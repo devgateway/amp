@@ -863,156 +863,100 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">			
 												<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1">								
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactName">Name</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>
+													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Title" feature="Pledge Contact 1">
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactTitle">Title</digi:trn>
-																											</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Title" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>		
+															<digi:trn key="pointContactTitle"><b>Title</b></digi:trn>																																								</td>
 												</field:display>								
 											</tr>
-											<tr bgcolor="#ffffff">
+											<tr>
+											<td><html:text property="contact1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+											<td><html:text property="contact1Title" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+											</tr>
+																						<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 1 - Organization" feature="Pledge Contact 1">											
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactOrganization">Organization</digi:trn>
+															<digi:trn key="pointContactOrganization"><b>Organization</b></digi:trn>																										</td>
+													</field:display>
+												<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1">
+													<td align="left" valign="middle">
 														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
+															<digi:trn key="pointContactMinistry"><b>Ministry</b></digi:trn>																										</td>
+													</field:display>							
+											</tr>
+											<tr>
+											<td>
 															<c:set var="valueId1"> contact1OrgId </c:set>
 								                              <c:set var="nameId1"> contact1OrgName </c:set>
 								                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
 								                              <input name="contact1OrgName" type="text" id="${nameId1}" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC; text-align:left" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
-								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
-	                            						
-	                            						
-													</td>	
-												</field:display>
-												<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1">
-													<td valign="middle" align="left" width="15%">
-														
-															<digi:trn key="pointContactMinistry">Ministry</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>			
-												</field:display>							
+								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton></td>
+											<td><html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
 											</tr>
 											<tr bgcolor="#ffffff">		
 												<field:display name="Pledge Contact 1 - Address" feature="Pledge Contact 1">									
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactAddress">Address</digi:trn>
-																											</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Address" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactAddress"><b>Address</b></digi:trn>																																								</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Telephone" feature="Pledge Contact 1">
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>		
+															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
 												</field:display>								
+											</tr>
+											<tr>
+											<td><html:text property="contact1Address" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+											<td><html:text property="contact1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 1 - Email" feature="Pledge Contact 1">											
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail">Email</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Fax" feature="Pledge Contact 1">
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactFax">Fax</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact1Fax" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactFax"><b>Fax</b></digi:trn>																										</td>
 												</field:display>									
+											</tr>
+											<tr>
+											<td><html:text property="contact1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+											<td><html:text property="contact1Fax" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
 											</tr>
 										</table>
 										<tr><td>&nbsp;</td></tr>
 									<field:display name="Pledge Contact 1 - Alternate Contact" feature="Pledge Contact 1">
-										<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
+										<tr><td align=center><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b><hr /></td></tr>
 										<tr><td>
 										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactName">Name</digi:trn>
+													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
+													<td width="50%" align="left" valign="middle">
 														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>	
-													<td valign="middle" align="left" width="15%">
-														
-															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>										
+															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+												</tr>
+												<tr>
+												<td><html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+												<td><html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
 												</tr>
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail">Email</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						
-													</td>	
-													<td valign="middle" align="left" width="15%">
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-													</td>										
+															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
+													<td align="left" valign="middle">																										</td>
+												</tr>
+													<tr>
+												<td><html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
+												<td>&nbsp;</td>
 												</tr>
 											</table>
 										</td></tr>
@@ -1032,168 +976,108 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr>
-												<td valign="middle" align="left" width="15%" colspan="2">
+												<td valign="middle" align="center" width="15%" colspan="2">
 													
 														<digi:trn key="sameAsOriginalPointOfContact">Same As Original Point Of Contact</digi:trn>
 													
-													<input type="checkbox" id="sameContact" onclick="setSameContact()">
-												</td>
+													<input type="checkbox" id="sameContact" onclick="setSameContact()">												</td>
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 2 - Name" feature="Pledge Contact 2">											
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactName">Name</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Name" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
+													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2">
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactTitle">Title</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Title" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactTitle"><b>Title</b></digi:trn>																										</td>
 												</field:display>									
+											</tr>
+											<tr>
+											<td><html:text property="contact2Name" size="40" styleClass="inp-text"/></td>
+											<td><html:text property="contact2Title" size="40" styleClass="inp-text"/></td>
 											</tr>
 											<tr bgcolor="#ffffff">	
 												<field:display name="Pledge Contact 2 - Organization" feature="Pledge Contact 2">										
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactOrganization">Organization</digi:trn>
+															<digi:trn key="pointContactOrganization"><b>Organization</b></digi:trn>																										</td>
+												</field:display>
+												<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2">
+													<td align="left" valign="middle">
 														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<c:set var="valueId2"> contact2OrgId </c:set>
+															<digi:trn key="pointContactMinistry"><b>Ministry</b></digi:trn>																										</td>
+												</field:display>							
+											</tr>
+											<tr>
+											<td><c:set var="valueId2"> contact2OrgId </c:set>
 								                              <c:set var="nameId2"> contact2OrgName </c:set>
 								                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
 								                              <input name="contact2OrgName" type='text' id="${nameId2}" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC;text-align:left" onKeyDown="return false" class="inp-text"/>
-								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
-	                            						
-	                            						
-													</td>	
-												</field:display>
-												<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2">
-													<td valign="middle" align="left" width="15%">
-														
-															<digi:trn key="pointContactMinistry">Ministry</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Ministry" size="40" styleClass="inp-text"/>
-	                            						
-													</td>			
-												</field:display>							
+								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton></td>
+											<td><html:text property="contact2Ministry" size="40" styleClass="inp-text"/></td>
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 2 - Address" feature="Pledge Contact 2">											
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactAddress">Address</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Address" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactAddress"><b>Address</b></digi:trn>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Telephone" feature="Pledge Contact 2">
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Telephone" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
 												</field:display>									
+											</tr>
+											<tr>
+											<td><html:text property="contact2Address" size="40" styleClass="inp-text"/></td>
+											<td><html:text property="contact2Telephone" size="40" styleClass="inp-text"/></td>
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2">
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail">Email</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Email" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
+															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2">
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactFax">Fax</digi:trn>
-															
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contact2Fax" size="40" styleClass="inp-text"/>
-                            							
-													</td>	
+															<digi:trn key="pointContactFax"><b>Fax</b></digi:trn>																										</td>
 												</field:display>									
+											</tr>
+											<tr>
+											<td><html:text property="contact2Email" size="40" styleClass="inp-text"/></td>
+											<td><html:text property="contact2Fax" size="40" styleClass="inp-text"/></td>
 											</tr>
 										</table>
 										<tr><td>&nbsp;</td></tr>
 									<field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2">
-										<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
+										<tr><td align=center><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b><hr /></td></tr>
 										<tr><td>
 										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="15%">
+													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactName">Name</digi:trn>
+															<digi:trn key="pointContactName"><b>Name</b></digi:trn>																										</td>
+													<td width="50%" align="left" valign="middle">
 														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
-													<td valign="middle" align="left" width="15%">
-														
-															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate2Telephone" size="40" styleClass="inp-text"/>
-	                            					
-													</td>										
+															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+												</tr>
+												<tr>
+												<td><html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/></td>
+												<td><html:text property="contactAlternate2Telephone" size="40" styleClass="inp-text"/></td>
 												</tr>
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="15%">
+													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail">Email</digi:trn>
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-															<html:text property="contactAlternate2Email" size="40" styleClass="inp-text"/>
-	                            						
-													</td>	
-													<td valign="middle" align="left" width="15%">
-														
-													</td>
-													<td valign="middle" align="left" width="35%">
-														
-													</td>										
+															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																																									</td>
+													<td align="left" valign="middle">																										</td>
 												</tr>
+												<tr bgcolor="#ffffff">
+												  <td align="left" valign="middle"><html:text property="contactAlternate2Email" size="40" styleClass="inp-text"/></td>
+												  <td align="left" valign="middle"></td>
+										    </tr>
 											</table>
 										</td></tr>
 									</field:display>

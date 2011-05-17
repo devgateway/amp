@@ -9,6 +9,7 @@ version: 2.8.2r1
     visibility:hidden;
     position:absolute;
     z-index: 2;
+
 }
 
 .yui-tt {
@@ -192,7 +193,8 @@ PLEASE NOTE:
     position:relative;
     left:0;
     top:0;
-    font:1em Arial;
+    font:10px Arial;
+	font-weight:bold;
     background-color:#FFF;
     border:1px solid #000;
     z-index:1;

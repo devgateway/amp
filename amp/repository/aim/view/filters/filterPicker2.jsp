@@ -74,17 +74,7 @@
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
-				<div style="width: 24%; margin-left: 76%; height: 100%;font-size: 11px">
-					<field:display name="Joint Criteria" feature="Budget">
-							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
-							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
-					</field:display>
-					<br />
-					<field:display name="Government Approval Procedures" feature="Budget">
-						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
-							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
-					</field:display>
-				</div>
+				
 			</div>
 		</div>
 		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
@@ -153,26 +143,38 @@
 		</div>
 	</div>
 </div>
-<div style="display: block; overflow:hidden;">
+<div style="width:50%; float:left;font-size: 11px">
+					<field:display name="Joint Criteria" feature="Budget">
+							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
+							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
+					</field:display>
+                    <br/>
+					<field:display name="Government Approval Procedures" feature="Budget">
+						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
+							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
+					</field:display>
+				</div>
+<div style="display: block; overflow:hidden;width:50%; float:right;">
 	<table width="100%">
 		<tr>
-			<td width="100%" align="center" style="font-size: 11px">
+			<td width="100%" align="center" style="font-size: 11px; font-weight:bold;">
 				<html:checkbox property="justSearch" value="true" />&nbsp;
 				<digi:trn>Use filter as advanced search</digi:trn>
 			</td>
 		</tr>
 		<tr>
 			<td width="100%" align="center">
-				<html:hidden property="ampReportId" />
+				
+			</td>
+		</tr>
+	</table>
+</div>
+<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;"><html:hidden property="ampReportId" />
 				<html:hidden property="defaultCurrency" />
 				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
 				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset">
 					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-				</html:button> 
-			</td>
-		</tr>
-	</table>
-</div>
+				</html:button> </div>
 
 </digi:form>

@@ -134,13 +134,15 @@
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getFundingsGraphData";
 				var strDomain:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

@@ -356,14 +356,15 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
 						<table cellpadding="0" cellspacing="0" width="100%" border="0">
-							<tr><td width="100%">
+							<tr><td width="100%" bgcolor="#FF0000" style="background-color:#F5F5F5; border:1px solid #CCCCCC; padding:15px;">
+
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#C7D4DB">
 							<!--<tr>
 							<td colspan=4 align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
 							</tr>-->
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
-								<div style="background-color:#F5F5F5; border:1px solid #CCCCCC; padding:15px;">
+								
 								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
 									<tr><td align=center bgcolor="#C7D4DB" height=25>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
@@ -402,7 +403,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</table>
 									</td></tr>
 								</table>
-								</div>
+							
 								<br /><br />
 								
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -411,59 +412,46 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
 
 									</td></tr>
-									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="30%">
-													<FONT color=red>*</FONT>
+												<td align="left" valign="middle">
+													<FONT color=red><b>*</b></FONT>
 													
+													<b>
 													<digi:trn key="donorCountryInstitution">Donor (Country/Institution)</digi:trn>
-																									
-												</td>
-												<td valign="middle" align="left" width="70%">
-													
-<!--														<html:hidden property="selectedOrgId" />-->
+													</b>																								</td>
+											</tr>
+											<tr>
+											<td><!--														<html:hidden property="selectedOrgId" />-->
 <!--														<html:text property="selectedOrgName" readonly="true"/>-->
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
 							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
 							                              <input name="selectedOrgName" type='text' id="${nameId}" value='${pledgeForm.selectedOrgName}' style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
-							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
-                            						
-													
-												</td>											
+							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton></td>
 											</tr>
 											<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="30%">
+													<td align="left" valign="middle">
 														
-														<digi:trn key="whoHasAuthorizedPledge">Who Has Authorized Pledge?</digi:trn>
-														
-													
-													</td>
-													<td valign="middle" align="left" width="70%">
-														
-															<html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/>
-	                            						
-													</td>											
+														<digi:trn key="whoHasAuthorizedPledge"><b>Who Has Authorized Pledge?</b></digi:trn>																										</td>
+												</tr>
+												<tr>
+												<td><html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/></td>
 												</tr>
 											</field:display>
 											<field:display name="Further Approval Needed" feature="Pledge Donor Information">
 												<tr bgcolor="#ffffff">											
-													<td valign="middle" align="left" width="30%">
+													<td align="left" valign="middle">
 														
-														<digi:trn key="pleaseIndicateFurtherApprovalNeeded">Please Indicate any Further Approval Needed</digi:trn> 
-														
-													
-													</td>
-													<td valign="middle" align="left" width="70%">
-														
-															<html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/>
-	                            																			</td>											
+														<digi:trn key="pleaseIndicateFurtherApprovalNeeded"><b>Please Indicate any Further Approval Needed</b></digi:trn>																												</td>
 												</tr>
+												<tr bgcolor="#ffffff">
+												  <td align="left" valign="middle"><html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/></td>
+											  </tr>
 											</field:display>
 										</table>
 									</td></tr>
@@ -754,90 +742,75 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																<tr>
 										                            <td align="center" valign="bottom" width="30" >
 																		<input name="<%=field0%>" type="hidden" id="<%=field0%>" value='${fundingPledgesDetails.id}'/>
-											                        	<input type="checkbox" name="<%=field1%>" id="<%=field1%>" >
-																	</td>
+											                        	<input type="checkbox" name="<%=field1%>" id="<%=field1%>" >																	</td>
 																	<td align="center" valign="bottom" width="170">
 																		<select name="<%=field2%>" class="inp-text" style="max-width: 150px;">
 																			<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
 																				<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
-																					<option selected="selected" value="<c:out value="${type.id}"/>">	
-																				</c:if>
+																					<option selected="selected" value="<c:out value="${type.id}"/>">																				</c:if>
 																				<c:if test="${fundingPledgesDetails.pledgetypeid != type.id}">
-																					<option value="<c:out value="${type.id}"/>">
-																				</c:if>
+																					<option value="<c:out value="${type.id}"/>">																				</c:if>
 																				<digi:trn>${type.value}</digi:trn>
 																				</option>
 																			</c:forEach>
-																		</select>
-										                            </td>
+																		</select>										                            </td>
 																	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
-																		<td align="center" valign="bottom" width="200">
-											                                <select name="<%=field3%>" class="inp-text" style="max-width: 150px;">
-																				<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
-																				<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
-																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
-																						<option selected="selected" value="<c:out value="${type.id}"/>">	
-																					</c:if>
-																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid != type.id}">
-																						<option value="<c:out value="${type.id}"/>">
-																					</c:if>
-																					<digi:trn>${type.value}</digi:trn>
-																					</option>
-																				</c:forEach>
-																			</select>
-											                            </td>
+																		<td align="center" valign="bottom" width="200"><select name="<%=field3%>" class="inp-text" style="max-width: 150px;">
+                                                                          <option selected="selected" value="-1">-
+                                                                            <digi:trn>Select from below</digi:trn>
+                                                                            -</option>
+                                                                          <c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
+                                                                            <c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
+                                                                              <option selected="selected" value="<c:out value="${type.id}"/>                                                                        
+                                                                              "> </c:if>
+                                                                            <c:if test="${fundingPledgesDetails.typeOfAssistanceid != type.id}">
+                                                                              <option value="<c:out value="${type.id}"/>                                                                        
+                                                                              "> </c:if>
+                                                                            <digi:trn>${type.value}</digi:trn>
+                                                                          </c:forEach>
+                                                                        </select></td>
 																	</field:display>
 																	<td align="center" valign="bottom" width="150">
 																		
-																		<input type="text" name="<%=field4%>" value="<aim:formatNumber value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
-										                            </td>
+																		<input type="text" name="<%=field4%>" value="<aim:formatNumber value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>										                            </td>
 																	<td align="center" valign="bottom" width="100">
 										                                <select name="<%=field5%>" class="inp-text" style="max-width: 150px;">
 																			<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
 																				<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
-																					<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">	
-																				</c:if>
+																					<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">																				</c:if>
 																				<c:if test="${fundingPledgesDetails.currencycode != currency.currencyCode}">
-																					<option value="<c:out value="${currency.currencyCode}"/>">
-																				</c:if>
+																					<option value="<c:out value="${currency.currencyCode}"/>">																				</c:if>
 																				<c:out value="${currency.currencyName}" />
 																				</option>
 																			</c:forEach>
-																		</select>
-										                            </td>
+																		</select>										                            </td>
 																	<td align="center" valign="bottom" width="150">
 																		<select name="<%=field6%>" class="inp-text" style="max-width: 150px;">
 																			<option value="unspecified"><digi:trn>unspecified</digi:trn></option>	
 																			<c:forEach var="year" items="${pledgeForm.years}">
 																				<c:if test="${fundingPledgesDetails.fundingYear == year}">
-																					<option selected="selected" value="<c:out value="${year}"/>">	
-																				</c:if>
+																					<option selected="selected" value="<c:out value="${year}"/>">																				</c:if>
 																				<c:if test="${fundingPledgesDetails.fundingYear != year}">
-																					<option value="<c:out value="${year}"/>">
-																				</c:if>
+																					<option value="<c:out value="${year}"/>">																				</c:if>
 																					${year}
 																				</option>
 																			</c:forEach>
-																		</select>
-										                                </td>
+																		</select>										                                </td>
 																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                               <select name="<%=field7%>" class="inp-text" style="max-width: 150px;">
 																				<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
 																					<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
-																						<option selected="selected" value="<c:out value="${type.id}"/>">	
-																					</c:if>
+																						<option selected="selected" value="<c:out value="${type.id}"/>">																					</c:if>
 																					<c:if test="${fundingPledgesDetails.aidmodalityid != type.id}">
-																						<option value="<c:out value="${type.id}"/>">
-																					</c:if>
+																						<option value="<c:out value="${type.id}"/>">																					</c:if>
 																					<digi:trn>${type.value}</digi:trn>
 																					</option>
 																				</c:forEach>
-																			</select>
-											                            </td>
+																			</select>											                            </td>
 																	</field:display>
 										                        </tr>
 															</table>
@@ -1271,6 +1244,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								<!-- end contents -->
 							</td></tr>
 							</table>
+
 							</td></tr>
 						</table>
 						</td>

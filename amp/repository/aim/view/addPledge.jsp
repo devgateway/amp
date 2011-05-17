@@ -343,12 +343,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
+						<!--<tr>
 							<td height="50" vAlign="middle" width="100%"><span class=subtitle-blue>
 								<digi:trn key="aim:addNewPledge">Add New Pledge</digi:trn>
 								
 							</td>
-						</tr>
+						</tr>-->
 					</table>
 				</td></tr>
 				<tr><td>
@@ -363,6 +363,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							</tr>-->
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
+								<div style="background-color:#F5F5F5; border:1px solid #CCCCCC; padding:15px;">
 								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
 									<tr><td align=center bgcolor="#C7D4DB" height=25>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
@@ -373,45 +374,37 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="30%">
+												<td colspan="2" align="left" valign="middle">
 													<FONT color=red>*</FONT>
 													
-													<digi:trn key="pledgeTitle">Pledge Title</digi:trn>
-													
-												
-												</td>
-												<td align="left" width="70%">
-													<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
+												<digi:trn key="pledgeTitle"><b>Pledge Title</b></digi:trn>												</td>
+											</tr>
+											<tr>
+											<td colspan="2"><select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
 														<option selected="selected" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
 														<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
 															<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
-																<option selected="selected" value="${titles.id}"/>	
-															</c:if>
+																<option selected="selected" value="${titles.id}"/>															</c:if>
 															<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
-																<option value="${titles.id}"/>
-															</c:if>
+																<option value="${titles.id}"/>															</c:if>
 															<c:out value="${titles.value}" />
 															</option>
 														</c:forEach>
-													</select>
-												</td>
+													</select></td>
 											</tr>
 											<tr bgcolor="#ffffff">
-												<td valign="middle" align="left" width="30%">
-													
-												</td>
+												<td valign="middle" align="left" width="30%">												</td>
 												<td align="left" width="70%">
 													 <div id="newTitle" style="display: none">											
 													    <html:text property="pledgeTitleId" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
-													   
-													</div>																	    	
-												</td>	
+													</div>												</td>	
 											</tr>
 										</table>
 									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									<tr><td>&nbsp;</td></tr>
 								</table>
+								</div>
+								<br /><br />
+								
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
 									<tr><td align=center bgcolor="#C7D4DB" height=25>
 									
@@ -474,15 +467,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											</field:display>
 										</table>
 									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									<tr><td>&nbsp;</td></tr>
 								</table>
-								
-								<feature:display name="Pledge Sector and Location" module="Pledges">
+<br /><br />								
+<!--								<feature:display name="Pledge Sector and Location" module="Pledges">
 									<table width="95%" bgcolor="#f4f4f2" border=0>
 										<tr>
 										    <td>
-										        <!-- contents -->
 										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
 										         
@@ -694,6 +684,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 									</table>
 								</feature:display>
+								
+-->
 								<feature:display name="Pledge Funding" module="Pledges">
 									<table width="95%" bgcolor="#f4f4f2" border=0>
 										<tr>
@@ -883,9 +875,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 		                                        </table>
 										     </td>
 										</tr>
-										<tr><td>&nbsp;</td></tr>
-										<tr><td>&nbsp;</td></tr>
 									</table>
+									<br /><br />
 								</feature:display>
 								<feature:display name="Pledge Contact 1" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -934,7 +925,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															<c:set var="valueId1"> contact1OrgId </c:set>
 								                              <c:set var="nameId1"> contact1OrgName </c:set>
 								                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
-								                              <input name="contact1OrgName" type="text" id="${nameId1}" style="text-align:left" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
+								                              <input name="contact1OrgName" type="text" id="${nameId1}" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC; text-align:left" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
 	                            						
 	                            						
@@ -1052,10 +1043,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												</tr>
 											</table>
 										</td></tr>
-										<tr><td>&nbsp;</td></tr>
-										<tr><td>&nbsp;</td></tr>
 									</field:display>
 								</table>
+								<br /><br />
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -1114,7 +1104,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															<c:set var="valueId2"> contact2OrgId </c:set>
 								                              <c:set var="nameId2"> contact2OrgName </c:set>
 								                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
-								                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:left" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
+								                              <input name="contact2OrgName" type='text' id="${nameId2}" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC;text-align:left" onKeyDown="return false" class="inp-text"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
 	                            						
 	                            						
@@ -1233,10 +1223,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												</tr>
 											</table>
 										</td></tr>
-										<tr><td>&nbsp;</td></tr>
-										<tr><td>&nbsp;</td></tr>
 									</field:display>
 								</table>
+								<br /><br />
 								</feature:display>
 								
 								<feature:display name="Pledge Additional Information" module="Pledges">

@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
 
 <digi:instance property="calendarViewForm"/>
 <script type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>

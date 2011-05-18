@@ -21,7 +21,7 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
-<jsp:include page="header.jsp" flush="true" />
+<jsp:include page="header.jsp"  />
 </td>
 </tr>
 <tr><td width="100%" valign="top" align="left">

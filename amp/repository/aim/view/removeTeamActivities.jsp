@@ -13,7 +13,7 @@
 <digi:link href="/admin.do" title="${translation}" >
 	Admin Home Page
 </digi:link><br><br>
-<jsp:include page="workspaceManagerMenu.jsp" flush="true" />
+<jsp:include page="workspaceManagerMenu.jsp"  />
 
 <digi:form action="/removeTeamActivity.do" method="post">
 <html:hidden property="activityId" />

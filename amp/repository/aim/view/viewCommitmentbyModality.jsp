@@ -63,7 +63,7 @@
 <digi:errors/>
 <digi:instance property="aimCommitmentbyDonorForm" />
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<tr>
 

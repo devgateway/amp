@@ -9,8 +9,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
-<jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
+<jsp:include page="previewLogframeUtil.jsp"  />
+<jsp:include page="overviewOptionsPopupUtil.jsp"  />
 
 <style type="text/css">
 	.td_top1 {

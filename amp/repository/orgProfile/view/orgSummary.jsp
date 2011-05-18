@@ -373,7 +373,7 @@
             <digi:trn>Printer Friendly Format</digi:trn>
         </a>
     </div>
-    <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
+    <jsp:include page="/orgProfile/showLargestProjects.do" />
 </div>
 
 <script language="javascript" type="text/javascript">

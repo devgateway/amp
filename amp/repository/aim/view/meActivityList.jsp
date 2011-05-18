@@ -112,7 +112,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <tr><td width="100%" valign="top" align="left">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 </td></tr>
 
@@ -190,7 +190,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 									<c:set var="selectedTab" value="6" scope="request"/>
 
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp"  />								
 
 								</td>
 

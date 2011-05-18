@@ -26,7 +26,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
 	
 	
 
@@ -301,7 +301,7 @@
 	-->
 
 </script>
- <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+ <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 
 <script language="JavaScript">
 <!--
@@ -346,7 +346,7 @@ function resetAll()
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
@@ -991,7 +991,7 @@ function resetAll()
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 						<!-- end of activity form menu -->
 						</td></tr>
 					</table>

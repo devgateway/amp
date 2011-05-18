@@ -16,10 +16,10 @@
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
     <c:choose>
         <c:when test="${gisWidgetTeaserForm.type==1}">
-            <jsp:include page="/orgProfile/showOrgSummary.do" flush="true"/>
+            <jsp:include page="/orgProfile/showOrgSummary.do" />
         </c:when>
         <c:when test="${gisWidgetTeaserForm.type==7}">
-            <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
+            <jsp:include page="/orgProfile/showParisIndicator.do" />
         </c:when>
         <c:otherwise>
             <DIV id="tabs">

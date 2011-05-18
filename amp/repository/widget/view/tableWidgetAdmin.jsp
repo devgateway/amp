@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <script type="text/javascript">
 <!--

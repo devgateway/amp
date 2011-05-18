@@ -12,7 +12,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" href="<digi:file src="/repository/parisindicator/view/css/pi_styles.css"/>">
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <%
 String auxReportId = request.getParameter("reportId");

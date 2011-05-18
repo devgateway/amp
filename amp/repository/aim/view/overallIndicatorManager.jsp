@@ -80,7 +80,7 @@
 <digi:context name="digiContext" property="context" />
 <input type="hidden" name="indicator">
 <%--  AMP Admin Logo --%>
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 		<tr>

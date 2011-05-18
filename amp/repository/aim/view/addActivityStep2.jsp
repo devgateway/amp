@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<jsp:include page="addSectors.jsp" flush="true" />
+<jsp:include page="addSectors.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -481,7 +481,7 @@ function remProgram(programType) {
     <tr>
       <td width="100%" vAlign="top" align="left">
         <!--  AMP Admin Logo -->
-        <jsp:include page="teamPagesHeader.jsp" flush="true" />
+        <jsp:include page="teamPagesHeader.jsp"  />
         <!-- End of Logo -->
       </td>
     </tr>
@@ -779,7 +779,7 @@ function remProgram(programType) {
             </td>
              <td width="25%" vAlign="top" align="right">
 	           <!-- edit activity form menu -->
-	           <jsp:include page="editActivityMenu.jsp" flush="true" />
+	           <jsp:include page="editActivityMenu.jsp"  />
 	           <!-- end of activity form menu -->
 	       	 </td>
           </tr>

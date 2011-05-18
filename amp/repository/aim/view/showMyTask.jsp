@@ -18,7 +18,7 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />			
+<jsp:include page="teamPagesHeader.jsp"  />			
 
 </td>
 

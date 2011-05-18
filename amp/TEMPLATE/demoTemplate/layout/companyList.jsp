@@ -23,7 +23,7 @@
         <tr>
 
 			<!-- dacon-header.jsp -->
-			<tiles:insert attribute="header" flush="true"/>
+			<tiles:insert attribute="header" />
 
         </tr>
 
@@ -35,7 +35,7 @@
 
             <td valign=top width=160 class="background">
 
-				<tiles:insert attribute="leftmenu" flush="true"/>
+				<tiles:insert attribute="leftmenu" />
 
 
             </td>
@@ -52,7 +52,7 @@
 
 				<table width="100%" cellspacing="0"  cellpadding="0">
 				            <tr>
-								<tiles:insert attribute="menuheader" flush="true"/>
+								<tiles:insert attribute="menuheader" />
 
 
 				         	</tr>
@@ -64,7 +64,7 @@
 
 				         	<tr>
 
-								<tiles:insert attribute="body" flush="true"/>
+								<tiles:insert attribute="body" />
 
 				        	</tr>
 
@@ -78,7 +78,7 @@
 
         <tr>
 
-				<tiles:insert attribute="footer" flush="true"/>
+				<tiles:insert attribute="footer" />
 
 
         </tr>

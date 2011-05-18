@@ -17,8 +17,8 @@
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="addSectors.jsp" flush="true" />
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="addSectors.jsp"  />
+<jsp:include page="scripts/newCalendar.jsp"  />
 <% int indexFund = 0; 
 PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 %>

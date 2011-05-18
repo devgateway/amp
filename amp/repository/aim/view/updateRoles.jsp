@@ -44,7 +44,7 @@ function unload() {}
   <html:hidden property="roleId" />
   <html:hidden property="action" />
 
-  <jsp:include page="teamPagesHeader.jsp" flush="true" />
+  <jsp:include page="teamPagesHeader.jsp"  />
   <c:set var="btnSave">
     <digi:trn key="btn:save">Save</digi:trn>
   </c:set>

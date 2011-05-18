@@ -17,7 +17,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 
 
@@ -89,7 +89,7 @@ function toggleDiv(num){
 -->
 </script>
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -110,7 +110,7 @@ function toggleDiv(num){
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
@@ -280,7 +280,7 @@ function toggleDiv(num){
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 						<!-- end of activity form menu -->
 						</td></tr>
 					</table>

@@ -138,7 +138,7 @@ else {
 	<tr>
 		<td width="100%" vAlign="top" align="left">
 		<!--  AMP Admin Logo -->
-		<jsp:include page="teamPagesHeader.jsp" flush="true" />
+		<jsp:include page="teamPagesHeader.jsp"  />
 		<!-- End of Logo -->
 		</td>
 	</tr>
@@ -626,7 +626,7 @@ else {
 									</td>
 									<td width="25%" vAlign="top" align="right">
 										<!-- edit activity form menu -->
-											<jsp:include page="editActivityMenu.jsp" flush="true" />
+											<jsp:include page="editActivityMenu.jsp"  />
 										<!-- end of activity form menu -->
 									</td></tr>
 								</table>

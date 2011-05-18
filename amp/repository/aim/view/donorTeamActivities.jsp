@@ -190,7 +190,7 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 </td></tr>
 
@@ -264,7 +264,7 @@
 
 								<td vAlign="top" width="100%">
 
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp"  />								
 
 								</td>
 

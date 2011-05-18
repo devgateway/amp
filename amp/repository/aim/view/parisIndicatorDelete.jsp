@@ -12,6 +12,6 @@ window.location="/aim/parisIndicatorManager.do";
 </script>
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 THIS IS THE DELETE PAGE!!!!!

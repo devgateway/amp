@@ -132,7 +132,7 @@
 
 <tr><td vAlign="top" align="left">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 </td></tr>
 

@@ -27,7 +27,7 @@ var OK_to_leave = "yes";
 		<!-- header -->
 		
 		
-		<tiles:insert attribute="header" flush="true"/>
+		<tiles:insert attribute="header" />
 		
 		
 		
@@ -39,7 +39,7 @@ var OK_to_leave = "yes";
 <tr>
 
   		<!-- menuheader -->
-  		<tiles:insert attribute="menuheader" flush="true"/>
+  		<tiles:insert attribute="menuheader" />
 
 </tr>
 
@@ -48,12 +48,12 @@ var OK_to_leave = "yes";
 <tr>
 
    		<!-- body -->
-   		<tiles:insert attribute="body" flush="true"/>
+   		<tiles:insert attribute="body" />
 </tr>
 
 <tr>
   		<!-- footer --><td>
-  		<tiles:insert attribute="footer" flush="true"/>
+  		<tiles:insert attribute="footer" />
 </tr>
 
 </table>

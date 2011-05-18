@@ -38,7 +38,7 @@
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
 		          <td vAlign=top><br/>
-		          	<jsp:include page="countriesLnk.jsp" flush="true" />		          
+		          	<jsp:include page="countriesLnk.jsp"  />		          
 						<BR/><BR/><BR/>						
       	     	</td>
         		</tr>

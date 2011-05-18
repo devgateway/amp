@@ -348,7 +348,7 @@
     <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 		<tr>
 			<td width="100%">
-				<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+				<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 			</td>
 		</tr>
 		<tr>

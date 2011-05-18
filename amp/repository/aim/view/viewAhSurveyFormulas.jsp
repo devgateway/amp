@@ -49,7 +49,7 @@ function resetFormula(){
 <digi:errors/>
 <digi:instance property="aimViewAhSurveyFormulasForm" />
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <digi:form action="/viewAhSurveyFormulas.do" >
   <html:hidden property="action" styleId="act" />
   <table>

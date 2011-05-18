@@ -12,7 +12,7 @@
 <c:if test="${!calendarViewForm.print}">			
 <table border="0"  width="100%" height="100%">
        <tr>
-          <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
+          <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" /><td>
        </tr> 
        <tr>			
 			<td height=33 colspan="2">				
@@ -49,17 +49,17 @@
 			          	<td>
 			        </tr>
 			        <tr>
-	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsNavigator.jsp" flush="true"/><td>
+	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsNavigator.jsp" /><td>
 	                </tr>
 	                <tr valign="top">
-	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
+	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" /></td>
 	                </tr>
 	            </table>
 	            </digi:form>
 	        </td>
     
 	        <td valign="top" width="100%">
-	               <jsp:include page="viewEventsBody.jsp" flush="true"/>
+	               <jsp:include page="viewEventsBody.jsp" />
 	        </td>
     	</tr>
 </table>
@@ -68,7 +68,7 @@
 <table border="0" align="center" width="100%" height="500px">
 <tr  align="center">
 	<td  align="center" width="800" height="500px" > 
-		<jsp:include page="viewEventsBody.jsp" flush="true"/>
+		<jsp:include page="viewEventsBody.jsp" />
 	</td>
 </tr>
 

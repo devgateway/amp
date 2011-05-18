@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=757 align="left">
   <tr>

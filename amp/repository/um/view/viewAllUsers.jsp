@@ -43,7 +43,7 @@ function banUser(txt) {
 <digi:context name="digiContext" property="context" />
 
 <!--  AMP Admin Logo -->
-<!-- jsp:include page="/repositoryteamPagesHeader.jsp" flush="true" /-->
+<!-- jsp:include page="/repositoryteamPagesHeader.jsp"  /-->
 <!-- End of Logo -->
 
 <digi:form action="/viewAllUsers.do" method="post">

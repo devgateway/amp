@@ -119,7 +119,7 @@ function loadShareRules(){
 
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr><td width="100%">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
@@ -165,7 +165,7 @@ function loadShareRules(){
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="0" scope="request"/>
 									<c:set var="selectedSubTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 								</td>
 							</tr>
 							<tr>

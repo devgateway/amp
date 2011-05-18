@@ -461,7 +461,7 @@ html>body #mainEmpty {
 		// hide loading image
 //        addLoadEvent(delBody);
 </script>
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 	<table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
 		<tr>

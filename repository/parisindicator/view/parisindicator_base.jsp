@@ -30,7 +30,7 @@
 
 <digi:errors />
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <%String reportId = request.getParameter("reportId");%>
 <digi:form action="/parisindicator.do" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">

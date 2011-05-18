@@ -168,7 +168,7 @@ function collapseAll() {
 <logic:present name="currentMember" scope="session">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 </logic:present>

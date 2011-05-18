@@ -10,7 +10,7 @@
 <table width="100%" cellPadding=0 cellSpacing=0 border=0>
 <tr>
 	<td valign="top" align="left" width="100%">
-		<jsp:include page="teamPagesHeader.jsp" flush="true" />
+		<jsp:include page="teamPagesHeader.jsp"  />
 	<td>
 </tr>
 <tr>
@@ -53,7 +53,7 @@
 						</tr>
 						<tr>
 							<td noWrap width=650 vAlign="top">
-								<jsp:include page="viewDocumentDetails.jsp" flush="true" />
+								<jsp:include page="viewDocumentDetails.jsp"  />
 							</td>
 						</tr>
 						<tr><td>&nbsp;</td></tr>

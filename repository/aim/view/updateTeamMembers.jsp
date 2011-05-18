@@ -29,7 +29,7 @@ function validate(){
 <html:hidden property="userId" />
 <html:hidden property="name" />
 <digi:errors/>
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>

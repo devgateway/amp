@@ -17,7 +17,7 @@
 
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr><td width="100%">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
@@ -64,7 +64,7 @@
 						valign="top" align="left">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>

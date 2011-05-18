@@ -39,6 +39,8 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 
+		<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+
 
 
 <style>
@@ -77,7 +79,7 @@ function toggleSettings(){
 	
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+
 
 
 <div id="mySorter" style="display: none">
@@ -109,8 +111,6 @@ session.setAttribute("progressValue", counter);
 	</div>
 </div>
 </logic:notEqual>
-
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 <%
@@ -249,7 +249,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                    <jsp:include page="${listable.jspFile}" />
                 </logic:present>
              </td>
              </tr>
@@ -329,7 +329,7 @@ session.setAttribute("progressValue", counter);
 		                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
 		                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
 		                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-		                    <jsp:include page="${listable.jspFile}" flush="true"/>
+		                    <jsp:include page="${listable.jspFile}" />
 		                </logic:present>
 		             </td>
 		             </tr>
@@ -399,7 +399,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                    <jsp:include page="${listable.jspFile}" />
                 </logic:present>
              </td>
              </tr>
@@ -568,7 +568,7 @@ session.setAttribute("progressValue", counter);
 	<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
+				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			
 	</tr>
 		

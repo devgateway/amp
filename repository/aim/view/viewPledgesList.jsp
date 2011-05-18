@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <style type="text/css">
 .jcol {

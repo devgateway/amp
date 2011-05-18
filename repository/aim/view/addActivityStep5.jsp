@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -517,7 +517,7 @@ function removeSelComponents() {
     <tr>
       <td width="100%" vAlign="top" align="left">
         <!--  AMP Admin Logo -->
-        <jsp:include page="teamPagesHeader.jsp" flush="true" />
+        <jsp:include page="teamPagesHeader.jsp"  />
         <!-- End of Logo -->
       </td>
     </tr>
@@ -803,7 +803,7 @@ function removeSelComponents() {
 
 						<!-- edit activity form menu -->
 
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 
 						<!-- end of activity form menu -->
 

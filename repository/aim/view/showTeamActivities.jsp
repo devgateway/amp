@@ -89,7 +89,7 @@
 <table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
 <tr><td>
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>

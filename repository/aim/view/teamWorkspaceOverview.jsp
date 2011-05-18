@@ -81,7 +81,7 @@ function updateChild(action) {
 
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr><td width="100%">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 border="0">
@@ -130,7 +130,7 @@ function updateChild(action) {
 									</c:choose>
 									<c:set var="teamAccessTypeLocal" scope="session"><bean:write name="aimUpdateWorkspaceForm" property="teamAccessType"/>
 									</c:set>
-									<jsp:include page="teamSetupMenu.jsp" flush="true"/>
+									<jsp:include page="teamSetupMenu.jsp" />
 								</td>
 							</tr>
 							<tr>

@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 									
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

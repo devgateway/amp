@@ -102,7 +102,7 @@
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
+					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
 
 				</TD>
 

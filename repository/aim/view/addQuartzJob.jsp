@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:instance property="quartzJobManagerForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <script type="text/javascript">
 function setAction(action){

@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <digi:instance property="aimEditActivityForm" />
 

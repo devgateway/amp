@@ -47,7 +47,7 @@ if (onDelete()){
  <digi:context name="digiContext" property="context" />
 
   <!--  AMP Admin Logo -->
-  <jsp:include page="teamPagesHeader.jsp" flush="true" />
+  <jsp:include page="teamPagesHeader.jsp"  />
   <!-- End of Logo -->
 
 

@@ -12,7 +12,7 @@
 <table border="0"  width="1000px" height="500px">
     <tr>
         <td width="800px" height="500px" >
-            <jsp:include page="viewEventsBody.jsp" flush="true"/>
+            <jsp:include page="viewEventsBody.jsp" />
         </td>
     </tr>
 </table>

@@ -52,7 +52,7 @@ method="post">
 						</tr>
 						<tr>
 							<td noWrap width=650 vAlign="top">
-								<jsp:include page="viewDocumentDetails.jsp" flush="true" />
+								<jsp:include page="viewDocumentDetails.jsp"  />
 							</td>
 						</tr>
 						<tr><td>&nbsp;</td></tr>

@@ -79,7 +79,7 @@
 					</td></tr>
 	<%if (session.getAttribute("hell").equals("1")){ %>
 					  kill me..
-					<tr><td><jsp:include page="submenu.jsp" flush="true" /></td></tr><%}%>
+					<tr><td><jsp:include page="submenu.jsp"  /></td></tr><%}%>
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
@@ -205,7 +205,7 @@
 <digi:context name="digiContext" property="context"/>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="true">
-	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp" flush="true" />
+	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp"  />
 </logic:equal>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="false">

@@ -21,7 +21,7 @@
 
 <table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td width="100%" valign="top" align="left">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
@@ -86,7 +86,7 @@
                                     <c:set var="selectedSubTab" value="-1" scope="request"/>
 
 
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp"  />								
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -101,7 +101,7 @@
                                             <tr>
                                                 <td valign="top">
 												
-                                                    <jsp:include page="viewDocumentDetails.jsp" flush="true" />
+                                                    <jsp:include page="viewDocumentDetails.jsp"  />
                                                 </td>
                                             </tr>
                                         </table>

@@ -14,7 +14,7 @@
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
-<%-- <jsp:include page="teamPagesHeader.jsp" flush="true" /> --%> 
+<%-- <jsp:include page="teamPagesHeader.jsp"  /> --%> 
 
 <c:set var="translation1">
 		<digi:trn key="aim:categoryManagerPlsEnterName">You need to enter a name for the category</digi:trn>

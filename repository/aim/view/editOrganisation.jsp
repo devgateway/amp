@@ -17,9 +17,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript">
-    <jsp:include page="scripts/calendar.js.jsp" flush="true" />
+    <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <style type="text/css">
     .selectStyle {
@@ -73,9 +73,9 @@
     }
 </style>
 
-<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {

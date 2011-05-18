@@ -26,7 +26,7 @@
 <digi:context name="digiContext" property="context" />
 <digi:form action="/updateSectorSchemes.do" method="post">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 

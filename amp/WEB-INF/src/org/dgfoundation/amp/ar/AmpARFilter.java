@@ -756,7 +756,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 
-		if(dateFilterHidesProjects && fromDate.length()>0) {
+		if(dateFilterHidesProjects && fromDate!=null && fromDate.length()>0) {
 			String FROM_DATE_FILTER=null;
 			try {
 				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
@@ -769,7 +769,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			
 			queryAppend(FROM_DATE_FILTER);
 		}
-		if(dateFilterHidesProjects && toDate.length()>0) {
+		if(dateFilterHidesProjects && toDate!=null && toDate.length()>0) {
 			String TO_DATE_FILTER=null;
 			try {
 				TO_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date<='"

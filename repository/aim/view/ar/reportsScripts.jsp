@@ -12,6 +12,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
+	<!-- Jquery Base Library -->
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/jquery.js"/>"></script>
+
+
 <logic:present name="reportMeta" scope="session">
 	<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 </logic:present>
@@ -302,11 +306,14 @@ saveReportEngine	= null;
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true" 
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
+		
 		filterForm.submit();
 	}
 	
 	function showFilter() {
+		$("#myFilter").empty().html('<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif"/></div>');
+		$("#myFilter").load("/aim/reportsFilterPicker.do");
 		YAHOOAmp.amptab.init();
 		YAHOOAmp.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");

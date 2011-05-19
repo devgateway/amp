@@ -1,0 +1,26 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="images/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:type">Type</wicket:trn></b></td>
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:title">Title</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:description">Description</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:latitude">Latitude</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:longitude">Longitude</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:shape">Shape</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr>
+		<td class="inside" align="right"><select wicket:id="structureTypes" /></td>
+		<td class="inside"><input class="inputx" size="10" wicket:id="name" /></td>
+		<td class="inside"><input class="inputx" size="35" wicket:id="description" /></td>
+		<td class="inside"><input class="inputx" size="8" wicket:id="latitude" /></td>
+		<td class="inside"><input class="inputx" size="8" wicket:id="longitude" /></td>
+		<td class="inside"><input class="inputx" size="8" wicket:id="shape" /></td>
+		<td class="inside" align="center"><span wicket:id="deleteStructure"/></td>
+	</tr>
+	<tr wicket:id="feedbackContainer">
+		<td class="inside" align="center" colspan="7">
+			<span wicket:id="feedbackLabel" class="feedbacklabel.error"></span>
+		</td>
+	</tr>
+</wicket:extend>				
+				 

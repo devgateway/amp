@@ -247,6 +247,7 @@ function drawpoints(){
 	  	cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,
 			map: map,
+			id: "activitiesMap",
 			features: features,
 			infoWindow: {
 				template: new esri.InfoTemplate("Attributes", "${*}"),
@@ -414,4 +415,49 @@ function updateLocationAttributes(graphicLayer){
     return graphicLayer;
 }
 
+function getStructures(clear) {
+	try {
+		map.removeLayer(map.getLayer("structuresMap"));
+		map.removeLayer(map.getLayer("activitiesMap"));
+	}catch(e){}
+    var structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: true, id: "structuresMap", visible: true});
 
+    var xhrArgs = {
+		url : "/esrigis/datadispatcher.do?showstructures=true",
+		handleAs : "json",
+		   load: function(jsonData) {
+			   dojo.forEach(jsonData,function(activity) {
+		        	MapFindStructure(activity, structureGraphicLayer);
+		        });
+			    map.addLayer(structureGraphicLayer);
+			    map.setExtent(map.extent.expand(1.01));
+				hideLoading();
+		   },
+		error : function(error) {
+			console.log(error);
+		}
+	}
+	// Call the asynchronous xhrGet
+	var deferred = dojo.xhrGet(xhrArgs);
+	showLoading();
+}
+
+function MapFindStructure(activity, structureGraphicLayer){
+	dojo.forEach(activity.structures,function(structure) {
+		var pt = new esri.geometry.Point(structure.lat,structure.lon,map.spatialReference);
+		var transpt = esri.geometry.geographicToWebMercator(pt);
+		
+		var sms = new esri.symbol.PictureMarkerSymbol('/TEMPLATE/ampTemplate/img_2/gis/' + structure.type +'.png', 32, 37);
+				
+//		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
+		var attr = {"Temp":"Temporal Attribute"};
+		var infoTemplate = new esri.InfoTemplate("");   
+		var pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
+		var exit = false;
+		pgraphic.setAttributes( {
+			  "Structure":structure.name,
+			  "Activity":activity.activityname
+			  });
+		structureGraphicLayer.add(pgraphic);
+    });
+}

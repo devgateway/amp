@@ -20,6 +20,7 @@ public class ActivityPoint {
 	private String commitments;
 	private String disbursements;
 	private ArrayList<SimpleLocation> locations;
+	private ArrayList<Structure> structures;
     private String implementationlevel;
 
     public ActivityPoint() {
@@ -74,6 +75,14 @@ public class ActivityPoint {
 
 	public String getImplementationlevel() {
 		return implementationlevel;
+	}
+
+	public void setStructures(ArrayList<Structure> structures) {
+		this.structures = structures;
+	}
+
+	public ArrayList<Structure> getStructures() {
+		return structures;
 	}
 
 }

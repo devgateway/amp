@@ -219,6 +219,10 @@ LoggerIdentifiable, Cloneable {
 	protected String statusReason;
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
+
+	@VersionableCollection(fieldTitle = "Structures")
+	protected Set<AmpStructure> structures;
+
 	@VersionableCollection(fieldTitle = "Component Fundings")
 	protected Set<AmpComponentFunding> componentFundings;
 	@VersionableCollection(fieldTitle = "Physical Progress")
@@ -816,6 +820,19 @@ contactName = string;
 	 */
 	public void setComponents(Set<AmpComponent> components) {
 		this.components = components;
+	}
+	/**
+	 * @return Returns the structures.
+	 */
+	public Set<AmpStructure> getStructures() {
+		return structures;
+	}
+	/**
+	 * @param structures
+	 *            The structures to set.
+	 */
+	public void setStructures(Set<AmpStructure> structures) {
+		this.structures = structures;
 	}
 	/**
 	 * @return Returns the activityApprovalDate.

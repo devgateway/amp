@@ -1,0 +1,75 @@
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ *
+ */
+package org.dgfoundation.amp.onepager.components.features.sections;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
+import org.dgfoundation.amp.onepager.components.fields.AmpStructureField;
+import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpStructure;
+
+/**
+ * @author fferreyra@dginternational.org since May 16, 2011
+ */
+public class AmpStructuresFormSectionFeature extends
+		AmpFormSectionFeaturePanel {
+
+	private static final long serialVersionUID = -6654390083784446344L;
+
+	public AmpStructuresFormSectionFeature(String id, String fmName,
+			final IModel<AmpActivityVersion> am) throws Exception {
+		super(id, fmName, am);
+		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
+		final ListView<AmpStructure> list;
+
+		
+		IModel<List<AmpStructure>> listModel = new AbstractReadOnlyModel<List<AmpStructure>>() {
+//			private static final long serialVersionUID = 3706184421459839210L;
+
+			@Override
+			public ArrayList<AmpStructure> getObject() {
+				return new ArrayList<AmpStructure>(setModel.getObject());
+			}
+		};
+		
+		list = new ListView<AmpStructure>("list", listModel) {
+			
+			@Override
+			protected void populateItem(ListItem<AmpStructure> stru) {
+				AmpStructureField acf = new AmpStructureField("structure", am, PersistentObjectModel.getModel(stru.getModelObject()), "Structure");
+				stru.add(acf);
+			}
+		};
+		add(list);
+		
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Structure", "Add Structure") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				AmpStructure stru = new AmpStructure();
+				setModel.getObject().add(stru);
+				target.addComponent(this.getParent());
+				target.appendJavascript(OnePagerConst.slideToggle);
+			}
+		};
+		add(addbutton);
+	}
+
+}

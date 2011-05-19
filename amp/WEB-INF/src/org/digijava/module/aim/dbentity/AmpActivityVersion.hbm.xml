@@ -229,6 +229,12 @@
 				column="amp_component_id" />
 		</set>
 		
+		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"
+				column="amp_structure_id" />
+		</set>
 		
 		<set name="componentProgress"  cascade="none">
 			<key column="amp_activity_id" />

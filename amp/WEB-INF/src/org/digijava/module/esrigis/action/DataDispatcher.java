@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -37,6 +38,7 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.QueryUtil;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
+import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.util.DbUtil;
 
@@ -64,6 +66,10 @@ public class DataDispatcher extends MultiAction{
 			else if (request.getParameter("showhighlights") != null){
 				return modeShowHighlights(mapping, form, request, response);
 			}
+			else if (request.getParameter("showstructures") != null){
+				return modeShowStructures(mapping, form, request, response);
+			}
+			
 		return null;
 	}
 	
@@ -191,6 +197,52 @@ public class DataDispatcher extends MultiAction{
         }
 
         PrintWriter pw = response.getWriter();
+		pw.write(jsonArray.toString());
+		pw.flush();
+		pw.close();
+		return null;
+	}
+	
+	public ActionForward modeShowStructures(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)throws Exception {
+		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
+		
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		maphelperform.getFilter().setTeamMember(tm);
+		
+		JSONArray jsonArray = new JSONArray();
+		 List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
+		 list = DbHelper.getActivities(maphelperform.getFilter());
+   		 boolean structuresExists = false;
+		 for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
+			 ActivityPoint ap = new ActivityPoint();
+			 AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
+			 ap.setActivityname(aA.getName());
+			 
+			ArrayList<Structure> structures = new ArrayList<Structure>();
+			for (Iterator<AmpStructure> iterator2 =aA.getStructures().iterator(); iterator2.hasNext();) {
+				
+				AmpStructure structure = iterator2.next();
+				Structure structureJSON = new Structure();
+				structureJSON.setDescription(structure.getDescription());
+				structureJSON.setLat(structure.getLatitude());
+				structureJSON.setLon(structure.getLongitude());
+				structureJSON.setName(structure.getTitle());
+				structureJSON.setShape(structure.getShape());
+				structureJSON.setType(structure.getType().getName());
+				structures.add(structureJSON);
+				structuresExists = true;
+			}
+			ap.setStructures(structures);
+			if(structuresExists) {
+				jsonArray.add(ap);
+				structuresExists = false;
+			}
+		 }
+
+	
+		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();
 		pw.close();

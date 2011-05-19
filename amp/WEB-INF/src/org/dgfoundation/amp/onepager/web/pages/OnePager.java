@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObs
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
@@ -77,6 +78,9 @@ public class OnePager extends OnePagerWrapper {
 			activityForm.add(relatedOrganizations);
 			AmpComponentsFormSectionFeature components = new AmpComponentsFormSectionFeature("components", "Components", am);
 			activityForm.add(components);
+
+			AmpStructuresFormSectionFeature structures = new AmpStructuresFormSectionFeature("structures", "Structures", am);
+			activityForm.add(structures);
 			
 			AmpIssuesFormSectionFeature issues = new AmpIssuesFormSectionFeature("issues", "Issues Section", am);
 			activityForm.add(issues);

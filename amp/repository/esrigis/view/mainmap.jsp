@@ -122,6 +122,7 @@
 						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
 						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
+						<td valign="middle" align="center" onclick="getStructures(true);" style="cursor: pointer;">Structures</td>
 						<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 							<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="Select base Map">
 						</td>

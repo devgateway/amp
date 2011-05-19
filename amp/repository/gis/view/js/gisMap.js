@@ -930,14 +930,15 @@
 	}
 	
 	function showFinFilters () {
-			var bgrDiv = $(".filter_wnd_background");
-			bgrDiv.css ("width", document.body.scrollWidth + "px");
-			bgrDiv.css ("height", document.body.scrollHeight + "px");
-			var filterDiagContainer = $("#filter_dialog");
-			$('.filter_wnd_background_holder').show();
+//			var bgrDiv = $(".filter_wnd_background");
+//			bgrDiv.css ("width", document.body.scrollWidth + "px");
+//			bgrDiv.css ("height", document.body.scrollHeight + "px");
+//			var filterDiagContainer = $("#filter_dialog");
+			showMyPanel('0','filter_dialog');
+			//$('.filter_wnd_background_holder').show();
 			
-			filterDiagContainer.css ("left", (document.body.clientWidth - filterDiagContainer.attr("offsetWidth"))/2 + document.body.scrollLeft + "px");
-			filterDiagContainer.css ("top", (document.body.clientHeight - filterDiagContainer.attr("offsetHeight"))/2 + document.body.scrollTop + "px");
+			//filterDiagContainer.css ("left", (document.body.clientWidth - filterDiagContainer.attr("offsetWidth"))/2 + document.body.scrollLeft + "px");
+			//filterDiagContainer.css ("top", (document.body.clientHeight - filterDiagContainer.attr("offsetHeight"))/2 + document.body.scrollTop + "px");
 		}
 	
 	
@@ -1188,8 +1189,9 @@
 		$('#donorSelected').html($('#donorsCombo option:selected').text());
 		*/
 
-		$('.filter_wnd_background_holder').hide();
+		//$('.filter_wnd_background_holder').hide();
 		
+		hidePanel(0);		
 		jQuery.fn.sectorSelectedFin(queryParam);
 	}
 	

@@ -51,17 +51,18 @@
 	
 	
 	div.sec_map_filter_outer_frame {
-		border: 1px solid gray;
+		/*border: 1px solid gray;*/
 	}
 	
 	div.sec_map_filter_container {
-		border: 1px solid;
+		/*border: 1px solid;
 		border-top-color: white;
 		border-left-color: white;
 		border-bottom-color: black;
 		border-right-color: black;
 		border-right-width: 2px;
 		border-bottom-width: 2px;
+		*/
 	}
 	
 	td.sec_map_filter_title {
@@ -71,7 +72,7 @@
 	}
 		
 	td.sec_selector_tree {
-		height: 100%;
+		/*height: 100%;*/
 		background-color: white;
 		background-repeat: repeat-y;
 		width: 13px;
@@ -153,6 +154,7 @@
 	
 	
 	div.filter_wnd_background {
+	/*
 		background-color:black;
 		position:absolute;
 		left:0px;
@@ -161,15 +163,25 @@
 		filter:alpha(opacity=50);                              
 		z-index: 100;
 		width:100%;
+		
 		height:100%;
-		/*
 		display:none;
 		*/
 	}
 	
 </style>
 
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="TEMPLATE/ampTemplate/script/yui/dom-min.js"/>"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+
+
+<script language="JavaScript" src="/repository/gis/view/js/gisPanel.js"></script>
 
 <script language="JavaScript">
 	var validatedRegPercentage = false;
@@ -207,14 +219,10 @@
 </c:if>
 
 
-<div class="filter_wnd_background_holder" style="display:none;">
-	
-	<div class="filter_wnd_background">&nbsp;</div>
-	
-	<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;">
+<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;display: none;width: 550px">
 		<div class="sec_map_filter_container">
 			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
-				<tr><td colspan="3" class="sec_map_filter_title" style="font-size:12px;"><digi:trn>Map filters</digi:trn></td></tr>
+				<!-- <tr><td colspan="3" class="sec_map_filter_title" style="font-size:12px;"><digi:trn>Map filters</digi:trn></td></tr> -->
 				<field:display name="Source of Data" feature="GIS DASHBOARD">
 				<tr>
 					<td style="font-size:12px;">
@@ -286,9 +294,6 @@
 					</td>
 				</tr>
 			</field:display>
-				
-				
-				
 				<tr>
 					<td colspan="3">
 						<hr>
@@ -315,17 +320,23 @@
 				<tr><td align='right' colspan="3">
 				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()' class="buttonx">
 					&nbsp;
-				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()' class="buttonx">
+				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='hidePanel(0)' class="buttonx">
 				</td></tr>
 				
 				
 			</table>
 	  </div>
 	</div>
+
+<%--
+<div class="filter_wnd_background_holder" style="display:none;">
+	
+	<div class="filter_wnd_background">&nbsp;</div>
+	
+	
 </div>
 
-
-
+ --%>
 
 
 
@@ -849,5 +860,6 @@
 	<c:if test="${isDevInfoMode == false}">
 		getSectorHierarchy();
 	</c:if>
-	
+
+	YAHOO.util.Event.addListener(window, "load", initPanel) ;
 </script>

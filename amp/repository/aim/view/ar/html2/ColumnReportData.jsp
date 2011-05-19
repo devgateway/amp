@@ -30,9 +30,16 @@
 		</c:when>
 		<c:otherwise>
 		<!-- printing row tag -->
-			<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).toggleRow()" 
-				onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).markRow(false)" 
-				onMouseout="getRowSelectorInstance(this,  {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
+				<c:choose>
+					<c:when test="${reportMeta.hideActivities==null || !reportMeta.hideActivities}">
+						<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).toggleRow()" 
+						onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' }).markRow(false)" 
+						onMouseout="getRowSelectorInstance(this,  {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
+					</c:when>
+					<c:otherwise>
+						<tr>
+					</c:otherwise>
+				</c:choose>
 				<jsp:include page="${trailCellsFile}"/>
 		</c:otherwise>
 	</c:choose>
@@ -100,9 +107,12 @@
 
 <c:if test="${columnReport.levelDepth > 1}">	
 	<%-- Here we include the totals for this ColumnReportData --%>
-	<tr class="${columnReport.htmlClassName}">
-		<td class="hierarchyCell">&nbsp;</td>
+	<c:if test="${reportMeta.hideActivities==null || !reportMeta.hideActivities }">
+		<tr class="${columnReport.htmlClassName}">
+	</c:if>
 		<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<jsp:include page="TrailCells.jsp" />
-	</tr>
+	<c:if test="${reportMeta.hideActivities==null || !reportMeta.hideActivities }">
+		</tr>
+	</c:if>
 </c:if>

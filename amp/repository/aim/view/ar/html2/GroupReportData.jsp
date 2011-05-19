@@ -39,9 +39,16 @@
 		</c:when>
 		<c:otherwise>
 			<!-- printing row tag -- ${trailCellsFile} -->
-			<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).toggleRow()" 
-				onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).markRow(false)" 
-				onMouseout="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
+				<c:choose>
+					<c:when test="${reportMeta.hideActivities==null || !reportMeta.hideActivities}">
+						<tr onmousedown="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).toggleRow()" 
+						onMouseover="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).markRow(false)" 
+						onMouseout="getRowSelectorInstance(this, {baseId:'${baseId}', markerColor:'${markerColor}', skippedClass:'${skippedClass}' } ).unmarkRow(false)">
+					</c:when>
+					<c:otherwise>
+						<tr>
+					</c:otherwise>
+				</c:choose>
 				<jsp:include page="${trailCellsFile}"/>
 		</c:otherwise>
 	</c:choose>
@@ -70,7 +77,9 @@
 	<%-- Here we include the totals for this GroupReportData --%>
 	<tr  class="${groupReport.htmlClassName}" >
 		<c:forEach var="idx" begin="${groupReport.levelDepth}" end="${reportMeta.numOfHierarchies+1}">
-			<td class="hierarchyCell">&nbsp;</td>
+			<c:if test="${idx != reportMeta.numOfHierarchies}">
+				<td class="hierarchyCell">&nbsp;</td>
+			</c:if>
 		</c:forEach>
 		<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
 		<jsp:include page="TrailCells.jsp" />

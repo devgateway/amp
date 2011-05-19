@@ -588,7 +588,10 @@ public class ColumnReportData extends ReportData {
 			}
 			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows < realStartRow) {
 				// partial overlapping beginning of range
-				this.setRowSpan( numOfPreviousRows+visibleRows - realStartRow + 2 );
+				int rowsp	= numOfPreviousRows+visibleRows - realStartRow + 2;
+				if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
+					rowsp	= 1;
+				this.setRowSpan( rowsp );
 				return;
 			}
 			if ( numOfPreviousRows+visibleRows > realEndRow && numOfPreviousRows < realStartRow) {
@@ -598,7 +601,10 @@ public class ColumnReportData extends ReportData {
 			}
 			if ( numOfPreviousRows+visibleRows <= realEndRow && numOfPreviousRows >= realStartRow) {
 				// all rows are inside the range
-				this.setRowSpan( visibleRows + 1 );
+				int rowsp	= visibleRows + 1;
+				if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
+					rowsp	= 1;
+				this.setRowSpan( rowsp );
 				return;
 			}
 			

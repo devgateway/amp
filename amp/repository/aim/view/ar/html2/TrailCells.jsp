@@ -18,8 +18,10 @@
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">
 			<digi:trn key="rep:popup:reporttotals">Report Totals:</digi:trn>
 		</span>
-		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="session">
-	  		<td style="border-bottom:black 1px solid;border-right:#E2E2E2 1px solid;" height="18px">&nbsp;</td>
+		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="session" indexId="hierIdx">
+			<c:if test="${ hierIdx > 0}">
+	  			<td style="border-bottom:black 1px solid;border-right:#E2E2E2 1px solid;" height="18px">&nbsp;</td>
+	  		</c:if>
 	  	</logic:iterate>
 		
 	</c:if>
@@ -77,8 +79,8 @@
 		<c:set var="firstCell" value="${false}"></c:set>
 	</c:if>
 	--%>
-	
-	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page">
+	<c:set var="firstCell" value="${false}"></c:set>
+	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page" indexId="cellIdx">
 			<c:if test="${cell!=null}">
 				<bean:define id="column" scope="page" toScope="page"  name="cell" property="column"/>
 				<c:if test="${column.worker!=null}">
@@ -91,16 +93,33 @@
 					<c:set var="t3" value="${t1||t2}"/>
 				</c:if>	
 			</c:if>
+
 		<c:if test="${firstCell == false || t3}">
 				<c:if test="${reportData.levelDepth == 1}">
-					<td align="center" style="border-right: #E0E0E0 1px solid;font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold; border-bottom:black 1px solid;">
+					<c:if test="${reportMeta.numOfHierarchies!=0 || cellIdx >0}">
+						<td align="center" style="border-right: #E0E0E0 1px solid;font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold; border-bottom:black 1px solid;">
+					</c:if>
 				</c:if>
 				<c:if test="${reportData.levelDepth == 2}">
-					<td style="font-family: Verdana,Arial,Helvetica,sans-serif;">
+					<c:choose>
+						<c:when test="${reportMeta.hideActivities==null || !reportMeta.hideActivities}">
+							<td style="font-family: Verdana,Arial,Helvetica,sans-serif;">
+						</c:when>
+						<c:otherwise>
+							<td class="${reportData.htmlClassName}">
+						</c:otherwise>
+					</c:choose>
 				</c:if>  
 			
 				<c:if test="${reportData.levelDepth > 2}">
-					<td style="border-bottom: #E2E2E2 1px solid;">
+					<c:choose>
+						<c:when test="${reportMeta.hideActivities==null || !reportMeta.hideActivities}">
+							<td style="border-bottom: #E2E2E2 1px solid;">
+						</c:when>
+						<c:otherwise>
+							<td class="${reportData.htmlClassName}">
+						</c:otherwise>
+					</c:choose>
 				</c:if>  
 			
 					<c:if test="${cell!=null}">
@@ -111,7 +130,9 @@
 					<c:if test="${cell==null}">
 					&nbsp;
 					</c:if>	
+				<c:if test="${reportData.levelDepth != 1 || reportMeta.numOfHierarchies !=0 || cellIdx > 0 }">
 				</td>
+				</c:if>
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>
 		<c:set var="total" scope="page" value=""/>

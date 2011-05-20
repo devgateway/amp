@@ -158,7 +158,7 @@ public class PIUseCase {
 		 	 		rootSecondaryAmpSectors.setUniqueId("0");
 		 	 		List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
 		 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
-		 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
+		 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSectors");
 		 	 		form.getSectorStatusesElements().add(secondarySectorsElement);
 		 	 	}
 
@@ -168,7 +168,7 @@ public class PIUseCase {
 		 	 		rootTertiaryAmpSectors.setUniqueId("0");
 		 	 		List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
 		 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
-		 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
+		 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedSectors");
 		 	 		form.getSectorStatusesElements().add(tertiarySectorsElement);
 		 	 	}
 		}

@@ -143,9 +143,6 @@ var selected, currentLocation;
 
 
 function createToolbarAndContextMenu() {
-  // Add some graphics to the map
-//  addGraphics();
-
   // Create and setup editing tools
   editToolbar = new esri.toolbars.Edit(map);
 
@@ -155,7 +152,6 @@ function createToolbarAndContextMenu() {
 
   createMapMenu();
   createGraphicsMenu();
-
 }
 
 
@@ -173,7 +169,7 @@ function createMapMenu() {
   });
 
   ctxMenuForMap.addChild(new dijit.MenuItem({ 
-    label: "Select this object",
+    label: "Select this point",
     onClick: function(evt) {
     	selectLocationCaller(currentLocation);
     }
@@ -376,9 +372,18 @@ function selectLocationCallerShape(selectedGraphic){
 	//Hack to get the Ids for the fields lan/lon from parent window
 	var callerButton = window.opener.callerGisObject;
 	//This takes an identifier for the element shape (the sibling of the Map button) and replaces shape with latitude and longitude
-	//Very experimental, storing the point as Json Object
+	//Very experimental, storing the point as Stringified Json Object
 	var shapeField = callerButton.nextSibling; //this is the "shape" field
 	shapeField.value = JSON.stringify(selectedGraphic.toJson());
+	//Since this is a shape that we have stored, we'll wipe the lat/lon values to avoid confusion
+	//The lat/lon fields can be used if they are known before hand and entered manually
+	//For quicker data entry.
+	//The function that renders this in the esrimap/mainmap.do draws it either coming from shape or lat/lon
+	var callerIdentifierLatitude = shapeField.name.replace("shape","latitude");
+	var callerIdentifierLongitude = shapeField.name.replace("shape","longitude");
+	window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value = "";
+	window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value = "";
+	
 	window.close();
 }
 

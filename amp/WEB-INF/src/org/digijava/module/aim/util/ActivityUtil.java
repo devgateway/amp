@@ -3415,7 +3415,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 
         /* delete Component Fundings */
-        Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
+        Collection<AmpComponentFunding>  componentFundingCol = ampAct.getComponentFundings();
         if (componentFundingCol != null) {
   			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
   			while (componentFundingColIt.hasNext()) {

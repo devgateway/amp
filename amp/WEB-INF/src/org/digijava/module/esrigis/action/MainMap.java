@@ -43,7 +43,10 @@ public class MainMap extends Action{
 			dataDispatcherForm.setFilter(filter);
 			initializeFilter(filter);
 		}
-		
+		if(request.getParameter("popup") != null && request.getParameter("popup").equalsIgnoreCase("true")){
+			return mapping.findForward("popup");
+			
+		}
 		return mapping.findForward("forward");
 	}
 	private void initializeFilter(MapFilter filter) {

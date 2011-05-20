@@ -8,6 +8,7 @@
 	<action-mappings>
 		<action name="datadispatcherform" path="/esrigis/mainmap" scope="session" type="org.digijava.module.esrigis.action.MainMap">
 			<forward name="forward" path="/showLayout.do?layout=mainmap" />
+			<forward name="popup" path="/showLayout.do?layout=mainmapPopup" />
 		</action>
 		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispatcher"></action>
 	</action-mappings>

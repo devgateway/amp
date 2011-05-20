@@ -11,6 +11,7 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 
 	private Long typeId;
 	private String name;
+	private String graphicType;
 
 	private transient Set<AmpStructure> structures;
 
@@ -70,5 +71,13 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 	@Override
 	public Class getDimensionClass() {
 		return null;
+	}
+
+	public void setGraphicType(String graphicType) {
+		this.graphicType = graphicType;
+	}
+
+	public String getGraphicType() {
+		return graphicType;
 	}	
 }

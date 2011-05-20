@@ -766,6 +766,7 @@
             </module>
             <module name="esrigis">
 				<page>mainmap</page>
+				<page>mainmapPopup</page>
             </module>
 		</page-group>
 	</site-layout>

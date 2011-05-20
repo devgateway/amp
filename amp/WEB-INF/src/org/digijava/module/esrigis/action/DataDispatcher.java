@@ -71,12 +71,14 @@ public class DataDispatcher extends MultiAction {
 			throws Exception {
 		if (request.getParameter("showactivities") != null) {
 			return modeShowActivities(mapping, form, request, response);
-		} else if (request.getParameter("showhighlights") != null) {
+		}else if (request.getParameter("showhighlights") != null) {
 			return modeShowHighlights(mapping, form, request, response);
 		}else if (request.getParameter("jsonobject") != null) { 
 			return modeJSONObject(mapping, form, request, response);
 		}else if (request.getParameter("applyfilter") != null) { 
 			return modeapplyFilter(mapping, form, request, response);
+		}else if (request.getParameter("showstructures") != null){
+			return modeShowStructures(mapping, form, request, response);
 		}
 		return null;
 	}

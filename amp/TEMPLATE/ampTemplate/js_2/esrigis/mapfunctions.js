@@ -474,20 +474,51 @@ function getStructures(clear) {
 
 function MapFindStructure(activity, structureGraphicLayer){
 	dojo.forEach(activity.structures,function(structure) {
-		var pt = new esri.geometry.Point(structure.lat,structure.lon,map.spatialReference);
-		var transpt = esri.geometry.geographicToWebMercator(pt);
-		
 		var sms = new esri.symbol.PictureMarkerSymbol('/TEMPLATE/ampTemplate/img_2/gis/' + structure.type +'.png', 32, 37);
+		var pgraphic;
+		if(structure.shape == ""){
+			var pt = new esri.geometry.Point(structure.lat,structure.lon,map.spatialReference);
+			var transpt = esri.geometry.geographicToWebMercator(pt);
+			var infoTemplate = new esri.InfoTemplate("");   
+			var attr = {"Temp":"Temporal Attribute"};
+			pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
+			pgraphic.setAttributes( {
+				  "Structure Name":structure.name,
+				  "Activity": activity.activityname,
+				  "Structure Type":structure.type
+				  });
+		}
+		else
+		{
+			var jsonObject = eval('(' + structure.shape + ')');
+			if(jsonObject.geometry != null){ //If it's a complete Graphic object
+				pgraphic = new esri.Graphic(jsonObject);
+				if(jsonObject.symbol.style == "esriSMSCircle") //If it's a point, put the appropriate icon
+				{
+					pgraphic.setAttributes( {
+						  "Structure Name":structure.name,
+						  "Activity": activity.activityname,
+						  "Structure Type":structure.type
+						  });
+					pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
+					pgraphic.setSymbol(sms);
+				}
 				
-//		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
-		var attr = {"Temp":"Temporal Attribute"};
-		var infoTemplate = new esri.InfoTemplate("");   
-		var pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
-		var exit = false;
-		pgraphic.setAttributes( {
-			  "Structure":structure.name,
-			  "Activity":activity.activityname
-			  });
+			}
+			else
+			{
+				pt = new esri.geometry.Point(jsonObject);
+				var infoTemplate = new esri.InfoTemplate("");   
+				var attr = {"Temp":"Temporal Attribute"};
+				pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
+				pgraphic.setAttributes( {
+					  "Structure Name":structure.name,
+					  "Activity": activity.activityname,
+					  "Structure Type":structure.type
+					  });
+				
+			}
+		}
 		structureGraphicLayer.add(pgraphic);
     });
 }

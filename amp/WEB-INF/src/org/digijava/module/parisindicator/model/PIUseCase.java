@@ -10,16 +10,20 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -27,11 +31,15 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.filters.GroupingElement;
+import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -66,8 +74,8 @@ public class PIUseCase {
 	 * TODO: Replace the form variable for all collections to decouple the
 	 * Action from the UseCase, so this method can be used from elsewhere.
 	 */
-	public PIForm setupFiltersData(PIForm form, HttpServletRequest request) {
-		if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
+	public PIForm setupFiltersData(PIForm form, HttpServletRequest request,ServletContext ampContext) {
+		/*if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
 			form.setStatuses(DbUtil.getAmpStatusFromCM(request));
 		}
 		if (form.getDonors() == null || form.getDonors().isEmpty()) {
@@ -79,15 +87,94 @@ public class PIUseCase {
 		if (form.getDonorGroups() == null || form.getDonorGroups().isEmpty()) {
 			form.setDonorGroups(DbUtil.getAllOrgGroups());
 		}
+		if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
+		form.setFinancingInstruments(DbUtil.getAllFinancingInstruments());
+		}*/
 		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
 			form.setCalendars(DbUtil.getAllFisCalenders());
 		}
 		if (form.getCurrencyTypes() == null || form.getCurrencyTypes().isEmpty()) {
 			form.setCurrencyTypes(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
 		}
-		if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
-			form.setFinancingInstruments(DbUtil.getAllFinancingInstruments());
+		if (form.getFinancingInstrumentsElements() == null || form.getFinancingInstrumentsElements().isEmpty()) {
+			form.setFinancingInstrumentsElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
+			Collection<AmpCategoryValue> finInstrValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);	
+			HierarchyListableImplementation rootFinancingInstrument	= new HierarchyListableImplementation();
+			rootFinancingInstrument.setLabel("All Financing Instrument Values");
+			rootFinancingInstrument.setUniqueId("0");
+			rootFinancingInstrument.setChildren( finInstrValues );
+			GroupingElement<HierarchyListableImplementation> finInstrElement	=
+					new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div", 
+							rootFinancingInstrument, "selectedFinancingIstruments");
+			form.getFinancingInstrumentsElements().add(finInstrElement);
 		}
+		if(form.getDonorElements()==null||form.getDonorElements().isEmpty()){
+			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
+	 	 	form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+			HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
+	 	 	rootOrgGroup.setLabel("All Donor Groups");
+	 	 	rootOrgGroup.setUniqueId("0");
+	 	 	rootOrgGroup.setChildren( donorGroups );
+	 	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
+	 	 	form.getDonorElements().add(donorGroupElement);
+	 	 	
+	 	 	Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
+	 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
+	 	 	rootDonors.setLabel("All Donors");
+	 	 	rootDonors.setUniqueId("0");
+	 	 	rootDonors.setChildren( donors );
+	 	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonors");
+	 	 	form.getDonorElements().add(donorsElement);
+			
+		}
+		if (form.getSectorStatusesElements()==null||form.getSectorStatusesElements().isEmpty()) { 
+			form.setSectorStatusesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+			Collection<AmpCategoryValue> activityStatusValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);	
+			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
+			rootActivityStatus.setLabel("All");
+			rootActivityStatus.setUniqueId("0");
+			rootActivityStatus.setChildren( activityStatusValues );
+			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
+					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
+							rootActivityStatus, "selectedStatuses");
+			form.getSectorStatusesElements().add(activityStatusElement);
+		
+			
+			if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
+		 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
+		 	 	rootAmpSectors.setLabel("Primary Sectors");
+		 	 	rootAmpSectors.setUniqueId(0 + "");
+		 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
+		 	 	rootAmpSectors.setChildren(ampSectors);
+		 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
+		 	 	form.getSectorStatusesElements().add(sectorsElement);
+		 	 	}
+		 	 	
+		 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
+		 	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
+		 	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
+		 	 		rootSecondaryAmpSectors.setUniqueId("0");
+		 	 		List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
+		 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
+		 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
+		 	 		form.getSectorStatusesElements().add(secondarySectorsElement);
+		 	 	}
+
+		        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
+		 	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
+		 	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
+		 	 		rootTertiaryAmpSectors.setUniqueId("0");
+		 	 		List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
+		 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
+		 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
+		 	 		form.getSectorStatusesElements().add(tertiarySectorsElement);
+		 	 	}
+		}
+ 	 	
+		
+	
 		return form;
 	}
 
@@ -104,9 +191,13 @@ public class PIUseCase {
 			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()).getAmpFiscalCalId()
 					.toString());
 		}
+		form.setDefaultCalendar(form.getSelectedCalendar());
 		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
+		form.setDefaultCurrency(form.getSelectedCurrency());
 		form.setSelectedEndYear(Calendar.getInstance().get(Calendar.YEAR));
+		form.setDefaultEndYear(form.getSelectedEndYear());
 		form.setSelectedStartYear(Calendar.getInstance().get(Calendar.YEAR) - 2);
+		form.setDefaultStartYear(form.getSelectedStartYear());
 		form.setStartYears(new int[10]);
 		form.setEndYears(new int[10]);
 		int auxYear = form.getSelectedEndYear() - 5;

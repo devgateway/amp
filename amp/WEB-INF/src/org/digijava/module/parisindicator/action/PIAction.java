@@ -1,5 +1,7 @@
 package org.digijava.module.parisindicator.action;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,6 +23,7 @@ public class PIAction extends Action {
 		logger.debug("PIAction begin");
 		PIForm piForm = (PIForm) form;
 		PIUseCase useCase = new PIUseCase();
+		
 
 		// Reformat some data because how the arrays come from the page.
 		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0
@@ -56,7 +59,8 @@ public class PIAction extends Action {
 		}
 
 		// Setup filters.
-		useCase.setupFiltersData(piForm, request);
+		ServletContext ampContext = getServlet().getServletContext();
+		useCase.setupFiltersData(piForm, request,ampContext);
 		if (piForm.isReset()) {
 			useCase.resetFilterSelections(piForm, ((TeamMember) request.getSession().getAttribute("currentMember"))
 					.getAppSettings());

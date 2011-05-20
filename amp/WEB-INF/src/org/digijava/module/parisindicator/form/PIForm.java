@@ -9,6 +9,8 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.filters.GroupingElement;
+import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
@@ -28,6 +30,10 @@ public class PIForm extends ActionForm {
 	private int selectedEndYear;
 	private String selectedCurrency;
 	private String selectedCalendar;
+	private int defaultStartYear;
+	private int defaultEndYear;
+	private String defaultCurrency;
+	private String defaultCalendar;
 	private String[] selectedStatuses;
 	private String[] selectedDonorGroups;
 	private String[] selectedSectors;
@@ -46,7 +52,27 @@ public class PIForm extends ActionForm {
 	private Collection<AmpCategoryValue> financingInstruments;
 	private int[] startYears;
 	private int[] endYears;
+	Collection<GroupingElement<HierarchyListableImplementation>> financingInstrumentsElements;
+	Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
+	Collection<GroupingElement<HierarchyListableImplementation>> sectorStatusesElements;
 
+	public Collection<GroupingElement<HierarchyListableImplementation>> getSectorStatusesElements() {
+		return sectorStatusesElements;
+	}
+
+	public void setSectorStatusesElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> sectorStatusesElements) {
+		this.sectorStatusesElements = sectorStatusesElements;
+	}
+
+	public Collection<GroupingElement<HierarchyListableImplementation>> getDonorElements() {
+		return donorElements;
+	}
+
+	public void setDonorElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> donorElements) {
+		this.donorElements = donorElements;
+	}
 	/*
 	 * Rows of the main table.
 	 */
@@ -294,4 +320,47 @@ public class PIForm extends ActionForm {
 	public void setPrintPreview(boolean print) {
 		this.printPreview = print;
 	}
+
+	public Collection<GroupingElement<HierarchyListableImplementation>> getFinancingInstrumentsElements() {
+		return financingInstrumentsElements;
+	}
+
+	public void setFinancingInstrumentsElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> financingInstrumentsElements) {
+		this.financingInstrumentsElements = financingInstrumentsElements;
+	}
+	
+	public int getDefaultStartYear() {
+		return defaultStartYear;
+	}
+
+	public void setDefaultStartYear(int defaultStartYear) {
+		this.defaultStartYear = defaultStartYear;
+	}
+
+	public int getDefaultEndYear() {
+		return defaultEndYear;
+	}
+
+	public void setDefaultEndYear(int defaultEndYear) {
+		this.defaultEndYear = defaultEndYear;
+	}
+
+	public String getDefaultCurrency() {
+		return defaultCurrency;
+	}
+
+	public void setDefaultCurrency(String defaultCurrency) {
+		this.defaultCurrency = defaultCurrency;
+	}
+
+	public String getDefaultCalendar() {
+		return defaultCalendar;
+	}
+
+	public void setDefaultCalendar(String defaultCalendar) {
+		this.defaultCalendar = defaultCalendar;
+	}
+	
+
 }

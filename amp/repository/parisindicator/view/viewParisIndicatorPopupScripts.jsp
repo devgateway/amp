@@ -6,21 +6,16 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"%>
-
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 	
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
-	<%-- <script type="text/javascript" src=".<digi:file src='module/aim/scripts/logger/logger-min.js'/>">.</script> --%>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+
 	
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" >.</script>
+
 	
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
@@ -31,13 +26,8 @@
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
 	
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -193,7 +183,8 @@
 		//alert('handleClose()');
 		//var wrapper = document.getElementById('myFilterWrapper');
 		var wrapper = document;
-		var filter = document.getElementById('myFilter');
+		var filter = document.getElementById('filterContainer');
+		$("div[id^='filter_']").hide();// IE fix
 		if (filter.parent != null) {
 			filter.parent.removeChild(filter);
 		}
@@ -201,7 +192,7 @@
 	};
 
 	var myPanel1 = new YAHOO.widget.Panel("new", {
-		width :"700px",
+		width :"750px",
 		fixedcenter :true,
 		constraintoviewport :true,
 		underlay :"none",
@@ -265,6 +256,46 @@
 		myPanel1.setBody("<p>initScripts</p>");
 		myPanel1.render(document.body);
 	}
+	function setSelectedValues(txtSelectedValuesObj,selname){
+		var selectedArray = new Array();
+		    $("input[name='"+selname+"']:checked").each(function(index) {
+		 	   selectedArray[index] = $(this).val();
+		 });
+		 if(selectedArray.length>0)
+		 txtSelectedValuesObj.value = selectedArray;
+		
+	}
+	
+	
+	function resetPIFilters() {
+		 $("input[name='selectedDonors']:checked").attr('checked', false);
+		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
+		 $("input[name='selectedStatuses']:checked").attr('checked', false);
+		 $("input[name='selectedFinancingIstruments']:checked").attr('checked', false);
+		 $("input[name='selectedSectors']:checked").attr('checked', false);
+		  var filterForm = document.getElementsByName("parisIndicatorForm")[0]; 
+		  var selectedArray = new Array();
+ 			filterForm.selectedDonors.value= selectedArray;
+ 			filterForm.selectedDonorGroups.value= selectedArray;
+ 			filterForm.selectedStatuses.value= selectedArray;
+ 			filterForm.selectedSectors.value= selectedArray;
+ 			filterForm.selectedFinancingIstruments.value= selectedArray;
+ 			filterForm.selectedStartYear.value = filterForm.defaultStartYear.value ;
+ 	        filterForm.selectedEndYear.value = filterForm.defaultEndYear.value;
+ 	        filterForm.selectedCalendar.value = filterForm.defaultCalendar.value;
+ 	        filterForm.selectedCurrency.value = filterForm.defaultCurrency.value;
+			$('#selectedStartYear option[value='+filterForm.defaultStartYear.value+']').attr('selected', 'selected');
+ 			$('#selectedEndYear option[value='+filterForm.defaultEndYear.value+']').attr('selected', 'selected');
+ 			$('#selectedCalendar option[value='+filterForm.selectedCalendar.value+']').attr('selected', 'selected');
+ 			$('#selectedCurrency option[value='+filterForm.selectedCurrency.value+']').attr('selected', 'selected');
+	}
+	function showFilterDiv(divId,searchId){
+		var divEl=document.getElementById(divId);
+		getSearchManagerInstanceById(searchId).setDiv(divEl); 
+		$("div[id^='filter_']").hide();
+		$('#'+divId).show();
+	}
+	
 
 	function submitFilters() {
 		//alert('submitfilters');
@@ -276,73 +307,31 @@
         
         //Donors
         var txtSelectedValuesObj = filterForm.selectedDonors;
-        var selectedArray = new Array();
-        var selObj = document.getElementById("selectedDonors");
-        var i;
-        var count = 0;
-        for (i=0; i<selObj.options.length; i++) {
-            if (selObj.options[i].selected) {
-            	  selectedArray[count] = selObj.options[i].value;
-            	  count++;
-            }
-        }
-        txtSelectedValuesObj.value = selectedArray;
+        setSelectedValues(txtSelectedValuesObj,'selectedDonors');
+      
+       
 
         //groups
         var txtSelectedValuesObj = filterForm.selectedDonorGroups;
-        var selectedArray = new Array();
-        var selObj = document.getElementById("selectedDonorGroups");
-        var i;
-        var count = 0;
-        for (i=0; i<selObj.options.length; i++) {
-            if (selObj.options[i].selected) {
-                  selectedArray[count] = selObj.options[i].value;
-                  count++;
-            }
-        }
-        txtSelectedValuesObj.value = selectedArray;
+        setSelectedValues(txtSelectedValuesObj,'selectedDonorGroups');
+      
 
         //status
         var txtSelectedValuesObj = filterForm.selectedStatuses;
-        var selectedArray = new Array();
-        var selObj = document.getElementById("selectedStatuses");
-        var i;
-        var count = 0;
-        for (i=0; i<selObj.options.length; i++) {
-            if (selObj.options[i].selected) {
-                  selectedArray[count] = selObj.options[i].value;
-                  count++;
-            }
-        }
-        txtSelectedValuesObj.value = selectedArray;
+        setSelectedValues(txtSelectedValuesObj,'selectedStatuses');
+  
 
         //instruments
         var txtSelectedValuesObj = filterForm.selectedFinancingIstruments;
-        var selectedArray = new Array();
-        var selObj = document.getElementById("selectedFinancingIstruments");
-        var i;
-        var count = 0;
-        for (i=0; i<selObj.options.length; i++) {
-            if (selObj.options[i].selected) {
-                  selectedArray[count] = selObj.options[i].value;
-                  count++;
-            }
-        }
-        txtSelectedValuesObj.value = selectedArray;
+        setSelectedValues(txtSelectedValuesObj,'selectedFinancingIstruments');
+ 
+
 
         //sectors
         var txtSelectedValuesObj = filterForm.selectedSectors;
-        var selectedArray = new Array();
-        var selObj = document.getElementById("selectedSectors");
-        var i;
-        var count = 0;
-        for (i=0; i<selObj.options.length; i++) {
-            if (selObj.options[i].selected) {
-                  selectedArray[count] = selObj.options[i].value;
-                  count++;
-            }
-        }
-        txtSelectedValuesObj.value = selectedArray;
+        setSelectedValues(txtSelectedValuesObj,'selectedSectors');
+
+      
 
         //filterForm.selectedFinancingIstruments.value = document.getElementsByName("selectedFinancingIstruments")[0].value;
         filterForm.submit();
@@ -360,7 +349,8 @@
 	function showFilter() {
 		//alert('showFilter');
 		YAHOO.amptab.init();
-		var element = document.getElementById("myFilter");
+		var element = document.getElementById("filterContainer");
+		//var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		//alert(element.innerHTML);
 		myPanel1.setBody(element);

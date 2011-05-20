@@ -37,11 +37,8 @@
 	<tr align="center">
 		<td>
 			<!-- CSS -->
-			<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
 			<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-			<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
-			<link href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
-			<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
+			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -51,9 +48,9 @@
 					
 			<%String reportId = request.getParameter("reportId");%>
 			<digi:form action="/parisindicator.do" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
-			    
+			     <jsp:include page="viewParisIndicatorPopupScripts.jsp" />
 			    <jsp:include page="viewParisIndicatorPopupFilter.jsp" />
-			    <jsp:include page="viewParisIndicatorPopupScripts.jsp" />
+			   
 			    
 			    <html:hidden property="selectedEndYear"/>
 			    <html:hidden property="selectedStartYear"/>
@@ -97,9 +94,9 @@
 												<td noWrap="nowrap" align="right" style="padding-right: 5px; padding-top: 5px; color: #376091;font-weight: bold;">
 													<a style="height: 20px; cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>
 													|&nbsp;
-													<span style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">
+													<a style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">
 														<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
-													</span>
+													</a>
 												</td>
 											</tr>
 											<tr>

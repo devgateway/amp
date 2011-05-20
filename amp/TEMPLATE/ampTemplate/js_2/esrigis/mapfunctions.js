@@ -12,6 +12,7 @@ dojo.require("esri.tasks.find");
 dojo.require("esri.tasks.geometry");
 dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
+dojo.require("dijit.TitlePane");
 
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
@@ -27,9 +28,10 @@ function init() {
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
+	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
-
+	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {opacity : 0.40});
 	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
@@ -80,12 +82,22 @@ function createMapAddLayers(myService1, myService2) {
     });
 	map.addLayer(myService1);
 	map.addLayer(myService2);
+	//map.addLayer(povertymap);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
-	mapPrinter = new MapPrinter(map, "http://localhost:8080/getpdf.out");
+	
+	createBasemapGalleryEsri();
 	createBasemapGallery();
 }
 
+function toggle(id) {
+	  var layer = map.getLayer(id);
+	  if (layer.visible) {
+	    layer.hide();
+	  } else {
+	    layer.show();
+	  }
+	}
 
 function showLoading() {
     esri.show(loading);
@@ -168,7 +180,7 @@ function MapFind(activity){
     	    findParams.returnGeometry = true;
     	    findParams.layerIds = [0,1];
     	    findParams.contains = false;
-    	    //Configure the search field in global settings
+    	    //TODO:Configure the search field in global settings
     	    findParams.searchFields = ["GEO_ID"];
     		execute(location.geoId);
     		totallocations ++;
@@ -180,13 +192,31 @@ function MapFind(activity){
     		var infoTemplate = new esri.InfoTemplate("");   
     		var pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
     		var exit = false;
+    		var primarysector;
+    		var primarysectorschema;
+    		var primarypercentage;
+    		
+    		dojo.forEach(activity.sectors,function(sector) {
+    			primarysector = sector.sectorName;
+    			primarysectorschema = sector.sectorScheme;
+    			primarypercentage = sector.sectorPercentage;
+    		});
+    		
     		pgraphic.setAttributes( {
-  				  "Activity":activity.activityname,
-  				  "Location":location.name,
-  				  "commitments":location.commitments,
-  				  "disbursements":location.disbursements,
-  				  "expenditures":location.expenditures,
-  				  "percentage":location.percentage
+    			  "Activity":'<b>'+activity.activityname+'</b>',
+    			  "Activity Preview":'<a href="/aim/selectActivityTabs.do~ampActivityId='+activity.id+'" target="_blank">Click here</a>',	
+    			  "AMP Activity ID":activity.ampactivityid,	
+    			  "Activity commitments":'<b>'+activity.commitments+'</b>',
+  				  "Activity disbursements":'<b>'+activity.disbursements+'</b>',
+  				  "Activity expenditures":'<b>'+activity.expenditures+'</b>',
+  				  "Location":'<b>'+location.name+'</b>',
+  				  "Location commitments":'<b>'+location.commitments+'</b>',
+  				  "Location disbursements":'<b>'+location.disbursements+'</b>',
+  				  "Location expenditures":'<b>'+location.expenditures+'</b>',
+  				  "Location percentage":location.percentage,
+  				  "Primary Sector":'<b>'+primarysector+'</b>',
+  				  "Primary Schema":primarysectorschema,
+  				  "Primary Percentage":primarypercentage
   				  });
   			location.isdisplayed = true;
   			features.push(pgraphic);
@@ -250,9 +280,9 @@ function drawpoints(){
 			id: "activitiesMap",
 			features: features,
 			infoWindow: {
-				template: new esri.InfoTemplate("Attributes", "${*}"),
+				template: new esri.InfoTemplate("Activity Details", "${*}"),
 			width: 300,
-			height: 250
+			height: 300
 		},
 		flareLimit: 15,
 		flareDistanceFromCenter: 20

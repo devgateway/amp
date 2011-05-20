@@ -41,11 +41,9 @@ public class DbHelper {
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 		Long[] locationIds = filter.getSelLocationIds();
-		boolean locationCondition = locationIds != null
-				&& locationIds.length > 0 && !locationIds[0].equals(-1l);
+		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] sectorIds = filter.getSelSectorIds();
-		boolean sectorCondition = sectorIds != null && sectorIds.length > 0
-				&& !sectorIds[0].equals(-1l);
+		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		/*
 		 * We are selecting sectors which are funded In selected year by the
 		 * selected organization

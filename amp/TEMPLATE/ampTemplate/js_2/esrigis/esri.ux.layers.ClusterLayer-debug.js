@@ -39,14 +39,14 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         try {
             this.setFeatures(options.features);
         } catch (ex) {
-            alert(ex);
+            //alert(ex);
         }
 
         //connects for cluster layer itself that handles the loading and mouse events on the graphics
         dojo.connect(this, 'onLoad', this.handleLayerLoaded);
         dojo.connect(this, 'onMouseOver', this.handleMouseOver);
         dojo.connect(this, 'onMouseOut', this.handleMouseOut);
-        //dojo.connect(this, 'onMouseClick', this.handleMouseClick);
+        dojo.connect(this, 'onMouseClick', this.handleMouseClick);
         
         //default symbol bank for clusters and single graphics
         //TODO: allow for user supplied symbol bank to override.  just use an ESRI renderer somehow?
@@ -266,7 +266,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 delete g.clusterGraphics;
                 g.attributes.clustered = false;
             }, this, [graphic]);
-            task.delay(800);
+            task.delay(900);
             graphic.task = task;
         } else {
             if (graphic.attributes.baseGraphic) { //cluster flare
@@ -275,14 +275,23 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                     delete g.attributes.baseGraphic.clusterGraphics;
                     g.attributes.baseGraphic.attributes.clustered = false;
                 }, this, [graphic]);
-                task.delay(800);
+                task.delay(900);
                 graphic.attributes.baseGraphic.task = task;
             }
-            if (map.infoWindow.isShowing) {
-                map.infoWindow.hide();
-            }
+            //if (map.infoWindow.isShowing & !this.keepinfowindow) {
+            //    map.infoWindow.hide();
+            //}
         }
     },
+    
+    
+    handleMouseClick: function(evt) {
+        var graphic = evt.graphic;
+        //this.showInfoWindow(graphic);
+        this.keepinfowindow=true;
+        alert('click');
+    },
+    
     
     //removes the flare graphics from the map when a cluster graphic is moused out
     removeFlareGraphics: function(graphics) {

@@ -95,6 +95,10 @@
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
 
+<feature:display name="Select Base Map" module="Map Module"></feature:display>
+<field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
+<field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
+
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 

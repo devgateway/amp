@@ -2,8 +2,10 @@ package org.digijava.module.esrigis.helpers;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.helper.ActivitySector;
 
 import net.sf.json.JSON;
 
@@ -15,14 +17,18 @@ import net.sf.json.JSON;
 public class ActivityPoint {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private String id;
+	private String ampactivityid;
 	private String activityname;
 	private String commitments;
 	private String disbursements;
+	private String expenditures;
 	private ArrayList<SimpleLocation> locations;
 	private ArrayList<Structure> structures;
     private String implementationlevel;
-
+    private List<ActivitySector> sectors;
+    
     public ActivityPoint() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -77,12 +83,45 @@ public class ActivityPoint {
 		return implementationlevel;
 	}
 
+	public String getExpenditures() {
+		return expenditures;
+	}
+
+	public void setExpenditures(String expenditures) {
+		this.expenditures = expenditures;
+	}
+
+	public List<ActivitySector> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(List<ActivitySector> sectors) {
+		this.sectors = sectors;
+	}
+
+	public String getAmpactivityid() {
+		return ampactivityid;
+	}
+
+	public void setAmpactivityid(String ampactivityid) {
+		this.ampactivityid = ampactivityid;
+	}
+
+	
 	public void setStructures(ArrayList<Structure> structures) {
 		this.structures = structures;
 	}
 
 	public ArrayList<Structure> getStructures() {
 		return structures;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

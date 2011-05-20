@@ -1,5 +1,6 @@
 package org.digijava.module.esrigis.helpers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -18,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -34,6 +37,8 @@ import fi.joensuu.joyds1.calendar.EthiopicCalendar;
 import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 public class QueryUtil {
+	 public static final BigDecimal ONEHUNDERT = new BigDecimal(100);
+	 
 	public static Date getStartDate(Long fiscalCalendarId, int year) {
 		Date startDate = null;
 		if (fiscalCalendarId != null && fiscalCalendarId != -1) {
@@ -227,8 +232,12 @@ public class QueryUtil {
 		if (filter.getOrgGroupId() == null || filter.getOrgGroupId() == -1) {
 			filter.setOrgGroupId(-1l);
 		}
-		orgs = DbUtil.getDonorOrganisationByGroupId(
-				filter.getOrgGroupId(), false); 
+		if (filter.getSelLocationIds() == null) {
+			Long[] locationIds={-1l};
+			filter.setSelLocationIds(locationIds);
+		}
+		
+		orgs = DbUtil.getDonorOrganisationByGroupId(filter.getOrgGroupId(), false); 
 		filter.setOrganizations(orgs);
 
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
@@ -237,20 +246,15 @@ public class QueryUtil {
 		if (filter.getYear() == null) {
 			Long year = null;
 			try {
-				year = Long.parseLong(FeaturesUtil
-						.getGlobalSettingValue("Current Fiscal Year"));
+				year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
 			} catch (NumberFormatException ex) {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}
 			filter.setYear(year);
 		}
 		filter.setYears(new ArrayList<BeanWrapperImpl>());
-		long yearFrom = Long
-				.parseLong(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-		long countYear = Long
-				.parseLong(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+		long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 		long maxYear = yearFrom + countYear;
 		if (maxYear < filter.getYear()) {
 			maxYear = filter.getYear();
@@ -263,8 +267,7 @@ public class QueryUtil {
 		if (calendars != null) {
 			filter.setFiscalCalendars(new ArrayList(calendars));
 		}
-		String value = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
@@ -281,9 +284,7 @@ public class QueryUtil {
 		}
 		if (filter.getRegions() == null) {
 			try {
-				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(
-						DynLocationManagerUtil
-								.getLocationsOfTypeRegionOfDefCountry()));
+				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -297,7 +298,6 @@ public class QueryUtil {
 				region = LocationUtil.getAmpCategoryValueLocationById(regionId[0]);
 				if (region.getChildLocations() != null) {
 					zones.addAll(region.getChildLocations());
-
 				}
 			} catch (DgException e) {
 				e.printStackTrace();
@@ -324,4 +324,9 @@ public class QueryUtil {
 		return filter;
     	
     }
+    
+    public static String getPercentage(BigDecimal base, BigDecimal pct){
+        return FormatHelper.formatNumber(base.multiply(pct).divide(ONEHUNDERT).doubleValue()); 
+    }
+
 }

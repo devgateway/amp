@@ -39,3 +39,16 @@ function createBasemapGallery() {
 		console.log(error)
 	});
 }
+
+function createBasemapGalleryEsri() {
+    //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
+    var basemapGallery = new esri.dijit.BasemapGallery({
+      showArcGISBasemaps: true,
+      bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
+      map: map
+    }, "basemapGalleryesri");
+
+    basemapGallery.startup();
+    
+    dojo.connect(basemapGallery, "onError", function(msg) {console.log(msg)});
+  }

@@ -82,11 +82,16 @@
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module" parentModule="MAP MODULE"></module:display>
+
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="PUBLIC VIEW"></module:display> 
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
+
+<feature:display name="Select Base Map" module="Map Module"></feature:display>
+<field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
+<field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
 
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display> 
 <feature:display name="My Resources" module="Resources"></feature:display> 

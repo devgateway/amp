@@ -113,8 +113,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		super(id, model,fmName, AmpFMTypes.FIELD);
 		setOutputMarkupId(true);
 		this.fmName = fmName;
-		titleLabel = new TrnLabel("fieldLabel", new Model<String>(fmName),
-				fmName);
+		titleLabel = new TrnLabel("fieldLabel", fmName);
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");

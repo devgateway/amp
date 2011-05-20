@@ -5,11 +5,14 @@
 package org.dgfoundation.amp.onepager.web.pages;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -18,14 +21,18 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.AmpWebSession;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.wicketstuff.jquery.JQueryBehavior;
+
+import wicket.contrib.tinymce.settings.TinyMCESettings;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -33,6 +40,20 @@ import org.wicketstuff.jquery.JQueryBehavior;
  */
 public class AmpHeaderFooter extends WebPage {
 	public AmpHeaderFooter() {
+		
+		Cookie[] cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+		if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("digi_language")) {
+                	String languageCode = cookies[i].getValue();
+                	Session.get().setLocale(new Locale(languageCode));
+                    if (languageCode != null) {
+                        break;
+                    }
+                }
+            }
+        }
+		
 		add(new HeaderContributor(
 				new com.google.excanvas.ExCanvasHeaderContributor()));
 		add(new JQueryBehavior());
@@ -51,14 +72,15 @@ public class AmpHeaderFooter extends WebPage {
 
 		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
 				"translations.js", variablesModel));
+		add(JavascriptPackageResource.getHeaderContribution("/ckeditor/ckeditor.js"));
+		
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpStructuresFormSectionFeature.class, "gisPopup.js"));
-		String changeTrnMode = "Enable TrnMode";
 		/*
-		 * 
-		add(new AjaxLink("changeTrnMode", new Model(changeTrnMode)) {
+		String changeTrnMode = "Enable TrnMode";
+		add(new AmpAjaxLinkField("switchTranslatorMode", "Switch Translator Mode Button", changeTrnMode) {
 
 			@Override
 			public void onClick(AjaxRequestTarget arg0) {
@@ -70,7 +92,6 @@ public class AmpHeaderFooter extends WebPage {
 				setResponsePage(OnePager.class);
 			}
 		});
-
 		add(new AjaxLink("changeFmMode", new Model("FM Mode")) {
 			@Override
 			public void onClick(AjaxRequestTarget arg0) {

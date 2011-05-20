@@ -4,8 +4,11 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.util.CKEditorBehavior;
 
 import wicket.contrib.tinymce.TinyMceBehavior;
 
@@ -34,7 +37,17 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
 		super(id, fmName);
 		textAreaContainer = new TextArea<T>("richText", model);
-		if(wysiwyg) textAreaContainer.add(new TinyMceBehavior());
+		textAreaContainer.setOutputMarkupId(true);
+		if(wysiwyg){
+			textAreaContainer.add(new AjaxFormComponentUpdatingBehavior("onclick"){
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					//textAreaContainer.add(new TinyMceBehavior());
+					textAreaContainer.add(new CKEditorBehavior());
+					target.addComponent(textAreaContainer);
+				}
+			});
+		}
 		addFormComponent(textAreaContainer);
 	}
 

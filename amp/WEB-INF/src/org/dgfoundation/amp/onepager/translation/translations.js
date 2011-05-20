@@ -84,23 +84,12 @@ function saveEditBox(labelId){
 	var label = document.getElementById(labelId);
 	var editor = document.getElementById(labelId+".editor");
 	
-	var params = '&method=translate' + 
-				 '&editorKey='+editor.getAttribute("key") + 
+	var params = '&editorKey='+editor.getAttribute("key") + 
 				 '&editorVal='+editor.value +
 				 '&labelId='+labelId;
 	
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
-
-function wicketSwitchTranslationMode(){
-	var params = '&method=switchtranslatormode';
-	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
-}
-
-$(document).ready(function(){
-	$("#switchTranslationMode").attr('href', 'javascript:wicketSwitchTranslationMode()');
-	$('#wicketFooter').replaceWith($('#footer'));
-})
 
 //////////////////////////////////////////////////////////////
 //

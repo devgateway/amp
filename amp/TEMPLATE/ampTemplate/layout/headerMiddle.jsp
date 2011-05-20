@@ -7,18 +7,15 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
- <!-- Dependencies --> 
+        <!-- Dependencies --> 
+		
 <%@page import="org.digijava.module.aim.helper.Constants"%>
-
-
-<!-- Core + Skin CSS -->
-<digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
-<div id="customAbout" style="display: none" class="content">
-	<jsp:include page="/repository/aim/view/helpAbout.jsp" />
-</div>
+	<div id="customAbout" style="display: none" class="content">
+		<jsp:include page="/repository/aim/view/helpAbout.jsp" />
+	</div>
 <!--</div>-->
 
 <div id="myUserFilterWrapper" style="display: none;" >
@@ -26,7 +23,10 @@
 		<jsp:include page="/repository/aim/view/workspacePopup.jsp" />
 	</div>
 </div>
-    
+
+        <!-- Core + Skin CSS -->
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/container.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
     <c:choose>

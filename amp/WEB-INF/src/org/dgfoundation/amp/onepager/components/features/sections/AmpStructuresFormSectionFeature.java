@@ -5,11 +5,12 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -17,9 +18,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpStructureField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpStructure;
 
 /**
@@ -34,10 +38,6 @@ public class AmpStructuresFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
-		if (setModel.getObject() == null){
-			setModel.setObject(new HashSet());
-		}
-		
 		final ListView<AmpStructure> list;
 
 		

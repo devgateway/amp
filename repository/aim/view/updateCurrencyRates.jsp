@@ -26,30 +26,30 @@
 
 function validate() {
 	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateCode.value) == true) {
-		alert('<digi:trn key="aim:currencyCodenotEntered">Currency code not entered</digi:trn>');
+		alert('<digi:trn jsFriendly="true" key="aim:currencyCodenotEntered">Currency code not entered</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
 	if (document.aimCurrencyRateFormPop.updateCRateCode.value == 'USD') {
-		alert('<digi:trn key="aim:selectDifferentCurrency">All exchange rates are saved in terms of USD. Please select a different currency.</digi:trn>');
+		alert('<digi:trn jsFriendly="true" key="aim:selectDifferentCurrency">All exchange rates are saved in terms of USD. Please select a different currency.</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
 
 	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateDate.value) == true) {
-		alert('<digi:trn key="aim:exchangeRateDateNotEntered">Exchange rate date not entered</digi:trn>');
+		alert('<digi:trn jsFriendly="true" key="aim:exchangeRateDateNotEntered">Exchange rate date not entered</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateDate.focus();
 		return false;
 	}
 	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateAmount.value) == true) {
-		alert('<digi:trn key="aim:exchangeRateNotEntered">Exchange rate not entered</digi:trn>');
+		alert('<digi:trn jsFriendly="true" key="aim:exchangeRateNotEntered">Exchange rate not entered</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateAmount.focus();
 		return false;
 	}
 	
 	if (checkAmountUsingSymbols(document.aimCurrencyRateFormPop.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
 		{
-			alert('<digi:trn key="aim:invalidExchangeRateEntered">Invalid exchange rate entered</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:invalidExchangeRateEntered">Invalid exchange rate entered</digi:trn>');
 			document.aimCurrencyRateFormPop.updateCRateAmount.focus();
 			return false;
 		}

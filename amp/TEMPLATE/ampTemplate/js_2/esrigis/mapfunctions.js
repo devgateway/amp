@@ -29,9 +29,9 @@ function init() {
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
 	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
-	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
-	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
-	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {opacity : 0.40});
+	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
+	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
+	povertymap = new  new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
 	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
@@ -82,7 +82,7 @@ function createMapAddLayers(myService1, myService2) {
     });
 	map.addLayer(myService1);
 	map.addLayer(myService2);
-	//map.addLayer(povertymap);
+	map.addLayer(povertymap);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
 	
@@ -90,12 +90,15 @@ function createMapAddLayers(myService1, myService2) {
 	createBasemapGallery();
 }
 
-function toggle(id) {
+function toggleindicatormap(id) {
 	  var layer = map.getLayer(id);
+	  var functionalayer = map.getLayer('liberia');
 	  if (layer.visible) {
 	    layer.hide();
+	    functionalayer.show();
 	  } else {
 	    layer.show();
+	    functionalayer.hide();
 	  }
 	}
 

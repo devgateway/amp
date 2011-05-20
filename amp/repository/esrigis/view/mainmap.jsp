@@ -139,6 +139,7 @@
 						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
 						<td valign="middle" align="center" onclick="getStructures(true);" style="cursor: pointer;">Structures</td>
+						<td valign="middle" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;">Indicator</td>
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 								<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="<digi:trn>Select base Map</digi:trn>">

@@ -5,12 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-</div>
 <!-- FOOTER START -->
 
 	<div class="footer">
 		
-			<img src="img_2/logo_footer.gif" /> AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
+			<img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
 			<logic:notEmpty name="currentMember" scope="session">
 				<digi:secure actions="ADMIN">
             		<a href='<digi:site property="url"/>/admin/'>Admin</a>
@@ -19,7 +18,6 @@
 			</logic:notEmpty>
 	
 	 </div>
-	 </center> 
 <!-- FOOTER END  -->
 	
 

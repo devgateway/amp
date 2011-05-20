@@ -4,17 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.components.features;
 
-import java.util.Iterator;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-
 import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
 
 /**
@@ -49,8 +44,7 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 
 	public AmpFeaturePanel(String id, IModel<T> model, String fmName, boolean hideLabel){
 		super(id, model, fmName, AmpFMTypes.FEATURE);
-		labelContainer = new TrnLabel("featureLabel",
-				new Model<String>(fmName), fmName);
+		labelContainer = new TrnLabel("featureLabel", fmName);
 		labelContainer.setVisible(!hideLabel);
 		add(labelContainer);
 		setOutputMarkupId(true);

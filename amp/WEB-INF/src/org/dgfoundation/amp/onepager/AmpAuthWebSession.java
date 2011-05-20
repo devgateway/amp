@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
@@ -14,10 +15,15 @@ import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -35,6 +41,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private TeamMember currentMember;
 	private AmpTeamMember ampCurrentMember;
 	private HttpSession httpSession;
+	private Site site;
 	
 	
 	public AmpAuthWebSession(final Request request) {
@@ -49,6 +56,22 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 			ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		else
 			ampCurrentMember = null;
+		
+		
+		WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
+	    HttpServletRequest hsRequest   = cycle.getWebRequest().getHttpServletRequest();
+		SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(hsRequest.getServerName(), null);
+		site = siteDomain.getSite();
+	}
+
+	
+	
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
 	}
 
 	public AmpTeamMember getAmpCurrentMember() {
@@ -82,6 +105,10 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 
 	public void setTranslatorMode(boolean translatorMode) {
 		this.translatorMode = translatorMode;
+	}
+	
+	public void switchTranslatorMode(){
+		this.translatorMode = !translatorMode;
 	}
 
 	public boolean isFmMode() {

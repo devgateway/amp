@@ -63,6 +63,10 @@ public class SwitchLanguage
         locale.setCode(localeKey);
         DgUtil.switchLanguage(locale, request, response);
 
+        if(referrerUrl.equals("/translation/default/showAdvancedTranslation.do")) {
+        	referrerUrl = "/translation/showAdvancedTranslation.do";
+        }
+        
         return new ActionForward(referrerUrl, true);
     }
 }

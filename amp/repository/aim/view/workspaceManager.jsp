@@ -149,8 +149,8 @@
 }
 		
 </style>
-<!-- Individual YUI JS files --> 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
@@ -189,12 +189,10 @@
 			myclose();
 		}); 
 		myPanel.render(document.body);
-		panelStart = 0;
+		panelStart = 0; 
 		
 	}
 	
-	
-
 </script>
 <script language="JavaScript">
     var tooltipPanel;

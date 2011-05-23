@@ -21,6 +21,10 @@
 		width:634px;
 		height:350px;
 	}
+	.side_opt_sel {
+		background-color: rgb(191, 210, 223); 
+	}
+	
 </style>
 <!-- Visualization's Scripts-->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
@@ -227,12 +231,13 @@ function resetToDefaults(){
 	}
 	loadingPanel.show();
 	
-	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
-	document.getElementById("region_dropdown_ids").selectedIndex = 0;
-	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
-	removeOptions("org_dropdown_ids");
-	removeOptions("zone_dropdown_ids");
-	removeOptions("sub_sector_dropdown_ids");
+	unCheckOptions("org_grp_check");
+	unCheckOptions("region_check");
+	unCheckOptions("sector_check");
+	removeOptions("orgDivList");
+	removeOptions("zoneDivList");
+	removeOptions("subSectorDivList");
+	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
 	
@@ -255,46 +260,221 @@ function resetToDefaults(){
 }
 
 function removeOptions (obj){
-	var elem = document.getElementById(obj);
-	  var i;
-	  for (i = elem.length - 1; i>0; i--) {
-	    elem.remove(i);
-	  }
+	var div = document.getElementById(obj);
+	div.innerHTML = "";
+}
+
+function unCheckOptions (obj){
+	var elems = document.getElementsByName(obj);
+	for(i=0;i<elems.length;i++){
+		elems[i].checked=false;
+	}
+}
+
+function getSelectionsFromElement(elementId){
+	var sels = "";
+	var cnt = 0;
+	var elems=document.getElementsByName(elementId);
+	for(i=0;i<elems.length;i++){
+		if (elems[i].checked==true){
+			if(sels != ""){
+				sels = sels + ",";
+			}
+			sels = sels + elems[i].value;
+			cnt++;
+		}
+	}
+	return sels;
 }
 
 function changeTab (selected){
-	document.getElementById("selGeneral").className = "selector_type";
-	document.getElementById("selOrgs").className = "selector_type";
-	document.getElementById("selRegions").className = "selector_type";
-	document.getElementById("selSectors").className = "selector_type";
+	document.getElementById("selGeneral").className = "";
+	document.getElementById("selOrgs").className = "";
+	document.getElementById("selRegions").className = "";
+	document.getElementById("selSectors").className = "";
 
-	document.getElementById("divGeneralFilter").style.display = "none";
-	document.getElementById("divOrganizationsFilter").style.display = "none";
-	document.getElementById("divSectorsFilter").style.display = "none";
-	document.getElementById("divRegionsFilter").style.display = "none";
+	document.getElementById("generalTab").style.display = "none";
+	document.getElementById("organizationsTab").style.display = "none";
+	document.getElementById("regionsTab").style.display = "none";
+	document.getElementById("sectorsTab").style.display = "none";
 	
 	switch (selected) {
 	case 0:
-		document.getElementById("selGeneral").className = "selector_type_sel";
-		document.getElementById("divGeneralFilter").style.display = "block";
+		document.getElementById("selGeneral").className = "selected";
+		document.getElementById("generalTab").style.display = "block";
 		break;
 	case 1:
-		document.getElementById("selOrgs").className = "selector_type_sel";
-		document.getElementById("divOrganizationsFilter").style.display = "block";
+		document.getElementById("selOrgs").className = "selected";
+		document.getElementById("organizationsTab").style.display = "block";
 		break;
 	case 2:
-		document.getElementById("selRegions").className = "selector_type_sel";
-		document.getElementById("divRegionsFilter").style.display = "block";
+		document.getElementById("selRegions").className = "selected";
+		document.getElementById("regionsTab").style.display = "block";
 		break;
 	case 3:
-		document.getElementById("selSectors").className = "selector_type_sel";
-		document.getElementById("divSectorsFilter").style.display = "block";
+		document.getElementById("selSectors").className = "selected";
+		document.getElementById("sectorsTab").style.display = "block";
 		break;
 	default:
 		break;
 	}
 }
 
+function getChildren(e) {
+	var eValue = e.value;
+	var eName = e.name;
+	var objectType = "";
+
+	switch(eName){
+		case "org_grp_check":
+			if (getChecked(eName) == -1) {
+				var div = document.getElementById("orgDivList");
+				div.innerHTML = "";
+			} else {
+				eValue = getChecked(eName);
+			}
+			objectType = "Organizations";
+			break;
+		case "region_check":
+			if (getChecked(eName) == -1) {
+				var div = document.getElementById("zoneDivList");
+				div.innerHTML = "";
+			} else {
+				eValue = getChecked(eName);
+			}
+			objectType = "Regions";
+			break;
+		case "sector_check":
+			if (getChecked(eName) == -1) {
+				var div = document.getElementById("subSectorDivList");
+				div.innerHTML = "";
+			} else {
+				eValue = getChecked(eName);
+			}
+			objectType = "Sectors";
+			break;
+	}
+
+	if (getChecked(eName) != -1 && objectType != ""){
+		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + eValue, getChildrenCall, null);
+	}
+}
+
+var getChildrenCall = {
+  	success: function(o) {
+	  	try {
+		    var results = YAHOO.lang.JSON.parse(o.responseText);
+		    switch(results.objectType)
+		    {
+			    case "Organizations":
+			    	var div = document.getElementById("orgDivList");
+			    	var inner = "";
+					for(var i = 0; i < results.children.length; i++){
+						inner += "<input type='checkbox' name='organization_check' value='"+results.children[i].ID+"'/>"; 
+						inner += "<span style='font-family: Arial; font-size: 12px;'>";
+						inner += results.children[i].name;
+						inner += "</span>";
+						inner += "<br/>";
+		    		}
+					div.innerHTML = inner;
+					break;
+			    case "Regions":
+			    	var div = document.getElementById("zoneDivList");
+			    	var inner = "";
+					for(var i = 0; i < results.children.length; i++){
+						inner += "<input type='checkbox' name='zone_check' value='"+results.children[i].ID+"'/>"; 
+						inner += "<span style='font-family: Arial; font-size: 12px;'>";
+						inner += results.children[i].name;
+						inner += "</span>";
+						inner += "<br/>";
+		    		}
+					div.innerHTML = inner;
+					break;
+				case "Sectors":
+				    	var div = document.getElementById("subSectorDivList");
+				    	var inner = "";
+						for(var i = 0; i < results.children.length; i++){
+							inner += "<input type='checkbox' name='sub_sector_check' value='"+results.children[i].ID+"'/>"; 
+							inner += "<span style='font-family: Arial; font-size: 12px;'>";
+							inner += results.children[i].name;
+							inner += "</span>";
+							inner += "<br/>";
+			    		}
+						div.innerHTML = inner;
+						break;
+		    }
+		}
+		catch (e) {
+		    alert("Invalid respose.");
+		}
+  	},
+  	failure: function(o) {//Fail silently
+	}
+};
+		
+function getChecked (checkName){
+	var count = 0;
+	var id = 0;
+	if (checkName!=null){
+		var checks = document.getElementsByName(checkName);
+		for (i=0; i<checks.length; i++) {
+		  if (checks[i].checked) {
+		    count++;
+		    id = checks[i].value;
+		  }
+		}
+	}
+	if (count > 1) {
+		return -1;
+	} else {
+		return id;
+	}
+}
+
+function changeChild (selected){
+	document.getElementById("org_grp_selector").className = "";
+	document.getElementById("org_selector").className = "";
+	document.getElementById("region_selector").className = "";
+	document.getElementById("zone_selector").className = "";
+	document.getElementById("sector_selector").className = "";
+	document.getElementById("sub_sector_selector").className = "";
+
+	document.getElementById("orgGrpDivList").style.display = "none";
+	document.getElementById("orgDivList").style.display = "none";
+	document.getElementById("regionDivList").style.display = "none";
+	document.getElementById("zoneDivList").style.display = "none";
+	document.getElementById("sectorDivList").style.display = "none";
+	document.getElementById("subSectorDivList").style.display = "none";
+	switch (selected) {
+	case 0:
+		document.getElementById("org_grp_selector").className = "side_opt_sel";
+		document.getElementById("orgGrpDivList").style.display = "block";
+		break;
+	case 1:
+		document.getElementById("org_selector").className = "side_opt_sel";
+		document.getElementById("orgDivList").style.display = "block";
+		break;
+	case 2:
+		document.getElementById("region_selector").className = "side_opt_sel";
+		document.getElementById("regionDivList").style.display = "block";
+		break;
+	case 3:
+		document.getElementById("zone_selector").className = "side_opt_sel";
+		document.getElementById("zoneDivList").style.display = "block";
+		break;
+	case 4:
+		document.getElementById("sector_selector").className = "side_opt_sel";
+		document.getElementById("sectorDivList").style.display = "block";
+		break;
+	case 5:
+		document.getElementById("sub_sector_selector").className = "side_opt_sel";
+		document.getElementById("subSectorDivList").style.display = "block";
+		break;
+	
+	default:
+		break;
+	}
+}
 -->
 </script>
 <table>
@@ -302,27 +482,100 @@ function changeTab (selected){
 <td>
 <div id="dialog2" class="dialog" title="Advanced Filters">
 <div id="popinContent" class="content">
-	<div id="selectDiv" class="yui-navset">
-		<table class="inside" width="100%" height=400 cellpadding="0" cellspacing="0">
-			<tr>
-				<td width=40% height=25 align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header">Grouping Selector</b></td>
-				<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside" align="center"><b class="ins_header">Grouping Details</b></td>
-			</tr>
-			<tr>
-			    <td class="inside" style="background-color:#F9F9F9;" valign="top">
-			    <ul class="yui-nav" style="width: 70%; position: static;">
-					<div id="selGeneral" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(0)">General</a></div></div>
-					<div id="selOrgs" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(1)">Organizations</a></div></div>
-					<div id="selRegions" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(2)">Regions</a></div></div>
-					<div id="selSectors" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(3)">Sectors</a></div></div>
-				</ul>
-				</td>
-				<td class="inside" valign="top" style="background-color:#F9F9F9;">
-					<div id="divGeneralFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-						<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><b><digi:trn>Show Only Data From This Workspace</digi:trn></b></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;
-						<b><digi:trn>Decimals to show</digi:trn>: </b>
-							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
+	<c:set var="selectorHeaderSize" scope="page" value="11" />
+	<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
+	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
+		<li id="selGeneral" class="selected"><a href="javascript:changeTab(0)"><div><digi:trn>General</digi:trn></div></a></li>
+		<li id="selOrgs"><a href="javascript:changeTab(1)"><div><digi:trn>Organizations</digi:trn></div></a></li>
+		<li id="selRegions"><a href="javascript:changeTab(2)"><div><digi:trn>Regions</digi:trn></div></a></li>
+		<li id="selSectors"><a href="javascript:changeTab(3)"><div><digi:trn>Sectors</digi:trn></div></a></li>
+	</ul>
+	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;" >
+		<div id="generalTab" style="height: 91%;">
+			<div class="grayBorder">
+				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+						<div class="inside">
+							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
+						</div>
+					</div>
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+							<tr style="cursor: pointer;" >
+								<td class="side_opt_sel" id="general_selector">
+									<div class="selector_type_cont">
+										<digi:trn>General</digi:trn>
+									</div>
+								</td>
+								
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+							<div class="inside" style="float: left" >&nbsp;
+								<b class="ins_header">
+									<digi:trn>Options Selector</digi:trn>
+								</b>
+							</div>
+					</div>
+					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="generalDivList">
+						<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						<hr />
+						<br />
+						<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						<html:checkbox  property="filter.commitmentsVisible" styleId="commitments_visible"><digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						<html:checkbox  property="filter.disbursementsVisible" styleId="disbursements_visible"><digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						<hr />
+						<br />
+						<digi:trn>What data should the dashboard show?</digi:trn><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+                            <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio><br />
+                            <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio><br />
+                            <html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio><br />
+						<hr />
+					</div>
+				</div>
+			</div>
+			<div>
+				<table border="0" cellspacing="3" cellpadding="3">
+					<tr>
+					  	<td><b>Currency Type:</b></td>
+					  	<td>
+					  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
+   								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
+							</html:select> 	
+						</td>
+						<td><b>Fiscal Year Start:</b></td>
+				    	<td>
+				    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:100px;">
+	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+	                        </html:select>
+						</td>
+				 	</tr>
+				    <tr>
+				    	<td><b>Fiscal Calendar:</b></td>
+					    <td>
+					    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
+	                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
+	                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
+	                        </html:select>
+						</td>
+				  		<td><b>Time Scale:</b></td>
+					    <td>
+							<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:100px;">
+	                            <html:option value="1">1</html:option>
+	                            <html:option value="2">2</html:option>
+	                            <html:option value="3">3</html:option>
+	                            <html:option value="4">4</html:option>
+	                            <html:option value="5">5</html:option>
+	                        </html:select>
+						</td>
+						<td><b>Decimals to show:</b></td>
+					    <td>
+							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:100px;">
 	                            <html:option value="0">0</html:option>
 	                            <html:option value="1">1</html:option>
 	                            <html:option value="2">2</html:option>
@@ -330,145 +583,182 @@ function changeTab (selected){
 	                            <html:option value="4">4</html:option>
 	                            <html:option value="5">5</html:option>
 	                        </html:select>
-						<hr />
-						<b>For Time Series Comparison, what data do you want to show?</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<html:checkbox  property="filter.commitmentsVisible" styleId="commitments_visible"><digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
-						<html:checkbox  property="filter.disbursementsVisible" styleId="disbursements_visible"><digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox>
-						<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox>
-						<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						<b>What data should the dashboard show? </b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<fieldset>
-                            <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio>
-                            <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio>
-                            <html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio>
-<!--                            <html:radio property="filter.transactionType" value="3"><digi:trn>Pledges</digi:trn></html:radio>-->
-                        </fieldset>
-						<hr />
-							<table border="0" cellspacing="0" cellpadding="0">
-								<tr>
-								  	<td><b>Currency Type:</b></td>
-								  	<td>
-								  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-	           								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
-	       								</html:select> 	
-									</td>
-								   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-								</tr>
-							    <tr>
-								    <td><b>Fiscal Calendar:</b></td>
-								    <td>
-								    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:145px;">
-				                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
-				                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
-				                        </html:select>
-									</td>
-							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							 	</tr>
-							    <tr>
-							    	<td><b>Fiscal Year Start:</b></td>
-							    	<td>
-							    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-				                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-				                        </html:select>
-									</td>
-							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							  	</tr>
-				      			<tr>
-								    <td><b>Time Scale:</b></td>
-								    <td>
-										<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-				                            <html:option value="1">1</html:option>
-				                            <html:option value="2">2</html:option>
-				                            <html:option value="3">3</html:option>
-				                            <html:option value="4">4</html:option>
-				                            <html:option value="5">5</html:option>
-				                        </html:select>
-									</td>
-								    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-								</tr>
-							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="organizationsTab" style="height: 91%;">
+			<div class="grayBorder">
+				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+						<div class="inside">
+							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div id="divOrganizationsFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-						<b>Organization Group:</b><br />
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+							<tr style="cursor: pointer;" >
+								<td class="side_opt_sel" onclick="changeChild(0)" id="org_grp_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Organization Groups</digi:trn>
+									</div>
+								</td>
+								
+							</tr>
+							<tr style="cursor: pointer;" >
+								<td  onclick="changeChild(1)" id="org_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Organizations</digi:trn>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+							<div class="inside" style="float: left" >&nbsp;
+								<b class="ins_header">
+									<digi:trn>Member Selector</digi:trn>
+								</b>
+							</div>
+					</div>
+					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
+						<c:forEach items="${visualizationform.filter.orgGroups}" var="item">
 							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-								<html:select property="filter.orgGroupIds" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-	           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	          	 					<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-	       						</html:select> 
-       						</c:if>	
-       						<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-       							<html:select property="filter.orgGroupIds" multiple="true" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
-	           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	          	 					<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-	       						</html:select> 
-       						</c:if>
-							<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
-							<hr />
-							<div id="divOrgDrpdwn">
-							<b>Organization:</b><br />
-							<html:select property="filter.orgIds" multiple="true" styleId="org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
-           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-       						</html:select>	
-       						</div>	
+								<input type="radio" name="org_grp_check" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+								<input type="checkbox" name="org_grp_check" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+							</c:if>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${item.orgGrpName}</digi:trn>
+							</span>
+							<br/>
+						</c:forEach>
+					</div>
+					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgDivList">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="regionsTab" style="height: 91%;">
+			<div class="grayBorder">
+				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+						<div class="inside">
+							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div id="divRegionsFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-							<b>Region:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-								<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-		    						<html:select property="filter.regionIds" styleId="region_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-	           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	           							<html:optionsCollection property="filter.regions" value="id" label="name" />
-	       							</html:select>
-       							</c:if>	
-       							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-		    						<html:select property="filter.regionIds" multiple="true" styleId="region_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-	           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	           							<html:optionsCollection property="filter.regions" value="id" label="name" />
-	       							</html:select>
-       							</c:if>	
-							<hr />
-							<div id="divZoneDrpdwn">
-							<b>Zone:</b><br />
-								<html:select property="filter.zoneIds" multiple="true" styleId="zone_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-       							</html:select>		
-							<hr />
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+							<tr style="cursor: pointer;" >
+								<td class="side_opt_sel" onclick="changeChild(2)" id="region_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Regions</digi:trn>
+									</div>
+								</td>
+								
+							</tr>
+							<tr style="cursor: pointer;" >
+								<td  onclick="changeChild(3)" id="zone_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Zones</digi:trn>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+							<div class="inside" style="float: left" >&nbsp;
+								<b class="ins_header">
+									<digi:trn>Member Selector</digi:trn>
+								</b>
 							</div>
+					</div>
+					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="regionDivList">
+						<c:forEach items="${visualizationform.filter.regions}" var="item">
+							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+								<input type="radio" name="region_check" value="${item.id}" onchange="getChildren(this)"/> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
+								<input type="checkbox" name="region_check" value="${item.id}" onchange="getChildren(this)"/> 
+							</c:if>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${item.name}</digi:trn>
+							</span>
+							<br/>
+						</c:forEach>
+					</div>
+					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="zoneDivList">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="sectorsTab" style="height: 91%;" >
+			<div class="grayBorder">
+				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+						<div class="inside">
+							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div id="divSectorsFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-							<b>Sector:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-								<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-		    						<html:select property="filter.sectorIds" styleId="sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-							           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-							           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
-							    	</html:select>
-							   	</c:if>	
-       							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-		    						<html:select property="filter.sectorIds" multiple="true" styleId="sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-							           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-							           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
-							    	</html:select>
-							   	</c:if> 	
-							<hr />
-							<div id="divSubSectorDrpdwn">
-							<b>Sub-Sectors:</b><br />
-								<html:select property="filter.subSectorIds" multiple="true" styleId="sub_sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-       							</html:select>	
-							<hr />
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+							<tr style="cursor: pointer;" >
+								<td class="side_opt_sel" onclick="changeChild(4)" id="sector_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Sectors</digi:trn>
+									</div>
+								</td>
+								
+							</tr>
+							<tr style="cursor: pointer;" >
+								<td  onclick="changeChild(5)" id="sub_sector_selector">
+									<div class="selector_type_cont">
+										<digi:trn>Sub Sectors</digi:trn>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+							<div class="inside" style="float: left" >&nbsp;
+								<b class="ins_header">
+									<digi:trn>Member Selector</digi:trn>
+								</b>
 							</div>
-						</div>
 					</div>
-				</td>
-			</tr>
-		</table>
+					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
+						<c:forEach items="${visualizationform.filter.sectors}" var="item">
+							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+								<input type="radio" name="sector_check" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+								<input type="checkbox" name="sector_check" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+							</c:if>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${item.name}</digi:trn>
+							</span>
+							<br/>
+						</c:forEach>
+					</div>
+					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="subSectorDivList">
+						
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	</div>
+</div>
+</div>
 
 <input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
 <input type="button" value="Reset to defaults" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
@@ -1047,31 +1337,7 @@ var callbackChildrenCall = {
 			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
-			    	case "Organizations":
-			    		var orgDropdown = document.getElementById("org_dropdown_ids");
-			    		orgDropdown.options.length = 0;
-			    		orgDropdown.options[0] = new Option("All", -1);
-			    		for(var i = 0; i < results.children.length; i++){
-			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
-			    		}
-			    		break;
-				    case "Sectors":
-			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_ids");
-			    		subSectorDropdown.options.length = 0;
-			    		subSectorDropdown.options[0] = new Option("All", -1);
-			    		for(var i = 1; i < results.children.length; i++){
-			    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
-			    		}
-			    		break;
-			    	case "Regions":
-			    		var zonesDropdown = document.getElementById("zone_dropdown_ids");
-			    		zonesDropdown.options.length = 0;
-			    		zonesDropdown.options[0] = new Option("All", -1);
-			    		for(var i = 1; i < results.children.length; i++){
-			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
-			    		}
-			    		break;
-			    
+			    	
 			    }
 			}
 			catch (e) {
@@ -1107,30 +1373,6 @@ function callbackChildren(e) {
 			break;
 		case "org_group_dropdown_id":
 			objectType = "Organization";
-			break;
-		case "sector_dropdown_ids":
-			if (countSelected(targetObj) > 1) {
-				document.getElementById("divSubSectorDrpdwn").style.display = "none";
-			} else {
-				document.getElementById("divSubSectorDrpdwn").style.display = "block";
-			}
-			objectType = "Sectors";
-			break;
-		case "region_dropdown_ids":
-			if (countSelected(targetObj) > 1) {
-				document.getElementById("divZoneDrpdwn").style.display = "none";
-			} else {
-				document.getElementById("divZoneDrpdwn").style.display = "block";
-			}
-			objectType = "Regions";
-			break;
-		case "org_group_dropdown_ids":
-			if (countSelected(targetObj) > 1) {
-				document.getElementById("divOrgDrpdwn").style.display = "none";
-			} else {
-				document.getElementById("divOrgDrpdwn").style.display = "block";
-			}
-			objectType = "Organizations";
 			break;
 	}
 
@@ -1219,12 +1461,12 @@ var allGraphs = document.getElementsByName("flashContent");
 	}
 	
 	var params = "";
-	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_group_dropdown_ids");
-	params = params + "&orgIds=" + getSelectionsFromElement("org_dropdown_ids");
-	params = params + "&regionIds=" + getSelectionsFromElement("region_dropdown_ids");
-	params = params + "&zoneIds=" + getSelectionsFromElement("zone_dropdown_ids");
-	params = params + "&sectorIds=" + getSelectionsFromElement("sector_dropdown_ids");
-	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_dropdown_ids");
+	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check");
+	params = params + "&orgIds=" + getSelectionsFromElement("organization_check");
+	params = params + "&regionIds=" + getSelectionsFromElement("region_check");
+	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check");
+	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check");
+	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check");
 	
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		allGraphs[idx].style.display = "none";
@@ -1240,13 +1482,13 @@ var allGraphs = document.getElementsByName("flashContent");
 function getSelectionsFromElement(elementId){
 	var sels = "";
 	var cnt = 0;
-	var elem=document.getElementById(elementId).options;
-	for(i=0;i<elem.length;i++){
-		if (elem[i].selected==true){
+	var elems=document.getElementsByName(elementId);
+	for(i=0;i<elems.length;i++){
+		if (elems[i].checked==true){
 			if(sels != ""){
 				sels = sels + ",";
 			}
-			sels = sels + elem[i].value;
+			sels = sels + elems[i].value;
 			cnt++;
 		}
 	}
@@ -1627,12 +1869,12 @@ function refreshBoxes(o){
 }
 
 
-YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren);
-YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
-YAHOO.util.Event.addListener("sector_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("sector_dropdown_ids", callbackChildren);
+//YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
+//YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren);
+//YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
+//YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
+//YAHOO.util.Event.addListener("sector_dropdown_ids", "change", callbackChildren);
+//YAHOO.util.Event.onAvailable("sector_dropdown_ids", callbackChildren);
 YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("region_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);

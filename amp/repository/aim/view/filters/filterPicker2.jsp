@@ -31,7 +31,7 @@
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;" >
+	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
 		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />

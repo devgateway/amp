@@ -51,7 +51,7 @@
 				</table>
 		</div>
 	</div>
-	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;background: white;">
 		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%;border: 1px solid #CCCCCC;border-bottom: 0px;">
 				<div class="inside" style="float: left" >&nbsp;
 					<b class="ins_header">

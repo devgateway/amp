@@ -77,9 +77,9 @@ public class DataDispatcher extends MultiAction {
 			return modeJSONObject(mapping, form, request, response);
 		}else if (request.getParameter("applyfilter") != null) { 
 			return modeapplyFilter(mapping, form, request, response);
-		}else if (request.getParameter("showstructures") != null){
-			return modeShowStructures(mapping, form, request, response);
-		}
+		}else if (request.getParameter("showstructures") != null) { 
+				return modeShowStructures(mapping, form, request, response);
+			}
 		return null;
 	}
 
@@ -282,7 +282,6 @@ public class DataDispatcher extends MultiAction {
 			 
 			ArrayList<Structure> structures = new ArrayList<Structure>();
 			for (Iterator<AmpStructure> iterator2 =aA.getStructures().iterator(); iterator2.hasNext();) {
-				
 				AmpStructure structure = iterator2.next();
 				Structure structureJSON = new Structure();
 				structureJSON.setDescription(structure.getDescription());

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.ActivitySector;
 
 import net.sf.json.JSON;
@@ -28,7 +29,7 @@ public class ActivityPoint {
 	private ArrayList<Structure> structures;
     private String implementationlevel;
     private List<ActivitySector> sectors;
-    
+    private List<AmpOrganisation> donors;
     public ActivityPoint() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -122,6 +123,14 @@ public class ActivityPoint {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public List<AmpOrganisation> getDonors() {
+		return donors;
+	}
+
+	public void setDonors(List<AmpOrganisation> donors) {
+		this.donors = donors;
 	}
 
 }

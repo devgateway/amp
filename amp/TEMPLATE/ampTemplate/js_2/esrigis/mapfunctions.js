@@ -31,7 +31,7 @@ function init() {
 	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
-	povertymap = new  new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
+	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
 	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
@@ -73,10 +73,6 @@ function createMapAddLayers(myService1, myService2) {
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
-		//dojo.connect(map, "onMouseMove", showCoordinates);
-		//dojo.connect(map, "onMouseDrag", showCoordinates);
-		//dojo.connect(map,"onUpdateStart",showLoading);
-		//dojo.connect(map,"onUpdateEnd",hideLoading);
         dojo.byId('map_zoom_slider').style.top = '80px';
         getActivities();
     });

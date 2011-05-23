@@ -457,8 +457,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									</td></tr>
 								</table>
 <br /><br />								
-<!--								<feature:display name="Pledge Sector and Location" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border=0>
+<feature:display name="Pledge Sector and Location" module="Pledges">
+									<table width="95%" bgcolor="#dbdbdb" border=0>
 										<tr>
 										    <td>
 										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
@@ -470,9 +470,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#f2f2f2">
 							                    	<tr>
-							                            <td align="left">
+							                            <td align=center height=25>
 							                                <b>
 							                                    <digi:trn key="aim:sector">
 							                                        Sector
@@ -544,9 +544,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#f2f2f2">
 							                    	<tr>
-							                            <td align="left">
+							                            <td align=center height=25>
 							                                <b>
 							                                    <digi:trn key="aim:Location">
 							                                        Location
@@ -608,9 +608,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#f2f2f2">
 							                    	<tr>
-							                            <td align="left">
+							                            <td align=center height=25>
 							                                <b>
 							                                    <digi:trn key="aim:Program">
 							                                        Program
@@ -668,27 +668,23 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										    </td>
 										</tr>
 										</field:display>
-										<tr><td>&nbsp;</td></tr>
-										<tr><td>&nbsp;</td></tr>
+
 									</table>
 								</feature:display>
-								
--->
 								<feature:display name="Pledge Funding" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border=0>
+									<table width="95%" bgcolor="#dbdbdb" border=0>
 										<tr>
-										    <td>
+										    <td height=25 align=center>
 										        <!-- contents -->
 										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 										        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
 										        
 										    </td>
 								        </tr>
-							            <tr><td>&nbsp;</td></tr>
-										<tr>
+							            <tr>
 							                <td>
 							                    <div id="fundTitle" style="display:block;">
-												<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+												<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#f2f2f2">
 							                    	<tr>
 														<td align="center" valign="bottom" width="20" />
 														<td align="center" width="240">

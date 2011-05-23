@@ -61,7 +61,6 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
     }
     private List<TransparentWebMarkupContainer> sliders;
     private AmpAddContactFeaturePanel newContactDetails;
-    private AmpActivityVersion activity;
     
     /**
      * @param id
@@ -74,13 +73,10 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         super(id, fmName, am);
         final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
         final String specificType = contactType;
-        activity=am.getObject();
-        newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact",  new AmpActivityContact(),true);
+        
+        newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact",  new Model<AmpActivityContact>(new AmpActivityContact()),true);
         newContactDetails.setVisible(false);
       
-
-
-
         final IModel<List<AmpActivityContact>> listModel = new AbstractReadOnlyModel<List<AmpActivityContact>>() {
 
             private static final long serialVersionUID = 3706184421459839210L;
@@ -123,7 +119,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                 });
                 AmpContactDetailsSubsectionFeaturePanel contactDetails = null;
                 try {
-                    contactDetails = new AmpContactDetailsSubsectionFeaturePanel("contactDetails", "Contact Details", item.getModel());
+                    contactDetails = new AmpContactDetailsSubsectionFeaturePanel("contactDetails", "Contact Details", am, item.getModel());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -212,7 +208,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     activityContact.setContactType(contactType);
                     newContact.getActivityContacts().add(activityContact);
                     
-                    AmpAddContactFeaturePanel tempContactDetailsPanel = new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact", activityContact,true);
+                    AmpAddContactFeaturePanel tempContactDetailsPanel = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact", new Model<AmpActivityContact>(activityContact),true);
                     newContactDetails.replaceWith(tempContactDetailsPanel);
                     newContactDetails=tempContactDetailsPanel;
 

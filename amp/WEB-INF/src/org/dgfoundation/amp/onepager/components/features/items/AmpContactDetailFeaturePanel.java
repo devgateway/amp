@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -22,10 +18,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.EmailAddressPatternValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.MinimumValidator;
-import org.apache.wicket.validation.validator.NumberValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
@@ -84,34 +77,31 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	}
 
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
-		// TODO Auto-generated constructor stub
 		super(id, model, fmName, hideLabel);
 		
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		
 		//final IModel<AmpContact> ampContact = new Model(model);
- 		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
-		
- 						transient List<AmpContactProperty> specificContacts = null;   
-						@Override
-						public List<AmpContactProperty> getObject() {
-							specificContacts = new ArrayList<AmpContactProperty>();
-							if(setModel.getObject()!=null){
-								for (AmpContactProperty detail : setModel.getObject()) {
-									if(detail.getName().equals(contactProperty)){
-                                                                            if(detail.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)&&detail.getActualValue()==null){
-                                                                                detail.setActualValue(detail.getActualPhoneNumber());
-                                                                                detail.setCategoryValue(ContactInfoUtil.getPhoneCategoryValue(detail.getValue()));
-                                                                            }
-                                                                           specificContacts.add(detail);
-									}
-								}
-							}	
-							return specificContacts;
+		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
+			@Override
+			public List<AmpContactProperty> getObject() {
+				List<AmpContactProperty> specificContacts = new ArrayList<AmpContactProperty>();
+				if(setModel.getObject()!=null){
+					for (AmpContactProperty detail : setModel.getObject()) {
+						if(detail.getName().equals(contactProperty)){
+							if(detail.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)&&detail.getActualValue()==null){
+								detail.setActualValue(detail.getActualPhoneNumber());
+								detail.setCategoryValue(ContactInfoUtil.getPhoneCategoryValue(detail.getValue()));
+							}
+							specificContacts.add(detail);
 						}
-						
+					}
+				}	
+				return specificContacts;
+			}
+
 		};
-                final WebMarkupContainer resultcontainer = new   WebMarkupContainer("resultcontainer");
+		final WebMarkupContainer resultcontainer = new   WebMarkupContainer("resultcontainer");
 		final ListView<AmpContactProperty> detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 
                 @Override

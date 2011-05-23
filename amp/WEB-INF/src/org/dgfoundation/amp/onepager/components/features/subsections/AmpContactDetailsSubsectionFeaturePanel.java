@@ -20,6 +20,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
@@ -43,11 +44,10 @@ public class AmpContactDetailsSubsectionFeaturePanel extends AmpSubsectionFeatur
 	 * @param am
 	 * @throws Exception
 	 */
-	public AmpContactDetailsSubsectionFeaturePanel(String id, String fmName, final IModel<AmpActivityContact> ampActContact) throws Exception {
+	public AmpContactDetailsSubsectionFeaturePanel(String id, String fmName, IModel<AmpActivityVersion> am, IModel<AmpActivityContact> ampActContact) throws Exception {
 		//super(id, contactModel, fmName, true);
 		super(id,fmName, ampActContact);
-                AmpActivityContact activityContact=ampActContact.getObject();
-		add(new AmpAddContactFeaturePanel("contactDetail", fmName, activityContact));
+		add(new AmpAddContactFeaturePanel("contactDetail", fmName, am, ampActContact));
 
 
 	}

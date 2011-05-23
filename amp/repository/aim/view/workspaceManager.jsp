@@ -679,15 +679,15 @@ function updateTableActivities(members){
         tbl        = demo.getElementsByTagName('table')[0],
         tbody      = tbl.getElementsByTagName('tbody')[0],
         tmp        = document.createElement('div'),
-        html       = ["<table id=\"dataTable\"><tbody>"],i,j = 1,l,item;
+        html       = ["<table id=\"dataTable\" class=\"inside\"><tbody>"],i,j = 1,l,item;
 
     if (members && members.length>0) {
         for (i = 0, l = members.length; i < l; ++i) {
             item = members[i];
-            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
+            html[j++] = '<tr><td width="300" class="inside">';
             html[j++] = item.name;
-            html[j++] = '</td ><td align=\'center\' width="100" class="reportsBorderTD">';
-            html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn>Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/images/deleteIcon.gif\'/>' + '</a>';
+            html[j++] = '</td ><td align=\'center\' width="100" class="inside">';
+            html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn>Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
             html[j++] = '</td></tr>';
         }
         

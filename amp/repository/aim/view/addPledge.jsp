@@ -460,14 +460,13 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 <feature:display name="Pledge Sector and Location" module="Pledges">
 									<table width="95%" bgcolor="#dbdbdb" border=0>
 										<tr>
-										    <td>
+										    <td height=25 align=center>
 										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
 										         
 										    </td>
 								        </tr>
 							            <field:display name="Pledge Sector" feature="Pledge Sector and Location">
-										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
 							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#f2f2f2">
@@ -541,10 +540,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										</field:display>
 										<field:display name="Pledge Location" feature="Pledge Sector and Location">
-										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#f2f2f2">
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#f2f2f2">
 							                    	<tr>
 							                            <td align=center height=25>
 							                                <b>
@@ -605,7 +603,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										</field:display>
 										<field:display name="Pledge Program" feature="Pledge Sector and Location">
-										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
 							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#f2f2f2">
@@ -1093,7 +1090,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="left" width="90%">
+												<td valign="middle" align="center" width="90%">
 													<a>
 														<html:textarea property="additionalInformation" rows="6" cols="80" styleClass="inp-text"/>
                             						</a>

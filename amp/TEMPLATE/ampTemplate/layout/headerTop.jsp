@@ -68,7 +68,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <!-- HEADER START-->
-
+<center>
 
 <div class="header">
 
@@ -90,7 +90,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	</div>
 
 </div>
-
+</center>
 <!--HEADER END -->
 
 

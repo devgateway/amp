@@ -96,7 +96,7 @@
  <logic:notEmpty name="currentMember" scope="session">
  	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
  </logic:notEmpty>
-
+<center>
 <!-- HEADER START -->
 <div class="header">
 	<div class="centering">
@@ -158,7 +158,7 @@
 	</div>
 </div>
 <!-- HEADER END -->
-
+</center>
 <script type="text/javascript">
 	function selectwkspace(id){
 		var url = "/selectTeam.do?id="+id;

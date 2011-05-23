@@ -400,3 +400,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 	.formCheckContainer{text-align:right;font-weight:bold;}
 .formCheckContainer input
 	{float:right;}
+	#auditloggertable{border:1px solid #cccccc;border-left:none;}
+#auditloggertable tr td{border-bottom:1px solid #cccccc;border-left:1px solid #cccccc;padding:10px;}
+#auditloggertable tr td.auditloggername{color:#376091;font-weight:bold;font-size:12px;}
+#auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}

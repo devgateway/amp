@@ -29,7 +29,7 @@
 				<cache usage="read-write"/>
 				<key column="perm_id" />
 				<index column="index_column" />
-				<element column="parameter" type="string" />
+				<element column="parameter" type="java.lang.String" length="5000" />
 			</list>
 			<set name="actions" table="PERM_GATE_ACTION" cascade="all" lazy="false">
 				<cache usage="read-write"/>

@@ -3,7 +3,9 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpIndicator" table="AMP_INDICATOR">
 		<id name="indicatorId" column="indicator_id">
-			<generator class="native" />
+			<generator class="native">
+				<param name="sequence">AMP_INDICATOR_seq</param>
+			</generator>
 		</id>
 
 		<property name="name" column="name" type="java.lang.String" />

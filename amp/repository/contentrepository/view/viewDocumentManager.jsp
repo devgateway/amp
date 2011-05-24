@@ -144,7 +144,7 @@ margin-left: 2px;
 padding-right: 7px;
 border-right: 1px solid rgb(208, 208, 208);
 }
-
+.yui-panel .hd {display:none;}
 </style>
 
 <script language="javascript">

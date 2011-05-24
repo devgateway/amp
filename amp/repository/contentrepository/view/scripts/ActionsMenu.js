@@ -16,9 +16,10 @@ function ActionsMenu(objectId,nameprefix,isTeamMenu){
 ActionsMenu.prototype.render=function (){
 	this.overlay 	= new YAHOO.widget.Panel(this.nameprefix, { context:[this.objectId,"tl","bl"],
 		  visible:false,
-		  width:"150px" } );
+		  width:"150px",
+		  close: false } );
 	
-	this.overlay.setHeader('Add Resource');
+	this.overlay.setHeader('<span>Add Resource</span>');
 	
 	var bigDiv		= document.createElement("div");
 	var divEl	= document.createElement("div");

@@ -404,3 +404,4 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggertable tr td{border-bottom:1px solid #cccccc;border-left:1px solid #cccccc;padding:10px;}
 #auditloggertable tr td.auditloggername{color:#376091;font-weight:bold;font-size:12px;}
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
+#actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}

@@ -139,25 +139,6 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
-	<!-- Startup servlet used for URL preloading -->
-	<servlet>
-		<servlet-name>url-preloader</servlet-name>
-		<servlet-class>
-			org.digijava.kernel.startup.UrlPreloaderServlet
-		</servlet-class>
-		<init-param>
-			<param-name>urls-list-file</param-name>
-			<param-value>
-				repository/preload.urls.properties
-			</param-value>
-		</init-param>
-		<init-param>
-			<param-name>max-threads</param-name>
-			<param-value>20</param-value>
-		</init-param>
-		<load-on-startup>5</load-on-startup>
-	</servlet>
-	<!-- End of servlet used for URL preloading -->
 	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>

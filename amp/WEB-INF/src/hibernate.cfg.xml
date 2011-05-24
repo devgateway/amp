@@ -6,11 +6,13 @@
   <property name="connection.datasource">java:comp/env/ampDS</property>
   &dialect;
   <property name="current_session_context_class">thread</property>
-  <property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+  <property name="cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</property>
+  <property name="cache.use_second_level_cache">true</property>
+  <property name="cache.use_query_cache">true</property> 
   <property name="show_sql">false</property>
   <property name="jdbc.use_get_generated_keys">true</property>
   <property name="jdbc.use_streams_for_binary">false</property>
   <property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
-  <property name="hbm2ddl.auto">update</property> 
+  <property name="hbm2ddl.auto">update</property>
  </session-factory>
 </hibernate-configuration>

@@ -11,7 +11,7 @@
          user.dir - User's current working directory
          java.io.tmpdir - Default temp file path -->
          
-    <diskStore path="java.io.tmpdir/ampehcache"/>
+    <diskStore path="java.io.tmpdir"/>
 
 
     <!--Default Cache configuration. These will applied to caches programmatically created through
@@ -45,10 +45,10 @@
     <defaultCache
         maxElementsInMemory="1000"
         eternal="false"
-        overflowToDisk="true"
+        overflowToDisk="false"
         timeToIdleSeconds="1800"
         timeToLiveSeconds="3600"
-        diskPersistent="true"
+        diskPersistent="false"
         maxElementsOnDisk="100000"
     />
 	
@@ -59,8 +59,8 @@
 		name="org.digijava.kernel.entity.Message.id_cache"
 		maxElementsInMemory="1000"
 		eternal="true"
-		overflowToDisk="true"
-		diskPersistent="true"
+		overflowToDisk="false"
+		diskPersistent="false"
 		maxElementsOnDisk="50000"
 		/>
 
@@ -80,8 +80,8 @@
 		name="org.digijava.kernel.persistence.PersistenceManager.precache_region"
 		maxElementsInMemory="1000"
 		eternal="true"
-		overflowToDisk="true"
-		diskPersistent="true"
+		overflowToDisk="false"
+		diskPersistent="false"
 		maxElementsOnDisk="50000"
 		/>
 
@@ -101,8 +101,8 @@
 	<cache
 		name="EXCHANGE_RATES_CACHE"
 		maxElementsInMemory="50000"
-		overflowToDisk="true"
-		diskPersistent="true"
+		overflowToDisk="false"
+		diskPersistent="false"
 		maxElementsOnDisk="1000000"
 		/>
 		

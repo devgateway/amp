@@ -82,6 +82,7 @@ import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.digijava.module.aim.helper.FormatHelper;
 
 import sun.misc.BASE64Decoder;
 
@@ -294,7 +295,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				rankProjects.add(child);
 			}
 		}
@@ -304,7 +305,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				topProjects.add(child);
 			}
 		}
@@ -319,7 +320,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				rankSectors.add(child);
 			}
 		}
@@ -329,7 +330,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				topSectors.add(child);
 			}
 		}
@@ -344,7 +345,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				rankDonors.add(child);
 			}
 		}
@@ -354,7 +355,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				topDonors.add(child);
 			}
 		}
@@ -369,7 +370,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				rankRegions.add(child);
 			}
 		}
@@ -379,7 +380,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", entry.getValue().toString());
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				topRegions.add(child);
 			}
 		}
@@ -389,12 +390,12 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootRegions);
 		
 		rootTotComms.put("type", "TotalComms");
-		rootTotComms.put("value", visualizationForm.getSummaryInformation().getTotalCommitments().toString());
+		rootTotComms.put("value", FormatHelper.formatNumber(visualizationForm.getSummaryInformation().getTotalCommitments()));
 		rootTotComms.put("curr", visualizationForm.getFilter().getCurrencyCode());
 		children.add(rootTotComms);
 		
 		rootTotDisbs.put("type", "TotalDisbs");
-		rootTotDisbs.put("value", visualizationForm.getSummaryInformation().getTotalDisbursements().toString());
+		rootTotDisbs.put("value", FormatHelper.formatNumber(visualizationForm.getSummaryInformation().getTotalDisbursements()));
 		children.add(rootTotDisbs);
 		
 		rootNumOfProjs.put("type", "NumberOfProjs");
@@ -414,7 +415,7 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootNumOfDons);
 		
 		rootAvgProjs.put("type", "AvgProjSize");
-		rootAvgProjs.put("value", visualizationForm.getSummaryInformation().getAverageProjectSize().toString());
+		rootAvgProjs.put("value", FormatHelper.formatNumber( visualizationForm.getSummaryInformation().getAverageProjectSize()));
 		children.add(rootAvgProjs);
 		
 		root.put("objectType", "lists");

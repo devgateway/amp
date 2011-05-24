@@ -42,7 +42,7 @@ public class CKEditorBehavior extends AbstractBehavior{
 
 	protected String getRenderJavascript(IHeaderResponse response) {
         if (component == null)
-            throw new IllegalStateException("TinyMceBehavior is not bound to a component");
+            throw new IllegalStateException("CKEditorBehavior is not bound to a component");
         if (mayRenderJavascriptDirect())
             return getAddCKEditorScript(component);
         return null;
@@ -55,7 +55,7 @@ public class CKEditorBehavior extends AbstractBehavior{
 
     public void bind(Component component) {
         if (this.component != null)
-            throw new IllegalStateException("TinyMceBehavior can not bind to more than one component");
+            throw new IllegalStateException("CKEditorBehavior can not bind to more than one component");
         super.bind(component);
         if (isMarkupIdRequired())
             component.setOutputMarkupId(true);

@@ -38,8 +38,7 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 public class AmpIssueTreePanel extends AmpFieldPanel{
 
 	private static final long serialVersionUID = 0L;
-	private RadioChoice<Boolean> choiceContainer;
-
+	
 	public AmpIssueTreePanel(String id, final List<Class> tree, final Map<Class, String> setName, final Map<Class, String> labelName, final IModel objModel, final IModel parentSet, final Class parentClass, final int level, final String fmName) throws Exception{
 		super(id,fmName, true);
 		

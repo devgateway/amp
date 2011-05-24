@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -22,9 +21,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -102,9 +100,9 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		name.add(nameOnChange);
 		add(name);
 
-		AmpButtonField addbutton = new AmpButtonField("deleteComponent", "Delete Component") {
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("deleteComponent", "Delete Component", "Delete Component") {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = componentModel.getObject();
 				setModel.getObject().remove(comp);
 				target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));

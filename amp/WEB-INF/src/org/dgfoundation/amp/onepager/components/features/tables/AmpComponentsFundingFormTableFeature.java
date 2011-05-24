@@ -56,13 +56,15 @@ public class AmpComponentsFundingFormTableFeature extends
 			public List<AmpComponentFunding> getObject() {
 				List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
 				Set<AmpComponentFunding> allComp = compFundsModel.getObject();
-				Iterator<AmpComponentFunding> iterator = allComp.iterator();
-				while (iterator.hasNext()) {
-					AmpComponentFunding comp = (AmpComponentFunding) iterator
-							.next();
-					if (comp.getTransactionType() == transactionType)
-						if (/*comp.getComponent().equals(componentModel.getObject())*/ comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-							result.add(comp);
+				if (allComp != null){
+					Iterator<AmpComponentFunding> iterator = allComp.iterator();
+					while (iterator.hasNext()) {
+						AmpComponentFunding comp = (AmpComponentFunding) iterator
+						.next();
+						if (comp.getTransactionType() == transactionType)
+							if (/*comp.getComponent().equals(componentModel.getObject())*/ comp.getComponent().hashCode() == componentModel.getObject().hashCode())
+								result.add(comp);
+					}
 				}
 				
 				return result;

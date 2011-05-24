@@ -4,11 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -16,12 +12,9 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * @author aartimon@dginternational.org
@@ -52,6 +45,10 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 			if ("switchtranslatormode".compareTo(method.toLowerCase()) == 0){
 				switchTranslatorMode(request, target);
 			}
+			else
+				if ("switchfmmode".compareTo(method.toLowerCase()) == 0){
+					switchFMMode(request, target);
+				}	
 		
 	}
 	
@@ -95,6 +92,11 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 	
 	private void switchTranslatorMode(Request request, AjaxRequestTarget target){
 		((AmpAuthWebSession) Session.get()).switchTranslatorMode();
+		target.appendJavascript("window.location.reload()");
+	}
+
+	private void switchFMMode(Request request, AjaxRequestTarget target){
+		((AmpAuthWebSession) Session.get()).switchFMMode();
 		target.appendJavascript("window.location.reload()");
 	}
 }

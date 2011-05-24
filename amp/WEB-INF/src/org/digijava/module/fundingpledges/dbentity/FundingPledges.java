@@ -1,15 +1,9 @@
 package org.digijava.module.fundingpledges.dbentity;
 
-import java.util.Collection;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -17,7 +11,12 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Diego Dimunzio
  * 
  */
-public class FundingPledges implements Comparable<FundingPledges>{
+public class FundingPledges implements Comparable<FundingPledges>, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private AmpCategoryValue title;
 	private String additionalInformation;

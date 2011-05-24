@@ -5,13 +5,14 @@
 
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpComponentFunding implements Versionable, Cloneable {
+public class AmpComponentFunding implements Versionable, Cloneable, Serializable {
 	
 	private Long ampComponentFundingId;
 	private AmpActivityVersion activity;

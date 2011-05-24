@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,8 @@ public class AmpComponentsFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpComponent>> setModel=new PropertyModel<Set<AmpComponent>>(am,"components");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet());
 		final ListView<AmpComponent> list;
 
 		

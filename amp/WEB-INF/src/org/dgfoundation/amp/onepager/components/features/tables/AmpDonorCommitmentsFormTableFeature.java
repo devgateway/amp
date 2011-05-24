@@ -6,10 +6,12 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.List;
 
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
@@ -46,12 +48,23 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				item.add(getFundingAmountComponent(item.getModel()));
 
+				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
+					protected java.util.List<FundingPledges> load() {
+						return PledgesEntityHelper
+								.getPledgesByDonor(model.getObject()
+								.getAmpDonorOrgId().getAmpOrgId()); 
+					};
+				};
+				
 				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
-								"pledgeid"), PledgesEntityHelper
-								.getPledgesByDonor(model.getObject()
-										.getAmpDonorOrgId().getAmpOrgId()),
-						"Pledges", true, true));
+								"pledgeid"), pledgesModel,
+						"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
+							@Override
+							public Object getDisplayValue(FundingPledges arg0) {
+								return arg0.getTitle();
+							}
+						}));
 
 				item.add(getDeleteLinkField("delCommitment",
 						"Delete Commitment", item));

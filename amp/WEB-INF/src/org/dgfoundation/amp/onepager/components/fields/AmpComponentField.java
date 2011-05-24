@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.util.HashSet;
 import java.util.Set;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
@@ -29,7 +30,9 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 		
 		final PropertyModel<Set<AmpComponentFunding>> componentsSetModel=new 
 				PropertyModel<Set<AmpComponentFunding>>(activityModel, "componentFundings");
-
+		if (componentsSetModel.getObject() == null)
+			componentsSetModel.setObject(new HashSet());
+		
 		try {
 			WebMarkupContainer componentFunding = new WebMarkupContainer("componentFunding");
 			componentFunding.setVisible(false);

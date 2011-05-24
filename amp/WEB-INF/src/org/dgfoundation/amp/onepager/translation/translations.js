@@ -97,9 +97,23 @@ function wicketSwitchTranslationMode(){
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
 
+function wicketSwitchFMMode(){
+	var params = '&method=switchfmmode';
+	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
+}
+
 $(document).ready(function(){
 	$("#switchTranslationMode").attr('href', 'javascript:wicketSwitchTranslationMode()');
 	$('#wicketFooter').replaceWith($('#footer'));
+	$('#footer').css("display", "inline"); 
+	
+	/*
+	$("#yui-gen33").before($("#yui-gen33").clone().attr("id", "fmMode"));
+	$('#fmMode').find("a").html("FM Mode");
+	$('#fmMode').find("a").attr('href', 'javascript:wicketSwitchFMMode()');
+	$('#fmMode').find("a").attr('onclick', 'wicketSwitchFMMode()');
+	$('#fmMode').attr('index', '9');
+	*/
 })
 
 //////////////////////////////////////////////////////////////

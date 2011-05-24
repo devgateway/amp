@@ -3632,6 +3632,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           AmpComments ampComment = (AmpComments) commentItr.next();
           /*AmpComments ampComm = (AmpComments) session.load
               (AmpComments.class, ampComment.getAmpCommentId());*/
+          ampComment.setAmpActivityId(null);
           session.delete(ampComment);
         }
      }

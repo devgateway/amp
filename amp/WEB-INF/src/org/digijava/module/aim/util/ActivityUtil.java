@@ -3448,8 +3448,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 								if (actor != null) {
 									Iterator actorItr = actor.iterator();
 									while (actorItr.hasNext()) {
-										AmpRegionalObservationActor ampActor = (AmpRegionalObservationActor) actorItr
-												.next();
+										AmpActor ampActor = (AmpActor) actorItr.next();
 										session.delete(ampActor);
 									}
 								}
@@ -3475,7 +3474,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 								if (actor != null) {
 									Iterator actorItr = actor.iterator();
 									while (actorItr.hasNext()) {
-										AmpActor ampActor = (AmpActor) actorItr.next();
+										AmpRegionalObservationActor ampActor = (AmpRegionalObservationActor) actorItr.next();
 										session.delete(ampActor);
 									}
 								}
@@ -3553,16 +3552,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        
         //	 delete all previous comments
         ArrayList col = org.digijava.module.aim.util.DbUtil.
-            getAllCommentsByActivityId(ampAct.getAmpActivityId());
-        logger.debug("col.size() [Inside deleting]: " + col.size());
+            getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
+        logger.info("col.size() [Inside deleting]: " + col.size());
         if (col != null) {
           Iterator itr = col.iterator();
           while (itr.hasNext()) {
             AmpComments comObj = (AmpComments) itr.next();
+            comObj.setAmpActivityId(null);
             session.delete(comObj);
           }
         }
-        logger.debug("comments deleted");
+        logger.info("comments deleted");
         
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();

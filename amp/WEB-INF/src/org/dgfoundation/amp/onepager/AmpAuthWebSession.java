@@ -118,7 +118,11 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	public void setFmMode(boolean fmMode) {
 		this.fmMode = fmMode;
 	}
-    /**
+
+	public void switchFMMode(){
+		this.fmMode = !fmMode;
+	}
+	/**
      * Attempts to authenticate a user that has provided the given username and password.
      * @param username current username
      * @param password current password

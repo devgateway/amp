@@ -109,7 +109,7 @@ session.setAttribute("progressValue", counter);
 		<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 		
 		<logic:notEqual name="widget" scope="request" value="true">
-			<div class="reportname" style="font-size:18px; font-weight:bold; color:#000000;">
+			<div class="reportname" style="font-size:18px; padding-left:5px; font-family:Arial, Helvetica, sans-serif; margin-bottom:10px; font-weight:bold; color:#000000;">
 			<bean:write scope="session" name="reportMeta" property="name" />
 				<!--<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		  			<tr>

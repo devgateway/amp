@@ -1,5 +1,5 @@
 tr.firstLevel, td.firstLevel {
-	background:#8DB4E3; 
+	background:#BFC9CE; 
 	border-bottom: black 1px solid;
 	border-right: none;
 	padding-left: 5px;
@@ -7,7 +7,7 @@ tr.firstLevel, td.firstLevel {
 }
 
 tr.secondLevel, td.secondLevel {
-	background: #B6DDE8;
+	background: #D6DCDF;
 	border-bottom:#E2E2E2 1px solid;
 	border-right:#B6DDE8 1px solid;
 	padding-left: 5px;
@@ -15,7 +15,7 @@ tr.secondLevel, td.secondLevel {
 }
 
 tr.thirdLevel, td.thirdLevel {
-	background: #DBEEF3;
+	background: #E9EBED;
 	border-bottom:#E2E2E2 1px solid;
 	border-right:#DBEEF3 1px solid;
 	padding-left: 5px;
@@ -31,16 +31,17 @@ td.hierarchyCell{
 }
 
 tr.reportHeader, td.reportHeader {
-	background-color: #313131;
-	color: white;
+	background-color: #B4C0C6;
+	color: #000000;
 	border-bottom:white 1px solid;
 	border-right:white 1px solid;
 	padding-left: 2px; 
 	padding-right: 2px;
 	font-weight: normal;
-	font:12px Arial;
+	font:11px Arial;
 	text-align: center;
 	cursor: pointer;
+	font-weight:bold;
 	
 }
 

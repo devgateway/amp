@@ -109,8 +109,9 @@ session.setAttribute("progressValue", counter);
 		<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 		
 		<logic:notEqual name="widget" scope="request" value="true">
-			<div class="reportname" style="background: #222E5D">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<div class="reportname" style="font-size:18px; font-weight:bold; color:#000000;">
+			<bean:write scope="session" name="reportMeta" property="name" />
+				<!--<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		  			<tr>
 		    			<td align="left">
 		    				<img src="images/tableftcorner.gif"/>
@@ -122,13 +123,13 @@ session.setAttribute("progressValue", counter);
 		    				<img src="images/tabrightcorner.gif" />
 		    			</td>
 		  			</tr>
-				</table>
+				</table>-->
 			</div>
 		</logic:notEqual>
 		
 		<table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
 			<logic:notEmpty property="reportDescription" name="reportMeta">
-			<tr style="border-top:#222E5D 3px solid;">
+			<tr>
 				<td style="padding-left: 5px;padding-left: 5px;">
 					<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
 						<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
@@ -138,7 +139,7 @@ session.setAttribute("progressValue", counter);
 			</tr>
 			</logic:notEmpty>
 			<logic:empty property="reportDescription" name="reportMeta">
-				<tr style="border-top:#222E5D 3px solid;">
+				<tr>
 			</logic:empty>
 			<logic:notEmpty property="reportDescription" name="reportMeta">
 			<tr>
@@ -176,7 +177,7 @@ session.setAttribute("progressValue", counter);
 	<logic:notEqual name="viewFormat" scope="request" value="print">
 	<tr>
 		<td>
-		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+		<div style="margin-left:5px;;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
 	        
             <span style="cursor:pointer;float:left;">

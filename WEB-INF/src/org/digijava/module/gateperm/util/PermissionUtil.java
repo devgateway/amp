@@ -62,6 +62,10 @@ public final class PermissionUtil {
 	    return scope;
 	}
 	
+	public static String removeTabsNewlines(String text) {
+		return text.replace("\r\n", " ").replace("\n", " ").replace("\t", "");
+	}
+	
 	/**
 	 * flushes the gate permissions scope
 	 * @param session

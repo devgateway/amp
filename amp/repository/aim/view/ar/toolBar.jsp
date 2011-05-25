@@ -174,7 +174,7 @@ addLoadEvent(addpanel);
 	}
 </script>
 <div class="toolbar" align="center">
-<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+<table border="0" align="center" class="toolbartable">
 	<tr>
 		<!-- 
 			<td noWrap align=left valign="center">	
@@ -188,20 +188,20 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+				<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/xls_icon.gif" border="0" alt="Export to Excel" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
 			</a>
 		</td>
 
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		

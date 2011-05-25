@@ -3,6 +3,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -10,18 +11,20 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpContactDetailsSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContactsSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.visitors.InternalForm;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -33,7 +36,6 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private AmpActivityContact actContact;
 	private AmpContactOrganizationFeaturePanel contactOrganizations;
 	private AmpContactDetailFeaturePanel detailFax;
 	private AmpContactDetailFeaturePanel detailEmail;
@@ -47,12 +49,13 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 	 * TODO: 
 	 */
 	public AmpAddContactFeaturePanel(String id, final IModel<AmpActivityVersion> am,
-			String fmName, IModel<AmpActivityContact> activityContact, boolean visible) throws Exception {
+			String fmName, IModel<AmpActivityContact> activityContact) throws Exception {
 		super(id, fmName);
-
+		final AmpActivityContact actContact=activityContact.getObject();
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		feedback.setFilter(new ContainerFeedbackMessageFilter(AmpAddContactFeaturePanel.this));
 		feedback.setOutputMarkupId(true);
+		InternalForm nestedAddContactForm = new InternalForm("nestedAddContactForm");
 
 		AmpContact newContact = null;
 		if (activityContact.getObject().getContact() == null) {
@@ -80,26 +83,26 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 		contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);
 		contactOrganizations.setOutputMarkupId(true);
 		add(feedback);
-		add(contactTitle);
+		nestedAddContactForm.add(contactTitle);
 		TextField<String> name=new TextField<String>("name");
 		name.setRequired(true);
 		TextField<String> lastname=new TextField<String>("lastname");
 		lastname.setRequired(true);
-		add(name);
-		add(lastname);
-		add(detailEmail);
-		add(new TextField<String>("function"));
-		add(new TextField<String>("organisationName"));
-		add(contactOrganizations);
-		add(detailPhone);
-		add(detailFax);
-		add(new TextArea<String>("officeaddress"));
+		nestedAddContactForm.add(name);
+		nestedAddContactForm.add(lastname);
+		nestedAddContactForm.add(detailEmail);
+		nestedAddContactForm.add(new TextField<String>("function"));
+		nestedAddContactForm.add(new TextField<String>("organisationName"));
+		nestedAddContactForm.add(contactOrganizations);
+		nestedAddContactForm.add(detailPhone);
+		nestedAddContactForm.add(detailFax);
+		nestedAddContactForm.add(new TextArea<String>("officeaddress"));
 		final AjaxButton saveContactButton = new AjaxButton("saveContact") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AmpContact contact = (AmpContact) this.getParent().getDefaultModelObject();
+				AmpContact contact = (AmpContact) this.getParent().getParent().getDefaultModelObject();
 				if (am.getObject().getActivityContacts() == null) {
 					am.getObject().setActivityContacts(new HashSet<AmpActivityContact>());
 				}
@@ -109,7 +112,7 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 					if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
 						int contactWithSameEmail=-1;
 						try {
-							contactWithSameEmail=ContactInfoUtil.getContactsCount(property.getValue(),null);
+							contactWithSameEmail=ContactInfoUtil.getContactsCount(property.getValue(),contact.getId());
 							if(contactWithSameEmail>0){
 								info("Contact with the given email already exists");
 								duplication=true;
@@ -138,12 +141,23 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 						am.getObject().getActivityContacts().add(actContact);
 						actContact.setActivity(am.getObject());
 					}
-					AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)this.getParent().getParent();
-					section.getIdsList().removeAll();
-					target.appendJavascript(OnePagerConst.getToggleChildrenJS(section));
-					this.getParent().setVisible(false);
-					target.addComponent(section);
-					target.addComponent(this.getParent());
+		
+					AmpAddContactFeaturePanel addContactPanel=(AmpAddContactFeaturePanel)this.getParent().getParent();
+					if(addContactPanel.getParent() instanceof AmpContactsSubsectionFeaturePanel){
+						AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)addContactPanel.getParent();
+						addContactPanel.setVisible(false);
+						target.addComponent(addContactPanel);
+						section.getIdsList().removeAll();
+						target.appendJavascript(OnePagerConst.getToggleChildrenJS(section));
+						target.addComponent(section);
+					}
+					else{
+						if(addContactPanel.getParent() instanceof AmpContactDetailsSubsectionFeaturePanel){
+							info("contact updated sucessfully!");
+							target.addComponent(feedback);
+						}
+					}
+							
 				}
 
 			}
@@ -153,25 +167,25 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)this.getParent().getParent();
+				AmpAddContactFeaturePanel addContactPanel=(AmpAddContactFeaturePanel)this.getParent().getParent();
+				AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)addContactPanel.getParent();
 				target.appendJavascript(OnePagerConst.getToggleChildrenJS(section));
-				this.getParent().setVisible(false);
+				addContactPanel.setVisible(false);
 				target.addComponent(section);
-				target.addComponent(this.getParent());
+				target.addComponent(addContactPanel);
 			}
 		};
 		cancelContactButton.setDefaultFormProcessing(false);
-		saveContactButton.setVisible(visible);
-		cancelContactButton.setVisible(visible);
-		add(saveContactButton);
-		add(cancelContactButton);
+		nestedAddContactForm.add(saveContactButton);
+		nestedAddContactForm.add(cancelContactButton);
+		add(nestedAddContactForm);
 
 		this.setOutputMarkupId(true);
 		this.setOutputMarkupPlaceholderTag(true);
 	}
 
 	public AmpAddContactFeaturePanel(String id, String fmName, IModel<AmpActivityVersion> am, IModel<AmpActivityContact> activityContact) throws Exception{
-		this(id, am, fmName, activityContact,false);
+		this(id, am, fmName, activityContact);
 	}
-
+	
 }

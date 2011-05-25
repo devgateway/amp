@@ -74,7 +74,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
         final String specificType = contactType;
         
-        newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact",  new Model<AmpActivityContact>(new AmpActivityContact()),true);
+        newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact",  new Model<AmpActivityContact>(new AmpActivityContact()));
         newContactDetails.setVisible(false);
       
         final IModel<List<AmpActivityContact>> listModel = new AbstractReadOnlyModel<List<AmpActivityContact>>() {
@@ -158,7 +158,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     aaContact.setActivity(act);
                     RadioGroup<AmpContact> group=contactDuplicationTable.getContactsGroup();
                     if (group.getModelObject() == null) {
-                        info("Please select contact!");
+                        error("Please select contact!");
                     } else {
                         Session.get().cleanupFeedbackMessages();
                         AmpContact choice = (AmpContact) group.getDefaultModelObject();
@@ -208,7 +208,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     activityContact.setContactType(contactType);
                     newContact.getActivityContacts().add(activityContact);
                     
-                    AmpAddContactFeaturePanel tempContactDetailsPanel = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact", new Model<AmpActivityContact>(activityContact),true);
+                    AmpAddContactFeaturePanel tempContactDetailsPanel = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact", new Model<AmpActivityContact>(activityContact));
                     newContactDetails.replaceWith(tempContactDetailsPanel);
                     newContactDetails=tempContactDetailsPanel;
 

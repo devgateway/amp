@@ -114,7 +114,7 @@ public class ExchangePermission extends MultiAction {
 			List gatePerm = xmlPermissions.getGatePerm();
 			Iterator i=gatePerm.iterator();
 			while (i.hasNext()) {
-			    	Session session=PersistenceManager.getSession();
+			    	Session session=PersistenceManager.getRequestDBSession();
 			    	Transaction transaction = session.beginTransaction();
 				GatePermType gp = (GatePermType) i.next();
 				GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
@@ -126,7 +126,7 @@ public class ExchangePermission extends MultiAction {
 			List compPerm = xmlPermissions.getCompositePerm();
 			i=compPerm.iterator();
 			while (i.hasNext()) {
-			    	Session session=PersistenceManager.getSession();
+			    	Session session=PersistenceManager.getRequestDBSession();
 			    	Transaction transaction = session.beginTransaction();
 			    	CompositePermType gp = (CompositePermType) i.next();
 				CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
@@ -167,7 +167,7 @@ public class ExchangePermission extends MultiAction {
 	    Permission dbp=PermissionUtil.findPermissionByName(elem.getName());
 		if(dbp!=null) {
 			if(dbp instanceof GatePermission) {
-			    Session session = PersistenceManager.getSession();			    
+			    Session session = PersistenceManager.getRequestDBSession();			    
 			    session.delete(dbp);dbp=null;
 			    PersistenceManager.releaseSession(session);
 		    }
@@ -212,7 +212,7 @@ public class ExchangePermission extends MultiAction {
 		if(dbp!=null) {
 		    
 			if(dbp instanceof CompositePermission) {
-			    Session session = PersistenceManager.getSession();
+			    Session session = PersistenceManager.getRequestDBSession();
 			    session.delete(dbp);dbp=null;
 			    PersistenceManager.releaseSession(session);
 			    }
@@ -254,15 +254,19 @@ public class ExchangePermission extends MultiAction {
 		List<PermissionMap> ret=new ArrayList<PermissionMap>();
 		for (AssignedObjIdType assignedObjIdType : localIds) {
 			PermissionMap pm=new PermissionMap();
-			ret.add(pm);
 			pm.setPermissibleCategory(assignedObjIdType.getPermissibleClass());
-			String clusterId=assignedObjIdType.getValue();
+			String clusterId=PermissionUtil.removeTabsNewlines(assignedObjIdType.getValue());
 			if(clusterId!=null && !clusterId.equals("")) {
 				Identifiable ident = PermissionUtil.getIdentifiableByClusterIdentifier(clusterId, GatePermConst.availablePermissiblesBySimpleNames
 						.get(pm.getPermissibleCategory()));
+				if(ident==null) {
+					logger.info("Unknown object identifier "+clusterId);
+					continue;
+				}
 				pm.setObjectIdentifier((Long) ident.getIdentifier());
 			}
 			pm.setPermission(p);
+			ret.add(pm);
 		}
 		return ret;
 		

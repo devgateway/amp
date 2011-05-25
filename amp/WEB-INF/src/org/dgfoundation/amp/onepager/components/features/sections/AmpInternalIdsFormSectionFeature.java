@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpInternalIdsFormTableFeature;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
@@ -23,6 +24,7 @@ public class AmpInternalIdsFormSectionFeature extends
 	public AmpInternalIdsFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
+		this.fmType = AmpFMTypes.MODULE;
 
 		AmpInternalIdsFormTableFeature internalIdsTable = new AmpInternalIdsFormTableFeature(
 				"internalIdsTable", "Internal IDs", am);

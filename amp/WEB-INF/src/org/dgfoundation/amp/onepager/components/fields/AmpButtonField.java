@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * Encaspulates a html button of type {@link AjaxButton}
@@ -62,4 +63,9 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		addFormComponent(button);
 	}
 
+
+	public AmpButtonField(String id, String fmName, AmpFMTypes fmType) {
+		this(id, fmName);
+		this.fmType = fmType;
+	}
 }

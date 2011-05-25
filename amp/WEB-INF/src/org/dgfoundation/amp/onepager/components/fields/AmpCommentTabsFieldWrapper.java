@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * @author aartimon@dginternational.org
@@ -17,6 +18,8 @@ public class AmpCommentTabsFieldWrapper extends AmpFieldPanel {
 
 	public AmpCommentTabsFieldWrapper(String id, String fmName, List<ITab> tabs) {
 		super(id, fmName);
+		this.fmType = AmpFMTypes.FEATURE;
+		
 		AjaxTabbedPanel atp = new AjaxTabbedPanel("tabs", tabs);
 		atp.setOutputMarkupId(true);
 		add(atp);

@@ -13,6 +13,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpCommentSimpleWrapper;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
@@ -33,18 +34,19 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 	public AmpPlanningFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> actModel) throws Exception {
 		super(id, fmName, actModel);
-
+		this.fmType = AmpFMTypes.MODULE;
+		
 		RangeValidator<Integer> rankValidator = new RangeValidator<Integer>(1,5);
 		AttributeModifier rankModifier = new AttributeModifier("size",new Model(2));
 		
 		AmpTextFieldPanel<Integer> lineMinistryRank = new AmpTextFieldPanel<Integer>(
-				"lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank");
+				"lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank", AmpFMTypes.FEATURE);
 		lineMinistryRank.getTextContainer().add(rankValidator);
 		lineMinistryRank.getTextContainer().add(rankModifier);
 		add(lineMinistryRank);
 		
 		AmpTextFieldPanel<Integer> planningMinistryRank = new AmpTextFieldPanel<Integer>(
-				"planningMinistryRank", new PropertyModel<Integer>(actModel, "planMinRank"), "Ministry of Planning Rank");
+				"planningMinistryRank", new PropertyModel<Integer>(actModel, "planMinRank"), "Ministry of Planning Rank", AmpFMTypes.FEATURE);
 		planningMinistryRank.getTextContainer().add(rankValidator);
 		planningMinistryRank.getTextContainer().add(rankModifier);
 		add(planningMinistryRank);

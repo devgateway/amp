@@ -13,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -53,7 +54,7 @@ public class OnePagerWrapper extends AmpHeaderFooter {
 		add(activityForm);
 		
 		//add ajax submit button
-		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit") {
+		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.FEATURE) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());

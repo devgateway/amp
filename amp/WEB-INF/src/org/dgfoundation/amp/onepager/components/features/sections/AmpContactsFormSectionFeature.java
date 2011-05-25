@@ -5,6 +5,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContactsSubsectionFeaturePanel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -17,6 +18,7 @@ public class AmpContactsFormSectionFeature extends AmpFormSectionFeaturePanel {
 	
 	public AmpContactsFormSectionFeature(String id, String fmName, IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		//AmpContactsSubsectionFeaturePanel donors =new AmpContactsSubsectionFeaturePanel("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
 		//donors.setOutputMarkupId(true);

@@ -6,9 +6,8 @@ package org.dgfoundation.amp.onepager.components;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -28,8 +27,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected String fmName;
 	protected AmpFMTypes fmType;
 	protected WebMarkupContainer fmBorder;
-	protected IndicatingAjaxButton visibleFmButton;
-	protected IndicatingAjaxButton enabledFmButton;
+	protected IndicatingAjaxLink visibleFmButton;
+	protected IndicatingAjaxLink enabledFmButton;
 	protected static Logger logger = Logger.getLogger(AmpComponentPanel.class);
 	
 	/**
@@ -70,16 +69,13 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		setOutputMarkupId(true);
 		this.fmName=fmName;
 		this.fmType=fmBehavior;
-		setEnabled(FMUtil.isFmMode(getSession())?true:FMUtil.isFmEnabled(this));
-		setVisible(FMUtil.isFmMode(getSession())?true:FMUtil.isFmVisible(this));
 		fmBorder = new TransparentWebMarkupContainer("fmBorder");
 		add(fmBorder);
-		visibleFmButton=new IndicatingAjaxButton("visibleFmButton",new Model<String>(FMUtil.isFmVisible(this)?"Hide":"Show")) {	
-			
+		visibleFmButton=new IndicatingAjaxLink("visibleFmButton") {	
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				FMUtil.switchFmVisible(AmpComponentPanel.this);
-				visibleFmButton.setDefaultModel(new Model<String>(FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show"));
+				visibleFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")));
 				target.addComponent(this);
 			}
 		};
@@ -87,11 +83,11 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		visibleFmButton.setVisible(false);
 		add(visibleFmButton);
 		
-		enabledFmButton=new IndicatingAjaxButton("enabledFmButton",new Model<String>(FMUtil.isFmEnabled(this)?"Disable":"Enable")) {
+		enabledFmButton=new IndicatingAjaxLink("enabledFmButton") {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				FMUtil.switchFmEnabled(AmpComponentPanel.this);
-				enabledFmButton.setDefaultModel(new Model<String>(FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable"));
+				enabledFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable")));
 				target.addComponent(this);
 			}
 		};
@@ -123,13 +119,22 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	
 	@Override
 	protected void onBeforeRender() {
-		if(FMUtil.isFmMode(getSession())) {
+		boolean fmMode = FMUtil.isFmMode(getSession());
+		boolean fmEnabled = FMUtil.isFmEnabled(this);
+		boolean fmVisible = FMUtil.isFmVisible(this);
+		
+		setEnabled(fmMode?true:fmEnabled);
+		setVisible(fmMode?true:fmVisible);
+		
+		enabledFmButton.add(new AttributeModifier("value", new Model(fmEnabled?"Disable":"Enable")));
+		visibleFmButton.add(new AttributeModifier("value", new Model(fmVisible?"Hide":"Show")));
+		
+		if(fmMode) {
 			visibleFmButton.setVisible(true);
 			enabledFmButton.setVisible(true);
 		}
-		String style=FMUtil.isFmMode(getSession())?"border: 2px blue solid; padding: 4px;":"";
+		String style=fmMode?"border: 2px blue solid; padding: 4px;":"";
 		fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		super.onBeforeRender();
 	}
-
 }

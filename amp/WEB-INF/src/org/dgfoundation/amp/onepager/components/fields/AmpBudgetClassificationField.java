@@ -11,18 +11,15 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.models.ActivityBudgetModel;
 import org.dgfoundation.amp.onepager.models.BudgetClassificationProxyModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 
 /**
@@ -39,7 +36,8 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 
 	public AmpBudgetClassificationField(String id, final IModel model, String fmName) {
 		super(id, model, fmName);
-
+		this.fmType = AmpFMTypes.FEATURE;
+		
 		ArrayList<AmpBudgetSector> budgetSectors = BudgetDbUtil.getBudgetSectors();
 		ArrayList<AmpTheme> budgetPrograms = BudgetDbUtil.getBudgetPrograms();
 		final ArrayList<AmpOrganisation> budgetOrgs = new ArrayList<AmpOrganisation>();

@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -61,6 +62,12 @@ public class AmpCategoryGroupFieldPanel extends
 		addFormComponent(choiceContainer);
 	}
 
+	public AmpCategoryGroupFieldPanel(String id, String categoryKey,
+			IModel<Set<AmpCategoryValue>> model, String fmName,
+			boolean ordered, Boolean nullValid, Boolean isMultiselect, AmpFMTypes fmType) throws Exception {
+		this(id, categoryKey, model, fmName, ordered, nullValid, isMultiselect);
+		this.fmType = fmType;
+	}
 	
 	/**
 	 * Creates a category select field panel for use as a singleselect

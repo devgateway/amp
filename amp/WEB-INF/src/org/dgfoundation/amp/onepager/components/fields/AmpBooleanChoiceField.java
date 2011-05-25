@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * Yes/No radio field that wraps around a boolean variable
@@ -35,6 +36,7 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 	 */
 	public AmpBooleanChoiceField(String id,	IModel<Boolean> model,  String fmName) throws Exception {
 		this(id,model,new Model<String[]>(DEFAULT_CHOICES),fmName);
+		this.fmType = AmpFMTypes.FEATURE;
 	}
 	
 	/**

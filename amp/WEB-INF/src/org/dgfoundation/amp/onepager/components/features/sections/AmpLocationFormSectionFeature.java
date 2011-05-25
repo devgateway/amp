@@ -13,6 +13,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -40,7 +41,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 	public AmpLocationFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, AmpRegionalFundingFormSectionFeature regionalFundingFeature) throws Exception {
 		super(id, fmName, am);
-
+		this.fmType = AmpFMTypes.MODULE;
+		
 		AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
 				"implementationLevel",
 				CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
@@ -48,7 +50,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 						new PropertyModel<Set<AmpCategoryValue>>(am,
 								"categories"),
 						CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
-				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null);
+				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.FEATURE);
 		add(implementationLevel);
 
 		final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
@@ -59,7 +61,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								"categories"),
 						CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
 				CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
-				null, implementationLevel.getChoiceModel());
+				null, implementationLevel.getChoiceModel(), AmpFMTypes.FEATURE);
 		implementationLocation.setOutputMarkupId(true);
 		add(implementationLocation);
 

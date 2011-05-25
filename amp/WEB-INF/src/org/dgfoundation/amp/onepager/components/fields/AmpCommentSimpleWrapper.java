@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -15,6 +16,8 @@ public class AmpCommentSimpleWrapper extends AmpFieldPanel {
 
 	public AmpCommentSimpleWrapper(String id, String fmName, IModel<AmpActivityVersion> activityModel) {
 		super(id, fmName, true);
+		this.fmType = AmpFMTypes.FEATURE;
+		
 		AmpCommentPanel acp = new AmpCommentPanel("comments", fmName, activityModel);
 		acp.setOutputMarkupId(true);
 		add(acp);

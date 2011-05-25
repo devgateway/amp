@@ -49,9 +49,9 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 	 * TODO: 
 	 */
 	public AmpAddContactFeaturePanel(String id, final IModel<AmpActivityVersion> am,
-			String fmName, IModel<AmpActivityContact> activityContact) throws Exception {
+			String fmName, final IModel<AmpActivityContact> activityContact) throws Exception {
 		super(id, fmName);
-		final AmpActivityContact actContact=activityContact.getObject();
+		
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		feedback.setFilter(new ContainerFeedbackMessageFilter(AmpAddContactFeaturePanel.this));
 		feedback.setOutputMarkupId(true);
@@ -137,9 +137,9 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 					} 
 				}
 				if(!duplication){
-					if (actContact.getId() == null) {
-						am.getObject().getActivityContacts().add(actContact);
-						actContact.setActivity(am.getObject());
+					if (activityContact.getObject().getId() == null) {
+						am.getObject().getActivityContacts().add(activityContact.getObject());
+						activityContact.getObject().setActivity(am.getObject());
 					}
 		
 					AmpAddContactFeaturePanel addContactPanel=(AmpAddContactFeaturePanel)this.getParent().getParent();

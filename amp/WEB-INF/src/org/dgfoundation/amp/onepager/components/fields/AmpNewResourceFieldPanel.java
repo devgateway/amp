@@ -16,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -24,7 +25,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
  */
-public class AmpNewResourceFieldPanel extends AmpFieldPanel {
+public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 
 	public AmpNewResourceFieldPanel(String id, IModel model, String fmName, final AmpResourcesFormTableFeature resourcesList, boolean newResourceIsWebLink) throws Exception {
 		super(id, model, fmName, true);

@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsFormTableFeature;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 
@@ -20,6 +21,8 @@ public class AmpRelatedOrganizationsFormSectionFeature extends
 	public AmpRelatedOrganizationsFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
+		this.fmType = AmpFMTypes.MODULE;
+		
 		add(new AmpRelatedOrganizationsFormTableFeature(
 				"responsibleOrganization", "Responsible Organization", am, Constants.RESPONSIBLE_ORGANISATION));
 		

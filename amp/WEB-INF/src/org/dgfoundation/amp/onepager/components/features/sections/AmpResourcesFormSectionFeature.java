@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -24,6 +25,7 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 	public AmpResourcesFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		if (am.getObject().getDocuments() == null)
 			am.getObject().setDocuments(new HashSet());

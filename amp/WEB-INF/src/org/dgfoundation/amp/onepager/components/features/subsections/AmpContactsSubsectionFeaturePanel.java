@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -236,19 +237,36 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                String name =(String) contactname.getTextContainer().getDefaultModelObject();
-                String lastname = (String) contactLast.getTextContainer().getDefaultModelObject();
+                final String name =(String) contactname.getTextContainer().getDefaultModelObject();
+                final String lastname = (String) contactLast.getTextContainer().getDefaultModelObject();
                 try {
-                    List<AmpContact> contacts = ContactInfoUtil.getContactsByNameLastName(name, lastname);
                     ListView<AmpContact> list = contactDuplicationTable.getList();
-                    list.setList(contacts);
+                    
+                    LoadableDetachableModel<List<AmpContact>> contactsModel = new LoadableDetachableModel<List<AmpContact>>() {
+						@Override
+						protected List<AmpContact> load() {
+							
+							List<AmpContact> contacts = null;
+							try {
+								contacts = ContactInfoUtil.getContactsByNameLastName(name, lastname);
+							} catch (Exception e) {
+								logger.error(e);
+							}
+							
+							return contacts;
+						}
+					};
+                    
+                    //list.setList(contacts);
+                    list.setModel(contactsModel);
+                    
                     if(!list.getList().isEmpty()){
-                    contactDuplicationTable.setVisible(true);
-                    target.addComponent(contactDuplicationTable);
-                    addContact.setVisible(true);
+	                    contactDuplicationTable.setVisible(true);
+	                    target.addComponent(contactDuplicationTable);
+	                    addContact.setVisible(true);
                     }
                     else{
-                         addContact.setVisible(false);
+                    	addContact.setVisible(false);
                     }
                     newContactDetails.setVisible(false);
                     buttonsContainer.setVisible(true);

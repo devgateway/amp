@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.CKEditorBehavior;
 
 import wicket.contrib.tinymce.TinyMceBehavior;
@@ -45,5 +46,9 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		addFormComponent(textAreaContainer);
 	}
 
+	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg, AmpFMTypes fmType) {
+		this(id, model, fmName, wysiwyg);
+		this.fmType = fmType;
+	}
 
 }

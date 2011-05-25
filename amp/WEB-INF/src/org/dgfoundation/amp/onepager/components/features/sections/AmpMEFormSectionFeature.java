@@ -36,6 +36,7 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -56,6 +57,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 	public AmpMEFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
+		this.fmType = AmpFMTypes.MODULE;
+		
 		//final IModel<Set<IndicatorActivity>> setModel = new PropertyModel<Set<IndicatorActivity>>(am, "indicators");
 		
 		if (am.getObject().getIndicators() == null){

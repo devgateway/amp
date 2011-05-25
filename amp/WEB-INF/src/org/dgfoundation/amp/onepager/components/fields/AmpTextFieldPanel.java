@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -29,7 +30,12 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName) {
 		this(id,model,fmName,false);
 	}
-	
+
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName, AmpFMTypes fmType) {
+		this(id, model, fmName);
+		this.fmType = fmType;
+	}
+
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
 		super(id, fmName, hideLabel);

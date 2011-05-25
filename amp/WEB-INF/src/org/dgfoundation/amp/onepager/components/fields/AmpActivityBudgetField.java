@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.ActivityBudgetModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 import com.rc.retroweaver.runtime.Arrays;
 
@@ -35,6 +36,8 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 	
 	public AmpActivityBudgetField(String id, final IModel model, String fmName, final Panel budgetExtras, final AmpBudgetClassificationField budgetClassification) {
 		super(id, model, fmName);
+		this.fmType = AmpFMTypes.FEATURE;
+		
 		this.budgetExtras = budgetExtras;
 		this.budgetClassification = budgetClassification;
 

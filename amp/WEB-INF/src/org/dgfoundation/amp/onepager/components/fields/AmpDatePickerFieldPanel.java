@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
@@ -40,6 +41,8 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 			IModel<Date> model, String fmName,AmpDatePickerFieldPanel otherDatePicker,
 			boolean hideLabel) {
 		super(id, fmName, hideLabel);
+		this.fmType = AmpFMTypes.FEATURE;
+		
 		setOutputMarkupId(true);
 		this.otherDatePicker = otherDatePicker;
 		dateWrapper = new WebMarkupContainer("dateWrapper");

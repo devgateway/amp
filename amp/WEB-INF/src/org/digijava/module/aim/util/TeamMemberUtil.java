@@ -1928,4 +1928,42 @@ public class TeamMemberUtil {
     	}
     }
 
+    
+	public static List<AmpTeam> getAllTeamsForUser(String email) {
+
+		User user = DbUtil.getUser(email);
+		if (user == null) return null;
+
+		Session session = null;
+		Query qry = null;
+		
+
+		ArrayList<AmpTeam> result = new ArrayList<AmpTeam>();
+		
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.user=:user)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("user", user.getId(), Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpTeamMember member = (AmpTeamMember) itr.next();
+				result.add(member.getAmpTeam());
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get team member", e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return result;
+
+	}
+
+    
 }

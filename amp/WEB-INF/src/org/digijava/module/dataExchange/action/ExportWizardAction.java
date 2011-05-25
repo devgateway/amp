@@ -1,13 +1,16 @@
 package org.digijava.module.dataExchange.action;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
@@ -20,9 +23,12 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.form.ExportForm;
@@ -32,6 +38,7 @@ import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.util.ExportBuilder;
 import org.digijava.module.dataExchange.util.ExportHelper;
 import org.digijava.module.dataExchange.util.ExportUtil;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
 
 public class ExportWizardAction extends DispatchAction {
@@ -107,15 +114,10 @@ public class ExportWizardAction extends DispatchAction {
 			response.setHeader("content-disposition","attachment; filename=exportActivities.xml"); // file name will generate by date
 			ServletOutputStream outputStream = null;
 			try {
-
 				// package name
 				JAXBContext	jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
-
-
-
 				Marshaller m = jc.createMarshaller();
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
 				outputStream = response.getOutputStream();
 				m.marshal(activities, outputStream);
 
@@ -130,11 +132,9 @@ public class ExportWizardAction extends DispatchAction {
 					outputStream.close();
 				}
 			}
-
 		} else {
 			log.debug("Wrong information from Export wizard.");
 		}
-
 		return null;
 
 	}
@@ -146,8 +146,10 @@ public class ExportWizardAction extends DispatchAction {
 
 		ExportForm eForm = (ExportForm)form;
 
+//		response.setHeader("content-disposition","attachment; filename=exportLog.txt"); // file name will generate by date
+		
 		response.setContentType("text/xml");
-		response.setHeader("content-disposition","attachment; filename=exportLog.txt"); // file name will generate by date
+		response.setHeader("content-disposition","attachment; filename=exportActivities.xml");
 		ServletOutputStream outputStream = null;
 		try {
 			outputStream = response.getOutputStream();
@@ -170,9 +172,56 @@ public class ExportWizardAction extends DispatchAction {
 				outputStream.close();
 			}
 		}
+		return null;
+	}		
+	
+	
+	
+	
+	public ActionForward amplifyExport(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	throws Exception {
+
+		HttpSession session = request.getSession();
+		String email = "atl@amp.org";
+		//String attribute = (String)request.getParameter("j_username");
+		ArrayList<AmpTeam> allTeams = (ArrayList<AmpTeam>) TeamMemberUtil.getAllTeamsForUser(email);
+		List<AmpActivity> activities = ExportUtil.getActivitiesForTeams(allTeams);
+		TeamMember tm = null;
+        if (session.getAttribute("currentMember") != null)
+        	tm = (TeamMember) session.getAttribute("currentMember");
+        if(tm!=null)
+        	System.out.println("++++++++++++++++"+tm.getEmail());
+		
+        ExportForm eForm = (ExportForm)form;
+		response.setContentType("text/xml");
+		response.setHeader("content-disposition","attachment; filename=exportActivities"+email+".xml"); // file name will generate by date
+		ServletOutputStream outputStream = null;
+		try {
+			
+			//outputStream.println("There is no error while Export");
+			JAXBContext jc;
+			try {
+				jc = JAXBContext.newInstance(org.digijava.module.dataExchange.utils.Constants.JAXB_INSTANCE);
+				Marshaller m = jc.createMarshaller();
+				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				//java.io.StringWriter sw = new StringWriter();
+				outputStream = response.getOutputStream();
+				m.marshal(DataExchangeUtils.generateAmplifyExport(activities),outputStream);
+				//outputStream.println(sw.toString()); 
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception ex) {
+			log.error("dataExchange.exportLog.error", ex);
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
 
 
 		return null;
 
 	}		
+
 }

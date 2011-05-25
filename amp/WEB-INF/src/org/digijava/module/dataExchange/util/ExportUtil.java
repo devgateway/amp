@@ -1,6 +1,8 @@
 package org.digijava.module.dataExchange.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -197,4 +199,37 @@ public class ExportUtil {
 			return retValue;
            
     }
+    
+    public static List<AmpActivity> getActivitiesForTeams(List<AmpTeam> teams) {
+    	List<AmpActivity> retValue = null;
+        Session session = null;    	
+        String condition = "";
+        for (Iterator it = teams.iterator(); it.hasNext();) {
+			AmpTeam ampTeam = (AmpTeam) it.next();
+			condition+=ampTeam.getAmpTeamId()+" ";
+		}
+        
+        List<AmpActivity> result = new ArrayList<AmpActivity>();
+        	try {
+        		session = PersistenceManager.getRequestDBSession();
+				StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act");
+		        Query qry=session.createQuery(from.toString());
+		        retValue = qry.list();
+		        for (Iterator it = retValue.iterator(); it.hasNext();) {
+					AmpActivity ampActivity = (AmpActivity) it.next();
+			        for (Iterator jt = teams.iterator(); jt.hasNext();) {
+						AmpTeam ampTeam = (AmpTeam) jt.next();
+						if(ampActivity.getTeam()!=null && ampActivity.getTeam().getAmpTeamId()!=null && ampTeam.getAmpTeamId()!=null)
+							if(ampTeam.getAmpTeamId().compareTo(ampActivity.getTeam().getAmpTeamId()) == 0)
+							result.add(ampActivity);
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
+           
+    }
+    
 }

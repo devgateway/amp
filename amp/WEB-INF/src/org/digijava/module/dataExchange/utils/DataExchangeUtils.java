@@ -34,10 +34,16 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
+import org.digijava.module.dataExchange.jaxb.ObjectFactory;
+import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
+import org.digijava.module.dataExchange.util.ExportBuilder;
+import org.digijava.module.dataExchange.util.ExportUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -988,6 +994,98 @@ public class DataExchangeUtils {
 //		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, Hibernate.STRING);
 //		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, Hibernate.STRING);
 		
+	}
+
+
+	public static Activities generateAmplifyExport(List<AmpActivity> ampActivities) {
+		Activities activities = (new ObjectFactory()).createActivities();
+		//List<AmpActivity> ampActivities = (List<AmpActivity>) ExportUtil.getWsActivities();
+		for (Iterator iterator = ampActivities.iterator(); iterator.hasNext();) {
+			ExportBuilder eBuilder = null;
+			AmpActivity ampActivity = (AmpActivity) iterator.next();
+
+			eBuilder = new ExportBuilder(ampActivity, "3");
+			AmpColumnEntry columns = new AmpColumnEntry();
+			columns.setKey("activityTree.select");
+			columns.setName("activity");
+			columns.setSelect(true);
+			
+		//
+			
+			AmpColumnEntry colid = new AmpColumnEntry("activityTree.elements[0].select","id","activity.id");
+			colid.setSelect(true);
+			colid.setMandatory(true);
+			
+			AmpColumnEntry coltitle = new AmpColumnEntry("activityTree.elements[1].select","title","activity.title");
+			coltitle.setSelect(true);
+			coltitle.setMandatory(true);
+			
+			AmpColumnEntry colissues = new AmpColumnEntry("activityTree.elements[2].select","issues","activity.issues");
+			colissues.setSelect(true);
+			colissues.setMandatory(false);
+			
+			AmpColumnEntry implementationLevels = new AmpColumnEntry("activityTree.elements[2].select","implementationLevels","activity.implementationLevels");
+			implementationLevels.setSelect(true);
+			implementationLevels.setMandatory(false);
+			
+			//location element
+			AmpColumnEntry collocation = new AmpColumnEntry("activityTree.elements[4].select","location","activity.location");
+			collocation.setSelect(true);
+			collocation.setMandatory(true);
+			
+			ArrayList<AmpColumnEntry>locationitems = new ArrayList<AmpColumnEntry>();
+			AmpColumnEntry locationname = new AmpColumnEntry("activityTree.elements[4].elements[0].select","locationname","activity.location.locationName");
+			locationname.setName("locationname");
+			locationname.setSelect(true);
+			locationname.setMandatory(false);
+			
+			AmpColumnEntry locationFunding = new AmpColumnEntry("activityTree.elements[4].elements[1].select","locationFunding","activity.location.locationFunding");
+			locationFunding.setName("locationFunding");
+			locationFunding.setSelect(true);
+			locationFunding.setMandatory(false);
+			
+			ArrayList<AmpColumnEntry>locationfundingitems = new ArrayList<AmpColumnEntry>();
+			AmpColumnEntry loccommitments = new AmpColumnEntry("activityTree.elements[4].elements[1].elements[0].select","commitments","activity.location.locationFunding.commitments");
+			loccommitments.setSelect(true);
+			loccommitments.setName("commitments");
+			AmpColumnEntry locdisbursements = new AmpColumnEntry("activityTree.elements[4].elements[1].elements[1].select","disbursements","activity.location.locationFunding.disbursements");
+			locdisbursements.setSelect(true);
+			locdisbursements.setName("disbursements");
+			AmpColumnEntry locexpenditures = new AmpColumnEntry("activityTree.elements[4].elements[1].elements[2].select","expenditures","activity.location.locationFunding.expenditures");
+			locexpenditures.setSelect(true);
+			locexpenditures.setName("expenditures");
+			locationfundingitems.add(loccommitments);
+			locationfundingitems.add(locdisbursements);
+			locationfundingitems.add(locexpenditures);
+			locationFunding.setElements(locationfundingitems);
+			
+			locationitems.add(locationname);
+			locationitems.add(locationFunding);
+			collocation.setElements(locationitems);
+
+			AmpColumnEntry coldocuments= new AmpColumnEntry("activityTree.elements[5].select","documents","activity.documents");
+			coldocuments.setSelect(true);
+			coldocuments.setMandatory(true);
+			
+			AmpColumnEntry relatedLinks= new AmpColumnEntry("activityTree.elements[6].select","relatedLinks","activity.relatedLinks");
+			relatedLinks.setSelect(true);
+			relatedLinks.setMandatory(true);
+			
+			columns.setElements(new ArrayList<AmpColumnEntry>());
+			columns.getElements().add(colid);
+			columns.getElements().add(coltitle);
+			columns.getElements().add(collocation);
+			columns.getElements().add(coldocuments);
+			columns.getElements().add(colissues);
+			columns.getElements().add(implementationLevels);
+			try {
+				activities.getActivity().add(eBuilder.getActivityType(columns));
+			} catch (AmpExportException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return activities;
 	}
 
 	

@@ -97,7 +97,7 @@
 	            	</c:choose>	
 	        		<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", column.getName() ); %>
 	        	<logic:notEqual name="widget" scope="request" value="true">
-	            	<html:link  style="font-size:12px; text-decoration: none;color: white;cursor:pointer;" page="/viewNewAdvancedReport.do" name="linkMap">
+	            	<html:link  style="font-size:11px; font-weight:bold; text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" name="linkMap">
 	              		      <digi:trn key="aim:reportBuilder:${reportHeading}">
                               	<c:out value="${reportHeading}"/>
                               </digi:trn>
@@ -136,7 +136,7 @@
           		</c:when>
           		<c:otherwise>
 	      			<td class="reportHeader" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-	      				<html:link style="font-size: 12px;text-decoration: none; color: white" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	      				<html:link style="font-size: 11px;text-decoration: none; font-weight:bold; color: #000000" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
 	            				<c:out value="${reportHeading}"/>
 	            			</digi:trn>

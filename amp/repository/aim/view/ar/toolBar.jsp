@@ -134,21 +134,16 @@ addLoadEvent(addpanel);
 <!--
 .toolbar{
 	width: 90px;
-	background: #addadd; 
-	background-color: #addadd; 
+	background: #f2f2f2; 
+	background-color: #f2f2f2f; 
 	padding: 3px 3px 3px 3px; 
 	position: relative; 
 	top: 10px; 
 	left: 10px;
-	bottom: 100px;		
+	bottom: 100px;	
+	border:1px solid #CCCCCC;	
 }
 .toolbartable{
-	border-color: #FFFFFF;
-	border-width: 2px;
-	border-bottom-width: 2px; 
-	border-right-width: 2px;"
-	border-left-width: 2px;
-	border-style: solid;
 }
 -->
 </style>
@@ -193,20 +188,20 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/xls_icon.gif" border="0" alt="Export to Excel" />
 			</a>
 		</td>
 
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		

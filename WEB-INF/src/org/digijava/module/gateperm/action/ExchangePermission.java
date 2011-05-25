@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +21,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -48,6 +44,9 @@ import org.digijava.module.gateperm.feed.schema.ObjectFactory;
 import org.digijava.module.gateperm.feed.schema.Permissions;
 import org.digijava.module.gateperm.form.ExchangePermissionForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author mihai
@@ -198,7 +197,7 @@ public class ExchangePermission extends MultiAction {
 //		    transaction.commit();
 		    dbCp.getPermissions().add(xmlToDbCompositePermission);
 		}
-		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new TreeSet());
+		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new HashSet());
 		dbCp.getPermissibleObjects().clear();
 		dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
 		
@@ -227,11 +226,14 @@ public class ExchangePermission extends MultiAction {
 		dbGp.setDedicated(xmlGp.isDedicated());
 		dbGp.setDescription(xmlGp.getDescription());
 		dbGp.getGateParameters().clear();
-		dbGp.getGateParameters().addAll(xmlGp.getParam());
+		for(Object param: xmlGp.getParam()) 
+			dbGp.getGateParameters().add(PermissionUtil.removeTabs((String) param));
+		
+
 		dbGp.setGateTypeName(GatePermConst.availableGatesBySimpleNames.get(xmlGp.getGateClass()).getName());
 		
-		if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new TreeSet());
-		
+		if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new HashSet());
+		dbGp.getPermissibleObjects().clear();
 		dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId(),dbGp));
 			
 		return dbGp;

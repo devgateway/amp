@@ -13,7 +13,7 @@
 			<key column="linked_perm_id" />
 			<many-to-many class="org.digijava.module.gateperm.core.Permission" column="perm_id" />
 		</set>
-		<set name="permissibleObjects" table="PERM_MAP" inverse="true" cascade="all-delete-orphan" lazy="false">
+		<set name="permissibleObjects" table="PERM_MAP" cascade="all-delete-orphan" lazy="false">
 			<cache usage="read-write"/>
 			<key column="permission_id" />
 			<one-to-many class="org.digijava.module.gateperm.core.PermissionMap" />

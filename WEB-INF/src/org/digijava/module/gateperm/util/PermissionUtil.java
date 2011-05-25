@@ -62,8 +62,12 @@ public final class PermissionUtil {
 	    return scope;
 	}
 	
+	public static String removeTabs(String text) {
+		return text.replace("\t", "");
+	}
+	
 	public static String removeTabsNewlines(String text) {
-		return text.replace("\r\n", " ").replace("\n", " ").replace("\t", "");
+		return removeTabs(text).replace("\r\n", " ").replace("\n", " ");
 	}
 	
 	/**

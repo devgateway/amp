@@ -5,19 +5,14 @@ package org.digijava.module.gateperm.action;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,6 +23,8 @@ import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionMapForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * ManagePermissionMap.java
@@ -231,7 +228,7 @@ public class ManagePermissionMap extends MultiAction {
 
 	// we put all the permission maps in the form list
 	form.getPermissionMaps().clear();
-	TreeSet<PermissionMap> ts = new TreeSet<PermissionMap>(permissionMapsForPermissibleClass.values());
+	HashSet<PermissionMap> ts = new HashSet<PermissionMap>(permissionMapsForPermissibleClass.values());
 	form.getPermissionMaps().addAll(ts);
 	
 	PersistenceManager.releaseSession(hs);

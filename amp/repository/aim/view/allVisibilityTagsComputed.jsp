@@ -66,7 +66,6 @@
 <module:display name="WIDGETS"></module:display> 
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Map Module" parentModule="MAP MODULE"></module:display>
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
@@ -98,6 +97,8 @@
 <feature:display name="Select Base Map" module="Map Module"></feature:display>
 <field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
 <field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
+<feature:display name="Map Options" module="Map Module"></feature:display>
+<field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 

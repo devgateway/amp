@@ -29,6 +29,8 @@ public class Location implements Serializable
 	private String woreda;
 	private String percent;//AMP-2250 
 	private boolean showPercent;
+	private String lat;
+	private String lon;
 	
 	private String locationName;
 	
@@ -303,6 +305,22 @@ public class Location implements Serializable
 	 */
 	public void setPercentageBlocked(boolean percentageBlocked) {
 		this.percentageBlocked = percentageBlocked;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLon() {
+		return lon;
+	}
+
+	public void setLon(String lon) {
+		this.lon = lon;
 	}
 	
 }

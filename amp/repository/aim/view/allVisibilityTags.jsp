@@ -92,6 +92,8 @@
 <feature:display name="Select Base Map" module="Map Module"></feature:display>
 <field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
 <field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
+<feature:display name="Map Options" module="Map Module"></feature:display>
+<field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
 
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display> 
 <feature:display name="My Resources" module="Resources"></feature:display> 

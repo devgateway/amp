@@ -156,7 +156,7 @@ function collapseAll() {
 			containerObj.hide();
 		}	
 	}
-
+	var coordinates = new Array();
 -->
 
 </script>
@@ -1203,107 +1203,102 @@ function collapseAll() {
 						</c:forEach> &nbsp;</td>
 					</tr>
 				</module:display>
+				
 				<feature:display name="Location" module="Project ID and Planning">
-					<field:display name="Implementation Location" feature="Location">
-						<tr>
-							<td class="prv_left" align=right><img id="location_plus"
-								onclick="toggleGroup('location')"
-								src="/TEMPLATE/ampTemplate/images/arrow_right.gif"
-							/> <img id="location_minus" onclick="toggleGroup('location')"
-								src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
-								style="display: none"
-							/> <digi:trn key="aim:location">
-											Location</digi:trn></td>
-							<td class="prv_right">
-							<div id="location_dots">...</div>
-							<div id="act_location" style="display: none;"><c:if
-								test="${!empty aimEditActivityForm.location.selectedLocs}"
-							>
+					<tr>
+						<td class="prv_left" align=right style="vertical-align: top;">
+							<img id="location_plus" onclick="toggleGroup('location')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/> 
+							<img id="location_minus" onclick="toggleGroup('location')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display: none"/> 
+							<digi:trn key="aim:location"> Location</digi:trn>
+						</td>
+						<td class="prv_right">
+						<div id="location_dots">...</div>
+						<div id="act_location" style="display: none;">
+						<field:display name="Implementation Location" feature="Location">
+							<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 								<table width="100%" cellSpacing="2" cellPadding="1">
-									<c:forEach var="selectedLocs"
-										items="${aimEditActivityForm.location.selectedLocs}"
-									>
+									<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 										<tr>
-											<td width="85%"><c:forEach var="ancestorLoc"
-												items="${selectedLocs.ancestorLocationNames}"
-											>
-                                                                    	[${ancestorLoc}] 
-                                                                    </c:forEach></td>
-											<td width="15%" align="right"><field:display
-												name="Regional Percentage" feature="Location"
-											>
-												<c:if test="${selectedLocs.showPercent}">
-													<c:out value="${selectedLocs.percent}" />%
-																</c:if>
-											</field:display></td>
+											<td width="85%">
+												<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+                                                 	[${ancestorLoc}] 
+                                                </c:forEach>
+                                            </td>
+											<td width="15%" align="right">
+												<field:display name="Regional Percentage" feature="Location">
+													<c:if test="${selectedLocs.showPercent}">
+														<c:out value="${selectedLocs.percent}"/>%
+													</c:if>
+												</field:display>
+											</td>
 										</tr>
 									</c:forEach>
+									<module:display name="GIS dashboard">
 									<tr>
 										<td colspan="2"><br>
-										<logic:notEmpty name="aimEditActivityForm"
-											property="location.selectedLocs"
-										>
+										<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 											<bean:define id="selLocIds">
-												<c:forEach var="selectedLocs"
-													items="${aimEditActivityForm.location.selectedLocs}"
-												>
-													<bean:write name="selectedLocs" property="locId" />|</c:forEach>
+											<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+													<bean:write name="selectedLocs" property="locId" />|
+											</c:forEach>
 											</bean:define>
-										</logic:notEmpty> <%--
-										                                  	<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-												                              		<img src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
-												                              	</logic:notEmpty>
-												                              	--%> <logic:notEmpty
-											name="aimEditActivityForm" property="location.selectedLocs"
-										>
-											<a href="javascript:showZoomedMap(true)"> <img
-												id="mapThumbnail" border="0"
-												src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"
-											> </a>
-											<div id="zoomMapContainer"
-												style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;"
-												z-index="9999"
-											><a href="javascript:showZoomedMap(false)"><img
-												border="0"
-												src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"
-											></a></div>
-										</logic:notEmpty></td>
+										</logic:notEmpty>
+										<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
+											<a href="javascript:showZoomedMap(true)"> <img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>
+											<div id="zoomMapContainer" style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;" z-index="9999"><a href="javascript:showZoomedMap(false)">
+												<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>
+											</div>
+										</logic:notEmpty>
+										</td>
 									</tr>
+									</module:display>
+									<field:display name="Show Map In Activity Preview" feature="Map Options">
+									<tr>
+										<td colspan="2">
+											<script type="text/javascript">
+											<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+												coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>');
+											</c:forEach>
+											</script>
+											<jsp:include page="previewmap.jsp"/>
+										</td>
+									</tr>
+									</field:display>
 								</table>
-							</c:if></div>
-							</td>
-						</tr>
-					</field:display>
-					<field:display name="Implementation Level" feature="Location">
-						<tr>
-							<td width="30%" align="right" valign="top" nowrap="nowrap"
-								bgcolor="#f4f4f2" class="t-name"
-							><digi:trn key="aim:level">Implementation Level</digi:trn></td>
-							<td bgcolor="#ffffff"><c:if
-								test="${aimEditActivityForm.location.levelId>0}"
-							>
-								<category:getoptionvalue
-									categoryValueId="${aimEditActivityForm.location.levelId}"
-								/>
-							</c:if></td>
-						</tr>
-					</field:display>
-					<field:display name="Implementation Location" feature="Location">
-						<tr>
-							<td width="30%" align="right" valign="top" nowrap="nowrap"
-								bgcolor="#f4f4f2" class="t-name"
-							><digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>
-							</td>
-							<td bgcolor="#ffffff"><c:if
-								test="${aimEditActivityForm.location.implemLocationLevel>0}"
-							>
-								<category:getoptionvalue
-									categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"
-								/>
-							</c:if></td>
-						</tr>
-					</field:display>
+							</c:if>
+							</field:display>
+							<field:display name="Implementation Level" feature="Location">
+								<table>
+								<tr>
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+										<digi:trn key="aim:level">Implementation Level</digi:trn>
+									</td>
+									<td bgcolor="#ffffff">
+										<c:if test="${aimEditActivityForm.location.levelId>0}">
+											<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
+										</c:if>
+									</td>
+								</tr>
+								</table>
+							</field:display>
+							<field:display name="Implementation Location" feature="Location">
+							<table>
+								<tr>
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+										<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>
+									</td>
+									<td bgcolor="#ffffff">
+										<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}">
+											<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+										</c:if>
+									</td>
+								</tr>
+							</table>
+							</field:display>
+						</div>
+					</td>
 				</feature:display>
+				
 				<feature:display name="Program" module="Program">
 					<field:display name="National Planning Objectives"
 						feature="NPD Programs"

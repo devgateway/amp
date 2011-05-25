@@ -144,6 +144,7 @@ function getActivities(clear) {
 	if (clear){
 		cL.clear();
 	}
+	
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?showactivities=true",
 		handleAs : "json",
@@ -272,6 +273,10 @@ function showResults(results) {
 
 function drawpoints(){
 	if (timer_on){
+	 if(cL!=null){ 
+		 cL._features=[];
+		 cL.levelPointTileSpace = [];
+	 }
 	 hideLoading();
 	  	cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,

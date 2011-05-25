@@ -1035,7 +1035,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               if (loc != null) {
                 Location location = new Location();
                 location.setLocId(loc.getAmpLocationId());
-               
+                location.setLat(loc.getLocation().getGsLat());
+                location.setLon(loc.getLocation().getGsLong());
                 
                 logger.info(" this is the settings Value" + cIso);
                 Country cntry = DbUtil.getDgCountry(cIso);

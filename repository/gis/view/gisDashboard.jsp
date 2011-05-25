@@ -452,8 +452,8 @@
 				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
 				<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
 				-->
-				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
-				<input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked ><digi:trn>Region view</digi:trn> &nbsp;
+				<input title="District view" type="Radio" value="3" name="mapLevelRadio" ><digi:trn>District view</digi:trn>
 				
 			</td>
 		</tr>
@@ -561,8 +561,8 @@
                 <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
                 <input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
                 -->
-                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
-                <input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked ><digi:trn>Region view</digi:trn> &nbsp;
+                <input title="District view" type="Radio" value="3" name="mapLevelRadio" ><digi:trn>District view</digi:trn>
                 
             </td>
         </tr>

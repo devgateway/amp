@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -68,6 +69,7 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.SurveyFunding;
@@ -1539,6 +1541,13 @@ private ActionForward showStep1(ActionMapping mapping,
      eaForm.getIdentification().setBudgetCVOn(
    		  (budgetOn==null)?1:budgetOn.getId()
    		  );
+     
+    //if turned on from GS, put as default the Off Budget option if the current team is of type Computed
+ 	boolean computedTeamsDefaultOffBudget = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.COMPUTED_TEAMS_DEFAULT_OFF_BUDGET));
+	AmpTeam ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+	if (computedTeamsDefaultOffBudget && ampTeam.getComputation())
+		eaForm.getIdentification().setBudgetCV(eaForm.getIdentification().getBudgetCVOff());
+	
 	}
 	catch (Exception e) {
 		e.printStackTrace();

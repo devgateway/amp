@@ -171,8 +171,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-   	   			    if(ampFieldFromTree.getPermission(false)!=null && 
-   	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
+   	   			if(ampFieldFromTree.getPermission(false)!=null)
+   	   			    if (
    	   			    	!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
    	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
    	   			    {

@@ -182,8 +182,8 @@ public class ExportWizardAction extends DispatchAction {
 	throws Exception {
 
 		HttpSession session = request.getSession();
-		String email = "atl@amp.org";
-		//String attribute = (String)request.getParameter("j_username");
+		//String email = "atl@amp.org";
+		String email = (String)request.getParameter("j_username");
 		ArrayList<AmpTeam> allTeams = (ArrayList<AmpTeam>) TeamMemberUtil.getAllTeamsForUser(email);
 		List<AmpActivity> activities = ExportUtil.getActivitiesForTeams(allTeams);
 		TeamMember tm = null;

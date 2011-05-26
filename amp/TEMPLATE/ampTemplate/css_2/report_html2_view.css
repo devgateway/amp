@@ -4,6 +4,8 @@ tr.firstLevel, td.firstLevel {
 	border-right: none;
 	padding-left: 5px;
 	padding-right: 3px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 
 tr.secondLevel, td.secondLevel {
@@ -12,6 +14,8 @@ tr.secondLevel, td.secondLevel {
 	border-right:#B6DDE8 1px solid;
 	padding-left: 5px;
 	padding-right: 3px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 
 tr.thirdLevel, td.thirdLevel {
@@ -21,6 +25,8 @@ tr.thirdLevel, td.thirdLevel {
 	padding-left: 5px;
 	padding-right: 3px;
 	width: 170px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 
 tr.oddActivity {
@@ -47,6 +53,8 @@ tr.reportHeader, td.reportHeader {
 
 table.html2ReportTable {
 	border-collapse: collapse;
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
 }
 
 .clsTableCellDataHtml {

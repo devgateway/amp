@@ -178,18 +178,22 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         Long secId = null;
         Long prgId = null;
         int sectorQueryType = 0;
-        if (secIdStr.startsWith("sec_scheme_id_")) {
+        if (secIdStr!=null && secIdStr.startsWith("sec_scheme_id_")) {
             sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
             secId = new Long(secIdStr.substring(14));
-        } else if (secIdStr.startsWith("sec_id_")) {
+        } else if (secIdStr!=null && secIdStr.startsWith("sec_id_")) {
             sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
             secId = new Long(secIdStr.substring(7));
-        } else if (secIdStr.startsWith("prj_id_")) {
+        } else if (secIdStr!=null && secIdStr.startsWith("prj_id_")) {
             sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
             prgId = new Long(secIdStr.substring(7));
         } else {
             sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
-            secId = new Long(secIdStr);
+            if (secIdStr!=null){
+            	secId = new Long(secIdStr);
+            } else {
+            	secId = new Long("-1");
+            }
         }
 
 		if (request.getParameter("indicatorId") != null && !request.getParameter("indicatorId").equals("-1")) {
@@ -307,18 +311,22 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                 secIdStr = request.getParameter("sectorId");
             }
 
-            if (secIdStr.startsWith("sec_scheme_id_")) {
+            if (secIdStr!=null && secIdStr.startsWith("sec_scheme_id_")) {
                 sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
                 secId = new Long(secIdStr.substring(14));
-            } else if (secIdStr.startsWith("sec_id_")) {
+            } else if (secIdStr!=null && secIdStr.startsWith("sec_id_")) {
                 sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
                 secId = new Long(secIdStr.substring(7));
-            } else if (secIdStr.startsWith("prj_id_")) {
+            } else if (secIdStr!=null && secIdStr.startsWith("prj_id_")) {
                 sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
                 prgId = new Long(secIdStr.substring(7));
             } else {
                 sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
-                secId = new Long(secIdStr);
+                if (secIdStr!=null){
+                	secId = new Long(secIdStr);
+                } else {
+                	secId = new Long("-1");
+                }
             }
 
             /*

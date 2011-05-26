@@ -65,7 +65,7 @@ function submitForm(mode) {
 
 <logic:equal name="permissionForm" property="type" value="Composite">	
 <tr><td align="right">Permissions:</td><td>
-<html:select property="permissions" multiple="true">
+<html:select property="permissions" multiple="true" size="20">
 <html:optionsCollection property="_availablePermissions" value="id" label="name"/>
 </html:select>
 </td></tr>	

@@ -764,6 +764,7 @@ target.style.cursor = "default"
 											<feature:display name="Budget" module="Project ID and Planning">
 											
 											
+												<field:display name="On/Off/Treasure Budget" feature="Budget">
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 
@@ -772,15 +773,14 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-												<field:display name="On/Off/Treasure Budget" feature="Budget">
 													<c:set var="noanswer">
 														<digi:trn>No Answer</digi:trn>
 													</c:set>
 											 		<category:showoptions firstLine="${noanswer}" name="aimEditActivityForm" property="identification.budgetCV" outeronchange="budgetCheckboxClick();"
 											 		  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_BUDGET_KEY %>" styleClass="inp-text" outerid="budgetCV" />	
-												</field:display>
 												</td>
 											</tr>
+												</field:display>
 											<tr bgcolor="#ffffff"/>
 											<tr bgcolor="#ffffff">
 											<td>

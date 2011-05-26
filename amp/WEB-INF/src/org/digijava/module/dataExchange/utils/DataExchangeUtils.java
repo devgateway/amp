@@ -1071,6 +1071,10 @@ public class DataExchangeUtils {
 			relatedLinks.setSelect(true);
 			relatedLinks.setMandatory(true);
 			
+			AmpColumnEntry physicalProgress= new AmpColumnEntry("activityTree.elements[7].select","physicalProgress","activity.physicalProgress");
+			physicalProgress.setSelect(true);
+			physicalProgress.setMandatory(true);
+			
 			columns.setElements(new ArrayList<AmpColumnEntry>());
 			columns.getElements().add(colid);
 			columns.getElements().add(coltitle);
@@ -1078,6 +1082,7 @@ public class DataExchangeUtils {
 			columns.getElements().add(coldocuments);
 			columns.getElements().add(colissues);
 			columns.getElements().add(implementationLevels);
+			columns.getElements().add(physicalProgress);
 			try {
 				activities.getActivity().add(eBuilder.getActivityType(columns));
 			} catch (AmpExportException e) {

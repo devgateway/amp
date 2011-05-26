@@ -52,6 +52,8 @@
 					<xs:attribute name="gis" type="xs:string" use="optional"/>
 					<xs:attribute name="iso3" type="xs:string" use="required"/>
 					<xs:attribute name="countryName" type="xs:string" use="required"/>
+					<xs:attribute name="latitude" type="xs:string" use="optional"/>
+					<xs:attribute name="longitude" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="proposedApprovalDate" type="dateType" minOccurs="0"/>
@@ -149,6 +151,15 @@
 			</xs:element>
 			<xs:element name="donorContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="govContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="title" type="freeTextType"/>
+							<xs:element name="description" type="freeTextType"/>
+							<xs:element name="reportingDate" type="dateType"/>
+						</xs:sequence>
+					</xs:complexType>
+			</xs:element>
 			<xs:element name="additional" type="additionalFieldType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="dbKey" type="xs:string" use="required"/>

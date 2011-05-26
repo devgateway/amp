@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -333,6 +334,18 @@ public class ExportBuilder {
 			AdditionalFieldType ptip = buildAdditionalFieldType("en", ampActivity.getCrisNumber(), "String");
 			parent.getAdditional().add(ptip);
 		}
+		
+		else if (path.equalsIgnoreCase("activity.physicalProgress")){
+			
+			//Amplify
+			if (ampActivity.getRegionalObservations()  != null){
+				for (Iterator iterator = ampActivity.getRegionalObservations().iterator(); iterator.hasNext();) {
+					AmpRegionalObservation issue = (AmpRegionalObservation) iterator.next();
+					parent.getPhysicalProgress().add(buildPhysicalProgress(issue, ampColumnEntry));
+				}
+			}
+			
+		}
 	}
 
 	private AdditionalFieldType buildAdditionalFieldType(String lang, String field, String type) {
@@ -611,6 +624,12 @@ public class ExportBuilder {
 		return retValue;
 	}
 
+	private ActivityType.PhysicalProgress buildPhysicalProgress(AmpRegionalObservation ampRegObs, AmpColumnEntry ampColumnEntry) throws AmpExportException{
+		ActivityType.PhysicalProgress retValue = objectFactory.createActivityTypePhysicalProgress();
+		retValue.setTitle(buildFreeText(ampRegObs.getName()));
+		retValue.setReportingDate(buildDate(getDate(ampRegObs.getObservationDate().toString()),false));
+		return retValue;
+	}
 	
 	private ActivityType.Issues buildIssue(AmpIssues ampIssue, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType.Issues retValue = objectFactory.createActivityTypeIssues();

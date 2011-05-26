@@ -1545,7 +1545,7 @@ private ActionForward showStep1(ActionMapping mapping,
     //if turned on from GS, put as default the Off Budget option if the current team is of type Computed
  	boolean computedTeamsDefaultOffBudget = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.COMPUTED_TEAMS_DEFAULT_OFF_BUDGET));
 	AmpTeam ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-	if (computedTeamsDefaultOffBudget && ampTeam.getComputation())
+	if (computedTeamsDefaultOffBudget && ampTeam.getComputation() && eaForm.getActivityId()==null)
 		eaForm.getIdentification().setBudgetCV(eaForm.getIdentification().getBudgetCVOff());
 	
 	}

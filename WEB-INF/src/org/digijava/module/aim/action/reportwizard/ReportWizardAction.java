@@ -84,6 +84,9 @@ public class ReportWizardAction extends MultiAction {
 		
 		myForm.setDuplicateName(false);
 		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		PermissionUtil.putInScope(request.getSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		
 		return this.modeSelect(mapping, form, request, response);
 	}
 	
@@ -507,7 +510,8 @@ public class ReportWizardAction extends MultiAction {
 			}
 			allAmpColumns.clear();
 			allAmpColumns.addAll(allAmpColumnsPrefixed);
-			*/
+			*/			  
+			
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 			{
 				AmpColumns ampColumn=(AmpColumns) it.next();

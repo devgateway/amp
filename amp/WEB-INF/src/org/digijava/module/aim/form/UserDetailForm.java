@@ -1,6 +1,8 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.List;
+import org.digijava.module.aim.helper.TeamMember;
 
 import org.digijava.module.um.form.UserProfileForm;
 
@@ -8,14 +10,13 @@ public class UserDetailForm extends UserProfileForm
 {
 	
 	private Collection teamMemberDetails;
-	private String info[];
 	private String teamName;
 	private String roleName;
 	private String address;
 	private int count;
+        private List<TeamMember> teamMemberTeamHelpers;
 
-	
-	
+  	
 	/**
 	 * @return Returns the count.
 	 */
@@ -28,18 +29,7 @@ public class UserDetailForm extends UserProfileForm
 	public void setCount(int count) {
 		this.count = count;
 	}
-	/**
-	 * @return Returns the info.
-	 */
-	public String[] getInfo() {
-		return info;
-	}
-	/**
-	 * @param info The info to set.
-	 */
-	public void setInfo(String[] info) {
-		this.info = info;
-	}
+	
 	
 	/**
 	 * @return Returns the teamMemberDetails.
@@ -84,12 +74,21 @@ public class UserDetailForm extends UserProfileForm
 	public String getTeamName() {
 		return teamName;
 	}
-	/**
+        /**
 	 * @param teamName The teamName to set.
 	 */
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
+
+        public List<TeamMember> getTeamMemberTeamHelpers() {
+            return teamMemberTeamHelpers;
+        }
+
+        public void setTeamMemberTeamHelpers(List<TeamMember> teamMemberTeamHelpers) {
+            this.teamMemberTeamHelpers = teamMemberTeamHelpers;
+        }
+	
 	/**
 	 * @return Returns the teamMemberDetails.
 	 */

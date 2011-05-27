@@ -46,6 +46,11 @@ public class TeamMember implements Comparable, Serializable{
 	private boolean approver;
 
 	public TeamMember() {}
+        
+        public TeamMember( String teamName,String teamMemberRole) {
+            this.teamName = teamName;
+            this.roleName = teamMemberRole;
+        }
 
 	/**
 	 * @return Returns the appSettings.

@@ -868,38 +868,26 @@ public class TeamMemberUtil {
 		return col;
 	}
 
-	public static String[] getMemberInformation(Long userId) {
+	public static List<TeamMember> getMemberInformation(Long userId) {
 		logger.debug("In getMemberInformation() : " + userId);
 		Session session = null;
-		String query = " ";
-		Iterator iter = null;
-		AmpTeamMember tm = null;
-		Vector vect = new Vector();
-		String[] info = null;
-
-		Collection memCollInfo = new ArrayList();
+		List<TeamMember>  helpers=null;
 		try {
 			Query q = null;
 			session = PersistenceManager.getRequestDBSession();
-			query = "select m from " + AmpTeamMember.class.getName()+" m where m.user=:memberId";
+			String query = "select new org.digijava.module.aim.helper.TeamMember(team.name,role.role) from " + AmpTeamMember.class.getName()+" m"
+                                +" inner join m.ampTeam team inner join m.ampMemberRole role"
+                                + " where m.user=:memberId";
 			q = session.createQuery(query);
-			q.setParameter("memberId", userId, Hibernate.LONG);
-			if (q != null) {
-				iter = q.list().iterator();
-				while (iter.hasNext()) {
-					tm = (AmpTeamMember) iter.next();
-					vect.add(tm.getAmpTeam().getName());
-					vect.add(tm.getAmpMemberRole().getRole());
-				}
-			}
-			info = new String[vect.size()];
-			vect.toArray(info);
+			q.setLong("memberId", userId);
+			helpers=q.list();
+			
 		} catch (Exception e) {
 			logger.error("Exception in getTeamMemberInformation() : ", e);
 			e.printStackTrace(System.out);
 		} 
 
-		return info;
+		return helpers;
 	}
 
 	public static AmpTeamMemberRoles getAmpTeamHeadRole() {

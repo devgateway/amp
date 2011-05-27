@@ -101,7 +101,6 @@ function unload() {
 								<digi:trn key="aim:teamsAssociatedWith" >Teams Associated with</digi:trn>
 							</td>
 						</tr>
-						<% int i = 0; %>
 						<tr>
 							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:teamName">Team Name</digi:trn>
@@ -110,24 +109,17 @@ function unload() {
 								<digi:trn key="aim:role">Role</digi:trn>
 							</td>
 						</tr>
-						<c:forEach var="info" items="${aimUserDetailForm.info}">
-							<% if ((i%2) == 0) { %>
-								<tr>
-							<% } %>
-							<td class="inside">
-										<logic:equal value="Workspace Manager" name="info">
-											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
-										</logic:equal>
-										<logic:equal value="Workspace Member" name="info">
-											<digi:trn key="aim:workspaceMember">Workspace Member</digi:trn>
-										</logic:equal>
-							</td>
+						<c:forEach var="teamMemberDetail" items="${aimUserDetailForm.teamMemberTeamHelpers}">
 							
-							<% if ((i%2) != 0) { %>
-								</tr>
-								<% }
-								i++;
-							%>
+							<tr>
+                                                            <td class="inside">
+                                                                ${teamMemberDetail.teamName}
+                                                            </td>
+							<td class="inside">
+								<digi:trn>${teamMemberDetail.roleName}</digi:trn>
+							</td>
+                                                    </tr>
+								
 						
 						</c:forEach>
 					</table>

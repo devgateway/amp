@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,7 +14,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -47,14 +48,14 @@ public class ViewUserProfile
             userid = user.getId();
         }
 
-        String[] memberInformationn = null;
+        List<TeamMember> memberInformationn = new ArrayList<TeamMember>();
         if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
         else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
         
         if (member == null && request.getParameter("id") != null) {
             if (userid.equals(teamMember.getMemberId())) {
                 user = DbUtil.getUser(teamMember.getMemberId());
-                memberInformationn = new String[]{teamMember.getTeamName(), teamMember.getRoleName()};
+                memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
             } else {
                 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
                 saveErrors(request, errors);
@@ -80,7 +81,7 @@ public class ViewUserProfile
         formBean.setLastName(user.getLastName());
         formBean.setMailingAddress(user.getEmail());
         formBean.setOrganizationName(user.getOrganizationName());
-        formBean.setInfo(memberInformationn);
+        formBean.setTeamMemberTeamHelpers(memberInformationn);
 
         return mapping.findForward("forward");
     }

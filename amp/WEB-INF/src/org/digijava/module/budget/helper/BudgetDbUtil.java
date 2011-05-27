@@ -336,13 +336,26 @@ public class BudgetDbUtil {
 	 * 
 	 * @param dep
 	 */
-	public static void SaveDepartment(AmpDepartments dep){
+	public static void saveDepartment(AmpDepartments dep) throws DgException{
 		Session session;
+                Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
+                        tx = session.beginTransaction();
 			session.save(dep);
+			tx.commit();
+
 		} catch (DgException e) {
-			logger.error("Can not save sector" + e.getMessage());
+			logger.error("Can not save department" + e.getMessage());
+                        if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception ex ) {
+					logger.error("...Rollback failed");
+					throw new DgException("Can't rollback", ex);
+				}			
+			}
+                        throw new DgException("Can't rollback", e);
 		};
 		
 	}

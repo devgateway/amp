@@ -15,10 +15,11 @@
 <script language="JavaScript">
 
 function saveDep() {
-  	<digi:context name="back" property="context/module/moduleinstance/editdepartment.do" />
+    <digi:context name="back" property="context/module/moduleinstance/editdepartment.do" />
     document.EditDepartmentForm.action = "<%= back %>~edit=true";
+    document.EditDepartmentForm.target = window.opener.name;
     document.EditDepartmentForm.submit();
-    closePopup()
+    closePopup();
 }
 function validateDep(){
 	if (document.EditDepartmentForm.depname.value==''){
@@ -33,10 +34,6 @@ function validateDep(){
 }
 
 function closePopup() {
-  <digi:context name="back" property="context/module/moduleinstance/departmentsmanager.do" />
-  document.EditDepartmentForm.action = "<%= back %>";
-  document.EditDepartmentForm.target = window.opener.name;
-  document.EditDepartmentForm.submit();
   window.close();
 }
 

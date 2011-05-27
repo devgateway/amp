@@ -17,6 +17,7 @@
 function addDepartment(){
 		<digi:context name="Url" property="context/module/moduleinstance/departmentsmanager.do?new=true" />
     	document.DepartmentsManagerForm.action = "<%=Url%>";
+    	document.DepartmentsManagerForm.target = "_self";
     	document.DepartmentsManagerForm.submit();
 }
 

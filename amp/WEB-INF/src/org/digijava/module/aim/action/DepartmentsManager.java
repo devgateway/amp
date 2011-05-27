@@ -69,7 +69,7 @@ public class DepartmentsManager extends MultiAction{
 		AmpDepartments dep = new AmpDepartments();
 		dep.setName(dform.getDepartmentname());
 		dep.setCode(dform.getDepartmentcode());
-		BudgetDbUtil.SaveDepartment(dep);
+		BudgetDbUtil.saveDepartment(dep);
 		
 		return modeFinalize(mapping, form, request, response);
 	}

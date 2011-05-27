@@ -40,7 +40,7 @@ public class EditDepartment extends Action {
 		
 		if (request.getParameter("edit") != null) {
 			modeEdit(eform,request);
-			return mapping.findForward("forward");
+			return mapping.findForward("forwardToDepartmentsmanager");
 		}
 		return mapping.findForward("forward");
 	}

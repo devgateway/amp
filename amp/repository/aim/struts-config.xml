@@ -1808,6 +1808,7 @@
     </action>
      <action name="EditDepartmentForm" path="/aim/editdepartment" scope="session" type="org.digijava.module.aim.action.EditDepartment" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editdepartment" />
+      <forward name="forwardToDepartmentsmanager" path="/aim/departmentsmanager.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action> 
 	<action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">

@@ -1,7 +1,7 @@
 package org.digijava.module.message.triggers;
 
-import org.digijava.module.message.helper.Event;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.MessageConstants;
 
 public class ActivityProposedApprovalDateTrigger extends Trigger {
@@ -14,7 +14,7 @@ public class ActivityProposedApprovalDateTrigger extends Trigger {
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TEAM_ID,PARAM_TRIGGER_SENDER,PARAM_URL};
 
     public ActivityProposedApprovalDateTrigger(Object source) {
-        if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an activity!");
+        if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an activity version!");
         this.source=source;
         forwardEvent();
     }
@@ -27,6 +27,7 @@ public class ActivityProposedApprovalDateTrigger extends Trigger {
         e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
         e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());
+        e.getParameters().put(PARAM_TEAM_ID, activity.getTeam().getAmpTeamId());
         return e;
     }
 

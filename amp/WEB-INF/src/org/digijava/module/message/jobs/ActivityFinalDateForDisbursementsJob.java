@@ -36,7 +36,7 @@ public class ActivityFinalDateForDisbursementsJob implements StatefulJob {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllActivitiesList();
+        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
         if(actList!=null){
             for (AmpActivityVersion act : actList) {
                 if (act.getDisbursmentsDate() != null) {

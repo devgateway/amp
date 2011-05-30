@@ -3472,6 +3472,26 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return col;
   }
+  
+  public static List<AmpActivityVersion> getAllAssignedActivitiesList() {
+	    List col = null;
+	    Session session = null;
+	    Query qry = null;
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct where ampAct.team is not null";
+	      qry = session.createQuery(queryString);
+	      col = qry.list();
+	      logger.debug("the size of the ampActivity : " + col.size());
+	    }
+	    catch (Exception e1) {
+	      logger.error("Could not retrieve the activities list from getallactivitieslist");
+	      e1.printStackTrace(System.out);
+	    }
+	    return col;
+	  }
+  
 
   /*
    * get the list of all the activities

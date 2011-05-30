@@ -114,7 +114,7 @@ public class RegionManagerTest extends SeleneseTestCase {
 			selenium.logComment("Module \"Dynamic Region Manager\" is not available.");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Region Manager Test Finished Successfully");
 		selenium.logComment("Region Manager Test Finished Successfully");

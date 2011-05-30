@@ -1043,8 +1043,7 @@ public class DEImportBuilder {
 		HttpSession	httpSession		= request.getSession();
 		TeamMember oldTeamMember		= (TeamMember)httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 			
-		setTeamMember(request,teamLead.getUser().getEmail(),activity.getTeam().getAmpTeamId());
-			Session writeSession = DocumentManagerUtil.getWriteSession(request);
+		setTeamMember(request,teamLead.getUser().getEmail(),activity.getTeam().getAmpTeamId());			
 				for (Iterator it = actType.getDocuments().iterator(); it.hasNext();) {
 					Documents doc = (Documents) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
@@ -1092,8 +1091,7 @@ public class DEImportBuilder {
 		TeamMember oldTeamMember		= (TeamMember)httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		
 		setTeamMember(request,teamLead.getUser().getEmail(),activity.getTeam().getAmpTeamId());
-			Session writeSession = DocumentManagerUtil.getWriteSession(request);
-				for (Iterator it = actType.getRelatedLinks().iterator(); it.hasNext();) {
+		for (Iterator it = actType.getRelatedLinks().iterator(); it.hasNext();) {
 					RelatedLinks doc = (RelatedLinks) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
 			tdd.setName(doc.getLabel());

@@ -320,7 +320,7 @@ public class SeleniumTestUtil extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 			}
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 	}
 }

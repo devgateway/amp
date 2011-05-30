@@ -166,7 +166,7 @@ public class MessageTest extends SeleneseTestCase {
 				logger.error("Error sending Message to another team");
 				selenium.logAssertion("assertTrue", "Error sending Message to another team", "condition=false");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "uattm@amp.org");
@@ -193,7 +193,7 @@ public class MessageTest extends SeleneseTestCase {
 				logger.error("Error sending Alert to my team");
 				selenium.logAssertion("assertTrue", "Error sending Alert to my team", "condition=false");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "uattmc@amp.org");
@@ -222,7 +222,7 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"javascript:deleteMessage('"+mId+"')\")]");
 			selenium.getConfirmation();
 			Thread.sleep(5000);
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			deleteAllMessages(selenium);
@@ -237,7 +237,7 @@ public class MessageTest extends SeleneseTestCase {
 				selenium.type("msgStoragePerMsgTypeNew", "55");
 				selenium.click("//input[@onclick=\"saveRecord('storage')\"]");
 				selenium.waitForPageToLoad("30000");
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "UATtl@amp.org");
@@ -254,7 +254,7 @@ public class MessageTest extends SeleneseTestCase {
 					logger.error("Error in Messages Settings");
 					selenium.logAssertion("assertTrue", "Error in Messages Settings", "condition=false");
 				}
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "admin@amp.org");
@@ -271,7 +271,7 @@ public class MessageTest extends SeleneseTestCase {
 			logger.info("Messages are not available");
 			selenium.logComment("Messages are not available");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Messages Test Finished Successfully");
 		selenium.logComment("Messages Test Finished Successfully");
@@ -335,7 +335,7 @@ public class MessageTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		Thread.sleep(1500);
 		deleteLoop(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		selenium.type("j_username", "UATtm@amp.org");
 		selenium.type("j_password", "abc");
@@ -393,7 +393,7 @@ public class MessageTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		Thread.sleep(1500);
 		deleteLoop(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		selenium.type("j_username", "UATtmc@amp.org");
 		selenium.type("j_password", "abc");
@@ -451,7 +451,7 @@ public class MessageTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		Thread.sleep(1500);
 		deleteLoop(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 	}

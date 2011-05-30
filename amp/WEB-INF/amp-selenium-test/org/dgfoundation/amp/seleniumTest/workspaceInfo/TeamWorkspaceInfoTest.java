@@ -29,7 +29,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/aim/defaultSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
 			String currId1 = selenium.getSelectedLabel("currencyId");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -49,7 +49,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			
 			selenium.click("//input[@onclick='validade();']");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "uattm@amp.org");
@@ -87,7 +87,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 				selenium.click("//input[@onclick=\"closeWindow()\"]");
 				selenium.selectWindow("null");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 				
 			selenium.type("j_username", "UATtl@amp.org");
@@ -104,7 +104,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 				logger.error("Currency is not according default settings");
 				selenium.logAssertion("assertTrue", "Currency is not according default settings", "condition=false");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -125,7 +125,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.logComment("Workspace Info is not available");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Workspace Info Finished Successfully");
 		selenium.logComment("Workspace Info Finished Successfully");

@@ -27,20 +27,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.GrantedAuthorityImpl;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.GrantedAuthorityImpl;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 public class DigiUserDetailsService
     implements UserDetailsService {
@@ -51,7 +51,7 @@ public class DigiUserDetailsService
      * loadUserByUsername
      *
      * @param string String
-     * @return UserDetails
+     * @return UserDetailsO
      * @throws UsernameNotFoundException
      * @throws DataAccessException
      * @todo Implement this org.acegisecurity.userdetails.UserDetailsService
@@ -88,7 +88,7 @@ public class DigiUserDetailsService
     protected UserDetails getUserDetails(User user) throws DataAccessException {
         GrantedAuthority[] authorities = getAssignedAuthorities(user);
 
-        UserDetails ud = new org.acegisecurity.userdetails.User(user.getEmail(),
+        UserDetails ud = new org.springframework.security.userdetails.User(user.getEmail(),
             user.getPassword(), true, true, true, true, authorities);
 
         return ud;
@@ -127,7 +127,7 @@ public class DigiUserDetailsService
             GrantedAuthority item = (GrantedAuthority) iter.next();
             result[i++] = item;
         }
-        return result;
+        return  result;
     }
 
     public boolean isPopulateGroupAuthorities() {

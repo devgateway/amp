@@ -144,7 +144,7 @@ public class LabelManagerAction extends MultiAction {
 		}
 		
 		modeReset(mapping, lmForm, request, response);
-		
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return modeGetHTMLLabels(mapping, lmForm, request, response);
 	}
 	

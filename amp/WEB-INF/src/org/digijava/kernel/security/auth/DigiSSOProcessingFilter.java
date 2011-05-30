@@ -23,21 +23,15 @@
 package org.digijava.kernel.security.auth;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
-import org.acegisecurity.ui.AbstractProcessingFilter;
+import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForward;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
@@ -45,11 +39,16 @@ import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.event.authentication.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.ui.AbstractProcessingFilter;
 import org.springframework.util.Assert;
-import org.digijava.kernel.util.ModuleUtils;
 
 public class DigiSSOProcessingFilter
     extends AbstractProcessingFilter implements Filter, InitializingBean{
@@ -63,11 +62,6 @@ public class DigiSSOProcessingFilter
         Assert.notNull(getAuthenticationManager(),
                        "authenticationManager must be specified");
 */
-    }
-
-    public void init(FilterConfig filterConfig) throws ServletException {
-        super.init(filterConfig);
-        this.servletContext = filterConfig.getServletContext();
     }
 
 
@@ -320,13 +314,20 @@ public class DigiSSOProcessingFilter
         }
 
         try {
-            request.getSession().setAttribute(ACEGI_SECURITY_LAST_EXCEPTION_KEY, failed);
+            request.getSession().setAttribute(SPRING_SECURITY_LAST_EXCEPTION_KEY, failed);
         } catch (Exception ignored) {}
 
         onUnsuccessfulAuthentication(request, response, failed);
 
         sendRedirect(request, response, failureUrl);
     }
+
+
+	@Override
+	public int getOrder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 
 class NoCookieException

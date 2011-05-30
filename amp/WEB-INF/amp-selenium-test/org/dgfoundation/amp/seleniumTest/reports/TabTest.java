@@ -354,7 +354,7 @@ public class TabTest extends SeleneseTestCase{
 			assertNotNull(selenium.getConfirmation());
 			selenium.waitForPageToLoad("50000");*/
 			deleteAllTabs(selenium);
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			logger.info("Tab Test Finished Successfully");
 			selenium.logComment("Tab Test Finished Successfully");

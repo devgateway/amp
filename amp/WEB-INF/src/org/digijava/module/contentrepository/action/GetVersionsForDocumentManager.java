@@ -81,6 +81,7 @@ public class GetVersionsForDocumentManager extends Action {
 				
 			}
 		}
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return mapping.findForward("forward");
 	}
 	
@@ -123,7 +124,7 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setCurrentVersionNeedsApproval(versionNeedsApproval);
 		
 		docData.process(myRequest);
-		docData.computeIconPath( false );		
+		docData.computeIconPath( false );
 		return true;
 	}
 	

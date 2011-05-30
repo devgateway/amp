@@ -23,16 +23,17 @@
 package org.digijava.kernel.security.auth;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.ui.AuthenticationEntryPoint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.digijava.kernel.security.HttpLoginManager;
-import javax.servlet.RequestDispatcher;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.ui.AuthenticationEntryPoint;
 
 public class DigiSSOAuthenticationEntryPoint
     implements AuthenticationEntryPoint {

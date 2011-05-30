@@ -32,14 +32,14 @@ public class UserManagerTest extends SeleneseTestCase {
 			selenium.type("confirmNewPassword", "123");
 			selenium.click("//input[@onclick=\"validate('Either fields are blank or their values do not match','changePassword');\"]");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "uattl@amp.org");
 			selenium.type("j_password", "123");
 			selenium.click("submitButton");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -62,7 +62,7 @@ public class UserManagerTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Module \"User Manager\" is not available.", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("User Manager Test Finished Successfully");
 		selenium.logComment("User Manager Test Finished Successfully");

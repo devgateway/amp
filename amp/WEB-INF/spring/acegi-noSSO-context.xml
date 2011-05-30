@@ -24,7 +24,7 @@
     </property>
   </bean>
 
-  <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
+  <bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
     <property name="providers">
       <list>
         <ref bean="daoAuthenticationProvider" />
@@ -32,9 +32,9 @@
     </property>
   </bean>
 
-  <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter" />
+  <bean id="roleVoter" class="org.springframework.security.vote.RoleVoter" />
 
-  <bean id="accessDecisionManager" class="org.acegisecurity.vote.UnanimousBased">
+  <bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
     <property name="decisionVoters">
       <list>
         <ref bean="roleVoter" />
@@ -43,7 +43,7 @@
   </bean>
 
 <!--
-  <bean id="securityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+  <bean id="securityInterceptor" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
     <property name="authenticationManager">
       <ref bean="authenticationManager" />
     </property>
@@ -60,18 +60,18 @@
   </bean>
 -->
 
-  <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+  <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
     <property name="loginFormUrl">
       <value>/showLayout.do?layout=login</value>
     </property>
   </bean>
   <!--
-  <bean id="rememberMeServices" class="org.acegisecurity.ui.rememberme.NullRememberMeServices" />
+  <bean id="rememberMeServices" class="org.springframework.security.ui.rememberme.NullRememberMeServices" />
   -->
 <!--
-  <bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+  <bean id="authenticationProcessingFilter" class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
     <property name="filterProcessesUrl">
-      <value>/j_acegi_security_check</value>
+      <value>/j_spring_security_check</value>
     </property>
     <property name="authenticationFailureUrl">
       <value>/showLayout.do?layout=login</value>
@@ -86,7 +86,7 @@
 -->
   <bean id="authenticationProcessingFilter" class="org.digijava.module.aim.auth.AmpAuthenticationProcessingFilter">
     <property name="filterProcessesUrl">
-      <value>/j_acegi_security_check</value>
+      <value>/j_spring_security_check</value>
     </property>
     <property name="authenticationFailureUrl">
       <value>/aim/getLoginStatus.do?loginError=invalidLogin</value>
@@ -108,21 +108,21 @@
     </property>
   </bean>
 
-  <bean id="logoutFilter" class="org.acegisecurity.ui.logout.LogoutFilter">
+  <bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
     <!-- URL redirected to after logout -->
     <constructor-arg value="/aim/logout.do"/> 
     <constructor-arg>
       <list>
-        <bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler"/>
+        <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
         <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
       </list>
     </constructor-arg>
     <property name="filterProcessesUrl">
-      <value>/j_acegi_logout</value>
+      <value>/j_spring_logout</value>
     </property>
 </bean>
 
-<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+<bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
   <property name="filterInvocationDefinitionSource">
     <value>
     CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
@@ -132,18 +132,15 @@
   </property>
 </bean>
 
-<bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+<bean id="httpSessionContextIntegrationFilter" class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
   <property name="allowSessionCreation"><value>true</value></property>
-  <property name="context">
-    <value>org.acegisecurity.context.SecurityContextImpl</value>
-  </property>
 </bean>
 
-<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+<bean id="exceptionTranslationFilter" class="org.springframework.security.ui.ExceptionTranslationFilter">
   <property name="authenticationEntryPoint"><ref
     local="digiAuthenticationProcessingFilterEntryPoint"/></property>
     <property name="accessDeniedHandler">
-      <bean class="org.acegisecurity.ui.AccessDeniedHandlerImpl">
+      <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl">
         <property name="errorPage">
            <value>/aim/getLoginStatus.do?loginError=noTeamMember</value>
         </property>

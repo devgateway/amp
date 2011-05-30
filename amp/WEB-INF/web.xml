@@ -51,12 +51,12 @@
 	<filter>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
 		<filter-class>
-			org.acegisecurity.util.FilterToBeanProxy
+			org.springframework.security.util.FilterToBeanProxy
 		</filter-class>
 		<init-param>
 			<param-name>targetClass</param-name>
 			<param-value>
-				org.acegisecurity.util.FilterChainProxy
+				org.springframework.security.util.FilterChainProxy
 			</param-value>
 		</init-param>
 	</filter>
@@ -67,7 +67,7 @@
 	<filter>
 		<filter-name>Acegi Authentication</filter-name>
 		<filter-class>
-			org.acegisecurity.util.FilterToBeanProxy
+			org.springframework.security.util.FilterToBeanProxy
 		</filter-class>
 		<init-param>
 			<param-name>targetBean</param-name>

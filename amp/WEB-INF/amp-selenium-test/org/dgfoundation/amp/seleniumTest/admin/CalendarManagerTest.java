@@ -80,7 +80,7 @@ public class CalendarManagerTest extends SeleneseTestCase {
 			selenium.logComment("Module \"Fiscal Calendar Manager\" is not available.");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Calendar Manager Test Finished Successfully");
 		selenium.logComment("Calendar Manager Test Finished Successfully");

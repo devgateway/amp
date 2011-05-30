@@ -66,6 +66,7 @@ public class DownloadResourceStream implements IResourceStream {
 					
 					Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
 					fileSize = size.getLong();
+					DocumentManagerUtil.logoutJcrSessions( s.getHttpSession());
 				} catch (RepositoryException e) {
 					logger.error("Error while getting data stream from JCR:", e);
 				}

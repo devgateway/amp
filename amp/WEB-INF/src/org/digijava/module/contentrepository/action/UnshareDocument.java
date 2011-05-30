@@ -51,6 +51,7 @@ public class UnshareDocument extends Action {
 				}
 			}
 		}
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
 	}

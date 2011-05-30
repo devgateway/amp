@@ -3,7 +3,6 @@
  */
 package org.dgfoundation.amp.onepager;
 
-import org.acegisecurity.AuthenticationManager;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
@@ -18,6 +17,7 @@ import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.hibernate.SessionFactory;
+import org.springframework.security.AuthenticationManager;
 
 /**
  * @author mihai

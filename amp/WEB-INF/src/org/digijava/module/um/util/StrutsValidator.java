@@ -85,8 +85,10 @@ public class StrutsValidator
                                     HttpServletRequest request) {
     String value = (String) ValidatorUtils.getValueAsString(bean,
         field.getProperty());
-    UrlValidator validator = new UrlValidator();
-    if (!GenericValidator.isBlankOrNull(value) && !validator.isValid(value)) {
+    //UrlValidator validator = new UrlValidator();
+    if (!GenericValidator.isBlankOrNull(value) 
+    		//&& !validator.isValid(value)
+    		) {
       errors.add(field.getKey(), Resources.getActionMessage(request, va, field));
       return false;
     } else {

@@ -22,34 +22,16 @@
 
 package org.digijava.kernel.exception;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import org.apache.struts.Globals;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ExceptionHandler;
 import org.apache.struts.config.ExceptionConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import java.util.Enumeration;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.apache.struts.tiles.ComponentContext;
-import org.digijava.kernel.Constants;
-import org.digijava.module.exception.form.DigiExceptionReportForm;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.DgUtil;
-import java.util.Date;
-import org.digijava.kernel.request.Site;
-import org.digijava.module.exception.util.ModuleErrorStack;
-import javax.servlet.RequestDispatcher;
-import java.io.*;
-import org.acegisecurity.AcegiSecurityException;
 
 /**
  * Implementation of <strong>ExceptionHandler</strong> that handles any
@@ -88,12 +70,6 @@ public final class ActionExceptionHandler
         ActionForm formInstance,
         HttpServletRequest request,
         HttpServletResponse response) throws ServletException {
-
-        // Simply throw AcegiSecurityException's
-        // We will take care on it separately
-        if (ex instanceof AcegiSecurityException) {
-            throw (AcegiSecurityException)ex;
-        }
 
         //Special processing for security exceptions
         if (ex instanceof SecurityException) {

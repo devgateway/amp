@@ -74,7 +74,7 @@ public class LabelAction extends MultiAction {
 			}
 			
 		}
-		
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		
 	}
 	public void modeRemove(ActionMapping mapping, LabelForm form,
@@ -89,6 +89,7 @@ public class LabelAction extends MultiAction {
 			}
 			
 		}
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 	}
 
 }

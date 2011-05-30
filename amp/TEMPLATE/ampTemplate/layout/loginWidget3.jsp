@@ -42,7 +42,7 @@
 	function ajaxLogin() {
 		$
 				.ajax({
-					url : "/j_acegi_security_check",
+					url : "/j_spring_security_check",
 					type : "POST",
 					data : $("#loginForm").serialize(),
 					success : function(data) {
@@ -78,7 +78,7 @@
 	}
 </script>
 <div id="show_login_pop_box">
-						<form action="/j_acegi_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
+						<form action="/j_spring_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
 				    				</label>

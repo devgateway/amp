@@ -27,9 +27,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Field;
-import org.acegisecurity.AcegiSecurityException;
 
 /**
  *
@@ -72,15 +69,7 @@ public final class DigiExceptionHandler
         Throwable cause = (Throwable) request.getAttribute(
             "javax.servlet.error.exception");
 
-        // Simply throw AcegiSecurityException's
-        // We will take care on it separately
-        if (cause instanceof AcegiSecurityException) {
-            request.removeAttribute("javax.servlet.error.status_code");
-            request.removeAttribute("javax.servlet.error.message");
-            request.removeAttribute("javax.servlet.error.request_uri");
-            request.removeAttribute("javax.servlet.error.exception");
-            throw (AcegiSecurityException) cause;
-        }
+
 
         //response.setStatus(javax.servlet.http.HttpServletResponse.SC_OK);
 

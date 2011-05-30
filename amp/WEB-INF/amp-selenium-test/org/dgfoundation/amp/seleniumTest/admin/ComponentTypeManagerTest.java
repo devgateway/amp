@@ -90,7 +90,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 				selenium.click("addBtn");
 				selenium.selectWindow("null");
 				selenium.waitForPageToLoad("30000");
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "UATtl@amp.org");
@@ -134,7 +134,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 					selenium.logComment("Feature \"Components\" is not available.");
 				}
 				
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "admin@amp.org");
@@ -161,7 +161,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Component Type Manager is not available", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Component Type Manager Test Finished Successfully");
 		selenium.logComment("Component Type Manager Test Finished Successfully");

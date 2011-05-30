@@ -63,6 +63,7 @@ public class DeleteForDocumentManager extends Action {
 						//out.println("<div id='successfullDiv'>Document deleted successfully</div>");
 					}
 			}
+			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 			return mapping.findForward("forward");
 		}
 		

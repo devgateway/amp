@@ -40,7 +40,7 @@ public class ResourcesTest extends SeleneseTestCase {
 			selenium.type("webLink", "www.yahoo.com");
 			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "uattm@amp.org");
@@ -87,7 +87,7 @@ public class ResourcesTest extends SeleneseTestCase {
 			selenium.getConfirmation();
 			Thread.sleep(5000);
 			selenium.click("//div[@id='aPanel1']/span");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -114,7 +114,7 @@ public class ResourcesTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Option 'RESOURCES' is not available.", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Resources Test Finished Successfully");
 		selenium.logComment("Resources Test Finished Successfully");

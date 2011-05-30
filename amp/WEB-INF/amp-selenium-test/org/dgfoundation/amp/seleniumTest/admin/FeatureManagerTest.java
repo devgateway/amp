@@ -67,7 +67,7 @@ public class FeatureManagerTest extends SeleneseTestCase {
 		}
 		selenium.click("saveAll");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "UATtl@amp.org");
@@ -86,7 +86,7 @@ public class FeatureManagerTest extends SeleneseTestCase {
 			logger.error("Field Title is disabled Feature Manager but is available on Activity form");
 			selenium.logAssertion("assertTrue", "Field Title is disabled Feature Manager but is available on Activity form", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "admin@amp.org");
@@ -118,10 +118,10 @@ public class FeatureManagerTest extends SeleneseTestCase {
 		selenium.getConfirmation();
 		selenium.waitForPageToLoad("30000");
 		if (selenium.isElementPresent("link="+templateName)) {
-			logger.error("Template wasn´t deleted");
-			selenium.logAssertion("assertTrue", "Template wasn´t deleted", "condition=false");
+			logger.error("Template wasnï¿½t deleted");
+			selenium.logAssertion("assertTrue", "Template wasnï¿½t deleted", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Feature Manager Test Finished Successfully");
 		selenium.logComment("Feature Manager Test Finished Successfully");

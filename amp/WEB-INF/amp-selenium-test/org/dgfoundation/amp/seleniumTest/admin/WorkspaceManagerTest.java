@@ -69,7 +69,7 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Module \"Workspace Manager\" is not available", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Workspace Manager Test Finished Successfully");
 		selenium.logComment("Workspace Manager Test Finished Successfully");

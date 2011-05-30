@@ -16,8 +16,8 @@ public class TestWorkspace extends SeleneseTestCase {
 	
 	public void testAddWorkspace(Selenium selenium) throws Exception {
 		
-		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_acegi_logout\")]")) {
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_spring_logout\")]")) {
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("50000");
 		}
 		
@@ -52,7 +52,7 @@ public class TestWorkspace extends SeleneseTestCase {
 		} else {
 			logger.info("Workspace for Selenium tests already exists.");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 	}
 

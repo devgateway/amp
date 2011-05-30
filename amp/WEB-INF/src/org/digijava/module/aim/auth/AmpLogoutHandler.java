@@ -1,12 +1,14 @@
 package org.digijava.module.aim.auth;
 
+import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.ui.logout.LogoutHandler;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.contentrepository.helper.CrConstants;
+import org.springframework.security.Authentication;
+import org.springframework.security.ui.logout.LogoutHandler;
 
 public class AmpLogoutHandler
     implements LogoutHandler {
@@ -26,6 +28,12 @@ public class AmpLogoutHandler
         //save dev mode setting after logout.
         boolean wasDevMode=RequestUtils.isDevelopmentModeActive(httpServletRequest);
        // session.removeAttribute("debugFM");
+    	Session jcrWriteSession		= (Session)session.getAttribute(CrConstants.JCR_WRITE_SESSION);
+    	if(jcrWriteSession!=null) jcrWriteSession.logout();
+    	
+    	Session jcrReadSession		= (Session)session.getAttribute(CrConstants.JCR_READ_SESSION);
+    	if(jcrReadSession!=null) jcrReadSession.logout();
+    	
         session.invalidate();
 
         //if user switched to dev mode before logout, then restore it.

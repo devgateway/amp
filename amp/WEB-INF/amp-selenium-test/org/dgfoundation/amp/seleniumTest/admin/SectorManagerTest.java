@@ -80,7 +80,7 @@ public class SectorManagerTest extends SeleneseTestCase {
 					break;
 				}
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -122,7 +122,7 @@ public class SectorManagerTest extends SeleneseTestCase {
 					}
 				}			
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -181,7 +181,7 @@ public class SectorManagerTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Module \"Sector Manager\" is not available.", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Sector Manager Test Finished Successfully");
 		selenium.logComment("Sector Manager Test Finished Successfully");

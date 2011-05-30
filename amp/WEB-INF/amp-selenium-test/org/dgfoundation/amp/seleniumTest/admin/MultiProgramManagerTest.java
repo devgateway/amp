@@ -67,7 +67,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
 				selenium.select("settingsList[0].defaultHierarchyId", "label="+progName);
 				selenium.click("save");
 				selenium.waitForPageToLoad("30000");
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "UATtl@amp.org");
@@ -94,7 +94,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
 						selenium.waitForPageToLoad("30000");
 					}
 				}
-				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+				selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				
 				selenium.type("j_username", "admin@amp.org");
@@ -126,7 +126,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
 			selenium.logComment("Module \"National Planning Dashboard\" is not available.");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Multi Program Manager Test Finished Successfully");
 		selenium.logComment("Multi Program Manager Test Finished Successfully");

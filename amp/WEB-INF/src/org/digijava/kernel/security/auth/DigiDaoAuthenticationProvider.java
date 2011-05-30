@@ -24,27 +24,25 @@ package org.digijava.kernel.security.auth;
 
 import java.util.List;
 
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.BadCredentialsException;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.providers.dao.DaoAuthenticationProvider;
-import org.acegisecurity.providers.dao.SaltSource;
-import org.acegisecurity.ui.session.HttpSessionEventPublisher;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
-import org.digijava.module.aim.action.GetTeamActivities;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.BadCredentialsException;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.providers.dao.DaoAuthenticationProvider;
+import org.springframework.security.providers.dao.SaltSource;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 public class DigiDaoAuthenticationProvider
     extends DaoAuthenticationProvider implements InitializingBean, SaltSource {

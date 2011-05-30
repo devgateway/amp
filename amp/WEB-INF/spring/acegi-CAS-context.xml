@@ -11,7 +11,7 @@
     </property>
   </bean>
 
-  <bean id="casAuthenticationProvider" class="org.acegisecurity.providers.cas.CasAuthenticationProvider">
+  <bean id="casAuthenticationProvider" class="org.springframework.security.providers.cas.CasAuthenticationProvider">
     <property name="ticketValidator">
       <ref bean="casTicketValidator" />
     </property>
@@ -28,26 +28,16 @@
       <value>amp_cas_password</value>
     </property> 
   </bean>
-
-  <bean id="casTicketValidator" class="org.acegisecurity.providers.cas.ticketvalidator.CasProxyTicketValidator">
-    <property name="casValidate">
-      <value>https://amp.cas.powerdot.net:9392/cas-amp/proxyValidate</value>
-    </property>
-    <property name="serviceProperties">
-      <ref bean="serviceProperties"/>
-    </property> 
-    <property name="trustStore"><value>D:/Servers/jboss-3.2.5/server/default-amp/conf/jboss.cacerts</value></property>
-  </bean>
-
-  <bean id="serviceProperties" class="org.acegisecurity.ui.cas.ServiceProperties">
+  
+  <bean id="serviceProperties" class="org.springframework.security.ui.cas.ServiceProperties">
     <property name="service">
       <value>http://amp.mofed.gov:8080/j_acegi_cas_security_check</value>
     </property>
   </bean>
 
-  <bean id="casProxyDecider" class="org.acegisecurity.providers.cas.proxy.AcceptAnyCasProxy"/> 
+  <bean id="casProxyDecider" class="org.springframework.security.providers.cas.proxy.AcceptAnyCasProxy"/> 
 
-   <bean id="statelessTicketCache" class="org.acegisecurity.providers.cas.cache.EhCacheBasedTicketCache"> 
+   <bean id="statelessTicketCache" class="org.springframework.security.providers.cas.cache.EhCacheBasedTicketCache"> 
      <property name="cache"><ref local="ticketCacheBackend"/></property> 
    </bean> 
 
@@ -62,11 +52,11 @@
      </property> 
    </bean> 
 
-   <bean id="casAuthoritiesPopulator" class="org.acegisecurity.providers.cas.populator.DaoCasAuthoritiesPopulator"> 
+   <bean id="casAuthoritiesPopulator" class="org.springframework.security.providers.cas.populator.DaoCasAuthoritiesPopulator"> 
      <property name="userDetailsService"><ref bean="digiUserDetailsService"/></property> 
    </bean> 
 
-  <bean id="casAuthenticationManager" class="org.acegisecurity.providers.ProviderManager">
+  <bean id="casAuthenticationManager" class="org.springframework.security.providers.ProviderManager">
     <property name="providers">
       <list>
         <ref bean="casAuthenticationProvider" />
@@ -74,9 +64,9 @@
     </property>
   </bean>
 
-  <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter" />
+  <bean id="roleVoter" class="org.springframework.security.vote.RoleVoter" />
 
-  <bean id="accessDecisionManager" class="org.acegisecurity.vote.UnanimousBased">
+  <bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
     <property name="decisionVoters">
       <list>
         <ref bean="roleVoter" />
@@ -85,7 +75,7 @@
   </bean>
 
 <!--
-  <bean id="securityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+  <bean id="securityInterceptor" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
     <property name="authenticationManager">
       <ref bean="authenticationManager" />
     </property>
@@ -102,10 +92,10 @@
   </bean>
 -->
   <!--
-  <bean id="rememberMeServices" class="org.acegisecurity.ui.rememberme.NullRememberMeServices" />
+  <bean id="rememberMeServices" class="org.springframework.security.ui.rememberme.NullRememberMeServices" />
   -->
 
-   <bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.cas.CasProcessingFilter"> 
+   <bean id="authenticationProcessingFilter" class="org.springframework.security.ui.cas.CasProcessingFilter"> 
      <property name="authenticationManager"><ref bean="casAuthenticationManager"/></property> 
      <property name="authenticationFailureUrl"><value>/404.jsp</value></property> 
      <property name="defaultTargetUrl"><value>/shevediiit.jsp</value></property> 
@@ -121,17 +111,17 @@
     </constructor-arg>
     <constructor-arg>
       <list>
-        <bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler"/>
+        <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
         <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
       </list>
     </constructor-arg>
     <property name="filterProcessesUrl">
-      <value>/j_acegi_logout</value>
+      <value>/j_spring_logout</value>
     </property>
   </bean>
 
 
-<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+<bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
   <property name="filterInvocationDefinitionSource">
     <value>
     CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
@@ -141,19 +131,16 @@
   </property>
 </bean>
 
-<bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+<bean id="httpSessionContextIntegrationFilter" class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
   <property name="allowSessionCreation"><value>true</value></property>
-  <property name="context">
-    <value>org.acegisecurity.context.SecurityContextImpl</value>
-  </property>
 </bean>
 
-<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+<bean id="exceptionTranslationFilter" class="org.springframework.security.ui.ExceptionTranslationFilter">
   <property name="authenticationEntryPoint">
     <ref local="digiAuthenticationProcessingFilterEntryPoint"/>
    </property>
    <property name="accessDeniedHandler">
-      <bean class="org.acegisecurity.ui.AccessDeniedHandlerImpl">
+      <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl">
         <property name="errorPage" value="/403.jsp"/>
       </bean>
    </property>
@@ -163,7 +150,7 @@
      This name is MANDATORY for authentication entry point, because it is 
      hard-coded in some non-spring managed code. For example - RequestProcessor
   -->
-   <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.acegisecurity.ui.cas.CasProcessingFilterEntryPoint"> 
+   <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.springframework.security.ui.cas.CasProcessingFilterEntryPoint"> 
      <property name="loginUrl">
        <value>https://amp.cas.powerdot.net:9392/cas-amp/login</value>
      </property> 

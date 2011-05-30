@@ -118,7 +118,7 @@ public class SelectDocumentDM extends Action {
 		TeamInformationBeanDM teamInfo			= DocumentManagerUtil.getTeamInformationBeanDM( request.getSession() );
 		
 		selectDocumentForm.setTeamInformationBeanDM(teamInfo);		
-		
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return mapping.findForward("forwardDM");
 	}
 	

@@ -31,6 +31,7 @@ public class ApproveVersion extends Action {
 			lastAppVersion=new NodeLastApprovedVersion(baseNodeUUID, versionId);
 		}					
 		DbUtil.saveOrUpdateObject(lastAppVersion);
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return null;
 	}
 }

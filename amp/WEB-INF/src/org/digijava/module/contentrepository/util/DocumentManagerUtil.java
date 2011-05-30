@@ -129,6 +129,13 @@ public class DocumentManagerUtil {
 		return getWriteSession(request.getSession());
 	}
 	
+	public static void logoutJcrSessions(HttpSession httpSession) {
+		Session jcrWriteSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
+		if(jcrWriteSession!=null) jcrWriteSession.logout();		
+		Session jcrReadSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+		if(jcrReadSession!=null) jcrReadSession.logout();
+	}
+	
 	public static Session getWriteSession(HttpSession httpSession) {
 		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
 		

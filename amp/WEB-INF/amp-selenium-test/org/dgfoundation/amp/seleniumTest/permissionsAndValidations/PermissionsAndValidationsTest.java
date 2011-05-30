@@ -33,7 +33,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.click("link=UAT Team Workspace");
 		selenium.waitForPageToLoad("30000");
 		addActivity(selenium, activityName);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 
 		//Login as TL WS Team - Computed (create a tab and check that the activity is NOT present)
@@ -49,7 +49,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.error("Activity is available for a wrong user");
 			selenium.logAssertion("assertTrue", "Activity is available for a wrong user", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TL WS Team (create a tab and validate the activity)
@@ -67,7 +67,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//input[@onclick='saveClicked()']");
 		selenium.waitForPageToLoad("50000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TL WS Team - Computed (use the tab created and check the activity)
@@ -89,7 +89,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 //		selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
 //		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TL WS Management (create a tab and check the activity)
@@ -109,7 +109,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//input[@onclick='saveClicked()']");
 		selenium.waitForPageToLoad("50000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		*/
 		
@@ -176,7 +176,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         Thread.sleep(5000);
         selenium.click("//input[@name='saveTreeVisibility']");
         selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TM WS Team (create a tab and check if the Project Title and Status are enabled)
@@ -212,7 +212,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
 			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
         
 		//Login as TL WS Team (use the tab created and check if the Project Title and Status are enabled)
@@ -253,7 +253,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
 			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
         
 		//Login as TMC WS Team (create a tab and check if the Project Title and Status are disabled)
@@ -290,7 +290,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Status field is enabled", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
       
 		//Login as TL WS Team (change the application settings)
@@ -308,7 +308,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.select("validation", "index=0");
 		selenium.click("//input[@onclick='validade();']");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
       
 		//Login as TM WS Team (use the tab created, add an activity and check if the title is green and with an *)
@@ -336,7 +336,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.error("Activity name is shown without *");
 			selenium.logAssertion("assertTrue", "Activity name is shown without *", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TL WS Team (create a tab and validate the activity)
@@ -373,7 +373,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.error("Activity name is shown with *");
 			selenium.logAssertion("assertTrue", "Activity name is shown with *", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 
 		//Login as TL WS Team (change the application settings)
@@ -391,7 +391,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.select("validation", "index=1");
 		selenium.click("//input[@onclick='validade();']");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
       
 		//Login as TM WS Team (use the tab created and check if the Project Title and Status are enabled)
@@ -428,7 +428,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.error("Activity name is shown with *");
 			selenium.logAssertion("assertTrue", "Activity name is shown with *", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TL WS Team (create a tab and validate the activity)
@@ -567,7 +567,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.error("Activity owner is wrong");
 			selenium.logAssertion("assertTrue", "Activity owner is wrong", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		//Login as TMC WS Team (create a tab and check if the Project Title and Status are enabled)
@@ -607,7 +607,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
 			selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "uattl@amp.org");
@@ -619,7 +619,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=true\")]");
 		selenium.waitForPageToLoad("50000");
 		TabTest.deleteAllTabs(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "uattm@amp.org");
@@ -631,7 +631,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=true\")]");
 		selenium.waitForPageToLoad("50000");
 		TabTest.deleteAllTabs(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "uattmc@amp.org");
@@ -643,7 +643,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=true\")]");
 		selenium.waitForPageToLoad("50000");
 		TabTest.deleteAllTabs(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "uattl@amp.org");
@@ -655,7 +655,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=true\")]");
 		selenium.waitForPageToLoad("50000");
 		TabTest.deleteAllTabs(selenium);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "admin@amp.org");
@@ -695,7 +695,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			logger.info("Activity Manager is not available");
 			selenium.logComment("Activity Manager is not available");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		logger.info("Permissions and Validations Test Finished Successfully");

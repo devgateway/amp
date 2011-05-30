@@ -173,7 +173,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 						selenium.click("//input[@onclick=\"return sendEvent();\"]");
 						selenium.waitForPageToLoad("30000");
 						eventId++;
-						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 						selenium.waitForPageToLoad("30000");
 						
 						selenium.type("j_username", "uattmc@amp.org");
@@ -198,7 +198,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 							logger.error("Non Public Event is visible for an user who is not in the attender list.");
 							selenium.logAssertion("assertTrue", "Non Public Event is visible for an user who is not in the attender list.", "condition=false");
 						}
-						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 						selenium.waitForPageToLoad("30000");
 												
 						selenium.type("j_username", "uattm@amp.org");
@@ -227,7 +227,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 						selenium.click("//input[@onclick=\"return sendEvent();\"]");
 						selenium.waitForPageToLoad("30000");
 						eventId++;*/
-						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 						selenium.waitForPageToLoad("30000");
 						
 						selenium.type("j_username", "uattl@amp.org");
@@ -256,7 +256,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 						selenium.click("//input[@onclick=\"return sendEvent();\"]");
 						selenium.waitForPageToLoad("30000");
 						eventId++;
-						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 						selenium.waitForPageToLoad("30000");
 												
 						selenium.type("j_username", "uattm@amp.org");
@@ -294,7 +294,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 			logger.info("Module \"Calendar\" is not available.");
 			selenium.logComment("Module \"Calendar\" is not available.");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Calendar Test Finished Successfully");
 		selenium.logComment("Calendar Test Finished Successfully");

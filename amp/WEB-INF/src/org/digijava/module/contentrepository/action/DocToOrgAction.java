@@ -116,6 +116,7 @@ public class DocToOrgAction extends MultiAction {
 				}
 				docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) removed from the Document.", request));
 			}
+			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		}
 		
 		docToOrgForm.setRemovingUuid(null);
@@ -157,6 +158,7 @@ public class DocToOrgAction extends MultiAction {
 			}
 		}
 		
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return mapping.findForward("list");
 	}
 

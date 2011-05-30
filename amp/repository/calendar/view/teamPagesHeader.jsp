@@ -35,7 +35,7 @@ function showUserProfile(id){
           </td>
           <td align="right">
             <div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
-              <a href="${request.contextPath}/j_acegi_logout" class="up-menu" onclick="return quitRnot()">
+              <a href="${request.contextPath}/j_spring_logout" class="up-menu" onclick="return quitRnot()">
                 <digi:trn key="aim:logout">Logout</digi:trn>
               </a>
             </div>&nbsp;&nbsp;&nbsp;&nbsp;

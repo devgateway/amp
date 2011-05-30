@@ -41,7 +41,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		}
 		selenium.click("saveAll");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.type("j_username", "UATtl@amp.org");
@@ -161,7 +161,7 @@ public class PublicViewTest extends SeleneseTestCase {
 			selenium.logComment("Option 'Resources' is not available.");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		
 		selenium.click("//a[contains(@href, \"/aim/reportsPublicView.do\")]");
@@ -214,7 +214,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		}
 		selenium.click("saveAll");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		selenium.type("j_username", "UATtl@amp.org");
 		selenium.type("j_password", "abc");
@@ -265,7 +265,7 @@ public class PublicViewTest extends SeleneseTestCase {
 			Thread.sleep(5000);
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Public View Test Finished Successfully");
 		selenium.logComment("Public View Test Finished Successfully");

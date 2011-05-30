@@ -22,27 +22,28 @@
 
 package org.digijava.kernel.security.auth;
 
-import org.acegisecurity.ui.logout.LogoutFilter;
-import org.acegisecurity.ui.logout.LogoutHandler;
-import javax.servlet.ServletResponse;
-import org.acegisecurity.Authentication;
-import javax.servlet.ServletRequest;
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.util.Assert;
-import javax.servlet.ServletException;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import org.acegisecurity.context.SecurityContextHolder;
-import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.Authentication;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.ui.logout.LogoutFilter;
+import org.springframework.security.ui.logout.LogoutHandler;
+import org.springframework.util.Assert;
 
 public class CasLogoutFilter
     extends LogoutFilter {
 
     //~ Instance fields ================================================================================================
 
-    private String filterProcessesUrl = "/j_acegi_logout";
+    private String filterProcessesUrl = "/j_spring_logout";
     private String logoutSuccessUrl;
     private String logoutUrl;
     private LogoutHandler[] handlers;
@@ -59,52 +60,6 @@ public class CasLogoutFilter
         this.logoutSuccessUrl = logoutSuccessUrl;
         this.handlers = handlers;
     }
-
-    //~ Methods ========================================================================================================
-
-    /**
-     * Not used. Use IoC container lifecycle methods instead.
-     */
-    public void destroy() {}
-
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
-        if (!(request instanceof HttpServletRequest)) {
-            throw new ServletException("Can only process HttpServletRequest");
-        }
-
-        if (!(response instanceof HttpServletResponse)) {
-            throw new ServletException("Can only process HttpServletResponse");
-        }
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        if (requiresLogout(httpRequest, httpResponse)) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-            if (auth != null) {
-                for (int i = 0; i < handlers.length; i++) {
-                    handlers[i].logout(httpRequest, httpResponse, auth);
-                }
-            }
-
-            sendRedirect(httpRequest, httpResponse, logoutSuccessUrl);
-
-            return;
-        }
-
-        chain.doFilter(request, response);
-    }
-
-    /**
-     * Not used. Use IoC container lifecycle methods instead.
-     *
-     * @param arg0 ignored
-     *
-     * @throws ServletException ignored
-     */
-    public void init(FilterConfig arg0) throws ServletException {}
 
     /**
      * Allow subclasses to modify when a logout should tak eplace.

@@ -37,9 +37,7 @@ public class GetDesktopLinks extends TilesAction {
 
 			
 			Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
-			javax.jcr.Node userNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, tm);
-			javax.jcr.Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, tm.getTeamId());
-
+		
 			ArrayList<DocumentData> list = new ArrayList<DocumentData>();
 			
 			Collection<DocumentData> tmp = this.getTeamDocuments(tm, jcrWriteSession.getRootNode(), request);
@@ -60,7 +58,7 @@ public class GetDesktopLinks extends TilesAction {
 			}
 				
 			session.setAttribute(Constants.MY_LINKS,reducedList);	
-			 
+			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

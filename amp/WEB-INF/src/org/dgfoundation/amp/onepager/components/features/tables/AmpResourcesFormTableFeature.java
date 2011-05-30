@@ -103,6 +103,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					td.setContentType(nw.getContentType());
 					
 					ret.add(td);
+					DocumentManagerUtil.logoutJcrSessions( session.getHttpSession());
 				}
 				
 				ret.addAll(newItems);

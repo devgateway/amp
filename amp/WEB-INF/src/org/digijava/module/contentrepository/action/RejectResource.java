@@ -30,6 +30,7 @@ public class RejectResource extends DispatchAction {
 		 //create approval
 		 Node node=DocumentManagerUtil.getReadNode(sharedPrivateResourceVersionUUID, request);
 		 new RejectResourceSharetrigger(node);
+		 DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		 return null;
 	}
 }

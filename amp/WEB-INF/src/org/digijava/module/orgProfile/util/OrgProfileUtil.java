@@ -1496,6 +1496,7 @@ public class OrgProfileUtil {
 				}
 			}
 		}
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		return nodeWrappers;
 	}
 }

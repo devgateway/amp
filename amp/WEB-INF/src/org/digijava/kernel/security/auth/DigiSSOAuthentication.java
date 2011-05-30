@@ -22,9 +22,9 @@
 
 package org.digijava.kernel.security.auth;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.GrantedAuthority;
 import org.digijava.kernel.security.HttpLoginManager;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
 
 public class DigiSSOAuthentication implements Authentication {
 

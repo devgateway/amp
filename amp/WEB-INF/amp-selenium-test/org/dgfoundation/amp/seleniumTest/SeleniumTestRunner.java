@@ -210,8 +210,8 @@ public class SeleniumTestRunner  extends SeleneseTestBase{
 	}
 	
 	private void logout() {
-		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_acegi_logout\")]")) {
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_spring_logout\")]")) {
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 		}
 		

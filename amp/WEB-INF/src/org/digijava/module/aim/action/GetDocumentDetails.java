@@ -18,6 +18,7 @@ import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /***
  * Fetch the Document and activity details provided the document Id and activity Id 
@@ -68,6 +69,7 @@ extends Action {
 			document.setFileName(nodeWrapper.getName());
 			document.setUrl(nodeWrapper.getWebLink());
 			rlForm.setDocument(document);
+			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		}
 
 		rlForm.setPageId(pageId);	  

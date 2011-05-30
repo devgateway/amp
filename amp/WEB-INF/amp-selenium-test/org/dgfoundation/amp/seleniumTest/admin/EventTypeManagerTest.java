@@ -39,7 +39,7 @@ public class EventTypeManagerTest extends SeleneseTestCase {
 			selenium.type("hexColorNum", "#"+hexColor);
 			selenium.click("//input[@onclick=\"setActionMethod('addType')\"]");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -81,7 +81,7 @@ public class EventTypeManagerTest extends SeleneseTestCase {
 				logger.info("Module \"Calendar\" is not available.");
 				selenium.logComment("Module \"Calendar\" is not available.");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -113,7 +113,7 @@ public class EventTypeManagerTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Event Type Manager is not available", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Event Type Manager Test Finished Successfully");
 		selenium.logComment("Event Type Manager Test Finished Successfully");		

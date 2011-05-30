@@ -942,7 +942,7 @@ public class ActivityFormTest extends SeleneseTestCase{
 			}
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Activity Form Test Finished Successfully");
 		selenium.logComment("Activity Form Test Finished Successfully");
@@ -954,8 +954,8 @@ public class ActivityFormTest extends SeleneseTestCase{
 	 */
 	public static String getFirstActivityName (Selenium selenium){
 		String ret = null;
-		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_acegi_logout\")]")) {
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_spring_logout\")]")) {
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("50000");
 		}
 		
@@ -977,11 +977,11 @@ public class ActivityFormTest extends SeleneseTestCase{
 			} else {
 				ret = selenium.getText("//table[@id='dataTable']/tbody/tr[1]/td[2]");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			return ret;
 		}else{
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			return null;
 		}

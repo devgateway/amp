@@ -23,7 +23,7 @@
 <%-- 
 <table width="100%" height="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
-<form action="/j_acegi_security_check" method="post"">
+<form action="/j_spring_security_check" method="post"">
 <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=757>
 	<tr>
 		<td align=left valign="top" width=520><br>

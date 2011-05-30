@@ -763,8 +763,7 @@ public class ImportBuilder {
 		
 		
 		if(activityImported.getDocuments() != null || activityImported.getDocuments().size() > 0){
-			setTeamMember(request, "admin@amp.org", 0L);
-			Session writeSession = DocumentManagerUtil.getWriteSession(request);
+			setTeamMember(request, "admin@amp.org", 0L);		
 				for (Iterator it = activityImported.getDocuments().iterator(); it.hasNext();) {
 					Documents doc = (Documents) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
@@ -789,7 +788,6 @@ public class ImportBuilder {
 		
 		if(activityImported.getRelatedLinks() != null || activityImported.getRelatedLinks().size() > 0){
 			setTeamMember(request, "admin@amp.org", 0L);
-			Session writeSession = DocumentManagerUtil.getWriteSession(request);
 				for (Iterator it = activityImported.getRelatedLinks().iterator(); it.hasNext();) {
 					RelatedLinks doc = (RelatedLinks) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();

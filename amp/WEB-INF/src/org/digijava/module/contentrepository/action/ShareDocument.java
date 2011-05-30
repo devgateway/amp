@@ -139,6 +139,7 @@ public class ShareDocument extends Action {
 				}
 			}
 		}
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
 	}

@@ -61,7 +61,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			//selenium.select("tempNumResults", "label=All");
 			//selenium.click("//input[@value='GO']");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -89,7 +89,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("50000");
 				
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -142,7 +142,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 			selenium.logAssertion("assertTrue", "Organization Manager is not available.", "condition=false");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Organization Manager Test Finished Successfully");
 		selenium.logComment("Organization Manager Test Finished Successfully");

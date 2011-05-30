@@ -87,7 +87,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 				selenium.logComment("Currency Rate Manager is not available");
 			}
 			
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -129,7 +129,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 				selenium.click("//input[@onclick=\"closeWindow()\"]");
 				selenium.selectWindow("null");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 					
 			selenium.type("j_username", "admin@amp.org");
@@ -143,7 +143,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"javascript:makeInactive('"+currencyCode+"')\")]");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -190,7 +190,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 				selenium.click("//input[@onclick=\"closeWindow()\"]");
 				selenium.selectWindow("null");
 			}
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -217,7 +217,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 			selenium.logComment("Currency Manager is not available");
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Currency Manager Test Finished Successfully");
 		selenium.logComment("Currency Manager Test Finished Successfully");

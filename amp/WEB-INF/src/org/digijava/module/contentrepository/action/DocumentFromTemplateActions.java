@@ -140,9 +140,10 @@ public class DocumentFromTemplateActions extends DispatchAction {
 			
 			clearForm(myForm);
 			request.getSession().setAttribute("resourcesTab", myForm.getDocOwnerType());
+
 			myForm.setDocOwnerType(null);
 		}
-		
+		DocumentManagerUtil.logoutJcrSessions(request.getSession());	
 		return mapping.findForward("showResources");
 	}
 	

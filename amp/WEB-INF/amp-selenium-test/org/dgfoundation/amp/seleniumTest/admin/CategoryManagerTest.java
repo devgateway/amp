@@ -83,7 +83,7 @@ public class CategoryManagerTest extends SeleneseTestCase {
 			logger.error("Category Type wasn't deleted");
 			selenium.logAssertion("assertTrue", "Category Type wasn't deleted", "condition=false");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Category Manager Test Finished Successfully");
 		selenium.logComment("Category Manager Test Finished Successfully");

@@ -6,15 +6,12 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.acegisecurity.adapters.HttpRequestIntegrationFilter;
-import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.util.CalendarThread;
-import org.digijava.module.mondrian.query.QueryThread;
 
 public class DateBreakDown {
     private int type;

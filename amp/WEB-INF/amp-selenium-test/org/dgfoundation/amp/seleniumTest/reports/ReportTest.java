@@ -401,7 +401,7 @@ public class ReportTest extends SeleneseTestCase{
 				cnt++;
 			}
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Report Test Finished Successfully");
 		selenium.logComment("Report Test Finished Successfully");

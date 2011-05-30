@@ -1302,6 +1302,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	          /* END - Setting documents for preview */
 	          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
+	          DocumentManagerUtil.logoutJcrSessions(request.getSession());
 	          return mapping.findForward("preview");
 	        }
 }

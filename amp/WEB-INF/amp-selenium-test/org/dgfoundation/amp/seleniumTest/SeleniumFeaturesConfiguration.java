@@ -66,7 +66,7 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestCase {
 		selenium.logComment("Features found: " + featuresCounter);
 		logger.info("Fields found: " + fieldsCounter);
 		selenium.logComment("Fields found: " + fieldsCounter);
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Get Features Configuration Finished Successfully");
 		selenium.logComment("Get Features Configuration Finished Successfully");

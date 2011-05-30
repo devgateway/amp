@@ -111,6 +111,7 @@ public class ViewRelatedLinks extends Action {
 			        	 pagedCol.add(document);
 			        }
 		        }
+		        DocumentManagerUtil.logoutJcrSessions(request.getSession());
 			}
 			rlForm.setAllDocuments(pagedCol);
 		}

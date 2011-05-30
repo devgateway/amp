@@ -56,7 +56,6 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import org.digijava.kernel.Constants;
-import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.moduleconfig.Security;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -77,6 +76,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
 
 /**
  * This class works as Struts request processor

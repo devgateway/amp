@@ -108,7 +108,7 @@ public class MondrianTest extends SeleneseTestCase{
 			logger.info("Module \"Multi-dimensional Reports\" is not available.");
 			selenium.logComment("Module \"Multi-dimensional Reports\" is not available.");
 		}
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Mondrian Test Finished Successfully");
 		selenium.logComment("Mondrian Test Finished Successfully");

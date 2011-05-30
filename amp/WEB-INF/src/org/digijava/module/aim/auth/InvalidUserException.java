@@ -1,6 +1,6 @@
 package org.digijava.module.aim.auth;
 
-import org.acegisecurity.AccessDeniedException;
+import org.springframework.security.AccessDeniedException;
 
 public class InvalidUserException
     extends AccessDeniedException {

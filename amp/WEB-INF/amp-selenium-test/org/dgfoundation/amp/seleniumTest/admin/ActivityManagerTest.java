@@ -120,7 +120,7 @@ public class ActivityManagerTest extends SeleneseTestCase {
 			
 			selenium.click("//input[@onclick='saveClicked()']");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
 			selenium.type("j_username", "admin@amp.org");
@@ -154,7 +154,7 @@ public class ActivityManagerTest extends SeleneseTestCase {
 			}
 		}
 		
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Activity Manager Test Finished Successfully");
 		selenium.logComment("Activity Manager Test Finished Successfully");

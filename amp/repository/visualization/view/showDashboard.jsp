@@ -1839,7 +1839,7 @@ function refreshBoxes(o){
 		inner = trnTopProjects + " (" + startYear + "-" + endYear + ")";
 	}
 	div.innerHTML = inner;
-	if (dashboardType!=2) {
+	if (dashboardType!=3) {
 		div = document.getElementById("topSectorsTitle");
 		if (yearsInRange == 1) {
 			inner = trnTopSectors + " (" + startYear + ")";
@@ -1857,7 +1857,7 @@ function refreshBoxes(o){
 		}
 		div.innerHTML = inner;
 	}
-	if (dashboardType!=3) {
+	if (dashboardType!=2) {
 		div = document.getElementById("topRegionsTitle");
 		if (yearsInRange == 1) {
 			inner = trnTopRegions + " (" + startYear + ")";

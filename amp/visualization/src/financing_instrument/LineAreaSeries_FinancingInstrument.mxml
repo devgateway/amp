@@ -87,14 +87,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "4");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "4");
 			}
 			/**
 			 * This function is called when the % data slider changes.
@@ -156,14 +159,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getAidTypeGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

@@ -90,14 +90,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "6");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "6");
 			}
 			protected function myStack_preRenderHandler(event:Event):void
 			{
@@ -113,14 +116,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getSectorProfileGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

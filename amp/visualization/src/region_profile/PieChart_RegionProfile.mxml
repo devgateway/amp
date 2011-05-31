@@ -38,6 +38,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 		<mx:request>
 			<format>xml</format>
 			<typeofaid>true</typeofaid>
+			<donut>true</donut>
 		</mx:request>
 	</mx:HTTPService>
 	<mx:Script>
@@ -60,9 +61,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 				//perform aggregations to create data values for our nested wedges
 				if(isNaN(sliderYear.value))
 				{
-					startYear = service.lastResult.region[0].startYear;
-					endYear = service.lastResult.region[0].endYear;
-					sliderYear.value = endYear;
+					try {
+						startYear = service.lastResult.region.startYear;
+						endYear = service.lastResult.region.endYear;
+						sliderYear.value = endYear;
+					} catch (errObject:Error) {
+						startYear = service.lastResult.region[0].startYear;
+						endYear = service.lastResult.region[0].endYear;
+						sliderYear.value = endYear;
+					}
 					var labelArray:Array = new Array(); 
 					for (var index:Number=startYear; index <= endYear; index++){
 						labelArray[labelArray.length] = index;
@@ -96,14 +103,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "7");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "7");
 			}
 			
 			//Used to rotate wedge labels 180 degrees for readability
@@ -149,14 +159,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getRegionProfileGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

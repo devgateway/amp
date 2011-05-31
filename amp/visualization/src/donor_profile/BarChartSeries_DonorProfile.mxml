@@ -76,23 +76,36 @@
 						object.aggregates.X_Y_min
 						object.aggregates.X_Y_max
 				 */ 
-				ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
+				//ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
 				/**
 				 * Now aggregate all the sums per country. Ultimately to get the max value so we can scale the chart appropriately
 				 */
-				ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
+				//ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
 				/**
 				 * Note the odd syntax regarding how you access aggregates of aggregated data
 				 */
-				vScale.maxValue = service.lastResult.aggregates['sector_aggregates:amount_amount_sum_max'];
-				vScale.minValue = 0;
+				//vScale.maxValue = service.lastResult.aggregates['sector_aggregates:amount_amount_sum_max'];
+				//vScale.minValue = 0;
 				/**
 				 * So each iteration of the repeater in the graph will have a country node
 				 */
-				dataProvider = service.lastResult.sector;
+				//dataProvider = service.lastResult.sector;
 				/**
 				 * Anytime the DataCanvas dp is set this must be called
 				 */
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				
+				var maxValue:Number = 0;
+				var fillCategories:Boolean = false;
+				for(var i:Number = 0; i < service.lastResult.donor.length; i++){
+					var currentValue:Number = service.lastResult.donor[i].value;
+					if (maxValue < currentValue) maxValue = currentValue;
+				}
+				//				categories = categoriesLocal; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
+				vScale.minValue = 0;
+				dataProvider = service.lastResult.donor;
+				dc.visible = true;
 				dc.invalidateDisplayList();
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
@@ -103,14 +116,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "5");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "5");
 			}
 			protected function myStack_preRenderHandler(event:Event):void
 			{
@@ -126,14 +142,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getDonorProfileGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
@@ -160,10 +179,10 @@
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
-	<mx:String id="dataField">amount</mx:String>
+	<mx:String id="dataField">value</mx:String>
 	<mx:String id="labelField">name</mx:String>
-	<mx:String id="childDataField">amount</mx:String>
-	<mx:String id="childLabelField">category</mx:String>
+	<mx:String id="childDataField">value</mx:String>
+	<mx:String id="childLabelField">label</mx:String>
 	<mx:Number id="percentGap">.02</mx:Number>
 
 	<!--  
@@ -291,7 +310,7 @@
 					     This is the outter column around all the columns for a given country that provides a total of all those columns
 					     Note that it uses the aggregates as a data provider and uses the X_Y_sum value, or medal_count_sum for the dataField
 					     Also, note the way you need to access the aggregates through []
-					-->
+					
 					<groupings:ColumnCluster 
 						id="myStack"
 						x="0"
@@ -311,7 +330,7 @@
 						preRender="myStack_preRenderHandler(event)"
 						showDataLabel="false"
 						/>
-						
+					-->	
 					<!-- Cluster Group
 						 These are the individual medal columns within a country 
 							NOTE: In this example, the width is only .9 of the reference geometry to provide some clearance
@@ -324,9 +343,10 @@
 						y="0"
 						width="{hLayout.currentReference.width*.9}"
 						height="{hLayout.currentReference.height}"
-						dataProvider="{hLayout.currentValue}"
+						dataProvider="{hLayout.currentDatum}"
 						dataField="{childDataField}"
 						labelField="{childLabelField}"
+						showLabel="false"
 						percentGap=".1"
 						fill="{clusterFill}"
 						stroke="{colStroke}"
@@ -360,7 +380,7 @@
 						width="{hLayout.currentReference.width}"
 						height="60"
 						fontFamily="Myriad Pro"
-						fontSize="14"
+						fontSize="10"
 						fontColor="{outerPalette.currentColor}"
 						labelValue="{hLayout.currentLabel}"
 						markerStroke="{myStroke}"/>
@@ -389,7 +409,6 @@
 	<mx:Array id="palettes">
 		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
-		<paint:LayoutAutoPalette id="stackPalette" layout="{myStack}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 	</mx:Array>
 	
 	<!--

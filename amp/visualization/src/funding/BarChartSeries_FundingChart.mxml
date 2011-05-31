@@ -67,17 +67,30 @@
 			public function start():void
 			{
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
-				
 				//service.lastResult.year[x].fundingtype[y].amount
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
-				for(var i:Number = 0; i < service.lastResult.year.length; i++){
-					for(var j:Number = 0; j < service.lastResult.year[i].fundingtype.length; j++){
-						var currentValue:Number = service.lastResult.year[i].fundingtype[j].amount;
-						//Just add the categories in the last iteration
-						if(i == service.lastResult.year.length-1)
-							categoriesLocal.addItem(service.lastResult.year[i].fundingtype[j]);
-						if (maxValue < currentValue) maxValue = currentValue;
+				try {
+					for(var j:Number = 0; j < service.lastResult.year.fundingtype.length; j++){
+						try {
+							maxValue = service.lastResult.year.fundingtype.amount
+						} catch (errObject:Error) {
+							var currentValue:Number = service.lastResult.year.fundingtype[j].amount;
+							//Just add the categories in the last iteration
+							//if(i == service.lastResult.year.length-1)
+								categoriesLocal.addItem(service.lastResult.year.fundingtype[j]);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
+					}
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.year.length; i++){
+						for(var j:Number = 0; j < service.lastResult.year[i].fundingtype.length; j++){
+							var currentValue:Number = service.lastResult.year[i].fundingtype[j].amount;
+							//Just add the categories in the last iteration
+							if(i == service.lastResult.year.length-1)
+								categoriesLocal.addItem(service.lastResult.year[i].fundingtype[j]);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
 					}
 				}
 				categories = categoriesLocal; 
@@ -95,14 +108,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "1");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "1");
 			}
 			protected function labelRender(object:Object):String {
 				var wrappedLabel:String = null;
@@ -133,6 +149,7 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getFundingsGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
 					strDomain = "localhost:8081";

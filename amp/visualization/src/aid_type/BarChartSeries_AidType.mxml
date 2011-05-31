@@ -71,13 +71,27 @@
 
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
-				for(var i:Number = 0; i < service.lastResult.year.length; i++){
-					for(var j:Number = 0; j < service.lastResult.year[i].aidtype.length; j++){
-						var currentValue:Number = service.lastResult.year[i].aidtype[j].amount;
-						//Just add the categories in the last iteration
-						if(i == service.lastResult.year.length-1)
-							categoriesLocal.addItem(service.lastResult.year[i].aidtype[j]);
-						if (maxValue < currentValue) maxValue = currentValue;
+				try {
+					for(var j:Number = 0; j < service.lastResult.year.aidtype.length; j++){
+						try {
+							maxValue = service.lastResult.year.aidtype.amount
+						} catch (errObject:Error) {
+							var currentValue:Number = service.lastResult.year.aidtype[j].amount;
+							//Just add the categories in the last iteration
+							//if(i == service.lastResult.year.length-1)
+							categoriesLocal.addItem(service.lastResult.year.aidtype[j]);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
+					}
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.year.length; i++){
+						for(var j:Number = 0; j < service.lastResult.year[i].aidtype.length; j++){
+							var currentValue:Number = service.lastResult.year[i].aidtype[j].amount;
+							//Just add the categories in the last iteration
+							if(i == service.lastResult.year.length-1)
+								categoriesLocal.addItem(service.lastResult.year[i].aidtype[j]);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
 					}
 				}
 				categories = categoriesLocal; 
@@ -94,14 +108,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "3");
+				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "3");
 			}
 			protected function myStack_preRenderHandler(event:Event):void
 			{
@@ -117,14 +134,17 @@
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getAidTypeGraphData";
 				var strDomain:String = "";
+				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
 					strDomain = "localhost:8081";
 				}
 				else
 				{
+					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				service.url = "http://" + strDomain + strUrl;
+				service.url = strProtocol + "//" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

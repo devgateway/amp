@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -448,6 +449,9 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("linechart") != null)
 			lineChart = Boolean.parseBoolean(request.getParameter("linechart"));
 
+		Boolean donut = false;
+		if(request.getParameter("donut") != null)
+			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
@@ -463,12 +467,6 @@ public class DataDispatcher extends DispatchAction {
 			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
 			filter.setCurrencyId(currency.getAmpCurrencyId());
 		}
-        int transactionType = filter.getTransactionType();
-        
-
-        HashMap<String,BigDecimal> dataSet = new HashMap<String,BigDecimal>();
-        ValueComparator bvc =  new ValueComparator(dataSet);
-        TreeMap<String,BigDecimal> dataSetSorted = new TreeMap<String,BigDecimal>(Collections.reverseOrder(bvc));
 
         Date startDate = null;
         Date endDate = null;
@@ -479,111 +477,381 @@ public class DataDispatcher extends DispatchAction {
         int yearsInRange=filter.getYearsInRange()-1;
 
         //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
-            try {
-                List<AmpSector> sectors = DbUtil.getSectors(filter);
-                Iterator<AmpSector> sectorIter = sectors.iterator();
-                Long fiscalCalendarId = filter.getFiscalCalendarId();
-                if (selectedYear!=null) {
-                	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-                    endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
-    			} else {
-    				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-    	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-    			}
-                while (sectorIter.hasNext()) {
-                    //calculating funding for each region
-                    AmpSector sector = sectorIter.next();
-        			Long[] ids = {sector.getAmpSectorId()};
-        			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-        			newFilter.setSelSectorIds(ids);
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                   
-                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                    String keyName = sector.getName();
-                   
-                    sectorTotal = sectorTotal.add(amount);
-                    dataSet.put(keyName, amount);
-                }
-            } catch (Exception e) {
-                logger.error(e);
-                throw new DgException("Cannot load sector fundings by donors from db", e);
-            }
+        try {
+	        Map map = visualizationForm.getRanksInformation().getFullSectors();
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        if (selectedYear!=null) {
+	        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+	            map = DashboardUtil.getRankSectors(DbUtil.getSectors(filter), filter, selectedYear);
+			} else {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+	        
+	        List list = new LinkedList(map.entrySet());
+			for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        //result.put(entry.getKey(), entry.getValue());
+		        sectorTotal = sectorTotal.add((BigDecimal) entry.getValue());
+		    }
+	        
+	        StringBuffer xmlString = null;
+	        StringBuffer csvString = null;
+			if(format != null && format.equals("xml")){
+				xmlString = new StringBuffer();
+				if(sectorTotal.compareTo(BigDecimal.ZERO) == 1){
+					list = new LinkedList(map.entrySet());
+					Iterator it = list.iterator();
+					int index = 0;
+					 while(it.hasNext() && index <= 4){
+						Map.Entry entry = (Map.Entry)it.next();
+	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), sectorTotal);
+	 	                if (donut){
+    	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+    	                		xmlString.append("<sector name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		index++;
+    	                	}
+    	                } else {
+    	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+    	                		xmlString.append("<sector name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		index++;
+	     	                }
+    	                }
+	 				}
+	 	            //Accumulate the rest in Others.
+	 	            BigDecimal othersValue = new BigDecimal(0);
+	 	            while(it.hasNext()){
+	 	            	Map.Entry entry = (Map.Entry)it.next();
+	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	 	            }
+	 	            BigDecimal percentage = getPercentage(othersValue, sectorTotal);
+	 	            if (donut){
+	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+	              		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                	}
+	                } else {
+	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+	                		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		index++;
+    	                }
+	                }
+	 	            //if (!othersValue.equals(BigDecimal.ZERO)) {
+	 				//	xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, sectorTotal) + "\"/>\n");
+	 	            //}
+				} else {
+	            	xmlString.append("<sector name=\"\">\n");
+					xmlString.append("</sector>\n");
+				}
+			} else {
+	        	csvString = new StringBuffer();
+	            list = new LinkedList(map.entrySet());
+				Iterator it = list.iterator();
+				int index = 0;
+	    		csvString.append("Sector Name");
+	    		csvString.append(",");
+	    		csvString.append("Amount");
+	    		csvString.append("\n");
+	            BigDecimal othersValue = BigDecimal.ZERO;
+	            // Take the top 5
+	            while(it.hasNext() && index <= 4){
+	                Map.Entry entry = (Map.Entry)it.next();
+	        		csvString.append(entry.getKey());
+	        		csvString.append(",");
+	        		csvString.append(entry.getValue());
+	        		csvString.append("\n");
+	        		index++;
+	            }
+	            while(it.hasNext()){
+	            	Map.Entry entry = (Map.Entry)it.next();
+	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	            }
+	            if (!othersValue.equals(BigDecimal.ZERO)) {
+	        		csvString.append(othersTitle);
+	        		csvString.append(",");
+	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+	        		csvString.append("\n");
+	            }
+	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	        			response.getOutputStream(), "UTF-8"), true);
+	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+	            	out.println(csvString.toString());
+	            	out.close();
+	            	return null;
+	    		}
+	        }
+	          
+			String sectorData = "";
+			int index = 0;
+			list = new LinkedList(map.entrySet());
+			Iterator it = list.iterator();
+			csvString = new StringBuffer();
+			csvString.append("Year,");
+			sectorData += "<Year>";
+	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
+	        while(it.hasNext() && index <= 4){
+	            //Long[] key = it.next();
+	            Map.Entry entry = (Map.Entry)it.next();
+	            AmpSector sec = (AmpSector) entry.getKey();
+	            csvString.append(sec.getName());
+	            csvString.append(",");
+	            sectorData += sec.getName() + ">";
+	            for (Long i = year - yearsInRange; i <= year; i++) {
+	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			Long[] ids = {sec.getAmpSectorId()};
+	    			newFilter.setSelSectorIds(ids);
+	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	                if(allData.containsKey(i)){
+	                	BigDecimal[] currentAmounts = allData.get(i);
+	                	currentAmounts[index] = amount;
+	                	allData.put(i, currentAmounts);
+	                }
+	                else
+	                {
+	                	BigDecimal[] currentAmounts = {BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO};
+	                	currentAmounts[index] = amount;
+	                	allData.put(i, currentAmounts);
+	                }
+	            }
+	            index++;
+	        }
+	        HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
+	        csvString.append("Others");
+	        csvString.append("\n");
+	        sectorData += "Others";
+	        
+	        DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	        ArrayList<Long> ids = new ArrayList<Long>();
+	        while(it.hasNext()){
+	        	Map.Entry entry = (Map.Entry)it.next();
+	            AmpSector sec = (AmpSector) entry.getKey();
+				ids.add(sec.getAmpSectorId());
+	        }
+	        Long[] idsArray = new Long[ids.size()];
+	        index = 0;
+	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
+				Long long1 = (Long) iterator.next();
+				idsArray[index] = long1;
+				index++;
+			}
+	        newFilter.setSelSectorIds(idsArray);
+	        for (Long i = year - yearsInRange; i <= year; i++) {
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            if(othersYearlyValue.containsKey(i)){
+	            	BigDecimal currentAmount = othersYearlyValue.get(i);
+	                othersYearlyValue.put(i, currentAmount.add(amount));
+	            }
+	            else
+	                othersYearlyValue.put(i, amount);
+	        }
+	      //Put headers
+	        for (Long i = year - yearsInRange; i <= year; i++) {
+	        	csvString.append(i);
+	        	csvString.append(",");
+	        	sectorData += "<" + i + ">";
+	            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+	        	csvString.append(",");
+	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+	        	sectorData += ">";
+	        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
+	        	csvString.append(",");
+	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+	        	sectorData += ">";
+	        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
+	        	csvString.append(",");
+	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+	        	sectorData += ">";
+	        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
+	        	csvString.append(",");
+	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+	        	sectorData += ">";
+	        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
+	        	csvString.append(",");
+	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+	        	sectorData += ">";
+	        	csvString.append(othersYearlyValue.get(i));
+	        	csvString.append("\n");
+	        	sectorData += othersYearlyValue.get(i);
+	        }
+	        visualizationForm.getExportData().setSectorTableData(sectorData);
+	        	
+			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	        			response.getOutputStream(), "UTF-8"), true);
+				out.println(xmlString.toString());
+				out.close();
+				return null;
+				
+			} else {
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+						response.getOutputStream(), "UTF-8"), true);
+	        	out.println(csvString.toString());
+	        	out.close();
+	        	return null;
+			}
             
-            dataSetSorted.putAll(dataSet);
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException("Cannot load sector fundings by donors from db", e);
+        }
+            
+	}
+	
+	private BigDecimal getPercentage(BigDecimal currentSector, BigDecimal sectorTotal) {
+		BigDecimal result = new BigDecimal(100).multiply(currentSector).divide(sectorTotal, 2, RoundingMode.HALF_UP);
+		
+		return result;
+	}
+
+	public ActionForward getDonorProfileGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
+		Boolean lineChart = false;
+		if(request.getParameter("linechart") != null)
+			lineChart = Boolean.parseBoolean(request.getParameter("linechart"));
+
+		Boolean donut = false;
+		if(request.getParameter("donut") != null)
+			donut = Boolean.parseBoolean(request.getParameter("donut"));
+
+		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+		String othersTitle = "Other";
+        
+		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            divideByMillionDenominator = new BigDecimal(1000);
+        }
+		BigDecimal donorTotal = BigDecimal.ZERO;
+		String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} else {
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+		}
+        
+        Date startDate = null;
+        Date endDate = null;
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        int yearsInRange=filter.getYearsInRange()-1;
+
+        try {
+        	Map map = visualizationForm.getRanksInformation().getFullDonors();
+        	Long fiscalCalendarId = filter.getFiscalCalendarId();
+            
+            if (selectedYear!=null) {
+            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+                map = DashboardUtil.getRankDonors(DbUtil.getDonors(filter), filter, selectedYear);
+			} else {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+            List list = new LinkedList(map.entrySet());
+			for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        //result.put(entry.getKey(), entry.getValue());
+		        donorTotal = donorTotal.add((BigDecimal) entry.getValue());
+		    }
+            
             StringBuffer xmlString = null;
+            StringBuffer csvString = null;
     		if(format != null && format.equals("xml")){
     			xmlString = new StringBuffer();
-    			if(sectorTotal.compareTo(BigDecimal.ZERO) == 1){
-    		        Set<String> keysSet = dataSetSorted.keySet();
-    				//Loop funding types
-    	            Iterator<String> it = keysSet.iterator();
-    	            int index = 0;
-    	            // Take the top 5
-    	            while(it.hasNext() && index <= 4){
-    	                String key = it.next();
-    	                BigDecimal percentage = getPercentage(dataSetSorted.get(key), sectorTotal);
-    	                if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
-    	                {
-    	    				xmlString.append("<sector name=\"" + key + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ dataSetSorted.get(key) + "\" label=\"" + key + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
-    	    				index++;
-    	                }
-    				}
-    	            //Accumulate the rest in Others.
-    	            BigDecimal othersValue = new BigDecimal(0);
-    	            while(it.hasNext()){
-    	                String key = it.next();
-    	                BigDecimal addingValue = dataSetSorted.get(key); 
-    	                othersValue = othersValue.add(addingValue);
-    	            }
-    	            if (!othersValue.equals(BigDecimal.ZERO)) {
-    					xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(10, RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, sectorTotal) + "\"/>\n");
-    	            }
+    			if(donorTotal.compareTo(BigDecimal.ZERO) == 1){
+    				list = new LinkedList(map.entrySet());
+    				Iterator it = list.iterator();
+    				int index = 0;
+    				 while(it.hasNext() && index <= 4){
+    					Map.Entry entry = (Map.Entry)it.next();
+     	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), donorTotal);
+     	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
+     	                if (donut){
+     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+     	                		xmlString.append("<donor name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+     	                		index++;
+     	                	}
+     	                } else {
+     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+     	                		xmlString.append("<donor name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+     	                		index++;
+ 	     	                }
+     	                }
+     				}
+     	            //Accumulate the rest in Others.
+     	            BigDecimal othersValue = new BigDecimal(0);
+     	            while(it.hasNext()){
+     	            	Map.Entry entry = (Map.Entry)it.next();
+     	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+     	            }
+     	           	BigDecimal percentage = getPercentage(othersValue, donorTotal);
+	 	            if (donut){
+	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                	}
+	                } else {
+	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		index++;
+	                	}
+	                }
+	 	            
+     	            //if (!othersValue.equals(BigDecimal.ZERO)) {
+     				//	xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, donorTotal) + "\"/>\n");
+     	            //}
     			}
     			else
     			{
-                	xmlString.append("<sector name=\"\">\n");
-    				xmlString.append("</sector>\n");
+                	xmlString.append("<donor name=\"\">\n");
+    				xmlString.append("</donor>\n");
     			}
-
-    			
-    			//PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    			//		response.getOutputStream(), "UTF-8"), true);
-    			//out.println(xmlString.toString());
-    			//out.close();
-    			//return null;
     		}
             else
             {
-                StringBuffer csvString = new StringBuffer();
-                Set<String> keysSet = dataSetSorted.keySet();
-        		csvString.append("Sector Name");
+                csvString = new StringBuffer();
+                list = new LinkedList(map.entrySet());
+				Iterator it = list.iterator();
+				int index = 0;
+        		csvString.append("Donor Name");
         		csvString.append(",");
         		csvString.append("Amount");
         		csvString.append("\n");
-                Iterator<String> it = keysSet.iterator();
-                int index = 0;
                 BigDecimal othersValue = BigDecimal.ZERO;
                 // Take the top 5
                 while(it.hasNext() && index <= 4){
-                    String key = it.next();
-            		csvString.append(key);
+                    Map.Entry entry = (Map.Entry)it.next();
+            		csvString.append(entry.getKey());
             		csvString.append(",");
-            		csvString.append(dataSet.get(key));
+            		csvString.append(entry.getValue());
             		csvString.append("\n");
             		index++;
                 }
                 while(it.hasNext()){
-                    String key = it.next();
-                    othersValue = othersValue.add(dataSetSorted.get(key));
+                	Map.Entry entry = (Map.Entry)it.next();
+                    othersValue = othersValue.add((BigDecimal) entry.getValue());
                 }
                 if (!othersValue.equals(BigDecimal.ZERO)) {
             		csvString.append(othersTitle);
             		csvString.append(",");
-            		csvString.append(othersValue.setScale(10, RoundingMode.HALF_UP));
+            		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
             		csvString.append("\n");
                 }
-            		
-        		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+                PrintWriter out = new PrintWriter(new OutputStreamWriter(
             			response.getOutputStream(), "UTF-8"), true);
         		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 	            	out.println(csvString.toString());
@@ -591,59 +859,28 @@ public class DataDispatcher extends DispatchAction {
 	            	return null;
         		}
             }
-        //} else {
-            HashMap<Long[],BigDecimal> dataSetCSV = new HashMap<Long[],BigDecimal>();
-            ValueComparatorLongs bvcl =  new ValueComparatorLongs(dataSetCSV);
-            TreeMap<Long[],BigDecimal> dataSetSortedCSV = new TreeMap<Long[],BigDecimal>(Collections.reverseOrder(bvcl));
-
-            List<AmpSector> sectors = DbUtil.getSectors(filter);
-            Iterator<AmpSector> sectorIter = sectors.iterator();
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            if (selectedYear!=null) {
-            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
-			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-			}
-            
-            HashMap<Long, String> sectorList = new HashMap<Long, String>();
-            while (sectorIter.hasNext()) {
-                //calculating funding for each sector
-                AmpSector sector = sectorIter.next();
-                sectorList.put(sector.getAmpSectorId(), sector.getName());
-    			Long[] ids = {sector.getAmpSectorId()};
-    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setSelSectorIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                amount.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                sectorTotal = sectorTotal.add(amount);
-                dataSetCSV.put(ids, amount);
-            }
-            dataSetSortedCSV.putAll(dataSetCSV);
-            
-            Set<Long[]> keysSet = dataSetSortedCSV.keySet();
-            StringBuffer csvString = new StringBuffer();
-            String sectorData = "";
+    		String donorData = "";
+    		int index = 0;
+    		list = new LinkedList(map.entrySet());
+			Iterator it = list.iterator();
+			csvString = new StringBuffer();
+			csvString.append("Year,");
+            donorData += "<Year>";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-            
-            Iterator<Long[]> it = keysSet.iterator();
-            int index = 0;
-            // Take the top 5
-            csvString.append("Year,");
-            sectorData += "<Year>";
             while(it.hasNext() && index <= 4){
-                Long[] key = it.next();
-                csvString.append(sectorList.get(key[0]));
+                //Long[] key = it.next();
+                Map.Entry entry = (Map.Entry)it.next();
+                AmpOrganisation org = (AmpOrganisation) entry.getKey();
+                csvString.append(org.getName());
                 csvString.append(",");
-                sectorData += sectorList.get(key[0]) + ">";
+                donorData += org.getName() + ">";
                 for (Long i = year - yearsInRange; i <= year; i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-        			newFilter.setSelSectorIds(key);
-                    startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                    endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+        			Long[] ids = {org.getAmpOrgId()};
+        			newFilter.setOrgIds(ids);
+                    startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+                    endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
                     BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(allData.containsKey(i)){
                     	BigDecimal[] currentAmounts = allData.get(i);
@@ -662,55 +899,65 @@ public class DataDispatcher extends DispatchAction {
             HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
             csvString.append("Others");
             csvString.append("\n");
-            sectorData += "Others";
+            donorData += "Others";
             
+            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+            ArrayList<Long> ids = new ArrayList<Long>();
             while(it.hasNext()){
-                Long[] key = it.next();
-    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setSelSectorIds(key);
-                for (Long i = year - yearsInRange; i <= year; i++) {
-                    startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                    endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                    if(othersYearlyValue.containsKey(i)){
-                    	BigDecimal currentAmount = othersYearlyValue.get(i);
-                        othersYearlyValue.put(i, currentAmount.add(amount));
-                    }
-                    else
-                        othersYearlyValue.put(i, amount);
-                }
+            	Map.Entry entry = (Map.Entry)it.next();
+                AmpOrganisation org = (AmpOrganisation) entry.getKey();
+    			ids.add(org.getAmpOrgId());
             }
-            //Put headers
+            Long[] idsArray = new Long[ids.size()];
+            index = 0;
+            for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
+				Long long1 = (Long) iterator.next();
+				idsArray[index] = long1;
+				index++;
+			}
+            newFilter.setOrgIds(idsArray);
+            for (Long i = year - yearsInRange; i <= year; i++) {
+                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+                if(othersYearlyValue.containsKey(i)){
+                	BigDecimal currentAmount = othersYearlyValue.get(i);
+                    othersYearlyValue.put(i, currentAmount.add(amount));
+                }
+                else
+                    othersYearlyValue.put(i, amount);
+            }
+          //Put headers
             for (Long i = year - yearsInRange; i <= year; i++) {
             	csvString.append(i);
             	csvString.append(",");
-            	sectorData += "<" + i + ">";
+            	donorData += "<" + i + ">";
                 csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
             	csvString.append(",");
-            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
-            	sectorData += ">";
+            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+            	donorData += ">";
             	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
             	csvString.append(",");
-            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
-            	sectorData += ">";
+            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+            	donorData += ">";
             	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
             	csvString.append(",");
-            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
-            	sectorData += ">";
+            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+            	donorData += ">";
             	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
             	csvString.append(",");
-            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
-            	sectorData += ">";
+            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+            	donorData += ">";
             	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
             	csvString.append(",");
-            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
-            	sectorData += ">";
+            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+            	donorData += ">";
             	csvString.append(othersYearlyValue.get(i));
             	csvString.append("\n");
-            	sectorData += othersYearlyValue.get(i);
+            	donorData += othersYearlyValue.get(i);
             }
-            visualizationForm.getExportData().setSectorTableData(sectorData);
+            visualizationForm.getExportData().setDonorTableData(donorData);
     		
 
     		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -728,160 +975,10 @@ public class DataDispatcher extends DispatchAction {
 	        	return null;
     		}
             
-        //}
-            
-		//return null;
-	}	
-	
-	private BigDecimal getPercentage(BigDecimal currentSector, BigDecimal sectorTotal) {
-		BigDecimal result = new BigDecimal(100).multiply(currentSector).divide(sectorTotal, 2, RoundingMode.HALF_UP);
-		
-		return result;
-	}
-
-	public ActionForward getDonorProfileGraphData(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws java.lang.Exception {
-
-		VisualizationForm visualizationForm = (VisualizationForm) form;
-
-		DashboardFilter filter = visualizationForm.getFilter();
-		
-		String format = request.getParameter("format");
-		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
-
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-		String othersTitle = "Other";
-        
-		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
-		BigDecimal donorTotal = BigDecimal.ZERO;
-		String currCode = "USD";
-        if (filter.getCurrencyId()!=null) {
-        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
-		} else {
-			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
-			filter.setCurrencyId(currency.getAmpCurrencyId());
-		}
-        
-        int transactionType = filter.getTransactionType();
-        
-        java.util.Hashtable<String,BigDecimal> dataSet = new java.util.Hashtable<String,BigDecimal> ();
-        
-        
-//        DefaultPieDataset ds = new DefaultPieDataset();
-        /*
-         * We are selecting sector which are funded
-         * In selected year by the selected organization
-         *
-         */
-        try {
-            List<AmpOrganisation> donors = DbUtil.getDonors(filter);
-            Iterator<AmpOrganisation> donorIter = donors.iterator();
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            Date startDate = null;
-            Date endDate = null;
-            if (selectedYear!=null) {
-            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
-			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-			}
-            
-            while (donorIter.hasNext()) {
-                //calculating funding for each region
-                AmpOrganisation donor = donorIter.next();
-    			Long[] ids = {donor.getAmpOrgId()};
-    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setOrgIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-                /*Newly created objects and   selected currency
-                are passed doCalculations  method*/
-                
-                //BigDecimal amount = fundingCal.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(divideByMillionDenominator);
-                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator);
-                amount.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                String keyName = donor.getName();
-                donorTotal = donorTotal.add(fundingCal.getValue());
-                dataSet.put(keyName, amount);
-            }
-            java.util.Enumeration<String> keysEnum = dataSet.keys();
-            BigDecimal othersValue = BigDecimal.ZERO;
-            while(keysEnum.hasMoreElements()){
-                String key = keysEnum.nextElement();
-                /*if (key.equals(nationalTitle)||key.equals(regionalTitle)) {
-                    continue;
-                }*/
-                BigDecimal value = (BigDecimal) dataSet.get(key);
-                if (value.compareTo(BigDecimal.ZERO)==0) {
-                	dataSet.remove(key);
-				} else {
-					Double percent = (value.divide(donorTotal.divide(divideByMillionDenominator), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).doubleValue();
-	                if (percent <= 0.05) {
-	                    othersValue = othersValue.add(value);
-	                    dataSet.remove(key);
-	                }
-				}
-            }
-            
-            if (!othersValue.equals(BigDecimal.ZERO)) {
-                dataSet.put(othersTitle, othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-            }
-            
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);
         }
-        
-		if(format != null && format.equals("xml")){
-			StringBuffer xmlString = new StringBuffer();
-			//Loop funding types
-            java.util.Enumeration<String> keysEnum = dataSet.keys();
-            while(keysEnum.hasMoreElements()){
-                String key = keysEnum.nextElement();
-				xmlString.append("<sector name=\"" + key + "\">\n");
-				xmlString.append("<amount amount=\""+ dataSet.get(key) + "\"/>\n");
-				xmlString.append("</sector>\n");
-			}
-			
-            if (xmlString.length()==0) {
-            	xmlString.append("<sector name=\"\">\n");
-				xmlString.append("<amount amount=\"\"/>\n");
-				xmlString.append("</sector>\n");
-			}
-			
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-					response.getOutputStream(), "UTF-8"), true);
-			out.println(xmlString.toString());
-			out.close();
-			return null;
-		}
-        else
-        {
-            StringBuffer csvString = new StringBuffer();
-    		csvString.append("Sector Name");
-    		csvString.append(",");
-    		csvString.append("Amount");
-    		csvString.append("\n");
-            java.util.Enumeration<String> keysEnum = dataSet.keys();
-            while(keysEnum.hasMoreElements()){
-                String key = keysEnum.nextElement();
-        		csvString.append(key);
-        		csvString.append(",");
-        		csvString.append(dataSet.get(key));
-        		csvString.append("\n");
-            }
-            
-    		PrintWriter out = new PrintWriter(new OutputStreamWriter(
-        			response.getOutputStream(), "UTF-8"), true);
-
-        	out.println(csvString.toString());
-
-        	out.close();
-        }
-		return null;
 	}	
 	
 	public ActionForward getSixthGraphData(ActionMapping mapping,
@@ -1502,25 +1599,20 @@ public class DataDispatcher extends DispatchAction {
 		String format = request.getParameter("format");
 		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 		Boolean lineChart = false;
-		
 		if(request.getParameter("linechart") != null)
 			lineChart = Boolean.parseBoolean(request.getParameter("linechart"));
 
+		Boolean donut = false;
+		if(request.getParameter("donut") != null)
+			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        String othersTitle = "Other";
-        String nationalTitle = "National";
-        String regionalTitle = "Regional";
-        String unallocatedTitle = "Unallocated";
-//        String othersTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
-//        String nationalTitle = TranslatorWorker.translateText("National", opt.getLangCode(), opt.getSiteId());
-//        String regionalTitle = TranslatorWorker.translateText("Regional", opt.getLangCode(), opt.getSiteId());
-//        String unallocatedTitle = TranslatorWorker.translateText("Unallocated", opt.getLangCode(), opt.getSiteId());
+		String othersTitle = "Other";
         
 		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-        BigDecimal regionalTotal = BigDecimal.ZERO;
+        BigDecimal regionTotal = BigDecimal.ZERO;
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
@@ -1528,12 +1620,6 @@ public class DataDispatcher extends DispatchAction {
 			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
 			filter.setCurrencyId(currency.getAmpCurrencyId());
 		}
-        int transactionType = filter.getTransactionType();
-        
-
-        HashMap<String,BigDecimal> dataSet = new HashMap<String,BigDecimal>();
-        ValueComparator bvc =  new ValueComparator(dataSet);
-        TreeMap<String,BigDecimal> dataSetSorted = new TreeMap<String,BigDecimal>(Collections.reverseOrder(bvc));
 
         Date startDate = null;
         Date endDate = null;
@@ -1543,330 +1629,232 @@ public class DataDispatcher extends DispatchAction {
         }
         int yearsInRange=filter.getYearsInRange()-1;
 
-        //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
-            try {
-                List<AmpCategoryValueLocations> locations = DbUtil.getRegions(filter);
-                Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
-                Long fiscalCalendarId = filter.getFiscalCalendarId();
-                if (selectedYear!=null) {
-                	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-                    endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
-    			} else {
-    				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-    	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-    			}
-                
-                while (regionIter.hasNext()) {
-                    //calculating funding for each region
-                    AmpCategoryValueLocations location = regionIter.next();
-                    //Long[] oldIds = filter.getSelLocationIds();
-        			Long[] ids = {location.getId()};
-        			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-        			newFilter.setSelLocationIds(ids);
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                   
-                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                    BigDecimal oldvalue = BigDecimal.ZERO;
-                    String keyName = "";
-                    String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
-                    if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                        keyName = nationalTitle;
-                    } else {
-                        Long zoneIds[] = filter.getZoneIds();
-                        if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-                            implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
-                            if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                                keyName = regionalTitle;
-                            } else {
-                                AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                                keyName = parent.getName();
-                            }
-                        } else {
-                            AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                            keyName = parent.getName();
-                        }
-
-                    }
-
-                    regionalTotal = regionalTotal.add(amount);
-                    dataSet.put(keyName, amount);
-                }
-            } catch (Exception e) {
-                logger.error(e);
-                throw new DgException("Cannot load region fundings by donors from db", e);
-            }
-            
-            dataSetSorted.putAll(dataSet);
-            StringBuffer xmlString = null;
-    		if(format != null && format.equals("xml")){
-    			xmlString = new StringBuffer();
-    			if(regionalTotal.compareTo(BigDecimal.ZERO) == 1){
-    		        Set<String> keysSet = dataSetSorted.keySet();
-    				//Loop funding types
-    	            Iterator<String> it = keysSet.iterator();
-    	            int index = 0;
-    	            // Take the top 5
-    	            while(it.hasNext() && index <= 4){
-    	                String key = it.next();
-    	                BigDecimal percentage = getPercentage(dataSetSorted.get(key), regionalTotal);
-    	                if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
-    	                {
-    	    				xmlString.append("<region name=\"" + key + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ dataSetSorted.get(key) + "\" label=\"" + key + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
-    	    				index++;
-    	                }
-    				}
-    	            //Accumulate the rest in Others.
-    	            BigDecimal othersValue = new BigDecimal(0);
-    	            while(it.hasNext()){
-    	                String key = it.next();
-    	                BigDecimal addingValue = dataSetSorted.get(key); 
-    	                othersValue = othersValue.add(addingValue);
-    	            }
-    	            if (!othersValue.equals(BigDecimal.ZERO)) {
-    					xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(10, RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, regionalTotal) + "\"/>\n");
-    	            }
-    			}
-    			else
-    			{
-                	xmlString.append("<region name=\"\">\n");
-    				xmlString.append("</region>\n");
-    			}
-
-    			//PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    			//		response.getOutputStream(), "UTF-8"), true);
-    			//out.println(xmlString.toString());
-    			//out.close();
-    			//return null;
-    		}
-            else
-            {
-                StringBuffer csvString = new StringBuffer();
-                Set<String> keysSet = dataSetSorted.keySet();
-        		csvString.append("Region Name");
-        		csvString.append(",");
-        		csvString.append("Amount");
-        		csvString.append("\n");
-                Iterator<String> it = keysSet.iterator();
-                int index = 0;
-                BigDecimal othersValue = BigDecimal.ZERO;
-                // Take the top 5
-                while(it.hasNext() && index <= 4){
-                    String key = it.next();
-            		csvString.append(key);
-            		csvString.append(",");
-            		csvString.append(dataSet.get(key));
-            		csvString.append("\n");
-            		index++;
-                }
-                while(it.hasNext()){
-                    String key = it.next();
-                    othersValue = othersValue.add(dataSetSorted.get(key));
-                }
-                if (!othersValue.equals(BigDecimal.ZERO)) {
-            		csvString.append(othersTitle);
-            		csvString.append(",");
-            		csvString.append(othersValue.setScale(10, RoundingMode.HALF_UP));
-            		csvString.append("\n");
-                }
-            	
-                if(!lineChart){ // Line Chart needs a special treatment (yearly values)
-	        		PrintWriter out = new PrintWriter(new OutputStreamWriter(
-	            			response.getOutputStream(), "UTF-8"), true);
-	
-	            	out.println(csvString.toString());
-	            	out.close();
-	            	return null;
-                }
-            }
-        //} else {
-            HashMap<Long[],BigDecimal> dataSetCSV = new HashMap<Long[],BigDecimal>();
-            ValueComparatorLongs bvcl =  new ValueComparatorLongs(dataSetCSV);
-            TreeMap<Long[],BigDecimal> dataSetSortedCSV = new TreeMap<Long[],BigDecimal>(Collections.reverseOrder(bvcl));
-
-            List<AmpCategoryValueLocations> locations = DbUtil.getRegions(filter);
-            Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            if (selectedYear!=null) {
-            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+        try {
+	        Map map = visualizationForm.getRanksInformation().getFullRegions();
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        
+	        if (selectedYear!=null) {
+	        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+	            map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, selectedYear);
 			} else {
 				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}List list = new LinkedList(map.entrySet());
+			for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        //result.put(entry.getKey(), entry.getValue());
+		        regionTotal = regionTotal.add((BigDecimal) entry.getValue());
+		    }
+	        
+	        StringBuffer xmlString = null;
+	        StringBuffer csvString = null;
+			if(format != null && format.equals("xml")){
+				xmlString = new StringBuffer();
+				if(regionTotal.compareTo(BigDecimal.ZERO) == 1){
+					list = new LinkedList(map.entrySet());
+					Iterator it = list.iterator();
+					int index = 0;
+					 while(it.hasNext() && index <= 4){
+						Map.Entry entry = (Map.Entry)it.next();
+	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), regionTotal);
+	 	                if (donut){
+    	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		index++;
+    	                	}
+    	                } else {
+    	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		index++;
+	     	                }
+    	                }
+	 				}
+	 	            //Accumulate the rest in Others.
+	 	            BigDecimal othersValue = new BigDecimal(0);
+	 	            while(it.hasNext()){
+	 	            	Map.Entry entry = (Map.Entry)it.next();
+	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	 	            }
+	 	            BigDecimal percentage = getPercentage(othersValue, regionTotal);
+	 	            if (donut){
+	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
+	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                	}
+	                } else {
+	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
+	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		index++;
+	                	}
+	                }
+	 	            //if (!othersValue.equals(BigDecimal.ZERO)) {
+	 				//	xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, regionTotal) + "\"/>\n");
+	 	            //}
+				} else {
+	            	xmlString.append("<region name=\"\">\n");
+					xmlString.append("</region>\n");
+				}
+			} else {
+	        	csvString = new StringBuffer();
+	            list = new LinkedList(map.entrySet());
+				Iterator it = list.iterator();
+				int index = 0;
+	    		csvString.append("Region Name");
+	    		csvString.append(",");
+	    		csvString.append("Amount");
+	    		csvString.append("\n");
+	            BigDecimal othersValue = BigDecimal.ZERO;
+	            // Take the top 5
+	            while(it.hasNext() && index <= 4){
+	                Map.Entry entry = (Map.Entry)it.next();
+	        		csvString.append(entry.getKey());
+	        		csvString.append(",");
+	        		csvString.append(entry.getValue());
+	        		csvString.append("\n");
+	        		index++;
+	            }
+	            while(it.hasNext()){
+	            	Map.Entry entry = (Map.Entry)it.next();
+	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	            }
+	            if (!othersValue.equals(BigDecimal.ZERO)) {
+	        		csvString.append(othersTitle);
+	        		csvString.append(",");
+	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+	        		csvString.append("\n");
+	            }
+	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	        			response.getOutputStream(), "UTF-8"), true);
+	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+	            	out.println(csvString.toString());
+	            	out.close();
+	            	return null;
+	    		}
+	        }
+            
+			String regionData = "";
+			int index = 0;
+			list = new LinkedList(map.entrySet());
+			Iterator it = list.iterator();
+			csvString = new StringBuffer();
+			csvString.append("Year,");
+			regionData += "<Year>";
+	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
+	        while(it.hasNext() && index <= 4){
+	            //Long[] key = it.next();
+	            Map.Entry entry = (Map.Entry)it.next();
+	            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) entry.getKey();
+	            csvString.append(loc.getName());
+	            csvString.append(",");
+	            regionData += loc.getName() + ">";
+	            for (Long i = year - yearsInRange; i <= year; i++) {
+	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			Long[] ids = {loc.getId()};
+	    			newFilter.setSelLocationIds(ids);
+	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	                if(allData.containsKey(i)){
+	                	BigDecimal[] currentAmounts = allData.get(i);
+	                	currentAmounts[index] = amount;
+	                	allData.put(i, currentAmounts);
+	                }
+	                else
+	                {
+	                	BigDecimal[] currentAmounts = {BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO};
+	                	currentAmounts[index] = amount;
+	                	allData.put(i, currentAmounts);
+	                }
+	            }
+	            index++;
+	        }
+	        HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
+	        csvString.append("Others");
+	        csvString.append("\n");
+	        regionData += "Others";
+	        
+	        DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	        ArrayList<Long> ids = new ArrayList<Long>();
+	        while(it.hasNext()){
+	        	Map.Entry entry = (Map.Entry)it.next();
+	        	AmpCategoryValueLocations loc = (AmpCategoryValueLocations) entry.getKey();
+				ids.add(loc.getId());
+	        }
+	        Long[] idsArray = new Long[ids.size()];
+	        index = 0;
+	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
+				Long long1 = (Long) iterator.next();
+				idsArray[index] = long1;
+				index++;
 			}
-            
-            HashMap<Long, String> regionList = new HashMap<Long, String>();
-            while (regionIter.hasNext()) {
-                //calculating funding for each region
-                AmpCategoryValueLocations location = regionIter.next();
-                //Long[] oldIds = filter.getSelLocationIds();
-    			Long[] ids = {location.getId()};
-                String keyName = "";
-                String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
-                if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                    keyName = nationalTitle;
-                } else {
-                    Long zoneIds[] = filter.getZoneIds();
-                    if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-                        implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
-                        if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                            keyName = regionalTitle;
-                        } else {
-                            AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                            keyName = parent.getName();
-                        }
-                    } else {
-                        AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                        keyName = parent.getName();
-                    }
-
-                }
-                regionList.put(location.getId(), keyName);
-    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setSelLocationIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                regionalTotal = regionalTotal.add(amount);
-                dataSetCSV.put(ids, amount);
-
-            
-            }
-            dataSetSortedCSV.putAll(dataSetCSV);
-            
-            Set<Long[]> keysSet = dataSetSortedCSV.keySet();
-            StringBuffer csvString = new StringBuffer();
-            String regionData = "";
-            HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-            
-            Iterator<Long[]> it = keysSet.iterator();
-            int index = 0;
-            // Take the top 5
-            csvString.append("Year,");
-            regionData += "<Year>";
-            while(it.hasNext() && index <= 4){
-                Long[] key = it.next();
-                csvString.append(regionList.get(key[0]));
-                csvString.append(",");
-                regionData += regionList.get(key[0]) + ">";
-                for (Long i = year - yearsInRange; i <= year; i++) {
-        			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-        			newFilter.setSelLocationIds(key);
-                    startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                    endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                    if(allData.containsKey(i)){
-                    	BigDecimal[] currentAmounts = allData.get(i);
-                    	currentAmounts[index] = amount;
-                    	allData.put(i, currentAmounts);
-                    }
-                    else
-                    {
-                    	BigDecimal[] currentAmounts = {BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO};
-                    	currentAmounts[index] = amount;
-                    	allData.put(i, currentAmounts);
-                    }
-                }
-                index++;
-            }
-            HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
-            csvString.append("Others");
-            csvString.append("\n");
-            regionData += "Others";
-            
-            while(it.hasNext()){
-                Long[] key = it.next();
-    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setSelLocationIds(key);
-                for (Long i = year - yearsInRange; i <= year; i++) {
-                    startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                    endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-                    if(othersYearlyValue.containsKey(i)){
-                    	BigDecimal currentAmount = othersYearlyValue.get(i);
-                        othersYearlyValue.put(i, currentAmount.add(amount));
-                    }
-                    else
-                        othersYearlyValue.put(i, amount);
-                }
-            }
+	        newFilter.setSelLocationIds(idsArray);
+	        for (Long i = year - yearsInRange; i <= year; i++) {
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            if(othersYearlyValue.containsKey(i)){
+	            	BigDecimal currentAmount = othersYearlyValue.get(i);
+	                othersYearlyValue.put(i, currentAmount.add(amount));
+	            }
+	            else
+	                othersYearlyValue.put(i, amount);
+	        }
+			
             //Put headers
-            for (Long i = year - yearsInRange; i <= year; i++) {
-            	csvString.append(i);
-            	csvString.append(",");
-            	regionData += "<" + i + ">";
-            	csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
-            	csvString.append(",");
-            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
-            	regionData += ">";
-            	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
-            	csvString.append(",");
-            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
-            	regionData += ">";
-            	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
-            	csvString.append(",");
-            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
-            	regionData += ">";
-            	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
-            	csvString.append(",");
-            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
-            	regionData += ">";
-            	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
-            	csvString.append(",");
-            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
-            	regionData += ">";
-            	csvString.append(othersYearlyValue.get(i));
-            	csvString.append("\n");
-            	regionData += othersYearlyValue.get(i);
-            }
-            visualizationForm.getExportData().setRegionTableData(regionData);
-            if(!lineChart){ // Line Chart needs a special treatment (yearly values)
-    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-            			response.getOutputStream(), "UTF-8"), true);
-    			out.println(xmlString.toString());
-    			out.close();
-    			return null;
-    			
-    		} else {
-    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    					response.getOutputStream(), "UTF-8"), true);
+	        for (Long i = year - yearsInRange; i <= year; i++) {
+	        	csvString.append(i);
+	        	csvString.append(",");
+	        	regionData += "<" + i + ">";
+	            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+	        	csvString.append(",");
+	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+	        	regionData += ">";
+	        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
+	        	csvString.append(",");
+	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+	        	regionData += ">";
+	        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
+	        	csvString.append(",");
+	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+	        	regionData += ">";
+	        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
+	        	csvString.append(",");
+	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+	        	regionData += ">";
+	        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
+	        	csvString.append(",");
+	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+	        	regionData += ">";
+	        	csvString.append(othersYearlyValue.get(i));
+	        	csvString.append("\n");
+	        	regionData += othersYearlyValue.get(i);
+	        }
+	        visualizationForm.getExportData().setRegionTableData(regionData);
+	        	
+			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	        			response.getOutputStream(), "UTF-8"), true);
+				out.println(xmlString.toString());
+				out.close();
+				return null;
+				
+			} else {
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+						response.getOutputStream(), "UTF-8"), true);
 	        	out.println(csvString.toString());
 	        	out.close();
 	        	return null;
-    		}
+			}
             
-            
-        //}
-        
-		//return null;
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException("Cannot load region fundings from db", e);
+        }
+	      
 	}	
-	
-	
-	private class ValueComparator implements Comparator {
 
-		Map<String, BigDecimal> base;
-
-		public ValueComparator(Map<String, BigDecimal> base) {
-			this.base = base;
-		}
-
-		public int compare(Object a, Object b) {
-			return base.get(a).compareTo(base.get(b));
-		}
-	}
-
-	private class ValueComparatorLongs implements Comparator {
-
-		Map<Long[], BigDecimal> base;
-
-		public ValueComparatorLongs(Map<Long[], BigDecimal> base) {
-			this.base = base;
-		}
-
-		public int compare(Object a, Object b) {
-			return base.get(a).compareTo(base.get(b));
-		}
-	}
 	
 	public ActionForward setChartImageFromSnapshot(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,

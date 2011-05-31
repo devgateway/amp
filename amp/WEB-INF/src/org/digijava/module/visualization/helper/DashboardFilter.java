@@ -54,7 +54,7 @@ public class DashboardFilter {
     private List<AmpCategoryValueLocations> locationsSelected;
    
     private Collection<BeanWrapperImpl> years;
-    private int transactionType;
+    private int transactionType = 1;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
     private Integer largestProjectNumber;

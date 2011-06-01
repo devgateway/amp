@@ -11,6 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentsFundingSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentIdentificationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpStructureIdentificationFormTableFeature;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -28,6 +29,7 @@ public class AmpStructureField extends AmpFieldPanel<Boolean>{
 	public AmpStructureField(String id,	IModel<AmpActivityVersion> activityModel, 
 			IModel<AmpStructure> structureModel, String fmName){
 		super(id,fmName, true);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		try {
 			WebMarkupContainer structureInformation = new WebMarkupContainer("structureInformation");

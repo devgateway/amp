@@ -11,6 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentsFundingSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentIdentificationFormTableFeature;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -27,6 +28,7 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 	public AmpComponentField(String id,	IModel<AmpActivityVersion> activityModel, 
 			IModel<AmpComponent> componentModel, String fmName){
 		super(id,fmName, true);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		final PropertyModel<Set<AmpComponentFunding>> componentsSetModel=new 
 				PropertyModel<Set<AmpComponentFunding>>(activityModel, "componentFundings");

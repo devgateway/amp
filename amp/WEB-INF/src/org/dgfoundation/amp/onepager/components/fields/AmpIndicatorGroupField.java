@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Date;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
 /**
@@ -35,6 +36,7 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 
 	public AmpIndicatorGroupField(String id, IModel<Double> value, IModel<Date> valueDate, IModel<String> comment, String fmName, String fieldPrefix) {
 		super(id, fmName, true);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		AmpTextFieldPanel<Double> val = new AmpTextFieldPanel<Double>("value", value, fieldPrefix + " Value", false, false, Double.class);
 		add(val);

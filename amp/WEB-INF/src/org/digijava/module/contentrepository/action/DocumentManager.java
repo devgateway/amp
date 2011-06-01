@@ -19,19 +19,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
@@ -753,7 +751,9 @@ public class DocumentManager extends Action {
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
 				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
 				documentData.setLabels( nodeWrapper.getLabels() );
-								
+				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
+				documentData.setCreatorEmail( nodeWrapper.getCreator() );
+				
 				documentData.process(request);
 				documentData.computeIconPath(true);
 				

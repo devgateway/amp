@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.image.Image;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 import com.visural.wicket.component.dropdown.DropDownImageResourceRef;
 
@@ -32,7 +33,10 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 		this(id, fmName, autoComplete,false,false);
 	}
 	
-
+	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete, AmpFMTypes fmType){
+		this(id, fmName, autoComplete);
+		this.fmType = fmType;
+	}
 	
 	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete, boolean newLineVisible, boolean hideLabel) {
 		super(id, fmName,hideLabel);

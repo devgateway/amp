@@ -18,7 +18,7 @@ public class AmpCommentTabsFieldWrapper extends AmpFieldPanel {
 
 	public AmpCommentTabsFieldWrapper(String id, String fmName, List<ITab> tabs) {
 		super(id, fmName);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 		
 		AjaxTabbedPanel atp = new AjaxTabbedPanel("tabs", tabs);
 		atp.setOutputMarkupId(true);

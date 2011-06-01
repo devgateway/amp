@@ -15,7 +15,7 @@
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 
 
-		<set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all" lazy="false">
+		<set name="items" table="AMP_FEATURES_VISIBILITY" inverse="true" cascade="all" lazy="false">
 			<cache usage="read-write" />
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />

@@ -747,7 +747,13 @@ function adminHelp(){
 			                                        </a>
 		                                        </li>
                                             </digi:secure>
-                                        </logic:notEmpty>                                        
+                                        </logic:notEmpty> 
+                                                                               
+                                        <li id="switchFMMode" class="yuiampmenuitem_drop" style="display: none;">
+                                        	<a class="yuiampmenuitemlabel" href="javascript:wicketSwitchFMMode()"  onclick="return canExit()">
+                                        		<digi:trn key="aim:search">FM Mode</digi:trn>
+                                       		 </a>
+                                        </li>
                                         <li class="yuiampmenuitem_drop">
                                         	<a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
                                         		<digi:trn key="aim:search">Search</digi:trn>

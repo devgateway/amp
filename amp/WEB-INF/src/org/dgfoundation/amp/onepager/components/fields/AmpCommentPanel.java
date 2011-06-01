@@ -29,6 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -55,6 +56,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			final IModel<AmpActivityVersion> activityModel) {
 		super(id, fmName, true);
 		super.setOutputMarkupId(true);
+		this.fmType = AmpFMTypes.FEATURE;
 
 		final String trnAddComment = TranslatorUtil
 				.getTranslatedText(" <<add new comment>>");

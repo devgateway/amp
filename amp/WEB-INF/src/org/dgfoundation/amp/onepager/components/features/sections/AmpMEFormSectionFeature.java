@@ -117,14 +117,14 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		};
 
 		final AmpComboboxFieldPanel<AmpIndicator> searchIndicators = new AmpComboboxFieldPanel<AmpIndicator>(
-				"search", "Search Indicators", autoComplete);
+				"search", "Search Indicators", autoComplete, AmpFMTypes.FEATURE);
 		add(searchIndicators);
 
 		final IModel<AmpIndicator> newInd = getNewIndicatorModel();
 		
-		add(new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name"));
-		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false));
-		add(new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code"));
+		add(new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.FEATURE));
+		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.FEATURE));
+		add(new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.FEATURE));
 		AmpDatePickerFieldPanel datePicker = new AmpDatePickerFieldPanel("indDate", new PropertyModel<Date>(newInd, "creationDate"), "Creation Date");
 		datePicker.setEnabled(false);
 		add(datePicker);
@@ -218,10 +218,10 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		autoCompleteSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
 		final AmpComboboxFieldPanel<AmpSector> searchSectors = new AmpComboboxFieldPanel<AmpSector>(
-				"searchSectors", "Search " + fmName, autoCompleteSectors);
+				"searchSectors", "Search " + fmName, autoCompleteSectors, AmpFMTypes.FEATURE);
 		add(searchSectors);
 		
-		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator") {
+		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.FEATURE) {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				try {

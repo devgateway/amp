@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 
@@ -119,7 +120,10 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	
 	@Override
 	protected void onBeforeRender() {
-		boolean fmMode = FMUtil.isFmMode(getSession());
+		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
+		/**
+		 * Do not reverse the order of fmEnabled and fmVisible
+		 */
 		boolean fmEnabled = FMUtil.isFmEnabled(this);
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		

@@ -78,32 +78,6 @@ public class AmpHeaderFooter extends WebPage {
 				AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpStructuresFormSectionFeature.class, "gisPopup.js"));
-		/*
-		String changeTrnMode = "Enable TrnMode";
-		add(new AmpAjaxLinkField("switchTranslatorMode", "Switch Translator Mode Button", changeTrnMode) {
-
-			@Override
-			public void onClick(AjaxRequestTarget arg0) {
-				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-				if (session.isTranslatorMode())
-					session.setTranslatorMode(false);
-				else
-					session.setTranslatorMode(true);
-				setResponsePage(OnePager.class);
-			}
-		});
-		add(new AjaxLink("changeFmMode", new Model("FM Mode")) {
-			@Override
-			public void onClick(AjaxRequestTarget arg0) {
-				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-				if (session.isFmMode())
-					session.setFmMode(false);
-				else
-					session.setFmMode(true);
-				setResponsePage(OnePager.class);
-			}
-		});
-		 */
 	}
 	
 	public HttpServletRequest getServletRequest(){

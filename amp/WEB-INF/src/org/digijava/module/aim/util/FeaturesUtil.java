@@ -195,6 +195,11 @@ public class FeaturesUtil {
 		 */
 
 	}
+	
+	public static FeatureTemplates getActiveTemplate(){
+		FeatureTemplates template = getTemplate(getGlobalSettingValue("Feature Template"));
+		return template;
+	}
 
 	public static AmpFeature toggleFeature(Integer featureId) {
 		Session session = null;
@@ -2125,6 +2130,10 @@ public class FeaturesUtil {
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				feature.setHasLevel(false);
 			else feature.setHasLevel(true);
+			
+			module.getItems().add(feature);
+			
+			session.update(module);
 			session.save(feature);
 			tx.commit();
 			
@@ -2174,6 +2183,55 @@ public class FeaturesUtil {
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				module.setHasLevel(false);
 			else module.setHasLevel(true);
+			session.save(module);
+			tx.commit();
+			
+			String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
+       		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+				tx = session.beginTransaction();
+				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+						templateId);
+				template.getItems().add(module);
+				tx.commit();
+       		}
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return;
+	}
+
+	public static void insertModuleVisibility(Long templateId, Long parentId, String moduleName, String hasLevel) {
+		Session session = null;
+		AmpModulesVisibility module = new AmpModulesVisibility();
+		AmpTemplatesVisibility template = null;
+		Transaction tx;
+		try {
+			session = PersistenceManager.getSession();
+
+			tx = session.beginTransaction();
+			AmpModulesVisibility parent = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, parentId);
+			
+			module.setName(moduleName);
+			module.setParent(parent);
+			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
+				module.setHasLevel(false);
+			else module.setHasLevel(true);
+			
+			parent.getSubmodules().add(module);
+			
+			session.update(parent);
 			session.save(module);
 			tx.commit();
 			

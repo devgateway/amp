@@ -16,7 +16,7 @@ public class AmpCommentSimpleWrapper extends AmpFieldPanel {
 
 	public AmpCommentSimpleWrapper(String id, String fmName, IModel<AmpActivityVersion> activityModel) {
 		super(id, fmName, true);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 		
 		AmpCommentPanel acp = new AmpCommentPanel("comments", fmName, activityModel);
 		acp.setOutputMarkupId(true);

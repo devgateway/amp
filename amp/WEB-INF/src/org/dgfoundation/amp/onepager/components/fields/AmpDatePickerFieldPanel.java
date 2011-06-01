@@ -41,7 +41,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 			IModel<Date> model, String fmName,AmpDatePickerFieldPanel otherDatePicker,
 			boolean hideLabel) {
 		super(id, fmName, hideLabel);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 		
 		setOutputMarkupId(true);
 		this.otherDatePicker = otherDatePicker;
@@ -87,8 +87,10 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 			}
 		};
 
-		if (otherDatePicker == null)
+		if (otherDatePicker == null){
+			this.fmType = AmpFMTypes.FEATURE;
 			sameAsOtherDatePicker.setVisible(false);
+		}
 		add(sameAsOtherDatePicker);
 
 	}

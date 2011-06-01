@@ -10,6 +10,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * Encaspulates an ajax link of type {@link AjaxLink}
@@ -52,4 +53,8 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 		add(button);
 	}
 
+	public AmpAjaxLinkField(String id, String fmName, String buttonCaption, AmpFMTypes fmType) {
+		this(id, fmName, buttonCaption);
+		this.fmType = fmType;
+	}
 }

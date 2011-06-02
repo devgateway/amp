@@ -276,13 +276,21 @@ public final class FMUtil {
 		}
 	}
 
+	public static void changeFmEnabled(Component c, boolean enabled) {
+		setFmEnabled(c, enabled);
+	}
+	
 	public static void switchFmEnabled(Component c) {
-		AmpFMConfigurable fmc = (AmpFMConfigurable) c;
 		Boolean current=isFmEnabled(c);
 		setFmEnabled(c, !current);
 	}
 	
 	public static void switchFmVisible(Component c) {
+		Boolean isVisible = isFmVisible(c);
+		changeFmVisible(c, !isVisible);
+	}
+	
+	public static void changeFmVisible(Component c, boolean visible) {
 		AmpFMConfigurable fmc = (AmpFMConfigurable) c;
 		Boolean isVisible = isFmVisible(c);
 		
@@ -328,7 +336,7 @@ public final class FMUtil {
 				throw new Exception("Current component [" + fmPathString + "] has it's visibility status diferent from it's presence in the tree!");
 			}
 			
-			if (isVisible){
+			if (!visible){
 				set.remove(obj);
 			}
 			else{

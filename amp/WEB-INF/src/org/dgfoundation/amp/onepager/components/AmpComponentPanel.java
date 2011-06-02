@@ -5,15 +5,21 @@ package org.dgfoundation.amp.onepager.components;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+
+import bsh.This;
 
 /**
  * Basic class for AMP components. This component wraps a feature manager connectivity, receiving
@@ -30,6 +36,18 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected WebMarkupContainer fmBorder;
 	protected IndicatingAjaxLink visibleFmButton;
 	protected IndicatingAjaxLink enabledFmButton;
+	protected AjaxCheckBox cascadeFmToChildren;
+	protected Label cascadeFmToChildrenLabel;
+	
+	public AjaxCheckBox getCascadeFmToChildren() {
+		return cascadeFmToChildren;
+	}
+
+
+	public void setCascadeFmToChildren(AjaxCheckBox cascadeFmToChildren) {
+		this.cascadeFmToChildren = cascadeFmToChildren;
+	}
+
 	protected static Logger logger = Logger.getLogger(AmpComponentPanel.class);
 	
 	/**
@@ -58,7 +76,59 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	public AmpComponentPanel(String id,String fmName) {
 		this(id,null,fmName,AmpFMTypes.FEATURE);
 	}
+	
+	/**
+	 * Switch visibility for this fm Control. Change Hide with Show for the FM Button
+	 * @param target the ajax target
+	 */
+	public void switchFmVisible(AjaxRequestTarget target) {
+		FMUtil.switchFmVisible(AmpComponentPanel.this);
+		visibleFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")));
+		target.addComponent(this);
+	}
 
+	/**
+	 * Switch enabling/disabling for this fm Control. Change Hide with Show for the FM Button
+	 * @param target the ajax target
+	 */
+	public void switchFmEnabled(AjaxRequestTarget target) {
+		FMUtil.switchFmEnabled(AmpComponentPanel.this);
+		enabledFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable")));
+		target.addComponent(this);
+	}
+	
+	/**
+	 * Cascade the {@link #switchFmVisible(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
+	 * @param target
+	 */
+	public void cascadeFmVisible(AjaxRequestTarget target, boolean visible) {
+		for (int i = 0; i < this.size(); i++) {
+			Component component = this.get(i);
+			if(component instanceof AmpComponentPanel) {
+				FMUtil.changeFmVisible(component, visible);
+				target.addComponent(component);
+				((AmpComponentPanel) component).cascadeFmVisible(target,visible);
+			}
+		}
+	}
+	
+
+	/**
+	 * Cascade the {@link #switchFmEnabled(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
+	 * @param target
+	 */
+	public void cascadeFmEnabled(AjaxRequestTarget target, boolean enabled) {
+		for (int i = 0; i < this.size(); i++) {
+			Component component = this.get(i);
+			if(component instanceof AmpComponentPanel) {				
+				FMUtil.changeFmEnabled(component, enabled);
+				target.addComponent(component);
+				((AmpComponentPanel) component).cascadeFmEnabled(target,enabled);
+			}
+		}
+	}
+	
+	
 	/**
 	 * @param id
 	 * @param model
@@ -75,9 +145,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		visibleFmButton=new IndicatingAjaxLink("visibleFmButton") {	
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				FMUtil.switchFmVisible(AmpComponentPanel.this);
-				visibleFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")));
-				target.addComponent(this);
+				switchFmVisible(target);
+				if(cascadeFmToChildren.getModelObject()) 
+					cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this));				
 			}
 		};
 		visibleFmButton.setOutputMarkupId(true);
@@ -87,11 +157,29 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		enabledFmButton=new IndicatingAjaxLink("enabledFmButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				FMUtil.switchFmEnabled(AmpComponentPanel.this);
-				enabledFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable")));
-				target.addComponent(this);
+				switchFmEnabled(target);
+				if(cascadeFmToChildren.getModelObject()) 
+					cascadeFmEnabled(target,FMUtil.isFmEnabled(AmpComponentPanel.this));  
 			}
 		};
+		
+		cascadeFmToChildren=new IndicatingAjaxCheckBox("cascadeFmToChildren",new Model<Boolean>()) {			
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
+		cascadeFmToChildren.setOutputMarkupId(true);
+		cascadeFmToChildren.setVisible(false);
+		add(cascadeFmToChildren);
+		
+		cascadeFmToChildrenLabel= new Label("cascadeFmToChildrenLabel","Cascade to children");
+		cascadeFmToChildrenLabel.setVisible(false);
+		add(cascadeFmToChildrenLabel);
+		
+		
 		enabledFmButton.setOutputMarkupId(true);
 		enabledFmButton.setVisible(false);
 		add(enabledFmButton);
@@ -136,6 +224,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		if(fmMode) {
 			visibleFmButton.setVisible(true);
 			enabledFmButton.setVisible(true);
+			cascadeFmToChildren.setVisible(true);
+			cascadeFmToChildrenLabel.setVisible(true);
 		}
 		String style=fmMode?"border: 2px blue solid; padding: 4px;":"";
 		fmBorder.add(new AttributeModifier("style", true, new Model(style)));

@@ -43,6 +43,7 @@
 	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getAidTypeGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<typeofaid>true</typeofaid>
+			<linechart>true</linechart>
 		</mx:request>
 	</mx:HTTPService>
 	

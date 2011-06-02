@@ -41,7 +41,9 @@
 
 	<mx:Style source="styles/Axiis_Examples.css"/>
 	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
-		
+		<mx:request>
+			<linechart>true</linechart>
+		</mx:request>
 	</mx:HTTPService>
 	
 	<mx:Script>

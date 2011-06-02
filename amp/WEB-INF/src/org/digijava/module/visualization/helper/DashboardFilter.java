@@ -61,7 +61,9 @@ public class DashboardFilter {
     private Boolean divideThousands;
     private Integer divideThousandsDecimalPlaces;
    
-    private int yearsInRange;
+    private int yearsInRange = 5;
+    private int yearsInRangePie = 7;
+    private int yearsInRangeLine = 8;
     private Boolean commitmentsVisible = true;
     private Boolean disbursementsVisible= true;
     private Boolean pledgeVisible= true;
@@ -125,6 +127,24 @@ public class DashboardFilter {
 
     public void setYearsInRange(int yearsInRange) {
         this.yearsInRange = yearsInRange;
+    }
+
+    public int getYearsInRangePie() {
+    	if(yearsInRangePie == 0) yearsInRangePie = 7;
+        return yearsInRangePie;
+    }
+
+    public void setYearsInRangePie(int yearsInRangePie) {
+        this.yearsInRangePie = yearsInRangePie;
+    }
+
+    public int getYearsInRangeLine() {
+    	if(yearsInRangeLine == 0) yearsInRangeLine = 8;
+        return yearsInRangeLine;
+    }
+
+    public void setYearsInRangeLine(int yearsInRangeLine) {
+        this.yearsInRangeLine = yearsInRangeLine;
     }
 
     public List<AmpCategoryValueLocations> getRegions() {

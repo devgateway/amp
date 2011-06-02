@@ -475,7 +475,12 @@ public class DataDispatcher extends DispatchAction {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
         int yearsInRange=filter.getYearsInRange()-1;
-
+        if (lineChart) {
+        	yearsInRange=filter.getYearsInRangeLine()-1;
+		}
+        if (donut) {
+        	yearsInRange=filter.getYearsInRangePie()-1;
+		}
         //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
         try {
 	        Map map = visualizationForm.getRanksInformation().getFullSectors();
@@ -485,8 +490,12 @@ public class DataDispatcher extends DispatchAction {
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
 	            map = DashboardUtil.getRankSectors(DbUtil.getSectors(filter), filter, selectedYear);
 			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+	        
+	        if (map==null) {
+	        	map = new HashMap<AmpSector, BigDecimal>();
 			}
 	        
 	        List list = new LinkedList(map.entrySet());
@@ -651,33 +660,35 @@ public class DataDispatcher extends DispatchAction {
 	                othersYearlyValue.put(i, amount);
 	        }
 	      //Put headers
-	        for (Long i = year - yearsInRange; i <= year; i++) {
-	        	csvString.append(i);
-	        	csvString.append(",");
-	        	sectorData += "<" + i + ">";
-	            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
-	        	csvString.append(",");
-	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
-	        	sectorData += ">";
-	        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
-	        	csvString.append(",");
-	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
-	        	sectorData += ">";
-	        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
-	        	csvString.append(",");
-	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
-	        	sectorData += ">";
-	        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
-	        	csvString.append(",");
-	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
-	        	sectorData += ">";
-	        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
-	        	csvString.append(",");
-	        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
-	        	sectorData += ">";
-	        	csvString.append(othersYearlyValue.get(i));
-	        	csvString.append("\n");
-	        	sectorData += othersYearlyValue.get(i);
+	        if (!allData.isEmpty()){
+		        for (Long i = year - yearsInRange; i <= year; i++) {
+		        	csvString.append(i);
+		        	csvString.append(",");
+		        	sectorData += "<" + i + ">";
+		            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+		        	csvString.append(",");
+		        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+		        	sectorData += ">";
+		        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
+		        	csvString.append(",");
+		        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+		        	sectorData += ">";
+		        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
+		        	csvString.append(",");
+		        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+		        	sectorData += ">";
+		        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
+		        	csvString.append(",");
+		        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+		        	sectorData += ">";
+		        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
+		        	csvString.append(",");
+		        	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+		        	sectorData += ">";
+		        	csvString.append(othersYearlyValue.get(i));
+		        	csvString.append("\n");
+		        	sectorData += othersYearlyValue.get(i);
+		        }
 	        }
 	        visualizationForm.getExportData().setSectorTableData(sectorData);
 	        	
@@ -749,6 +760,13 @@ public class DataDispatcher extends DispatchAction {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
         int yearsInRange=filter.getYearsInRange()-1;
+        
+        if (lineChart) {
+        	yearsInRange=filter.getYearsInRangeLine()-1;
+		}
+        if (donut) {
+        	yearsInRange=filter.getYearsInRangePie()-1;
+		}
 
         try {
         	Map map = visualizationForm.getRanksInformation().getFullDonors();
@@ -759,10 +777,13 @@ public class DataDispatcher extends DispatchAction {
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
                 map = DashboardUtil.getRankDonors(DbUtil.getDonors(filter), filter, selectedYear);
 			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 			}
-            List list = new LinkedList(map.entrySet());
+            if (map==null) {
+	        	map = new HashMap<AmpOrganisation, BigDecimal>();
+			}
+	        List list = new LinkedList(map.entrySet());
 			for (Iterator it = list.iterator(); it.hasNext();) {
 		        Map.Entry entry = (Map.Entry)it.next();
 		        //result.put(entry.getKey(), entry.getValue());
@@ -929,33 +950,35 @@ public class DataDispatcher extends DispatchAction {
                     othersYearlyValue.put(i, amount);
             }
           //Put headers
-            for (Long i = year - yearsInRange; i <= year; i++) {
-            	csvString.append(i);
-            	csvString.append(",");
-            	donorData += "<" + i + ">";
-                csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
-            	csvString.append(",");
-            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
-            	donorData += ">";
-            	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
-            	csvString.append(",");
-            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
-            	donorData += ">";
-            	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
-            	csvString.append(",");
-            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
-            	donorData += ">";
-            	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
-            	csvString.append(",");
-            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
-            	donorData += ">";
-            	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
-            	csvString.append(",");
-            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
-            	donorData += ">";
-            	csvString.append(othersYearlyValue.get(i));
-            	csvString.append("\n");
-            	donorData += othersYearlyValue.get(i);
+            if (!allData.isEmpty()){
+	            for (Long i = year - yearsInRange; i <= year; i++) {
+	            	csvString.append(i);
+	            	csvString.append(",");
+	            	donorData += "<" + i + ">";
+	                csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+	            	csvString.append(",");
+	            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+	            	donorData += ">";
+	            	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
+	            	csvString.append(",");
+	            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+	            	donorData += ">";
+	            	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
+	            	csvString.append(",");
+	            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+	            	donorData += ">";
+	            	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
+	            	csvString.append(",");
+	            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+	            	donorData += ">";
+	            	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
+	            	csvString.append(",");
+	            	donorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+	            	donorData += ">";
+	            	csvString.append(othersYearlyValue.get(i));
+	            	csvString.append("\n");
+	            	donorData += othersYearlyValue.get(i);
+	            }
             }
             visualizationForm.getExportData().setDonorTableData(donorData);
     		
@@ -1008,6 +1031,7 @@ public class DataDispatcher extends DispatchAction {
 
 		boolean typeOfAid = request.getParameter("typeofaid") != null ? Boolean.parseBoolean(request.getParameter("typeofaid")) : false;
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
+		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         BigDecimal divideByDenominator;
@@ -1035,7 +1059,15 @@ public class DataDispatcher extends DispatchAction {
         } else {
             categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
         }
+        
         int yearsInRange=filter.getYearsInRange()-1;
+        if (linechart) {
+        	yearsInRange=filter.getYearsInRangeLine()-1;
+		}
+
+        if (donut) {
+        	yearsInRange=filter.getYearsInRangePie()-1;
+		}
 
         if(selectedYear != null){
         	year = selectedYear;
@@ -1161,6 +1193,8 @@ public class DataDispatcher extends DispatchAction {
 		String format = request.getParameter("format");
 		
 		boolean nodata = true; // for displaying no data message
+		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
+		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 
 		Long year = filter.getYear();
 		BigDecimal divideByDenominator;
@@ -1194,6 +1228,12 @@ public class DataDispatcher extends DispatchAction {
 			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
 		}
 		int yearsInRange = filter.getYearsInRange() - 1;
+		if (linechart) {
+			yearsInRange = filter.getYearsInRangeLine() - 1;
+		}
+		if (donut) {
+			yearsInRange = filter.getYearsInRangePie() - 1;
+		}
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 
 		String plannedTitle = "Planned";
@@ -1277,6 +1317,8 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
+		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
+		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 
 		Long year = filter.getYear();
 		BigDecimal divideByDenominator;
@@ -1311,6 +1353,12 @@ public class DataDispatcher extends DispatchAction {
 			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
 		}
 		int yearsInRange = filter.getYearsInRange() - 1;
+		if (linechart) {
+			yearsInRange = filter.getYearsInRangeLine() - 1;
+		}
+		if (donut) {
+			yearsInRange = filter.getYearsInRangePie() - 1;
+		}
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 		String pledgesTranslatedTitle = "Pledges";
 		String actComTranslatedTitle = "Actual commitments";
@@ -1628,7 +1676,12 @@ public class DataDispatcher extends DispatchAction {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
         int yearsInRange=filter.getYearsInRange()-1;
-
+        if (lineChart) {
+        	yearsInRange=filter.getYearsInRangeLine()-1;
+		}
+        if (donut) {
+        	yearsInRange=filter.getYearsInRangePie()-1;
+		}
         try {
 	        Map map = visualizationForm.getRanksInformation().getFullRegions();
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -1638,9 +1691,13 @@ public class DataDispatcher extends DispatchAction {
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
 	            map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, selectedYear);
 			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-			}List list = new LinkedList(map.entrySet());
+			}
+	        if (map==null) {
+	        	map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
+			}
+	        List list = new LinkedList(map.entrySet());
 			for (Iterator it = list.iterator(); it.hasNext();) {
 		        Map.Entry entry = (Map.Entry)it.next();
 		        //result.put(entry.getKey(), entry.getValue());
@@ -1803,33 +1860,35 @@ public class DataDispatcher extends DispatchAction {
 	        }
 			
             //Put headers
-	        for (Long i = year - yearsInRange; i <= year; i++) {
-	        	csvString.append(i);
-	        	csvString.append(",");
-	        	regionData += "<" + i + ">";
-	            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
-	        	csvString.append(",");
-	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
-	        	regionData += ">";
-	        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
-	        	csvString.append(",");
-	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
-	        	regionData += ">";
-	        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
-	        	csvString.append(",");
-	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
-	        	regionData += ">";
-	        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
-	        	csvString.append(",");
-	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
-	        	regionData += ">";
-	        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
-	        	csvString.append(",");
-	        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
-	        	regionData += ">";
-	        	csvString.append(othersYearlyValue.get(i));
-	        	csvString.append("\n");
-	        	regionData += othersYearlyValue.get(i);
+	        if (!allData.isEmpty()){
+		        for (Long i = year - yearsInRange; i <= year; i++) {
+		        	csvString.append(i);
+		        	csvString.append(",");
+		        	regionData += "<" + i + ">";
+		            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+		        	csvString.append(",");
+		        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+		        	regionData += ">";
+		        	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
+		        	csvString.append(",");
+		        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+		        	regionData += ">";
+		        	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
+		        	csvString.append(",");
+		        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+		        	regionData += ">";
+		        	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
+		        	csvString.append(",");
+		        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+		        	regionData += ">";
+		        	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
+		        	csvString.append(",");
+		        	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+		        	regionData += ">";
+		        	csvString.append(othersYearlyValue.get(i));
+		        	csvString.append("\n");
+		        	regionData += othersYearlyValue.get(i);
+		        }
 	        }
 	        visualizationForm.getExportData().setRegionTableData(regionData);
 	        	

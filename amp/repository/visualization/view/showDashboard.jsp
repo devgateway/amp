@@ -271,22 +271,6 @@ function unCheckOptions (obj){
 	}
 }
 
-function getSelectionsFromElement(elementId){
-	var sels = "";
-	var cnt = 0;
-	var elems=document.getElementsByName(elementId);
-	for(i=0;i<elems.length;i++){
-		if (elems[i].checked==true){
-			if(sels != ""){
-				sels = sels + ",";
-			}
-			sels = sels + elems[i].value;
-			cnt++;
-		}
-	}
-	return sels;
-}
-
 function changeTab (selected){
 	document.getElementById("selGeneral").className = "";
 	document.getElementById("selOrgs").className = "";
@@ -370,7 +354,7 @@ var getChildrenCall = {
 			    	var div = document.getElementById("orgDivList");
 			    	var inner = "";
 					for(var i = 0; i < results.children.length; i++){
-						inner += "<input type='checkbox' name='organization_check' value='"+results.children[i].ID+"'/>"; 
+						inner += "<input type='checkbox' name='organization_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
 						inner += "<span style='font-family: Arial; font-size: 12px;'>";
 						inner += results.children[i].name;
 						inner += "</span>";
@@ -382,7 +366,7 @@ var getChildrenCall = {
 			    	var div = document.getElementById("zoneDivList");
 			    	var inner = "";
 					for(var i = 0; i < results.children.length; i++){
-						inner += "<input type='checkbox' name='zone_check' value='"+results.children[i].ID+"'/>"; 
+						inner += "<input type='checkbox' name='zone_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
 						inner += "<span style='font-family: Arial; font-size: 12px;'>";
 						inner += results.children[i].name;
 						inner += "</span>";
@@ -394,7 +378,7 @@ var getChildrenCall = {
 				    	var div = document.getElementById("subSectorDivList");
 				    	var inner = "";
 						for(var i = 0; i < results.children.length; i++){
-							inner += "<input type='checkbox' name='sub_sector_check' value='"+results.children[i].ID+"'/>"; 
+							inner += "<input type='checkbox' name='sub_sector_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
 							inner += "<span style='font-family: Arial; font-size: 12px;'>";
 							inner += results.children[i].name;
 							inner += "</span>";
@@ -542,46 +526,74 @@ function changeChild (selected){
 			<div>
 				<table border="0" cellspacing="3" cellpadding="3">
 					<tr>
-					  	<td><b>Currency Type:</b></td>
+					  	<td><b><digi:trn>Currency Type</digi:trn>:</b></td>
 					  	<td>
 					  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
    								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
 							</html:select> 	
 						</td>
-						<td><b>Fiscal Year Start:</b></td>
-				    	<td>
-				    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:100px;">
-	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-				 	</tr>
-				    <tr>
-				    	<td><b>Fiscal Calendar:</b></td>
+						<td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
 					    <td>
-					    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
-	                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
-	                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
-	                        </html:select>
-						</td>
-				  		<td><b>Time Scale:</b></td>
-					    <td>
-							<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:100px;">
-	                            <html:option value="1">1</html:option>
-	                            <html:option value="2">2</html:option>
-	                            <html:option value="3">3</html:option>
-	                            <html:option value="4">4</html:option>
-	                            <html:option value="5">5</html:option>
-	                        </html:select>
-						</td>
-						<td><b>Decimals to show:</b></td>
-					    <td>
-							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:100px;">
+							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 	                            <html:option value="0">0</html:option>
 	                            <html:option value="1">1</html:option>
 	                            <html:option value="2">2</html:option>
 	                            <html:option value="3">3</html:option>
 	                            <html:option value="4">4</html:option>
 	                            <html:option value="5">5</html:option>
+	                        </html:select>
+						</td>
+				 	</tr>
+				    <tr>
+				    	<td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+					    <td>
+					    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
+	                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
+	                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
+	                        </html:select>
+						</td>
+				  		<td><b><digi:trn>Years range</digi:trn>:</b></td>
+					    <td>
+							<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:option value="1">1</html:option>
+	                            <html:option value="2">2</html:option>
+	                            <html:option value="3">3</html:option>
+	                            <html:option value="4">4</html:option>
+	                            <html:option value="5">5</html:option>
+	                        </html:select>
+						</td>
+						
+					</tr>
+					<tr>
+						<td><b><digi:trn>Fiscal Year Start</digi:trn>:</b></td>
+				    	<td>
+				    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+	                        </html:select>
+						</td>
+						<td><b><digi:trn>Years range for linechart</digi:trn>:</b></td>
+					    <td>
+							<html:select property="filter.yearsInRangeLine" styleId="yearsInRangeLine_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:option value="1">1</html:option>
+	                            <html:option value="2">2</html:option>
+	                            <html:option value="3">3</html:option>
+	                            <html:option value="4">4</html:option>
+	                            <html:option value="5">5</html:option>
+	                            <html:option value="6">6</html:option>
+	                            <html:option value="7">7</html:option>
+	                            <html:option value="8">8</html:option>
+	                        </html:select>
+						</td>
+						<td><b><digi:trn>Years range for piechart</digi:trn>:</b></td>
+					    <td>
+							<html:select property="filter.yearsInRangePie" styleId="yearsInRangePie_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:option value="1">1</html:option>
+	                            <html:option value="2">2</html:option>
+	                            <html:option value="3">3</html:option>
+	                            <html:option value="4">4</html:option>
+	                            <html:option value="5">5</html:option>
+	                            <html:option value="6">6</html:option>
+	                            <html:option value="7">7</html:option>
 	                        </html:select>
 						</td>
 					</tr>
@@ -627,14 +639,12 @@ function changeChild (selected){
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
 						<c:forEach items="${visualizationform.filter.orgGroups}" var="item">
 							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-								<input type="radio" name="org_grp_check" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+								<input type="radio" name="org_grp_check" title="${item.orgGrpName}" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-								<input type="checkbox" name="org_grp_check" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+								<input type="checkbox" name="org_grp_check" title="${item.orgGrpName}" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
 							</c:if>
-							<span style="font-family: Arial; font-size: 12px;">
 								<digi:trn>${item.orgGrpName}</digi:trn>
-							</span>
 							<br/>
 						</c:forEach>
 					</div>
@@ -683,10 +693,10 @@ function changeChild (selected){
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="regionDivList">
 						<c:forEach items="${visualizationform.filter.regions}" var="item">
 							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-								<input type="radio" name="region_check" value="${item.id}" onchange="getChildren(this)"/> 
+								<input type="radio" name="region_check" title="${item.name}" value="${item.id}" onchange="getChildren(this)"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-								<input type="checkbox" name="region_check" value="${item.id}" onchange="getChildren(this)"/> 
+								<input type="checkbox" name="region_check" title="${item.name}" value="${item.id}" onchange="getChildren(this)"/> 
 							</c:if>
 							<span style="font-family: Arial; font-size: 12px;">
 								<digi:trn>${item.name}</digi:trn>
@@ -739,10 +749,10 @@ function changeChild (selected){
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
 						<c:forEach items="${visualizationform.filter.sectors}" var="item">
 							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+								<input type="radio" name="sector_check" title="${item.name}" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+								<input type="checkbox" name="sector_check" title="${item.name}" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
 							</c:if>
 							<span style="font-family: Arial; font-size: 12px;">
 								<digi:trn>${item.name}</digi:trn>
@@ -886,6 +896,8 @@ function changeChild (selected){
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
+<html:hidden property="filter.yearsInRangeLine" styleId="yearsInRangeLine" />
+<html:hidden property="filter.yearsInRangePie" styleId="yearsInRangePie" />
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
@@ -1441,6 +1453,8 @@ var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
+	document.getElementById("yearsInRangeLine").value = document.getElementById("yearsInRangeLine_dropdown").options[document.getElementById("yearsInRangeLine_dropdown").selectedIndex].value;
+	document.getElementById("yearsInRangePie").value = document.getElementById("yearsInRangePie_dropdown").options[document.getElementById("yearsInRangePie_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 
@@ -1461,13 +1475,13 @@ var allGraphs = document.getElementsByName("flashContent");
 	}
 	
 	var params = "";
-	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check");
-	params = params + "&orgIds=" + getSelectionsFromElement("organization_check");
-	params = params + "&regionIds=" + getSelectionsFromElement("region_check");
-	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check");
-	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check");
-	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check");
-	
+	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
+	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
+	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
+	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
+	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
+
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		allGraphs[idx].style.display = "none";
 	}
@@ -1479,7 +1493,7 @@ var allGraphs = document.getElementsByName("flashContent");
 	hidePopin();
 }
 
-function getSelectionsFromElement(elementId){
+function getSelectionsFromElement(elementId, text){
 	var sels = "";
 	var cnt = 0;
 	var elems=document.getElementsByName(elementId);
@@ -1488,7 +1502,11 @@ function getSelectionsFromElement(elementId){
 			if(sels != ""){
 				sels = sels + ",";
 			}
-			sels = sels + elems[i].value;
+			if(text){
+				sels = sels + elems[i].title;
+			} else {
+				sels = sels + elems[i].value;
+			}
 			cnt++;
 		}
 	}
@@ -1758,19 +1776,85 @@ function refreshBoxes(o){
 
 	var namePlaceholder = document.getElementById("dashboard_name");
 	if (dashboardType==1) {
-		var name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
-		var name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-		namePlaceholder.innerHTML = name1 + "<br/><span style=\"font-size:16px\">" + name2 + "</span>";
+		var name1 = "";
+		var name2 = "";
+		if (getSelectionsFromElement("org_grp_check",true)==""){
+			if (document.getElementById("org_group_dropdown_id").selectedIndex == 0) {
+				name1 = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
+			} else {
+				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			name1 = getSelectionsFromElement("org_grp_check",true);
+		}
+		if (getSelectionsFromElement("organization_check",true)==""){
+			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
+				name2 = "<digi:trn jsFriendly='true'>ALL Organizations</digi:trn>";
+			} else {
+				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			if (getSelectionsFromElement("organization_check",false).indexOf(',') !=-1) {
+				name2 = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>";
+			} else {
+				name2 = getSelectionsFromElement("organization_check",true);
+			}
+		}
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==3) {
-		var name1 = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
-		var name2 = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
-		namePlaceholder.innerHTML = name1 + "<br/><span style=\"font-size:16px\">" + name2 + "</span>";
+		var name1 = "";
+		var name2 = "";
+		if (getSelectionsFromElement("sector_check",true)==""){
+			if (document.getElementById("sector_dropdown_id").selectedIndex == 0) {
+				name1 = "<digi:trn jsFriendly='true'>ALL Sectors</digi:trn>";
+			} else {
+				name1 = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			name1 = getSelectionsFromElement("sector_check",true);
+		}
+		if (getSelectionsFromElement("sub_sector_check",true)==""){
+			if (document.getElementById("sub_sector_dropdown_id").selectedIndex == 0) {
+				name2 = "<digi:trn jsFriendly='true'>ALL Sub Sectors</digi:trn>";
+			} else {
+				name2 = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			if (getSelectionsFromElement("sub_sector_check",false).indexOf(',') !=-1) {
+				name2 = "<digi:trn jsFriendly='true'>Multiple Sub Sectors</digi:trn>";
+			} else {
+				name2 = getSelectionsFromElement("sub_sector_check",true);
+			}
+		}
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==2) {
-		var name1 = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
-		var name2 = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
-		namePlaceholder.innerHTML = name1 + "<br/><span style=\"font-size:16px\">" + name2 + "</span>";
+		var name1 = "";
+		var name2 = "";
+		if (getSelectionsFromElement("region_check",true)==""){
+			if (document.getElementById("region_dropdown_id").selectedIndex == 0) {
+				name1 = "<digi:trn jsFriendly='true'>ALL Regions</digi:trn>";
+			} else {
+				name1 = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			name1 = getSelectionsFromElement("region_check",true);
+		}
+		if (getSelectionsFromElement("zone_check",true)==""){
+			if (document.getElementById("zone_dropdown_id").selectedIndex == 0) {
+				name2 = "<digi:trn jsFriendly='true'>ALL Zones</digi:trn>";
+			} else {
+				name2 = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
+			}
+		} else {
+			if (getSelectionsFromElement("zone_check",false).indexOf(',') !=-1) {
+				name2 = "<digi:trn jsFriendly='true'>Multiple Zones</digi:trn>";
+			} else {
+				name2 = getSelectionsFromElement("zone_check",true);
+			}
+		}
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 
 	div = document.getElementById("fundingChartTitle");

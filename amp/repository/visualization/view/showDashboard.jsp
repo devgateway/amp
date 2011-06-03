@@ -913,7 +913,6 @@ function changeChild (selected){
 <div class="dashboard_total" id="divTotalComms"></div>
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td>
     	<div class="dashboard_name" id="dashboard_name">
     		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
     			<digi:trn>ALL DONORS</digi:trn>
@@ -925,8 +924,16 @@ function changeChild (selected){
     			<digi:trn>ALL REGIONS</digi:trn>
     		</c:if>
     	</div>
-    </td>
-    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export Options</a></div></div></td>
+    <td>
+    	<table>
+    		<tr>
+    			<td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export Options</a></div></div></td>
+    		</tr>
+    		<tr>
+    			<td><div id="currencyInfo"></div></td>
+    		</tr>
+    	</table>
+   	</td>
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
@@ -1734,8 +1741,11 @@ function refreshBoxes(o){
 				//}
 				break;
 			case "TotalComms":
-				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br /><digi:trn>Total Commitments</digi:trn>(" + child.curr + ")";
+				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br /><digi:trn>Total Commitments</digi:trn>";
 				var div = document.getElementById("divTotalComms");
+				div.innerHTML = inner;
+				inner = "<i><font size='2' color='red'><digi:trn>All amounts in millions</digi:trn> - " + child.curr + "</font></i>";
+				var div = document.getElementById("currencyInfo");
 				div.innerHTML = inner;
 				break;
 			case "TotalDisbs":

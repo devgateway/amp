@@ -47,45 +47,45 @@
       </div>
             
     <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;" border="1" bordercolor="#000000">
+		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;" border="1" bordercolor="#CCCCCC">
 			<tr>
-				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td width="120" style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Country</digi:trn>
 				</td>
 				<td>&nbsp;<%=countryName%></td>
 			</tr>
 			<tr>
-				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td width="120" style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Region</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="regName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Sector</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="selSectorName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Year Range</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="startYear"/> - <bean:write name="gisRegReportForm" property="endYear"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Commitments</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Disbursements</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Expenditures</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
@@ -119,17 +119,17 @@
 						<thead>
 			
 						<tr>
-								<td colspan="4" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;" >
+								<td colspan="4" style="overflow-x:hidden; background-color: #C7D4DB; color:#000000;" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											<digi:trn>Overall information</digi:trn>
+											<digi:trn><b>Overall information</b></digi:trn>
 										</div>
 									</div>
 								</td>
-								<td colspan="3" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;">
+								<td colspan="3" style="overflow-x:hidden; background-color: #C7D4DB; color:#000000;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											<digi:trn>For selected sector/region</digi:trn>
+											<digi:trn><b>For selected sector/region</b></digi:trn>
 										</div>
 									</div>
 								</td>
@@ -137,37 +137,37 @@
 			
 						
 						<tr>
-								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="20%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Activity</digi:trn>
 										</div>
 											</td>
-								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="20%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Region</digi:trn>(s)
 										</div>
 								</td>
-								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="20%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Sector</digi:trn>(s)
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Donor</digi:trn>(s)
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Commitments</digi:trn>
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" style="overflow-x:hidden;background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Disbursements</digi:trn>
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
+								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Expenditures</digi:trn>
 										</div>
@@ -305,8 +305,8 @@
 							</tr>
 						</logic:iterate>
 						<tr>
-							<td colspan="7" height="100%" style="border-top:1px solid black;">
-									&nbsp;
+							<td colspan="7" height="100%" style="border-top:1px solid black;">&nbsp;
+									
 							</td>
 							<!--
 							<td>&nbsp;</td>

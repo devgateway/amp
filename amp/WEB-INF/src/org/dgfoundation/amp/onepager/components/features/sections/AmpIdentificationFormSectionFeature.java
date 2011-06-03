@@ -59,7 +59,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			title.getTextContainer().setRequired(true);
 			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
-			
 			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(
@@ -108,7 +107,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			budgetClassification.setOutputMarkupId(true);
 			budgetClassificationContainer.add(budgetClassification);
 			add(budgetClassificationContainer);
-			
+
 			AmpActivityBudgetField activityBudget = new AmpActivityBudgetField("activityBudget", new PropertyModel(am, "budget"), "Activity Budget", budgetExtras, budgetClassification);
 			add(activityBudget);
 
@@ -175,8 +174,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			add(new AmpBooleanChoiceField("humanitarianAid", 
 					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid"));
 			
-			
-	
 		
 			add(new AmpTextAreaFieldPanel<String>("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
@@ -186,8 +183,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("objective",
 					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.FEATURE));
-			
-			
 			
 			List<ITab> objectiveTabs = new ArrayList<ITab>();
 			objectiveTabs.add(new AmpCommentTab("OV Indicators" , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
@@ -218,7 +213,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
 			add(resultsTabs);
-			
 			add(new AmpTextAreaFieldPanel<String>("lessonsLearned",
 					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("projectImpact",
@@ -227,10 +221,10 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("contractingArrangements",
 					new PropertyModel<String>(am, "contractingArrangements"), "Contracting Arrangements", true, AmpFMTypes.FEATURE));
-			add(new AmpTextAreaFieldPanel<String>("conditionalitySequencing",
-					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("linkedActivities",
 					new PropertyModel<String>(am, "linkedActivities"), "Linked Activities", true, AmpFMTypes.FEATURE));
+			add(new AmpTextAreaFieldPanel<String>("conditionalitySequencing",
+					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("conditionalities",
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.FEATURE));
 			add(new AmpTextAreaFieldPanel<String>("projectManagement",

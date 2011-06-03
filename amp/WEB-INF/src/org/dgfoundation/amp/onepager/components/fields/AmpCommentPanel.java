@@ -24,9 +24,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -47,8 +49,6 @@ import org.hibernate.Transaction;
  */
 public class AmpCommentPanel extends AmpFieldPanel {
 
-	private transient ArrayList<AmpComments> comments;
-	
 	private static final long serialVersionUID = 1L;
 	final ListView listView;
 
@@ -83,8 +83,8 @@ public class AmpCommentPanel extends AmpFieldPanel {
 
 		// Behaviour to click the hidden AjaxSubmitLink so that it submits the
 		// new comment
-		AmpAjaxBehavior commentBehavior = new AmpAjaxBehavior();
-		addComment.add(commentBehavior);
+		//AmpAjaxBehavior commentBehavior = new AmpAjaxBehavior();
+		//addComment.add(commentBehavior);
 		String keypress = "var kc=wicketKeyCode(event); if (kc==27) {this.blur();} else if (kc!=13) { return true; } else {this.nextSibling.onclick(); this.blur(); return false;}";
 		addComment.add(new SimpleAttributeModifier("onkeypress",
 				"if (Wicket.Browser.isSafari()) { return; };" + keypress));
@@ -100,10 +100,15 @@ public class AmpCommentPanel extends AmpFieldPanel {
 
 		// load the comments, for this activity and the specified field, from
 		// the db
-		comments = DbUtil.getAllCommentsByField(
+		IModel<ArrayList<AmpComments>> comments = new LoadableDetachableModel<ArrayList<AmpComments>>() {
+			@Override
+			protected ArrayList<AmpComments> load() {
+				return DbUtil.getAllCommentsByField(
 				field.getAmpFieldId(), activityModel.getObject()
 						.getAmpActivityId());
-
+			}
+		}; 
+		
 		// list view to render the comments list
 		listView = new ListView<AmpComments>("comment", comments) {
 			private static final long serialVersionUID = 1L;
@@ -111,12 +116,6 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			@Override
 			protected void populateItem(final ListItem<AmpComments> item) {
 				item.add(new Label("userName", item.getModelObject().getMemberName()));
-				/*
-				 * if (comment.getCommentDate() != null){ SimpleDateFormat sdf =
-				 * new SimpleDateFormat("dd/MM/yy HH:mm"); item.add(new
-				 * Label("date", sdf.format(comment.getCommentDate()))); } else
-				 * item.add(new Label("date", ""));
-				 */
 				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("deleteComment","Delete Comment") {
 					@Override
 					protected void onClick(AjaxRequestTarget target) {
@@ -132,15 +131,13 @@ public class AmpCommentPanel extends AmpFieldPanel {
 							logger.error("Error while deleting comment", e);
 							tx.rollback();
 						}
-						comments.remove(item.getModelObject());
 						target.addComponent(this.getParent().getParent()
 								.getParent());
 					}
 				};
 				item.add(delOrgId);
-
 				AjaxEditableMultiLineLabel ae2 = new AjaxEditableMultiLineLabel(
-						"body", new PropertyModel(item.getModelObject(), "comment")) {
+						"body", new PropertyModel(PersistentObjectModel.getModel(item.getModelObject()), "comment")) {
 					protected org.apache.wicket.markup.html.basic.MultiLineLabel newLabel(
 							MarkupContainer parent, String componentId,
 							IModel model) {
@@ -223,6 +220,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			}
 		};
 		listView.setOutputMarkupId(true);
+		listView.setReuseItems(false);
 		add(listView);
 
 		// hidden submit link to submit the new comment
@@ -258,7 +256,6 @@ public class AmpCommentPanel extends AmpFieldPanel {
 
 				addComment.setModelObject(msg);
 				target.addComponent(addComment);
-				comments.add(c);
 				target.addComponent(this.getParent().getParent());
 			}
 		};

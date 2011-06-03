@@ -159,8 +159,6 @@ public final class FMUtil {
 						return true;
 				}
 			}
-			
-		
 		}
 		return false;
 	}

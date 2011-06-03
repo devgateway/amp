@@ -6,9 +6,9 @@ package org.dgfoundation.amp.onepager.components;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,8 +18,6 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
-
-import bsh.This;
 
 /**
  * Basic class for AMP components. This component wraps a feature manager connectivity, receiving
@@ -101,29 +99,32 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 * Cascade the {@link #switchFmVisible(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
 	 * @param target
 	 */
-	public void cascadeFmVisible(AjaxRequestTarget target, boolean visible) {
-		for (int i = 0; i < this.size(); i++) {
-			Component component = this.get(i);
-			if(component instanceof AmpComponentPanel) {
-				FMUtil.changeFmVisible(component, visible);
-				target.addComponent(component);
-				((AmpComponentPanel) component).cascadeFmVisible(target,visible);
+	public void cascadeFmVisible(AjaxRequestTarget target, final boolean visible, Component c) {
+		if (c instanceof MarkupContainer){
+			MarkupContainer m = (MarkupContainer) c;
+			for (int i = 0; i < m.size(); i++) {
+				Component component = m.get(i);
+				if(component instanceof AmpComponentPanel) {
+					FMUtil.changeFmVisible(component, visible);
+				}
+				cascadeFmVisible(target,visible, component);
 			}
 		}
 	}
-	
 
 	/**
 	 * Cascade the {@link #switchFmEnabled(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
 	 * @param target
 	 */
-	public void cascadeFmEnabled(AjaxRequestTarget target, boolean enabled) {
-		for (int i = 0; i < this.size(); i++) {
-			Component component = this.get(i);
-			if(component instanceof AmpComponentPanel) {				
-				FMUtil.changeFmEnabled(component, enabled);
-				target.addComponent(component);
-				((AmpComponentPanel) component).cascadeFmEnabled(target,enabled);
+	public void cascadeFmEnabled(AjaxRequestTarget target, boolean enabled, Component c) {
+		if (c instanceof MarkupContainer){
+			MarkupContainer m = (MarkupContainer) c;
+			for (int i = 0; i < m.size(); i++) {
+				Component component = m.get(i);
+				if(component instanceof AmpComponentPanel) {
+					FMUtil.changeFmEnabled(component, enabled);
+				}
+				cascadeFmEnabled(target, enabled, component);
 			}
 		}
 	}
@@ -147,7 +148,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			public void onClick(AjaxRequestTarget target) {
 				switchFmVisible(target);
 				if(cascadeFmToChildren.getModelObject()) 
-					cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this));				
+					cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this), AmpComponentPanel.this);				
 			}
 		};
 		visibleFmButton.setOutputMarkupId(true);
@@ -159,7 +160,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			public void onClick(AjaxRequestTarget target) {
 				switchFmEnabled(target);
 				if(cascadeFmToChildren.getModelObject()) 
-					cascadeFmEnabled(target,FMUtil.isFmEnabled(AmpComponentPanel.this));  
+					cascadeFmEnabled(target,FMUtil.isFmEnabled(AmpComponentPanel.this), AmpComponentPanel.this);  
 			}
 		};
 		

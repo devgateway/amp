@@ -5,7 +5,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 public class AmpActivityProgram {
 
         private Long ampActivityProgramId;
-        private Long programPercentage;
+        private Float programPercentage;
         private AmpTheme program;
         private AmpActivity activity;
         private AmpActivityProgramSettings programSetting;
@@ -13,7 +13,7 @@ public class AmpActivityProgram {
                 return ampActivityProgramId;
         }
 
-        public Long getProgramPercentage() {
+        public Float getProgramPercentage() {
                 return programPercentage;
         }
 
@@ -33,7 +33,7 @@ public class AmpActivityProgram {
                 this.ampActivityProgramId = ampActivityProgramId;
         }
 
-        public void setProgramPercentage(Long programPercentage) {
+        public void setProgramPercentage(Float programPercentage) {
                 this.programPercentage = programPercentage;
         }
 

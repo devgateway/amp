@@ -1,20 +1,19 @@
 a {color:#376091;}
 
 div.gisReportTableBevelCellContainer{
-	border: 1px solid black;
+	border: 1px solid #CCCCCC;
 	width: 100%;
 	height: 100%;
 /*	padding : -1px; */
 }
 
 div.gisReportTableBevelCell{
-	border:1px solid #CCCCCC;
 	width: 100%;
 	height: 100%;
 }
 
 div.gisReportTableBevelCellBgNormal{
-	background-color : #D4D0C8;
+	background-color : #F2F2F2;
 	padding: 0px;
 }
 

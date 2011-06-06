@@ -105,7 +105,7 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
             width:100%;
             float:none;
             font-size:12px;
-            color:white;
+            color:#000000;
             font-weight:bold;
             height:25px;
             background-color:#C7D4DB;

@@ -29,7 +29,10 @@ public class ActivityPoint {
 	private ArrayList<Structure> structures;
     private String implementationlevel;
     private List<ActivitySector> sectors;
-    private List<AmpOrganisation> donors;
+    private List<SimpleDonor> donors;
+    
+    
+    
     public ActivityPoint() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -125,11 +128,11 @@ public class ActivityPoint {
 		this.id = id;
 	}
 
-	public List<AmpOrganisation> getDonors() {
+	public List<SimpleDonor> getDonors() {
 		return donors;
 	}
 
-	public void setDonors(List<AmpOrganisation> donors) {
+	public void setDonors(List<SimpleDonor> donors) {
 		this.donors = donors;
 	}
 

@@ -153,7 +153,7 @@
 					</tr>
 			</table>
 		</div>
-		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 700px;margin-top: 50px;display: none;">
+		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 500px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 

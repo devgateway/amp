@@ -14,6 +14,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -32,7 +34,7 @@ public class DbHelper {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
 		List<AmpActivityVersion> activities = null;
 		Long[] orgIds = filter.getOrgIds();
-
+		Long[] orgtypeids = filter.getOrgtypeIds();
 		int transactionType = filter.getTransactionType();
 		TeamMember teamMember = filter.getTeamMember();
 		// apply calendar filter
@@ -68,17 +70,24 @@ public class DbHelper {
 				oql += " and (fd.transactionType =0 or  fd.transactionType =1) ";
 			}
 			if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-				if (orgGroupIds != null && orgGroupIds.length > 0
-						&& orgGroupIds[0] != -1) {
+				if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 					oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
 				}
 			} else {
 				oql += QueryUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
 			}
+			
+			if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+				if (orgtypeids != null && orgtypeids.length > 0 && orgtypeids[0] != -1) {
+					oql += QueryUtil.getOrganizationTypeQuery(true, orgIds, orgtypeids);
+				}
+			} else {
+				oql += QueryUtil.getOrganizationTypeQuery(true, orgIds, orgtypeids);;
+			}
+			
 			oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 
-			if (filter.getFromPublicView() != null
-					&& filter.getFromPublicView() == true) {
+			if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
 				oql += QueryUtil.getTeamQueryManagement();
 			} else {
 				oql += QueryUtil.getTeamQuery(teamMember);
@@ -451,5 +460,64 @@ public class DbHelper {
 
         return total;
 	}
+    
+    public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        queryString.append(" where  role.roleCode='DN' ");
+         if (orgGroupId != null&&orgGroupId !=-1) {
+            queryString.append(" and org.orgGrpId=:orgGroupId ");
+        }
+        if (publicView) {
+            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+        }
 
+        queryString.append("order by org.name asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            if (orgGroupId != null&&orgGroupId !=-1) {
+                q.setLong("orgGroupId", orgGroupId);
+            }
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization names from database ", ex);
+        }
+        return organizations;
+    }
+    
+    public static List<AmpOrganisation> getDonorOrganisationByType(Long orgTypeId, boolean publicView) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        queryString.append(" where  role.roleCode='DN' ");
+         if (orgTypeId != null && orgTypeId !=-1) {
+            queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
+        }
+        if (publicView) {
+            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+        }
+
+        queryString.append("order by org.name asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            if (orgTypeId != null && orgTypeId !=-1) {
+                q.setLong("orgtypeId", orgTypeId);
+            }
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization names from database ", ex);
+        }
+        return organizations;
+    }
 }

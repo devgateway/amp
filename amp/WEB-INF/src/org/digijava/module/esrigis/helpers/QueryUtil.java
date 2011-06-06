@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -126,8 +127,7 @@ public class QueryUtil {
 		return calendar;
 	}
 
-	public static String getOrganizationQuery(boolean orgGroupView,
-			Long[] selectedOrganizations, Long[] selectedOrgGroups) {
+	public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups) {
 		String qry = "";
 		if (orgGroupView) {
 			qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId in ("
@@ -138,7 +138,18 @@ public class QueryUtil {
 		}
 		return qry;
 	}
+	
+	public static String getOrganizationTypeQuery(boolean orgTypeView, Long[] selectedOrganizations, Long[] selectedtypes) {
+		String qry = "";
+		if (orgTypeView) {
+			qry = " and  f.ampDonorOrgId.orgGrpId.orgType in ("+ getInStatement(selectedtypes) + ") ";
+		} else {
+			qry = " and f.ampDonorOrgId in ("+ getInStatement(selectedOrganizations) + ") ";
+		}
+		return qry;
+	}
 
+	
 	public static String getInStatement(Long ids[]) {
 		String oql = "";
 		for (int i = 0; i < ids.length; i++) {
@@ -239,7 +250,10 @@ public class QueryUtil {
 		
 		orgs = DbUtil.getDonorOrganisationByGroupId(filter.getOrgGroupId(), false); 
 		filter.setOrganizations(orgs);
-
+		
+		List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
+		filter.setOrganizationstype(orgtypes);
+		
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
 		filter.setSectors(sectors);
 

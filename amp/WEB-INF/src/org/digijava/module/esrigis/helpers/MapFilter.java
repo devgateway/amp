@@ -6,6 +6,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.TeamMember;
@@ -22,11 +23,14 @@ public class MapFilter {
 	private List<AmpCurrency> currencies;
 	private List<AmpOrganisation> organizations;
 	private List<AmpOrganisation> organizationsSelected;
+	private List<AmpOrgType> organizationstype;
+	private List<AmpOrgType> organizationstypeselected;
 	private List<AmpOrgGroup> orgGroups;
 	private List<AmpSector> sectors;
 	private List<AmpCategoryValueLocations> regions;
 	private List<AmpCategoryValueLocations> zones;
-
+	
+	private Long[] orgtypeIds;
 	private Long[] orgGroupIds;
 	private Long orgGroupId;
 	private Long[] orgIds;
@@ -483,6 +487,37 @@ public class MapFilter {
 
 	public void setDecimalsToShow(int decimalsToShow) {
 		this.decimalsToShow = decimalsToShow;
+	}
+
+
+	public List<AmpOrgType> getOrganizationstype() {
+		return organizationstype;
+	}
+
+
+	public void setOrganizationstype(List<AmpOrgType> organizationstype) {
+		this.organizationstype = organizationstype;
+	}
+
+
+	public List<AmpOrgType> getOrganizationstypeselected() {
+		return organizationstypeselected;
+	}
+
+
+	public void setOrganizationstypeselected(
+			List<AmpOrgType> organizationstypeselected) {
+		this.organizationstypeselected = organizationstypeselected;
+	}
+
+
+	public Long[] getOrgtypeIds() {
+		return orgtypeIds;
+	}
+
+
+	public void setOrgtypeIds(Long[] orgtypeIds) {
+		this.orgtypeIds = orgtypeIds;
 	}
 
 }

@@ -22,17 +22,21 @@ var activitiesarray = new Array();
 var loading;
 var cL;
 var basemapGallery;
-
+var activitieson;
+var structureson;
+var maxExtent;
+var basemap;
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
 	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
-	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
+	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
 	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
 	
+	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
 		layerLoadCount += 1;
@@ -66,10 +70,11 @@ function init() {
 // Create a map, set the extent, and add the services to the map.
 function createMapAddLayers(myService1, myService2) {
 	// create map
-	// convert the extent to Web Mercator
-	map = new esri.Map("map", {
-		extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)
-	});
+	var lods = basemap.tileInfo.lods;
+	 
+	 
+	map = new esri.Map("map", {lods:lods,
+		extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
@@ -81,10 +86,53 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(povertymap);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
+	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();
 	createBasemapGallery();
+	
+	maxExtent = map.extent;
 }
+
+
+function showExtent(extent, delta, levelChange, lod) {
+	//In javascript, object passes byref. so it's not correct to difine new extent using
+	//"var adjustedEx = extent;"
+	var adjustedEx = new esri.geometry.Extent(extent.xmin, extent.ymin, extent.xmax, extent.ymax);
+	var flag = false;	
+	//set a buffer to make the max extent a slightly bigger to void minor differences
+	//the map unit for this case is meter. 
+	var buffer = 100;
+	console.log(extent.xmin + "," + maxExtent.xmin);
+	var onLoadHandle = dojo.connect(basemap, "onUpdate", function() {
+		//cancel the connection because it shouldn only be triggered when extent changes. Other events causing tiles loading shoudn't trigger this.
+        dojo.disconnect(onLoadHandle);
+        if(extent.xmin < maxExtent.xmin-buffer) {
+			adjustedEx.xmin = maxExtent.xmin;
+			adjustedEx.xmax = Math.abs(extent.xmin - maxExtent.xmin) + extent.xmax;
+            flag = true;
+        }
+		if(extent.ymin < maxExtent.ymin-buffer) {
+		    adjustedEx.ymin = maxExtent.ymin;
+		    adjustedEx.ymax = Math.abs(extent.ymin - maxExtent.ymin) + extent.ymax;
+            flag = true;
+        }
+		if(extent.xmax-buffer > maxExtent.xmax) {
+		    adjustedEx.xmax = maxExtent.xmax;
+		    adjustedEx.xmin =extent.xmin - Math.abs(extent.xmax - maxExtent.xmax);
+            flag = true;
+        }
+		if(extent.ymax-buffer > maxExtent.ymax) {
+		    adjustedEx.ymax = maxExtent.ymax;
+		    adjustedEx.ymin =extent.ymin - Math.abs(extent.ymax - maxExtent.ymax);
+            flag = true;
+        }
+		if (flag === true) {
+			map.setExtent(adjustedEx);				
+		}
+		flag = false;
+	});		
+  }
 
 function toggleindicatormap(id) {
 	  var layer = map.getLayer(id);
@@ -202,6 +250,15 @@ function MapFind(activity){
     			primarypercentage = sector.sectorPercentage;
     		});
     		
+    		var donorname;
+    		dojo.forEach(activity.donors,function(donor) {
+    			if (donorname==null){
+    				donorname = donor.donorname;
+    			}else{
+    				donorname = donorname +","+ donor.donorname;
+    			}
+    		});
+    		
     		pgraphic.setAttributes( {
     			  "Activity":'<b>'+activity.activityname+'</b>',
     			  "Activity Preview":'<a href="/aim/selectActivityTabs.do~ampActivityId='+activity.id+'" target="_blank">Click here</a>',	
@@ -209,6 +266,7 @@ function MapFind(activity){
     			  "Activity commitments":'<b>'+activity.commitments+'</b>',
   				  "Activity disbursements":'<b>'+activity.disbursements+'</b>',
   				  "Activity expenditures":'<b>'+activity.expenditures+'</b>',
+  				  "Donors":'<b>'+donorname+'</b>',
   				  "Location":'<b>'+location.name+'</b>',
   				  "Location commitments":'<b>'+location.commitments+'</b>',
   				  "Location disbursements":'<b>'+location.disbursements+'</b>',
@@ -277,7 +335,6 @@ function drawpoints(){
 		 cL._features=[];
 		 cL.levelPointTileSpace = [];
 	 }
-	 hideLoading();
 	  	cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,
 			map: map,
@@ -294,6 +351,13 @@ function drawpoints(){
 	map.addLayer(cL);
 	timer_on=0;
 	}
+}
+
+function measuredistance(distance){
+	var distParams = new esri.tasks.DistanceParameters();
+	distParams.geometry1 = inputPoints[inputPoints.length -2]; 
+	distParams.geometry2 = inputPoints[inputPoints.length -1];
+	
 }
 
 //FFerreyra Functions
@@ -454,8 +518,8 @@ function getStructures(clear) {
 		map.removeLayer(map.getLayer("structuresMap"));
 		map.removeLayer(map.getLayer("activitiesMap"));
 	}catch(e){}
-    var structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: true, id: "structuresMap", visible: true});
-
+    var structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "structuresMap", visible: true});
+    structureson =true;
     var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?showstructures=true",
 		handleAs : "json",

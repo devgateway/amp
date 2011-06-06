@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -45,6 +46,7 @@ import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.QueryUtil;
+import org.digijava.module.esrigis.helpers.SimpleDonor;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.visualization.util.DbUtil;
@@ -106,10 +108,15 @@ public class DataDispatcher extends MultiAction {
 
 			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
 			Iterator fundItr = aA.getFunding().iterator();
+			ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
 				Collection fundDetails = ampFunding.getFundingDetails();
 				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
+				SimpleDonor donor = new SimpleDonor(); 
+				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
+				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
+				ap.getDonors().add(donor);
 			}
 			ap.setCommitments(calculations.getTotalCommitments().toString());
 			ap.setDisbursements(calculations.getTotActualDisb().toString());
@@ -322,16 +329,13 @@ public class DataDispatcher extends MultiAction {
 
 		// Gets children object according to objectType
 
-		if (parentId != null
-				&& objectType != null
-				&& (objectType.equals("Organization") || objectType
-						.equals("Organizations"))) {
+		if (parentId != null && objectType != null && (objectType.equals("Organizations")||objectType.equals("Organization"))) {
 			// Get list of sub organizations
 			Long orgGroupId = Long.parseLong(parentId);
 
 			List<AmpOrganisation> orgs;
 			try {
-				orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, false); 
+				orgs = DbHelper.getDonorOrganisationByGroupId(orgGroupId, false); 
 				JSONObject child = new JSONObject();
 				Iterator<AmpOrganisation> it = orgs.iterator();
 				while (it.hasNext()) {
@@ -346,9 +350,28 @@ public class DataDispatcher extends MultiAction {
 			} catch (Exception e) {
 				logger.error("unable to load organizations", e);
 			}
-		} else if (parentId != null
-				&& objectType != null
-				&& (objectType.equals("Sector") || objectType.equals("Sectors"))) {
+		}else if (parentId != null && objectType != null && objectType.equals("Orgtype")){
+			// Get list of sub organizations
+			Long orgtypeid = Long.parseLong(parentId);
+
+			List<AmpOrganisation> orgs;
+			try {
+				orgs = DbHelper.getDonorOrganisationByType(orgtypeid, false); 
+				JSONObject child = new JSONObject();
+				Iterator<AmpOrganisation> it = orgs.iterator();
+				while (it.hasNext()) {
+					AmpOrganisation org = it.next();
+					child.put("ID", org.getAmpOrgId());
+					child.put("name", org.getName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+			} catch (Exception e) {
+				logger.error("unable to load organizations", e);
+			}
+		}else if (parentId != null && objectType != null && (objectType.equals("Sector") || objectType.equals("Sectors"))) {
 			Long sectorId = Long.parseLong(parentId);
 			List<AmpSector> sectors;
 			try {
@@ -367,9 +390,7 @@ public class DataDispatcher extends MultiAction {
 			} catch (Exception e) {
 				logger.error("unable to load organizations", e);
 			}
-		} else if (parentId != null
-				&& objectType != null
-				&& (objectType.equals("Region") || objectType.equals("Regions"))) {
+		} else if (parentId != null && objectType != null && (objectType.equals("Region") || objectType.equals("Regions"))) {
 			Long regionId = Long.parseLong(parentId);
 			List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
@@ -427,7 +448,7 @@ public class DataDispatcher extends MultiAction {
 		datadispatcherform.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		datadispatcherform.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		datadispatcherform.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
-		
+		datadispatcherform.getFilter().setOrgtypeIds(getLongArrayFromParameter(request.getParameter("orgtypeIds")));
 		Long[] orgsGrpIds =  datadispatcherform.getFilter().getOrgGroupIds();
 		Long orgsGrpId =  datadispatcherform.getFilter().getOrgGroupId();
 		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {

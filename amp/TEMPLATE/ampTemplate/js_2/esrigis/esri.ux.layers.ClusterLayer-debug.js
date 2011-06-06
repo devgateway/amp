@@ -410,5 +410,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 }, this);
             }
         }, this);
+        
+        hideLoading();
     }
 });

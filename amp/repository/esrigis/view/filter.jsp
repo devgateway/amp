@@ -100,15 +100,21 @@
 				<div id="divOrganizationsFilter">
 					<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
 					<b>Organization Group:</b><br />
-						<html:select property="filter.orgGroupIds" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
+						<html:select multiple="true" property="filter.orgGroupIds" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
 	        				<html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	       	 				<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+	    				</html:select> 
+	    				<br>
+	    				<b>Organization Type:</b><br />
+						<html:select  property="filter.orgtypeIds" styleId="org_type_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
+	        				<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+	       	 				<html:optionsCollection property="filter.organizationstype" value="ampOrgTypeId" label="orgType"  />
 	    				</html:select> 
       					<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
 						<hr />
 						<div id="divOrgDrpdwn">
 						<b>Organization:</b><br />
-						<html:select property="filter.orgIds" multiple="true" styleId="org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
+						<html:select multiple="true	" property="filter.orgIds"  styleId="org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
       						</html:select>	
       						</div>	
@@ -253,6 +259,15 @@ function callbackChildren(e) {
 			}
 			objectType = "Organizations";
 			break;
+			
+		case "org_type_dropdown_ids":
+			if (countSelected(targetObj) > 1) {
+				document.getElementById("divOrgDrpdwn").style.display = "none";
+			} else {
+				document.getElementById("divOrgDrpdwn").style.display = "block";
+			}
+			objectType = "Orgtype";
+			break;
 	}
 
 	if (parentId != "" && objectType != ""){
@@ -275,6 +290,9 @@ var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
 				  getActivities(true);
+					if(structureson){ 
+				 		getStructures(true);
+					}
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -319,6 +337,7 @@ function callbackApplyFilter(e){
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_group_dropdown_ids");
+	params = params + "&orgtypeIds=" + getSelectionsFromElement("org_type_dropdown_ids");
 	params = params + "&orgIds=" + getSelectionsFromElement("org_dropdown_ids");
 	params = params + "&regionIds=" + getSelectionsFromElement("region_dropdown_ids");
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_dropdown_ids");
@@ -377,7 +396,14 @@ var callbackChildrenCall = {
 				    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 				    		}
 				    		break;
-				    
+				    	case "Orgtype":
+				    		var orgDropdown = document.getElementById("org_dropdown_ids");
+				    		orgDropdown.options.length = 0;
+				    		orgDropdown.options[0] = new Option("All", -1);
+				    		for(var i = 0; i < results.children.length; i++){
+				    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		break;
 				    }
 				}
 				catch (e) {
@@ -391,17 +417,13 @@ var callbackChildrenCall = {
 
 
 YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren);
+YAHOO.util.Event.onAvailable("org_type_dropdown_ids", callbackChildren);
+YAHOO.util.Event.addListener("org_type_dropdown_ids", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren)
 YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("sector_dropdown_ids", callbackChildren);
-YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("region_dropdown_id", callbackChildren);
-YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
-YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("sector_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.onDOMReady(changeTab(0));
 
@@ -412,7 +434,8 @@ function resetToDefaults(){
 		allGraphs[idx].style.display = "none";
 	}
 	showLoading();
-	
+
+	document.getElementById("org_type_dropdown_ids").selectedIndex = 0;
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;

@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -1381,8 +1382,11 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal totalCommitments, totalDisbursements, totalExpenditures;
 
 		totalPledges = 0.0;
-		totalCommitments = totalDisbursements = totalExpenditures = new BigDecimal(
-				0);
+		totalCommitments = totalDisbursements = totalExpenditures = new BigDecimal(0);
+		
+		ServletContext ampContext = getServlet().getServletContext();
+		boolean expendituresVisible = FeaturesUtil.isVisibleFeature("Expenditures", ampContext);
+		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext);
 
 		StringBuffer csvString = new StringBuffer();
 		csvString.append("Year");
@@ -1411,20 +1415,23 @@ public class DataDispatcher extends DispatchAction {
 				fundingData += "<" + i;
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-
-				DecimalWraper fundingDisb = DbUtil
-				.getFunding(filter, startDate, endDate, null, null,
-						Constants.DISBURSEMENT, Constants.ACTUAL);
-				xmlString
-				.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
-				fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-				DecimalWraper fundingComm = DbUtil
-				.getFunding(filter, startDate, endDate, null, null,
-						Constants.COMMITMENT, Constants.ACTUAL);
-				xmlString
-				.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
-				fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-				if (filter.isExpendituresVisible()) {
+				if (filter.isDisbursementsVisible()) {
+					DecimalWraper fundingDisb = DbUtil
+					.getFunding(filter, startDate, endDate, null, null,
+							Constants.DISBURSEMENT, Constants.ACTUAL);
+					xmlString
+					.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				}
+				if (filter.isCommitmentsVisible()) {
+					DecimalWraper fundingComm = DbUtil
+					.getFunding(filter, startDate, endDate, null, null,
+							Constants.COMMITMENT, Constants.ACTUAL);
+					xmlString
+					.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				}
+				if (filter.isExpendituresVisible() && expendituresVisible) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
@@ -1433,7 +1440,7 @@ public class DataDispatcher extends DispatchAction {
 					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
-				if (filter.isPledgeVisible()) {
+				if (filter.isPledgeVisible() && pledgesVisible) {
 					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);

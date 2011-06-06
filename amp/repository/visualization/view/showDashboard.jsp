@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <!-- Visualization's Stylesheet-->
 <link rel="stylesheet" href="css_2/visualization.css" type="text/css" />
@@ -511,14 +514,20 @@ function changeChild (selected){
 						<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 						<html:checkbox  property="filter.commitmentsVisible" styleId="commitments_visible"><digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
 						<html:checkbox  property="filter.disbursementsVisible" styleId="disbursements_visible"><digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						<feature:display module="Funding" name="Expenditures">
+							<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						</feature:display> 
+						<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
+							<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
+						</module:display>
 						<hr />
 						<br />
 						<digi:trn>What data should the dashboard show?</digi:trn><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
                             <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio><br />
                             <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio><br />
-                            <html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio><br />
+                            <feature:display module="Funding" name="Expenditures">
+                            	<html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio><br />
+                            </feature:display>
 						<hr />
 					</div>
 				</div>
@@ -1465,10 +1474,18 @@ var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 
+	alert("comCheck: "+document.getElementById("commitments_visible").checked);
+	alert("disCheck: "+document.getElementById("disbursementsVisible").checked);
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
 	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
-	document.getElementById("expendituresVisible").value = document.getElementById("expenditures_visible").checked;
-	document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
+	alert("comValue: "+document.getElementById("commitmentsVisible").value);
+	alert("disValue: "+document.getElementById("disbursementsVisible").value);
+	if (document.getElementById("expenditures_visible")!=null){
+		document.getElementById("expendituresVisible").value = document.getElementById("expenditures_visible").checked;
+	}
+	if (document.getElementById("pledge_visible")!=null){
+		document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
+	}
 	document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
@@ -1477,10 +1494,11 @@ var allGraphs = document.getElementsByName("flashContent");
 	if (document.getElementById("transaction_type_1").checked == true) {
 		document.getElementById("transactionType").value = document.getElementById("transaction_type_1").value;
 	}
-	if (document.getElementById("transaction_type_2").checked == true) {
-		document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
+	if (document.getElementById("transaction_type_2")!=null){
+		if (document.getElementById("transaction_type_2").checked == true) {
+			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
+		}
 	}
-	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
 	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
@@ -1875,11 +1893,15 @@ function refreshBoxes(o){
 	if (document.getElementById("disbursements_visible").checked==true) {
 		inner = inner + trnDisbursements + " - ";
 		}
-	if (document.getElementById("expenditures_visible").checked==true) {
-		inner = inner + trnExpenditures + " - ";
+	if (document.getElementById("expenditures_visible")!=null){
+		if (document.getElementById("expenditures_visible").checked==true) {
+			inner = inner + trnExpenditures + " - ";
 		}
-	if (document.getElementById("pledge_visible").checked==true) {
-		inner = inner + trnPledges;
+	}
+	if (document.getElementById("pledge_visible")!=null){
+		if (document.getElementById("pledge_visible").checked==true) {
+			inner = inner + trnPledges;
+		}
 	}
 	div.innerHTML = inner;
 

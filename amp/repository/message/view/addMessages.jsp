@@ -814,12 +814,12 @@ span.extContactDropdownEmail {
 									<logic:notEmpty name="team" property="members">
 										<div class="rec_group_container">
 											<div class="msg_grp_name">
-												<input class="group_checkbox" type="checkbox" value="t:${team.id}" style="float:left;">
+												<html:multibox property="receiversIds" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
 												<div class="msg_lbl">---${team.name}---</div>
 											</div>
 											<div class="msg_grp_mem_name">
 												<c:forEach var="tm" items="${team.members}">
-													<input name="receiversIds" id="t:${team.id}" type="checkbox" value="m:${tm.memberId}" />${tm.memberName}<br/>
+													<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" />${tm.memberName}<br/>
 												</c:forEach>
 											</div>
 										</div>

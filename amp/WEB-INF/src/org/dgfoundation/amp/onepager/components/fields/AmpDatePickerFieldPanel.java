@@ -106,6 +106,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	public AmpDatePickerFieldPanel(String id, IModel<Date> model,
 			AmpDatePickerFieldPanel otherDatePicker, String fmName) {
 		this(id,  model, fmName,otherDatePicker, false);
+		this.fmType = AmpFMTypes.MODULE;
 	}
 
 	

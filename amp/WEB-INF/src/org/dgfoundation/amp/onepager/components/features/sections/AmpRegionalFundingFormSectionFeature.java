@@ -43,9 +43,13 @@ public class AmpRegionalFundingFormSectionFeature extends
 		super(id, fmName, am);
 		final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
 				am, "regionalFundings");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet());
 
 		final IModel<Set<AmpActivityLocation>> locationModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
+		if (locationModel.getObject() == null)
+			locationModel.setObject(new HashSet());
 
 		/**
 		 * The following readonly model creates a set of the

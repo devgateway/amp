@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRegionalTransactionsFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -43,10 +44,10 @@ public class AmpRegionalTransactionsSubsectionFeature extends
 				transactionType,cvLocationModel);
 		add(transactionsTableFeature);
 
-		AmpButtonField addCommit = new AmpButtonField("addTransaction",
-				"Add Transaction") {
+		AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addTransaction",
+				"Add Transaction", "Add Transaction") {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				AmpRegionalFunding fd = new AmpRegionalFunding();
 				fd.setTransactionAmount(0d);
 				fd.setAdjustmentType(Constants.ACTUAL);

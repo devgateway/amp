@@ -32,6 +32,7 @@ table tr td.f-names{font-weight:bold;}
 .dropdwn_sm_wksp {border:1px solid #CCCCCC; font-size:11px; background-color:#FFFFFF; color:#000000;}
 .dropdwn_sm_lng {border:1px solid #728896; font-size:11px; background-color:#496678; color:#FFFFFF;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
+fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
@@ -406,4 +407,3 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
 #actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
 
-.settingsLink {color:#376091; font-weight:bold;}

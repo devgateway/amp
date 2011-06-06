@@ -305,7 +305,7 @@
 							</tr>
 						</logic:iterate>
 						<tr>
-							<td colspan="7" height="100%" style="border-top:1px solid black;">&nbsp;
+							<td colspan="7" height="100%" style="border-top:1px solid #CCCCCC;">&nbsp;
 									
 							</td>
 							<!--

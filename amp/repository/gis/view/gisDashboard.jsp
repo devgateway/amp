@@ -135,16 +135,17 @@
 	}
 	
 	div.sec_scheme_selector_default {
-		background-color: #edf5ff;
+		background-color: #5E8AD1;
 	}
 	
 	div.sec_scheme_selector_default:hover {
-		background-color: #d2e1e8;
+		background-color: #3D5987;
 	}
 	
 	div.sec_scheme_selector_selected {
-		background-color: #222e5d;
+		background-color: #FF6000;
 		color:white;
+		font-weight:bold;
 	}
 	
 	div.sec_scheme_selector_active {
@@ -152,6 +153,9 @@
 		color:white;
 	}
 	
+	div.child_sector_container {
+	border:1px solid #CCCCCC !important; background-color:#F2F2F2 !important;	 
+	}
 	
 	div.filter_wnd_background {
 	/*
@@ -234,8 +238,8 @@
 	            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
 	        	</select>
 	        </td>
-	        <td width="10">
-			        &nbsp;
+	        <td width="10">&nbsp;
+			        
 					</td>
 				</tr>
 			</field:display>
@@ -289,8 +293,8 @@
 					<td align="right">
             <input id="showOnlyCurentWS" type="checkbox" value="true">
 	        </td>
-	        <td width="10">
-			        &nbsp;
+	        <td width="10">&nbsp;
+			        
 					</td>
 				</tr>
 			</field:display>
@@ -312,7 +316,7 @@
 				<tr>
 					<td colspan="3">
 						<div id="sector_selector_hider">
-					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
+					    <div id="filtrSectorSelectorContainer" style="width:504px;"></div>
 					  </div>
 					</td>
 				</tr>

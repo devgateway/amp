@@ -136,6 +136,7 @@
 	
 	div.sec_scheme_selector_default {
 		background-color: #5E8AD1;
+		color:#FFFFFF;
 	}
 	
 	div.sec_scheme_selector_default:hover {
@@ -321,7 +322,7 @@
 					</td>
 				</tr>
 				
-				<tr><td align='right' colspan="3">
+				<tr><td align='center' colspan="3">
 				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()' class="buttonx">
 					&nbsp;
 				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='hidePanel(0)' class="buttonx">

@@ -78,25 +78,24 @@
 										style="border-width: 1px; border-color: #D0D0D0; border-style: solid; padding: 5px;">
 											<tr>
 												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
-													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Export to PDF</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: bottom;" border="0" />
+													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 												    	<digi:trn>Export to PDF</digi:trn>
 													</a>|&nbsp;
 												    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
-												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" style="vertical-align: bottom;"/>
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 												    	<digi:trn>Export to Excel</digi:trn>
 												    </a>|&nbsp;
 												    <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
-														<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" style="vertical-align: bottom;"/>
+														<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="3" style="vertical-align: middle; border-color:#FFFFFF;"/>
 														<digi:trn>Print</digi:trn> 
 													</a>|&nbsp;
 												</td>
-												<td noWrap="nowrap" align="right" style="padding-right: 5px; padding-top: 5px; color: #376091;font-weight: bold;">
-													<a style="height: 20px; cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>
-													|&nbsp;
+												<td noWrap="nowrap" align="right" style="color: #376091;font-weight: bold;">
+													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;|&nbsp;
 													<a style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">
 														<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
-													</a>
+													</a>&nbsp;&nbsp;
 												</td>
 											</tr>
 											<tr>

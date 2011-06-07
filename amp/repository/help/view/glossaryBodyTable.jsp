@@ -83,7 +83,7 @@
 		</tr>
 		<tr>
 			<td>						
-				<table width="150" border="1" align="right" class="toolbartable">
+				<table width="150" border="0" align="right" class="toolbartable">
 					<tr>
 						<td noWrap align="center" valign="middle">		
 							<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">

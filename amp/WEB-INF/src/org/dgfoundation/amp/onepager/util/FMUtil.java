@@ -25,6 +25,7 @@ public final class FMUtil {
 	private static HashMap<String,Boolean> fmVisible=new HashMap<String,Boolean>();
 	private static HashMap<String,Boolean> fmEnabled=new HashMap<String,Boolean>();
 	private static boolean fmRootChecked = false;
+	private static final String fmRoot="/Activity Form";
 
 	private static final class PathException extends Exception{
 		private static final long serialVersionUID = 1L;
@@ -44,10 +45,10 @@ public final class FMUtil {
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
 			if(ampTreeVisibility!=null){
-				if (!existInVisibilityTree(ampTreeVisibility, "/Activity Form", AmpFMTypes.MODULE)){
+				if (!existInVisibilityTree(ampTreeVisibility, fmRoot, AmpFMTypes.MODULE)){
 					logger.info("Activity Form FM Root Node doesn't exist, attempting to create!");
 					try {
-						addModuleToFM(context, ampTreeVisibility, "/Activity Form", null);
+						addModuleToFM(context, ampTreeVisibility, fmRoot, null);
 					} catch (Exception e) {
 						logger.error(">>>");
 						logger.error(">>> Unable to add Activity Form FM ROOT:", e);
@@ -65,13 +66,11 @@ public final class FMUtil {
 			String fmParentPathString = fmPathString.substring(0, fmPathString.lastIndexOf('/'));
 			
 			AmpFMConfigurable fmc = (AmpFMConfigurable) c;
-			Component cParent = getFirstFmConfigurableParent(c);
-			AmpFMConfigurable fmcParent = (AmpFMConfigurable) cParent;
 			
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 			
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
-			if(ampTreeVisibility!=null){
+			if(ampTreeVisibility!=null && fmParentPathString.length()>0){
 				if (!existInVisibilityTree(ampTreeVisibility, fmParentPathString, AmpFMTypes.MODULE)){
 					logger.error("Parent of current component isn't in the FM Tree: " + fmPathString);
 					logger.error("Current feature is disabled!");
@@ -348,9 +347,10 @@ public final class FMUtil {
 			AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			context.setAttribute("ampTreeVisibility",ampTreeVisibility);
+			logger.info("Changed FM visible status of "+fmc.getFMName()+ " to "+visible);
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception : " + ex.getMessage()+" while changing FM visible status for "+fmc.getFMName());
 		}
 		finally {
 			if (session != null) {
@@ -454,10 +454,10 @@ public final class FMUtil {
 			}
 			visitor = visitor.getParent();
 		}
-		ret = "[module: Activity Form] "+ ret;
-		mmm.addFirst(AmpFMTypes.MODULE);
-		FMInfo tmp = new FMInfo(AmpFMTypes.MODULE, "Activity Form");
-		fmInfoPath.addFirst(tmp);
+//		ret = "[module: Activity Form] "+ ret;
+//		mmm.addFirst(AmpFMTypes.MODULE);
+//		FMInfo tmp = new FMInfo(AmpFMTypes.MODULE, "Activity Form");
+//		fmInfoPath.addFirst(tmp);
 		
 		//Check that path is compatible with FM structure:
 		//		(module)*{(feature)}?

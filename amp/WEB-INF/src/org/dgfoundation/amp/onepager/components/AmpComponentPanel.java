@@ -5,8 +5,6 @@ package org.dgfoundation.amp.onepager.components;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -16,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 
@@ -36,6 +35,13 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected IndicatingAjaxLink enabledFmButton;
 	protected AjaxCheckBox cascadeFmToChildren;
 	protected Label cascadeFmToChildrenLabel;
+	
+	public String getShorterFmName() {
+		int maxLen=26;
+		if(fmType.equals(AmpFMTypes.FEATURE)) maxLen=13; 
+		if(getFMName().length()>maxLen) return getFMName().substring(0,maxLen)+".."; 
+			else return getFMName();
+	}
 	
 	public AjaxCheckBox getCascadeFmToChildren() {
 		return cascadeFmToChildren;
@@ -81,7 +87,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 */
 	public void switchFmVisible(AjaxRequestTarget target) {
 		FMUtil.switchFmVisible(AmpComponentPanel.this);
-		visibleFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")));
+		visibleFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")+ " "+getShorterFmName())));
 		target.addComponent(this);
 	}
 
@@ -91,44 +97,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 */
 	public void switchFmEnabled(AjaxRequestTarget target) {
 		FMUtil.switchFmEnabled(AmpComponentPanel.this);
-		enabledFmButton.add(new AttributeModifier("value", new Model(FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable")));
+		enabledFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable") + " "+getShorterFmName())));
 		target.addComponent(this);
 	}
-	
-	/**
-	 * Cascade the {@link #switchFmVisible(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
-	 * @param target
-	 */
-	public void cascadeFmVisible(AjaxRequestTarget target, final boolean visible, Component c) {
-		if (c instanceof MarkupContainer){
-			MarkupContainer m = (MarkupContainer) c;
-			for (int i = 0; i < m.size(); i++) {
-				Component component = m.get(i);
-				if(component instanceof AmpComponentPanel) {
-					FMUtil.changeFmVisible(component, visible);
-				}
-				cascadeFmVisible(target,visible, component);
-			}
-		}
-	}
-
-	/**
-	 * Cascade the {@link #switchFmEnabled(AjaxRequestTarget)} to all children of this {@link AmpComponentPanel}
-	 * @param target
-	 */
-	public void cascadeFmEnabled(AjaxRequestTarget target, boolean enabled, Component c) {
-		if (c instanceof MarkupContainer){
-			MarkupContainer m = (MarkupContainer) c;
-			for (int i = 0; i < m.size(); i++) {
-				Component component = m.get(i);
-				if(component instanceof AmpComponentPanel) {
-					FMUtil.changeFmEnabled(component, enabled);
-				}
-				cascadeFmEnabled(target, enabled, component);
-			}
-		}
-	}
-	
 	
 	/**
 	 * @param id
@@ -147,8 +118,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				switchFmVisible(target);
-				if(cascadeFmToChildren.getModelObject()) 
-					cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this), AmpComponentPanel.this);				
+				if(cascadeFmToChildren.getModelObject()!=null && cascadeFmToChildren.getModelObject()) 
+					OnePagerUtil.cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this), AmpComponentPanel.this);				
 			}
 		};
 		visibleFmButton.setOutputMarkupId(true);
@@ -159,8 +130,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				switchFmEnabled(target);
-				if(cascadeFmToChildren.getModelObject()) 
-					cascadeFmEnabled(target,FMUtil.isFmEnabled(AmpComponentPanel.this), AmpComponentPanel.this);  
+				if(cascadeFmToChildren.getModelObject()!=null && cascadeFmToChildren.getModelObject()) 
+					OnePagerUtil.cascadeFmEnabled(target,FMUtil.isFmEnabled(AmpComponentPanel.this), AmpComponentPanel.this);  
 			}
 		};
 		
@@ -219,8 +190,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		setEnabled(fmMode?true:fmEnabled);
 		setVisible(fmMode?true:fmVisible);
 		
-		enabledFmButton.add(new AttributeModifier("value", new Model(fmEnabled?"Disable":"Enable")));
-		visibleFmButton.add(new AttributeModifier("value", new Model(fmVisible?"Hide":"Show")));
+		enabledFmButton.add(new AttributeModifier("value", new Model((fmEnabled?"Disable":"Enable")+ " "+getShorterFmName())));
+		visibleFmButton.add(new AttributeModifier("value", new Model((fmVisible?"Hide":"Show")+ " "+getShorterFmName())));
 		
 		if(fmMode) {
 			visibleFmButton.setVisible(true);

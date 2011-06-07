@@ -8,19 +8,12 @@ import java.util.Map;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
-import org.dgfoundation.amp.onepager.AmpWebSession;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.wicketstuff.jquery.JQueryBehavior;
 
 /**

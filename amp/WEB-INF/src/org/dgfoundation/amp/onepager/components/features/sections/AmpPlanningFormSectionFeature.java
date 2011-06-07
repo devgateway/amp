@@ -14,14 +14,12 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCommentSimpleWrapper;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Implements the planning section of the one pager
  * 
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
- * @see OnePager
  */
 public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 

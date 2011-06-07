@@ -7,14 +7,12 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpInternalIdsFormTableFeature;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Organisation IDs from the activity form. This is also an AMP Feature
  * 
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
- * @see OnePager
  */
 public class AmpInternalIdsFormSectionFeature extends
 		AmpFormSectionFeaturePanel {

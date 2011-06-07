@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.onepager;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -13,7 +12,6 @@ import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.JspResolver;

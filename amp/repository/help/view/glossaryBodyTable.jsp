@@ -25,6 +25,19 @@
 	};  
 </script>
 
+<script type="text/javascript">
+	function toggleActionForm(type) {
+		if (type == null) return false;
+		if (type == "xls") {
+			document.forms[1].action = "/help/xlsExport.do";
+		} else if (type == "pdf") {
+			document.forms[1].action = "/help/pdfExport.do";
+		} else if (type == "doc") {
+			document.forms[1].action = "/help/wordExport.do";
+		}
+		document.forms[1].submit();
+	}
+</script>
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
@@ -66,6 +79,31 @@
 		<tr>
 			<td class="subtitle-blue">
 				<digi:trn>Glossary</digi:trn>	
+			</td>
+		</tr>
+		<tr>
+			<td>						
+				<table width="150" border="1" align="right" class="toolbartable">
+					<tr>
+						<td noWrap align="center" valign="middle">		
+							<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+								<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+							</a>
+						</td>
+				
+						<td noWrap align="center" valign="middle">
+							<a href="#" target="_blank" onclick="toggleActionForm('doc'); return false;">
+								<digi:img hspace="2" vspace="2" src="module/aim/images/word_icon.gif" border="0" alt="Export to Word" />
+							</a>
+						</td>
+				
+						<td noWrap align="center" valign="middle">
+							<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+								<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+							</a>
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		<tr>

@@ -40,5 +40,9 @@
 		<action name="glossaryForm" path="/help/searchGlossary" scope="request" type="org.digijava.module.help.action.SearchGlossary" validate="false" />
 		<action name="glossaryForm" path="/help/saveTopicTitle" scope="request" type="org.digijava.module.help.action.SaveTopicTitle" validate="false" />
 		
+		<action name="glossaryForm" path="/help/pdfExport" scope="request" type="org.digijava.module.help.action.PdfExport" validate="false" />
+		<action name="glossaryForm" path="/help/wordExport" scope="request" type="org.digijava.module.help.action.WordExport" validate="false" />
+		<action name="glossaryForm" path="/help/xlsExport" scope="request" type="org.digijava.module.help.action.XlsExport" validate="false" />
+		
 	</action-mappings>
 </struts-config>

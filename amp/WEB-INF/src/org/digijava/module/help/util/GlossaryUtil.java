@@ -336,4 +336,42 @@ public class GlossaryUtil {
 		}
 		return helpTopics;
 	}
+
+	/**
+	 * Retrieves direct children topics of specified parent topic.
+	 * @param topic paremt topic, should NOT be NULL
+	 * @param dbSession db session, should NOT be NULL
+	 * @return list of one level children topics or NULL
+	 * @throws DgException
+	 */
+	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws AimException {
+		Session session = null;
+		Query query = null;
+		List<HelpTopic> helpTopics = null;
+		String queryString=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "from "+ HelpTopic.class.getName()
+						+ " topic where (topic.topicType=:GLOSS_TYPE) and (topic.siteId=:siteId) "
+						+ " and (topic.moduleInstance=:moduleInstance) ";
+			if (parentId == null) {
+				queryString += "and topic.parent is null";
+			} else {
+				queryString += "and (topic.parent.helpTopicId=:id)";
+			}
+			query = session.createQuery(queryString);	
+			query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
+			query.setParameter("siteId", siteId);
+			query.setParameter("moduleInstance", moduleInstance);
+			if (parentId != null) {
+				query.setParameter("id", parentId);
+			}
+			helpTopics = query.list();			
+
+		} catch (Exception e) {
+			logger.error("Unable to load help topics");
+  			throw new AimException("Unable to Load Help Topics", e);
+		}
+		return helpTopics;
+	}
 }

@@ -256,12 +256,19 @@ function resetToDefaults(){
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
-	removeOptions("org_dropdown_id");
-	removeOptions("zone_dropdown_id");
-	removeOptions("sub_sector_dropdown_id");
+	removeOptionsDropdown("org_dropdown_id");
+	removeOptionsDropdown("zone_dropdown_id");
+	removeOptionsDropdown("sub_sector_dropdown_id");
 	applyFilterPopin();
 }
-
+function removeOptionsDropdown(object){
+	obj = document.getElementById(object);
+	for(var i = 1; i < obj.options.length; i++){
+		obj.options[i].remove;
+	}
+	obj.options.length = 0;
+	obj.options[0] = new Option("All", -1);
+}
 function removeOptions (obj){
 	var div = document.getElementById(obj);
 	div.innerHTML = "";

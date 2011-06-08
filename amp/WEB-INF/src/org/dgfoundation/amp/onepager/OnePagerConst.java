@@ -27,20 +27,39 @@ public final class OnePagerConst {
 	public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
 	
-	//TODO: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
-	public final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";
-	public final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
-	public final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
-	public final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
-	public final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
+	/**
+	 * NOTICE: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
+	 */
+	/**
+	 * @deprecated
+	 * Don't use this unless necessary, it updates all
+	 * sliders on page and some might get the click set 
+	 * more than once!
+	 */
+	@Deprecated
+	private final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";
 
-	public final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
+	private final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	private final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	private final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
+	private final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
+	private final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
 	
+	/**
+	 * Use to set the slider for current component only
+	 * @param c - make sure that c has setMarkupId(true)
+	 * @return
+	 */
 	public static String getToggleJS(Component c)
 	{
 		return String.format(toggleJS, c.getMarkupId());
 	}
 
+	/**
+	 * Use to set the slider for current component's children
+	 * @param c - make sure that c has setMarkupId(true)
+	 * @return
+	 */
 	public static String getToggleChildrenJS(Component c)
 	{
 		return String.format(toggleChildrenJS, c.getMarkupId());
@@ -52,6 +71,7 @@ public final class OnePagerConst {
 	}
 	
 	/**
+	 * Slide the section on refresh
 	 * Use this when c is a sibbling with the slider or the slider itself
 	 * @param c
 	 * @return
@@ -61,6 +81,7 @@ public final class OnePagerConst {
 	}
 
 	/**
+	 * Slide the section on refresh
 	 * Use this when c is the parent to the slider
 	 * @param c
 	 * @return

@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
@@ -89,6 +90,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		FMUtil.switchFmVisible(AmpComponentPanel.this);
 		visibleFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")+ " "+getShorterFmName())));
 		target.addComponent(this);
+		target.appendJavascript(OnePagerConst.getToggleChildrenJS(this));
 	}
 
 	/**
@@ -99,6 +101,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		FMUtil.switchFmEnabled(AmpComponentPanel.this);
 		enabledFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable") + " "+getShorterFmName())));
 		target.addComponent(this);
+		target.appendJavascript(OnePagerConst.getToggleChildrenJS(this));
 	}
 	
 	/**

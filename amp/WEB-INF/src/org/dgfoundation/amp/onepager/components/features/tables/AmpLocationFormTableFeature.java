@@ -127,7 +127,7 @@ public class AmpLocationFormTableFeature extends
 							}
 							regionalFundingFeature.getList().removeAll();
 							target.addComponent(regionalFundingFeature);
-							target.appendJavascript(OnePagerConst.slideToggle);
+							target.appendJavascript(OnePagerConst.getToggleChildrenJS(regionalFundingFeature));
 							
 							percentageValidationField.reloadValidationField(target);							
 						}
@@ -184,7 +184,7 @@ public class AmpLocationFormTableFeature extends
 				target.addComponent(list.getParent());
 				regionalFundingFeature.getList().removeAll();
 				target.addComponent(regionalFundingFeature);
-				target.appendJavascript(OnePagerConst.slideToggle);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(regionalFundingFeature));
 				list.removeAll();
 			}
 

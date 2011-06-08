@@ -67,7 +67,7 @@ public class AmpComponentsFormSectionFeature extends
 				AmpComponent comp = new AmpComponent();
 				setModel.getObject().add(comp);
 				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerConst.slideToggle);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(this.getParent()));
 			}
 		};
 		add(addbutton);

@@ -72,7 +72,7 @@ public class AmpDonorFundingFormSectionFeature extends
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(AmpDonorFundingFormSectionFeature.this);
-						target.appendJavascript(OnePagerConst.slideToggle);
+						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 						list.removeAll();
 					}
 				};
@@ -106,7 +106,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				setModel.getObject().add(funding);
 				list.removeAll();
 				target.addComponent(AmpDonorFundingFormSectionFeature.this);
-				target.appendJavascript(OnePagerConst.slideToggle);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 			}
 
 			@Override

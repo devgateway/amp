@@ -66,7 +66,6 @@ public class AmpStructuresFormSectionFeature extends
 				AmpStructure stru = new AmpStructure();
 				setModel.getObject().add(stru);
 				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerConst.slideToggle);
 			}
 		};
 		add(addbutton);

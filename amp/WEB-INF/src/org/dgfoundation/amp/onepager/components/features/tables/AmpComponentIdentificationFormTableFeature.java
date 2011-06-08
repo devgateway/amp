@@ -127,7 +127,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		if (update){
 			target.addComponent(this);
 			target.addComponent(componentFundingSection);
-			target.appendJavascript(OnePagerConst.slideToggle);
+			target.appendJavascript(OnePagerConst.getToggleChildrenJS(componentFundingSection));
 		}
 	}
 	

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -58,6 +60,33 @@ public class XlsExport extends Action {
     		//
 			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(siteId, moduleInstance, null);
 			//
+			HSSFFont font = workbook.createFont();
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			//
+			HSSFCellStyle style = workbook.createCellStyle();
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			style.setFont(font);
+			//
+			HSSFRow row = sheet.createRow(r[0].intValue());
+			HSSFCell cell = row.createCell(c[0].intValue());			
+    		// path
+    		cell.setCellValue(TranslatorWorker.translateText("PATH", language, siteId));
+    		cell.setCellStyle(style);
+			//
+    		c[0]++;
+    		cell = row.createCell(c[0].intValue());
+    		// term
+    		cell.setCellValue(TranslatorWorker.translateText("TERM", language, siteId));
+    		cell.setCellStyle(style);
+            //
+    		c[0]++;
+    		cell = row.createCell(c[0].intValue());
+    		//
+    		cell.setCellValue(TranslatorWorker.translateText("DEFINITION", language, siteId));
+    		cell.setCellStyle(style);
+    		//
+			r[0]++;
+			c[0] = 0;
 			writechild(r, c, helpTopics, moduleInstance, siteId, language, sheet);
 			//
     		ServletOutputStream out = response.getOutputStream();

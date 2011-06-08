@@ -1474,12 +1474,8 @@ var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 
-	alert("comCheck: "+document.getElementById("commitments_visible").checked);
-	alert("disCheck: "+document.getElementById("disbursementsVisible").checked);
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
 	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
-	alert("comValue: "+document.getElementById("commitmentsVisible").value);
-	alert("disValue: "+document.getElementById("disbursementsVisible").value);
 	if (document.getElementById("expenditures_visible")!=null){
 		document.getElementById("expendituresVisible").value = document.getElementById("expenditures_visible").checked;
 	}

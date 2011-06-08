@@ -337,14 +337,18 @@ public class GlossaryUtil {
 		return helpTopics;
 	}
 
+	
 	/**
+	 * /**
 	 * Retrieves direct children topics of specified parent topic.
-	 * @param topic paremt topic, should NOT be NULL
-	 * @param dbSession db session, should NOT be NULL
-	 * @return list of one level children topics or NULL
+	 *
+	 * @param siteId , should NOT be NULL
+	 * @param moduleInstance, should NOT be NULL
+	 * @param parentId , should NOT be NULL
+	 * @return direct children topics
 	 * @throws DgException
 	 */
-	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws AimException {
+	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws DgException {
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -369,9 +373,10 @@ public class GlossaryUtil {
 			helpTopics = query.list();			
 
 		} catch (Exception e) {
-			logger.error("Unable to load help topics");
-  			throw new AimException("Unable to Load Help Topics", e);
+			logger.error("Unable to load Glossary topics");
+  			throw new AimException("Unable to Load Glossary Topics", e);
 		}
 		return helpTopics;
 	}
+	
 }

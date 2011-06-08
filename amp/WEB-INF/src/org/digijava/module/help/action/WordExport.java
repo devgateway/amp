@@ -68,7 +68,7 @@ public class WordExport extends Action {
             //
 			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(siteId, moduleInstance, null);
 			//
-            writechild(10, helpTopics, moduleInstance, siteId, language, document);
+            writechild(20, helpTopics, moduleInstance, siteId, language, document);
         	//
     		document.close();
     		writer2.close();
@@ -87,7 +87,7 @@ public class WordExport extends Action {
     
     /**
      * 
-     * @param left
+     * @param size
      * @param helpTopics
      * @param moduleInstance
      * @param siteId
@@ -95,22 +95,23 @@ public class WordExport extends Action {
      * @param document
      */
     @SuppressWarnings("unchecked")
-	private void writechild (float left, List<HelpTopic> helpTopics, String moduleInstance, String siteId, String language, Document document) {
+	private void writechild (float size, List<HelpTopic> helpTopics, String moduleInstance, String siteId, String language, Document document) {
   		//
     	try {
     		List<HelpTopic> childs = null;
 			String body = null;
 			Paragraph pp = null;
 			List<Element> objects = null;
-			Font fontT = FontFactory.getFont("Arial", 14, Font.BOLD);
-			Font fontB = FontFactory.getFont("Arial", 12, Font.NORMAL);
+			if (size < 10) size = 10;
+			Font fontT = FontFactory.getFont("Arial", size, Font.BOLD);
+			Font fontB = FontFactory.getFont("Arial", 10, Font.NORMAL);
 			for (HelpTopic helpTopic : helpTopics) {
 				//
 				pp = new Paragraph(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, siteId), fontT);
-				pp.setIndentationLeft(left);
-				//
-				document.add(pp);
-	            document.add(new Paragraph(" "));
+            	//
+            	document.add(pp);
+            	document.add(new Paragraph(" "));
+	            //
 	            //
 				body = DbUtil.getEditorBody(siteId, helpTopic.getBodyEditKey(), language);
 				if (body == null) body = "";
@@ -119,7 +120,6 @@ public class WordExport extends Action {
 	            for (Element element : objects) {
 	            	pp = (Paragraph) element;
 	            	pp.setFont(fontB);
-	            	pp.setIndentationLeft(left);
 	            	//
 	            	document.add(pp);
 	            }
@@ -127,7 +127,7 @@ public class WordExport extends Action {
 	            //
 	            childs = GlossaryUtil.getChildTopics(siteId, moduleInstance, helpTopic.getHelpTopicId());
 	            if ((childs != null) && (!childs.isEmpty())) {
-		            writechild((left+20), childs, moduleInstance, siteId, language, document);	
+		            writechild((size-2), childs, moduleInstance, siteId, language, document);	
 	            }
 			}
     	} catch (Exception ex) {

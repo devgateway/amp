@@ -22,13 +22,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.util.Html2TextCallback;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.util.GlossaryUtil;
-
-import com.lowagie.text.Element;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
 
 /**
  * @author mouhamad
@@ -85,7 +82,6 @@ public class XlsExport extends Action {
      * @param language
      * @param sheet
      */
-	@SuppressWarnings("unchecked")
 	private void writechild (Integer[] r, Integer[] c, List<HelpTopic> helpTopics, String moduleInstance, String siteId, String language, HSSFSheet sheet) {
   		//
     	try {
@@ -93,34 +89,33 @@ public class XlsExport extends Action {
 			String body = null;
 			HSSFRow row = null;
 			HSSFCell cell = null;
-			List<Element> objects = null;
+			Html2TextCallback html2TextCallback = new Html2TextCallback();
 			for (HelpTopic helpTopic : helpTopics) {
 				//
 				row = sheet.createRow(r[0].intValue());
 				cell = row.createCell(c[0].intValue());
-	    		//
+	    		// path
+	    		cell.setCellValue(topicPath(helpTopic));
+	            //
+	    		c[0]++;
+	    		cell = row.createCell(c[0].intValue());
+	    		// term
 	    		cell.setCellValue(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, siteId));
-	            //    		
-	    		r[0]++;
-				row = sheet.createRow(r[0].intValue());
-				cell = row.createCell(c[0].intValue());
-	    		//
+	            //
+	    		c[0]++;
+	    		cell = row.createCell(c[0].intValue());
+	    		// definition
 				body = DbUtil.getEditorBody(siteId, helpTopic.getBodyEditKey(), language);
 				if (body == null) body = "";
 				//
-				objects = HTMLWorker.parseToList(new StringReader(TranslatorWorker.translateText(body, language, siteId)), null);
-	            for (Element element : objects) {
-	            	
-	            	//
-	            	cell.setCellValue(element.toString());
-	            }
-				//cell.setCellValue(TranslatorWorker.translateText(body, language, siteId));
-	            //	   		
+				html2TextCallback.parse(new StringReader(TranslatorWorker.translateText(body, language, siteId)));
+				cell.setCellValue(html2TextCallback.getText());
+	    		//
 	    		r[0]++;
+	    		c[0] = 0;
 	    		//
 	            childs = GlossaryUtil.getChildTopics(siteId, moduleInstance, helpTopic.getHelpTopicId());
 	            if ((childs != null) && (!childs.isEmpty())) {
-	            	c[0]++;
 		            writechild(r, c, childs, moduleInstance, siteId, language, sheet);	
 	            }
 			}
@@ -128,4 +123,17 @@ public class XlsExport extends Action {
             ex.printStackTrace();
         }
     }
+	
+	/**
+	 * 
+	 * @param topic
+	 * @return
+	 */
+	private String topicPath(HelpTopic topic) {
+		if (topic.getParent() == null) {
+			return "["+topic.getTopicKey()+"]";
+		} else {
+			return topicPath(topic.getParent())+"["+topic.getTopicKey()+"]";
+		}
+	}
 }

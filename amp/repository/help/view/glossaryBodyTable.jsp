@@ -81,31 +81,34 @@
 				<digi:trn>Glossary</digi:trn>	
 			</td>
 		</tr>
-		<tr>
-			<td>						
-				<table width="150" border="0" align="right" class="toolbartable">
-					<tr>
-						<td noWrap align="center" valign="middle">		
-							<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-								<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
-							</a>
-						</td>
-				
-						<td noWrap align="center" valign="middle">
-							<a href="#" target="_blank" onclick="toggleActionForm('doc'); return false;">
-								<digi:img hspace="2" vspace="2" src="module/aim/images/word_icon.gif" border="0" alt="Export to Word" />
-							</a>
-						</td>
-				
-						<td noWrap align="center" valign="middle">
-							<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
-								<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
-							</a>
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
+		<digi:secure group="Help Administrators">
+			<tr>
+				<td>	
+								
+					<table width="150" border="0" align="right" class="toolbartable">
+						<tr>
+							<td noWrap align="center" valign="middle">		
+								<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+									<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+								</a>
+							</td>
+					
+							<td noWrap align="center" valign="middle">
+								<a href="#" target="_blank" onclick="toggleActionForm('doc'); return false;">
+									<digi:img hspace="2" vspace="2" src="module/aim/images/word_icon.gif" border="0" alt="Export to Word" />
+								</a>
+							</td>
+					
+							<td noWrap align="center" valign="middle">
+								<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+									<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+								</a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</digi:secure>
 		<tr>
 			<td>&nbsp;</td>
 		</tr>

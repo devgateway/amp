@@ -97,9 +97,13 @@
 				
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
-				for(var i:Number = 0; i < service.lastResult.donor.length; i++){
-					var currentValue:Number = service.lastResult.donor[i].value;
-					if (maxValue < currentValue) maxValue = currentValue;
+				try {
+					maxValue =  service.lastResult.donor.value;
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.donor.length; i++){
+						var currentValue:Number = service.lastResult.donor[i].value;
+						if (maxValue < currentValue) maxValue = currentValue;
+					}
 				}
 				//				categories = categoriesLocal; 
 				vScale.maxValue = Math.round(maxValue * 1.05);

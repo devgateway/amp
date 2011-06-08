@@ -71,9 +71,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 				
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
-				for(var i:Number = 0; i < service.lastResult.region.length; i++){
-					var currentValue:Number = service.lastResult.region[i].value;
-					if (maxValue < currentValue) maxValue = currentValue;
+				try {
+					maxValue =  service.lastResult.region.value;
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.region.length; i++){
+						var currentValue:Number = service.lastResult.region[i].value;
+						if (maxValue < currentValue) maxValue = currentValue;
+					}
 				}
 				//				categories = categoriesLocal; 
 				vScale.maxValue = Math.round(maxValue * 1.05);

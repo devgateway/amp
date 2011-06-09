@@ -592,6 +592,86 @@ function submitForm(thisform){
 
 </script>
 
+<script language="JavaScript" type="text/javascript">
+
+var addedGuests = new Array();
+
+function validateGuestEmail (email) {
+	var successVal = true;
+	if(email.indexOf("<")!=-1){
+		email=email.substr(email.indexOf("<")+1, email.indexOf(">")-email.indexOf("<")-1); //cut email from "some text <email>"
+	}
+	
+	var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	var expression = new RegExp(pattern)
+	if(expression.test(email)!=true){
+	    var trn='<digi:trn>Please provide correct email</digi:trn>';
+			alert(trn);
+	    successVal = false; 
+	}
+	return successVal;
+}
+
+function addContact(contact){
+	var guestVal=contact.value;
+	if (validateGuestEmail(guestVal)) {
+		if(guestVal.length>0 && $.inArray("g:" + guestVal, addedGuests) < 0){
+			addedGuests.push("g:" + guestVal);
+			var filteredGusetId = guestVal.replace("<", "&lt;").replace(">", "&gt;");
+
+			var guestListItemMarkup = new Array();
+			guestListItemMarkup.push('<div class="msg_added_cont">');
+			guestListItemMarkup.push('<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+			guestListItemMarkup.push(filteredGusetId);
+			guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="c:');
+			guestListItemMarkup.push(filteredGusetId);
+			guestListItemMarkup.push('">');
+			guestListItemMarkup.push('</div>');
+			var html=guestListItemMarkup.join('');
+			$('#guest_user_container').append(html);
+		}	
+		contact.value = "";
+	}
+}
+
+function fillExternalContact() {
+	if (selContacts != null && selContacts.length > 0) {
+		var guestListItemMarkup = new Array();
+		for (var contIdx = 0; contIdx < selContacts.length; contIdx ++) {
+			var curContact = selContacts[contIdx];
+			
+			if (curContact.substring(0,2) == "g:") {
+				guestListItemMarkup.push('<div class="msg_added_cont">');
+				guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+				guestListItemMarkup.push(curContact.substring(2));
+
+				guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="');								
+
+				guestListItemMarkup.push(curContact);
+				guestListItemMarkup.push('"/>');
+
+				guestListItemMarkup.push('</div></div>');
+			}
+		}
+		$('#guest_user_container').append(guestListItemMarkup.join(''));
+	}
+}
+
+function removeGuest(obj) {
+	var delControl = $(obj);
+	delControl.parent().parent().remove();
+	
+	var addedGuestIdx;
+	for (addedGuestIdx = 0; addedGuestIdx < addedGuests.length; addedGuestIdx ++) {
+		if (addedGuests[addedGuestIdx] == delControl.parent().parent().find("input").attr("value")) {
+			addedGuests.splice(addedGuestIdx, 1);
+			break;
+		}
+	}
+	return null;
+}
+</script>
+
 
 <digi:form action="/showCalendarEvent.do" styleId="showAmpEventFormID">
     <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
@@ -944,26 +1024,52 @@ function submitForm(thisform){
 	<font color="red" size="3px">*</font>
     <digi:trn key="calendar:Attendee"><b style="font-size:12px;">Attendee</b></digi:trn><br />
 	<div class="msg_receivers">
+		<logic:empty name="calendarEventForm" property="teamMapValues">
+			<div class="msg_lbl">No receivers</div>
+		</logic:empty>
+		<logic:notEmpty name="calendarEventForm"  property="teamMapValues" >
+			<c:forEach var="team" items="${calendarEventForm.teamMapValues}">
+				<logic:notEmpty name="team" property="members">
+					<div class="rec_group_container">
+						<div class="msg_grp_name">
+							
+							<html:multibox property="selectedAtts" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
+							<div class="msg_lbl">---${team.name}---</div>
+						</div>
+						<div class="msg_grp_mem_name">
+							<c:forEach var="tm" items="${team.members}">
+								<html:multibox property="selectedAtts" styleId="t:${team.id}" value="m:${tm.memberId}" />${tm.memberName}<br/>
+							</c:forEach>
+						</div>
+					</div>
+				</logic:notEmpty>											                                                		
+			</c:forEach>		
+		</logic:notEmpty>
+	
+	
+	<%--
 	<div class="rec_group_container">
-	
-	<div class="msg_grp_name" style="font-size:11px">
-	<input type="checkbox" style="float: left;" value="t:10" class="group_checkbox">
-	<div class="msg_lbl">---Team Name---</div>
-	</div>
-	
-	<div class="msg_grp_mem_name" style="font-size:11px;">
-	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-	</div>
-	<div class="msg_grp_mem_name" style="font-size:11px;">
-	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-	</div><div class="msg_grp_mem_name" style="font-size:11px;">
-	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-	</div><div class="msg_grp_mem_name" style="font-size:11px;">
-	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-	</div><div class="msg_grp_mem_name" style="font-size:11px;">
-	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-	</div>
-	</div>
+		
+			<div class="msg_grp_name" style="font-size:11px">
+				<input type="checkbox" style="float: left;" value="t:10" class="group_checkbox">
+				<div class="msg_lbl">---Team Name---</div>
+			</div>
+			
+			<div class="msg_grp_mem_name" style="font-size:11px;">
+				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+			</div>
+			<div class="msg_grp_mem_name" style="font-size:11px;">
+				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+			</div><div class="msg_grp_mem_name" style="font-size:11px;">
+				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+			</div><div class="msg_grp_mem_name" style="font-size:11px;">
+				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+			</div><div class="msg_grp_mem_name" style="font-size:11px;">
+				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+			</div>
+		</div>
+	 --%>
+		
 	</div>
 	<br />
 				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
@@ -971,7 +1077,12 @@ function submitForm(thisform){
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">		</td>
+				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
+				<br>
+				<div id="contactsContainer" style="width:470px;"></div>
+				<div id="guest_user_container">
+				</div>
+			</td>
     </tr>
 </table></td>
 			                    	</tr>
@@ -1061,6 +1172,24 @@ function submitForm(thisform){
 </digi:form>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <script type="text/javascript">
+	var selContacts = new Array();
+	<logic:present name="calendarEventForm" property="selectedAtts">
+		<logic:iterate indexId="idxId" name="calendarEventForm" property="selectedAtts" id="selectedAtts">
+			selContacts[<bean:write name="idxId"/>] = '<bean:write name="selectedAtts"/>';
+		</logic:iterate>
+		fillExternalContact();
+	</logic:present>
+
+	$(".group_checkbox").bind("change", function (event) { 
+		var selGrpCtrl = $(this);
+		var childUsers = selGrpCtrl.parent().parent().find("input[name='selectedAtts']");
+		
+		childUsers.each(
+			function (idx){
+				this.checked = selGrpCtrl.attr("checked");
+			})
+		});
+
 	//attach character counters 
 	$("#eventTitle").charCounter(50,{
 									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",

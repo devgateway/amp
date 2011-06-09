@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -42,13 +43,14 @@ public abstract class AmpPercentageValidationHiddenField<T> extends
 	 * @param setModel the {@link Set} model holding the <T> objects 
 	 * @param fmName
 	 */
-	public AmpPercentageValidationHiddenField(String id, final IModel<Set<T>> setModel,
+	public AmpPercentageValidationHiddenField(String id, final IModel<? extends Collection<T>> setModel,
 			String fmName) {
 		super(id, fmName);
 		
 		AbstractReadOnlyModel<Double> model=new AbstractReadOnlyModel<Double>() {
 			@Override
 			public Double getObject() {
+				if(setModel.getObject().size()==0) return 100d;
 				double total=0;
 				for( T item : setModel.getObject()) 
 					if(getPercentage(item)!=null) total+=getPercentage(item).doubleValue();

@@ -138,7 +138,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		settings.setUseSmartPositioning(true);
 		settings.setAdjustInputWidth(false);
 		
-		settings.setThrottleDelay(2000);
+		settings.setThrottleDelay(1000);
 //		settings.setShowCompleteListOnFocusGain(true);
 //		settings.setShowListOnFocusGain(true);
 		

@@ -90,6 +90,7 @@ public class FeedbackLabel extends Label {
         this.text=iModel;
     }
 
+
     /**
      * Set the content of this FeedbackLabel, depending on if the component has a FeedbackMessage.
      *

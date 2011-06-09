@@ -4,8 +4,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.components.FeedbackLabel;
+import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 
 /**
  * Behavior that checks if a {@link FormComponent} is valid. Valid {@link FormComponent} objects get the CSS class
@@ -50,12 +54,21 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      * @param e of type RuntimeException
      */
     @Override
-    protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
+    protected void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(true);
         changeCssClass(ajaxRequestTarget, false, INVALID_CLASS);
+        
+        traverseFeedBackPanel(ajaxRequestTarget);
     }
 
+    protected void traverseFeedBackPanel(final AjaxRequestTarget ajaxRequestTarget) {
+    	FormComponent<?> formComponent = getFormComponent();
+		Form<?> form=formComponent.getForm();
+		Component component = form.get("feedbackPanel");
+		ajaxRequestTarget.addComponent(component);
+    }
+    
     /**
      * Listener invoked on the ajax request. This listener is invoked after the {@link Component}'s model has been
      * updated. Handles the change of a css class when validation was succesful.
@@ -67,13 +80,14 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     	if(updateComponent!=null) 
     		updateComponent.setVisible(false);
         changeCssClass(ajaxRequestTarget, true, previousClass);
+        traverseFeedBackPanel(ajaxRequestTarget);
     }
 
     /**
      * Changes the CSS class of the linked {@link FormComponent} via AJAX.
      *
      * @param ajaxRequestTarget of type AjaxRequestTarget
-     * @param valid Was the validation succesful?
+     * @param valid Was the validation successful?
      * @param cssClass The CSS class that must be set on the linked {@link FormComponent}
      */
     private void changeCssClass(AjaxRequestTarget ajaxRequestTarget, boolean valid, String cssClass) {

@@ -69,7 +69,7 @@ public class AmpSectorsFormTableFeature extends
 		};
 
 		final AmpPercentageValidationHiddenField<AmpActivitySector> percentageValidationField=
-			new AmpPercentageValidationHiddenField<AmpActivitySector>("sectorPercentageTotal",setModel,"sectorPercentageTotal") {
+			new AmpPercentageValidationHiddenField<AmpActivitySector>("sectorPercentageTotal",listModel,"sectorPercentageTotal") {
 				@Override
 				public Number getPercentage(AmpActivitySector item) {
 					return item.getSectorPercentage();

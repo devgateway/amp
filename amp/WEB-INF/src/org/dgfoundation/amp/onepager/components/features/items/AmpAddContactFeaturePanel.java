@@ -52,9 +52,9 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 			String fmName, final IModel<AmpActivityContact> activityContact) throws Exception {
 		super(id, fmName);
 		
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		final FeedbackPanel feedback = new FeedbackPanel("feedbackPanelContact");
 		feedback.setFilter(new ContainerFeedbackMessageFilter(AmpAddContactFeaturePanel.this));
-		feedback.setOutputMarkupId(true);
+		feedback.setOutputMarkupPlaceholderTag(true);
 		InternalForm nestedAddContactForm = new InternalForm("nestedAddContactForm");
 
 		AmpContact newContact = null;

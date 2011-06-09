@@ -70,9 +70,11 @@ public class AmpLocationFormTableFeature extends
 		final IModel<Set<AmpActivityLocation>> setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
 
+		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
+		.getReadOnlyListModelFromSetModel(setModel);
 	
 		final AmpPercentageValidationHiddenField<AmpActivityLocation> percentageValidationField=
-			new AmpPercentageValidationHiddenField<AmpActivityLocation>("locationPercentageTotal",setModel,"locationPercentageTotal") {
+			new AmpPercentageValidationHiddenField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
 				@Override
 				public Number getPercentage(AmpActivityLocation item) {
 					return item.getLocationPercentage();
@@ -81,8 +83,6 @@ public class AmpLocationFormTableFeature extends
 		
 		add(percentageValidationField);
 		
-		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
 
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 

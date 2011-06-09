@@ -138,7 +138,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         final AmpTextFieldPanel<String> contactname = new AmpTextFieldPanel<String>("contactname", new Model<String>(), "Contact name",true,true);
         final FeedbackPanel feedback = new FeedbackPanel("feedback");
         feedback.setFilter(new ContainerFeedbackMessageFilter(AmpContactsSubsectionFeaturePanel.this));
-        feedback.setOutputMarkupId(true);
+        feedback.setOutputMarkupPlaceholderTag(true);
 
         final AmpTextFieldPanel<String> contactLast = new AmpTextFieldPanel<String>("contactlastname", new Model<String>(), "Contact lastname",true,true);
         final AmpContactFormTableFeature contactDuplicationTable = new AmpContactFormTableFeature("duplicationTable", am, "Duplications table", null);

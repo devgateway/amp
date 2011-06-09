@@ -80,8 +80,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		activityForm=new Form<AmpActivityVersion>("activityForm") ;
 		activityForm.setOutputMarkupId(true);
 		
-		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
-		feedbackPanel.setOutputMarkupId(true);
+		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
+		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 		
         //int[] filteredErrorLevels = new int[]{FeedbackMessage.ERROR};
         //feedbackPanel.setFilter(new ErrorLevelsFeedbackMessageFilter(filteredErrorLevels));

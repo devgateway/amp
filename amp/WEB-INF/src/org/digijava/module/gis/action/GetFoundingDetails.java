@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,13 +29,16 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -77,7 +81,7 @@ public class GetFoundingDetails extends Action {
             }
 
             String indYear = request.getParameter("indYear");
-
+                       
             String subgroupIdStr = request.getParameter("subgroupId");
             Long subgroupId = null;
             if (subgroupIdStr != null) {
@@ -116,6 +120,60 @@ public class GetFoundingDetails extends Action {
                 fEndDate = Calendar.getInstance();
                 fEndDate.set(Integer.parseInt(toYear), 11, 31, 23, 59, 59);
 
+            }
+            
+            String selectedDonorGroupsStr = request.getParameter("selectedDonorGroups");
+            String [] selectedDonorGroup =null;
+            if(selectedDonorGroupsStr !=null && !selectedDonorGroupsStr.equalsIgnoreCase("undefined")){
+            	selectedDonorGroup = selectedDonorGroupsStr.split(",");
+            }
+            
+            String selectedDonorTypesStr = request.getParameter("selectedDonorTypes");
+            String [] selectedDonorTypes =null;
+            if(selectedDonorTypesStr !=null && !selectedDonorTypesStr.equalsIgnoreCase("undefined")){
+            	selectedDonorTypes = selectedDonorTypesStr.split(",");
+            }
+            
+            String selectedDonnorAgencyStr = request.getParameter("selectedDonnorAgency");
+            String [] selectedDonnorAgency =null;
+            if(selectedDonnorAgencyStr !=null && !selectedDonnorAgencyStr.equalsIgnoreCase("undefined")){
+            	selectedDonnorAgency = selectedDonnorAgencyStr.split(",");
+            }
+            
+            String selectedNatPlanObjStr = request.getParameter("selectedNatPlanObj");
+            String [] selectedNatPlanObj =null;
+            if(selectedNatPlanObjStr !=null && !selectedNatPlanObjStr.equalsIgnoreCase("undefined")){
+            	selectedNatPlanObj = selectedNatPlanObjStr.split(",");
+            }
+            
+            String selectedPrimaryProgramsStr = request.getParameter("selectedPrimaryPrograms");
+            String [] selectedPrimaryPrograms =null;
+            if(selectedPrimaryProgramsStr !=null && !selectedPrimaryProgramsStr.equalsIgnoreCase("undefined")){
+            	selectedPrimaryPrograms = selectedPrimaryProgramsStr.split(",");
+            }
+            
+            String selectedSecondaryProgramsStr = request.getParameter("selectedSecondaryPrograms");
+            String [] selectedSecondaryPrograms =null;
+            if(selectedSecondaryProgramsStr !=null && !selectedSecondaryProgramsStr.equalsIgnoreCase("undefined")){
+            	selectedSecondaryPrograms = selectedSecondaryProgramsStr.split(",");
+            }
+            
+            String selectedSectorsStr = request.getParameter("selectedSectors");
+            String [] selectedSectors =null;
+            if(selectedSectorsStr !=null && !selectedSectorsStr.equalsIgnoreCase("undefined")){
+            	selectedSectors = selectedSectorsStr.split(",");
+            }
+            
+            String selectedSecondarySectorsStr = request.getParameter("selectedSecondarySectors");
+            String [] selectedSecondarySectors =null;
+            if(selectedSecondarySectorsStr !=null && !selectedSecondarySectorsStr.equalsIgnoreCase("undefined")){
+            	selectedSecondarySectors = selectedSecondarySectorsStr.split(",");
+            }
+            
+            String selectedTertiarySectorsStr = request.getParameter("selectedTertiarySectors");
+            String [] selectedTertiarySectors =null;
+            if(selectedTertiarySectorsStr !=null && !selectedTertiarySectorsStr.equalsIgnoreCase("undefined")){
+            	selectedTertiarySectors = selectedTertiarySectorsStr.split(",");
             }
 
             CoordinateRect rect = gisUtil.getMapRect(map);
@@ -185,16 +243,81 @@ public class GetFoundingDetails extends Action {
 
                     xml.output(sos);
                 } else if (action.equalsIgnoreCase("getDataForSectorFin")) {
-                    response.setContentType("image/png");
-                    String secIdStr = request.getParameter("sectorId");
+                	response.setContentType("image/png");
+                	
+                	/**
+                	 * Dare version start
+                	 */
+                	Set primarySectors = Util.getSelectedObjects(AmpSector.class, selectedSectors);
+            		Set secondarySectors = Util.getSelectedObjects(AmpSector.class, selectedSecondarySectors);
+                    Set tertiarySectors = Util.getSelectedObjects(AmpSector.class, selectedTertiarySectors);
+                    
+                    Set natPlanObj = Util.getSelectedObjects(AmpTheme.class, selectedNatPlanObj);
+            		Set primaryPrograms = Util.getSelectedObjects(AmpTheme.class, selectedPrimaryPrograms);
+            		Set secondaryPrograms = Util.getSelectedObjects(AmpTheme.class, selectedSecondaryPrograms);
+            		
+            		// Calendar part is missing, should be included
+            		
+            		Set donorTypes = null;
+            		if (selectedDonorTypes != null && selectedDonorTypes.length > 0) {
+            			donorTypes=new HashSet();
+            			for (int i = 0; i < selectedDonorTypes.length; i++) {
+            				Long id = Long.parseLong("" + selectedDonorTypes[i]);
+            				AmpOrgType type = org.digijava.module.aim.util.DbUtil.getAmpOrgType(id);
+            				if (type != null){
+            					donorTypes.add(type);
+            				}            					
+            			}
+            		}
+            		
+            		Set donorGroups = null;
+            		if (selectedDonorGroup != null && selectedDonorGroup.length > 0) {
+            			donorGroups=new HashSet();
+            			for (int i = 0; i < selectedDonorGroup.length; i++) {
+            				Long id = Long.parseLong("" + selectedDonorGroup[i]);
+            				AmpOrgGroup grp = org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(id);
+            				if (grp != null)
+            					donorGroups.add(grp);
+            			}
+            		}
+            		
+            		Set donorAgencies = ReportsUtil.processSelectedFilters(selectedDonnorAgency, AmpOrganisation.class);
+            		
+            		Collection<AmpSector> sectors = null; // with current GIS filter sectors are not differentiated, I think they should be re-made
+                    if(primarySectors!=null || secondarySectors!=null || tertiarySectors !=null){
+                    	sectors = new HashSet<AmpSector>();
+                    }
+                    if(primarySectors!=null){
+                    	sectors.addAll(primarySectors);
+                    }
+                    if(secondarySectors!= null ){
+                    	sectors.addAll(secondarySectors);
+                    }
+                    if(tertiarySectors!=null){
+                    	sectors.addAll(tertiarySectors);
+                    }
+                    
 
-
-
-                    TeamMember tm = null;
-                    //AmpTeam team = null;
+            		Collection<AmpTheme> programs = null; // with current GIS filter themes are not differentiated, I think they should be re-made
+                    if(natPlanObj!=null || primaryPrograms!=null || secondaryPrograms !=null){
+                    	programs = new HashSet<AmpTheme>();
+                    }
+                    if(natPlanObj!=null){
+                    	programs.addAll(natPlanObj);
+                    }
+                    if(primaryPrograms!= null ){
+                    	programs.addAll(primaryPrograms);
+                    }
+                    if(secondaryPrograms!=null){
+                    	programs.addAll(secondaryPrograms);
+                    }
+            		
+            		TeamMember tm = null;
                     Long teamId = null;
 
                     boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+                    boolean includeNatProjects = request.getParameter("natProjects") != null &&
+                            request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
 
                     if (curWorkspaceOnly) {
                         tm = (TeamMember)request.getSession().getAttribute("currentMember");
@@ -203,60 +326,42 @@ public class GetFoundingDetails extends Action {
                             teamId = team.getAmpTeamId();
                         }
                     }
-
-                    Long secId = null;
-                    Long prgId = null;
-                    int sectorQueryType = 0;
-                    if (secIdStr.startsWith("sec_scheme_id_")) {
-                        sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
-                        secId = new Long(secIdStr.substring(14));
-                    } else if (secIdStr.startsWith("sec_id_")) {
-                        sectorQueryType = DbUtil.SELECT_SECTOR;
-                        secId = new Long(secIdStr.substring(7));
-                    } else if (secIdStr.startsWith("prj_id_")) {
-                        sectorQueryType = DbUtil.SELECT_PROGRAM;
-                        prgId = new Long(secIdStr.substring(7));
-                    } else {
-                        sectorQueryType = DbUtil.SELECT_DEFAULT;
-                        secId = new Long(secIdStr);
-                    }
-
-
-
-
-                    String donorIdStr = request.getParameter("donorId");
-                    Long donorId = null;
-
-                    if (donorIdStr != null) {
-                        donorId = new Long(donorIdStr);
-                    } else {
-                        donorId = new Long (-1);
-                    }
-
-
-
+                    
                     int mapMode =  (request.getParameter("mapMode") != null && request.getParameter("mapMode").
                             equalsIgnoreCase("pledgesData")) ? DbUtil.MAP_MODE_PLEDGES : DbUtil.MAP_MODE_ACTIVITIES;
+                    
+                    
+                    String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
+                    Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, Integer.parseInt(mapLevel));
 
 
                     List segmentDataList = new ArrayList();
                     BigDecimal min = null;
                     BigDecimal max = null;
                     if (mapMode == DbUtil.MAP_MODE_PLEDGES) {
-                        List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
 
-                        Object[] fundingList = getPledgesByLocations (selPledges,
-                                Integer.parseInt(mapLevel),
-                                fStartDate.getTime(),
-                                fEndDate.getTime(), donorId);
+                        //getPledgesByLocationsForPrograms
+                    	
+                        Object[] pledgeFundings = DbUtil.getPledgeFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
 
-                        request.getSession().setAttribute(
-                                "AMP_FUNDING_DATA", fundingList);
+                        Object[] fundingList = null;
+
+//                        if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+//                            List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
+//                            fundingList = getPledgesByLocations (selPledges,
+//                                Integer.parseInt(mapLevel),
+//                                fStartDate.getTime(),
+//                                fEndDate.getTime(), donorId);
+//                        } else {
+////                            List <FundingPledgesProgram> selPledges = DbUtil.getPledgesByProgram(prgId);
+////                            fundingList = getPledgesByLocationsForPrograms (selPledges,Integer.parseInt(mapLevel),fStartDate.getTime(),fEndDate.getTime(), donorId);
+//
+//                        }
+
+                        request.getSession().setAttribute("AMP_FUNDING_DATA", fundingList);
 
                         Map fundingLocationMap = (Map) fundingList[0];
-
-
-
+                        
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
 
 
@@ -296,28 +401,14 @@ public class GetFoundingDetails extends Action {
 
                         String fundingType = request.getParameter("fundingType");
 
-
                         //Get segments with funding for dashed paint map
                         List secFundings = null;
+                        
+                        
 
-
-                        if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
-                        if (request.getSession().getAttribute("publicuser")!=null){
-                            secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
-                        }else{
-                            if (secId.longValue() > -2l) {
-                                secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
-                            } else {
-                                secFundings = new ArrayList();
-                            }
-                        }
-                        } else {
-                            secFundings = DbUtil.getProgramFoundings(prgId);
-                        }
-                        Object[] fundingList = getFundingsByLocations(secFundings,
-                                Integer.parseInt(mapLevel),
-                                fStartDate.getTime(),
-                                fEndDate.getTime(), donorId);
+                        Object[] activityFundings = DbUtil.getActivityFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                        Object[] fundingList = RMMapCalculationUtil.getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
 
                         request.getSession().setAttribute(
                                 "AMP_FUNDING_DATA", fundingList);
@@ -374,13 +465,10 @@ public class GetFoundingDetails extends Action {
                             max = new BigDecimal(0);
                         }
                     }
+                    
+                    List hilightData = prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
 
-                    List hilightData = prepareHilightSegments(segmentDataList,
-                            map, new Double(min.doubleValue()), new Double(max.doubleValue()), MapColorScheme.getDefaultScheme());
-
-                    BufferedImage graph = new BufferedImage(canvasWidth,
-                            canvasHeight,
-                            BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
 
                     Graphics2D g2d = graph.createGraphics();
 
@@ -388,13 +476,8 @@ public class GetFoundingDetails extends Action {
 
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
-                    gisUtil.addDataToImage(g2d,
-                            map.getSegments(),
-                            hilightData,
-                            null,
-                            canvasWidth, canvasHeight,
-                            rect.getLeft(), rect.getRight(),
-                            rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+                    gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
+                            rect.getTop(), rect.getBottom(), true, false);
 
                     gisUtil.addCaptionsToImage(g2d,
                             map.getSegments(),
@@ -409,6 +492,247 @@ public class GetFoundingDetails extends Action {
                     ImageIO.write(ri, "png", sos);
 
                     graph.flush();
+                	
+                	/**
+                	 * dare version end
+                	 */
+                    
+                	
+                	/**
+                	 * flyer start
+                	 */
+                    
+                	/**
+                	 * String secIdStr = request.getParameter("sectorId");
+
+
+                     TeamMember tm = null;
+                     //AmpTeam team = null;
+                     Long teamId = null;
+
+                     boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+                     boolean includeNatProjects = request.getParameter("natProjects") != null &&
+                             request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
+
+                     if (curWorkspaceOnly) {
+                         tm = (TeamMember)request.getSession().getAttribute("currentMember");
+                         if (tm != null) {
+                             AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                             teamId = team.getAmpTeamId();
+                         }
+                     }
+                     
+                     Long secId = null;
+                     Long prgId = null;
+                     int sectorQueryType = 0;
+                     if (secIdStr.startsWith("sec_scheme_id_")) {
+                         sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
+                         secId = new Long(secIdStr.substring(14));
+                     } else if (secIdStr.startsWith("sec_id_")) {
+                         sectorQueryType = DbUtil.SELECT_SECTOR;
+                         secId = new Long(secIdStr.substring(7));
+                     } else if (secIdStr.startsWith("prj_id_")) {
+                         sectorQueryType = DbUtil.SELECT_PROGRAM;
+                         prgId = new Long(secIdStr.substring(7));
+                     } else {
+                         sectorQueryType = DbUtil.SELECT_DEFAULT;
+                         secId = new Long(secIdStr);
+                     }
+                     
+                     String donorIdStr = request.getParameter("donorId");
+                     Long donorId = null;
+
+                     if (donorIdStr != null) {
+                         donorId = new Long(donorIdStr);
+                     } else {
+                         donorId = new Long (-1);
+                     }
+
+
+
+                     int mapMode =  (request.getParameter("mapMode") != null && request.getParameter("mapMode").
+                             equalsIgnoreCase("pledgesData")) ? DbUtil.MAP_MODE_PLEDGES : DbUtil.MAP_MODE_ACTIVITIES;
+
+
+
+                     //New
+                     Collection<AmpSector> sectors = null;
+                     if (secId != null) {
+                         sectors = DbUtil.getSelectedSectors(secId, sectorQueryType);
+                     }
+
+                     Collection<AmpTheme> programs = null;
+                     if (prgId != null) {
+                         programs = DbUtil.getSelectedPrograms(prgId);
+                     }
+
+                     String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
+                     Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, Integer.parseInt(mapLevel));
+
+
+                     List segmentDataList = new ArrayList();
+                     BigDecimal min = null;
+                     BigDecimal max = null;
+                     if (mapMode == DbUtil.MAP_MODE_PLEDGES) {
+
+                         //getPledgesByLocationsForPrograms
+
+                         Object[] pledgeFundings = DbUtil.getPledgeFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+
+                         Object[] fundingList = null;
+
+                         if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+                             List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
+                             fundingList = getPledgesByLocations (selPledges,
+                                 Integer.parseInt(mapLevel),
+                                 fStartDate.getTime(),
+                                 fEndDate.getTime(), donorId);
+                         } else {
+//                             List <FundingPledgesProgram> selPledges = DbUtil.getPledgesByProgram(prgId);
+//                             fundingList = getPledgesByLocationsForPrograms (selPledges,Integer.parseInt(mapLevel),fStartDate.getTime(),fEndDate.getTime(), donorId);
+
+                         }
+
+                         request.getSession().setAttribute("AMP_FUNDING_DATA", fundingList);
+
+                         Map fundingLocationMap = (Map) fundingList[0];
+                         
+                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+
+
+                         while (locFoundingMapIt.hasNext()) {
+                             String key = (String) locFoundingMapIt.next();
+                             FundingData fData = (FundingData) fundingLocationMap.get(key);
+                             SegmentData segmentData = new SegmentData();
+                             segmentData.setSegmentCode(key);
+
+                             BigDecimal selValue = null;
+                             selValue = fData.getCommitment();
+
+
+                             segmentData.setSegmentValue(selValue.toString());
+
+                             if (min == null) {
+                                 min = selValue;
+                                 max = selValue;
+                             }
+
+                             if (selValue.compareTo(min) < 0) {
+                                 min = selValue;
+                             }
+
+                             if (selValue.compareTo(max) > 0) {
+                                 max = selValue;
+                             }
+
+                             segmentDataList.add(segmentData);
+                         }
+
+                         if (min == null) {
+                             min = new BigDecimal(0);
+                             max = new BigDecimal(0);
+                         }
+                     } else {
+
+                         String fundingType = request.getParameter("fundingType");
+
+
+                         //Get segments with funding for dashed paint map
+                         List secFundings = null;
+
+                         Object[] activityFundings = DbUtil.getActivityFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                         Object[] fundingList = RMMapCalculationUtil.getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
+
+                         request.getSession().setAttribute(
+                                 "AMP_FUNDING_DATA", fundingList);
+
+                         Map fundingLocationMap = (Map) fundingList[0];
+
+
+
+                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+
+
+                         while (locFoundingMapIt.hasNext()) {
+                             String key = (String) locFoundingMapIt.next();
+                             FundingData fData = (FundingData) fundingLocationMap.get(key);
+                             SegmentData segmentData = new SegmentData();
+                             segmentData.setSegmentCode(key);
+
+                             BigDecimal selValue = null;
+
+                             if (fundingType.equals("commitment")) {
+                                 selValue = fData.getCommitment();
+                             } else if (fundingType.equals("disbursement")) {
+                                 selValue = fData.getDisbursement();
+                             } else if (fundingType.equals("expenditure")) {
+                                 selValue = fData.getExpenditure();
+                             }else{
+                                 selValue = new BigDecimal("0");
+                             }
+
+
+                             segmentData.setSegmentValue(selValue.toString());
+
+                             //Hilight only if value is not 0
+                             if (selValue.longValue() != 0l) {
+                                 if (min == null) {
+                                     min = selValue;
+                                     max = selValue;
+                                 }
+
+                                 if (selValue.compareTo(min) < 0) {
+                                     min = selValue;
+                                 }
+
+                                 if (selValue.compareTo(max) > 0) {
+                                     max = selValue;
+                                 }
+
+                                 segmentDataList.add(segmentData);
+                             }
+                         }
+
+                         if (min == null) {
+                             min = new BigDecimal(0);
+                             max = new BigDecimal(0);
+                         }
+                     }
+
+                     List hilightData = prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+
+                     BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
+
+                     Graphics2D g2d = graph.createGraphics();
+
+                     g2d.setBackground(new Color(0, 0, 100, 255));
+
+                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+                     gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
+                             rect.getTop(), rect.getBottom(), true, false);
+
+                     gisUtil.addCaptionsToImage(g2d,
+                             map.getSegments(),
+                             canvasWidth, canvasHeight,
+                             rect.getLeft(), rect.getRight(),
+                             rect.getTop(), rect.getBottom());
+
+                     g2d.dispose();
+
+                     RenderedImage ri = graph;
+
+                     ImageIO.write(ri, "png", sos);
+
+                     graph.flush();
+                     
+                	 */
+                    
+                	/**
+                	 * flyer end
+                	 */                     
+
 
                 } else if (action.equalsIgnoreCase("getFinansialDataXML")) {
                     response.setCharacterEncoding("UTF-8");

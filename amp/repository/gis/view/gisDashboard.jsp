@@ -12,23 +12,23 @@
 
 <style>
 	div.navHiden{
-		background-color : #5e8ad1;
+		/*background-color : #5e8ad1;
 		color : white;
 		border-left: 1px solid white;
 		border-top: 1px solid white;
 		border-right: 1px solid black;
 		border-bottom: 1px solid black;
-		cursor:pointer;
+		cursor:pointer;*/
 	}
 	
 	div.navVisible{
-		background-color : #C4C4C4;
+		/*background-color : #C4C4C4;
 		color : black;
 		border-left: 1px solid black;
 		border-top: 1px solid black;
 		border-right: 1px solid white;
 		border-bottom: 1px solid white;
-		cursor:pointer;
+		cursor:pointer;*/
 	}
 	
 	#content{
@@ -179,14 +179,32 @@
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="TEMPLATE/ampTemplate/script/yui/dom-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+
+
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-<script language="JavaScript" src="/repository/gis/view/js/gisPanel.js"></script>
+
+<!-- CSS -->
+<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" rel="stylesheet" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+
+
+<link href="TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <script language="JavaScript">
 	var validatedRegPercentage = false;
@@ -223,117 +241,18 @@
 <c:set var="isDevInfoMode">false</c:set>
 </c:if>
 
+<jsp:include page="gisFilterScripts.jsp" />
+<jsp:include page="gisFilter.jsp" />
 
-<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;display: none;width: 550px">
-		<div class="sec_map_filter_container">
-			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
-				<!-- <tr><td colspan="3" class="sec_map_filter_title" style="font-size:12px;"><digi:trn>Map filters</digi:trn></td></tr> -->
-				<field:display name="Source of Data" feature="GIS DASHBOARD">
-				<tr>
-					<td style="font-size:12px;">
-						<digi:trn>Source of Data</digi:trn>
-					</td>
-					<td align="right">
-	            <select id="mapModeFin" style="width:250px" value="commitment">
-	            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
-	            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
-	        	</select>
-	        </td>
-	        <td width="10">&nbsp;
-			        
-					</td>
-				</tr>
-			</field:display>
-				
-				
-				<tr id="fundingTypeRow">
-					<td style="font-size:12px;">
-						<digi:trn>Funding type</digi:trn>
-					</td>
-					<td align="right">
-	            <select id="fundingType" onChange="" style="width:250px" value="commitment">
-	            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
-	            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
-	            </field:display>
-	            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
-	            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
-	            </field:display>
-	            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
-	            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
-	            </field:display>
-	        	</select>
-	        </td>
-	        <td width="10">
-			        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
-					</td>
-				</tr>
-				
-				<tr>
-	        <td style="font-size:12px;">
-	             <digi:trn>Select Donor</digi:trn>:
-	        </td>
-					<td align="right">
-						<select id="donorsCombo" onChange="" style="width:250px">
-							<option value="-1"><digi:trn>All Donors</digi:trn></option>
-							<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
-								<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>
-							</logic:iterate>
-						</select>
-					</td>
-					<td width="10">
-			        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
-			
-					</td>
-				</tr>
-				
-				<field:display name="Show fundings only from curent WS" feature="GIS DASHBOARD">
-				<tr>
-					<td style="font-size:12px;">
-						<digi:trn>Show data only for workspace selected</digi:trn>
-					</td>
-					<td align="right">
-            <input id="showOnlyCurentWS" type="checkbox" value="true">
-	        </td>
-	        <td width="10">&nbsp;
-			        
-					</td>
-				</tr>
-			</field:display>
-				<tr>
-					<td colspan="3">
-						<hr>
-					</td>
-				</tr>
-						
-						
-				<tr>
-					<td colspan="2" style="font-size:12px;">
-						<digi:trn>Select Sector</digi:trn>
-					</td>
-					<td width="10">
-		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
-					</td>
-				</td>
-				<tr>
-					<td colspan="3">
-						<div id="sector_selector_hider">
-					    <div id="filtrSectorSelectorContainer" style="width:504px;"></div>
-					  </div>
-					</td>
-				</tr>
-				
-				<tr><td align='center' colspan="3">
-				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()' class="buttonx">
-					&nbsp;
-				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='hidePanel(0)' class="buttonx">
-				</td></tr>
-				
-				
-			</table>
-	  </div>
-	</div>
+
 
 <%--
+
+<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;display: none;overflow: auto;">
+	<jsp:include page="gisFilter.jsp"></jsp:include>
+		
+	</div>
+
 <div class="filter_wnd_background_holder" style="display:none;">
 	
 	<div class="filter_wnd_background">&nbsp;</div>
@@ -678,7 +597,7 @@
     </tr>
     
     <tr>
-    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()" class="buttonx"></td>
+    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFilter()" class="buttonx"></td>
     </tr>
     
     <c:set var="translation">
@@ -866,5 +785,5 @@
 		getSectorHierarchy();
 	</c:if>
 
-	YAHOO.util.Event.addListener(window, "load", initPanel) ;
+	YAHOO.util.Event.addListener(window, "load", initScripts) ;
 </script>

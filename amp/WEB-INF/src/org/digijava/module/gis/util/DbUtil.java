@@ -5,10 +5,12 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -41,6 +44,9 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisSettings;
@@ -1733,5 +1739,555 @@ public class DbUtil {
     private static void createGisSettings (GisSettings sets) throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
         sess.save(sets);
+    }
+    
+    
+    // NEW PART
+    
+    public static Object[] getActivityFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+        List queryResults = null;
+        Object[] retVal = null;
+
+        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getActivitySectorPercentages(sectors) : null;
+        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getActivityProgramPercentages(programs) : null;
+        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations) : null;
+
+        Set allActivityIdsSet = new HashSet<Long>();
+
+        //If no locations selected no data will be returned
+        if (locationPercentageMap != null && !locationPercentageMap.isEmpty()) {
+
+            Set<Long> secActIds = null;
+            if (sectorPercentageMap != null) {
+                secActIds = sectorPercentageMap.keySet();
+            }
+
+            Set<Long> prgActIds = null;
+            if (programPercentageMap != null) {
+                prgActIds = programPercentageMap.keySet();
+            }
+
+            Set<Long> actIds = locationPercentageMap.keySet();
+            for (Long actId : actIds) {
+                if ((secActIds != null && secActIds.contains(actId)) ||  (prgActIds != null && prgActIds.contains(actId))) {
+                    allActivityIdsSet.add(actId);
+                }
+            }
+        }
+
+        //If any activity in selected filter
+        if (!allActivityIdsSet.isEmpty()) {
+            String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
+
+            Session sess = null;
+            try {
+                sess = PersistenceManager.getRequestDBSession();
+                StringBuilder queryStr = new StringBuilder("select fd.transactionAmount, fd.transactionType, fd.transactionDate, fd.ampCurrencyId.currencyCode, fd.ampFundingId.ampActivityId.ampActivityId from ");
+                queryStr.append(AmpFundingDetail.class.getName());
+                queryStr.append(" as fd where fd.transactionDate >= :START_DATE and fd.transactionDate <= :END_DATE");
+
+                queryStr.append(" and fd.ampFundingId.ampActivityId.ampActivityId in ");
+                queryStr.append(activityWhereclause);
+
+                Query q = sess.createQuery(queryStr.toString());
+                q.setDate("START_DATE", startDate);
+                q.setDate("END_DATE", endDate);
+
+                queryResults = q.list();
+
+            } catch (DgException ex) {
+              logger.error("Error getting activity fundings from database " + ex);
+            }
+
+            retVal = new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
+        } else {
+            //return dummy result
+            retVal = new Object[]{};
+        }
+
+
+        return retVal;
+    }
+
+    public static Object[] getActivityRegionalFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+        List queryResults = null;
+        Object[] retVal = null;
+
+        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getActivitySectorPercentages(sectors) : null;
+        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getActivityProgramPercentages(programs) : null;
+
+
+        Set<Long> allActivityIdsSet = null;
+        String locationWhereclause = null;
+        //If no locations selected no data will be returned
+        if (locations != null && !locations.isEmpty()) {
+            allActivityIdsSet = sectorPercentageMap != null ? sectorPercentageMap.keySet() : new HashSet<Long>();
+            Set<Long> prgActIds = programPercentageMap != null ? programPercentageMap.keySet() : new HashSet<Long>();
+            allActivityIdsSet.addAll(prgActIds);
+            locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
+        }
+
+
+
+        //If any activity in selected filter
+        if (!allActivityIdsSet.isEmpty()) {
+            String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
+
+            Session sess = null;
+            try {
+                sess = PersistenceManager.getRequestDBSession();
+                StringBuilder queryStr = new StringBuilder("select rf.transactionAmount, rf.transactionType, rf.transactionDate, rf.currency.currencyCode, rf.activity.ampActivityId, rf.regionLocation.id from ");
+                queryStr.append(AmpRegionalFunding.class.getName());
+                queryStr.append(" as rf where rf.transactionDate >= :START_DATE and rf.transactionDate <= :END_DATE");
+                queryStr.append(" and rf.activity.ampActivityId in ");
+                queryStr.append(activityWhereclause);
+                queryStr.append(" and rf.regionLocation.id in ");
+                queryStr.append(locationWhereclause);
+
+
+                Query q = sess.createQuery(queryStr.toString());
+                q.setDate("START_DATE", startDate);
+                q.setDate("END_DATE", endDate);
+
+                queryResults = q.list();
+
+            } catch (DgException ex) {
+              logger.error("Error getting activity regional fundings from database " + ex);
+            }
+
+            retVal = new Object[] {queryResults, sectorPercentageMap, programPercentageMap};
+        } else {
+            //return dummy result
+            retVal = new Object[]{};
+        }
+        return retVal;
+    }
+
+    private static Map <Long, Map> getActivitySectorPercentages (Collection<AmpSector> sectors) {
+        String sectorWhereclause = generateWhereclause(sectors, new SectorIdGetter());
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select actSec.activityId.ampActivityId, actSec.sectorId.ampSectorId, actSec.sectorPercentage from ");
+            queryStr.append(AmpActivitySector.class.getName());
+            queryStr.append(" as actSec where actSec.sectorPercentage is not null and actSec.sectorPercentage > 0");
+            if (sectorWhereclause != null) {
+                queryStr.append(" and actSec.sectorId.ampSectorId in ");
+                queryStr.append(sectorWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long actId = (Long)resArray[0];
+                    Long secId = (Long)resArray[1];
+                    Float secPercentage = (Float)resArray[2];
+
+                    if (retVal.containsKey(actId)) {
+                        ((Map<Long, Float>) retVal.get(actId)).put(secId, secPercentage);
+                    } else {
+                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
+                        secPercentMap.put(secId, secPercentage);
+                        retVal.put(actId, secPercentMap);
+                    }
+                }
+            }
+        } catch (DgException ex) {
+          logger.error("Error getting activity sectors from database " + ex);
+        }
+        return retVal;
+    }
+
+    private static Map <Long, Map> getActivityProgramPercentages (Collection<AmpTheme> programs) {
+        String programWhereclause = generateWhereclause(programs, new ProgramIdGetter());
+
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select actPrg.activity.ampActivityId, actPrg.program.ampThemeId, actPrg.programPercentage from ");
+            queryStr.append(AmpActivityProgram.class.getName());
+            queryStr.append(" as actPrg where actPrg.programPercentage is not null and actPrg.programPercentage > 0");
+            if (programWhereclause != null) {
+                queryStr.append(" and actPrg.program.ampThemeId in ");
+                queryStr.append(programWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long actId = (Long)resArray[0];
+                    Long prgId = (Long)resArray[1];
+                    Float prgPercentage = new Float(((Long)resArray[2]).floatValue());
+
+                    if (retVal.containsKey(actId)) {
+                        ((Map<Long, Float>) retVal.get(actId)).put(prgId, prgPercentage);
+                    } else {
+                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
+                        secPercentMap.put(prgId, prgPercentage);
+                        retVal.put(actId, secPercentMap);
+                    }
+                }
+            }
+        } catch (DgException ex) {
+          logger.error("Error getting activity programs from database " + ex);
+        }
+        return retVal;
+    }
+
+
+
+    private static Map <Long, Map> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations) {
+        String locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.regionLocation.id, actLoc.locationPercentage from ");
+            queryStr.append(AmpActivityLocation.class.getName());
+            queryStr.append(" as actLoc where actLoc.locationPercentage is not null and actLoc.locationPercentage > 0");
+            if (locationWhereclause != null) {
+                queryStr.append(" and actLoc.location.regionLocation.id in ");
+                queryStr.append(locationWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long actId = (Long)resArray[0];
+                    Long locId = (Long)resArray[1];
+                    Float locPercentage = (Float)resArray[2];
+
+                    if (retVal.containsKey(actId)) {
+                        ((Map<Long, Float>) retVal.get(actId)).put(locId, locPercentage);
+                    } else {
+                        Map <Long, Float> locPercentMap = new HashMap <Long, Float>();
+                        locPercentMap.put(locId, locPercentage);
+                        retVal.put(actId, locPercentMap);
+                    }
+                }
+            }
+        } catch (DgException ex) {
+          logger.error("Error getting activity locations from database " + ex);
+        }
+        return retVal;
+    }
+
+
+
+
+
+    //For pledges
+    public static Object[] getPledgeFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+        List queryResults = null;
+        Object[] retVal = null;
+
+        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getPledgeSectorPercentages(sectors) : null;
+        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getPledgeProgramPercentages(programs) : null;
+        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getPledgeLocationPercentages(locations) : null;
+
+        Set allPledgeIdsSet = new HashSet<Long>();
+
+        //If no locations selected no data will be returned
+        if (locationPercentageMap != null && !locationPercentageMap.isEmpty()) {
+
+            Set<Long> secPledgeIds = null;
+            if (sectorPercentageMap != null) {
+                secPledgeIds = sectorPercentageMap.keySet();
+            }
+
+            Set<Long> prgPledgeIds = null;
+            if (programPercentageMap != null) {
+                prgPledgeIds = programPercentageMap.keySet();
+            }
+
+            Set<Long> actIds = locationPercentageMap.keySet();
+            for (Long actId : actIds) {
+                if ((secPledgeIds != null && secPledgeIds.contains(actId)) ||  (prgPledgeIds != null && prgPledgeIds.contains(actId))) {
+                    allPledgeIdsSet.add(actId);
+                }
+            }
+        }
+
+        //If any activity in selected filter
+        if (!allPledgeIdsSet.isEmpty()) {
+            String pledgeWhereclause = generateWhereclause(allPledgeIdsSet, new GenericIdGetter());
+
+            Session sess = null;
+            try {
+                sess = PersistenceManager.getRequestDBSession();
+                StringBuilder queryStr = new StringBuilder("select fpd.amount, 0, fpd.fundingYear, fpd.currency, fpd.pledgeid.id from ");
+                queryStr.append(FundingPledgesDetails.class.getName());
+                queryStr.append(" as fpd where cast(fpd.fundingYear, Integer) >= :START_DATE and cast(fpd.fundingYear, Integer) <= :END_DATE");
+
+                queryStr.append(" and fpd.pledgeid.id in ");
+                queryStr.append(pledgeWhereclause);
+
+                Query q = sess.createQuery(queryStr.toString());
+                q.setInteger("START_DATE", startDate.getYear() + 1900);
+                q.setInteger("END_DATE", endDate.getYear() + 1900);
+
+                queryResults = q.list();
+
+            } catch (Exception ex) {
+              logger.error("Error getting oledge fundings from database " + ex);
+            }
+
+            retVal = new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
+        } else {
+            //return dummy result
+            retVal = new Object[]{};
+        }
+
+
+        return retVal;
+    }
+
+    private static Map <Long, Map> getPledgeSectorPercentages (Collection<AmpSector> sectors) {
+        String sectorWhereclause = generateWhereclause(sectors, new SectorIdGetter());
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select pldSec.pledgeid.id, pldSec.sector.ampSectorId, pldSec.sectorpercentage from ");
+            queryStr.append(FundingPledgesSector.class.getName());
+            queryStr.append(" as pldSec where pldSec.sectorpercentage is not null and pldSec.sectorpercentage > 0");
+            if (sectorWhereclause != null) {
+                queryStr.append(" and pldSec.sector.ampSectorId in ");
+                queryStr.append(sectorWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long pldId = (Long)resArray[0];
+                    Long secId = (Long)resArray[1];
+                    Float secPercentage = (Float)resArray[2];
+
+                    if (retVal.containsKey(pldId)) {
+                        ((Map<Long, Float>) retVal.get(pldId)).put(secId, secPercentage);
+                    } else {
+                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
+                        secPercentMap.put(secId, secPercentage);
+                        retVal.put(pldId, secPercentMap);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+          logger.error("Error getting pledge sectors from database " + ex);
+        }
+        return retVal;
+    }
+
+    private static Map <Long, Map> getPledgeProgramPercentages (Collection<AmpTheme> programs) {
+        String programWhereclause = generateWhereclause(programs, new ProgramIdGetter());
+
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select pldSec.pledgeid.id, pldSec.program.ampThemeId, pldSec.programpercentage from ");
+            queryStr.append(FundingPledgesProgram.class.getName());
+            queryStr.append(" as pldPrg where pldPrg.programpercentage is not null and pldPrg.programpercentage > 0");
+            if (programWhereclause != null) {
+                queryStr.append(" and pldSec.program.ampThemeId in ");
+                queryStr.append(programWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long pldId = (Long)resArray[0];
+                    Long prgId = (Long)resArray[1];
+                    Float prgPercentage = new Float(((Long)resArray[2]).floatValue());
+
+                    if (retVal.containsKey(pldId)) {
+                        ((Map<Long, Float>) retVal.get(pldId)).put(prgId, prgPercentage);
+                    } else {
+                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
+                        secPercentMap.put(prgId, prgPercentage);
+                        retVal.put(pldId, secPercentMap);
+                    }
+                }
+            }
+        } catch (DgException ex) {
+          logger.error("Error getting pledge programs from database " + ex);
+        }
+        return retVal;
+    }
+
+
+
+    private static Map <Long, Map> getPledgeLocationPercentages (Collection<AmpCategoryValueLocations> locations) {
+        String locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
+        Map <Long, Map> retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select pldLoc.pledgeid.id, pldLoc.location.id, pldLoc.locationpercentage from ");
+            queryStr.append(FundingPledgesLocation.class.getName());
+            queryStr.append(" as pldLoc where pldLoc.locationpercentage is not null and pldLoc.locationpercentage > 0");
+            if (locationWhereclause != null) {
+                queryStr.append(" and pldLoc.location.id in ");
+                queryStr.append(locationWhereclause);
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            List results = q.list();
+
+            if (results != null) {
+                retVal = new HashMap <Long, Map>();
+                for (Object resultObj: results) {
+                    Object[] resArray = (Object[]) resultObj;
+                    Long pldId = (Long)resArray[0];
+                    Long locId = (Long)resArray[1];
+                    Float locPercentage = (Float)resArray[2];
+
+                    if (retVal.containsKey(pldId)) {
+                        ((Map<Long, Float>) retVal.get(pldId)).put(locId, locPercentage);
+                    } else {
+                        Map <Long, Float> locPercentMap = new HashMap <Long, Float>();
+                        locPercentMap.put(locId, locPercentage);
+                        retVal.put(pldId, locPercentMap);
+                    }
+                }
+            }
+        } catch (DgException ex) {
+          logger.error("Error getting activity locations from database " + ex);
+        }
+        return retVal;
+    }
+
+
+
+
+    public static class SectorIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null && obj instanceof AmpSector) {
+                retVal = ((AmpSector) obj).getAmpSectorId();
+            }
+            return retVal;
+        }
+    }
+
+    public static class ProgramIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null && obj instanceof AmpTheme) {
+                retVal = ((AmpTheme) obj).getAmpThemeId();
+            }
+            return retVal;
+        }
+    }
+
+    public static class DonorIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null && obj instanceof AmpOrganisation) {
+                retVal = ((AmpOrganisation) obj).getAmpOrgId();
+            }
+            return retVal;
+        }
+    }
+
+    public static class LocationIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null && obj instanceof AmpCategoryValueLocations) {
+                retVal = ((AmpCategoryValueLocations) obj).getId();
+            }
+            return retVal;
+        }
+    }
+
+    public static class GenericIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null) {
+                retVal = (Long) obj;
+            }
+            return retVal;
+        }
+    }
+
+    private static String generateWhereclause (Collection objects, IdGetter getter) {
+        String retValStr = null;
+        if (objects != null) {
+            StringBuilder retVal = new StringBuilder("(");
+            Iterator it = objects.iterator();
+            while (it.hasNext()) {
+                Object obj = it.next();
+                Long id = getter.getId(obj);
+                retVal.append(id);
+                if (it.hasNext()) {
+                    retVal.append(",");
+                }
+            }
+            retVal.append(")");
+            retValStr = retVal.toString();
+        }
+        return retValStr;
+    }
+
+    public static Collection <AmpSector> getSelectedSectors (Long id, int sectorQueryType) {
+        Collection <AmpSector> retVal = null;
+        if (id > -1) {
+            if (sectorQueryType == SELECT_SECTOR_SCHEME) {
+                List <AmpSector> schemeSecs = SectorUtil.getAllSectorsFromScheme(id);
+                retVal = new ArrayList();
+                for (AmpSector iterSec: schemeSecs) {
+                    retVal.add(iterSec);
+                }
+            } else if (sectorQueryType == SELECT_SECTOR || sectorQueryType == SELECT_DEFAULT) {
+                retVal = SectorUtil.getAllChildSectors(id);
+                retVal.add(SectorUtil.getAmpSector(id));
+            }
+        } else {
+            retVal = SectorUtil.getAllSectors();
+        }
+        return retVal;
+    }
+
+    public static Collection <AmpTheme> getSelectedPrograms (Long id) throws DgException {
+        Collection <AmpTheme> retVal = ProgramUtil.getAllSubThemesFor(id);
+        retVal.add(ProgramUtil.getThemeById(id));
+        return retVal;
+    }
+
+    public static Collection <AmpCategoryValueLocations> getSelectedLocations (String countryISO, int mapLevel) {
+        List retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpCategoryValueLocations.class.getName());
+            if (mapLevel == GisMap.MAP_LEVEL_REGION) {
+                queryStr.append(" as loc where loc.parentCategoryValue.value='Region' and  loc.parentLocation.iso = :COUNTRY_ISO");
+            } else if (mapLevel == GisMap.MAP_LEVEL_DISTRICT) {
+                queryStr.append(" as loc where loc.parentCategoryValue.value='District' and parentLocation.parentLocation.iso = :COUNTRY_ISO");
+            }
+
+            Query q = sess.createQuery(queryStr.toString());
+            q.setString("COUNTRY_ISO", countryISO);
+            retVal = q.list();
+        } catch (Exception ex) {
+          logger.error("Error getting locations from database " + ex);
+        }
+        return retVal;
     }
 }

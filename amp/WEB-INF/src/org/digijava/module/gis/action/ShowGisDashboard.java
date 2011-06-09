@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,8 +15,23 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.digijava.module.aim.ar.util.ReportsUtil;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.filters.GroupingElement;
+import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -28,12 +44,10 @@ import org.digijava.module.widget.util.ChartWidgetUtil;
 public class ShowGisDashboard extends Action {
 
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         GisDashboardForm gisForm = (GisDashboardForm) form;
 
-        Collection sectors = DbUtil.getPrimaryToplevelSectors();
+        
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
         if (baseCurr == null) {
             baseCurr = "USD";
@@ -55,7 +69,140 @@ public class ShowGisDashboard extends Action {
                 }
 
          */
-        gisForm.setSectorCollection(sectors);
+        
+        
+           Collection sectors = DbUtil.getPrimaryToplevelSectors();
+           gisForm.setSectorCollection(sectors);
+        
+           Collection<LabelValueBean> allDonors = new ArrayList <LabelValueBean>() ; 
+		
+           List allDbDonors = DbUtil.getFundingDonors();
+		
+			for (Object donorItem : allDbDonors) {
+				Object[] donorNameId = (Object[]) donorItem;
+				LabelValueBean donorComboItem = new LabelValueBean((String)donorNameId[0], ((Long)donorNameId[1]).toString());
+				allDonors.add(donorComboItem);
+			}
+			
+			gisForm.setAllDonorOrgs(allDonors);
+         
+       
+        //currency
+        Collection currency = CurrencyUtil.getAmpCurrency();
+	    //Only currencies havening exchanges rates AMP-2620
+	    Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+	    gisForm.setCurrencies(validcurrencies);
+	    for (Iterator iter = currency.iterator(); iter.hasNext();) {
+	    	AmpCurrency element = (AmpCurrency) iter.next();
+			if( CurrencyUtil.isRate(element.getCurrencyCode())== true){
+				gisForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+			}
+		}
+	    
+	    //calendars 
+	    Collection allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
+	    gisForm.setCalendars(allFisCalenders);
+	    
+	    ServletContext ampContext = getServlet().getServletContext();
+	    
+	    List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);		
+ 	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
+        List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
+ 	 	
+ 	 	
+        gisForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+        gisForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
+ 	 	
+ 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
+	 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
+	 	 	rootAmpSectors.setLabel("Primary Sectors");
+	 	 	rootAmpSectors.setUniqueId(0 + "");
+	 	 	rootAmpSectors.setChildren(ampSectors);
+	 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
+	 	 	gisForm.getSectorElements().add(sectorsElement);
+ 	 	}
+ 	 	
+ 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
+ 	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
+ 	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
+ 	 		rootSecondaryAmpSectors.setUniqueId("0");
+ 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
+ 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
+ 	 		gisForm.getSectorElements().add(secondarySectorsElement);
+ 	 	}
+
+        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
+ 	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
+ 	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
+ 	 		rootTertiaryAmpSectors.setUniqueId("0");
+ 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
+ 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
+ 	 		gisForm.getSectorElements().add(tertiarySectorsElement);
+ 	 	}
+ 	 		
+ 	 	
+ 	 	
+		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+		AmpTheme primaryProg = null;
+		List<AmpTheme> primaryPrograms;		
+		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
+			primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
+			gisForm.getProgramElements().add(primaryProgElement);
+		}
+		
+		AmpTheme secondaryProg = null;
+ 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
+ 	 	List<AmpTheme> secondaryPrograms;		
+		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
+			secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
+			gisForm.getProgramElements().add(secondaryProgElement);
+		}
+ 	 	
+		AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+ 	 	
+		List<AmpTheme> nationalPlanningObjectives;
+ 	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
+ 	 		AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy()); 	 	 	
+ 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
+ 	 	 	gisForm.getProgramElements().add(natPlanProgElement);
+		}
+ 	 	
+ 	 	Collection donorTypes = org.digijava.module.aim.util.DbUtil.getAllOrgTypesOfPortfolio();
+ 	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(org.digijava.module.aim.util.DbUtil.getAllOrgGroupsOfPortfolio());
+ 	 	gisForm.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+ 	 	
+ 	 	HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation();
+ 	 	rootOrgType.setLabel("All Donor Types");
+ 	 	rootOrgType.setUniqueId("0");
+ 	 	rootOrgType.setChildren( donorTypes );
+ 	 	GroupingElement<HierarchyListableImplementation> donorTypeElement = new GroupingElement<HierarchyListableImplementation>("Donor Types", "filter_donor_types_div", rootOrgType, "selectedDonorTypes");
+ 	 	gisForm.getDonorElements().add(donorTypeElement);
+ 	 	
+ 	 	HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
+ 	 	rootOrgGroup.setLabel("All Donor Groups");
+ 	 	rootOrgGroup.setUniqueId("0");
+ 	 	rootOrgGroup.setChildren( donorGroups );
+ 	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
+ 	 	gisForm.getDonorElements().add(donorGroupElement);
+ 	 	
+ 	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);
+ 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
+ 	 	rootDonors.setLabel("All Donors");
+ 	 	rootDonors.setUniqueId("0");
+ 	 	rootDonors.setChildren( donors );
+ 	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonnorAgency");
+ 	 	gisForm.getDonorElements().add(donorsElement);
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+       
         gisForm.setAvailYears(DbUtil.getAvailIndicatorYears());
         //dropdown(on toolbar) things
 		Calendar cal=Calendar.getInstance();
@@ -67,17 +214,7 @@ public class ShowGisDashboard extends Action {
 		//fill to years' drop-down
 		gisForm.setYearsTo(ChartWidgetUtil.getYears(false));
 
-		Collection<LabelValueBean> allDonors = new ArrayList <LabelValueBean>() ; 
 		
-		List allDbDonors = DbUtil.getFundingDonors();
-		
-		for (Object donorItem : allDbDonors) {
-			Object[] donorNameId = (Object[]) donorItem;
-			LabelValueBean donorComboItem = new LabelValueBean((String)donorNameId[0], ((Long)donorNameId[1]).toString());
-			allDonors.add(donorComboItem);
-		}
-		
-		gisForm.setAllDonorOrgs(allDonors);
 			
 		if (request.getParameter("public")!=null){
 			request.getSession().setAttribute("publicuser", true);

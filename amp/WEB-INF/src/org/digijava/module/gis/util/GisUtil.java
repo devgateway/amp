@@ -228,6 +228,213 @@ public class GisUtil {
         }
 
     }
+    
+    public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
+            List dashedPaintList,
+            int canvasWidth, int canvasHeight,
+            float mapLeftX,
+            float mapRightX, float mapTopY, float mapLowY,
+            boolean fill, boolean makeGrid) {
+
+BufferedImage txtImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
+Graphics txtGraph = txtImage.getGraphics();
+txtGraph.setColor(new Color(0,0,0,80));
+txtGraph.drawLine(0,0,3,3);
+
+TexturePaint tp = new TexturePaint(txtImage, new Rectangle(0,0,3,3));
+
+
+float scale = 1f; //Pixels per degree
+
+int border = 10;
+
+float scaleX = (float) (canvasWidth - border * 2) /
+    (mapRightX - mapLeftX);
+float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
+
+
+
+
+int centerXOffset = 0;
+int centerYOffset = 0;
+
+if (scaleX < scaleY) {
+scale = scaleX;
+centerYOffset = ((canvasHeight - border * 2) - (int)((mapTopY - mapLowY) * scale))/2;
+
+} else {
+scale = scaleY;
+centerXOffset = ((canvasWidth - border * 2) - (int)((mapRightX - mapLeftX) * scale))/2;
+}
+
+
+int xOffset = (int) ( -mapLeftX * scale) + border + centerXOffset;
+int yOffset = (int) ( -mapLowY * scale) + centerYOffset;
+
+
+try {
+
+//Color paintColor = new Color(39, 39, 119);
+Color paintColor = new Color(201, 153, 113);
+Color fillColor = null;
+
+boolean addDashPaint = false;
+
+for (int segmentId = 0; segmentId < mapData.size();
+              segmentId++) {
+
+GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
+
+//Get hilight color
+if (hDataList != null && hDataList.size() > 0) {
+ ColorRGB cRGB = getColorForSegment((int) gms.getSegmentId(),
+         hDataList);
+ if (cRGB != null) {
+     fillColor = new Color(cRGB.getRed(), cRGB.getGreen(),
+                           cRGB.getBlue());
+ } else {
+     fillColor = paintColor;
+ }
+} else if (fill && fillColor == null) {
+ fillColor = paintColor;
+}
+
+//Get dashpaint color
+if (dashedPaintList != null && dashedPaintList.size() > 0) {
+ ColorRGB cRGB = getColorForSegment((int) gms.getSegmentId(),
+        dashedPaintList);
+if (cRGB != null) {
+    addDashPaint = true;
+    //txtGraph.clearRect(0,0,3,3);
+    txtGraph.setColor(new Color(cRGB.getRed(),
+            cRGB.getGreen(),
+            cRGB.getBlue(), 80));
+    txtGraph.drawLine(0,0,3,3);
+} else {
+   addDashPaint = false;
+}
+}
+
+
+
+for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
+
+ GisMapShape shape = (GisMapShape) gms.getShapes().get(
+         shapeId);
+ int[] xCoords = new int[shape.getShapePoints().size()];
+ int[] yCoords = new int[shape.getShapePoints().size()];
+
+ for (int mapPointId = 0;
+                       mapPointId < shape.getShapePoints().
+                       size();
+                       mapPointId++) {
+     GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().
+                       get(
+                               mapPointId);
+
+     int xCoord = xOffset +
+                  (int) ((gmp.getLongatude()) *
+                         scale);
+     int yCoord = canvasHeight - border - (yOffset +
+             (int) ((gmp.getLatitude()) *
+                    scale));
+     xCoords[mapPointId] = xCoord;
+     yCoords[mapPointId] = yCoord;
+ }
+
+ if (fill) {
+     Color gg = fillColor;
+     //TODO: Improve this it's a last minute solution
+     if (shape.getSegment().getSegmentName().indexOf("Lake")>=0){
+             g2d.setColor( new Color(51,153,255));
+
+             }else{
+                     g2d.setColor(gg);
+             }
+     g2d.fillPolygon(xCoords, yCoords,
+                     shape.getShapePoints().size());
+
+     //Dash
+     if (addDashPaint) {
+         g2d.setPaint(tp);
+         g2d.fillPolygon(xCoords, yCoords,
+                         shape.getShapePoints().size());
+         g2d.setPaint(null);
+     }
+
+
+
+     g2d.setColor(new Color(0, 0, 0, 70));
+     g2d.drawPolygon(xCoords, yCoords,
+                     shape.getShapePoints().size());
+
+
+
+ } else {
+     /*
+      g2d.setColor(new Color(39, 39, 119));
+      g2d.fillPolygon(xCoords, yCoords,
+                     shape.getShapePoints().size());
+      */
+
+     g2d.setColor(new Color(0, 0, 0, 50));
+     g2d.drawPolygon(xCoords, yCoords,
+                     shape.getShapePoints().size());
+
+ }
+}
+}
+
+//make grid
+if (makeGrid) {
+g2d.setColor(new Color(57, 57, 128, 80));
+for (float paralels = -90; paralels <= 90; paralels += 10) {
+ g2d.drawLine(border,
+              canvasHeight - border -
+              (yOffset + (int) ((paralels) * scale)),
+              canvasWidth - border,
+              canvasHeight - border -
+              (yOffset + (int) ((paralels) * scale)));
+}
+
+for (float meridians = -180; meridians <= 180; meridians += 10) {
+ g2d.drawLine(xOffset + (int) (meridians * scale),
+              border,
+              xOffset + (int) (meridians * scale),
+              canvasHeight - border);
+}
+
+g2d.setColor(new Color(130, 130, 164, 80));
+
+g2d.drawLine(border,
+          canvasHeight - border - yOffset,
+          canvasWidth - border,
+          canvasHeight - border - yOffset);
+
+g2d.drawLine(xOffset,
+          border,
+          xOffset,
+          canvasHeight - border);
+}
+
+//make border
+
+g2d.setColor(new Color(0, 0, 100));
+
+g2d.fillRect(0, 0, canvasWidth, border - 1);
+g2d.fillRect(0, 0, border - 1, canvasHeight);
+g2d.fillRect(canvasWidth - border + 1, 0, canvasWidth, canvasHeight);
+g2d.fillRect(0, canvasHeight - border + 1, canvasWidth, canvasHeight);
+
+g2d.setColor(new Color(200, 200, 200, 255));
+g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5,
+      canvasHeight - border * 2 + 5);
+} catch (Exception ex) {
+String ggg = "ggg";
+}
+
+
+}
 
 
     public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,

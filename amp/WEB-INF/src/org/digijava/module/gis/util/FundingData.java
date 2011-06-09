@@ -70,4 +70,11 @@ public class FundingData {
         this.activityLocationFundingList = activityLocationFundingList;
     }
 
+    public void add(FundingData fd) {
+        this.commitment = this.commitment.add(fd.getCommitment());
+        this.disbursement = this.disbursement.add(fd.getDisbursement());
+        this.expenditure = this.expenditure.add(fd.getExpenditure());
+
+    }
+
 }

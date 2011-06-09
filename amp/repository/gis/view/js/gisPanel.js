@@ -5,7 +5,7 @@
 	function initPanel() {
 		gisPanel = new YAHOO.widget.Panel("myGisPanel", {
 			width:"600px", 
-			height:"500px", 
+			height:"550px",
 			fixedcenter: true, 
 			constraintoviewport: true, 
 			underlay:"shadow", 
@@ -14,7 +14,7 @@
 			visible:false, 
 			draggable:true} );
 
-		gisPanel.setHeader("GIS Panel");
+		gisPanel.setHeader("Map Filter");
 		gisPanel.setBody("Empty");
 		gisPanel.setFooter("");
 		gisPanel.render(document.body);		
@@ -53,6 +53,7 @@
 		gisPanel.setBody(element.innerHTML);
 	}
 	function showPanel (panelNum) {
+		//gisPanel.setBody(document.getElementById("filter_dialog"));
 		gisPanel.show();
 	}
 	function hidePanel (panelNum) {

@@ -221,7 +221,7 @@
             var fromYear = document.getElementsByName('selectedFromYear')[0].value;
             var toYear = document.getElementsByName('selectedToYear')[0].value;
             var fundingType = document.getElementById('fundingType').value;
-            var donorId = document.getElementById('donorsCombo').value;
+            //var donorId = document.getElementById('donorsCombo').value;
             var uniqueStr = (new Date()).getTime();
             var mapMode = $("#mapModeFin").val();
             if (mapMode == null) {
@@ -236,10 +236,41 @@
             	onlyCurWS = false;
             }
             
+            var selectedDonorGroups = new Array();
+            setSelectedValues(selectedDonorGroups,'selectedDonorGroups');
+           
+            var selectedDonorTypes = new Array ();
+            setSelectedValues(selectedDonorTypes,'selectedDonorTypes');
             
+            var selectedDonnorAgency = new Array();
+            setSelectedValues(selectedDonnorAgency,'selectedDonnorAgency');
+            
+            var selectedNatPlanObj = new Array();
+            setSelectedValues(selectedNatPlanObj,'selectedNatPlanObj');
+            
+            var selectedPrimaryPrograms = new Array();
+            setSelectedValues(selectedPrimaryPrograms,'selectedPrimaryPrograms');
+            
+            var selectedSecondaryPrograms = new Array();
+            setSelectedValues(selectedSecondaryPrograms,'selectedSecondaryPrograms');
+            
+            var selectedSectors = new Array();
+            setSelectedValues(selectedSectors,'selectedSectors');
+            
+            var selectedSecondarySectors = new Array();
+            setSelectedValues(selectedSecondarySectors,'selectedSecondarySectors');
+            
+            var selectedTertiarySectors = new Array();
+            setSelectedValues(selectedTertiarySectors,'selectedTertiarySectors');
+            
+            alert('haha');
             //setBusy(true);
-            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-
+            //var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&selectedDonorGroups=" + selectedDonorGroups.value
+            + "&selectedDonorTypes=" + selectedDonorTypes.value + "&selectedDonnorAgency=" + selectedDonnorAgency.value + "&selectedNatPlanObj=" + selectedNatPlanObj.value + "&selectedPrimaryPrograms=" + selectedPrimaryPrograms.value 
+            + "&selectedSecondaryPrograms=" + selectedSecondaryPrograms.value + "&selectedSectors=" + selectedSectors.value+ "&selectedSecondarySectors=" + selectedSecondarySectors.value + "&selectedTertiarySectors=" + selectedTertiarySectors.value 
+            + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            
             $("#testMap").attr({src: newUrl});
             
             if (sect != -2) {
@@ -261,6 +292,7 @@
 						$('#fundingTypeSelected').html($('#fundingType option:selected').text());
 						$('#donorSelected').html($('#donorsCombo option:selected').text());
         }
+        
         
         jQuery.fn.donorSelectedFin = function(donorId){
             var selSector = $("#sectorsMapComboFin").val();
@@ -1191,7 +1223,7 @@
 
 		//$('.filter_wnd_background_holder').hide();
 		
-		hidePanel(0);		
+		hideFilter();
 		jQuery.fn.sectorSelectedFin(queryParam);
 	}
 	

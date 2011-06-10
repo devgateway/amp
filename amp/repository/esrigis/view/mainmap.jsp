@@ -40,6 +40,7 @@
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
+   	
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <!-- Individual YUI CSS files --> 
@@ -70,6 +71,12 @@
 	});
 
 	$(function(){
+  		$('#search').click(function(){
+     		$('#distancediv').toggle();
+     	});
+	});
+
+	$(function(){
   		$('#basemap').click(function(){
      		$('#basemapGalleryesri').toggle();
      	});
@@ -80,7 +87,6 @@
      		$('#basemapGallery').toggle();
      	});
 	});
-
 </script>
 
  	<!-- Filter Styles -->
@@ -135,6 +141,7 @@
 					<tr>
 						<td id="toolsbtn" valign="middle" align="right" style="cursor: pointer;">Tools</td>
 						<td id="filterbtn" valign="middle" align="right" style="cursor: pointer;">Filter</td>
+						<td valign="middle" align="center" id="search" style="cursor: pointer;">Search</td>
 						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
 						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
@@ -158,6 +165,19 @@
  		</div>
  		 
         <div id="legenddiv" class="legendContent">
+        </div>
+        <div id="distancediv" class="legendContent">
+        	<table>
+        		<tr>
+        			<td>Distance in Km</td>
+        			<td>
+        				<input type="text" id="distance" width="5px"/> 
+        			</td>
+        			<td>
+        				<input type="button" id="sbyd" width="5px" value="Go"/> 
+        			</td>
+        		</tr>
+        	</table>
         </div>
  		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:20px; top:10px; z-Index:999;display: none;margin-top: 45px;">
 			<div dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>

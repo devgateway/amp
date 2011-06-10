@@ -9,6 +9,19 @@ function createBasemapGallery() {
 	var WorldTopolayer = new esri.dijit.BasemapLayer(
 			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Topo_Map/MapServer"});
 	
+	var WorldImagery = new esri.dijit.BasemapLayer(
+			{url : "http://syberia.devgateway.org:8399/arcgis/rest/services/World_Imagery/MapServer"});
+	
+	var WorldTerrain = new esri.dijit.BasemapLayer(
+			{url : "http://syberia.devgateway.org:8399/arcgis/rest/services/World_Terrain_Base/MapServer"});
+	
+	var WorldShaded = new esri.dijit.BasemapLayer(
+			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Shaded_Relief/MapServer"});
+	
+	
+	var WorldStreet = new esri.dijit.BasemapLayer(
+			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer"});
+	
 	
 	var worldphysicalmap = new esri.dijit.Basemap({
 		layers : [ worldphysicallayer ],
@@ -19,13 +32,39 @@ function createBasemapGallery() {
 	var worldtopodmap = new esri.dijit.Basemap({
 		layers : [ WorldTopolayer ],
 		title : "World Topo Map",
-		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_shaded_map_thumb.png"
+		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_topo_map_thumb.png"
 	});
 	
+	var worldimagery = new esri.dijit.Basemap({
+		layers : [ WorldImagery ],
+		title : "World_Imagery",
+		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_imagery_map_thumb.png"
+	});
+	
+	var worldterrain = new esri.dijit.Basemap({
+		layers : [ WorldTerrain ],
+		title : "World Terrain",
+		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_terrain_map_thumb.png"
+	});
+	
+	var worldshaded = new esri.dijit.Basemap({
+		layers : [ WorldShaded ],
+		title : "World Shaded Relief",
+		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_shaded_map_thumb.png"
+	});
 
+	var worldsstreet = new esri.dijit.Basemap({
+		layers : [ WorldStreet ],
+		title : "World Street",
+		thumbnailUrl : "/TEMPLATE/ampTemplate/img_2/world_street_map_thumb.png"
+	});
+	
 	basemaps.push(worldphysicalmap);
 	basemaps.push(worldtopodmap);
-
+	basemaps.push(worldimagery);
+	basemaps.push(worldterrain);
+	basemaps.push(worldshaded);
+	basemaps.push(worldsstreet);
 	
 
 	var basemapGallery = new esri.dijit.BasemapGallery({

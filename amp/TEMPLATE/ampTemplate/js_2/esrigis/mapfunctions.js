@@ -2,7 +2,6 @@ dojo.require("dijit.dijit"); // Optimize: load dijit layer
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("esri.map");
-dojo.require("esri.layers.FeatureLayer");
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojo.data.ItemFileReadStore");
 dojo.require("esri.toolbars.navigation");
@@ -13,6 +12,7 @@ dojo.require("esri.tasks.geometry");
 dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
 dojo.require("dijit.TitlePane");
+dojo.require("dijit.Menu");
 
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
@@ -29,7 +29,7 @@ var basemap;
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
-	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
+	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
 	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
 	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
@@ -70,11 +70,8 @@ function init() {
 // Create a map, set the extent, and add the services to the map.
 function createMapAddLayers(myService1, myService2) {
 	// create map
-	var lods = basemap.tileInfo.lods;
-	 
-	 
-	map = new esri.Map("map", {lods:lods,
-		extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
+	lods = 
+	map = new esri.Map("map", {extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
@@ -86,6 +83,7 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(povertymap);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
+	//dojo.connect(map, "onClick", doBuffer);
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();
@@ -105,7 +103,7 @@ function showExtent(extent, delta, levelChange, lod) {
 	var buffer = 100;
 	console.log(extent.xmin + "," + maxExtent.xmin);
 	var onLoadHandle = dojo.connect(basemap, "onUpdate", function() {
-		//cancel the connection because it shouldn only be triggered when extent changes. Other events causing tiles loading shoudn't trigger this.
+		//cancel the connection because it should'n only be triggered when extent changes. Other events causing tiles loading shoudn't trigger this.
         dojo.disconnect(onLoadHandle);
         if(extent.xmin < maxExtent.xmin-buffer) {
 			adjustedEx.xmin = maxExtent.xmin;
@@ -188,8 +186,39 @@ function resizeMap() {
 // show map on load
 dojo.addOnLoad(init);
 
+
+function doBuffer(evt) {
+    map.graphics.clear();
+    var params = new esri.tasks.BufferParameters();
+    params.geometries = [ evt.mapPoint ];
+
+    //buffer in linear units such as meters, km, miles etc.
+    params.distances = [ 2, 30 ];
+    params.unit = esri.tasks.GeometryService.UNIT_KILOMETER;
+    params.outSpatialReference = map.spatialReference;
+
+    geometryService.buffer(params, showBuffer);
+  }
+
+  function showBuffer(geometries) {
+
+    var symbol = new esri.symbol.SimpleFillSymbol(
+      esri.symbol.SimpleFillSymbol.STYLE_SOLID,
+      new esri.symbol.SimpleLineSymbol(
+        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+        new dojo.Color([0,0,255,0.65]), 2
+      ),
+      new dojo.Color([0,0,255,0.20])
+    );
+
+    dojo.forEach(geometries, function(geometry) {
+      var graphic = new esri.Graphic(geometry,symbol);
+      map.graphics.add(graphic);
+    });
+  }
+
 function getActivities(clear) {
-	if (clear){
+	if (clear && cL){
 		cL.clear();
 	}
 	
@@ -351,13 +380,6 @@ function drawpoints(){
 	map.addLayer(cL);
 	timer_on=0;
 	}
-}
-
-function measuredistance(distance){
-	var distParams = new esri.tasks.DistanceParameters();
-	distParams.geometry1 = inputPoints[inputPoints.length -2]; 
-	distParams.geometry2 = inputPoints[inputPoints.length -1];
-	
 }
 
 //FFerreyra Functions

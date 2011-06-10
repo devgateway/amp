@@ -105,12 +105,7 @@
 	       	 				<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
 	    				</html:select> 
 	    				<br>
-	    				<b>Organization Type:</b><br />
-						<html:select  property="filter.orgtypeIds" styleId="org_type_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-	        				<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	       	 				<html:optionsCollection property="filter.organizationstype" value="ampOrgTypeId" label="orgType"  />
-	    				</html:select> 
-      					<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+	    				
 						<hr />
 						<div id="divOrgDrpdwn">
 						<b>Organization:</b><br />
@@ -337,7 +332,7 @@ function callbackApplyFilter(e){
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_group_dropdown_ids");
-	params = params + "&orgtypeIds=" + getSelectionsFromElement("org_type_dropdown_ids");
+	//params = params + "&orgtypeIds=" + getSelectionsFromElement("org_type_dropdown_ids");
 	params = params + "&orgIds=" + getSelectionsFromElement("org_dropdown_ids");
 	params = params + "&regionIds=" + getSelectionsFromElement("region_dropdown_ids");
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_dropdown_ids");
@@ -417,8 +412,8 @@ var callbackChildrenCall = {
 
 
 YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("org_type_dropdown_ids", callbackChildren);
-YAHOO.util.Event.addListener("org_type_dropdown_ids", "change", callbackChildren);
+//YAHOO.util.Event.onAvailable("org_type_dropdown_ids", callbackChildren);
+//YAHOO.util.Event.addListener("org_type_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren)
 YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
@@ -435,7 +430,7 @@ function resetToDefaults(){
 	}
 	showLoading();
 
-	document.getElementById("org_type_dropdown_ids").selectedIndex = 0;
+	//document.getElementById("org_type_dropdown_ids").selectedIndex = 0;
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;

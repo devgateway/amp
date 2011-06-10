@@ -1,11 +1,10 @@
 .yui-panel .hd {
-    background-color:#990000 !important;
-    color:#FFF;
-    font-size:100%;
+    background-color:#C7D4DB !important;
+    color:#000000 !important; 
+    font-size:12px !important;
     line-height:100%;
-    border:1px solid #FFF;
-    border-bottom:1px solid #000;
-    font-weight:bold;
+    border-bottom:1px solid #AEBAC0 !important;
+    font-weight:bold !important;
     padding:4px;
     white-space:nowrap;
 }

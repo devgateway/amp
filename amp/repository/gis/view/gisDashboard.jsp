@@ -203,7 +203,6 @@
 
 
 <link href="TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <script language="JavaScript">

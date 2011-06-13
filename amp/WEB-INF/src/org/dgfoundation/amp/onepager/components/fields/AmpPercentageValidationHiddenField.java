@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.RangeValidator;
@@ -22,9 +24,11 @@ import bsh.This;
  * @since Feb 16, 2011
  */
 public abstract class AmpPercentageValidationHiddenField<T> extends
-		AmpHiddenFieldPanel<Double> {
+		AmpHiddenFieldPanel<Double> implements IAjaxIndicatorAware {
 
+	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
+	
 	/**
 	 * Reloads {@link This} component through {@link AjaxRequestTarget}.
 	 * This method clears the component input, so it is re-validated, it also simulates an 'onChange' event using jQuery
@@ -62,6 +66,8 @@ public abstract class AmpPercentageValidationHiddenField<T> extends
 		
 		hiddenContainer.setType(Double.class);
 		hiddenContainer.add(new RangeValidator<Double>(100d, 100d));
+		
+		add(indicatorAppender);
 	}
 	
 	/**
@@ -71,5 +77,10 @@ public abstract class AmpPercentageValidationHiddenField<T> extends
 	 */
 	public abstract Number getPercentage(T item);
 	
+
+	@Override
+	public String getAjaxIndicatorMarkupId() {
+		return indicatorAppender.getMarkupId();
+	}
 
 }

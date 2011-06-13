@@ -923,6 +923,8 @@ function changeChild (selected){
 <html:hidden property="filter.transactionType" styleId="transactionType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+<html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
+<html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
@@ -2035,12 +2037,12 @@ function changeChart(e, chartType, container){
 	    }
 	    caller.className = "sel_sm_b";
 	}
-	var currentYear = document.getElementById("currentYear").value;
-	var yearsInRange = document.getElementById("yearsInRange").value;
-	var minSlider =  "" + (currentYear - yearsInRange + 1);
-	var maxSlider =  "" + currentYear;
-	var flashvars = { minSlider: minSlider, maxSlider: maxSlider };
-
+	var decimalSeparator = document.getElementById("decimalSeparator").value;
+	var groupSeparator = document.getElementById("groupSeparator").value;
+	//var minSlider =  "" + (currentYear - yearsInRange + 1);
+	//var maxSlider =  "" + currentYear;
+	var flashvars = { decimalSeparator: decimalSeparator, groupSeparator: groupSeparator };
+	
 	var params = {};
 	var attributes = {};
 	attributes.id = container;

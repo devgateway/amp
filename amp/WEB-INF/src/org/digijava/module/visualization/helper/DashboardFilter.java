@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -73,6 +74,8 @@ public class DashboardFilter {
 
     private Long activityId;
     private int decimalsToShow;
+    private String groupSeparator = FormatHelper.getGroupSymbol();
+    private String decimalSeparator = FormatHelper.getDecimalSymbol();
     
     public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
@@ -543,6 +546,22 @@ public class DashboardFilter {
 
 	public void setDecimalsToShow(int decimalsToShow) {
 		this.decimalsToShow = decimalsToShow;
+	}
+
+	public String getDecimalSeparator() {
+		return decimalSeparator;
+	}
+
+	public void setDecimalSeparator(String decimalSeparator) {
+		this.decimalSeparator = decimalSeparator;
+	}
+
+	public String getGroupSeparator() {
+		return groupSeparator;
+	}
+
+	public void setGroupSeparator(String groupSeparator) {
+		this.groupSeparator = groupSeparator;
 	}
 
 	

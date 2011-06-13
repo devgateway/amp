@@ -48,16 +48,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 	
 	<mx:Script>
 		<![CDATA[
+			import com.exportUtil.*;
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-			import com.exportUtil.*;
 			
 			import org.axiis.data.DataSet;
 			
 			private var ds:DataSet = new DataSet();
+			static var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -80,6 +83,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 				hAxis.invalidateDataProvider();
 				// Has to be called any time the dataCanvas dp is changed
 				dc.invalidateDisplayList();
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
 			}
@@ -119,7 +127,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 			 */
 			private function axisLabel(obj:Object):String
 			{
-				return formatter.format(Number(obj));
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.useThousandsSeparator=true;
+				return formatter.format(obj);
 			}
 			
 			/**
@@ -196,7 +209,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 						  precision="0"
 						  id="formatter"
 						  alignSymbol="right"
-						  useThousandsSeparator="true"/>
+							useThousandsSeparator="true"/>
 	
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
@@ -288,7 +301,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				showDataTips="false"
 				fontFamily="Myriad Pro"
 				fontColor="0"
-				fontSize="14"
+				fontSize="12"
 				tickGap="5"
 				majorTickSpacing="50"
 				labelFunction="{axisLabel}"/>
@@ -454,10 +467,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 	
 	<!-- DISPLAY OBJECTS -->
 	<mx:Number id="dataSlice">20</mx:Number>
-	<mx:Number id="slider">35</mx:Number>
+	<mx:Number id="slider">1</mx:Number>
 	<mx:Number id="labelRotate">0</mx:Number>
-	<mx:Boolean id="area">true</mx:Boolean>
-	<mx:Boolean id="showMarker">false</mx:Boolean>
+	<mx:Boolean id="area">false</mx:Boolean>
+	<mx:Boolean id="showMarker">true</mx:Boolean>
 	<mx:Number id="layoutGroup">{LineSeriesGroup.MODE_BASELINE}</mx:Number>
 	
 	<!--

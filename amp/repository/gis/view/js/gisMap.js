@@ -263,7 +263,6 @@
             var selectedTertiarySectors = new Array();
             setSelectedValues(selectedTertiarySectors,'selectedTertiarySectors');
             
-            alert('haha');
             //setBusy(true);
             //var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
             var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&selectedDonorGroups=" + selectedDonorGroups.value
@@ -1203,16 +1202,52 @@
 		}
 		markup.push ("</table>");
 	}
+	
+	function filterSet(data) {
+		
+		var mapLevelInt = $("#mapLevel").val();
+		
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
+		
+	}
 
-	function applySectorFilter() {
+	function applySectorFilter(obj) {
+		
+		//obj.form.submit()
+		
+		
+		$("#filterStartYear").val($("select[name='selectedFromYear']").val());
+		$("#filterEndYear").val($("select[name='selectedToYear']").val());
+		
+		
+		var allSectors = false;
+		if ($("input[name='selectedSectors']:checked").length + 
+				$("input[name='selectedSecondarySectors']:checked").length + 
+				$("input[name='selectedTertiarySectors']:checked").length == 0) {
+			$("input[name='selectedSectors']").attr("checked", "true");
+			$("input[name='selectedSecondarySectors']").attr("checked", "true");
+			$("input[name='selectedTertiarySectors']").attr("checked", "true");
+			allSectors = true;
+		}
+	
+		var requestURL = "../../gis/getFoundingDetails.do?mapCode=TZA&action=filter";
+    $.post(requestURL, $("#gisFilterForm").serialize(), filterSet);
+    
+    if (allSectors) {
+    	$("input[name='selectedSectors']").attr("checked", "false");
+			$("input[name='selectedSecondarySectors']").attr("checked", "false");
+			$("input[name='selectedTertiarySectors']").attr("checked", "false");
+    }
+		
+		/*
 		var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
 		var selSector = $(".sec_selector_item_selected").attr('id');
 		var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
-		
+		*/
 		//var selectionTxt = getSectorSelectionText (queryParam);
 		
 		
-		$('#sectorsMapComboFin').attr("value", queryParam);
+		//$('#sectorsMapComboFin').attr("value", queryParam);
 		
 		/*
 		$('#sectorSelected').html(selectionTxt);
@@ -1222,9 +1257,9 @@
 		*/
 
 		//$('.filter_wnd_background_holder').hide();
-		
+		/*
 		hideFilter();
-		jQuery.fn.sectorSelectedFin(queryParam);
+		jQuery.fn.sectorSelectedFin(queryParam);*/
 	}
 	
 	
@@ -1477,6 +1512,7 @@
 	}
 	
 	function setBusy(busy) {
+		return;
 		    /*
 			alert (actionImgLoading + " - " +
 				   actionGetImageMap  + " - " +

@@ -59,7 +59,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import org.axiis.data.DataSet;
 			
 			private var ds:DataSet = new DataSet();
-			static var groupSeparator:String = null;
+			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
 			/**
 			 * This example is using xml data read from the file system. 

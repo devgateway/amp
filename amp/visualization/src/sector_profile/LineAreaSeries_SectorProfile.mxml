@@ -58,6 +58,8 @@
 			import org.axiis.data.DataSet;
 
 			private var ds:DataSet = new DataSet();
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -80,6 +82,11 @@
 				hAxis.invalidateDataProvider();
 				// Has to be called any time the dataCanvas dp is changed
 				dc.invalidateDisplayList();
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
 			}
@@ -120,7 +127,12 @@
 			 */
 			private function axisLabel(obj:Object):String
 			{
-				return formatter.format(Number(obj));
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.useThousandsSeparator=true;
+				return formatter.format(obj);
 			}
 
 			/**
@@ -289,7 +301,7 @@
 				showDataTips="false"
 				fontFamily="Myriad Pro"
 				fontColor="0"
-				fontSize="14"
+				fontSize="12"
 				tickGap="5"
 				majorTickSpacing="50"
 				labelFunction="{axisLabel}"/>

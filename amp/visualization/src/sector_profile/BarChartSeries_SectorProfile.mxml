@@ -57,6 +57,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import com.exportUtil.*;
 			
 			private var ds:DataSet = new DataSet();
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
 			
 			/**
 			 * This example is using xml data read from the file system. 
@@ -85,6 +87,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 				dataProvider = service.lastResult.sector;
 				dc.visible = true;
 				dc.invalidateDisplayList();
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
 			}
@@ -140,6 +147,20 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 			}
 			
+			/**
+			 * The labelFunction property of the LineSeriesGroup, and other components, allow you to 
+			 * to determine how each to format each label the component displays
+			 */
+			private function axisLabel(obj:Object):String
+			{
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.useThousandsSeparator=true;
+				return formatter.format(obj);
+			}
+			
 			public function refreshGraph():void
 			{
 				service.send();
@@ -152,7 +173,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<!-- 
 	Provide nice background to chart 
 	-->
-	
+	<mx:CurrencyFormatter currencySymbol=""
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
 	
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
@@ -210,7 +235,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 						fontFamily="Myriad Pro"
 						fontColor="0"
 						fontSize="12"
-						tickGap="5"/>
+						tickGap="5"
+						labelFunction="{axisLabel}"/>
 		</axiis:backgroundGeometries>
 		
 		<!-- Layouts -->

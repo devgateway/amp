@@ -15,11 +15,14 @@
 
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript">
     <jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
+ 
+
+
 
 <style type="text/css">
     .selectStyle {
@@ -2128,7 +2131,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     
 	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
-            <td colspan="2" align=center>
+            <td colspan="2" align=center class="yui-skin-sam">
 				<table width="95%" cellspacing="0" cellpadding="0" border="0">
 					<tr>									
 						<td bgcolor=#f4f4f2 align=center>

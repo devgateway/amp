@@ -1,12 +1,13 @@
 package org.digijava.module.gis.util;
 
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -19,6 +20,78 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class RMMapCalculationUtil {
+
+    public static Object[] getAllFundingsFiltered (GisFilterForm filter) {
+
+        Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
+        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+
+        Set sectorCollector = new HashSet();
+
+        if (primartSectors != null) {
+            sectorCollector.addAll(primartSectors);
+        }
+        if (secondarySectors != null) {
+            sectorCollector.addAll(secondarySectors);
+        }
+        if (tertiarySectors != null) {
+            sectorCollector.addAll(tertiarySectors);
+        }
+        Collection allSectors = sectorCollector;
+
+        Collection<Long> donorTypeIds = longArrayToColl(filter.getSelectedDonorTypes());
+        Collection<Long> donorGroupIds = longArrayToColl(filter.getSelectedDonorGroups());
+        Collection<Long> donnorAgencyIds = longArrayToColl(filter.getSelectedDonnorAgency());
+        Collection<Long> programsIds = longArrayToColl(filter.getSelectedNatPlanObj());
+
+        String defaultCountryISO = null;
+
+        try {
+        defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, new Integer(filter.getMapLevel()));
+
+        Calendar fStartDate = Calendar.getInstance();
+                fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
+        Calendar fEndDate = Calendar.getInstance();
+                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
+
+
+
+        Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
+                                                               programsIds,
+                                                               donnorAgencyIds,
+                                                               donorGroupIds,
+                                                               donorTypeIds,
+                                                               locations,
+                                                               null, fStartDate.getTime(), fEndDate.getTime());
+        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+                                                                               programsIds,
+                                                                               donnorAgencyIds,
+                                                                               donorGroupIds,
+                                                                               donorTypeIds,
+                                                                               locations,
+                                                                               null, fStartDate.getTime(), fEndDate.getTime());
+        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
+
+
+        return fundingList;
+    }
+
+    private static Collection <Long> longArrayToColl(Long[] arrToAdd) {
+        Collection retVal = null;
+        new ArrayList();
+        if (arrToAdd != null) {
+            retVal = new ArrayList();
+            for (Long id : arrToAdd) {
+                retVal.add(id);
+            }
+        }
+        return retVal;
+    }
 
     public static Object[] getAllFundingsByLocations (Object[] activityFundingData,
                                                    Object[] activityRegionalFundingData,

@@ -65,6 +65,7 @@ public class GetFoundingDetails extends Action {
                                  HttpServletResponse response) throws Exception {
         ServletOutputStream sos = null;
 
+
         try {
 
             GisUtil gisUtil = new GisUtil();
@@ -242,6 +243,91 @@ public class GetFoundingDetails extends Action {
 //                    String imageMapCode = xml.toString();
 
                     xml.output(sos);
+                } else if (action.equalsIgnoreCase("getSelectedFilterMap")) {
+
+                        Object[] filteredData = (Object[]) request.getSession().getAttribute("GIS_FILTER_RESULTS");
+                        Object[] fundingList = (Object[])filteredData[1];
+                        GisFilterForm filterForm = (GisFilterForm)filteredData[0];
+
+                        List segmentDataList = new ArrayList();
+                        BigDecimal min = null;
+                        BigDecimal max = null;
+                        Map fundingLocationMap = (Map) fundingList[0];
+                        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+                        while (locFoundingMapIt.hasNext()) {
+                            String key = (String) locFoundingMapIt.next();
+                            FundingData fData = (FundingData) fundingLocationMap.get(key);
+                            SegmentData segmentData = new SegmentData();
+                            segmentData.setSegmentCode(key);
+
+                            BigDecimal selValue = null;
+
+                            if (filterForm.getFundingType().equals("commitment")) {
+                                selValue = fData.getCommitment();
+                            } else if (filterForm.getFundingType().equals("disbursement")) {
+                                selValue = fData.getDisbursement();
+                            } else if (filterForm.getFundingType().equals("expenditure")) {
+                                selValue = fData.getExpenditure();
+                            }else{
+                                selValue = new BigDecimal("0");
+                            }
+
+
+                            segmentData.setSegmentValue(selValue.toString());
+
+                            //Hilight only if value is not 0
+                            if (selValue.longValue() != 0l) {
+                                if (min == null) {
+                                    min = selValue;
+                                    max = selValue;
+                                }
+
+                                if (selValue.compareTo(min) < 0) {
+                                    min = selValue;
+                                }
+
+                                if (selValue.compareTo(max) > 0) {
+                                    max = selValue;
+                                }
+
+                                segmentDataList.add(segmentData);
+                            }
+                        }
+
+                        if (min == null) {
+                            min = new BigDecimal(0);
+                            max = new BigDecimal(0);
+                        }
+
+
+
+                    List hilightData = prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+
+                    BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
+
+                    Graphics2D g2d = graph.createGraphics();
+
+                    g2d.setBackground(new Color(0, 0, 100, 255));
+
+                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+                    gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
+                            rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+
+                    gisUtil.addCaptionsToImage(g2d,
+                            map.getSegments(),
+                            canvasWidth, canvasHeight,
+                            rect.getLeft(), rect.getRight(),
+                            rect.getTop(), rect.getBottom());
+
+                    g2d.dispose();
+
+                    RenderedImage ri = graph;
+
+                    ImageIO.write(ri, "png", sos);
+
+                    graph.flush();
+
                 } else if (action.equalsIgnoreCase("getDataForSectorFin")) {
                 	response.setContentType("image/png");
                 	
@@ -342,7 +428,7 @@ public class GetFoundingDetails extends Action {
 
                         //getPledgesByLocationsForPrograms
                     	
-                        Object[] pledgeFundings = DbUtil.getPledgeFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                        //Object[] pledgeFundings = DbUtil.getPledgeFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
 
                         Object[] fundingList = null;
 
@@ -406,12 +492,18 @@ public class GetFoundingDetails extends Action {
                         
                         
 
-                        Object[] activityFundings = DbUtil.getActivityFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
-                        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
-                        Object[] fundingList = RMMapCalculationUtil.getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
+                        //Object[] activityFundings = null;
+                        //Object[] activityFundings = DbUtil.getActivityFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                        //Object[] activityRegionalFundings = null;
+                        //Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectors, programs, null, locations, null, fStartDate.getTime(), fEndDate.getTime());
+                        //Object[] fundingList = RMMapCalculationUtil.getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
 
+                        //Object[] fundingList = RMMapCalculationUtil.getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations);
+                        Object[] fundingList = (Object[]) request.getSession().getAttribute("GIS_FILTER_RESULTS");
+
+                        /*
                         request.getSession().setAttribute(
-                                "AMP_FUNDING_DATA", fundingList);
+                                "AMP_FUNDING_DATA", fundingList);*/
 
                         Map fundingLocationMap = (Map) fundingList[0];
 
@@ -477,7 +569,7 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
-                            rect.getTop(), rect.getBottom(), true, false);
+                            rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d,
                             map.getSegments(),
@@ -1339,6 +1431,12 @@ public class GetFoundingDetails extends Action {
 
                     tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme, DbUtil.getGisSettings(request).getSectorSchemeFilterMode());
                     tree.output(sos);
+                } else if (action.equalsIgnoreCase("filter")) {
+
+                    GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
+                    Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm);
+                    request.getSession().setAttribute("GIS_FILTER_RESULTS", new Object[] {filterForm, filterResults});
+
                 }
             }  else if (map == null) {
             	response.setContentType("image/png");

@@ -1,6 +1,7 @@
 package org.digijava.module.gis.form;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.gis.util.GisFilterForm;
 
 /**
  * <p>Title: </p>
@@ -16,5 +17,15 @@ import org.apache.struts.action.ActionForm;
  */
 public class GisFoundingDetailsForm extends ActionForm {
     public GisFoundingDetailsForm() {
+    }
+
+    private GisFilterForm gisFilterForm;
+
+    public GisFilterForm getGisFilterForm() {
+        return gisFilterForm;
+    }
+
+    public void setGisFilterForm(GisFilterForm gisFilterForm) {
+        this.gisFilterForm = gisFilterForm;
     }
 }

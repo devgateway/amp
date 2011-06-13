@@ -144,8 +144,8 @@ public class DbUtil {
             Query q = session.createQuery("from " +
                                           GisMap.class.getName() +
                                           " rs where (rs.mapCode=:mapCode) and rs.mapLevel=:mapLevel");
-            q.setParameter("mapCode", code, Hibernate.STRING);
-            q.setParameter("mapLevel", level, Hibernate.INTEGER);
+            q.setString("mapCode", code);
+            q.setInteger("mapLevel", level);
             Iterator it = q.iterate();
             if (it.hasNext()) {
                 map = (GisMap) it.next();
@@ -1744,12 +1744,20 @@ public class DbUtil {
     
     // NEW PART
     
-    public static Object[] getActivityFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+    public static Object[] getActivityFundings (Collection<Long> sectorIds,
+                                                Collection<Long> programIds,
+                                                Collection<Long> donorIds,
+                                                Collection<Long> donorGroupIds,
+                                                Collection<Long> donorTypeIds,
+                                                Collection<AmpCategoryValueLocations> locations,
+                                                List <AmpTeam> workspaces,
+                                                java.util.Date startDate,
+                                                java.util.Date endDate) {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getActivitySectorPercentages(sectors) : null;
-        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getActivityProgramPercentages(programs) : null;
+        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
+        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
         Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations) : null;
 
         Set allActivityIdsSet = new HashSet<Long>();
@@ -1809,12 +1817,20 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Object[] getActivityRegionalFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+    public static Object[] getActivityRegionalFundings (Collection<Long> sectorIds,
+                                                        Collection<Long> programIds,
+                                                        Collection<Long> donorIds,
+                                                        Collection<Long> donorGroupIds,
+                                                        Collection<Long> donorTypeIds,
+                                                        Collection<AmpCategoryValueLocations> locations,
+                                                        List <AmpTeam> workspaces,
+                                                        java.util.Date startDate,
+                                                        java.util.Date endDate) {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getActivitySectorPercentages(sectors) : null;
-        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getActivityProgramPercentages(programs) : null;
+        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
+        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
 
 
         Set<Long> allActivityIdsSet = null;
@@ -1863,8 +1879,8 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getActivitySectorPercentages (Collection<AmpSector> sectors) {
-        String sectorWhereclause = generateWhereclause(sectors, new SectorIdGetter());
+    private static Map <Long, Map> getActivitySectorPercentages (Collection<Long> sectorsIds) {
+        String sectorWhereclause = generateWhereclause(sectorsIds, new GenericIdGetter());
         Map <Long, Map> retVal = null;
         Session sess = null;
         try {
@@ -1902,8 +1918,8 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getActivityProgramPercentages (Collection<AmpTheme> programs) {
-        String programWhereclause = generateWhereclause(programs, new ProgramIdGetter());
+    private static Map <Long, Map> getActivityProgramPercentages (Collection<Long> programIds) {
+        String programWhereclause = generateWhereclause(programIds, new GenericIdGetter());
 
         Map <Long, Map> retVal = null;
         Session sess = null;
@@ -1988,12 +2004,18 @@ public class DbUtil {
 
 
     //For pledges
-    public static Object[] getPledgeFundings (Collection<AmpSector> sectors, Collection<AmpTheme> programs, List<AmpOrganisation> donors, Collection<AmpCategoryValueLocations> locations, List <AmpTeam> workspaces, java.util.Date startDate, java.util.Date endDate) {
+    public static Object[] getPledgeFundings (Collection<Long> sectorIds,
+                                              Collection<Long> programIds,
+                                              Collection<Long> donorIds,
+                                              Collection<AmpCategoryValueLocations> locations,
+                                              List <AmpTeam> workspaces,
+                                              java.util.Date startDate,
+                                              java.util.Date endDate) {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectors != null && !sectors.isEmpty()) ? getPledgeSectorPercentages(sectors) : null;
-        Map <Long, Map> programPercentageMap = (programs != null && !programs.isEmpty()) ? getPledgeProgramPercentages(programs) : null;
+        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getPledgeSectorPercentages(sectorIds) : null;
+        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getPledgeProgramPercentages(programIds) : null;
         Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getPledgeLocationPercentages(locations) : null;
 
         Set allPledgeIdsSet = new HashSet<Long>();
@@ -2053,8 +2075,8 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getPledgeSectorPercentages (Collection<AmpSector> sectors) {
-        String sectorWhereclause = generateWhereclause(sectors, new SectorIdGetter());
+    private static Map <Long, Map> getPledgeSectorPercentages (Collection<Long> sectorIds) {
+        String sectorWhereclause = generateWhereclause(sectorIds, new GenericIdGetter());
         Map <Long, Map> retVal = null;
         Session sess = null;
         try {
@@ -2092,8 +2114,8 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getPledgeProgramPercentages (Collection<AmpTheme> programs) {
-        String programWhereclause = generateWhereclause(programs, new ProgramIdGetter());
+    private static Map <Long, Map> getPledgeProgramPercentages (Collection<Long> programIds) {
+        String programWhereclause = generateWhereclause(programIds, new GenericIdGetter());
 
         Map <Long, Map> retVal = null;
         Session sess = null;

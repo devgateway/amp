@@ -71,6 +71,22 @@
         font-weight:bold;
         color:#ffffff;
     }
+    div.charcounter-progress-container {
+	width:50%; 
+	height:3px;
+	max-height:3px;
+	border: 1px solid gray; 
+	filter:alpha(opacity=20); 
+	opacity:0.2;
+}
+
+div.charcounter-progress-bar {
+	height:3px; 
+	max-height:3px;
+	font-size:3px;
+	background-color:#5E8AD1;
+}
+    
 </style>
 
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
@@ -2077,7 +2093,14 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
 <c:if test="${aimAddOrgForm.type=='NGO'}">
     <tr>
-        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Other Information</digi:trn></td>
+        <td style="text-align:right;" class="tdBoldClass">
+        <digi:trn>Other Information</digi:trn>
+        <span style="font-size:11px;" id="otherInformationCharCounter"></span>
+        <br/>
+	    <div class="charcounter-progress-container" style="float:right">
+	    	<div id="otherInformationProgressBar" class="charcounter-progress-bar" style="width:0%;float:left"></div>
+	    </div>
+        </td>
         <td>
             <html:textarea property="otherInformation"  cols="50" rows="4"  styleId="otherInformation"/>
         </td>
@@ -2140,8 +2163,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
 
 <tr>
-    <td colspan="2" width="555" align="center" height="30">
-        <table width="100%" >
+    <td colspan="2"  align="center" height="30">
+        <table width="100%" width="555" >
             <tr>
                 <td align="center">
 				<hr />
@@ -2155,7 +2178,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                 <tr>
                     <td align="center">
-                        <input type="button" value="<digi:trn>Delete this Organization</digi:trn>" onclick="return msg()">
+                        <input type="button"  class="dr-menu" value="<digi:trn>Delete this Organization</digi:trn>" onclick="return msg()">
                     </td>
                 </tr>
             </c:if>
@@ -2186,5 +2209,35 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
-    $("#otherInformation").charCounter(256,{format: ' (%1'+ ' <digi:trn jsFriendly="true">characters remaining</digi:trn>)',pulse: false});
+	var otherInformationCounter = $("#otherInformationCharCounter");
+	var otherInformationProgressBar = $("#otherInformationProgressBar");
+	
+	initOtherInformationCounter();
+	
+	function initOtherInformationCounter() {
+		var otherInformationCounterTxt = ["(", 256 - $("#otherInformation").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		otherInformationCounter.html(otherInformationCounterTxt.join(""));
+		otherInformationProgressBar.css("width", $("#otherInformation").val().length/256*100 + "%");
+	}
+	$("#otherInformation").bind("keyup", function (event) {
+		if (this.value.length > 256) {
+			this.value = this.value.substring(0, 256);
+		}
+		var otherInformationCounterText = ["(", 256 - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		otherInformationCounter.html(otherInformationCounterText.join(""));
+		otherInformationProgressBar.css("width", this.value.length/256*100 + "%");
+	});
+	$("#otherInformation").bind("paste", function (event) { 
+	  	var browser=navigator.appName;
+	  	if(browser=="Microsoft Internet Explorer"){
+	  		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
+	  		var otherInformationValue = document.getElementById('otherInformation');
+	  		if(textThatNeedsToBePasted.length + otherInformationValue.value.length >256){
+	  			var msg="<digi:trn jsFriendly='true'>You can not exceed 256 symbols</digi:trn>";
+	  			alert(msg);
+	  			window.clipboardData.setData("Text",'');
+	  		}
+	      }				
+		});
+
 </script>

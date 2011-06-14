@@ -236,6 +236,8 @@
 		id="dc"
 		verticalCenter="0"
 		horizontalCenter="0" 
+		left="40"
+		right="80"
 		showDataTips="true"
 		strokes="{strokes}"
 		fills="{fills}"

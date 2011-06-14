@@ -228,6 +228,8 @@
 		bottom="50"
 		width="{this.width*.9}"
 		id="dc"
+		left="40"
+		right="80"
 		verticalCenter="0"
 		horizontalCenter="0" 
 		showDataTips="true"

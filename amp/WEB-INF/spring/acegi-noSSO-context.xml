@@ -113,7 +113,9 @@
     <constructor-arg value="/aim/logout.do"/> 
     <constructor-arg>
       <list>
-        <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
+        <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler">
+          <property name="invalidateHttpSession" value="false"/>
+         </bean>
         <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
       </list>
     </constructor-arg>

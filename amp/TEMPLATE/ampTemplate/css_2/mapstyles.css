@@ -140,7 +140,14 @@ body {
 	z-index:100;
 	margin-top:5%;
 	margin-left:70%;
-	font-size: 10px;
+	font-size: 11px;
 	display:none;
 	width:400px;
+	background:#fff;
+	overflow:auto;
+	height:300px;
+	border:10px solid #fff;
+	-moz-border-radius: 15px;
+border-radius: 15px;
+
 }

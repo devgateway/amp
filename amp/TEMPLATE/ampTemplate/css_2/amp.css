@@ -412,3 +412,4 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #navToolbar .toolscontainer span{line-height:30px; color:#fff;font-size:12px;}
 #navToolbar .toolscontainer .mapButton{border-right:1px solid #778177;padding:0px 5px;height:30px;}
 td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:underline;}
+.soria .dijitToolbar {border:none;}

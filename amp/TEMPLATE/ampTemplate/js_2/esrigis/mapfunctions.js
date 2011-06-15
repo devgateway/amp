@@ -75,7 +75,7 @@ function createMapAddLayers(myService1, myService2) {
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
-        dojo.byId('map_zoom_slider').style.top = '80px';
+        dojo.byId('map_zoom_slider').style.top = '95px';
         getActivities();
     });
 	map.addLayer(myService1);

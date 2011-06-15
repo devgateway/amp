@@ -406,4 +406,9 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggertable tr td.auditloggername{color:#376091;font-weight:bold;font-size:12px;}
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
 #actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
-
+/*---RAFY GIS STYLES---*/
+#navToolbar {width:100%;margin:0px; padding:0px; height:40px;margin-left:20px;    background:url(../img_2/maptoolsbg.png);margin-top:-5px;}\
+#navToolbar .toolscontainer{height:30px;margin-top:5px;}
+#navToolbar .toolscontainer span{line-height:30px; color:#fff;font-size:12px;}
+#navToolbar .toolscontainer .mapButton{border-right:1px solid #778177;padding:0px 5px;height:30px;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:underline;}

@@ -139,14 +139,14 @@
 			<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
-						<td id="toolsbtn" valign="middle" align="right" style="cursor: pointer;">Tools</td>
-						<td id="filterbtn" valign="middle" align="right" style="cursor: pointer;">Filter</td>
-						<td valign="middle" align="center" id="search" style="cursor: pointer;">Search</td>
-						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
-						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
-						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
-						<td valign="middle" align="center" onclick="getStructures(true);" style="cursor: pointer;">Structures</td>
-						<td valign="middle" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;">Indicator</td>
+						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;">Tools</td>
+						<td id="filterbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;">Filter</td>
+						<td valign="middle" class="mapMenuItem" align="center" id="search" style="cursor: pointer;">Search</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(true);" style="cursor: pointer;">Structures</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;">Indicator</td>
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 								<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="<digi:trn>Select base Map</digi:trn>">
@@ -179,15 +179,16 @@
         		</tr>
         	</table>
         </div>
- 		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:20px; top:10px; z-Index:999;display: none;margin-top: 45px;">
-			<div dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
-			<div dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
-			<div dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>
-		    <div dojoType="dijit.form.Button" id="zoomprev" iconClass="zoomprevIcon" onClick="navToolbar.zoomToPrevExtent();"><digi:trn>Prev Extent</digi:trn></div>
-		    <div dojoType="dijit.form.Button" id="zoomnext" iconClass="zoomnextIcon" onClick="navToolbar.zoomToNextExtent();"><digi:trn>Next Extent</digi:trn></div>
-		    <div dojoType="dijit.form.Button" id="pan" iconClass="panIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.PAN);"><digi:trn>Pan</digi:trn></div>
-		    <div dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
- 		</div>
+ 		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:10px; z-Index:999;display: none;margin-top: 40px;">
+        <div class="toolscontainer" style="margin:5px 0px 0px 40px;">
+			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
+			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
+			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>
+		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomprev" iconClass="zoomprevIcon" onClick="navToolbar.zoomToPrevExtent();"><digi:trn>Prev Extent</digi:trn></div>
+		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomnext" iconClass="zoomnextIcon" onClick="navToolbar.zoomToNextExtent();"><digi:trn>Next Extent</digi:trn></div>
+		    <div class="mapButton" dojoType="dijit.form.Button" id="pan" iconClass="panIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.PAN);"><digi:trn>Pan</digi:trn></div>
+		    <div class="mapButton" dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
+ 		</div></div>
     </div>  
   </body>
 </html>

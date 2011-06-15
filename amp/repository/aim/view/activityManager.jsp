@@ -220,7 +220,7 @@
 																	class="java.util.HashMap" />
 																<c:set target="${urlParamsSort}" property="action"
 																	value="sort" />
-																<td width="9" height="15" class="inside">&nbsp;</td>
+																<td width="9" height="15" class="inside ignore">&nbsp;</td>
 																<td class="inside"><b> <c:set target="${urlParamsSort}"
 																	property="sortByColumn" value="activityName" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
@@ -245,7 +245,7 @@
 	                                                                            	Activity Id
 	                                                                            </digi:trn>
 																</digi:link> </b></td>
-																<td width="5%" align="left" class="inside"><c:set
+																<td width="5%" align="left" class="inside ignore"><c:set
 																	var="trnSelectAll">
 																	<digi:trn>Select All</digi:trn>
 																</c:set> <input type="checkbox" id="chkAll"
@@ -260,12 +260,12 @@
 																type="org.digijava.module.aim.dbentity.AmpActivityVersion">
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
-																		<td width="9" height="15" class="inside"><img
+																		<td width="9" height="15" class="inside ignore"><img
 																			src="../ampTemplate/images/arrow_right.gif" border="0">
 																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
-																		<td width="9" height="15" class="inside"><img
+																		<td width="9" height="15" class="inside ignore"><img
 																			src="../ampTemplate/images/start_button.gif" border="0">
 																		</td>
 																	</logic:empty>
@@ -278,7 +278,7 @@
 																	<td width="100" class="inside"><bean:write name="activities"
 																		property="ampId" /></td>
 
-																	<td align="left" width="12" class="inside"><c:set var="actId">
+																	<td align="left" width="12" class="inside ignore"><c:set var="actId">
 																		<bean:write name="activities" property="ampActivityId" />
 																	</c:set> <input type="checkbox" value="${actId}" /></td>
 																</tr>

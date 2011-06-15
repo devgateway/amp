@@ -40,7 +40,7 @@ function Edit(id) {
 	document.DepartmentsManagerForm.submit();
 }
 
-
+-->
 </script>
 
 <digi:form action="/departmentsmanager.do" method="post">

@@ -98,7 +98,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "4");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "4");
 			}
 			
 			//Used to rotate wedge labels 180 degrees for readability
@@ -212,6 +212,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<axiis:NumericExpression id="center" value="{boundsRadius.value/2}"/>
 	<axiis:NumericExpression id="boundsRadius" value="{Math.min(this.height,this.width)}"/>
 	
+	<mx:Canvas id="mxc1" 
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634" 
+			   height="350">
+		
 	<!-- Data Canvas that holds our geometries -->
 	<axiis:DataCanvas id="dc"
 					  width="{boundsRadius.value}"
@@ -281,6 +287,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 		</axiis:strokes>
 		
 	</axiis:DataCanvas>
+	</mx:Canvas>
 	<mx:CheckBox x="50" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
 	<mx:VSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="17" x="70" y="35" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
 	

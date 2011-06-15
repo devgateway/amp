@@ -111,7 +111,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "6");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "6");
 			}
 			protected function myStack_preRenderHandler(event:Event):void
 			{
@@ -193,6 +193,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 	-->
 	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{hLayout.height}" />
 	
+	<mx:Canvas id="mxc1" 
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634" 
+			   height="350">
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
@@ -376,7 +381,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			</axiis:HBoxLayout>
 		</axiis:layouts>
 	</axiis:DataCanvas>
-	
+	</mx:Canvas>
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
 	and will contain x values where x is the number of objects in the Layout's dataProvider. As the Layout renders and its currentIndex property is incremented, 

@@ -106,7 +106,7 @@
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(dc,"png", strProtocol + "//" + strDomain + strUrl, "4");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "4");
 			}
 			/**
 			 * This function is called when the % data slider changes.
@@ -252,6 +252,11 @@
 		maxLayout="{myLineGroup.width}"
 	 />
 
+	<mx:Canvas id="mxc1" 
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634" 
+			   height="350">
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
@@ -399,6 +404,7 @@
 		
 	</axiis:DataCanvas>
 
+	</mx:Canvas>
 	<!--  PALLETTES & FILLS & STROKES -->
 
 	<!--

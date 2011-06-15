@@ -102,13 +102,6 @@ function wicketSwitchFMMode(){
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
 
-$(document).ready(function(){
-	$("#switchTranslationMode").attr('href', 'javascript:wicketSwitchTranslationMode()');
-	$("#switchFMMode").css("display", "block");
-	$('#wicketFooter').replaceWith($('#footer'));
-	$('#footer').css("display", "inline"); 
-})
-
 //////////////////////////////////////////////////////////////
 //
 // functions for button label

@@ -24,6 +24,7 @@ import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSe
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
+import org.dgfoundation.amp.onepager.yui.YuiAutoComplete;
 
 /**
  * Encapsulates a "google suggest" textbox - auto complete text field for AMP
@@ -32,6 +33,8 @@ import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
  * whenever an async request is made
  * 
  * @author mpostelnicu@dgateway.org since Sep 30, 2010
+ * @deprecated
+ * @see YuiAutoComplete
  */
 public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		AbstractAutoCompleteTextField<CHOICE> implements IAjaxIndicatorAware {

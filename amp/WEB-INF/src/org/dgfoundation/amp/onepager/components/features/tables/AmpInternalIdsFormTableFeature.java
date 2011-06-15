@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTe
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.YuiAutoComplete;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -81,19 +82,10 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 		};
 		idsList.setReuseItems(true);
 		add(idsList);
-
-		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {
-			private static final long serialVersionUID = 1227775244079125152L;
-
+		
+		final YuiAutoComplete<AmpOrganisation> searchOrgs=new YuiAutoComplete<AmpOrganisation>("searchOrgs","Search Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
-			protected String getChoiceValue(AmpOrganisation choice)
-					throws Throwable {
-				return choice.getAcronymAndName();
-			}
-
-			@Override
-			public void onSelect(AjaxRequestTarget target,
-					AmpOrganisation choice) {
+			protected void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
 				AmpActivityInternalId activityInternalId = new AmpActivityInternalId();
 				activityInternalId.setOrganisation(choice);
 				activityInternalId.setAmpActivity(am.getObject());
@@ -102,7 +94,12 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 				idsList.removeAll();
 				target.addComponent(idsList.getParent());
 			}
-
+			
+			@Override
+			protected String getChoiceValue(AmpOrganisation choice) {
+				return choice.getName();
+			}
+			
 			@Override
 			public Integer getChoiceLevel(AmpOrganisation choice) {
 				// TODO Auto-generated method stub
@@ -110,7 +107,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			}
 		};
 
-		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrgs", "Search Organizations", autoComplete);
+		
 		add(searchOrgs);
 		
 	}

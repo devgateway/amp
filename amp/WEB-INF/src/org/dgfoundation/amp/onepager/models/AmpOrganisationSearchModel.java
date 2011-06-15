@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.Criteria;
@@ -32,10 +33,13 @@ public class AmpOrganisationSearchModel extends
 
 	@Override
 	protected List<AmpOrganisation> load() {
+		List<AmpOrganisation> ret = null;
 		try {
-			List<AmpOrganisation> ret = null;
-			session = PersistenceManager.getSession();
+			
+			session = PersistenceManager.getRequestDBSession();
+			
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
+			if(input.trim().length()>0)
 			crit.add(Restrictions.disjunction()
 					.add(Restrictions.ilike("name", "%" + input + "%"))
 					.add(Restrictions.ilike("acronym", "%" + input + "%")));
@@ -46,15 +50,26 @@ public class AmpOrganisationSearchModel extends
 				if (maxResults != null && maxResults.intValue() != 0)
 					crit.setMaxResults(maxResults);
 			}
-			crit.setMaxResults(30);
 			ret = crit.list();
-			session.close();
-			return ret;
+			
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		return ret;
 	}
 
 }

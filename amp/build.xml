@@ -187,6 +187,7 @@
 					<include name="**/*.jrxml"/>
 					<include name="initSQL/*.sql"/>
             		<include name="**/*.js"/>
+            		<include name="**/*.css"/>
             		<include name="**/*.html"/>
     	        </patternset>
             </fileset>

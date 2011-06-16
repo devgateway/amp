@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/repository/aim/view/scripts/separateFiles/dhtmlSuite-dynamicContent.js"></script>
 <script type="text/javascript" src="/repository/aim/view/scripts/separateFiles/dhtmlSuite-modalMessage.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="/TEMPLATE/ampTemplate/script/tooltip/wz_tooltip.js"></script>
 
 <script type="text/javascript">
 	messageObj = new DHTMLSuite.modalMessage(); // We only create one object of this class
@@ -49,7 +50,6 @@
 	}
 </script>
 
-<script language="JavaScript" type="text/javascript" src="/TEMPLATE/ampTemplate/script/tooltip/wz_tooltip.js"></script>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amptab");

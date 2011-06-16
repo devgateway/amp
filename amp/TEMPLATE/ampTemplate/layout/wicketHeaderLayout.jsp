@@ -9,10 +9,11 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+	<script type="text/javascript" src="/wicket/style/all-2.js"/></script>
 
-	<jsp:include page="headerTop_2.jsp"/>
+	<jsp:include page="headerTop_Wicket.jsp"/>
 	<div class="main_menu">
-		<digi:insert attribute="headerMiddle"/>
+		<digi:insert attribute="headerMiddleWicket"/>
          <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
    			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
 				<digi:trn key="aim:logout">LOGOUT</digi:trn>

@@ -16,6 +16,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -69,6 +70,8 @@ public class AmpHeaderFooter extends WebPage {
 				return variables;
 			}
 		};
+		
+		add(CSSPackageResource.getHeaderContribution(AmpHeaderFooter.class, "amp-wicket.css"));
 
 		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
 				"translations.js", variablesModel));

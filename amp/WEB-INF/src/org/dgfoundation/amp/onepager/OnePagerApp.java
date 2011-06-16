@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.JspResolver;
+import org.dgfoundation.amp.onepager.web.pages.AmpHeaderFooter;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.hibernate.SessionFactory;
@@ -70,15 +71,15 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 
 			 LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
 			 csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
-			 //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
+			 csslist.add(new ResourceSpec(AmpHeaderFooter.class, "amp-wicket.css"));
 			 
 			 
 			 LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
 			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.js"));
 			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.debug.js"));
 			 //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
-			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
 			 jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
+			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
 			 jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
 			 jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
 			 jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));			 

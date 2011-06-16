@@ -59,13 +59,9 @@
 					</TABLE>
 				</TD>
 			</TR>
-			<TR>
-				<TD width="100%" >
-				   <digi:insert attribute="footer" />
-				</TD>
-			</TR>
 			</TBODY>
 		</TABLE>
+		 <digi:insert attribute="footer" />
 	</BODY>
 </HTML>
 

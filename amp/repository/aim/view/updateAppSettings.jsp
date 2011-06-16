@@ -107,8 +107,12 @@ function loadShareRules(){
 <digi:errors/>
 <digi:instance property="aimUpdateAppSettingsForm" />
 <digi:form action="/saveApplicationSettings.do" method="post">
- <!-- this is for the nice tooltip widgets -->
+<!-- this is for the nice tooltip widgets -->
+<!-- we are using this hack to get rid from issue due to "position: relative" in tabs.css -->
+<![if !IE]>
  <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<![endif]>
+
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 <html:hidden property="save" />
@@ -154,8 +158,11 @@ function loadShareRules(){
 				<td valign="top">
 					<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 						<jsp:include page="teamSetupMenu.jsp" flush="true" />
-										
-						<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+						<!-- we are using this hack to get rid from issue due to "position: relative" in tabs.css -->
+								<!--[if IE]>
+								 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+								<![endif]-->
+								<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 							<logic:equal name="aimUpdateAppSettingsForm" property="updated" value="true">
 								<tr>
 									<td class="inside" colspan="2">
@@ -181,7 +188,7 @@ function loadShareRules(){
                 <td class="inside">
 									<html:text property="defRecsPerPage" size="5"  styleClass="inputx insidex" styleId="defRecsPerPage"/>
 									<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
-										<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0">
+										<img src="../ampTemplate/images/help.gif" alt="" width="10" height=10 border="0">
                   </a>
 								</td>
 							</tr>
@@ -192,7 +199,7 @@ function loadShareRules(){
 								<td class="inside">
 									<html:text property="defReportsPerPage" size="5"  styleClass="inputx insidex" styleId="repsPerPage"/>
 										<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
-											<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0">
+											<img src="../ampTemplate/images/help.gif" alt="" width="10" height=10 border="0">
                     </a>
 								</td>
 							</tr>

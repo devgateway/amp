@@ -24,9 +24,14 @@
 						<digi:trn>Portfolio</digi:trn>
 					</digi:link>&nbsp;&gt;&nbsp;
 					<digi:trn>Calendar</digi:trn>
-					<c:if test="${calendarViewForm.view!='none'}">&nbsp;&gt;&nbsp;</c:if>
+					&nbsp;&gt;&nbsp;
+					
 					<span class="crumb" id="viewSpan" style="color: #FF6000">
-						<digi:trn>Monthly View</digi:trn>
+						<c:if test="${not empty calendarViewForm.view && calendarViewForm.view!='none'}">
+							<digi:trn>${calendarViewForm.view} View</digi:trn>
+						</c:if>
+						<c:if test="${empty calendarViewForm.view || calendarViewForm.view=='none'}"><digi:trn>Monthly View</digi:trn></c:if>
+						
 					</span>					
 				</span>
 			</td>

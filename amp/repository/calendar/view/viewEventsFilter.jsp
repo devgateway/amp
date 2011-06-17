@@ -33,6 +33,23 @@ function changeState() {
 function changeDonorsAndEventTypesState(){
 	changeDonorsState();
 	changeEventTypesState();
+	var form = document.getElementById('filterForm');
+	var yearlyView = document.getElementsByName('year_tab')[0];
+	var monthlyView = document.getElementsByName('month_tab')[0];
+	var weeklyView = document.getElementsByName('week_tab')[0];
+	var daylyView = document.getElementsByName('day_tab')[0];
+	var view='';
+	if (yearlyView.className.indexOf('active')!=-1){
+		view='yearly';
+	}else if (monthlyView.className.indexOf('active')!=-1){
+		view='monthly';
+	}else if (weeklyView.className.indexOf('active')!=-1){
+		view='weekly';
+	}else if (daylyView.className.indexOf('active')!=-1){
+		view='daily';
+	}
+	form.view.value = view;
+	form.submit();
 }
 
 function openPrinter(){

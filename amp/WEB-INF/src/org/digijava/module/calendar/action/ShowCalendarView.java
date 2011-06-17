@@ -37,12 +37,13 @@ public class ShowCalendarView extends Action {
         int numDays = 0;
         
         if(printView != null){
-        	if(printView.equals("day")){
+        	if(printView.equals("daily")){
         		numDays = 1;
-        	}else if (printView.equals("week")){
+        	}else if (printView.equals("weekly")){
         		numDays = 2;
-        	}else{
-        		
+        	}else if (printView.equals("yearly")){        		
+        		numDays = 4;
+        	}else if (printView.equals("monthly")){
         		numDays = 3;
         	}
         }

@@ -63,11 +63,20 @@ public class ImportExportTranslations extends Action {
 			byte[] fileData = uploadedFile.getFileData();
 			InputStream inputStream = new ByteArrayInputStream(fileData);
 			request.getSession().setAttribute(SESSION_FILE, uploadedFile);
-			Unmarshaller unmarshaller = ImportExportUtil.getUnmarshaler();
-			Translations root = (Translations) unmarshaller.unmarshal(inputStream);
-			request.getSession().setAttribute(SESSION_ROOT, root);
-			Set<String> languagesInFile = ImportExportUtil.extractUsedLangages(root);
-			ioForm.setImportedLanguages(new ArrayList<String>(languagesInFile));
+			try {
+				Unmarshaller unmarshaller = ImportExportUtil.getUnmarshaler();
+				Translations root = (Translations) unmarshaller.unmarshal(inputStream);
+				request.getSession().setAttribute(SESSION_ROOT, root);
+				Set<String> languagesInFile = ImportExportUtil.extractUsedLangages(root);
+				ioForm.setImportedLanguages(new ArrayList<String>(languagesInFile));
+			}catch (Exception ex) {				
+				ex.printStackTrace(System.out);
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
+				saveErrors(request, errors);
+				return mapping.findForward("forward");
+			}
+			
 		}
 		
 		//This works when user selects which languages should be imported and how.

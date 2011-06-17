@@ -315,7 +315,7 @@
 				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
 			</c:if>
 			<c:if test="${isDevInfoMode == false}">
-				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=2&donorId=-1&fromYear=2009&toYear=2010&sectorId=-1&fundingType=commitment&uniqueStr=0&width=500&height=500">
+				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
 			</c:if>
 			</div>
 		  

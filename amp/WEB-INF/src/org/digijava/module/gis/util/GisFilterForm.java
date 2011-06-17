@@ -7,6 +7,7 @@ package org.digijava.module.gis.util;
  * To change this template use File | Settings | File Templates.
  */
 public class GisFilterForm {
+
     private Long[] selectedDonorTypes;
     private Long[] selectedDonorGroups;
     private Long[] selectedDonnorAgency;

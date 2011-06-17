@@ -38,7 +38,7 @@ public class RMMapCalculationUtil {
         if (tertiarySectors != null) {
             sectorCollector.addAll(tertiarySectors);
         }
-        Collection allSectors = sectorCollector;
+
 
         Collection<Long> donorTypeIds = longArrayToColl(filter.getSelectedDonorTypes());
         Collection<Long> donorGroupIds = longArrayToColl(filter.getSelectedDonorGroups());
@@ -96,11 +96,8 @@ public class RMMapCalculationUtil {
     public static Object[] getAllFundingsByLocations (Object[] activityFundingData,
                                                    Object[] activityRegionalFundingData,
                                                    Collection<AmpCategoryValueLocations> locations){
-        Object[] retVal = null;
         Object[] activityFundings = getFundingsByLocations (activityFundingData, locations);
         Object[] regionalFundings = getFundingsByLocationsForRegFnds (activityRegionalFundingData, locations);
-
-
         return combineResults (activityFundings, regionalFundings);
     }
 

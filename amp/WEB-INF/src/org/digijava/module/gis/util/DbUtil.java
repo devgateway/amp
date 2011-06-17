@@ -1760,7 +1760,11 @@ public class DbUtil {
         Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
         Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations) : null;
 
-        Set allActivityIdsSet = new HashSet<Long>();
+        String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
+        String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
+        String donorTypeIdsWhereclause = generateWhereclause(donorTypeIds, new GenericIdGetter());
+
+        Set<Long> allActivityIdsSet = new HashSet<Long>();
 
         //If no locations selected no data will be returned
         if (locationPercentageMap != null && !locationPercentageMap.isEmpty()) {
@@ -1783,6 +1787,11 @@ public class DbUtil {
             }
         }
 
+        cleanUpMap(sectorPercentageMap, allActivityIdsSet);
+        cleanUpMap(programPercentageMap, allActivityIdsSet);
+        cleanUpMap(locationPercentageMap, allActivityIdsSet);
+
+
         //If any activity in selected filter
         if (!allActivityIdsSet.isEmpty()) {
             String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
@@ -1796,6 +1805,21 @@ public class DbUtil {
 
                 queryStr.append(" and fd.ampFundingId.ampActivityId.ampActivityId in ");
                 queryStr.append(activityWhereclause);
+
+                if (donorIdsWhereclause != null) {
+                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.ampOrgId in ");
+                    queryStr.append(donorIdsWhereclause);
+                }
+
+                if (donorGroupIdsWhereclause != null) {
+                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.orgGrpId.ampOrgGrpId in ");
+                    queryStr.append(donorGroupIdsWhereclause);
+                }
+
+                if (donorTypeIdsWhereclause != null) {
+                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.orgGrpId.orgType.ampOrgTypeId in ");
+                    queryStr.append(donorTypeIdsWhereclause);
+                }
 
                 Query q = sess.createQuery(queryStr.toString());
                 q.setDate("START_DATE", startDate);
@@ -1817,6 +1841,27 @@ public class DbUtil {
         return retVal;
     }
 
+
+    //Remove act. IDs that didn't match filter criteria
+    private static void cleanUpMap (Map<Long, Map> dataMap, Set<Long> allActivityIdsSet) {
+        if (dataMap != null) {
+            Set<Long> keySet = dataMap.keySet();
+            Iterator <Long> it = keySet.iterator();
+            Set<Long> removeSet = new HashSet();
+            while (it.hasNext()) {
+                Long actId = it.next();
+                if (!allActivityIdsSet.contains(actId)) {
+                    removeSet.add(actId);
+                }
+            }
+
+            for (Long remId: removeSet) {
+                dataMap.remove(remId);
+            }
+        }
+
+    }
+
     public static Object[] getActivityRegionalFundings (Collection<Long> sectorIds,
                                                         Collection<Long> programIds,
                                                         Collection<Long> donorIds,
@@ -1832,6 +1877,9 @@ public class DbUtil {
         Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
         Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
 
+        String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
+        String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
+        String donorTypeIdsWhereclause = generateWhereclause(donorTypeIds, new GenericIdGetter());
 
         Set<Long> allActivityIdsSet = null;
         String locationWhereclause = null;
@@ -1859,6 +1907,22 @@ public class DbUtil {
                 queryStr.append(activityWhereclause);
                 queryStr.append(" and rf.regionLocation.id in ");
                 queryStr.append(locationWhereclause);
+
+
+                if (donorIdsWhereclause != null) {
+                    queryStr.append(" and rf.reportingOrganization.ampOrgId in ");
+                    queryStr.append(donorIdsWhereclause);
+                }
+
+                if (donorGroupIdsWhereclause != null) {
+                    queryStr.append(" and rf.reportingOrganization.orgGrpId.ampOrgGrpId in ");
+                    queryStr.append(donorGroupIdsWhereclause);
+                }
+
+                if (donorTypeIdsWhereclause != null) {
+                    queryStr.append(" and rf.reportingOrganization.orgGrpId.orgType.ampOrgTypeId in ");
+                    queryStr.append(donorTypeIdsWhereclause);
+                }
 
 
                 Query q = sess.createQuery(queryStr.toString());

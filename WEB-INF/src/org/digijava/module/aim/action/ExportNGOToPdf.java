@@ -451,7 +451,7 @@ public class ExportNGOToPdf extends Action {
 		    Iterator<Location> locationIter=selectedLocations.iterator();
 		    while(locationIter.hasNext()){
 		        Location location=locationIter.next();
-		        currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() ; 
+		        currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() +" ("+location.getPercent()+"%) "; 
 		        locations+= currentRecord +NEWLINECHAR;		        
 		    }
 		}

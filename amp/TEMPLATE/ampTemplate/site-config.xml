@@ -172,16 +172,6 @@
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-
-		<layout name="headerMiddleWicketLayout" file="headerMiddleWicket.jsp">
-	    	<put name="version">&ampVersion;</put>
-			<put name="build_version">&buildDate;</put>
-	    	<put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
-			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
-			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
-			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
-		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
 			<put name="version">&ampVersion;</put>
@@ -520,7 +510,6 @@
 			<put name="title">AMP</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="headerMiddleWicket" layout="headerMiddleWicketLayout"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="addEditNavigator" module="aim" instance="default" teaser="addEditNavigator"/>
 			<put-item name="addEditBody" module="aim" instance="default" teaser="blankTeaser"/>

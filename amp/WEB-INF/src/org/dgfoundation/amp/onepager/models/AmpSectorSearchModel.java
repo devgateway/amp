@@ -8,15 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
@@ -40,32 +40,45 @@ public class AmpSectorSearchModel extends
 	
 	@Override
 	protected List<AmpSector> load() {
+		List<AmpSector> ret=null;
 		try {
-			List<AmpSector> ret = new ArrayList<AmpSector>();
-			session = PersistenceManager.getSession();
-			Query query = session
-					.createQuery("from "
-							+ AmpSector.class.getName()
-							+ " o WHERE o.name like :name AND o.ampSecSchemeId=:scheme ORDER BY o.name");
+			ret = new ArrayList<AmpSector>();
+			session = PersistenceManager.getRequestDBSession();
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 			AmpSectorScheme scheme = (AmpSectorScheme) getParams().get(
 					PARAM.SECTOR_SCHEME);
+			Criteria crit = session.createCriteria(AmpSector.class);
+			crit.setCacheable(true);
+			if(input.trim().length()>0)
+			crit.add(Restrictions.conjunction()
+					.add(Restrictions.ilike("name", "%" + input + "%"))
+					.add(Restrictions.eq("ampSecSchemeId", scheme)));
+			
+	
 			if (maxResults != null && maxResults != 0)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			query.setParameter("scheme", scheme);
-			List<AmpSector> list = query.list();
+				crit.setMaxResults(maxResults);
+			List<AmpSector> list = crit.list();
 			
 			ret=createTreeView(list);
-			
-			session.close();
-			return ret;
+						
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		return ret;
 	}
 
 }

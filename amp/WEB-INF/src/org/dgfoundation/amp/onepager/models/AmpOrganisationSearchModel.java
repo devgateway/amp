@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -37,12 +38,13 @@ public class AmpOrganisationSearchModel extends
 		try {
 			
 			session = PersistenceManager.getRequestDBSession();
-			
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
+			crit.setCacheable(true);
 			if(input.trim().length()>0)
 			crit.add(Restrictions.disjunction()
 					.add(Restrictions.ilike("name", "%" + input + "%"))
-					.add(Restrictions.ilike("acronym", "%" + input + "%")));
+					.add(Restrictions.ilike("acronym", "%" + input + "%")))
+					.addOrder(Order.asc("name"));
 
 			if (params != null) {
 				Integer maxResults = (Integer) getParams().get(

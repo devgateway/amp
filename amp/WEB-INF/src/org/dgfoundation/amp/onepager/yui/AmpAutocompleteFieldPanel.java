@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
  *        ://ptrthomas.wordpress.com/2009/08/12/wicket
  *        -tutorial-yui-autocomplete-using-json-and-ajax/}
  */
-public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
+public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<String>
 		implements IAjaxIndicatorAware {
 
 	private static final long serialVersionUID = 1L;
@@ -65,6 +66,11 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 	 * The button that shows all options
 	 */
 	private WebMarkupContainer toggleButton;
+	
+	/**
+	 * Message indicator - loading panel or 
+	 */
+	private WebMarkupContainer indicator;
 
 	private AbstractDefaultAjaxBehavior onSelectBehavior;
 
@@ -91,10 +97,10 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 
 			@Override
 			public void renderHead(IHeaderResponse response) {
-				String js = "function callWicket(selectedString) { var wcall = wicketAjaxGet ('"
+				String js = "function callWicket"+textField.getMarkupId()+"(selectedString) { var wcall = wicketAjaxGet ('"
 						+ url
 						+ "&selectedString='+selectedString, function() { }, function() { } ) }";
-				response.renderJavascript(js, "myScript");
+				response.renderJavascript(js, "callWicket-"+textField.getMarkupId());
 			}
 		});
 
@@ -115,7 +121,7 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 	 * @param fmName the FM name @see {@link AmpFMTypes}
 	 * @param objectListModelClass the model to retrieve the list of items
 	 */
-	public YuiAutoComplete(String id, String fmName, Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+	public AmpAutocompleteFieldPanel(String id, String fmName, Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
 		this(id,fmName,false,objectListModelClass);
 	}
 	
@@ -126,9 +132,11 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 	 * @param hideLabel if true, the visible text label of the component is not shown
 	 * @param model
 	 */
-	public YuiAutoComplete(String id, String fmName, boolean hideLabel,Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+	public AmpAutocompleteFieldPanel(String id, String fmName, boolean hideLabel,Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
 		super(id,null,fmName,hideLabel, true);
 
+		
+		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 		this.objectListModelClass=objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");
 		toggleButton.setOutputMarkupId(true);
@@ -140,6 +148,10 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 		container.setOutputMarkupId(true);
 		add(container);
 		add(new YuiAutoCompleteBehavior());
+		
+		indicator = new WebMarkupContainer("indicator");
+		indicator.setOutputMarkupId(true);		
+		add(indicator);
 
 		onSelectBehavior = new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -274,12 +286,12 @@ public abstract class YuiAutoComplete<CHOICE> extends AmpFieldPanel<String>
 		public void renderHead(IHeaderResponse response) {
 			super.renderHead(response);
 			response.renderJavascriptReference(new JavascriptResourceReference(
-					YuiAutoComplete.class, "YuiAutoComplete.js"));
+					AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js"));
 			response.renderOnDomReadyJavascript(getJsVarName()
 					+ " = new YAHOO.widget.WicketAutoComplete('"
 					+ textField.getMarkupId() + "', '" + getCallbackUrl()
 					+ "', '" + container.getMarkupId() + "', '"
-					+ toggleButton.getMarkupId() + "');");
+					+ toggleButton.getMarkupId() + "', '"+indicator.getMarkupId() + "');");
 		}
 
 		@Override

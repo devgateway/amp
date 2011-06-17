@@ -25,11 +25,14 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 
 /**
@@ -110,12 +113,11 @@ public class AmpSectorsFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		final AbstractAmpAutoCompleteTextField<AmpSector> autoComplete = new AbstractAmpAutoCompleteTextField<AmpSector>(
-				AmpSectorSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
-			protected String getChoiceValue(AmpSector choice) throws Throwable {
+			protected String getChoiceValue(AmpSector choice) {
 				return choice.getName();
 			}
 
@@ -145,11 +147,9 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
-		autoComplete.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
-		autoComplete.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
+		searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
+		searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
-		final AmpComboboxFieldPanel<AmpSector> searchSectors = new AmpComboboxFieldPanel<AmpSector>(
-				"searchSectors", "Search " + fmName, autoComplete);
 		add(searchSectors);
 	}
 

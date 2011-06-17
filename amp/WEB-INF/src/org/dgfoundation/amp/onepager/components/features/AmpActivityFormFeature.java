@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.LocaleUtils;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
@@ -33,7 +32,6 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsForm
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.yui.YuiAutoComplete;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**

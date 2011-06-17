@@ -33,7 +33,6 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -144,7 +143,7 @@ margin-left: 2px;
 padding-right: 7px;
 border-right: 1px solid rgb(208, 208, 208);
 }
-.yui-panel .hd, .yui-panel .container-close {display:none;}
+
 </style>
 
 <script language="javascript">

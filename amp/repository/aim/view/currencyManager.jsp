@@ -192,6 +192,9 @@ function submitPages(){
 														<td bgcolor="#f4f4f2" vAlign="center" 
 															align="left" style="padding-right:10px;"><digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
 														</td>
+														<td bgcolor="#f4f4f2" vAlign="center" width="50"
+															align="left"><html:text property="numRecords"
+															size="3" styleClass="inp-text" /></td>
 														
 														<td bgcolor="#f4f4f2" vAlign="center" align="left"><c:set
 															var="trnViewBtn">

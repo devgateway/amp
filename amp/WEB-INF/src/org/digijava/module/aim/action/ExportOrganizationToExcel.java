@@ -925,7 +925,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		    while(locationIter.hasNext()){
 		        Location location=locationIter.next();
 		        currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() ; 
-		        locations+= currentRecord +NEWLINECHAR;
+		        locations+= currentRecord +" ("+location.getPercent()+"%) "+NEWLINECHAR;
 		        if(currentRecord.length() > longestLocRecord.length()){
 		        	longestLocRecord = currentRecord;
 		        }

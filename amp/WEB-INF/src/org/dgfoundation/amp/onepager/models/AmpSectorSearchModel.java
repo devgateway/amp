@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -50,12 +51,10 @@ public class AmpSectorSearchModel extends
 					PARAM.SECTOR_SCHEME);
 			Criteria crit = session.createCriteria(AmpSector.class);
 			crit.setCacheable(true);
-			if(input.trim().length()>0)
-			crit.add(Restrictions.conjunction()
-					.add(Restrictions.ilike("name", "%" + input + "%"))
-					.add(Restrictions.eq("ampSecSchemeId", scheme)));
-			
-	
+			Junction junction = Restrictions.conjunction().add(Restrictions.eq("ampSecSchemeId", scheme));			
+			if(input.trim().length()>0)		
+				junction.add(Restrictions.ilike("name", "%" + input + "%"));
+			crit.add(junction);
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
 			List<AmpSector> list = crit.list();

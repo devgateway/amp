@@ -1,9 +1,9 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>ethiopia.ampdev.net</virtual-host>
+<virtual-host>contracts.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
- com.example:loader=amp-ethiopia.war
+ com.example:loader=amp-contracts.war
  <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
  </loader-repository>
  </class-loading>
@@ -15,7 +15,7 @@
 	<res-type>javax.sql.DataSource</res-type>
 	
 	<!-- THIS IS THE RELATED JNDI DATASOURCE NAME. SET THIS TO THE REAL C3P0/JBOSS DATASOURCE -->
-	<jndi-name>ethiopiaDS</jndi-name>
+	<jndi-name>contractsDS</jndi-name>
 
 </resource-ref>
 </jboss-web>

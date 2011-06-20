@@ -1791,6 +1791,7 @@
     
     <action name="EditBudgetSectorForm" path="/aim/editbudgetsector" scope="session" type="org.digijava.module.budget.action.EditBudgetSector" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editbudgetsector" />
+      <forward name="forwardToBudgetmanager" path="/aim/BudgetManager.do?" redirect="true"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>   
     <action name="SetBudgetProgramForm" path="/aim/setbudgetprogram" scope="session" type="org.digijava.module.budget.action.SetBudgetProgram" validate="false">

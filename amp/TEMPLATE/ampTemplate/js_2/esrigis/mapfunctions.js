@@ -249,7 +249,10 @@ function findbydistance(evt){
 					foundstr.push(structures[count]);
 				}
 				count++;
-			});
+				if (count+1 >structures.length ){
+					showStInfoWindow();
+					}
+				});
 			
 		}
 	}

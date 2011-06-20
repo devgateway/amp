@@ -3,5 +3,6 @@
 	<secondary-pages>
 		<page name="mainmap" title="AMP GIS"/>
 		<page name="mainmapPopup" title="AMP GIS"/>
+		<page name="esriproxy" title="AMP GIS"/>
 	</secondary-pages>
 </config>

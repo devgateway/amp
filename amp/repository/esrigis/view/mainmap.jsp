@@ -77,6 +77,14 @@
 	});
 
 	$(function(){
+  		$('#sbyd').click(function(){
+  			searchdistance = $('#distance').val();
+     		$('#distancediv').toggle();
+     		searchactive = true;
+     	});
+	});
+	
+	$(function(){
   		$('#basemap').click(function(){
      		$('#basemapGalleryesri').toggle();
      	});
@@ -141,7 +149,7 @@
 					<tr>
 						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;">Tools</td>
 						<td id="filterbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;">Filter</td>
-						<td valign="middle" class="mapMenuItem" align="center" id="search" style="cursor: pointer;">Search</td>
+						<td valign="middle" class="mapMenuItem" align="center" id="search" style="cursor: pointer;">Search Structures</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
@@ -164,14 +172,16 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 
-        <div id="legenddiv" class="legendContent">
+        <div id="legenddiv" class="searchContent">
         </div>
-        <div id="distancediv" class="legendContent">
+        <div id="distancediv" class="searchContent">
         	<table>
         		<tr>
-        			<td>Distance in Km</td>
+        			<td style="color: white;">
+        				<digi:trn>Distance in Km</digi:trn>
+        			</td>
         			<td>
-        				<input type="text" id="distance" width="5px"/> 
+        				<input type="text" id="distance" style="width: 50px;"/> 
         			</td>
         			<td>
         				<input type="button" id="sbyd" width="5px" value="Go"/> 
@@ -179,7 +189,7 @@
         		</tr>
         	</table>
         </div>
- 		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:10px; z-Index:999;display: none;margin-top: 40px;">
+        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:10px; z-Index:999;display: none;margin-top: 40px;">
         <div class="toolscontainer" style="margin:5px 0px 0px 40px;">
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>

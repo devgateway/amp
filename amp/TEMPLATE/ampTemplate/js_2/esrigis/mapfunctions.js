@@ -17,6 +17,7 @@ dojo.require("dijit.Menu");
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
 var features = new Array();
+var structures = new Array();
 var timer_on = 0;
 var activitiesarray = new Array();
 var loading;
@@ -26,6 +27,12 @@ var activitieson;
 var structureson;
 var maxExtent;
 var basemap;
+//---- Search variable ---- 
+var searchactive=new Boolean();
+var searchdistance;
+var foundstr = new Array();
+var searchpoint;
+
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
@@ -37,6 +44,9 @@ function init() {
 	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
 	
 	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
+	//esri.config.defaults.io.alwaysUseProxy = true;
+	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
+	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
 		layerLoadCount += 1;
@@ -83,13 +93,14 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(povertymap);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
-	//dojo.connect(map, "onClick", doBuffer);
+	
+	dojo.connect(map, "onClick", doBuffer);
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();
 	createBasemapGallery();
-	
 	maxExtent = map.extent;
+	searchactive = false;
 }
 
 
@@ -154,6 +165,7 @@ function showLoading() {
     esri.hide(loading);
     map.enableMapNavigation();
     map.showZoomSlider();
+    
   
   }
 
@@ -183,39 +195,90 @@ function resizeMap() {
 		map.reposition();
 	}, 500);
 }
+
 // show map on load
 dojo.addOnLoad(init);
 
 
 function doBuffer(evt) {
-    map.graphics.clear();
-    var params = new esri.tasks.BufferParameters();
-    params.geometries = [ evt.mapPoint ];
-
-    //buffer in linear units such as meters, km, miles etc.
-    params.distances = [ 2, 30 ];
-    params.unit = esri.tasks.GeometryService.UNIT_KILOMETER;
-    params.outSpatialReference = map.spatialReference;
-
-    geometryService.buffer(params, showBuffer);
-  }
-
+	if (searchactive && searchdistance){
+		showLoading();
+	    map.graphics.clear();
+	    var params = new esri.tasks.BufferParameters();
+	    params.geometries = [ evt.mapPoint ];
+	    
+	    //buffer in linear units such as meters, km, miles etc.
+	    params.distances = [ 1, searchdistance ];
+	    params.unit = esri.tasks.GeometryService.UNIT_KILOMETER;
+	    params.outSpatialReference = map.spatialReference;
+		geometryService.buffer(params, showBuffer);
+		findbydistance(evt);
+	}
+}
   function showBuffer(geometries) {
-
-    var symbol = new esri.symbol.SimpleFillSymbol(
-      esri.symbol.SimpleFillSymbol.STYLE_SOLID,
-      new esri.symbol.SimpleLineSymbol(
-        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-        new dojo.Color([0,0,255,0.65]), 2
-      ),
-      new dojo.Color([0,0,255,0.20])
-    );
-
+	  var symbol = new esri.symbol.SimpleFillSymbol( esri.symbol.SimpleFillSymbol.STYLE_SOLID,new esri.symbol.SimpleLineSymbol(
+    		esri.symbol.SimpleLineSymbol.STYLE_DASH,new dojo.Color([112,0,0,0.60]), 2),new dojo.Color([112,0,0,0.15])
+   );
+	
     dojo.forEach(geometries, function(geometry) {
-      var graphic = new esri.Graphic(geometry,symbol);
-      map.graphics.add(graphic);
+	      var graphic = new esri.Graphic(geometry,symbol);
+		  map.graphics.add(graphic);
     });
-  }
+}
+
+
+function findbydistance(evt){
+	searchpoint = evt;
+	foundstr = [];
+	if (structures.length>0){
+		var count=0;
+		var tasktime = structures.length * 1.5 * 1000 ;
+		var t=setTimeout("showStInfoWindow();",tasktime);
+	   
+		var distParams = new esri.tasks.DistanceParameters();
+		//Iterate structures and query the geometry server to calculate the distance. 
+		for ( var int = 0; int < structures.length; int++) {
+			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;    
+			distParams.geometry1 = evt.mapPoint;
+			distParams.geometry2 = structures[int].geometry;
+			distParams.geodesic = true;
+			
+			geometryService.distance(distParams,function(distance){
+				if (distance <=searchdistance){
+					//console.log("Results: " + distance + " " + structures[count].attributes.Activity );
+					foundstr.push(structures[count]);
+				}
+				count++;
+			});
+			
+		}
+	}
+}
+
+function showStInfoWindow () {
+	 searchactive = false;
+	 var content = "<table border='1' width='100%'>" 
+	 			+ "<tr>" 
+	 			+ "<td align='center' width='200px'>Name</td>" 
+	 			+ "<td align='center' width='100px'>Type</td>" 
+	 			+ "<td align='center' width='300px'>Activity</td>"
+	 			+ "</tr>";
+		if (map.infoWindow.isShowing) {
+	        map.infoWindow.hide();
+		}
+    map.infoWindow.setTitle("Structures");
+    for ( var int = 0; int < foundstr.length; int++) {
+    	    content = content + "<tr><td>" + foundstr[int].attributes["Structure Name"] + "</a></td>" ;
+    	    content = content + "<td align='left'>" + foundstr[int].attributes["Structure Type"] + "</td>" ;
+    	    content = content + "<td>" + foundstr[int].attributes["Activity"] + "</td></tr>" ;
+     }
+    content = content + "</table>";
+    
+    map.infoWindow.setContent(content);
+    map.infoWindow.resize(600, 200);
+    map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
+    hideLoading();
+}
 
 function getActivities(clear) {
 	if (clear && cL){
@@ -382,7 +445,9 @@ function drawpoints(){
 	}
 }
 
-//FFerreyra Functions
+
+
+//--------------------------------------FFerreyra Functions
 var locations = new Array();
 var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"},
                            {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}
@@ -572,11 +637,13 @@ function MapFindStructure(activity, structureGraphicLayer){
 			var infoTemplate = new esri.InfoTemplate("");   
 			var attr = {"Temp":"Temporal Attribute"};
 			pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
+			
 			pgraphic.setAttributes( {
 				  "Structure Name":structure.name,
 				  "Activity": activity.activityname,
 				  "Structure Type":structure.type
 				  });
+			structures.push(pgraphic);
 		}
 		else
 		{
@@ -610,5 +677,6 @@ function MapFindStructure(activity, structureGraphicLayer){
 			}
 		}
 		structureGraphicLayer.add(pgraphic);
-    });
+		structures.push(pgraphic);
+	});
 }

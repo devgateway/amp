@@ -135,6 +135,35 @@ body {
 	margin-left:10px;
 	height:20px;
 }
+.searchContent {
+    background-color: rgba(0, 0, 0, 0.5);
+	position:absolute;
+	z-Index:100;
+	margin-left: 600px;
+	margin-top: 53px;
+	display: none;
+	width:250px;
+	padding:10px;    
+    
+}
+
+.searchContentValue {
+	margin-right:10px;
+	border:2px solid black;
+	display:block;
+	width:30px;
+	height:20px;
+	float:left;
+}
+
+.searchContentLabel {
+	font-size:8pt;
+	color:white;
+	margin-left:10px;
+	height:20px;
+}
+
+
 .esriBasemapGallery {
 	position:absolute;
 	z-index:100;

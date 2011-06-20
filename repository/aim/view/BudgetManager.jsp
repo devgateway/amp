@@ -15,7 +15,8 @@
 <script language="JavaScript" type="text/javascript">
 <!--
 function addBudgetsector(){
-		<digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
+        <digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
+        document.BudgetManagerForm.target = "_self";
     	document.BudgetManagerForm.action = "<%=Url%>";
     	document.BudgetManagerForm.submit();
 }

@@ -27,10 +27,13 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -144,12 +147,11 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		final AbstractAmpAutoCompleteTextField<AmpCategoryValueLocations> autoComplete = new AbstractAmpAutoCompleteTextField<AmpCategoryValueLocations>(
-				AmpLocationSearchModel.class) {
-
+		
+		
+		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
 			@Override
-			protected String getChoiceValue(AmpCategoryValueLocations choice)
-					throws Throwable {
+			protected String getChoiceValue(AmpCategoryValueLocations choice) {
 				return choice.getName();
 			}
 
@@ -195,11 +197,9 @@ public class AmpLocationFormTableFeature extends
 			}
 		};
 
-		autoComplete.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
+		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
 				implementationLocation.getChoiceModel());
-		final AmpComboboxFieldPanel<AmpCategoryValueLocations> searchLocations = new AmpComboboxFieldPanel<AmpCategoryValueLocations>(
-				"searchLocations", "Search Locations", autoComplete);
-
+		
 		add(searchLocations);
 	}
 

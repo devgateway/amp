@@ -3,8 +3,7 @@ YAHOO.widget.WicketDataSource = function(callbackUrl) {
     this.responseArray = [];
     this.transactionId = 0;
     this.queryMatchContains = true;
-    this.maxCacheEntries = 100;
-    this.queryMatchSubset = true;
+
 };
 
 YAHOO.widget.WicketDataSource.prototype = new YAHOO.util.LocalDataSource();
@@ -30,8 +29,12 @@ function ac_left_padding(str,level) {
    return (level>0?"<span style='color:#"+color+"'>":"")+Array(level*3).join("&nbsp;")+str+(level>0?"</span>":"");
 };
 
-YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId) {
+YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache) {
     this.dataSource = new YAHOO.widget.WicketDataSource(callbackUrl);
+    if(useCache) {
+    	this.dataSource.maxCacheEntries = 100;
+    	this.dataSource.queryMatchSubset = true;	
+    }
     this.autoComplete = new YAHOO.widget.AutoComplete(inputId, containerId, this.dataSource);
     this.autoComplete.prehighlightClassName = "yui-ac-prehighlight";
     this.autoComplete.useShadow = true;
@@ -49,7 +52,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     var autoComplete=this.autoComplete;
     //handler for selected items
     this.itemSelectHandler = function(sType, aArgs) {
-    	ac_show_loading(indicatorId,inputId);
+    	ac_show_loading(indicatorId,inputId,toggleButtonId);
     	var oData = aArgs[2];
     	//Function name is dynamic, ensure it exists
     	var callWicketFuncName="callWicket"+inputId;
@@ -81,6 +84,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
 		var aResults = aArgs[2];
 		var mySpan = YAHOO.util.Dom.get(indicatorId);
 		YAHOO.util.Dom.get(inputId).disabled=false;
+		YAHOO.util.Dom.get(toggleButtonId).disabled=false;
 		if (aResults.length == 0) {
 			mySpan.style.display = 'block';
 			mySpan.innerHTML = "No results found!";
@@ -91,15 +95,16 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
 	this.autoComplete.dataReturnEvent.subscribe(myOnDataReturn);
 	//show loading icon while list is loading
 	var myDataRequestEvent = function(ev, aArgs) {
-		ac_show_loading(indicatorId,inputId);
+		ac_show_loading(indicatorId,inputId,toggleButtonId);
 	};
 	this.autoComplete.dataRequestEvent.subscribe(myDataRequestEvent);
 };
 
 //show loading icon while list is loading
-function ac_show_loading(indicatorId,inputId) {
+function ac_show_loading(indicatorId,inputId,toggleButtonId) {
 	var mySpan = YAHOO.util.Dom.get(indicatorId);
 	mySpan.style.display = 'block';
 	YAHOO.util.Dom.get(inputId).disabled=true;
+	YAHOO.util.Dom.get(toggleButtonId).disabled=true;
 	mySpan.innerHTML = '<span id="'+indicatorId+'"><img src="/TEMPLATE/ampTemplate/js_2/yui/carousel/assets/skins/sam/ajax-loader.gif" /></span>';	
 };

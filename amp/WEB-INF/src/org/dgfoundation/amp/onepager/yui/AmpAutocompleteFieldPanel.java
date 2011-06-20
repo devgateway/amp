@@ -70,6 +70,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * Message indicator - loading panel or
 	 */
 	private WebMarkupContainer indicator;
+	
+	/**
+	 * If YUI client side datasource cache should be used (some instances of this control may require no cache)
+	 */
+	private boolean useCache=true;
 
 	/**
 	 * Behavior that is invoked when an item is selected in YUI list. The
@@ -137,7 +142,39 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
 		this(id, fmName, false, objectListModelClass);
 	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param fmName
+	 * @param hideLabel  the FM name @see {@link AmpFMTypes}
+	 * @param objectListModelClass the model to retrieve the list of items
+	 * @param useCache if YUI should use client side cache
+	 */
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
+		this(id,fmName,hideLabel,objectListModelClass);
+		this.useCache=useCache;
+	}
+	
 
+	/**
+	 * 
+	 * @param id
+	 * @param fmName  the FM name @see {@link AmpFMTypes}
+	 * @param objectListModelClass the model to retrieve the list of items
+	 * @param useCache if YUI should use client side cache
+	 */
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
+		this(id, fmName, false, objectListModelClass,useCache);
+	}
+	
 	/**
 	 * Constructs a new component. Initializes all subcomponents
 	 * 
@@ -317,7 +354,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 					+ textField.getMarkupId() + "', '" + getCallbackUrl()
 					+ "', '" + container.getMarkupId() + "', '"
 					+ toggleButton.getMarkupId() + "', '"
-					+ indicator.getMarkupId() + "');");
+					+ indicator.getMarkupId() + "', " +useCache+ ");");
 		}
 
 		@Override

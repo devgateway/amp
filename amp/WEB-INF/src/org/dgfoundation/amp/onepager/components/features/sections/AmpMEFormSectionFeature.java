@@ -34,13 +34,16 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.SectorUtil;
@@ -89,12 +92,12 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setReuseItems(true);
 		add(list);
 		
-		final AbstractAmpAutoCompleteTextField<AmpIndicator> autoComplete = new AbstractAmpAutoCompleteTextField<AmpIndicator>(
-				AmpMEIndicatorSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators=new AmpAutocompleteFieldPanel<AmpIndicator>("search","Search Indicators",AmpMEIndicatorSearchModel.class) {			
+			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
-			protected String getChoiceValue(AmpIndicator choice) throws Throwable {
+			protected String getChoiceValue(AmpIndicator choice) {
 				return choice.getName();
 			}
 
@@ -116,8 +119,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			}
 		};
 
-		final AmpComboboxFieldPanel<AmpIndicator> searchIndicators = new AmpComboboxFieldPanel<AmpIndicator>(
-				"search", "Search Indicators", autoComplete, AmpFMTypes.FEATURE);
 		add(searchIndicators);
 
 		final IModel<AmpIndicator> newInd = getNewIndicatorModel();
@@ -185,12 +186,12 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setReuseItems(true);
 		add(sectorList);
 
-		final AbstractAmpAutoCompleteTextField<AmpSector> autoCompleteSectors = new AbstractAmpAutoCompleteTextField<AmpSector>(
-				AmpSectorSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName,AmpSectorSearchModel.class) {			
+
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
-			protected String getChoiceValue(AmpSector choice) throws Throwable {
+			protected String getChoiceValue(AmpSector choice){
 				return choice.getName();
 			}
 
@@ -214,11 +215,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			}
 		};
 
-		autoCompleteSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
-		autoCompleteSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
+		searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
+		searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
-		final AmpComboboxFieldPanel<AmpSector> searchSectors = new AmpComboboxFieldPanel<AmpSector>(
-				"searchSectors", "Search " + fmName, autoCompleteSectors, AmpFMTypes.FEATURE);
 		add(searchSectors);
 		
 		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.FEATURE) {

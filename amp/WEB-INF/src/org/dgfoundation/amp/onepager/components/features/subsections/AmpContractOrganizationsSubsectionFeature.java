@@ -30,6 +30,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -90,13 +91,11 @@ public class AmpContractOrganizationsSubsectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(
-				AmpOrganisationSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("search","Search Funding Organizations",AmpOrganisationSearchModel.class) {			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
-			protected String getChoiceValue(AmpOrganisation choice)
-					throws Throwable {
+			protected String getChoiceValue(AmpOrganisation choice) {
 				return choice.getAcronymAndName();
 			}
 
@@ -116,9 +115,6 @@ public class AmpContractOrganizationsSubsectionFeature extends
 			}
 		};
 
-		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs = new AmpComboboxFieldPanel<AmpOrganisation>(
-				"search", "Search Organizations",
-				autoComplete);
 		add(searchOrgs);
 	}
 

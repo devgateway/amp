@@ -22,12 +22,15 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -93,12 +96,10 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		list.setReuseItems(true);
 		add(list);
 		
-		final AbstractAmpAutoCompleteTextField<AmpTheme> autoComplete = new AbstractAmpAutoCompleteTextField<AmpTheme>(AmpThemeSearchModel.class) {
-			private static final long serialVersionUID = 1L;
-
+		
+		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",AmpThemeSearchModel.class) {
 			@Override
-			protected String getChoiceValue(AmpTheme choice)
-					throws Throwable {
+			protected String getChoiceValue(AmpTheme choice) {
 				//transientBoolean used internally to flag the default theme
 				if (choice.isTransientBoolean())
 					return "<b>" +TranslatorUtil.getTranslatedText("Default program") + ":</b> " + choice.getName();
@@ -147,10 +148,9 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 
 			}
 		};
-		//
-		autoComplete.getModelParams().put(AmpThemeSearchModel.PARAM.PROGRAM_TYPE, programSettingsString); 
-		final AmpComboboxFieldPanel<AmpTheme> searchOrgs=new AmpComboboxFieldPanel<AmpTheme>("search", "Add Program", autoComplete);
-		add(searchOrgs);
+		
+		searchThemes.getModelParams().put(AmpThemeSearchModel.PARAM.PROGRAM_TYPE, programSettingsString); 		
+		add(searchThemes);
 	}
 
 }

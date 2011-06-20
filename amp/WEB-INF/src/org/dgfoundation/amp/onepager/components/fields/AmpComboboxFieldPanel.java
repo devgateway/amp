@@ -13,6 +13,7 @@ import com.visural.wicket.component.dropdown.DropDownImageResourceRef;
 
 /**
  * @author mpostelnicu@dgateway.org
+ * @deprecated
  * since Oct 21, 2010
  */
 public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {

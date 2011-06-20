@@ -224,16 +224,16 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 	 *            {@link #getChoices(String)}
 	 * @return the array with values
 	 */
-	protected String[] getChoiceValues(String input) {
+	protected String[][] getChoiceValues(String input) {
 		List<CHOICE> choices = getChoices(input);
-		List<String> choiceValues = new ArrayList<String>();
+		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
-			choiceValues.add(getChoiceValue(choice));
-			//choiceValues.add(new String[]{getChoiceValue(choice),choiceLevel!=null?choiceLevel.toString():"0"});
+			//choiceValues.add(getChoiceValue(choice));
+			choiceValues.add(new String[]{getChoiceValue(choice),choiceLevel!=null?choiceLevel.toString():"0"});
 		}
 			
-		return choiceValues.toArray(new String[0]);
+		return choiceValues.toArray(new String[0][0]);
 	}
 
 	/**
@@ -308,7 +308,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 				return;
 			}
 			String query = paramValues[0];
-			String[] result = getChoiceValues(query);
+			String[][] result = getChoiceValues(query);
 			String jsonResult = JsonUtils.marshal(result);
 			target.appendJavascript(getJsVarName()
 					+ ".dataSource.responseArray = " + jsonResult + ";");

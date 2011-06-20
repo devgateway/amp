@@ -22,6 +22,11 @@ function preg_quote( str ) {
     return (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
 };
 
+//left padding a string
+function left_padding(str,level) {
+	var color=222+(222*level);
+   return (level>0?"<span style='color:#"+color+"'>":"")+Array(level*3).join("&nbsp;")+str+(level>0?"</span>":"");
+};
 
 YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId) {
     this.dataSource = new YAHOO.widget.WicketDataSource(callbackUrl);
@@ -36,8 +41,8 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.forceSelection=true;
     this.autoComplete.maxResultsDisplayed = 1000;   
     this.autoComplete.formatResult = function(pResultData, pQuery, pResultMatch) {
-    	if(pQuery=="") return pResultMatch;
-    	return pResultMatch.replace( new RegExp( "(" + preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" );
+    	if(pQuery=="") return left_padding(pResultMatch,pResultData[1]);
+    	return left_padding(pResultMatch.replace( new RegExp( "(" + preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
     }; 
     var autoComplete=this.autoComplete;
     //handler for selected items
@@ -45,7 +50,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     	var oData = aArgs[2]; // object literal of data for the result
     	// Since its name is being dynamically generated, always ensure your function actually exists
     	var callWicketFuncName="callWicket"+inputId;
-    	if (typeof(window[callWicketFuncName]) === "function")  window[callWicketFuncName](oData);
+    	if (typeof(window[callWicketFuncName]) === "function")  window[callWicketFuncName](oData[0]);
     	 else throw("Error.  Function " + callWicketFuncName + " does not exist.");
     };
     this.autoComplete.itemSelectEvent.subscribe(this.itemSelectHandler);//subscribes this handler to YUI autocomplete

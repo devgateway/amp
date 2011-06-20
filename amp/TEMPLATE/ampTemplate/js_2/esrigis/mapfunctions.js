@@ -232,7 +232,7 @@ function findbydistance(evt){
 	foundstr = [];
 	if (structures.length>0){
 		var count=0;
-		var tasktime = structures.length * 1.5 * 1000 ;
+		var tasktime = structures.length * 5 * 1000 ;
 		var t=setTimeout("showStInfoWindow();",tasktime);
 	   
 		var distParams = new esri.tasks.DistanceParameters();

@@ -172,7 +172,7 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 
-        <div id="legenddiv" class="searchContent">
+        <div id="legenddiv" class="legendContent roundedCornersLegend">
         </div>
         <div id="distancediv" class="searchContent">
         	<table>

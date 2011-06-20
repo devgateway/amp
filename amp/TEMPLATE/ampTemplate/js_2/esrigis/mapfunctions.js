@@ -480,7 +480,7 @@ function closeHide(){
 	catch(e){}
 //	cL.clear();
 }
-
+var currentLevel;
 function MapFindLocation(level){
 	showLoading();
 	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
@@ -489,6 +489,7 @@ function MapFindLocation(level){
     query.outSpatialReference = {wkid:map.spatialReference.wkid};
     query.returnGeometry = true;
     query.outFields = ["COUNT", level.mapField, "GEO_ID"];
+    currentLevel = level;
     queryTask.execute(query, addResultsToMap);
 }
 
@@ -519,6 +520,18 @@ function addResultsToMap(featureSet) {
       }
 
     dojo.forEach(featureSet.features,function(feature){
+    	//Read current attributes and assign a new set
+    	var count = feature.attributes["COUNT"];
+    	var county = feature.attributes["COUNTY"];
+    	var geoId = feature.attributes["GEO_ID"];
+    	feature.setAttributes( {
+			  "COUNT": count,
+			  "AMOUNT": count,
+			  "COUNTY": county,
+			  "GEO_ID": geoId
+			  });
+    	//TODO: Should support all types of funding
+    	feature.setInfoTemplate(new esri.InfoTemplate("Funding", "County: ${COUNTY} <br/>Commitments: ${AMOUNT}<br/> "));
     	localGraphicLayer.add(feature);
     });
     
@@ -532,12 +545,19 @@ function addResultsToMap(featureSet) {
   }
 
 function showLegend(rangeColors, colors){
+	//TODO: Should support currencies
+	var currencyString = "USD";
+	//TODO: Should support all types of funding
+	var typeOfFunding = "Commitments";
 	var htmlDiv = "";
+	htmlDiv += "<div onclick='closeHide()' style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div class='legendHeader'>Showing " + typeOfFunding + " for " + currentLevel.name + "<br/><hr/></div>";
 	for(var i=0; i< rangeColors.length; i++){
-		htmlDiv += "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");' ></div>"
-				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + "-" + Math.floor(rangeColors[i][1]) + "</div><br/>";
+		htmlDiv += "<div class='legendContentContainer'>"
+				+ "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");' ></div>"
+				+"</div>"
+				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + " " + currencyString + " - " + Math.floor(rangeColors[i][1]) + " " + currencyString + " </div><br/>";
 	}
-	htmlDiv += "<div onclick='closeHide()' style='color:white;'>Close</div>";
 	$('#legenddiv').html(htmlDiv);
 	$('#legenddiv').show('slow');
 }
@@ -593,6 +613,7 @@ function updateLocationAttributes(graphicLayer){
     	  var currentLocation = locations[j];
           if(g.attributes["GEO_ID"] == currentLocation.geoId){
         	  g.attributes["COUNT"] = Math.log(currentLocation.commitments);
+        	  g.attributes["AMOUNT"] = currentLocation.commitments;
         	  break;
           }
       }
@@ -650,14 +671,14 @@ function MapFindStructure(activity, structureGraphicLayer){
 			var jsonObject = eval('(' + structure.shape + ')');
 			if(jsonObject.geometry != null){ //If it's a complete Graphic object
 				pgraphic = new esri.Graphic(jsonObject);
+				pgraphic.setAttributes( {
+					  "Structure Name":structure.name,
+					  "Activity": activity.activityname,
+					  "Structure Type":structure.type
+					  });
+				pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
 				if(jsonObject.symbol.style == "esriSMSCircle") //If it's a point, put the appropriate icon
 				{
-					pgraphic.setAttributes( {
-						  "Structure Name":structure.name,
-						  "Activity": activity.activityname,
-						  "Structure Type":structure.type
-						  });
-					pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
 					pgraphic.setSymbol(sms);
 				}
 				

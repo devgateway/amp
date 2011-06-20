@@ -578,7 +578,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			
 		int c;
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
 		}
 		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
@@ -682,15 +682,15 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					actStatusValue.append("1=1 ");					
 					break;
 				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-					actStatusValue.append(" (approval_status='edited' and draft <>1)");break;
+					actStatusValue.append(" (approval_status='edited' and draft <> true)");break;
 				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
-					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft=1) ");break;
+					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft is true) ");break;
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
 					actStatusValue.append(" (approval_status='started' and draft<>1)");break;
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
-					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft=1) ");break;
+					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft is true ) ");break;
 				case 4://Validated Activities 
-					actStatusValue.append("(approval_status='approved' and draft<>1)");break;
+					actStatusValue.append("(approval_status='approved' and draft<>true)");break;
 				default:actStatusValue.append("1=1 ");	break;
 				}
 				actStatusValue.append(" OR ");
@@ -707,7 +707,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
 				+ Constants.APPROVED_STATUS + "'";
 		
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
+		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 
@@ -978,7 +978,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		logger.info(this.generatedFilterQuery);
 		
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
 		}
 		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));

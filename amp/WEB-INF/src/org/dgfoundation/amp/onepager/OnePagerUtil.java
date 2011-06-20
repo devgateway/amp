@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,19 +16,47 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.SetModel;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.onepager.web.pages.OnePager;
 
 /**
+ * Various utility methods for the {@link OnePager}
  * @author mpostelnicu@dgateway.org since Nov 5, 2010
  */
 public final class OnePagerUtil {
 
+	
+	/**
+	 * This is used by {@link #jsonMarshal(Object)}
+	 */
+	private static final JsonFactory jf = new JsonFactory();
+
+	 /**
+	  * Marshall to JSON an object using the {@link ObjectMapper} (dynamically mapping)
+	  * @param o the object
+	  * @return the resulting JSON stream as a string
+	  */
+	 public static String jsonMarshal(Object o) {
+	        StringWriter sw = new StringWriter();
+	        try {
+	            JsonGenerator gen = jf.createJsonGenerator(sw);
+	            new ObjectMapper().writeValue(gen, o);
+	            return sw.toString();
+	        } catch(Exception e) {
+	            throw new RuntimeException(e);
+	        }
+	    }
+	
 	protected static Logger logger = Logger.getLogger(OnePagerUtil.class);
 	
 	/**
-	 * Returns an {@link AbstractReadOnlyModel} wrapping a list from a source SetModel.
-	 * Useful to return a {@link ListView} compliant model out of a Hibernate Set 
+	 * Returns an {@link AbstractReadOnlyModel} wrapping a list from a source {@link SetModel}.
+	 * Useful to return a {@link ListView} compliant model out of a Hibernate {@link Set} 
 	 * @param <T> The type of object in the set
 	 * @param setModel the given set model
 	 * @return the returned model

@@ -23,25 +23,24 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
 import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.dgfoundation.amp.onepager.JsonUtils;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
-
 /**
- * Autocomplete Combobox Component based on YUI 2.x This component can be used
- * to show an autocomplete editbox {@linkplain http
+ * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
+ * can be used to show an autocomplete editbox {@linkplain http
  * ://developer.yahoo.com/yui/examples/autocomplete/ac_combobox.html}
  * 
  * @author mpostelnicu@dgateway.org
- * @since Jun 14, 2011 {@linkplain http
- *        ://ptrthomas.wordpress.com/2009/08/12/wicket
- *        -tutorial-yui-autocomplete-using-json-and-ajax/}
+ * @since Jun 14, 2011
+ * @see {@linkplain http ://ptrthomas.wordpress.com/2009/08/12/wicket
+ *      -tutorial-yui-autocomplete-using-json-and-ajax/}
  */
-public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<String>
-		implements IAjaxIndicatorAware {
+public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
+		AmpFieldPanel<String> implements IAjaxIndicatorAware {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,12 +65,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 	 * The button that shows all options
 	 */
 	private WebMarkupContainer toggleButton;
-	
+
 	/**
-	 * Message indicator - loading panel or 
+	 * Message indicator - loading panel or
 	 */
 	private WebMarkupContainer indicator;
 
+	/**
+	 * Behavior that is invoked when an item is selected in YUI list. The
+	 * {@link #onBeforeRender()} method is overiden and adds a JS function
+	 * wrapping the {@link AbstractAmpAutoCompleteModel} callbackUrl
+	 */
 	private AbstractDefaultAjaxBehavior onSelectBehavior;
 
 	/**
@@ -97,10 +101,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 
 			@Override
 			public void renderHead(IHeaderResponse response) {
-				String js = "function callWicket"+textField.getMarkupId()+"(selectedString) { var wcall = wicketAjaxGet ('"
+				String js = "function callWicket"
+						+ textField.getMarkupId()
+						+ "(selectedString) { var wcall = wicketAjaxGet ('"
 						+ url
 						+ "&selectedString='+selectedString, function() { }, function() { } ) }";
-				response.renderJavascript(js, "callWicket-"+textField.getMarkupId());
+				response.renderJavascript(js,
+						"callWicket-" + textField.getMarkupId());
 			}
 		});
 
@@ -114,30 +121,41 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 		return indicatorAppender.getMarkupId();
 	}
 
-	
 	/**
 	 * Instantiates a new autocomplete component
-	 * @param id the Wicket id
-	 * @param fmName the FM name @see {@link AmpFMTypes}
-	 * @param objectListModelClass the model to retrieve the list of items
+	 * 
+	 * @param id
+	 *            the Wicket id
+	 * @param fmName
+	 *            the FM name @see {@link AmpFMTypes}
+	 * @param objectListModelClass
+	 *            the model to retrieve the list of items
 	 */
-	public AmpAutocompleteFieldPanel(String id, String fmName, Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id,fmName,false,objectListModelClass);
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+		this(id, fmName, false, objectListModelClass);
 	}
-	
+
 	/**
 	 * Constructs a new component. Initializes all subcomponents
+	 * 
 	 * @see YuiAutoComplete#YuiAutoComplete(String, String, Class)
 	 * @param id
-	 * @param hideLabel if true, the visible text label of the component is not shown
+	 * @param hideLabel
+	 *            if true, the visible text label of the component is not shown
 	 * @param model
 	 */
-	public AmpAutocompleteFieldPanel(String id, String fmName, boolean hideLabel,Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		super(id,null,fmName,hideLabel, true);
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+		super(id, null, fmName, hideLabel, true);
 
-		
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
-		this.objectListModelClass=objectListModelClass;
+		this.objectListModelClass = objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");
 		toggleButton.setOutputMarkupId(true);
 		add(toggleButton);
@@ -148,9 +166,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 		container.setOutputMarkupId(true);
 		add(container);
 		add(new YuiAutoCompleteBehavior());
-		
+
 		indicator = new WebMarkupContainer("indicator");
-		indicator.setOutputMarkupId(true);		
+		indicator.setOutputMarkupId(true);
 		add(indicator);
 
 		onSelectBehavior = new AbstractDefaultAjaxBehavior() {
@@ -160,6 +178,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 			protected void respond(final AjaxRequestTarget target) {
 				String selectedString = RequestCycle.get().getRequest()
 						.getParameter("selectedString");
+				// hide loading icon:
+				target.appendJavascript("YAHOO.util.Dom.get("
+						+ indicator.getMarkupId() + ").style.display = 'none'");
 				List<CHOICE> choices = getChoices(selectedString);
 				for (CHOICE choice : choices) {
 					if (selectedString.equals(getChoiceValue(choice))) {
@@ -169,9 +190,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 				}
 			}
 		};
-
 		textField.add(onSelectBehavior);
-
 	}
 
 	/**
@@ -200,10 +219,10 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 	 */
 	protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
 
-//	@Override
-//	public void updateModel() {
-//		textField.updateModel();
-//	}
+	// @Override
+	// public void updateModel() {
+	// textField.updateModel();
+	// }
 
 	/**
 	 * Returns the real JS name of the textfield component
@@ -229,10 +248,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
-			//choiceValues.add(getChoiceValue(choice));
-			choiceValues.add(new String[]{getChoiceValue(choice),choiceLevel!=null?choiceLevel.toString():"0"});
+			// choiceValues.add(getChoiceValue(choice));
+			choiceValues.add(new String[] { getChoiceValue(choice),
+					choiceLevel != null ? choiceLevel.toString() : "0" });
 		}
-			
+
 		return choiceValues.toArray(new String[0][0]);
 	}
 
@@ -273,13 +293,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 	}
 
 	/**
-	 * Behavior that shows the YUI autocomplete picklist Invokes
+	 * Behavior that shows the YUI autocomplete picklist. Invokes
 	 * YAHOO.widget.WicketAutoComplete using {@link YuiAutoComplete#textField
-	 * #getMarkupId()} and {@link YuiAutoComplete#container#getMarkupId()} The
+	 * #getMarkupId()} and {@link YuiAutoComplete#container#getMarkupId()}. The
 	 * select all button uses {@link YuiAutoComplete#toggleButton#getMarkupId()}
 	 * The {@link #respond(AjaxRequestTarget)} method invokes the
-	 * {@link JsonUtils#marshal(Object)} to get a json object which is sent to
-	 * the dataSource.responseArray
+	 * {@link JsonUtils#marshal(Object)} to get a JSON object which is sent to
+	 * YUI's dataSource.responseArray
 	 * 
 	 * @author mpostelnicu@dgateway.org
 	 * @since Jun 15, 2011
@@ -290,12 +310,14 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 		public void renderHead(IHeaderResponse response) {
 			super.renderHead(response);
 			response.renderJavascriptReference(new JavascriptResourceReference(
-					AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js"));
+					AmpAutocompleteFieldPanel.class,
+					"AmpAutocompleteFieldPanel.js"));
 			response.renderOnDomReadyJavascript(getJsVarName()
 					+ " = new YAHOO.widget.WicketAutoComplete('"
 					+ textField.getMarkupId() + "', '" + getCallbackUrl()
 					+ "', '" + container.getMarkupId() + "', '"
-					+ toggleButton.getMarkupId() + "', '"+indicator.getMarkupId() + "');");
+					+ toggleButton.getMarkupId() + "', '"
+					+ indicator.getMarkupId() + "');");
 		}
 
 		@Override
@@ -309,7 +331,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends AmpFieldPanel<St
 			}
 			String query = paramValues[0];
 			String[][] result = getChoiceValues(query);
-			String jsonResult = JsonUtils.marshal(result);
+			String jsonResult = OnePagerUtil.jsonMarshal(result);
 			target.appendJavascript(getJsVarName()
 					+ ".dataSource.responseArray = " + jsonResult + ";");
 		}

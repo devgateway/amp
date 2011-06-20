@@ -3,6 +3,8 @@ YAHOO.widget.WicketDataSource = function(callbackUrl) {
     this.responseArray = [];
     this.transactionId = 0;
     this.queryMatchContains = true;
+    this.maxCacheEntries = 100;
+    this.queryMatchSubset = true;
 };
 
 YAHOO.widget.WicketDataSource.prototype = new YAHOO.util.LocalDataSource();
@@ -17,13 +19,13 @@ YAHOO.widget.WicketDataSource.prototype.makeConnection = function(oRequest, oCal
     wicketAjaxGet(this.callbackUrl + '&q=' + oRequest, onWicketSuccessFn);
 };
 
-function preg_quote( str ) {
+function ac_preg_quote( str ) {
     //http://kevin.vanzonneveld.net - replace all regex chars with escaped versions
     return (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
 };
 
-//left padding a string
-function left_padding(str,level) {
+//left padding a string + colorize siblings
+function ac_left_padding(str,level) {
 	var color=222+(222*level);
    return (level>0?"<span style='color:#"+color+"'>":"")+Array(level*3).join("&nbsp;")+str+(level>0?"</span>":"");
 };
@@ -41,14 +43,15 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.forceSelection=true;
     this.autoComplete.maxResultsDisplayed = 1000;   
     this.autoComplete.formatResult = function(pResultData, pQuery, pResultMatch) {
-    	if(pQuery=="") return left_padding(pResultMatch,pResultData[1]);
-    	return left_padding(pResultMatch.replace( new RegExp( "(" + preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    	if(pQuery=="") return ac_left_padding(pResultMatch,pResultData[1]);
+    	return ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
     }; 
     var autoComplete=this.autoComplete;
     //handler for selected items
     this.itemSelectHandler = function(sType, aArgs) {
-    	var oData = aArgs[2]; // object literal of data for the result
-    	// Since its name is being dynamically generated, always ensure your function actually exists
+    	ac_show_loading(indicatorId,inputId);
+    	var oData = aArgs[2];
+    	//Function name is dynamic, ensure it exists
     	var callWicketFuncName="callWicket"+inputId;
     	if (typeof(window[callWicketFuncName]) === "function")  window[callWicketFuncName](oData[0]);
     	 else throw("Error.  Function " + callWicketFuncName + " does not exist.");
@@ -75,10 +78,9 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     autoComplete.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(bToggler, "open");});   
     // Show custom message if no results found
 	var myOnDataReturn = function(sType, aArgs) {
-		var myAutoComp = aArgs[0];
-		var sQuery = aArgs[1];
 		var aResults = aArgs[2];
 		var mySpan = YAHOO.util.Dom.get(indicatorId);
+		YAHOO.util.Dom.get(inputId).disabled=false;
 		if (aResults.length == 0) {
 			mySpan.style.display = 'block';
 			mySpan.innerHTML = "No results found!";
@@ -89,11 +91,15 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
 	this.autoComplete.dataReturnEvent.subscribe(myOnDataReturn);
 	//show loading icon while list is loading
 	var myDataRequestEvent = function(ev, aArgs) {
-		var ac = aArgs[0];
-		var mySpan = YAHOO.util.Dom.get(indicatorId);
-		mySpan.style.display = 'block';
-		
-		mySpan.innerHTML = '<span id="'+indicatorId+'"><img src="/TEMPLATE/ampTemplate/js_2/yui/carousel/assets/skins/sam/ajax-loader.gif" /></span>';
+		ac_show_loading(indicatorId,inputId);
 	};
 	this.autoComplete.dataRequestEvent.subscribe(myDataRequestEvent);
+};
+
+//show loading icon while list is loading
+function ac_show_loading(indicatorId,inputId) {
+	var mySpan = YAHOO.util.Dom.get(indicatorId);
+	mySpan.style.display = 'block';
+	YAHOO.util.Dom.get(inputId).disabled=true;
+	mySpan.innerHTML = '<span id="'+indicatorId+'"><img src="/TEMPLATE/ampTemplate/js_2/yui/carousel/assets/skins/sam/ajax-loader.gif" /></span>';	
 };

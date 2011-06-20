@@ -36,7 +36,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Main component hub for all activity form subcomponents.
- * This is {@link AmpFeaturePanel} as such it supports
+ * This is {@link AmpFeaturePanel}, as such, it supports
  * {@link OnePagerUtil#cascadeFmEnabled(AjaxRequestTarget, boolean, org.apache.wicket.Component)}
  * and
  * {@link OnePagerUtil#cascadeFmVisible(AjaxRequestTarget, boolean, org.apache.wicket.Component)}

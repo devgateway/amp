@@ -130,9 +130,9 @@ public class ExportAdminTable extends Action {
                         bulletCell = row.createCell(cellIndex++);
                         String cellValue = null;
                         if (splitedText.length > 1) {
-                            cellValue = BULLET + splitedText[j];
+                            cellValue = BULLET + splitedText[j].trim();
                         } else {
-                            cellValue = splitedText[0];
+                            cellValue = splitedText[0].trim();
                         }
                        
                         HSSFRichTextString text = new HSSFRichTextString(cellValue);

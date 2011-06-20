@@ -95,7 +95,7 @@ function confirmDelete() {
 									<b>Category Options</b>
 								</digi:trn>
 							</td>
-							<td bgcolor="#c7d4db" class="inside" align="center">
+							<td bgcolor="#c7d4db" class="inside ignore" align="center">
 								<digi:trn key="aim:categoryActions">
 									<b>Actions</b>
 								</digi:trn>
@@ -137,14 +137,13 @@ function confirmDelete() {
 								</logic:iterate>
 								</ul>
 							</td>
-							<td align="left" class="inside">
+							<td align="left" class="inside ignore">
 								<% if (category.isMultiselect()) {%>
 									<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 								<% }
 									else { %>
 									<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 								<%} %>
-								&nbsp;
 								<digi:trn key='aim:categoryIsMultiselect'>
 									Multiselect
 								</digi:trn>
@@ -155,12 +154,24 @@ function confirmDelete() {
 									else { %>
 									<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 								<%} %>
-								&nbsp;
 								<digi:trn key='aim:categoryIsOrdered'>
 									Ordered
 								</digi:trn>
 							</td>
-							<td align="left" class="inside">
+							<!-- this invisible td for export purpose, we export only options that are selected -->
+							<td align="left" style="display:none">
+								<ul>
+								<% if (category.isMultiselect()) {%>
+									<li><digi:trn>Multiselect</digi:trn></li>
+								<% }%>
+								<% if (category.isOrdered()) {%>
+								<li><digi:trn key='aim:categoryIsOrdered'>
+									Ordered
+								</digi:trn></li>
+								<% } %>
+								</ul>
+							</td>
+							<td align="left" class="inside ignore">
 								<ul>
 									<li>
 										<digi:link paramId="edit" paramName="category" paramProperty="id"  href='/categoryManager.do'>

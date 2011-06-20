@@ -15,7 +15,7 @@
         var  output='';
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var regexpWhiteSpaces = new RegExp(/&nbsp;/g);
-        var regexpListItem = new RegExp(/<li>/g);
+        var regexpListItem = new RegExp(/<li>/gi);
         var arrayRows=new Array();
         var m=0;
         for(var i=0;i<rows.length;i++){

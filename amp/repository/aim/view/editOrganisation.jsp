@@ -594,18 +594,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
         }     
 
-        function checkNumber(number){
-    	 	var validChars= "0123456789()+ ";
-    	 	for (var i = 0;  i < number.length;  i++) {
-    	 		var ch = number.charAt(i);
-    	  		if (validChars.indexOf(ch)==-1){
-    	  			//alert('enter correct number');	   			
-    	   			return false;
-    	  		}
-    	 	}	 
-    	 return true;
-    	}
-    	   
+          	   
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
         	//submit organization parameters first
            	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />

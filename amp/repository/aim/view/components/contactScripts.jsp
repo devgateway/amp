@@ -240,7 +240,13 @@ YAHOO.namespace("YAHOO.amp");
         		}
     		}
     	}
-    	
+    	if(phoneNumbers!=null){
+        	for(var i=0;i < phoneNumbers.length; i++){
+            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            		return false;
+            	}
+        	}
+    	}
     	/*
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
@@ -250,7 +256,8 @@ YAHOO.namespace("YAHOO.amp");
         	}
     	}*/
     	//check fax
-    	var faxes=$("input[id^='faxes_']");
+    	var faxes=$("input[id^='fax_']");
+    	
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
     			if(faxes[i].value==''){

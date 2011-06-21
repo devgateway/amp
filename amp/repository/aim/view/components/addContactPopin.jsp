@@ -85,7 +85,7 @@
 							<ul>
 							<c:forEach var="phone" items="${contact.properties}">
 									<c:if test="${phone.name=='contact phone'}">
-										<li><digi:trn>${phone.phoneCategory}</digi:trn>${phone.actualPhoneNumber}</li> 	
+										<li><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp; ${phone.actualPhoneNumber}</li> 	
 									</c:if>
 							</c:forEach>
 							</ul>
@@ -178,42 +178,37 @@
 				
 				<tr>
 					<td align="right" valign="top"><strong><digi:trn>Phone Number</digi:trn></strong></td>
-					<td align="left" nowrap="nowrap"><logic:notEmpty
-						name="aimAddContactForm" property="phones">
-						<logic:iterate name="aimAddContactForm" property="phones" id="foo"
-							indexId="ctr">
-							<div><c:set var="translationNone">
-								<digi:trn>None</digi:trn>
-							</c:set> <category:showoptions multiselect="false"
-								firstLine="${translationNone}" name="aimAddContactForm"
-								property="phones[${ctr}].phoneTypeId"
-								keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>"
-								styleClass="selectStyle" outerid="phoneType_${ctr}" /> <%--
-										<html:text name="aimAddContactForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
-										--%> <html:text name="aimAddContactForm"
-								property="phones[${ctr}].value" size="16"
-								styleId="phoneNum_${ctr}" /> <a
-								href="javascript:removeData('phone',${ctr})"> <img
-								src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"
-								vspace="2" border="0" /> </a> <c:if
-								test="${aimAddContactForm.phonesSize==0 ||  ctr==aimAddContactForm.phonesSize-1}">
-								<c:set var="trnadd">
-									<digi:trn>Add New</digi:trn>
-								</c:set>
-								<input id="addPhoneBtn"
-									style="font-family: verdana; font-size: 11px;" type="button"
-									name="addValBtn" value="${trnadd}"
-									onclick="addNewData('phone')">
-							</c:if></div>
-						</logic:iterate>
-					</logic:notEmpty> <logic:empty name="aimAddContactForm" property="phones">
-						<c:set var="trnadd">
-							<digi:trn>Add New</digi:trn>
-						</c:set>
-						<input id="addPhoneBtn"
-							style="font-family: verdana; font-size: 11px;" type="button"
-							name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">
-					</logic:empty></td>
+					<td align="left" nowrap="nowrap">
+						<logic:notEmpty	name="aimAddContactForm" property="phones">
+							<logic:iterate name="aimAddContactForm" property="phones" id="foo"indexId="ctr">
+								<div>
+									<c:set var="translationNone"><digi:trn>None</digi:trn></c:set> 
+									<category:showoptions multiselect="false"	firstLine="${translationNone}" name="aimAddContactForm"	property="phones[${ctr}].phoneTypeId"
+									keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="selectStyle" outerid="phoneType_${ctr}" /> <%--
+											<html:text name="aimAddContactForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+											--%> 
+									<html:text name="aimAddContactForm"	property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}" /> 
+									<a href="javascript:removeData('phone',${ctr})"> 
+										<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif"	vspace="2" border="0" />
+									</a> 
+									<c:if test="${aimAddContactForm.phonesSize==0 ||  ctr==aimAddContactForm.phonesSize-1}">
+										<c:set var="trnadd">
+											<digi:trn>Add New</digi:trn>
+										</c:set>
+										<input id="addPhoneBtn"	style="font-family: verdana; font-size: 11px;" type="button" name="addValBtn" value="${trnadd}"
+											onclick="addNewData('phone')">
+									</c:if>
+								</div>
+							</logic:iterate>
+						</logic:notEmpty> 
+						<logic:empty name="aimAddContactForm" property="phones">
+							<c:set var="trnadd">
+								<digi:trn>Add New</digi:trn>
+							</c:set>
+							<input id="addPhoneBtn"	style="font-family: verdana; font-size: 11px;" type="button"
+								name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">
+						</logic:empty>
+					</td>
 				</tr>
 				<tr>
 					<td align="right" valign="top"><strong><digi:trn>Fax</digi:trn></strong></td>

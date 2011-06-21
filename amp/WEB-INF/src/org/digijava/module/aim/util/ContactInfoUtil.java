@@ -562,10 +562,14 @@ public class ContactInfoUtil {
     //these methods are quick workaraound on translation problem
     public static String getActualPhoneNumber (String phoneNum) {
         String retVal = null;
-        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
-            int typeIdSeparatorPos = phoneNum.indexOf(" ");
-            String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
-            retVal=phoneNumberStr;
+        if (phoneNum != null && phoneNum.length() > 0) {
+        	if(phoneNum.indexOf(" ") > -1){
+        		int typeIdSeparatorPos = phoneNum.indexOf(" ");
+                String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
+                retVal=phoneNumberStr;
+        	}else if (phoneNum.indexOf(" ") == -1) {
+        		retVal=phoneNum;
+        	}
         }
         return retVal;
     }
@@ -577,7 +581,7 @@ public class ContactInfoUtil {
         if (phoneCategoryValue != null) {
             retVal = phoneCategoryValue.getValue();
         } else {
-            retVal = "Incorrect phone number";
+            retVal = "None";
         }
 
 

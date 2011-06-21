@@ -153,7 +153,7 @@
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(true);" style="cursor: pointer;">Structures</td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(false);" style="cursor: pointer;">Structures</td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;">Indicator</td>
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">

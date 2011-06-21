@@ -86,7 +86,8 @@ function createMapAddLayers(myService1, myService2) {
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
         dojo.byId('map_zoom_slider').style.top = '95px';
-        getActivities();
+        getActivities(false);
+        getStructures(false);
     });
 	map.addLayer(myService1);
 	map.addLayer(myService2);
@@ -215,17 +216,40 @@ function doBuffer(evt) {
 		findbydistance(evt);
 	}
 }
-  function showBuffer(geometries) {
+
+var rangegraphicLayer;
+function showBuffer(geometries) {
 	  var symbol = new esri.symbol.SimpleFillSymbol( esri.symbol.SimpleFillSymbol.STYLE_SOLID,new esri.symbol.SimpleLineSymbol(
     		esri.symbol.SimpleLineSymbol.STYLE_DASH,new dojo.Color([112,0,0,0.60]), 2),new dojo.Color([112,0,0,0.15])
    );
-	
+   try{
+	   if (rangegraphicLayer){
+		   map.removeLayer(map.getLayer("rangelayer"));
+	   }
+	}
+	catch(e){
+		console.log(e);
+	}
+	rangegraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "rangelayer", visible: true}); 
     dojo.forEach(geometries, function(geometry) {
 	      var graphic = new esri.Graphic(geometry,symbol);
-		  map.graphics.add(graphic);
+	      rangegraphicLayer.add(graphic);
     });
+   
+    map.addLayer(rangegraphicLayer);
+    map.reorderLayer(map.getLayer("rangelayer"),0);
 }
 
+function clearbuffer(){
+	try{
+		if (rangegraphicLayer){
+			map.removeLayer(map.getLayer("rangelayer"));
+		}
+		map.infoWindow.hide;
+	}catch(e){
+		console.log(e);
+	}
+}
 
 function findbydistance(evt){
 	searchpoint = evt;
@@ -276,10 +300,12 @@ function showStInfoWindow () {
     	    content = content + "<td>" + foundstr[int].attributes["Activity"] + "</td></tr>" ;
      }
     content = content + "</table>";
-    
-    map.infoWindow.setContent(content);
-    map.infoWindow.resize(600, 200);
-    map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
+    if (foundstr.length>0){
+    	map.infoWindow.setContent(content);
+    	map.infoWindow.resize(600, 200);
+    	map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
+    }
+    dojo.connect(map.infoWindow, "onHide", clearbuffer);
     hideLoading();
 }
 
@@ -624,31 +650,44 @@ function updateLocationAttributes(graphicLayer){
     return graphicLayer;
 }
 
+var structureGraphicLayer;
 function getStructures(clear) {
-	try {
-		map.removeLayer(map.getLayer("structuresMap"));
-		map.removeLayer(map.getLayer("activitiesMap"));
-	}catch(e){}
-    var structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "structuresMap", visible: true});
-    structureson =true;
-    var xhrArgs = {
-		url : "/esrigis/datadispatcher.do?showstructures=true",
-		handleAs : "json",
-		   load: function(jsonData) {
-			   dojo.forEach(jsonData,function(activity) {
-		        	MapFindStructure(activity, structureGraphicLayer);
-		        });
-			    map.addLayer(structureGraphicLayer);
-			    map.setExtent(map.extent.expand(1.01));
-				hideLoading();
-		   },
-		error : function(error) {
-			console.log(error);
+	if (clear){
+		try {
+			map.removeLayer(map.getLayer("structuresMap"));
+			map.removeLayer(map.getLayer("activitiesMap"));
+		}catch(e){
+			console.log(e);
 		}
 	}
-	// Call the asynchronous xhrGet
-	var deferred = dojo.xhrGet(xhrArgs);
-	showLoading();
+	if (structureGraphicLayer){
+		if (structureGraphicLayer.visible){
+			structureGraphicLayer.hide();
+		}else{
+			structureGraphicLayer.show();
+		}
+	}else{
+	    structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "structuresMap", visible: false});
+	    structureson =true;
+	    var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?showstructures=true",
+			handleAs : "json",
+			   load: function(jsonData) {
+				   dojo.forEach(jsonData,function(activity) {
+			        	MapFindStructure(activity, structureGraphicLayer);
+			        });
+				    map.addLayer(structureGraphicLayer);
+				    map.setExtent(map.extent.expand(1.01));
+					hideLoading();
+			   },
+			error : function(error) {
+				console.log(error);
+			}
+		}
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+		showLoading();
+	}
 }
 
 function MapFindStructure(activity, structureGraphicLayer){

@@ -10,6 +10,7 @@
 		</id>
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="graphicType" column="graphicType" type="java.lang.String" />
+		<property name="iconFile" column="iconfile" type="binary" length="500000"/>
 		<set name="structures" table="AMP_STRUCTURE">
 			<key column="type" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructure" />

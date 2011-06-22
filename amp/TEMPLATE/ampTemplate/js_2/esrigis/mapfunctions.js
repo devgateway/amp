@@ -692,7 +692,7 @@ function getStructures(clear) {
 
 function MapFindStructure(activity, structureGraphicLayer){
 	dojo.forEach(activity.structures,function(structure) {
-		var sms = new esri.symbol.PictureMarkerSymbol('/TEMPLATE/ampTemplate/img_2/gis/' + structure.type +'.png', 32, 37);
+		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
 		var pgraphic;
 		if(structure.shape == ""){
 			var pt = new esri.geometry.Point(structure.lat,structure.lon,map.spatialReference);

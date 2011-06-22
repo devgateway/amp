@@ -311,6 +311,17 @@
                           </tr>
                            -->
 						  <!-- -->
+                         <tr>
+	                         <td class="f-names" nowrap="nowrap">
+ 	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+ 	 				              <c:set var="translation">
+ 	                                <digi:trn>Click here to manage GIS Structure Types</digi:trn>
+ 		                          </c:set>  
+ 	 	                          <digi:link module="esrigis" href="/structureTypeManager.do">
+ 	 	                              <digi:trn>Structure Types Manager</digi:trn>
+ 	 	                          </digi:link>                                                                   
+                              </td>
+                         </tr>
 						  
                           <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>

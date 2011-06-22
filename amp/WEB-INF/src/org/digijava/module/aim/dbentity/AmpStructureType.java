@@ -12,6 +12,8 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 	private Long typeId;
 	private String name;
 	private String graphicType;
+	private byte[] iconFile;
+	private String iconFileContentType;
 
 	private transient Set<AmpStructure> structures;
 
@@ -79,5 +81,21 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 
 	public String getGraphicType() {
 		return graphicType;
+	}
+
+	public void setIconFile(byte[] iconFile) {
+		this.iconFile = iconFile;
+	}
+
+	public byte[] getIconFile() {
+		return iconFile;
+	}
+
+	public void setIconFileContentType(String iconFileContentType) {
+		this.iconFileContentType = iconFileContentType;
+	}
+
+	public String getIconFileContentType() {
+		return iconFileContentType;
 	}	
 }

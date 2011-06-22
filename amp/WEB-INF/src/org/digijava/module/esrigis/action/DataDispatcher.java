@@ -295,6 +295,7 @@ public class DataDispatcher extends MultiAction {
 				structureJSON.setName(structure.getTitle());
 				structureJSON.setShape(structure.getShape());
 				structureJSON.setType(structure.getType().getName());
+				structureJSON.setTypeId(structure.getType().getTypeId());
 				structures.add(structureJSON);
 				structuresExists = true;
 			}

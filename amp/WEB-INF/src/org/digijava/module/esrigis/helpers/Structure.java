@@ -12,6 +12,7 @@ public class Structure {
 	private String lon;
 	private String shape;
 	private String type;
+	private Long typeId;
 	
 	public void setName(String name) {
 		this.name = name;
@@ -48,5 +49,11 @@ public class Structure {
 	}
 	public String getType() {
 		return type;
+	}
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+	public Long getTypeId() {
+		return typeId;
 	}
 }

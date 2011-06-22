@@ -1034,25 +1034,24 @@ public class ChartWidgetUtil {
      */
     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding) throws DgException {
         Collection<DonorSectorFundingHelper> fundings = null;
-        String oql = "select actSec.sectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
+        String oql = "select sec.ampSectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act "
                 + " inner join act.sectors actSec "
                 + " inner join actSec.sectorId sec "
-                + " inner join actSec.activityId act "
                 + " inner join actSec.classificationConfig config ";
         oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
         if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (fd.ampFundingId.ampDonorOrgId in (" + getInStatment(donorIDs) + ") ) ";
+            oql += " and (fd.ampFundingId.ampDonorOrgId in (:donors ) ) ";
         }
         if (fromDate != null && toDate != null) {
             oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         }
                
         oql += " and config.name='Primary' and act.team is not null ";
-        oql += " group by actSec.sectorId ";
+        oql += " group by sec.ampSectorId ";
 
         Session session = PersistenceManager.getRequestDBSession();
         //search for grouped data
@@ -1063,6 +1062,9 @@ public class ChartWidgetUtil {
             if (fromDate != null && toDate != null) {
                 query.setDate("fDate", fromDate);
                 query.setDate("eDate", toDate);
+				if (donorIDs != null && donorIDs.length > 0) {
+					query.setParameterList("donors", donorIDs);
+				}
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
                 logger.debug("Filtering from " + df.format(fromDate) + " to " + df.format(toDate));
             }
@@ -1078,10 +1080,10 @@ public class ChartWidgetUtil {
             for (Object row : result) {
                 Object[] rowData = (Object[]) row;
                 //AmpOrganisation donor = (AmpOrganisation) rowData[0];
-                AmpSector sector = (AmpSector) rowData[0];
+                Long sectorId = (Long) rowData[0];
                 Double amt = (Double) rowData[1];
                 Double amount = FeaturesUtil.applyThousandsForVisibility(amt);
-                sector = SectorUtil.getTopLevelParent(sector);
+                AmpSector sector = SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId));
                 DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
                 //if not create and add to map
                 if (sectorFundngObj == null) {

@@ -715,7 +715,7 @@ public class WidgetUtil {
         queryString += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
         queryString += " and act.team is not null ";
         queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
-        queryString += " group by orgGrp.ampOrgGrpId ";
+        queryString += " group by orgGrp.ampOrgGrpId, orgGrp.orgGrpName ";
         queryString += " order by sum(fd.transactionAmountInBaseCurrency) desc ";
         try {
             Query query = session.createQuery(queryString);

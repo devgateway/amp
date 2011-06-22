@@ -26,6 +26,9 @@ import org.digijava.module.message.jaxb.AlertTemplateType;
 import org.digijava.module.message.jaxb.Messaging;
 import org.digijava.module.message.jaxb.TemplatesList;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 
 public class ExportAndImportTemplates extends DispatchAction {
@@ -103,6 +106,10 @@ public class ExportAndImportTemplates extends DispatchAction {
 	        	}	        	
 			} catch (Exception ex) {			
 				ex.printStackTrace(System.out);
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate", TranslatorWorker.translateText("Please choose correct file to import",request)));				
+				saveErrors(request, errors);
+				return mapping.findForward("gotoPage");
 			}			
 		}	
 		return mapping.findForward("viewTemplates");

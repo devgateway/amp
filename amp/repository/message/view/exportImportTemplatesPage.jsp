@@ -136,6 +136,7 @@ div.fakefile2 input{
 	</tr>
 	<tr>
 		<td align="center">
+			<digi:errors/>
 			<digi:form action="/exportImportTemplates.do?actionType=importTemplates" method="post" enctype="multipart/form-data">
 				<table cellpadding="3" cellspacing="3">
 					<tr>

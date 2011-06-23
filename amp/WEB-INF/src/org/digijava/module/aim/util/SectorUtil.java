@@ -1385,7 +1385,7 @@ public class SectorUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select count(cc.id) from " +AmpClassificationConfiguration.class.getName() + " cc where cc.name='"+name+"'";
+			queryString="select count(cc.id) from " +AmpClassificationConfiguration.class.getName() + " cc where lower(cc.name)=lower('"+name+"')";
             if(id!=null){
             	queryString+=" and cc.id!="+id;
             }

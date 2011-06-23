@@ -79,7 +79,7 @@
 																				type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                                                  		<tr>
                                                                     		<td width="256" bgcolor="#ffffff">
-                                                                        		<digi:trn key="aim:addActivitySectors:${classConfig.name}">${classConfig.name}</digi:trn>
+                                                                        		<digi:trn>${classConfig.name}</digi:trn>
                                                                          	</td>
                                                          					<td bgcolor="#ffffff" width="80px" align="right">
                                                                         		<c:set var="trnEditScheme">

@@ -71,7 +71,9 @@ function validate(){
 						</logic:equal>
 						<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 							<digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn>	
-						</logic:equal>						
+						</logic:equal>	
+                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+					
 					</td>
 				</tr>
 				<tr>
@@ -85,8 +87,8 @@ function validate(){
 					<tr><td noWrap width=600 vAlign="top">
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
-								<td vAlign="top" width="100%">
-									&nbsp;
+								<td vAlign="top" width="100%">&nbsp;
+									
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -172,8 +174,8 @@ function validate(){
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>
@@ -188,8 +190,8 @@ function validate(){
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

@@ -983,8 +983,8 @@
 <digi:context name="digiContext" property="context" />
 
 
-
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
+
     <tr>
         <td align=left vAlign=top width=850>
             <table cellPadding=5 cellSpacing=0 width="100%" border=0>
@@ -998,6 +998,7 @@
                                 <digi:trn>Admin Home</digi:trn>
                             </digi:link>&nbsp;&gt;&nbsp;
                             <digi:trn>Workspace Manager</digi:trn>
+                            <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/workspacemanager.jpg"/></div>
                     </td>
                     <!-- End navigation -->
                 </tr>

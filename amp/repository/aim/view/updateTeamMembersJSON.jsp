@@ -34,8 +34,8 @@
 					<tr><td noWrap width=350 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
-								<td vAlign="top" width="100%">
-									&nbsp;
+								<td vAlign="top" width="100%">&nbsp;
+									
 								</td>
 							</tr>
 							<tr>
@@ -52,6 +52,8 @@
 																<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 																	<digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn>	
 																</logic:equal>
+                                                                                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+
 														</td>
 													</tr>
 												</table>
@@ -124,8 +126,8 @@
 									</table>
 								</td>
 							</tr>
-							<tr><td>
-								&nbsp;
+							<tr><td>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

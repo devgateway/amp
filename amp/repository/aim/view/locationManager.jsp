@@ -122,6 +122,7 @@ function delet1(val1, val2) {
 						<digi:trn key="aim:regionManager"> Region Manager
 						</digi:trn>
                       </span>
+                      <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/regionmanager.jpg"/></div>
 					</td>
 					<!-- End navigation -->
 				</tr>

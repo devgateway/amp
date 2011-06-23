@@ -119,6 +119,7 @@ function submitPages(){
 						Currency Manager
 						</digi:trn>
 						</span>
+                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/currencymanager.jpg"/></div>
 					</td>
 					<!-- End navigation -->
 				</tr>

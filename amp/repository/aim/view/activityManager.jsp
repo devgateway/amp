@@ -131,6 +131,7 @@
 						<digi:trn key="aim:activityManager">
 							Activity Manager
 						</digi:trn>
+                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/activitymanager.jpg"/></div>
 					</td>
 					<!-- End navigation -->
 				</tr>

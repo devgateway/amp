@@ -1042,9 +1042,12 @@ public class ChartWidgetUtil {
                 + " inner join act.sectors actSec "
                 + " inner join actSec.sectorId sec "
                 + " inner join actSec.classificationConfig config ";
+        if (donorIDs != null && donorIDs.length > 0) {
+            oql += " inner join f.ampDonorOrgId org ";
+        }
         oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
         if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (fd.ampFundingId.ampDonorOrgId in (:donors ) ) ";
+            oql += " and (org.ampOrgId in (:donors ) ) ";
         }
         if (fromDate != null && toDate != null) {
             oql += " and (fd.transactionDate between :fDate and  :eDate ) ";

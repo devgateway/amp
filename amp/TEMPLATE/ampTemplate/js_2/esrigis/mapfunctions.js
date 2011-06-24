@@ -13,7 +13,9 @@ dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
 dojo.require("dijit.TitlePane");
 dojo.require("dijit.Menu");
-
+dojo.require("esri.dijit.Legend");
+dojo.require("esri.layers.FeatureLayer");
+/*----variables---------*/
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
 var features = new Array();
@@ -27,21 +29,30 @@ var activitieson;
 var structureson;
 var maxExtent;
 var basemap;
-//---- Search variable ---- 
+/*---- Search  ----*/ 
 var searchactive=new Boolean();
 var searchdistance;
 var foundstr = new Array();
 var searchpoint;
+/*-----------------Indicators Layers------------*/
+
 
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
-	var indicatorurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer";
+	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
+	
 	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
-	povertymap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorurl, {id:'indicator',visible:false});
+	povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, {
+        mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+        outFields: ["*"],
+        id:'indicator',
+        opacity : 0.50,
+        visible:false
+      });
 	
 	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
 	//esri.config.defaults.io.alwaysUseProxy = true;
@@ -89,13 +100,28 @@ function createMapAddLayers(myService1, myService2) {
         getActivities(false);
         getStructures(false);
     });
-	map.addLayer(myService1);
-	map.addLayer(myService2);
-	map.addLayer(povertymap);
-	navToolbar = new esri.toolbars.Navigation(map);
+	
+	//add the legend
+    dojo.connect(map,'onLayersAddResult',function(results){
+      var layerInfo = dojo.map(results, function(layer,index){
+    	  return {layer:layer.layer,title:layer.layer.name};
+      });
+      if(layerInfo.length > 0){
+        var legendDijit = new esri.dijit.Legend({map:map,layerInfos:layerInfo},"legendDiv");
+        legendDijit.startup();
+      }
+    });
+   
+    navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
 	
 	dojo.connect(map, "onClick", doBuffer);
+	
+	
+	map.addLayer(myService1);
+	map.addLayer(myService2);
+	map.addLayers([povertyratesmap]);
+	
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();
@@ -149,9 +175,11 @@ function toggleindicatormap(id) {
 	  var functionalayer = map.getLayer('liberia');
 	  if (layer.visible) {
 	    layer.hide();
+	    $('#legendDiv').hide('slow');
 	    functionalayer.show();
 	  } else {
 	    layer.show();
+	    $('#legendDiv').show('slow');
 	    functionalayer.hide();
 	  }
 	}
@@ -304,6 +332,8 @@ function showStInfoWindow () {
     	map.infoWindow.setContent(content);
     	map.infoWindow.resize(600, 200);
     	map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
+    }else{
+    	clearbuffer();
     }
     dojo.connect(map.infoWindow, "onHide", clearbuffer);
     hideLoading();
@@ -656,6 +686,7 @@ function getStructures(clear) {
 		try {
 			map.removeLayer(map.getLayer("structuresMap"));
 			map.removeLayer(map.getLayer("activitiesMap"));
+			structures = [];
 		}catch(e){
 			console.log(e);
 		}

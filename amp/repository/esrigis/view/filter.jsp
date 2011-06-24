@@ -285,9 +285,7 @@ var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
 				  getActivities(true);
-					if(structureson){ 
-				 		getStructures(true);
-					}
+				  getStructures(true)
 				}
 				catch (e) {
 				    alert("Invalid response.");

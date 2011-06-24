@@ -2376,4 +2376,59 @@ public class DbUtil {
         }
         return retVal;
     }
+
+    public static Map <Long, String> getActivityNames (Set<Long> actIds) {
+        Map <Long, String> retVal = new HashMap <Long, String> ();
+        try {
+            String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select act.ampActivityId, act.name from ");
+            queryStr.append(AmpActivity.class.getName());
+            queryStr.append(" as act where act.ampActivityId in ");
+            queryStr.append(actIdWhereclause);
+            Query q = sess.createQuery(queryStr.toString());
+            List <Object[]> qRes = q.list();
+
+            if (qRes != null) {
+                for (Object[] res : qRes) {
+                    retVal.put((Long)res[0], (String)res[1]);
+                }
+            }
+
+
+        } catch (Exception ex) {
+          logger.error("Error getting activity names from database " + ex);
+        }
+        return retVal;
+    }
+
+    public static Map <Long, Set> getActivitySectorNames (Set<Long> actIds) {
+        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+        try {
+            String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select actSec.activityId.ampActivityId, actSec.sectorId.name from ");
+            queryStr.append(AmpActivitySector.class.getName());
+            queryStr.append(" as actSec where actSec.activityId.ampActivityId in ");
+            queryStr.append(actIdWhereclause);
+            Query q = sess.createQuery(queryStr.toString());
+            List <Object[]> qRes = q.list();
+
+            if (qRes != null) {
+                for (Object[] res : qRes) {
+                    Long actId = (Long)res[0];
+                    if (!retVal.containsKey(actId)) {
+                        retVal.put(actId, new HashSet());
+                    }
+                    retVal.get(actId).add((String)res[1]);
+
+                }
+            }
+
+
+        } catch (Exception ex) {
+          logger.error("Error getting activity sector names from database " + ex);
+        }
+        return retVal;
+    }
 }

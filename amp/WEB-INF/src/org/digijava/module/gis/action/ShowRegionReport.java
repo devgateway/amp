@@ -28,9 +28,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.form.GisRegReportForm;
-import org.digijava.module.gis.util.ActivityLocationFunding;
-import org.digijava.module.gis.util.DbUtil;
-import org.digijava.module.gis.util.FundingData;
+import org.digijava.module.gis.util.*;
 
 
 /**
@@ -46,6 +44,12 @@ public class ShowRegionReport extends Action {
                                  HttpServletResponse response) throws Exception {
 
         response.setContentType("text/html");
+
+
+        GisFilterForm filterForm = GisUtil.parseFilterRequest(request);
+        Long regLocId = Long.parseLong(request.getParameter("regLocId"));
+
+        Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
 
         TeamMember tm = null;
         Long teamId = null;
@@ -117,7 +121,7 @@ public class ShowRegionReport extends Action {
 
         }
 
-        Long regLocId = Long.parseLong(request.getParameter("regLocId"));
+
 
         String regionName = DbUtil.getLocationNameById(regLocId);
         gisRegReportForm.setRegName(regionName);
@@ -303,8 +307,7 @@ public class ShowRegionReport extends Action {
                                     ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding(
                                    		fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
                                    		fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                   		fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                        activity);
+                                   		fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)));
 
                                     activityLocationFunding.setDonorOrgs(donorOrg);
                                     activityLocationFunding.setTopSectors(topLevelSectorNames);
@@ -366,8 +369,7 @@ public class ShowRegionReport extends Action {
                                        ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding(
                                     		   fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
                                     		   fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                    		   fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                    		   activity);
+                                    		   fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)));
                                         activityLocationFunding.setDonorOrgs(donorOrg);
                                         activityLocationFunding.setTopSectors(topLevelSectorNames);
                                         newVal.getActivityLocationFundingList().
@@ -443,8 +445,7 @@ public class ShowRegionReport extends Action {
                                             getLocationPercentage() / 100f)),
                                             fundingForSector.getExpenditure().
                                             multiply(new BigDecimal(loc.
-                                            getLocationPercentage() / 100f)),
-                                            activity);
+                                            getLocationPercentage() / 100f)));
                                     activityLocationFunding.setDonorOrgs(donorOrg);
                                     activityLocationFunding.setTopSectors(topLevelSectorNames);
 
@@ -514,8 +515,7 @@ public class ShowRegionReport extends Action {
                                                 getLocationPercentage() / 100f)),
                                                 fundingForSector.getExpenditure().
                                                 multiply(new BigDecimal(loc.
-                                                getLocationPercentage() / 100f)),
-                                                activity);
+                                                getLocationPercentage() / 100f)));
                                         activityLocationFunding.setDonorOrgs(donorOrg);
                                         activityLocationFunding.setTopSectors(topLevelSectorNames);
 

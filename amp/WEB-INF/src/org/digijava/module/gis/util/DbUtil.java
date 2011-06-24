@@ -720,7 +720,7 @@ public class DbUtil {
            querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
            querySrc.append(" group by ds.indicator.indicatorId order by ds.indicator.name");
            Query q = session.createQuery(querySrc.toString());
-           q.setParameter("sectorId", sectorId, Hibernate.LONG);
+           q.setLong("sectorId", sectorId);
            List allIndicatorList = q.list();
 
            //Get used indicator list for this map level
@@ -735,7 +735,7 @@ public class DbUtil {
                querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='District'");
            }
            Query q1 = session.createQuery(querySrc1.toString());
-           q1.setParameter("sectorId", sectorId, Hibernate.LONG);
+           q1.setLong("sectorId", sectorId);
            List usedIndicatorList = q1.list();
 
            retVal = new ArrayList();
@@ -784,12 +784,12 @@ public class DbUtil {
 
               Query q = session.createQuery(queryString.toString());
 
-              q.setParameter("sectorId", sectorId, Hibernate.LONG);
-              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
-              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+              q.setLong("sectorId", sectorId);
+              q.setLong("indicatorId", indicatorId);
+              q.setLong("subgroupId", subgroupId);
 
               if (year.intValue() > 0) {
-                  q.setParameter("indValDate", year, Hibernate.INTEGER);
+                  q.setInteger("indValDate", year);
               }
 
 
@@ -831,13 +831,13 @@ public class DbUtil {
 
               Query q = session.createQuery(queryString.toString());
 
-              q.setParameter("sectorId", sectorId, Hibernate.LONG);
-              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
-              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+              q.setLong("sectorId", sectorId);
+              q.setLong("indicatorId", indicatorId);
+              q.setLong("subgroupId", subgroupId);
 
               if (interval != null) {
-                  q.setParameter("intervalStart", interval.getStart(), Hibernate.DATE);
-                  q.setParameter("intervalEnd", interval.getEnd(), Hibernate.DATE);
+                  q.setDate("intervalStart", interval.getStart());
+                  q.setDate("intervalEnd", interval.getEnd());
               }
 
 
@@ -877,7 +877,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("select sum(fd.transactionAmount) from " + AmpFundingDetail.class.getName() + " fd where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
-            q.setParameter("activityId", activityId, Hibernate.LONG);
+            q.setLong("activityId", activityId);
             List tmpLst = q.list();
             if (!tmpLst.isEmpty())
             retVal = (Double)tmpLst.get(0);
@@ -1091,9 +1091,9 @@ public class DbUtil {
 
               Query q = session.createQuery(queryString.toString());
 
-              q.setParameter("sectorId", sectorId, Hibernate.LONG);
-              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
-              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+              q.setLong("sectorId", sectorId);
+              q.setLong("indicatorId", indicatorId);
+              q.setLong("subgroupId", subgroupId);
 
               retVal = q.list();
           } catch (Exception ex) {
@@ -1124,9 +1124,9 @@ public class DbUtil {
 
               Query q = session.createQuery(queryString.toString());
 
-              q.setParameter("sectorId", sectorId, Hibernate.LONG);
-              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
-              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+              q.setLong("sectorId", sectorId);
+              q.setLong("indicatorId", indicatorId);
+              q.setLong("subgroupId", subgroupId);
 
               retVal = q.list();
           } catch (Exception ex) {
@@ -1161,8 +1161,8 @@ public class DbUtil {
 
               Query q = session.createQuery(queryString.toString());
 
-              q.setParameter("sectorId", sectorId, Hibernate.LONG);
-              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+              q.setLong("sectorId", sectorId);
+              q.setLong("indicatorId", indicatorId);
 
               retVal = q.list();
           } catch (Exception ex) {

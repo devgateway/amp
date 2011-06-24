@@ -1711,9 +1711,27 @@
 		var popup = window.open("about:blank", "regReportWnd", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		var filterForm = $("#gisFilterForm");
 		filterForm.attr("method", "post");
-		filterForm.attr("action", "/gis/ShowRegionReport.do");
+		filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
 		filterForm.attr("target", "regReportWnd");
+		
+		var allSectors = false;
+		if ($("input[name='selectedSectors']:checked").length + 
+				$("input[name='selectedSecondarySectors']:checked").length + 
+				$("input[name='selectedTertiarySectors']:checked").length == 0) {
+			$("input[name='selectedSectors']").attr("checked", "true");
+			$("input[name='selectedSecondarySectors']").attr("checked", "true");
+			$("input[name='selectedTertiarySectors']").attr("checked", "true");
+			allSectors = true;
+		}
+		
 		filterForm[0].submit();
+		
+    if (allSectors) {
+    	$("input[name='selectedSectors']").removeAttr("checked");
+			$("input[name='selectedSecondarySectors']").removeAttr("checked");
+			$("input[name='selectedTertiarySectors']").removeAttr("checked");
+    }
+
 		
 		
 		

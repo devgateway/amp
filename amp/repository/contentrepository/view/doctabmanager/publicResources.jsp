@@ -24,8 +24,6 @@
 <%@include file="../documentManagerJsHelper.jsp" %>
 
 
-
-
 <script type="text/javascript">
 	var replaceableTabObject = null;
 	function setNewTab(tabName,filterId){
@@ -40,7 +38,7 @@
 
 		myTabsObject.addTab( new YAHOO.widget.Tab({ 
 			labelEl: labelDiv,
-			content: "<div id='replaceableDiv'><div style='padding-left: 10px;' id='replaceableFilterInfoDiv'></div><div id='replaceableDiv_markup' align='left'></div></div>",
+			content: "<div id='replaceableDiv' class='resource_box'><div  style='padding-left:10px' id='replaceableFilterInfoDiv'></div><div id='replaceableDiv_markup' align='left'></div></div>",
 			active: true
 		}), myTabsObject.get('tabs').length-1); 
 		
@@ -145,29 +143,61 @@
 YAHOO.util.Event.on(window, "load", afterPageLoad); 
 
 </script>
+<digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
+<style>
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
 
-<table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
-	<tr>
-		<td valign="bottom" class="crumb" >
-			&nbsp;&nbsp;&nbsp;
-			<c:set var="translation">
-					<digi:trn>Click here to go to public site home page</digi:trn>
-			</c:set>
-			<digi:link href="/.." styleClass="comment" title="${translation}" >
-               	<digi:trn>Home Page</digi:trn>
-               </digi:link> &gt; <digi:trn>Public Documents</digi:trn>
-			<br />
-		</td>
-	</tr>
-	<tr>
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
+}
+
+
+
+.yui-skin-sam span.yui-pg-first,
+.yui-skin-sam span.yui-pg-previous,
+.yui-skin-sam span.yui-pg-next,
+.yui-skin-sam span.yui-pg-last {
+display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+margin-left: 2px;
+padding-right: 7px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.resource_box {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    font-size: 12px;
+    padding: 10px;
+}
+</style>
+
+	
+<div id="menuContainerDiv"></div>	
+<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center" height="100%">	
+	<tbody>
+		<tr>
 		<td align=left valign="top">
-			<div id="menuContainerDiv"></div>	
-			<span class="subtitle-blue"> &nbsp;&nbsp; 
-				<digi:trn>Public Documents</digi:trn> 
-			</span> 
-			<br />
-			<table border="0" cellPadding=5 cellspacing="0" width="95%" style="position: relative; left: 10px;">
-			<tr><td>
+			<div style="width:1000px;" class="yui-skin-sam" id="content">
 			<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
 					<li id="allPublicResourcesTab" class="selected"><a href="#allPublicResourcesRef"><div><digi:trn>All Public Documents</digi:trn></div></a>
@@ -177,29 +207,43 @@ YAHOO.util.Event.on(window, "load", afterPageLoad);
 					<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
 						<li id="moreTabsTab"><a><div onclick="allTabsPanel.show()"><digi:trn>More Tabs</digi:trn>...</div></a></li>
 					</logic:notEmpty>
-			    </ul>            
-			    <div class="yui-content" style="background-color: #EEEEEE;">
-			    	<div id="allPublicResourcesRef">
-			    		<div id="allPublicResources_markup" align="left"></div>
-			    	</div>
-			    	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
-			    		<div id="Ref${filter.id}">
-			    			<br />
-			    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
-			    			<div id="${filter.id}_markup" align="left"></div>
-			    		</div>
-			    	</c:forEach>
-			    	
-					<!--End public Resources-->
+				</ul>
+				<div class="yui-content" style="border-color: #d0d0d0">
+					<div id="allPublicResourcesRef" class="resource_box">
+						<div id="allPublicResources_markup" align="left" style="clear: both;" >	
+					</div>
+						<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
+							<tr>
+								<td>
+												        	       
+										<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
+											<tr>
+									        	<td>
+										        	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
+											    		<div id="Ref${filter.id}">
+											    			<br />
+											    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
+											    			<div id="${filter.id}_markup" align="left"></div>
+											    		</div>
+											    	</c:forEach>
+											    </td>								    
+											</tr>								
+										</table>
+								</td>
+							</tr>
+						</table>						
+					</div>					
 				</div>
 			</div>
-			
-		</td></tr></table>
-		<%-- END -- Table for "My Documents" --%>
+			</div>			
+		
         <br />
       </td>
 	</tr>
+	</tbody>
 </table>
+
+
 <br/>
 
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">

@@ -133,7 +133,7 @@
 							</a>
                                                         
 							|&nbsp;
-							<a href="/widget/indSectRegManager.do~actType=delete~indSectId=${indSecReg.id}">
+							<a href="/widget/indSectRegManager.do~actType=delete~indSectId=${indSecReg.id}" onclick="return confirm('<digi:trn>Do you want to delete this indicator?</digi:trn>')">
 								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>

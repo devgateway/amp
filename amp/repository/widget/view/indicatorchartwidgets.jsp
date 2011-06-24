@@ -14,10 +14,10 @@
 		myForm.submit();
 	}
 	function deleteWidget(id){
-		<digi:context name="justSubmit" property="context/module/moduleinstance/indicatorchartwidgets.do~actType=delete" />
+                <digi:context name="justSubmit" property="context/module/moduleinstance/indicatorchartwidgets.do~actType=delete" />
 		myForm.action="<%=justSubmit%>";  
-		myForm.submit();
-	}
+		myForm.submit();   
+            }	
 //-->
 </script>
 
@@ -77,7 +77,7 @@
 								<digi:trn key="gis:editLink">Edit</digi:trn>
 							</a>
 							&nbsp;
-							<a href="/widget/indicatorchartwidgets.do~actType=delete~widgetId=${wi.id}">
+                                                        <a href="/widget/indicatorchartwidgets.do~actType=delete~widgetId=${wi.id}" onclick="return confirm('<digi:trn>Do you want to delete this widget?</digi:trn>')">
 								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>

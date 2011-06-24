@@ -756,7 +756,7 @@ background-color:yellow;
 			var paginationTDContent='<strong>'+pagesTrn+'</strong> :';
 				if(currentPage>1){
 					var prPage=currentPage-1;
-					paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
+					paginationTDContent+='<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
 					paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
 				}
 				paginationTDContent+='&nbsp';

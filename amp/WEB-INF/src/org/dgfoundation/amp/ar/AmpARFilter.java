@@ -966,12 +966,12 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		if (governmentApprovalProcedures != null) {
 			String GOVERNMENT_APPROVAL_FILTER = "SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="
-					+ ((governmentApprovalProcedures)?"1":"0");
+					+ ((governmentApprovalProcedures)?"true":"false");
 			queryAppend(GOVERNMENT_APPROVAL_FILTER);
 		}
 		if (jointCriteria != null) {
 			String JOINT_CRITERIA_FILTER = "SELECT a.amp_activity_id from amp_activity a where jointCriteria="
-					+ ((jointCriteria)?"1":"0");;
+					+ ((jointCriteria)?"true":"false");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);

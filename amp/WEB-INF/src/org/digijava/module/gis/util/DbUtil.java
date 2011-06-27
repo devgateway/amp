@@ -2431,4 +2431,64 @@ public class DbUtil {
         }
         return retVal;
     }
+
+    public static Map <Long, Set> getActivityDonorNames (Set<Long> actIds) {
+        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+        try {
+            String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select fnd.ampActivityId.ampActivityId, fnd.ampDonorOrgId.name from ");
+            queryStr.append(AmpFunding.class.getName());
+            queryStr.append(" as fnd where fnd.ampActivityId.ampActivityId in ");
+            queryStr.append(actIdWhereclause);
+            Query q = sess.createQuery(queryStr.toString());
+            List <Object[]> qRes = q.list();
+
+            if (qRes != null) {
+                for (Object[] res : qRes) {
+                    Long actId = (Long)res[0];
+                    if (!retVal.containsKey(actId)) {
+                        retVal.put(actId, new HashSet());
+                    }
+                    retVal.get(actId).add((String)res[1]);
+
+                }
+            }
+
+
+        } catch (Exception ex) {
+          logger.error("Error getting activity donor names from database " + ex);
+        }
+        return retVal;
+    }
+
+    public static Map <Long, Set> getActivityLocationNames (Set<Long> actIds) {
+        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+        try {
+            String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, loc.location.regionLocation.name from ");
+            queryStr.append(AmpActivityLocation.class.getName());
+            queryStr.append(" as loc where loc.activity.ampActivityId in ");
+            queryStr.append(actIdWhereclause);
+            Query q = sess.createQuery(queryStr.toString());
+            List <Object[]> qRes = q.list();
+
+            if (qRes != null) {
+                for (Object[] res : qRes) {
+                    Long actId = (Long)res[0];
+                    if (!retVal.containsKey(actId)) {
+                        retVal.put(actId, new HashSet());
+                    }
+                    retVal.get(actId).add((String)res[1]);
+
+                }
+            }
+
+
+        } catch (Exception ex) {
+          logger.error("Error getting activity location names from database " + ex);
+        }
+        return retVal;
+    }
 }

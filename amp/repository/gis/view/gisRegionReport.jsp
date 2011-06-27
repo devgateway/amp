@@ -108,11 +108,8 @@
 			<logic:notEmpty name="gisRegReportForm" property="activityLocationFundingList">
 
 			
-			<script language="javascript">
-				if (navigator.appName=="Microsoft Internet Explorer") {
-					document.write("<div style='width:100%; height:280px; border: 0px; overflow-y:scroll;'>");
-				}
-			</script>
+
+					<div style='width:100%; height:280px; border: 0px; overflow-y:scroll;'>
 			
 			
 					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
@@ -175,16 +172,18 @@
 						</tr>
 						</thead>
 						
-						<tbody style="display:block; display:table-row-group; overflow-y:scroll; overflow-x: hidden; height:250px;" height="250">
+						<tbody>
+							<%--
 							<bean:define name="gisRegReportForm" property="primarySectorSchemeId" id="primarySectorScheme"/>
+							--%>
 						
 						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
 							<tr>
 								<td width="30%" valign="top" style="overflow-x:hidden;" height="20">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
-											<a title="<bean:write name="activityLocationFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activity.ampActivityId"/>);">
-												<bean:write name="activityLocationFunding" property="activity.name"/>
+											<a title="<bean:write name="activityLocationFunding" property="activityName"/>" href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activityId"/>);">
+												<bean:write name="activityLocationFunding" property="activityName"/>
 											</a>
 										</div>
 									</div>
@@ -192,13 +191,12 @@
 								<td width="20%" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
-											<logic:present name="activityLocationFunding" property="activity.locations">
-												<logic:notEmpty name="activityLocationFunding" property="activity.locations">
+											<logic:present name="activityLocationFunding" property="locations">
+												<logic:notEmpty name="activityLocationFunding" property="locations">
 													<ul style="margin:0 0 0 20px; padding:0;">
-														<logic:iterate name="activityLocationFunding" property="activity.locations" id="iterLocation">
+														<logic:iterate name="activityLocationFunding" property="locations" id="iterLocation">
 															<li>
-																<bean:define id="ampLoc" name="iterLocation" property="location" type="org.digijava.module.aim.dbentity.AmpLocation"/>
-																<bean:write name="ampLoc" property="location.name"/>
+																<bean:write name="iterLocation"/>
 															</li>
 														</logic:iterate>
 													</ul>
@@ -230,8 +228,8 @@
 								--%>
 								<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
-											<logic:present name="activityLocationFunding" property="activity.orgrole">
-												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
+											<logic:present name="activityLocationFunding" property="topSectors">
+												<logic:notEmpty name="activityLocationFunding" property="topSectors">
 													<ul style="margin:0 0 0 20px; padding:0;">
 														<logic:iterate name="activityLocationFunding" property="topSectors" id="iterTopSectors">
 															<li>
@@ -246,8 +244,9 @@
 								</td>
 								<td width="20%" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal"><logic:present name="activityLocationFunding" property="activity.orgrole">
-												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<logic:present name="activityLocationFunding" property="donorOrgs">
+												<logic:notEmpty name="activityLocationFunding" property="donorOrgs">
 													<ul style="margin:0 0 0 20px; padding:0;">
 														<logic:iterate name="activityLocationFunding" property="donorOrgs" id="iterOrgrole">
 															<li>
@@ -315,12 +314,7 @@
 						</tbody>
 					</table>
 					
-					<script language="javascript">
-						if (navigator.appName=="Microsoft Internet Explorer") {
-							document.write("</div>");
-						}
-					</script>
-					
+					</div>
 				
 
 		

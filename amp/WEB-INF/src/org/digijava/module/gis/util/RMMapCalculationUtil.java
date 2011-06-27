@@ -56,6 +56,7 @@ public class RMMapCalculationUtil {
         Calendar fEndDate = Calendar.getInstance();
                 fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
 
+        String currencyCode = filter.getSelectedCurrency();
 
 
         Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
@@ -72,7 +73,7 @@ public class RMMapCalculationUtil {
                                                                                donorTypeIds,
                                                                                locations,
                                                                                null, fStartDate.getTime(), fEndDate.getTime());
-        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, false);
+        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, currencyCode, false);
 
 
         return fundingList;
@@ -125,6 +126,7 @@ public class RMMapCalculationUtil {
         Calendar fEndDate = Calendar.getInstance();
                 fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
 
+        String currencyCode = filter.getSelectedCurrency();
 
 
         Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
@@ -141,7 +143,7 @@ public class RMMapCalculationUtil {
                                                                                donorTypeIds,
                                                                                locations,
                                                                                null, fStartDate.getTime(), fEndDate.getTime());
-        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, true);
+        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, currencyCode, true);
 
 
         return fundingList;
@@ -162,13 +164,14 @@ public class RMMapCalculationUtil {
     public static Object[] getAllFundingsByLocations (Object[] activityFundingData,
                                                    Object[] activityRegionalFundingData,
                                                    Collection<AmpCategoryValueLocations> locations,
+                                                   String currencyCode,
                                                    boolean detailedActData){
-        Object[] activityFundings = getFundingsByLocations (activityFundingData, locations, detailedActData);
-        Object[] regionalFundings = getFundingsByLocationsForRegFnds (activityRegionalFundingData, locations, detailedActData);
+        Object[] activityFundings = getFundingsByLocations (activityFundingData, locations, currencyCode, detailedActData);
+        Object[] regionalFundings = getFundingsByLocationsForRegFnds (activityRegionalFundingData, locations, currencyCode, detailedActData);
         return combineResults (activityFundings, regionalFundings);
     }
 
-    private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, boolean detailedActData){
+    private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData){
         Object[] retVal = null;
 
         if (data != null && data instanceof Object[] && data.length > 0) {
@@ -190,7 +193,7 @@ public class RMMapCalculationUtil {
 
             Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap);
 
-            retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, null, detailedActData);
+            retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
         } else {
             retVal = new Object[]{new HashMap()};
         }
@@ -198,7 +201,7 @@ public class RMMapCalculationUtil {
         return retVal;
     }
 
-    private static Object[] getFundingsByLocationsForRegFnds (Object[] data, Collection<AmpCategoryValueLocations> locations, boolean detailedActData){
+    private static Object[] getFundingsByLocationsForRegFnds (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData){
         Object[] retVal = null;
 
         if (data != null && data instanceof Object[] && data.length > 0) {
@@ -220,7 +223,7 @@ public class RMMapCalculationUtil {
 
             Map<String, Set> locationGroupedFnds = groupFundingsByLocationForRegFundings (fundings, locationIdNameMap);
 
-            retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, null, detailedActData);
+            retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
         } else {
             retVal = new Object[]{new HashMap()};
         }
@@ -384,8 +387,14 @@ public class RMMapCalculationUtil {
         for (String locName : locations) {
             Set <AmpFundingDetail> fundingsForCurrentLoc = fundings.get(locName);
 
-            Map <Long, List> activityGrouped = null;
+           // FundingCalculationsHelper fch = new FundingCalculationsHelper();
+
+            List detailedActDataList = null;
             if(detailedActData) {
+
+                detailedActDataList = new ArrayList();
+
+                Map <Long, List> activityGrouped = null;
                 activityGrouped = new HashMap <Long, List> ();
                 for (AmpFundingDetail fndDet : fundingsForCurrentLoc) {
                     if (!activityGrouped.containsKey(fndDet.getAmpFundDetailId())) {
@@ -394,11 +403,33 @@ public class RMMapCalculationUtil {
                     activityGrouped.get(fndDet.getAmpFundDetailId()).add(fndDet);
                 }
 
-                Map <Long, String> allActIdNames = DbUtil.getActivityNames(activityGrouped.keySet());
-                Map <Long, Set> allActIdSectorNames =  DbUtil.getActivitySectorNames(activityGrouped.keySet());
+                Set<Long> actIds = activityGrouped.keySet();
+
+                Map <Long, String> allActIdNames = DbUtil.getActivityNames(actIds);
+                Map <Long, Set> allActIdSectorNames =  DbUtil.getActivitySectorNames(actIds);
+                Map <Long, Set> allActIdDonorNames =  DbUtil.getActivityDonorNames(actIds);
+                Map <Long, Set> allActIdLocationNames =  DbUtil.getActivityLocationNames(actIds);
+
+                for (Long actId : actIds) {
+                    FundingCalculationsHelper fch = new FundingCalculationsHelper();
+                    fch.doCalculations(activityGrouped.get(actId), currencyCode);
+                    ActivityLocationFunding actData = new ActivityLocationFunding(
+                            fch.getTotActualComm().getValue(),
+                            fch.getTotActualDisb().getValue(),
+                            fch.getTotActualExp().getValue());
+                    actData.setActivityId(actId);
+                    actData.setActivityName(allActIdNames.get(actId));
+                    actData.setTopSectors(allActIdSectorNames.get(actId));
+                    actData.setLocations(allActIdLocationNames.get(actId));
+                    actData.setDonorOrgs(allActIdDonorNames.get(actId));
+
+                    detailedActDataList.add(actData);
+                }
+
                 int gg = 1;
 
             }
+
 
             FundingCalculationsHelper fch = new FundingCalculationsHelper();
             fch.doCalculations(fundingsForCurrentLoc, currencyCode);
@@ -412,6 +443,9 @@ public class RMMapCalculationUtil {
             totalFunding.setCommitment(totalFunding.getCommitment().add(commitment));
             totalFunding.setDisbursement(totalFunding.getDisbursement().add(disbursement));
             totalFunding.setExpenditure(totalFunding.getExpenditure().add(expenditure));
+
+            forCurLocation.setActivityLocationFundingList(detailedActDataList);
+
 
             locationFundingMap.put(locName, forCurLocation);
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.FormatHelper;
 
 public class ActivityLocationFunding {
 
@@ -25,10 +26,6 @@ public class ActivityLocationFunding {
     private Long activityId;
     private String activityName;
 
-    private String fmtCommitment;
-    private String fmtDisbursement;
-    private String fmtExpenditure;
-
 
     private BigDecimal commitment;
     private BigDecimal disbursement;
@@ -37,6 +34,15 @@ public class ActivityLocationFunding {
 
     private Set donorOrgs;
     private Set topSectors;
+    private Set locations;
+
+    public Set getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set locations) {
+        this.locations = locations;
+    }
 
     public Long getActivityId() {
         return activityId;
@@ -55,27 +61,14 @@ public class ActivityLocationFunding {
     }
 
     public String getFmtCommitment() {
-        return fmtCommitment;
-    }
-
-    public void setFmtCommitment(String fmtCommitment) {
-        this.fmtCommitment = fmtCommitment;
+        return commitment != null ? FormatHelper.formatNumber(commitment.doubleValue()):null;
     }
 
     public String getFmtDisbursement() {
-        return fmtDisbursement;
+        return disbursement != null ? FormatHelper.formatNumber(disbursement.doubleValue()):null;
     }
-
-    public void setFmtDisbursement(String fmtDisbursement) {
-        this.fmtDisbursement = fmtDisbursement;
-    }
-
     public String getFmtExpenditure() {
-        return fmtExpenditure;
-    }
-
-    public void setFmtExpenditure(String fmtExpenditure) {
-        this.fmtExpenditure = fmtExpenditure;
+        return expenditure != null ? FormatHelper.formatNumber(expenditure.doubleValue()):null;
     }
 
     public BigDecimal getCommitment() {

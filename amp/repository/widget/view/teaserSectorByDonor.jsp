@@ -8,18 +8,31 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+ 
+
+<style type="text/css">
+.yui-tt {
+	visibility: hidden;
+	position: absolute;
+	color: #000;
+	background-color: #FFF;
+	font-size: 11px;
+	padding: 2px;
+	border: 1px solid #CCC;
+	width: auto;
+}
+</style>
+
 
 <digi:instance property="gisSectorByDonorTeaserForm" />
 <script type="text/javascript">
 <!--
-
-       function showHelpTooltip() {
-          document.getElementById("piehelptooltip").style.display = "block";
-         }
-                
-        function hideHelpTooltip() {
-             document.getElementById("piehelptooltip").style.display = "none";
-        }
+        var tooltiptext="<digi:trn key='widget:piechart:allAmountinUSDTooltip'>The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>";
+        myTooltip = new YAHOO.widget.Tooltip("myTooltip", { 
+            context: "myContextEl", 
+            text:tooltiptext,
+            showDelay: 500
+        });
 	<digi:context name="chartImageUrl" property="context/module/moduleinstance/showSectorByDonorChart.do" />
 	var chartURL = "<%=chartImageUrl%>";
 //-->
@@ -36,17 +49,14 @@
 
 <table width="100%" border="0">
     <tr>
-        <td colspan="3" align="left">
-            <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">               
-               	<digi:trn key='widget:piechart:allAmountinUSDTooltip'>The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>               
-            </div>  
+        <td colspan="3" align="left">  
             	<c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==true}">
             		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
             	</c:if>
                 <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
                		<digi:trn>All amounts in</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
                </c:if>
-            <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
+            <digi:img  src="module/widget/images/help1.gif" styleId="myContextEl" />
         </td>
     </tr>
 	<tr>

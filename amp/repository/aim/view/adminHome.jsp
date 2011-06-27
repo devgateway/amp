@@ -52,7 +52,7 @@
 						<module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/featuredsmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>
                               <c:set var="trnFeatureManager">
                                 <digi:trn key="aim:clickToAccessFeatureManager">Click here to access Feature Manager</digi:trn>
                               </c:set>
@@ -65,7 +65,7 @@
                           <module:display name="Flag uploader" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/flagsmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>
                               <c:set var="trnUploadFlags">
                                 <digi:trn key="aim:clickToUploadFlags">Click here to upload and select flags</digi:trn>
                               </c:set>
@@ -93,7 +93,7 @@
                           </tr>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/permissionssmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>
                               <c:set var="permManagerLink">
                                 <digi:trn key="aim:permManagerLinkTitle">Click here to manage permissions</digi:trn>
                               </c:set>
@@ -111,7 +111,7 @@
                           <module:display name="Global Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                                   <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/globalsmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>
                               <c:set var="trnSystemSettings">
                                 <digi:trn key="aim:clickToViewSystemSettings">Click here to view System Settings</digi:trn>
                               </c:set>
@@ -149,8 +149,7 @@
 						</module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="trnWorkspaceManager">
+                        <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/workspacemanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>                              <c:set var="trnWorkspaceManager">
                                 <digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
                               </c:set>
                               <digi:link href="/workspaceManager.do~page=1~reset=true" title="${trnWorkspaceManager}" >
@@ -162,7 +161,7 @@
 						<module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                         <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/categorymanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>               
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCategoryManager">Click here to view Category Manager</digi:trn>
                               </c:set>
@@ -175,7 +174,7 @@
                           <module:display name="User Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                             <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/usermanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>         
                               <c:set var="translation">
                                 <digi:trn key="aim:tipUserManager">Click here to view User Manager</digi:trn>
                               </c:set>
@@ -188,8 +187,7 @@
                           <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
                             <tr>
                               <td class="f-names" nowrap="nowrap">
-                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                <c:set var="translation">
+                <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/indicatormanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>                                         <c:set var="translation">
                                   <digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
                                 </c:set>
                                <digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
@@ -359,8 +357,7 @@
                          <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="translation">
+                <digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/calendarmanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>                                 <c:set var="translation">
                                 <digi:trn key="aim:clickToViewFiscalCalendarManager">Click here to view Fiscal Calendar Manager</digi:trn>
                               </c:set>
                               <digi:link href="/fiscalCalendarManager.do" title="${translation}" >
@@ -373,8 +370,7 @@
                           <module:display name="Currency Manager" parentModule="ADMINISTRATIVE SECTION">
 	                          <tr>
 	                            <td class="f-names" nowrap="nowrap">
-	                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-	                              <c:set var="translation">
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/currencymanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	                              <c:set var="translation">
 	                                <digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
 	                              </c:set>
 	                              <digi:link href="/currencyManager.do~clean=true" title="${translation}" >
@@ -389,7 +385,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCurrencyRatesManager">Click here to view Currency Rates Manager</digi:trn>
                               </c:set>
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/currencymanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <digi:link href="/showCurrencyRates.do~clean=true~timePeriod=1" title="${translation}">
                                 <digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
                               </digi:link>
@@ -412,7 +408,7 @@
                           <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION">
                            <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/regionmanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
                               </c:set>
@@ -438,7 +434,7 @@
                           <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
                           	<tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/currencymanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewSectorManager">Click here to view budget manager</digi:trn>
                               </c:set>
@@ -477,7 +473,7 @@
                           <feature:display  name="Indicator chart Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/indicatormanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <c:set var="translation">
                                 <digi:trn key="gis:clickToViewChartWidgetAdmin">Click here to view Indicator Chart Widgets Manager</digi:trn>
                               </c:set>
@@ -610,7 +606,7 @@
                           </tr>
                           <tr>
                           <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/indicatormanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewindicatormanager">Click here to view Indicator Manager</digi:trn>
                               </c:set>
@@ -693,7 +689,7 @@
                         <module:display name="Activity Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/activitymanagersmallsmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
                               <c:set var="trnActivityManager">
                                 <digi:trn key="aim:clickToViewActivityManager">Click here to view Activity Manager</digi:trn>
                               </c:set>
@@ -705,7 +701,8 @@
                           </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<digi:img src="../../../TEMPLATE/ampTemplate/img_2/adminicons/irgmanagersmall.jpg" width="16" style="float:left;margin:3px 5px 0px 0px;"/>	
+
                               <c:set var="trnOrganizationManager">
                                 <digi:trn key="aim:clickToViewOrganizationManager">Click here to view Organization Manager</digi:trn>
                               </c:set>

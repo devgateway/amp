@@ -19,9 +19,14 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
+<!-- JavaScript Dependencies for Tabview: -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+ 
+ 
 <style type="text/css"> 
 	#demo .yui-nav li {
 		margin-right:0;
@@ -762,45 +767,7 @@ function setIndex(index){
 		</td>
 	</tr>
 </table>
-<script language="javascript">
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
-	}
-	rows = null;
-}
-function setHoveredTable(tableId, hasHeaders) {
-
-	var tableElement = document.getElementById(tableId);
-	if(tableElement){
-    var className = 'Hovered',
-        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-        rows      = tableElement.getElementsByTagName('tr');
-
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			rows[i].onmouseover = function() {
-				this.className += ' ' + className;
-			};
-			rows[i].onmouseout = function() {
-				this.className = this.className.replace(pattern, ' ');
-
-			};
-		}
-		rows = null;
-	}
-}
-</script>
 <script type="text/javascript">
-	var myTabs = new YAHOOAmp.widget.TabView("demo");
-	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);
-
-	<logic:iterate name="sections"  id="sectionName">
-		setStripsTable("${sectionName}", "tableEven", "tableOdd");
-	</logic:iterate>
-	
+	var myTabs = new YAHOO.widget.TabView("demo");
+	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);	
 </script>

@@ -44,7 +44,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 td.report_inside { border-width: 1px 1px 0 0;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
-.ins_title_reg {font-size:9px; color:#767676; font-weight:bold; font-family:Verdana, Arial, Helvetica, sans-serif;}
+.ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
 .ins_title_sm {font-size:9px; color:#767676;}
 .ins_title_mid {font-size:10px; color:#767676;}
 .ins_header {color:#767676; font-size:12px; font-weight:bold;}
@@ -163,14 +163,14 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px;}
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .show_legend {float:right; font-size:11px; padding-top:9px;} 
-.desktop_project_name {font-size:9px; font-family:Verdana, Arial, Helvetica, sans-serif; padding-left:10px;}
+.desktop_project_name {font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left:10px;}
 .desktop_project_name_op {font-size:9px; color:#FF6000;  font-family:Verdana, Arial, Helvetica, sans-serif;background-color: #FDF5F0}
 .desktop_project_name_op_level1 {background-color: #FBE8DD}
 .desktop_project_name_op_levels {background-color: #FDF5F0}
-.desktop_project_name_sel {/*background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px;*/ font-size:9px; font-family:Verdana, Arial, Helvetica, sans-serif;}
-.desktop_project_count {font-size:9px;text-align:right; font-family:Verdana, Arial, Helvetica, sans-serif; font-weight:bold;}
+.desktop_project_name_sel {/*background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px;*/ font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-top:5px; padding-bottom:5px;}
+.desktop_project_count {font-size:11px;text-align:right; font-family:Arial, Helvetica, sans-serif; font-weight:bold;}
 .desktop_project_count_bolder {font-size:9px;font-weight:bold;text-align:right; font-family:Verdana, Arial, Helvetica, sans-serif;}
-.desktop_project_count_sel {font-size:9px; /*background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC; */ text-align:right; font-family:Verdana, Arial, Helvetica, sans-serif;}
+.desktop_project_count_sel {font-size:11px; /*background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC; */ text-align:right; font-family:Arial, Helvetica, sans-serif; padding-left:5px;}
 .organization_box {background-color:#EFEFEF; font-size:11px; margin-bottom:5px;}
 .organization_box_content {padding:10px;}
 .adding_funding_to_org {background-color:#F8F8F8; border-left:1px solid #EFEFEF; border-right:1px solid #EFEFEF; border-bottom:1px solid #EFEFEF;}

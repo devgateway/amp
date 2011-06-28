@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
-
+<div style="margin:0 auto;width:1000px;">
 <digi:instance property="aimViewAhSurveisForm" />
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -98,8 +98,8 @@
                 </td>
               </tr>
               <tr>
-                <td bgColor=#f4f4f2>
-                &nbsp;
+                <td bgColor=#f4f4f2>&nbsp;
+                
                 </td>
               </tr>
             </table>
@@ -110,6 +110,6 @@
   </tr>
 </table>
 
-
+</div>
 
 

@@ -33,10 +33,12 @@
 						<digi:trn key="aim:fiscalCalendarManager"> Fiscal Calendar Manager
 						</digi:trn>
                       </span>
+                      
                       <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/calendarmanager.jpg"/></div>
 					</td>
 					<!-- End navigation -->
 				</tr>
+              
 				<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:fiscalCalendarManager"></span><span class=crumb>Fiscal
@@ -52,7 +54,8 @@
 							page="/repository/aim/view/exportTable.jsp" /></td>
 			</tr>
 				<tr>
-					<td noWrap width="100%" vAlign="top">
+					<td noWrap width="100%" vAlign="top" align="center">
+                      <div style="margin:0 auto;width:1000px;">
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
 						<td noWrap width=600 vAlign="top">
@@ -243,8 +246,11 @@
 								</tr>
 							</table>
 						</td>
-					</tr>
+					
+                    </tr>
+                    
 				</table>
+                </div>
 			</td>
 		</tr>
 	</table>

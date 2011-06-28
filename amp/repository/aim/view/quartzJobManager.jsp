@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<div style="margin:0 auto;width:1000px;">
 <digi:instance property="quartzJobManagerForm" />
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -108,8 +108,8 @@
     <html:hidden name="quartzJobManagerForm" property="action" styleId="hdnAction" />
     <table>
         <tr>
-            <td>
-                &nbsp;
+            <td>&nbsp;
+                
             </td>
             <td>
                 <table>
@@ -129,7 +129,7 @@
                         <!-- End navigation -->
                     </tr>
                     <tr>
-                        <td colspan="6" style="height:53px;width:350px;">
+                        <td colspan="6" style="height:53px;width:320px;">
                             <span class="subtitle-blue">
                                 <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                             </span>
@@ -144,28 +144,28 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:250px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:200px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmName">Name</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmStartDate">Start date</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmEndDate">End date</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmPrevFireDate">Previus fire date</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmNextFiredate">Next fire date</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmFinalFireDate">Final fire date</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:60px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:50px;border-left:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmStatus">Status</digi:trn></b>
                                     </td>
-                                    <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:160px;border-left:solid 1px #000000;border-right:solid 1px #000000;">
+                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:100px;border-left:solid 1px #000000;border-right:solid 1px #000000;">
                                         <b><digi:trn key="aim:job:clmCommands">Commands</digi:trn></b>
                                     </td>
                                 </tr>
@@ -189,25 +189,25 @@
                                         </c:when>
                                         <c:otherwise>
                                              <tr>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.name}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.startDateTime}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.endDateTime}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.prevFireDateTime}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.nextFireDateTime}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;${job.finalFireDateTime}
                                         </td>
-                                        <td style="border-left:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;font-size:11px;">
                                             &nbsp;
                                             <c:if test="${job.paused}">
                                                 <b><digi:trn key="aim:job:stPaused">Paused</digi:trn></b>
@@ -216,7 +216,7 @@
                                                 <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
                                             </c:if>
                                         </td>
-                                        <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;white-space:nowrap;">
+                                        <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;">
                                             &nbsp;
                                             <c:if test="${job.paused}">
                                                 [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
@@ -237,8 +237,8 @@
                                 </c:forEach>
                             </table>
                         </td>
-                        <td>
-                            &nbsp;
+                        <td>&nbsp;
+                            
                         </td>
                         <td>
                             <!-- Other Links -->
@@ -305,7 +305,7 @@
                  </c:if>
                 <table style="text-align:right;width:100%;">
                     <tr>
-                        <td style="height:70px;white-space:nowrap;">
+                        <td style="height:70px;">
                             <a href="javaScript:addJob();"><digi:trn key="aim:job:lnkAddNewJob">Add new job</digi:trn></a>
                             &nbsp;
                             <a href="javaScript:pauseAllJobs();"><digi:trn key="aim:job:lnkPauseAllJobs">Pause all jobs</digi:trn></a>
@@ -314,7 +314,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="white-space:nowrap;">
+                        <td style="">
                             <digi:trn key="aim:job:serverTime">Server date and time:</digi:trn>
                             <span id="divServerTime"></span>
                         </td>
@@ -327,3 +327,4 @@
 <script type="text/javascript">
     getServerTime();
 </script>
+</div>

@@ -181,6 +181,7 @@
 
 	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
 </script>
+ <div style="margin:0 auto;width:1000px;">
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">
 	<tr>
@@ -281,4 +282,5 @@
 		<input type="hidden" name="unorgLocations" />
 		<input type="hidden" name="deleteLocationId" />
 	</form>
+</div>
 </div>

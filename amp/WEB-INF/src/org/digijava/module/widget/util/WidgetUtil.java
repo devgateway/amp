@@ -609,9 +609,12 @@ public class WidgetUtil {
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
         oql += " inner join actSec.sectorId sec ";
         oql += " inner join actSec.classificationConfig config ";
+        if (donorIDs != null && donorIDs.length > 0) {
+            oql += "  inner join f.ampDonorOrgId org ";
+        }
         oql += " where  fd.adjustmentType = 1 ";
         if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (f.ampDonorOrgId in (:donors) ) ";
+            oql += " and (org.ampOrgId in (:donors) ) ";
         }
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         oql += " and sec.ampSectorId in (:sectors) ";

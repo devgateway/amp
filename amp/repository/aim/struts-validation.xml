@@ -149,9 +149,9 @@
 			<field property="description" depends="required">
                     <arg key="display.aim.description"/>
             </field> -->
-            <field property="workspaceType" depends="required">
-                    <arg key="display.aim.workspaceType"/>
-            </field>
+            <field property="workspaceType" depends="validOption"> 
+            	<arg key="display.aim.workspaceType"/>
+           </field>           
 	</form>
 
 <!-- Aim Add Role -->

@@ -424,6 +424,51 @@
 			       depends=""
 			       msg="error.registration.NoPasswordMatch"
 			       jsFunction="org.apache.commons.validator.javascript.validateIdentical"/>
+			       
+		<validator name="validOption"
+   classname="org.apache.struts.validator.FieldChecks"
+   method="validateOption"
+   methodParams="java.lang.Object,
+   org.apache.commons.validator.ValidatorAction,
+   org.apache.commons.validator.Field,
+   org.apache.struts.action.ActionMessages,
+   org.apache.commons.validator.Validator,
+   javax.servlet.http.HttpServletRequest"
+   msg="errors.required">
+   
+	  <javascript>
+	  	<![CDATA[
+		  function validateOption(form) {
+		  var isValid = true;
+		  var focusField = null;
+		  var i = 0;
+		  var fields = new Array();
+		
+		  var omatchName= eval('new ' + jcv_retrieveFormName(form) +  '_validOption() ');
+		
+		  for (var x in omatchName) {
+		  if (!jcv_verifyArrayElement(x, omatchName[x])) {
+		  continue;
+		  }
+		  var field = form[omatchName[x][0]];
+		
+		  if (!jcv_isFieldPresent(field)) {
+		  fields[i++] = omatchName[x][1];
+		  isValid=false;
+		  } else if (field.value == "-1") {
+		  	fields[i++]=omatchName[x][1];
+		  	isValid=false;
+		  }
+		  }
+		  
+		  if (fields.length > 0) {
+		   jcv_handleErrors(fields, focusField);
+		  }
+		  return isValid;
+		  }
+		  ]]>
+	  </javascript>
+  </validator>
 	      
     </global>
 

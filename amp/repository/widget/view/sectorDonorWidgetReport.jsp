@@ -35,33 +35,33 @@
 
 		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;background:#FFFFFF" border="1" bordercolor="#000000">
 			<tr>
-				<td width="120" class="tableMainHeader"><digi:trn>Sector</digi:trn></td>
+				<td width="120" class="tableHeader"><digi:trn>Sector</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="sectorName"/></td>
 			</tr>
 			
                         <tr>
-				<td class="tableMainHeader"><digi:trn>Donor</digi:trn></td>
+				<td class="tableHeader"><digi:trn>Donor</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="donorName"/></td>
 			</tr>
 			<tr>
-				<td class="tableMainHeader"><digi:trn>Year Range</digi:trn></td>
+				<td class="tableHeader"><digi:trn>Year Range</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="startYear"/> - <bean:write name="sectorDonorWidgetReportForm" property="endYear"/></td>
 			</tr>
             <feature:display module="Funding" name="Commitments">
 			<tr>
-				<td class="tableMainHeader"><digi:trn>Actual Commitments</digi:trn></td>
+				<td class="tableHeader"><digi:trn>Actual Commitments</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
             </feature:display>
             <feature:display module="Funding" name="Disbursement">
 			<tr>
-				<td class="tableMainHeader"><digi:trn>Actual Disbursements</digi:trn></td>
+				<td class="tableHeader"><digi:trn>Actual Disbursements</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
             </feature:display>
             <feature:display module="Funding" name="Expenditures">
 			<tr>
-				<td class="tableMainHeader tableHeadColorStyle"><digi:trn>Actual Expenditures</digi:trn></td>
+				<td class="tableHeader"><digi:trn>Actual Expenditures</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
             </feature:display>
@@ -80,20 +80,20 @@
 		<logic:present name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo">
 			<logic:notEmpty name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo">
 
-
+<div style='width:100%; height:280px; border: 0px; overflow-y:scroll;'>
 
 					<table width="100%" cellpadding="0" cellspacing="0" cellpadding="0" cellspacing="0" style="width:100%;height:100%" border="0">
 						<thead>
 
 						<tr>
-								<td colspan="3" class="tableHeader" >
+								<td colspan="3" class="gisContentTableMainHeader" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Overall information</digi:trn>
 										</div>
 									</div>
 								</td>
-								<td colspan="3" class="tableHeader">
+								<td colspan="3" class="gisContentTableMainHeader">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>For selected sector/donor</digi:trn>
@@ -104,21 +104,21 @@
 
 
 						<tr>
-								<td width="30%" class="tableHeader">
+								<td width="30%" class="gisContentTableHeader">
 
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Activity</digi:trn>
 										</div>
 
 								</td>
-								<td width="20%" class="tableHeader">
+								<td width="20%" class="gisContentTableHeader">
 
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Sector(s)</digi:trn>
 										</div>
 
 								</td>
-								<td width="20%" class="tableHeader">
+								<td width="20%" class="gisContentTableHeader">
 
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Donor(s)</digi:trn>
@@ -126,7 +126,7 @@
 
 								</td>
                                 <feature:display module="Funding" name="Commitments">
-                                        <td width="10%"  class="tableHeader">
+                                        <td width="10%"  class="gisContentTableHeader">
 
                                         <div class="gisReportTableBevelCell">
                                             <digi:trn>Commitments</digi:trn>
@@ -135,7 +135,7 @@
                                     </td>
                                 </feature:display>
                                 <feature:display module="Funding" name="Disbursement">
-								<td width="10%" class="tableHeader">
+								<td width="10%" class="gisContentTableHeader">
                                   
                                         <div class="gisReportTableBevelCell">
                                             <digi:trn>Disbursements</digi:trn>
@@ -144,7 +144,7 @@
 								</td>
                                 </feature:display>
                                 <feature:display module="Funding" name="Expenditures">
-								<td width="10%" class="tableHeader">
+								<td width="10%" class="gisContentTableHeader">
                                     
                                         <div class="gisReportTableBevelCell">
                                             <digi:trn>Expenditures</digi:trn>
@@ -160,7 +160,7 @@
                                               
 						<logic:iterate name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo" id="activitySectorDonorFunding">
 							<tr>
-								<td width="30%">
+								<td width="30%" valign="top" style="overflow-x:hidden;">
                                     <div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<a title="<bean:write name="activitySectorDonorFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activitySectorDonorFunding" property="activity.ampActivityId"/>);">
@@ -170,12 +170,12 @@
 									</div>
 								</td>
 							
-								<td width="20%" align="left">
+								<td width="20%"  align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" >
 											<logic:present name="activitySectorDonorFunding" property="sectors">
 												<logic:notEmpty name="activitySectorDonorFunding" property="sectors">
-													<ul>
+													<ul style="margin:0 0 0 20px; padding:0;">
 														<c:forEach var="sector" items="${activitySectorDonorFunding.sectors}">
 															<li>
 																<c:out value="${sector.name}"/>
@@ -187,12 +187,12 @@
 										</div>
 									</div>
 								</td>
-                                <td width="20%" align="left">
+                                <td width="20%" align="left" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal" >
 											<logic:present name="activitySectorDonorFunding" property="donorOrgs">
 												<logic:notEmpty name="activitySectorDonorFunding" property="donorOrgs">
-													<ul>
+													<ul style="margin:0 0 0 20px; padding:0;">
 													 	<c:forEach var="donor"   items="${activitySectorDonorFunding.donorOrgs}">
 															<li>
 															 	<c:out value="${donor.name}"/>
@@ -205,49 +205,27 @@
 									</div>
 								</td>
                                  <feature:display module="Funding" name="Commitments">
-								<td width="10%">
+								<td width="10%" align="left" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
-									<div class="gisReportTableBevelCell
-									<logic:present name="activitySectorDonorFunding" property="fmtCommitment">
-									gisReportTableBevelCellBgNormal
-									</logic:present>
-									<logic:notPresent name="activitySectorDonorFunding" property="fmtCommitment">
-									gisReportTableBevelCellBgDash
-									</logic:notPresent>
-									">
+									<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 										<bean:write name="activitySectorDonorFunding" property="fmtCommitment"/>
 									</div>
-
 									</div>
 								</td>
                                 </feature:display>
                                 <feature:display module="Funding" name="Disbursement">
-								<td width="10%">
+								<td width="10%" align="left" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
-									<div class="gisReportTableBevelCell
-									<logic:present  name="activitySectorDonorFunding" property="fmtDisbursement">
-									gisReportTableBevelCellBgNormal
-									</logic:present>
-									<logic:notPresent  name="activitySectorDonorFunding" property="fmtDisbursement">
-									gisReportTableBevelCellBgDash
-									</logic:notPresent>
-									">
+									<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 										<bean:write name="activitySectorDonorFunding" property="fmtDisbursement"/>
 									</div>
 									</div>
 								</td>
                                  </feature:display>
                                 <feature:display module="Funding" name="Expenditures">
-								<td width="10%">
+								<td width="10%" align="left" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
-									<div class="gisReportTableBevelCell
-									<logic:present name="activitySectorDonorFunding" property="fmtExpenditure">
-									gisReportTableBevelCellBgNormal
-									</logic:present>
-									<logic:notPresent name="activitySectorDonorFunding" property="fmtExpenditure">
-									gisReportTableBevelCellBgDash
-									</logic:notPresent>
-									">
+									<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 										<bean:write name="activitySectorDonorFunding" property="fmtExpenditure"/>
 									</div>
 									</div>
@@ -266,7 +244,7 @@
 						</tbody>
                                             
 					</table>
-
+</div>
 
 			</logic:notEmpty>
 		</logic:present>

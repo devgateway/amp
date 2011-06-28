@@ -608,14 +608,13 @@ public class WidgetUtil {
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
         oql += " inner join actSec.sectorId sec ";
-        oql += " inner join actSec.activityId act ";
         oql += " inner join actSec.classificationConfig config ";
         oql += " where  fd.adjustmentType = 1 ";
         if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
+            oql += " and (f.ampDonorOrgId in (:donors) ) ";
         }
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-        oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIds) + ") ";
+        oql += " and sec.ampSectorId in (:sectors) ";
         oql += " and config.name='Primary' ";
         oql += "  and act.team is not null ";
         oql += " order by actSec";
@@ -628,6 +627,10 @@ public class WidgetUtil {
                 query.setDate("fDate", fromDate);
                 query.setDate("eDate", toDate);
             }
+            if (donorIDs != null && donorIDs.length > 0) {
+            	query.setParameterList("donors", donorIDs);
+            }
+            query.setParameterList("sectors", sectorIds);
             result = query.list();
         } catch (Exception e) {
             throw new DgException("Cannot load sector fundings by donors from db", e);

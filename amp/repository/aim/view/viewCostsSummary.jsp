@@ -26,7 +26,7 @@ function openEUActivityDetails(euActivityId) {
 	<table width="100%" bgcolor="#ffffff">
 		<tr>
 			<td>
-				<table  class="box-border-nopadding">
+				<table class="box-border-nopadding" style="font-size:11px;">
 					<tr class="textnegru" bgcolor="#f4f4f2" align="right">
 					
 </logic:equal>

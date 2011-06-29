@@ -161,16 +161,17 @@ addLoadEvent(addpanel);
 <script type="text/javascript">
 	function toggleActionForm(type) {
 		if (type == null) return false;
+		var form=document.getElementById("exportSettingsForm");
 		if (type == "xls") {
-			document.forms[4].action = "/aim"+"<%=viewParamXLS%>";
+			form.action = "/aim"+"<%=viewParamXLS%>";
 		} else if (type == "pdf") {
-			document.forms[4].action = "/aim"+"<%=viewParamPDF%>";
+			form.action = "/aim"+"<%=viewParamPDF%>";
 		}
 		<feature:display name="Show Options on Export" module="Report and Tab Options">
 			showMyPanel(0, 'logoStatement');
 			return false;
 		</feature:display>
-		document.forms[4].submit();
+		form.submit();
 	}
 </script>
 <div class="toolbar" align="center">
@@ -273,9 +274,9 @@ function openPrinter(){
 	</table>
 </div>
 
-<div id="logoStatement" style="display: none">
+<div id="logoStatement" style="display: none" >
 	<div align="center">
-			<digi:form action="<%=viewParamPDF%>" method="post">			
+			<digi:form action="<%=viewParamPDF%>" method="post" styleId="exportSettingsForm">			
 				<input type="hidden" name="viewParam" value="<%=viewParam%>" />
 				<input type="hidden" name="ampReportId" value="<%=ampReportId%>" />
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">

@@ -380,7 +380,7 @@ function collapseAll() {
 							<td class="prv_left" align=right>&nbsp;</td>
 							<td class="prv_right"><c:out
 								value="${aimEditActivityForm.identification.statusReason}"
-							/></td>
+							/> &nbsp;</td>
 						</tr>
 					</field:display>
 					<field:display feature="Identification" name="Objectives">

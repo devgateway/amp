@@ -168,14 +168,14 @@ function cancel() {
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%">
+					<table width="99%">
 						<tr><td>
 							<span class=subtitle-blue>
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 							</span>
 						</td></tr>
-						<tr><td>
-							&nbsp;
+						<tr><td>&nbsp;
+							
 						</td></tr>
                         <bean:define id="existingActivity" name="existingActivity" />
                         <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
@@ -222,8 +222,8 @@ function cancel() {
                         </c:if>
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
+				<tr><td>&nbsp;
+					
 				</td></tr>
 			</table>
 		</td>

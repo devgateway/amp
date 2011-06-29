@@ -1,6 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -300,6 +299,26 @@ public class ContactInfoUtil {
 			queryString= "select a from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id";
 			query=session.createQuery(queryString);
 			query.setParameter("id", activityId);
+			retValue=(List<AmpActivityContact>)query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load Message" + ex.getMessage());	
+			ex.printStackTrace();
+		}
+		return retValue;
+	}
+	
+	public static List<AmpActivityContact> getActivityContactsForType(Long activityId,String contactType) throws Exception{
+		if (activityId==null) return null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<AmpActivityContact> retValue=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select a from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id and a.contactType=:conttype";
+			query=session.createQuery(queryString);
+			query.setParameter("id", activityId);
+			query.setParameter("conttype", contactType);
 			retValue=(List<AmpActivityContact>)query.list();
 		}catch(Exception ex) {
 			logger.error("couldn't load Message" + ex.getMessage());	

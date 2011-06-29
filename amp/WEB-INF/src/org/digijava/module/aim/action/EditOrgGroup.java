@@ -78,8 +78,7 @@ public class EditOrgGroup extends Action {
 			ampGrp.setOrgType(ot);
 			ARUtil.clearOrgGroupTypeDimensions();
 			
-			AmpOrgGroup groupByName = DbUtil.getAmpOrgGroupByName(ampGrp.getOrgGrpName());
-			if(groupByName !=null && (editForm.getAmpOrgGrpId()==null || groupByName.getAmpOrgGrpId().compareTo( editForm.getAmpOrgGrpId())!=0)) {
+			if (DbUtil.checkAmpOrgGroupDuplication(ampGrp.getOrgGrpName(), editForm.getAmpOrgGrpId())) {
 				ActionMessages errors = new ActionMessages();
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.duplicateGroupName"));
 				saveErrors(request, errors);
@@ -88,6 +87,7 @@ public class EditOrgGroup extends Action {
 				if (editForm.getAmpOrgId() != null) return mapping.findForward("popup");
 				else return mapping.findForward("forward");
 			}
+			
 
 			if ((editForm.getAmpOrgGrpId().longValue() ==0)||(editForm.getAmpOrgGrpId().longValue() ==-1)) {
 				DbUtil.add(ampGrp);
@@ -133,6 +133,7 @@ public class EditOrgGroup extends Action {
 				AmpOrgGroup ampGrp = DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId());
 				if (ampGrp != null) {
 					ARUtil.clearOrgGroupTypeDimensions();
+					DbUtil.deleteUserExt(ampGrp, null, null);
 					DbUtil.delete(ampGrp);
 					logger.debug("Organization Group deleted");
 				}

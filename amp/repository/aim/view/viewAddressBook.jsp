@@ -274,13 +274,13 @@
 		        };        
 		        
 		        var myColumnDefs = [
-		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true, width: 50},
-		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 150},
-		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false, width: 150},
-		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false, width: 100},
-		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true, width: 100},
-		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false, width: 100},
-		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false, width: 100},
+		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true},
+		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true},
+		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false},
+		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false},
+		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true},
+		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false},
+		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false},
 		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
 		  

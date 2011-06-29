@@ -444,7 +444,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 				</tr>
 				</feature:display>
-				<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+				<module:display name="Program" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">
 					<td nowrap="nowrap">

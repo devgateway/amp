@@ -27,6 +27,9 @@ alert("goNextStep");
     document.aimEditActivityForm.action = "<%= nextStepUrl %>";
     document.aimEditActivityForm.submit();
   }
+  <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
+  document.aimEditActivityForm.action = "<%= nextStepUrl %>";
+  document.aimEditActivityForm.submit();
 }
 
 function validate(field) {
@@ -165,6 +168,7 @@ function validateForm(){
      <field:display name="Regional Percentage" feature="Location">
    	|| !validateLocationPercentage()
      </field:display>
+   	<feature:display name="Program" module="Program">
    	<field:display name="National Planning Objectives" feature="NPD Programs"> 
     || !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms")
     </field:display>
@@ -173,7 +177,9 @@ function validateForm(){
     </field:display>
     <field:display name="Secondary Program" feature="NPD Programs">
     || !validateProgramsPercentage(spSize,"secondaryPrograms")
-    </field:display>  
+    </field:display>
+   	</feature:display>
+   	  
     ){
         //alert("false");
       return false;

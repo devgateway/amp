@@ -88,8 +88,10 @@ public class CSVExportAction
 	    grdx.setMetadata(r);
 	
 	    String sortBy = (String) session.getAttribute("sortBy");
-	    if (sortBy != null)
+	    if (sortBy != null) {
 	      rd.setSorterColumn(sortBy);
+	      rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+	    }
 	
 	    //show title+desc
 	    rowId.inc();

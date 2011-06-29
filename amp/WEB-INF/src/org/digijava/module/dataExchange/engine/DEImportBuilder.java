@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -41,6 +42,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -76,14 +79,6 @@ import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Location;
-import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
-import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
 import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ComponentFundingType;
@@ -91,9 +86,17 @@ import org.digijava.module.dataExchange.jaxb.ContactType;
 import org.digijava.module.dataExchange.jaxb.FreeTextType;
 import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.jaxb.FundingType;
-import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Location;
+import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
+import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
+import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.pojo.DEActivityLog;
 import org.digijava.module.dataExchange.pojo.DECurrencyMissingLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
@@ -101,12 +104,10 @@ import org.digijava.module.dataExchange.pojo.DEImplLevelMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
-import org.digijava.module.dataExchange.pojo.DEMockTest;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramPercentageLog;
 import org.digijava.module.dataExchange.pojo.DESectorMissingLog;
-import org.digijava.module.dataExchange.pojo.DESectorPercentageLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
@@ -118,8 +119,6 @@ import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.HibernateException;
 import org.hibernate.type.NullableType;
 import org.xml.sax.SAXException;
-
-import com.mockrunner.mock.web.MockHttpServletRequest;
 
 /**
  * @author dan
@@ -333,11 +332,27 @@ public class DEImportBuilder {
 	// contact information, issues
 	private void processStep7(AmpActivity activity, ActivityType actType, Boolean update) {
 
-		if(isFieldSelected("activity.donorContacts"))
-			processDonorContacts(activity, actType);
+		if(isFieldSelected("activity.donorContacts")){
+			fillActivityWithContactInfo(actType.getDonorContacts(), activity,org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
+			//processDonorContacts(activity, actType);
+		}	
 
-		if(isFieldSelected("activity.govContacts"))
-			processGovContacts(activity, actType);
+		if(isFieldSelected("activity.govContacts")){
+			fillActivityWithContactInfo(actType.getGovContacts(), activity,org.digijava.module.aim.helper.Constants.MOFED_CONTACT);
+		}
+		
+		if(isFieldSelected("activity.sectMinContacts")){
+			fillActivityWithContactInfo(actType.getSectMinContacts(), activity,org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT);
+		}
+		
+		if(isFieldSelected("activity.projCoordinatorContacts")){
+			fillActivityWithContactInfo(actType.getProjCoordinatorContacts(), activity,org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT);
+		}
+		
+		if(isFieldSelected("activity.impExecAgencyContacts")){
+			fillActivityWithContactInfo(actType.getImpExecAgencyContacts(), activity,org.digijava.module.aim.helper.Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
+		}
+			
 
 		if(isFieldSelected("activity.issues"))
 			processIssues(activity, actType);
@@ -1098,31 +1113,7 @@ public class DEImportBuilder {
 /*
  * ******************* step 7 process methods
  */
-	
-	//donor contacts
-	private void processDonorContacts(AmpActivity activity, ActivityType actType) {
-		
-		if (actType.getDonorContacts() != null && actType.getDonorContacts().size() > 0){
-			ContactType contacts = actType.getDonorContacts().iterator().next();
-			if(contacts != null){
-				activity.setContFirstName(contacts.getFirstName());
-				activity.setContLastName(contacts.getLastName());
-				activity.setEmail(contacts.getEmail());
-			}
-		}
-	}
 
-	//gov contacts
-	private void processGovContacts(AmpActivity activity, ActivityType actType) {
-		if(actType.getGovContacts() !=null  && actType.getGovContacts().size() > 0){
-			ContactType contacts = actType.getGovContacts().iterator().next();
-			if(contacts != null){
-				activity.setMofedCntFirstName(contacts.getFirstName());
-				activity.setMofedCntLastName(contacts.getLastName());
-				activity.setMofedCntEmail(contacts.getEmail());
-			}
-		}
-	}
 
 	//issues
 	private void processIssues(AmpActivity activity, ActivityType actType) {
@@ -2038,6 +2029,34 @@ public class DEImportBuilder {
 			}
 		}
 	}
+	private void fillActivityWithContactInfo(List<ContactType> contacts,AmpActivity activity, String contactType) {
+		if (contacts!= null && contacts.size() > 0){
+			for (ContactType contact : contacts) {
+				AmpContact cont = new AmpContact(contact.getFirstName(), contact.getLastName());
+				List<String> emails = contact.getEmail();
+				if (emails != null) {
+					for (String email : emails) {
+						AmpContactProperty prop = new AmpContactProperty();
+						prop.setName(org.digijava.module.aim.helper.Constants.CONTACT_PROPERTY_NAME_EMAIL);
+						prop.setValue(email);
+						if (cont.getProperties() == null) {
+							cont.setProperties(new HashSet<AmpContactProperty>());
+						}
+						cont.getProperties().add(prop);
+					}
+				}
+				AmpActivityContact actContant = new AmpActivityContact();
+				actContant.setContactType(contactType);
+				actContant.setContact(cont);
+				actContant.setPrimaryContact(contact.isPrimary());
+				if (activity.getActivityContacts() == null){
+					activity.setActivityContacts(new HashSet<AmpActivityContact>()) ;
+				}
+				activity.getActivityContacts().add(actContant);
+				
+			}			
 
+		}
+	}
 	
 }

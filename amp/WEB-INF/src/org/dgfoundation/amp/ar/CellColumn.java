@@ -327,5 +327,17 @@ public class CellColumn extends Column {
 		else
 			return true;
 	}
-
+	
+	@Override
+	public Column hasSorterColumn(String namePath) {
+		if ( namePath == null ) {
+			logger.error("namePath param is not supposed to be null here. Something's wrong");
+			return null;
+		}
+		if ( namePath.equals(this.getNamePath()) ) {
+			return this;
+		}
+		else
+			return null;
+	}
 }

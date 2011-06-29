@@ -298,8 +298,16 @@ public class GroupReportData extends ReportData {
 
 	
 	public void setSorterColumn(String sortByColumn) {
-		if(sortByColumn.equals(this.sortByColumn)) sortAscending= !sortAscending; else sortAscending=true; 
+		//if(sortByColumn.equals(this.sortByColumn)) sortAscending= !sortAscending; else sortAscending=true; 
 		this.sortByColumn=sortByColumn;
+	}
+	
+	public void setSortAscending(Boolean sortAscending) {
+		if ( sortAscending == null ) {
+			this.sortAscending	= true;
+		}
+		else 
+			this.sortAscending	= sortAscending;
 	}
 
 	

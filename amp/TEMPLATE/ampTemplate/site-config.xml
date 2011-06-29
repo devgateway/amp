@@ -202,6 +202,9 @@
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body" module="aim" instance="default"/>
 		</layout>
+		<layout name="reportsLayout" file="aimReportsLayout.jsp">
+			<put name="title">Popup</put>
+		</layout>
 		<layout name="single" file="popupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
@@ -662,7 +665,7 @@
 				<page>	htmlViewPlannedProjects				</page>
 				<page>	htmlPhysicalComponentReport			</page>
 				<page>	htmlAdvancedReport			        </page>
-				<page>viewNewAdvancedReport</page>
+				
 				<page>aim_editQuestions</page>
 				<page>aim_addQuestion</page>
 				<page>aim_addIndicator</page>
@@ -738,6 +741,11 @@
                 <page>printPreviewPopupLayout</page>
                  <page>printViewPopupLayout</page>
             </module>
+		</page-group>
+		<page-group masterLayout="reportsLayout" tile="body">
+			<module name="aim">
+				<page>viewNewAdvancedReport</page>
+			</module>
 		</page-group>
 	</site-layout>
 </site-config>

@@ -3562,12 +3562,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             session.delete(comObj);
           }
         }
+        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        Connection con = session.connection();
+        Statement stmt = con.createStatement();
+        stmt.executeUpdate(deleteActivityComments);
         logger.info("comments deleted");
         
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = session.connection();
-        Statement stmt = con.createStatement();
+         con = session.connection();
+         stmt = con.createStatement();
         int deletedRows = stmt.executeUpdate(deleteActivityTeam);
         
         //Delete the connection with amp_physical_performance.
@@ -3576,7 +3580,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         stmt = con.createStatement();
         deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
-        //Delete the connection with Indicator Project.
+        //Delete the connection with Indicator Project. 
         //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         //con = session.connection();
         //stmt = con.createStatement();
@@ -3596,7 +3600,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
       
     //Section moved here from ActivityManager.java because it didn't worked there.
-	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
+	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
 	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
 	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
 	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);

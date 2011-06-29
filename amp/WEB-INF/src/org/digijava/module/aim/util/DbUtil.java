@@ -69,6 +69,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -130,6 +131,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.dbentity.TeamNodeState;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocToOrgDAO;
@@ -5114,6 +5116,28 @@ public class DbUtil {
         }
         return grp;
     }
+    
+    public static boolean checkAmpOrgGroupDuplication(String name,Long id) {
+    	boolean duplicateName = false;
+    	Session session = null;
+    	try {
+    		session = PersistenceManager.getRequestDBSession();
+            String queryString = "select count(l) from " + AmpOrgGroup.class.getName() + " l " + "where l.orgGrpName=:name ";
+            if (id != null) {
+            	queryString += " and l.ampOrgGrpId!="+id;
+            }
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("name", name, Hibernate.STRING);
+            Integer amount = (Integer)qry.uniqueResult();
+            if (amount!=null && amount.intValue() >0) {
+            	duplicateName = true;
+            }
+		} catch (Exception e) {
+			logger.error("Unable to get Org Group" + e);
+		}
+    	
+    	return duplicateName;
+    }
 
     public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
         Session session = null;
@@ -5216,20 +5240,29 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (o.orgTypeId=:orgTypeId)";
-            qry = sess.createQuery(queryString);
-            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
-            if (null != qry.list() && qry.list().size() > 0)
-                return true;
-            else {
-                queryString = "select o from " + AmpOrgGroup.class.getName()
-                    + " o where (o.orgType=:orgTypeId)";
-                qry = sess.createQuery(queryString);
-                qry.setParameter("orgTypeId", Id, Hibernate.LONG);
-                if (null != qry.list() && qry.list().size() > 0)
-                    return true;
-            }
+            queryString = "select o from " + AmpOrgGroup.class.getName()
+            + " o where (o.orgType=:orgTypeId)";
+	        qry = sess.createQuery(queryString);
+	        qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+	        if (null != qry.list() && qry.list().size() > 0) {
+	        	return true;
+	        }
+	            
+            
+//            queryString = "select o from " + AmpOrganisation.class.getName()
+//                + " o where (o.orgTypeId=:orgTypeId)";
+//            qry = sess.createQuery(queryString);
+//            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+//            if (null != qry.list() && qry.list().size() > 0)
+//                return true;
+//            else {
+//                queryString = "select o from " + AmpOrgGroup.class.getName()
+//                    + " o where (o.orgType=:orgTypeId)";
+//                qry = sess.createQuery(queryString);
+//                qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+//                if (null != qry.list() && qry.list().size() > 0)
+//                    return true;
+//            }
         } catch (Exception e) {
             logger.debug("Exception from chkOrgTypeReferneces(): " + e);
             e.printStackTrace(System.out);
@@ -6519,7 +6552,35 @@ public class DbUtil {
         }
         return country;
     }
-
+    
+    public static void deleteUserExt (AmpOrgGroup orgGrp,AmpOrgType orgType,AmpOrganisation org) {
+    	Session session=null;
+		Query query;
+		if (orgGrp != null || orgType !=null || org !=null) {
+			try {
+				Object relatedObj = null;
+				session=PersistenceManager.getRequestDBSession();
+				String qhl="delete from " + AmpUserExtension.class.getName()+ " ext where ";
+				if (orgGrp != null) {
+					qhl +=" ext.orgGroup=:relatedObj";
+					relatedObj = orgGrp;
+				}
+				if (orgType != null) {
+					qhl +=" ext.orgType=:relatedObj";
+					relatedObj = orgType;
+				}
+				if(org!=null){
+					qhl +=" ext.organization=:relatedObj";
+					relatedObj = org;
+				}
+				query=session.createQuery(qhl);
+				query.setEntity("relatedObj", relatedObj);
+				query.executeUpdate();
+			} catch (Exception e) {
+				logger.error("Delete Failed: " +e.toString());
+			}
+		}		
+    }
 
 
 

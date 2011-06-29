@@ -185,7 +185,7 @@ public class AddContactComponent extends DispatchAction{
         String params=request.getParameter("params");
 		int emailCount=0;
 		String contactEmail=null;
-		if(params !=null){
+		if(params !=null && params.trim().length() > 0 ){
 			String[] emails=params.split(";");
 			AmpContact contact=null;
 			if(createForm.getContactId()!=null){

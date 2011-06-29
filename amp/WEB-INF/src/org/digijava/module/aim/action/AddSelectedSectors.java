@@ -21,7 +21,7 @@ import org.digijava.module.aim.util.SectorUtil;
 public class AddSelectedSectors
     extends Action {
 
-  private static Logger logger = Logger.getLogger(AddSelectedLocations.class);
+  private static Logger logger = Logger.getLogger(AddSelectedSectors.class);
 
   SelectSectorForm eaForm;
 
@@ -54,19 +54,21 @@ public class AddSelectedSectors
           eaForm.getCols().addAll(sectors);
       }
     Long configId=eaForm.getConfigId();
-    AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(configId);
-
+    AmpClassificationConfiguration config=null;
     Long selsearchedSector[] = eaForm.getSelSectors();
     logger.info("size off selected searched sectors: " +
                 selsearchedSector.length);
     eaForm.setSomeError(false);
-     if(!config.isMultisector()&&selsearchedSector.length>1){
+    if(configId!=null&&configId!=-1){
+        config=SectorUtil.getClassificationConfigById(configId);
+        if(!config.isMultisector()&&selsearchedSector.length>1){
            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
               "error.aim.addActivity.sectorMultipleSelectionIsOff"));
           saveErrors(request, errors);
           eaForm.setSomeError(true);
           return mapping.findForward("forward");  
      }
+    }    
     Iterator itr = eaForm.getSearchedSectors().iterator();
     int count = 0;
     ActivitySector sctr = null;

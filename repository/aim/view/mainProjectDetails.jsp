@@ -465,30 +465,32 @@ ${aimMainProjectDetailsForm.activityExists}
 							</logic:notEqual>
 						</feature:display >
 						
-							<feature:display name="Funding Information" module="Funding"></feature:display>
-								<field:display name="Funding Organizations Tab" feature="Funding Information">
-									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-									   <LI>
-                                        <a name="node">
-                                        <div>
+						<feature:display name="Physical Progress" module="Components"></feature:display>
+						
+						<field:display name="Physical Progress Tab" feature="Physical Progress">
+							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+							   <LI>
+                            	   <a name="node">
+                                	   <div>
 											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
-                                        </div>
-                                        </a>
-										</LI>
-										</logic:equal>
-										<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-				                  <c:set target="${urlTabs}" property="tabIndex" value="3"/>
-										<LI>
+                                       </div>
+                                   </a>
+								</LI>
+							</logic:equal>
+							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+				            	<c:set target="${urlTabs}" property="tabIndex" value="3"/>
+									<LI>
                                         <span>
                                             <digi:link href="/viewPhysicalProgress.do" name="urlTabs">
-                                            <div title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
-                                            <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
-                                            </div>
+                                    	        <div title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
+                                            		<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
+	                                            </div>
 	                                        </digi:link>
     		                            </span>
-										</LI>
-									</logic:notEqual>
-								</field:display>
+									</LI>
+							</logic:notEqual>
+						</field:display>
+							
 							
 						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 						<feature:display name="Documents Tab" module="Document">

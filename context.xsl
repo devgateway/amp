@@ -10,7 +10,7 @@
 	<xsl:param name="antilock"/>
 
 	<xsl:template match="@url">
-		<xsl:attribute name="url">jdbc:mysql://localhost:<xsl:value-of select="$mysql.port"/>/<xsl:value-of select="$mysql.db"/>?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
+		<xsl:attribute name="url">jdbc:mysql://localhost:<xsl:value-of select="$mysql.port"/>/<xsl:value-of select="$mysql.db"/>?useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
 	</xsl:template>
 	
 	<xsl:template match="@username">

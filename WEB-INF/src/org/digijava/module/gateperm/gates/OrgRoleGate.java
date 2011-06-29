@@ -101,7 +101,7 @@ public class OrgRoleGate extends Gate {
 
 	//check if the scope has a funding organisation, if it does use that directly
 	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
-	if(org!=null) {
+	if(org!=null && "DN".equals(paramRoleCode) ) {
 		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
 		if(roleCode.equals(paramRoleCode) && org.getAmpOrgId().equals(user.getAssignedOrgId())) return true;

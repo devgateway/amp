@@ -81,7 +81,6 @@
 </c:if>
 
 <SCRIPT TYPE="text/javascript">
-<!--
 function popup(mylink, windowname)
 {
 if (! window.focus)return true;
@@ -91,11 +90,17 @@ if (typeof(mylink) == 'string')
 else
    href=mylink.href;
 
-  window.open(href,windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+  	myWindow	= window.open('',windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+  	myWindow.document.write("<html>");
+	myWindow.document.write("<div style='height: 20px; left: 45%; position: absolute; text-align: center; top: 0%;width: 230px;padding: 5px;background-color:#27415F;font-family: arial; font-size: 14px;text-align: center;font-weight:bold;color: white;'>");
+	myWindow.document.write("Loading step 1/3. Please wait ...");
+	myWindow.document.write("<div><html>");
+	myWindow.focus();
+	myWindow.location	= href;
+	
 
 return false;
 }
-//-->
 
 function confirmFunc() {
   return confirm("${translation}");
@@ -800,6 +805,6 @@ function confirmFunc() {
     </td>
   </tr>
 </table>
-
+<img src='/TEMPLATE/ampTemplate/images/ajax-loader.gif' style="display: none;"/>
 
 

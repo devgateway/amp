@@ -97,7 +97,7 @@ public class UserLevelGate extends Gate {
 		Gate relatedOrgGate = Gate.instantiateGate(scope, null, RelatedOrgGate.class.getName());
 		Gate computedActivityGate= Gate.instantiateGate(scope, null, ComputedTeamActivityGate.class.getName());
 		//if i am a guest and not the owner AND not related to the current object i will have guest access
-		if(!owner && !relatedOrgGate.logic() && !computedActivityGate.logic() && PARAM_GUEST.equals(param) ) return true;
+		if(!owner && !relatedOrgGate.logic() &&  PARAM_GUEST.equals(param) ) return true;
 		
 		
 		

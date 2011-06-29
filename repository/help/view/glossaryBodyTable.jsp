@@ -90,7 +90,7 @@
 				</a>
 			</li>
 		</ul>
-	<div class="yui-content" style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<div class="yui-content" style="overflow:auto;height: 350px; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
 	<div style="padding: 2;">
 						
 						

@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
@@ -109,9 +112,11 @@
                           <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
                           <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
+                        <field:display name="Proposed Project Date" feature="Proposed Project Cost">
                         <td align="center" valign="middle" width="120" colspan="2">
                           <b><font color="white"><digi:trn key="aim:PlannedCommitmentDate">Planned Commitment Date</digi:trn></font></b>
                         </td>
+                        </field:display>
                       </tr>
                       <tr>
                         <td valign="center" align="center">
@@ -125,14 +130,16 @@
                             	<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
                         	</html:select>
                         </td>
-                        <td valign="center" align="center">
-                          <html:text property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
-                        </td>
-                        <td valign="center" align="center">
-            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-							</a>
-                        </td>
+                        <field:display name="Proposed Project Date" feature="Proposed Project Cost">
+	                        <td valign="center" align="center">
+	                          <html:text property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
+	                        </td>
+	                        <td valign="center" align="center">
+	            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
+									<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								</a>
+	                        </td>
+                        </field:display>
             
                       </tr>
                     </table>

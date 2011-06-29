@@ -1,7 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -124,4 +127,19 @@ public class AmpContact {
 		this.organizationContacts = organizationContacts;
 	}	
 	
+	public List<String> getEmails (){
+		List<String> emails =null;
+		if (this.properties!= null ) {
+			for (AmpContactProperty prop : this.properties) {
+				if (prop.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+					if(emails ==null){
+						emails= new ArrayList<String>();
+					}
+					emails.add(prop.getValue());
+				}
+				
+			}
+		}		
+		return emails;
+	}
 }

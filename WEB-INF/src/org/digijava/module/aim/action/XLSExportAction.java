@@ -89,7 +89,10 @@ public class XLSExportAction extends Action {
 			
 			
 		String sortBy=(String) session.getAttribute("sortBy");
-		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+		if(sortBy!=null){
+			rd.setSorterColumn(sortBy); 
+			rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+		}
 			
 		Map sorters=(Map) session.getAttribute("reportSorters");
 		//XLSExporter.resetStyles();

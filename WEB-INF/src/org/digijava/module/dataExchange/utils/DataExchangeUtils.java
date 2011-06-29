@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,8 +27,11 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -274,12 +279,63 @@ public class DataExchangeUtils {
 	    Long activityId = null;
 	    
 	    try {
-	    	//session = PersistenceManager.getSession();
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
 	    	tx = session.beginTransaction();
-
+	    	
+	    	Set <AmpActivityContact> activityContacts = activity.getActivityContacts();
+	    	//new
+	    	if (activityContacts!= null) {
+	    		for (AmpActivityContact ampActivityContact : activityContacts) {
+	    			AmpContact cont = ampActivityContact.getContact();
+	    			AmpContact dbContact = null;
+	    			boolean contactExistsInDb = false;
+	    			Set<AmpContactProperty> properties = cont.getProperties();
+	    			for (AmpContactProperty formProperty : cont.getProperties()) {
+	    				Query qry = session.createQuery("select prop.contact from " + AmpContactProperty.class.getName() + " prop where prop.value=:curEmail" +
+						" and prop.contact.name=:contName and prop.contact.lastname=:contLastname");
+						qry.setParameter("curEmail", formProperty.getValue());
+						qry.setParameter("contName", cont.getName());
+						qry.setParameter("contLastname", cont.getLastname());
+						List retVal =  qry.list();
+						if (retVal != null && retVal.size() >0) {
+							contactExistsInDb =true;
+							dbContact =(AmpContact) retVal.get(0);
+							properties = compareProperties(properties, dbContact.getProperties());
+							break;
+						}
+							
+	    			}
+	    			
+	    			if (! contactExistsInDb){
+	    				session.save(cont);
+	    			}else {
+	    				ampActivityContact.setContact(dbContact);
+	    			}
+	    			
+	    			if(properties!=null){
+	    				for (AmpContactProperty formProperty : properties) {
+		    				if (dbContact != null) {
+		    					formProperty.setContact(dbContact);
+		    				}else {
+		    					formProperty.setContact(cont);
+		    				}						
+							session.save(formProperty);
+						}
+	    			}
+	    			
+	    		}
+	    	}
+	    	
+    	
 			session.save(activity);
+			
+			if (activityContacts!= null) {
+	    		for (AmpActivityContact ampActivityContact : activityContacts) {
+	    			ampActivityContact.setActivity(activity);
+	    			session.save(ampActivityContact);
+	    		}
+			}
 	        activityId = activity.getAmpActivityId();
 	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
 	        activity.setAmpId(ampId);
@@ -306,6 +362,27 @@ public class DataExchangeUtils {
 		AuditLoggerUtil.logObject(httpSession, request, activity, "add");
 	}
 
+	public static Set <AmpContactProperty> compareProperties (Set <AmpContactProperty> tobeImportedProperties, Set <AmpContactProperty> dbProperties) {
+		Set <AmpContactProperty> retVal = null;
+		for (AmpContactProperty toBeImported : tobeImportedProperties) {
+			boolean propertyExists = false;
+			String val = toBeImported.getValue();
+			String name = toBeImported.getName();
+			for (AmpContactProperty dbProperty : dbProperties) {
+				if (dbProperty.getName().equals(name) && dbProperty.getValue().equals(val)) {
+					propertyExists = true ;
+					break;
+				}
+			}
+			if (!propertyExists){
+				if (retVal == null) {
+					retVal =  new HashSet<AmpContactProperty>();
+				}
+				retVal.add(toBeImported);
+			}
+		}
+		return retVal;
+	}
 	/**
 	 * @author dan
 	 * @param name

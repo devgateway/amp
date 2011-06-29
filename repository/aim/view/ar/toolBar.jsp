@@ -375,3 +375,7 @@ function openPrinter(){
 		</div>			        
 	</div>		        
 </div>
+
+<script language="JavaScript">
+setStepNumber( "3/3" );
+</script>

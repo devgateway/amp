@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <SCRIPT TYPE="text/javascript">
-<!--
+
 function popup(mylink, windowname)
 {
 if (! window.focus)return true;
@@ -19,10 +19,18 @@ if (typeof(mylink) == 'string')
    href=mylink;
 else
    href=mylink.href;
-window.open(href, windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+
+  	myWindow	= window.open('',windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+  	myWindow.document.write("<html>");
+	myWindow.document.write("<div style='height: 20px; left: 45%; position: absolute; text-align: center; top: 0%;width: 230px;padding: 5px;background-color:#27415F;font-family: arial; font-size: 14px;text-align: center;font-weight:bold;color: white;'>");
+	myWindow.document.write("<digi:trn>Loading step</digi:trn> 1/3. <digi:trn>Please wait</digi:trn> ...");
+	myWindow.document.write("<div><html>");
+	myWindow.focus();
+	myWindow.location	= href;
+	
+
 return false;
 }
-//-->
 </SCRIPT>
 <br/>
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 

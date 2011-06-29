@@ -50,17 +50,17 @@
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
         <td align="center" style="background-color:#999999;color:black;" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+           	<c:choose>
+           		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.namePath}">
+           			<c:set var="sortAscString">sortByAsc=${!filterBean.sortByAsc}</c:set>
+           		</c:when>
+           		<c:otherwise>
+           			<c:set var="sortAscString">sortByAsc=true</c:set>
+           		</c:otherwise>
+           	</c:choose>				
             <logic:equal name="column" property="columnDepth" value="1">          
-            	<c:choose>
-            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">
-            			<c:set var="sortAscString">sortByAsc=${!filterBean.sortByAsc}</c:set>
-            		</c:when>
-            		<c:otherwise>
-            			<c:set var="sortAscString">sortByAsc=true</c:set>
-            		</c:otherwise>
-            	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
 	              		<logic:notEmpty name="reportMeta" property="hierarchies">
 			           		<c:if test="${colIndexId==0}">${reportMeta.hierarchiesPath}<br/> </c:if>
 			           </logic:notEmpty>
@@ -72,12 +72,12 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <a style="color:black;cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.name}~${sortAscString}">
+	              <a style="color:black;cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.namePath}~${sortAscString}">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </a>
 	            </logic:notEqual>
             
-	            <c:if test="${subColumn.name == columnReport.sorterColumn}">
+	            <c:if test="${subColumn.namePath == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
 	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
@@ -94,7 +94,7 @@
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
+	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -103,12 +103,12 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="color:black;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
-	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-	              </html:link>
+	            	<a style="color:black;cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.namePath}~${sortAscString}">
+		              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+	              	</a>
 	            </logic:notEqual>  
 	            
-				<c:if test="${subColumn.name == columnReport.sorterColumn}">
+				<c:if test="${subColumn.namePath == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
 	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>

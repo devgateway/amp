@@ -219,6 +219,7 @@ public final class ArConstants {
 //	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
+	public final static String SORT_ASCENDING="sortAscending";
 	
 	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
 	public static final String VIEW_COST="v_costs";	

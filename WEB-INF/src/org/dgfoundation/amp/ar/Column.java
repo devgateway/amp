@@ -443,6 +443,15 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		this.expression = expression;
 	}
 	
+	public abstract Column hasSorterColumn(String namePath);
+	
+	public String getNamePath () {
+		if ( parent instanceof Column ) {
+			return ((Column) parent).getNamePath() + "/" + name;
+		}
+		else
+			return "/" + name;
+	}
 	
 }
 

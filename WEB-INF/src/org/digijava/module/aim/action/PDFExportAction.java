@@ -161,7 +161,10 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String sortBy=(String) session.getAttribute("sortBy");
 				Map sorters=(Map) session.getAttribute("reportSorters");
 		
-				if(sortBy!=null) rd.setSorterColumn(sortBy); 
+				if(sortBy!=null) {
+					rd.setSorterColumn(sortBy);
+					rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+				}
 				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
 				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {

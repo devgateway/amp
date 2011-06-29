@@ -423,6 +423,35 @@ function adminHelp(){
 		                                            </a>
 												</li>
 	                                        </module:display>
+	                                        
+                                        <feature:display name="Change Workspace" module="My Desktop">
+	                                        <li class="yuiampmenuitem_drop" style="_width:230px;">
+	                                        	<a class="yuiampmenuitemlabel" href="#">
+	                                            	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
+	                                            </a>
+	                                            <div id="workspaceSubMenu" class="yuiampmenu">
+	                                          		<div class="bd">                    
+	                                                      <ul>
+															<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+																<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+																<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel"  style="height:18px;white-space: nowrap;">
+																		<a href="#"><bean:write name="team" property="name"/></a>
+																	</li>
+																</logic:equal>
+																<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel" style="height:18px;white-space: nowrap;">
+																		<a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
+																	</li>
+																</logic:notEqual>
+															</logic:iterate>
+	                                                      </ul>
+	                                                  </div>
+	                                              </div>
+	                                        </li>
+                                        </feature:display>
+                                     
+                                        
 	                                    	<c:if test="${not empty sessionScope.currentMember}">
 											<c:if test="${sessionScope.currentMember.pledger == 'true'}">
 		 										<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">

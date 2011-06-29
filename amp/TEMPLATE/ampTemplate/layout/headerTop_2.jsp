@@ -106,55 +106,9 @@
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
 		
-		<!-- <logic:notEmpty name="currentMember" scope="session">
-		<feature:display name="Change Workspace" module="My Desktop">
-			<div class="workspace_info">
-				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-		 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
-		 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-						<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-						<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-								<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
-						</logic:equal>
-						<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-								<option value="<bean:write name="item" property="ampTeamMemId"/>">
-									<bean:write name="team" property="name"/>
-								</option>
-						</logic:notEqual>
-					</logic:iterate>
-				</select>
-		 	</div>			
-		</feature:display>
-		</logic:notEmpty> -->
-		
 		<div id="usr_menu_logged">
-			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>	
-			
-			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">
-			<logic:present name="ampAdmin" scope="session">
-				<logic:equal name="ampAdmin" value="no">
-					<logic:notEmpty name="currentMember" scope="session">
-						<feature:display name="Change Workspace" module="My Desktop">
-							<select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
-								<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-									<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-									<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
-									</logic:equal>
-									<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-												<option value="<bean:write name="item" property="ampTeamMemId"/>">
-											<bean:write name="team" property="name"/>
-										</option>
-									</logic:notEqual>
-								</logic:iterate>
-							</select>
-						</feature:display>
-					</logic:notEmpty>
-				</logic:equal>
-			</logic:present>
-			
-						
-			
+			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>			
+			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">			
 		</div>
 	</div>
 </div>

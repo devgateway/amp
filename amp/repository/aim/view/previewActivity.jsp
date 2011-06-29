@@ -340,11 +340,11 @@ function collapseAll() {
 				>
 					<field:display name="AMP ID" feature="Identification">
 						<tr>
-							<td width="478" align=right class="prv_left"><digi:trn
+							<td width="45%" align=right class="prv_left"><digi:trn
 								key="aim:ampId"
 							>
 															 AMP ID</digi:trn></td>
-							<td width="478" class="prv_right"><b><c:out
+							<td width="55%" class="prv_right"><b><c:out
 								value="${aimEditActivityForm.identification.ampId}"
 							/></b></td>
 						</tr>
@@ -1216,7 +1216,7 @@ function collapseAll() {
 						<div id="act_location" style="display: none;">
 						<field:display name="Implementation Location" feature="Location">
 							<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
-								<table width="100%" cellSpacing="2" cellPadding="1">
+								<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 									<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 										<tr>
 											<td width="85%">
@@ -1282,7 +1282,7 @@ function collapseAll() {
 								</table>
 							</field:display>
 							<field:display name="Implementation Location" feature="Location">
-							<table>
+							<table style="font-size:11px;">
 								<tr>
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 										<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>

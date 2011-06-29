@@ -76,50 +76,20 @@ function popup(mylink, windowname)
 <hr />
 <!-- MAIN CONTENT PART START -->
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
-	<tr>
+			<tr>
+				<td><digi:trn>Report Title</digi:trn>: <html:text
+						property="keyword" /> <html:submit property="action"
+						value="search" styleClass="buttonx">
+						<digi:trn>Search</digi:trn>
+					</html:submit>
+					<html:submit property="action" value="clear" styleClass="buttonx">
+						<digi:trn>Clear</digi:trn>
+					</html:submit>
+				</td>
+			</tr>
+			<tr>
     	<td width="740" valign="top">	
-    		<div class="wlcm_txt_menu">
-    			<a href="/reportsPublicView.do" style="text-decoration: underline;cursor: pointer;">
-    				<digi:trn>
-    					Public Tab's
-    				</digi:trn>
-    			</a>
-    			<span class="wlcm_txt_menu_spc">|</span>
-    			<a onClick="showAbout(); return false;" style="text-decoration: underline;cursor: pointer;">
-    				<digi:trn>
-    					About AMP
-    				</digi:trn>
-    			</a>
-    			<span class="wlcm_txt_menu_spc">|</span>
-    			<b class="sel_mid">
-    				<digi:trn>
-    					Reports
-    				</digi:trn>
-    			</b>
-    			<span class="wlcm_txt_menu_spc">|</span>
-    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">
-    				<digi:trn>
-    					Resources
-    				</digi:trn>
-    			</a><span class="wlcm_txt_menu_spc">|</span>
-    			<a href=#>
-    				<digi:trn>
-    					Donor Profiles
-    				</digi:trn>
-    			</a>
-    			<span class="wlcm_txt_menu_spc">|</span>
-    				<a href=#>
-    					<digi:trn>
-    						Aid Map
-    					</digi:trn>
-    					</a>
-    			<span class="wlcm_txt_menu_spc">|</span>
-    				<a href=#>
-    					<digi:trn>
-    						Contact us
-    					</digi:trn>		
-    				</a>
-    		</div>
+    		
 		<table class="inside" width="100%" cellpadding="0" cellspacing="0">
    			<tr>
      			<td>

@@ -1074,7 +1074,7 @@ function collapseAll() {
 						<td class="prv_right">
 						<div id="group_planning_dots">...</div>
 						<div id="act_group_planning" style="display: none;">
-						<table width="100%" cellSpacing=2 cellpadding="1">
+						<table width="100%" cellSpacing=2 cellpadding="1" style="font-size:11px;">
 							<field:display feature="Planning" name="Line Ministry Rank">
 								<tr>
 									<td width="32%"><digi:trn key="aim:lineMinRank">
@@ -1304,16 +1304,15 @@ function collapseAll() {
 						feature="NPD Programs"
 					>
 						<tr>
-							<td width="30%" align="right" valign="top" nowrap="nowrap"
-								bgcolor="#f4f4f2" class="t-name"
-							><digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
+							<td width="30%" align="right" valign="top" nowrap="nowrap" class="prv_left">
+							<digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
 							<img id="npo_plus" onclick="toggleGroup('npo')"
 								src="/TEMPLATE/ampTemplate/images/arrow_right.gif"
 							/> <img id="npo_minus" onclick="toggleGroup('npo')"
 								src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 								style="display: none"
 							/></td>
-							<td bgcolor="#ffffff">
+							<td class="prv_right">
 							<div id="npo_dots">...</div>
 							<div id="act_npo" style="display: none;"><c:if
 								test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}"
@@ -1476,7 +1475,7 @@ function collapseAll() {
 								/> <img id="npd_npo_minus" onclick="toggleGroup('npd_npo')"
 									src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 									style="display: none"
-								/> <b> <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
+								/> <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></TD>
 								<td class="prv_right">
 								<div id="npd_npo_dots">...</div>
 								<div id="act_npd_npo" style="display: none;"><c:forEach
@@ -1500,7 +1499,7 @@ function collapseAll() {
 									onclick="toggleGroup('npd_primaryprog')"
 									src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 									style="display: none"
-								/> <b> <digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
+								/> <digi:trn key="aim:primary Programs">Primary Programs</digi:trn></TD>
 								<td class="prv_right">
 								<div id="npd_primaryprog_dots">...</div>
 								<div id="act_npd_primaryprog" style="display: none;"><c:forEach
@@ -1524,7 +1523,7 @@ function collapseAll() {
 									onclick="toggleGroup('npd_secondprog')"
 									src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 									style="display: none"
-								/> <b> <digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
+								/> <digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></TD>
 								<td class="prv_right">
 								<div id="npd_secondprog_dots">...</div>
 								<div id="act_npd_secondprog" style="display: none;"><c:forEach
@@ -2792,9 +2791,8 @@ function collapseAll() {
 						module="Contact Information"
 					>
 						<tr>
-							<td width="30%" align="right" valign="top" bgcolor="#f0f0f0"
-								class="t-name"
-							><digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
+							<td width="30%" align="right" valign="top" class="prv_left">
+							<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
 							</td>
 							<td class="prv_right"><c:if
 								test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}"
@@ -2910,7 +2908,7 @@ function collapseAll() {
 						<td class="prv_left" align=right><digi:trn key="aim:costing">
 										    Costing</digi:trn></td>
 						<td class="prv_right">&nbsp;&nbsp;&nbsp;
-						<table width="100%">
+						<table width="100%" style="font-size:11px;">
 							<tr>
 								<td><bean:define id="mode" value="preview"
 									type="java.lang.String" toScope="request"
@@ -3408,9 +3406,8 @@ function collapseAll() {
 							key="aim:activityCreatedBy"
 						>
 										    Activity created by</digi:trn></td>
-						<td width="69%" bgcolor="#FFFFFF"
-							style="border-bottom: 2px solid #f0f0f0"
-						><c:out
+						<td class="prv_right">
+						<c:out
 							value="${aimEditActivityForm.identification.actAthFirstName}"
 						/> <c:out
 							value="${aimEditActivityForm.identification.actAthLastName}"
@@ -3424,9 +3421,7 @@ function collapseAll() {
 						<td class="prv_left" align=right><digi:trn
 							key="aim:workspaceOfCreator"
 						>Worskpace of creator</digi:trn></td>
-						<td width="69%" bgcolor="#FFFFFF"
-							style="border-bottom: 2px solid #f0f0f0"
-						><c:out
+						<td class="prv_right"><c:out
 							value="${aimEditActivityForm.identification.createdBy.ampTeam.name}"
 						/> - <c:out
 							value="${aimEditActivityForm.identification.createdBy.ampTeam.accessType}"
@@ -3438,9 +3433,7 @@ function collapseAll() {
 						<td class="prv_left" align=right><digi:trn
 							key="aim:computation"
 						>Computation</digi:trn></td>
-						<td width="69%" bgcolor="#FFFFFF"
-							style="border-bottom: 2px solid #f0f0f0"
-						><c:if
+						<td class="prv_right"><c:if
 							test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'true'}"
 						>
 							<digi:trn key="aim:yes">Yes</digi:trn>

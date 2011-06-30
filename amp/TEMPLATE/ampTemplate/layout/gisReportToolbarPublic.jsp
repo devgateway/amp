@@ -29,7 +29,7 @@
 }
 -->
 </style>
-<div class="gis_wht" style="height:75px; padding-top:7px; margin-right:4px;" ><div class="gis_cont">
+<div class="gis_wht" style="height:85px; padding-top:7px; margin-right:4px;" ><div class="gis_cont">
 	<div style="float:right;">
 		<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -61,10 +61,10 @@
 	
 	<div style="float:left;">
 		<img
-						style="width: 16px; height: 16px; margin-right:5px;"
+						style="width: 16px; height: 16px; margin-right:5px;vertical-align: middle;"
 						src="/TEMPLATE/ampTemplate/images/info.png" /> <digi:trn></>Select the date
 						range for the funding information on the map</digi:trn>
-						<br/>
+						<br/><br/>
 		<digi:trn>From Date:</digi:trn> 
 		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedFromYear" onchange="mapYearChanged()">
 			<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>

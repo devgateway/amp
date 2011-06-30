@@ -55,9 +55,7 @@ else {
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
-		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+      	<link type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
 		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 			
 				<%--
@@ -76,43 +74,30 @@ else {
         	
 	</HEAD>
 	
-    <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">    	
+    <BODY bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">	
+    	 <digi:insert attribute="headerTop" />
+	
+	<div class="main_menu">
+		<digi:insert attribute="headerMiddle"/>
+	</div>
 
 <%--
 <h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 --%>
-<TABLE cellspacing="0" cellpadding="0"  width="100%"  border="0" valign="top" align="left">
+<TABLE cellspacing="0" cellpadding="0"  width="100%"  border="0"  align="left">
   <TBODY>
-    <TR>
-        <TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
-            <digi:insert attribute="headerTop" />
-        </TD>
-    </TR>
-    <TR>
-        <TD width="100%" align="center" vAlign="top" bgcolor="#376091">
-            <TABLE cellspacing="0" cellpadding="0" width="98%" border="0" vAlign="center" bgcolor="#376091">
-                <TBODY>
-                    <TR bgColor=#376091 height="15">
-                        <TD align="left" vAlign="center" height="15">
-                            <digi:insert attribute="headerMiddle" />
-                        </TD>
-                        <TD align="right" vAlign="top" height="15">
-                            <digi:insert attribute="loginWidget" />
-                        </TD>
-                    </TR>
-                </TBODY>
-            </TABLE>
-        </TD>
-    </TR>
-    <TR>
+			<TR>
+				<TD>&nbsp;</TD>
+			</TR>
+			<TR>
     	<TD align="center">
-				<TABLE width="100" cellPadding="5" cellSpacing="0" vAlign="top" align="center" border="0">
-					<tr>
-						<td style="width: 600;max-width: 600;">
+				<TABLE width="100" cellPadding="5" cellSpacing="0" border="0">
+					<TR>
+						<TD style="width: 600;max-width: 600;">
 							<jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbarPublic.jsp" />
-						</td>
-					</tr>
-					<tr>
+						</TD>
+					</TR>
+					<TR>
 						<TD vAlign="top" align="center" height="100%" rowspan="3" style="width: 100%;max-width: 600;">
 							<digi:insert attribute="body" />
 						</TD>
@@ -128,9 +113,8 @@ else {
 	        <digi:insert attribute="footer" />
 	    </TD>
   </TR>
+  </TBODY>
 </TABLE>
-		
-		
 	</BODY>
 </HTML>
 

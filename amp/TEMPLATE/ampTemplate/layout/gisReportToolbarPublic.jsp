@@ -29,55 +29,54 @@
 }
 -->
 </style>
-
-
-	<table border="0" width="100%" align="left"  cellpadding="3"  cellspacing="5" bgcolor="#FFFFFF">
-			<td>
-					<table width="100%" border="0" align="left" bgcolor="#EDF5FF" >
-						<tr>
-							<td height="30px" colspan="4">
-						        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" /> Select the date range for the funding information on the map
-							</td>
-						</tr>
-						<tr>
-							<td nowrap="nowrap" height="30px">
-								<digi:trn>From Date:</digi:trn>
-							</td>
-							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedFromYear" onchange="mapYearChanged()">
-									<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
-								</html:select>
-							</td>
-							<td nowrap="nowrap">
-								<digi:trn>To Date:</digi:trn>
-							</td>
-							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedToYear" onchange="mapYearChanged()">
-									<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
-								</html:select>
-							</td>
-						</tr>
-					</table>				
-			</td>
-			<td bgcolor="#EDF5FF">
-				<table border="0" align="center" bgcolor="#EDF5FF">
-						<tr>
-							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
-								<a target="_blank" onclick="exportPDF(); return false;">
-									<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
-								</a>
-							</td>
-
-							<td noWrap align=left valign="middle">
-                                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
-                                </digi:link>
-							</td>
-						</tr>
-					</table>
-			</td>
-		</tr>
-	</table>
+<div class="gis_wht" style="height:75px; padding-top:7px; margin-right:4px;" ><div class="gis_cont">
+	<div style="float:right;">
+		<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+				<td>
+					<digi:img src="img_2/ico_pdf.gif" align="left" style="margin-right:5px;"/>
+				</td>
+				<td>
+					<a class="l_sm" href="#" target="_blank" onclick="exportPDF(); return false;">Export to PDF</a>
+				</td>
+				<td width=10></td>
+				<td>
+					<digi:img src="img_2/ico_print.gif" style="margin-right:5px;"/>
+				</td>
+				<td>
+					<digi:link styleClass="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></digi:link>
+				</td>
+			</tr>
+		</table>
+	
+		<div class="dash_ico">
+			<div class="dash_ico_link">
+			</div>
+		</div>
+		<div class="dash_ico">
+			<div class="dash_ico_link">
+			</div>
+		</div>
+	</div>
+	
+	<div style="float:left;">
+		<img
+						style="width: 16px; height: 16px; margin-right:5px;"
+						src="/TEMPLATE/ampTemplate/images/info.png" /> <digi:trn></>Select the date
+						range for the funding information on the map</digi:trn>
+						<br/>
+		<digi:trn>From Date:</digi:trn> 
+		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedFromYear" onchange="mapYearChanged()">
+			<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
+		</html:select>
+		&nbsp;&nbsp;
+		<digi:trn>To Date:</digi:trn> 
+		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedToYear" onchange="mapYearChanged()">
+			<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
+		</html:select>
+	</div>
+</div>
+</div>
 
 <br>
 

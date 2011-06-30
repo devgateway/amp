@@ -265,7 +265,7 @@
 
 
 
-<fieldset style="position:static;">
+<fieldset>
 	<legend>
 		<span class="legend_label longTab">
 			<digi:trn key="gis:regionalview">Regional View</digi:trn>

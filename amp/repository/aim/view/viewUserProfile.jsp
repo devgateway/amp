@@ -22,25 +22,42 @@ function unload() {
 -->
 </script>
 
+<style>
+body table {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:12px;}
+table.inside1, td.inside1 {border: 0; font-size:12px;}
+table.inside, td.inside_zebra {}
+table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
+td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
+td.report_inside { border-width: 1px 1px 0 0;}
+td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
+.ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
+.ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
+.ins_title_sm {font-size:9px; color:#767676;}
+.ins_title_mid {font-size:10px; color:#767676;}
+.ins_header {color:#767676; font-size:12px; font-weight:bold;}
+.buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;}
+
+</style>
 
 <digi:instance property="aimUserDetailForm" />
 
 <digi:errors/>
 
 
-					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="1">
+					<body bgcolor="#FFFFFF"><table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
 							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>
 						<tr>
-							<td class="inside">
+							<td width="50%" class="inside">
 								<digi:trn key="aim:firstName">First Name</digi:trn>
-							</td>
-							<td class="inside">
+						  </td>
+							<td width="50%" class="inside">
 								 <bean:write name="aimUserDetailForm" property="firstNames" />
-							</td>
+						  </td>
 						</tr>
 						<tr>
 							<td class="inside">
@@ -64,7 +81,7 @@ function unload() {
 								<digi:trn key="aim:address" >Address</digi:trn>
 							</td>
 							<td class="inside">
-								<bean:write name="aimUserDetailForm" property="address" />
+								<bean:write name="aimUserDetailForm" property="address" />&nbsp;
 							</td>
 						</tr>
 						<tr>
@@ -72,7 +89,7 @@ function unload() {
 								<digi:trn key="aim:organizationName">Organization Name</digi:trn>
 							</td>
 							<td class="inside">
-								<bean:write name="aimUserDetailForm" property="organizationName" />
+								<bean:write name="aimUserDetailForm" property="organizationName" />&nbsp;
 							</td>
 						</tr>
 						<tr>
@@ -89,16 +106,17 @@ function unload() {
 										<digi:trn key="aim:autologin"><b>Autologin</b></digi:trn>
 									</a>
 								<%}%>
-							</td>
-						</tr>
-						<tr>
-							<td class="inside" colspan="2" align="center">
 								&nbsp;
 							</td>
 						</tr>
 						<tr>
-							<td class="inside" colspan="2" align="center">
-								<digi:trn key="aim:teamsAssociatedWith" >Teams Associated with</digi:trn>
+							<td class="inside" colspan="2" align="center">&nbsp;
+								
+						  </td>
+						</tr>
+						<tr>
+							<td class="inside" bgcolor="#C7D4DB" colspan="2" align="center">
+								<digi:trn key="aim:teamsAssociatedWith" ><b>Teams Associated with</b></digi:trn>
 							</td>
 						</tr>
 						<tr>
@@ -118,7 +136,7 @@ function unload() {
 							<td class="inside">
 								<digi:trn>${teamMemberDetail.roleName}</digi:trn>
 							</td>
-                                                    </tr>
+                          </tr>
 								
 						
 						</c:forEach>

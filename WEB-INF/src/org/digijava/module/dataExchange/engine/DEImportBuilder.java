@@ -1626,6 +1626,8 @@ public class DEImportBuilder {
 			if( Constants.IDML_ACTUAL.equals(fundDet.getType()) ) 
 				ampFundDet.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.ACTUAL));
 			
+			ampFundDet.setReportingDate(new Date(System.currentTimeMillis()));
+			
 			//TODO mapping the currencies!!! ??
 			ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrency()));
 			

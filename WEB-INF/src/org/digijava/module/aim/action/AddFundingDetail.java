@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -134,6 +135,7 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setAdjustmentType(Constants.ACTUAL);
         fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setIndex(fundingDetails.size());
+		fundingDetail.setReportingDate(new Date(System.currentTimeMillis()));
 		return fundingDetail;
 	}
 }

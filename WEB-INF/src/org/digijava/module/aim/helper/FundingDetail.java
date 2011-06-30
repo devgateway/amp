@@ -3,13 +3,12 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-import org.digijava.module.fundingpledges.form.PledgeForm;
 /**
  * @author jose
  *
@@ -21,6 +20,15 @@ public class FundingDetail implements Serializable, Comparable
 	private boolean checked;
 	private int transactionType;
 	private int adjustmentType;
+	public Date getReportingDate() {
+		return reportingDate;
+	}
+
+	public void setReportingDate(Date reportingDate) {
+		this.reportingDate = reportingDate;
+	}
+
+	private Date reportingDate;
 	private String adjustmentTypeName;
 	private String adjustmentTypeNameTrimmed;
 	private String transactionDate;

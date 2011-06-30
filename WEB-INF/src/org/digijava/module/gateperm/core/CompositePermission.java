@@ -50,8 +50,10 @@ public class CompositePermission extends Permission {
 			if(allowedActions!=null) 
 					actions.addAll(allowedActions);
 			} else {
-				if(firstRun) {actions.addAll(allowedActions);firstRun=false;}
-					else actions.retainAll(allowedActions);
+				if(firstRun) {
+						if(allowedActions!=null) actions.addAll(allowedActions);firstRun=false;
+					}
+					else if(allowedActions!=null) actions.retainAll(allowedActions); else actions.clear();
 			}
 			
 		}

@@ -1121,6 +1121,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 								// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
 								ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
+								ampFundDet.setReportingDate(fundDet.getReportingDate());
 								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet.getTransactionDate()));
 								boolean useFixedRate = false;
 								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {

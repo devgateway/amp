@@ -7,7 +7,11 @@ package org.digijava.module.gateperm.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Permission;
 import org.springframework.beans.BeanWrapperImpl;
@@ -24,7 +28,26 @@ public class PermissionForm extends ActionForm {
 	private String description;
 	private String type;
 	private Long id;
+	private Boolean intersection;
 	
+	public Boolean getIntersection() {
+		return intersection;
+	}
+
+	public void setIntersection(Boolean intersection) {
+		this.intersection = intersection;
+	}
+
+	
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		super.reset(mapping, request);
+		intersection=false;
+	}
+
+
+
 	private Long[] permissions;
 	private String gateTypeName;
 	private List<MetaInfo> gateParameters;
@@ -55,6 +78,7 @@ public class PermissionForm extends ActionForm {
 		mode="";
 		id=new Long(0);
 		type="Gate";
+		intersection=false;
 	}
 
 	public MetaInfo getGateParameter(int index) {

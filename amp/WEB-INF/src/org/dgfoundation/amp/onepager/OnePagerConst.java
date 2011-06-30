@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
@@ -26,7 +27,9 @@ public final class OnePagerConst {
 	
 	public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
-	
+
+	public static final MetaDataKey<HashMap<String, String>> EDITOR_ITEMS = new MetaDataKey<HashMap<String, String>>(){};
+
 	/**
 	 * NOTICE: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
 	 */

@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -25,11 +23,11 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -37,17 +35,16 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -56,7 +53,6 @@ public class ActivityVersionUtil {
 
 	private static Logger logger = Logger.getLogger(ActivityVersionUtil.class);
 
-	public static final String GLOBAL_SETTINGS_VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
 
 	public static Method getMethodFromFieldName(String fieldName, Class auxClass, String prefix) throws Exception {
 		String methodName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
@@ -180,10 +176,10 @@ public class ActivityVersionUtil {
 		}
 	}
 
-	public static int numberOfVersions() throws Exception {
+	public static int numberOfVersions() {
 		int ret = 0;
 		int aux = 5; // Default value after apply patch if no redeployed.
-		String gsValue = FeaturesUtil.getGlobalSettingValue(ActivityVersionUtil.GLOBAL_SETTINGS_VERSION_QUEUE_SIZE);
+		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
 			aux = Integer.valueOf(gsValue).intValue();
 		}
@@ -191,6 +187,10 @@ public class ActivityVersionUtil {
 			ret = aux;
 		}
 		return ret;
+	}
+	
+	public static boolean isVersioningEnabled(){
+		return (numberOfVersions() > 0);
 	}
 
 	public static AmpActivityVersion getLastActivityFromGroup(Long groupId) throws Exception {
@@ -381,11 +381,11 @@ public class ActivityVersionUtil {
 
 		// Locations.
 		if (out.getLocations() != null && out.getLocations().size() > 0) {
-			Set<AmpLocation> set = new HashSet<AmpLocation>();
-			Iterator<AmpLocation> i = out.getLocations().iterator();
+			Set<AmpActivityLocation> set = new HashSet<AmpActivityLocation>();
+			Iterator<AmpActivityLocation> i = out.getLocations().iterator();
 			while (i.hasNext()) {
-				AmpLocation aux = (AmpLocation) i.next();
-				aux = (AmpLocation) aux.prepareMerge(out);
+				AmpActivityLocation aux = (AmpActivityLocation) i.next();
+				aux = (AmpActivityLocation) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setLocations(set);
@@ -469,6 +469,20 @@ public class ActivityVersionUtil {
 			out.setSurvey(set);
 		} else {
 			out.setSurvey(null);
+		}
+
+		// Structures Survey.
+		if (out.getStructures() != null && out.getStructures().size() > 0) {
+			Set<AmpStructure> set = new HashSet<AmpStructure>();
+			Iterator<AmpStructure> i = out.getStructures().iterator();
+			while (i.hasNext()) {
+				AmpStructure aux = (AmpStructure) i.next();
+				aux = (AmpStructure) aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setStructures(set);
+		} else {
+			out.setStructures(null);
 		}
 
 		out.setTeam(member.getAmpTeam());

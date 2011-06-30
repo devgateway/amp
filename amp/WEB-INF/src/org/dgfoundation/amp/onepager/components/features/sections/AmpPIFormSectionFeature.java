@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -82,6 +81,8 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
         if (surveys.getObject() == null)
         	surveys.setObject(new HashSet<AmpAhsurvey>());
         
+        if (am.getObject().getFunding() == null)
+        	am.getObject().setFunding(new HashSet());
         Set<AmpFunding> fundings = am.getObject().getFunding();
         
         

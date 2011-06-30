@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,8 @@ public class AmpMTEFProjectionFormTableFeature extends
 		super(id, model, fmName);
 		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
 				model, "mtefProjections");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpFundingMTEFProjection>());
 
 		setTitleHeaderColSpan(5);
 		AbstractReadOnlyModel<List<AmpFundingMTEFProjection>> listModel = OnePagerUtil

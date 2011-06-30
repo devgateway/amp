@@ -33,9 +33,10 @@ public class OnePager extends AmpHeaderFooter {
 		super();
 		
 		String activityId = (String) parameters.get("activity");
-		
+		boolean newActivity = false;
 		if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();
+			newActivity = true;
 		}
 		else{
 			am = new AmpActivityModel(Long.valueOf(activityId));
@@ -44,7 +45,7 @@ public class OnePager extends AmpHeaderFooter {
 		
 		try {
 			
-			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form");
+			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity);
 			add(formFeature);
 
 		} catch (Exception e) {

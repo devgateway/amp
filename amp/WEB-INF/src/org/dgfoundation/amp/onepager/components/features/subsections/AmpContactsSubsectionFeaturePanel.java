@@ -13,16 +13,11 @@ import java.util.TreeSet;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -38,7 +33,6 @@ import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAddContactFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpContactFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -75,6 +69,9 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
         final String specificType = contactType;
         
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpActivityContact>());
+		
         newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", am, "Add Contact",  new Model<AmpActivityContact>(new AmpActivityContact()));
         newContactDetails.setVisible(false);
       

@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import wicket.contrib.tinymce.TinyMceBehavior;
 
@@ -34,6 +35,10 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	 */
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
 		super(id, fmName);
+		if (wysiwyg){
+			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model);
+		}
+		
 		textAreaContainer = new TextArea<T>("richText", model);
 		textAreaContainer.setOutputMarkupId(true);
 		if(wysiwyg){
@@ -46,5 +51,7 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		this(id, model, fmName, wysiwyg);
 		this.fmType = fmType;
 	}
+	
+	
 
 }

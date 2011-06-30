@@ -19,8 +19,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -46,6 +44,10 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpOrgRole>> setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet());
+		
+		
 		final AmpRole specificRole = DbUtil.getAmpRole(roleName);
 
 		IModel<List<AmpOrgRole>> listModel = new AbstractReadOnlyModel<List<AmpOrgRole>>() {

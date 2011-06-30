@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +43,8 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpActivityInternalId>> setModel=new PropertyModel<Set<AmpActivityInternalId>>(am,"internalIds");
-		
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpActivityInternalId>());
 
 		AbstractReadOnlyModel<List<AmpActivityInternalId>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 

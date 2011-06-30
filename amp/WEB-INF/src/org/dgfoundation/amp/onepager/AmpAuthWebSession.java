@@ -76,6 +76,11 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	}
 
 	public AmpTeamMember getAmpCurrentMember() {
+		if (ampCurrentMember == null){
+			getCurrentMember(); //may initialize currentMember if it's needed
+			if (currentMember != null)
+				ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		}
 		return ampCurrentMember;
 	}
 	public void setAmpCurrentMember(AmpTeamMember ampCurrentMember) {
@@ -83,6 +88,9 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	}
 
 	public TeamMember getCurrentMember() {
+		if (currentMember == null){
+			currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+		}
 		return currentMember;
 	}
 	public void setCurrentMember(TeamMember currentMember) {

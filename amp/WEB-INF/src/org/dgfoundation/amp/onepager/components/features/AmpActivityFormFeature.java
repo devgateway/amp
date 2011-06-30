@@ -70,11 +70,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	 * @param id
 	 * @param model
 	 * @param fmName
+	 * @param newActivity 
 	 * @param hideLabel
 	 * @throws Exception 
 	 */
 	public AmpActivityFormFeature(String id, final IModel<AmpActivityVersion> am,
-			String fmName) throws Exception {
+			String fmName, final boolean newActivity) throws Exception {
 		super(id, am, fmName, true);
 		
 		activityForm=new Form<AmpActivityVersion>("activityForm") ;
@@ -95,6 +96,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
 				info("Activity saved successfully");
+				if (newActivity){
+					Long actId = am.getObject().getAmpActivityId();
+					target.appendJavascript("window.location.replace(window.location.href.replace(\"new\" , \"" + actId + "\"));");
+				}
 				target.addComponent(feedbackPanel);
 			}
 		};

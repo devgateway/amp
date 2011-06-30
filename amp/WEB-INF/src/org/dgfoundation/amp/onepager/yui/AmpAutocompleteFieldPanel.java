@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
@@ -196,7 +197,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		toggleButton = new WebMarkupContainer("toggleButton");
 		toggleButton.setOutputMarkupId(true);
 		add(toggleButton);
-		textField = new TextField<String>("text");
+		textField = new TextField<String>("text", new Model<String>());
 		textField.setOutputMarkupId(true);
 		add(textField);
 		container = new WebMarkupContainer("container");

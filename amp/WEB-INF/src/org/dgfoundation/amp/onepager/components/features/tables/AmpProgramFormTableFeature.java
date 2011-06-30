@@ -19,10 +19,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -30,7 +27,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -50,6 +46,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpActivityProgram>> setModel=new PropertyModel<Set<AmpActivityProgram>>(am,"actPrograms");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpActivityProgram>());
 		
 		final AmpActivityProgramSettings programSettings = ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
 

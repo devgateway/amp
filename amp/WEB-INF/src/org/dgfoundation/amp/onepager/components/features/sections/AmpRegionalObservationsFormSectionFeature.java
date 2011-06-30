@@ -13,14 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
@@ -41,7 +39,9 @@ public class AmpRegionalObservationsFormSectionFeature extends
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpRegionalObservation>> setModel=new PropertyModel<Set<AmpRegionalObservation>>(am,"regionalObservations");
 		final ListView<AmpRegionalObservation> list;
-
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpRegionalObservation>());
+		
 		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {

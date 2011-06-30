@@ -123,6 +123,7 @@ public class FundingCalculationsHelper {
 
 			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
+			fundingDetail.setReportingDate(fundDet.getReportingDate());
 
 			fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());

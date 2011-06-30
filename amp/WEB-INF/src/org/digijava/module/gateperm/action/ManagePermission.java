@@ -160,6 +160,7 @@ public class ManagePermission extends MultiAction {
 		ids.add(element.getId());
 	    }
 	    pf.setPermissions(ids.toArray(new Long[ids.size()]));
+	    pf.setIntersection(cp.getIntersection());
 	}
 
 	return mapping.getInputForward();
@@ -242,6 +243,7 @@ public class ManagePermission extends MultiAction {
 	    if (p == null)
 		p = new CompositePermission();
 	    CompositePermission cp = (CompositePermission) p;
+	    cp.setIntersection(pf.getIntersection());
 	    cp.getPermissions().clear();
 	    for (int i = 0; i < pf.getPermissions().length; i++) {
 		Permission r = (Permission) hs.get(Permission.class, pf.getPermissions()[i]);

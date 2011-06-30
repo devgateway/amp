@@ -69,6 +69,10 @@ function submitForm(mode) {
 <html:optionsCollection property="_availablePermissions" value="id" label="name"/>
 </html:select>
 </td></tr>	
+
+<tr><td align="right">Intersection:</td><td>
+<html:checkbox property="intersection"></html:checkbox>
+</td></tr>
 </logic:equal>
 
 <logic:notEmpty name="permissionForm" property="gateParameters">

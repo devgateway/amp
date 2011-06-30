@@ -1048,6 +1048,7 @@ public class ImportBuilder {
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
 			ampFundDet.setTransactionType(new Integer(transactionType));
+			ampFundDet.setReportingDate(new Date(System.currentTimeMillis()));
 			ampFundDet.setTransactionDate(DataExchangeUtils.XMLGregorianDateToDate(fundDet.getDate()));
 			if( Constants.IDML_PLAN.equals(fundDet.getType()) ) 
 				ampFundDet.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.PLANNED));

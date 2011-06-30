@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/gateperm" prefix="gateperm" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.helper.Constants"%>
@@ -1213,6 +1214,7 @@
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
+							<gateperm:putInScope key="currentFundingDetail" name="fundingDetail">
 						 	<c:if test="${fundingDetail.transactionType==1}">
 										<tr>
 										
@@ -1347,6 +1349,7 @@
 											</field:display>
 										</tr>
 							</c:if>
+							</gateperm:putInScope>
 						 	</c:forEach>
 						 	</c:if>
 						</table>

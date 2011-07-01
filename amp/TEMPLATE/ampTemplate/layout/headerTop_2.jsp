@@ -59,7 +59,9 @@
 	<script language=javascript>
 	function showUserProfile(id){
 		<digi:context name="information" property="/aim/userProfile.do" />
-		openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+		//openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+		var param = "~edit=true~id="+id;
+		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	function help(){
 		 <digi:context name="rev" property="/help/help.do~blankPage=true" />
@@ -108,7 +110,15 @@
 		
 		<div id="usr_menu_logged">
 			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>			
-			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">			
+			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">		
+			
+			<c:set var="translation">
+                <digi:trn>Workspace Name</digi:trn>
+              </c:set>
+              <span title="${translation}">                
+                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>	
+              </span>              
+			 	
 		</div>
 	</div>
 </div>

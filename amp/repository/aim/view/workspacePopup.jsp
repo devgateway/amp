@@ -12,7 +12,7 @@
 		
     var myPanelWorkspaceframe = new YAHOO.widget.Panel("newmyPWorkspaceframe", {
 		width:"600px",
-		height:"700px",
+		height:"600px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",

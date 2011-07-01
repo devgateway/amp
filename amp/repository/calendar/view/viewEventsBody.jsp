@@ -220,7 +220,6 @@
 			   var weekly='<digi:trn jsFriendly="true">Weekly View</digi:trn>';
 			   var daily='<digi:trn jsFriendly="true">Daily View</digi:trn>';
 			   var yearly='<digi:trn jsFriendly="true">Yearly View</digi:trn>';
-			   alert(mode);
 			   if(mode=='month'){
 				   whichView.innerHTML=monthly;
 			   }else if(mode=='week'){

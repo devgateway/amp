@@ -25,13 +25,13 @@ function onCancel() {
 
 function validate()
 {
-  if ((document.aimComponentsTypeForm.name.value).length == 0)
+  if ((document.aimComponentsTypeForm.name.value).trim().length == 0)
   {
     alert("<digi:trn key="aim:errortypeName">Please Enter the name</digi:trn>");
     document.aimComponentsTypeForm.name.focus();
     return false;
   }
-  if ((document.aimComponentsTypeForm.code.value).length == 0)
+  if ((document.aimComponentsTypeForm.code.value).trim().length == 0)
   {
     alert("<digi:trn key="aim:errortypeCode">Please Enter the code</digi:trn>");
     document.aimComponentsTypeForm.code.focus();

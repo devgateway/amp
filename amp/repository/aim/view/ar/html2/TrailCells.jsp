@@ -97,13 +97,13 @@
 		<c:if test="${firstCell == false || t3}">
 				<c:if test="${reportData.levelDepth == 1}">
 					<c:if test="${reportMeta.numOfHierarchies!=0 || cellIdx >0}">
-						<td align="center" style="border-right: #E0E0E0 1px solid;font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold; border-bottom:black 1px solid;">
+						<td align="center" style="border-right: #E0E0E0 1px solid;font-weight:bold; border-bottom:black 1px solid;">
 					</c:if>
 				</c:if>
 				<c:if test="${reportData.levelDepth == 2}">
 					<c:choose>
 						<c:when test="${reportMeta.hideActivities==null || !reportMeta.hideActivities}">
-							<td style="font-family: Verdana,Arial,Helvetica,sans-serif;">
+							<td>
 						</c:when>
 						<c:otherwise>
 							<td class="${reportData.htmlClassName}">

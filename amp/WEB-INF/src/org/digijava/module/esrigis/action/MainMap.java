@@ -1,5 +1,8 @@
 package org.digijava.module.esrigis.action;
-
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ * @author Diego Dimunzio
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;

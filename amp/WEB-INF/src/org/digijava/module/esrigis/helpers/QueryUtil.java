@@ -1,5 +1,7 @@
 package org.digijava.module.esrigis.helpers;
-
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ */
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;

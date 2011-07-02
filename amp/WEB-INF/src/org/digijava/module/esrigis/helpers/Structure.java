@@ -1,6 +1,7 @@
 package org.digijava.module.esrigis.helpers;
 
 /**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  * Simplified structure object to manage locations in JSON, see if can be replaced by AmpStructure 
  *
  */

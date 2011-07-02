@@ -1,4 +1,8 @@
 package org.digijava.module.esrigis.action;
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ * @author Diego Dimunzio
+ */
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -129,9 +133,19 @@ public class DataDispatcher extends MultiAction {
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
 					isaggregatable = true;
+					SimpleLocation sl = new SimpleLocation();
 					String lat = alocation.getLocation().getLocation().getGsLat();
 					String lon = alocation.getLocation().getLocation().getGsLong();
-					SimpleLocation sl = new SimpleLocation();
+					
+					if (alocation.getLatitude() != null && alocation.getLatitude() !=null 
+							&& !"".equalsIgnoreCase(alocation.getLatitude()) && !"".equalsIgnoreCase(alocation.getLongitude())){
+						sl.setExactlocation(true);
+						sl.setExactlocation_lat(alocation.getLatitude());
+						sl.setExactlocation_lon(alocation.getLongitude());
+					}else{
+						sl.setExactlocation(false);
+					}
+					
 					sl.setName(alocation.getLocation().getLocation().getName());
 					sl.setGeoId(alocation.getLocation().getLocation().getGeoCode());
 					sl.setLat(lat);
@@ -141,11 +155,12 @@ public class DataDispatcher extends MultiAction {
 					} else {
 						sl.setIslocated(true);
 					}
-					sl.setPercentage(alocation.getLocationPercentage().toString());
-					sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-					sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-					sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-					
+					if (alocation.getLocationPercentage()!=null){
+						sl.setPercentage(alocation.getLocationPercentage().toString());
+						sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+						sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+					}
 					if (isfiltered){
 						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
 							sla.add(sl);

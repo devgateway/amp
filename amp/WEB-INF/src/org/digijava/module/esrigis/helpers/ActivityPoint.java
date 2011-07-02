@@ -11,7 +11,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import net.sf.json.JSON;
 
 /**
- * 
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  * @author Diego Dimunzio
  * 
  */
@@ -30,8 +30,6 @@ public class ActivityPoint {
     private String implementationlevel;
     private List<ActivitySector> sectors;
     private List<SimpleDonor> donors;
-    
-    
     
     public ActivityPoint() {
 		super();

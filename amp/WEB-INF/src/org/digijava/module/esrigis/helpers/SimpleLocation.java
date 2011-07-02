@@ -1,8 +1,9 @@
 package org.digijava.module.esrigis.helpers;
 
 /**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ * @author Diego Dimunzio
  * Simplified location object to manage locations in JSON 
- *
  */
 
 public class SimpleLocation {
@@ -16,6 +17,10 @@ public class SimpleLocation {
 	private String lon;
 	private Boolean islocated = false;
 	private String percentage;
+	private Boolean exactlocation; 
+	private String exactlocation_lat;
+	private String exactlocation_lon;
+	
     //This field is used only in the view to mark the location. 
     private String isdisplayed;
 
@@ -111,5 +116,29 @@ public class SimpleLocation {
 
 	public String getIsdisplayed() {
 		return isdisplayed;
+	}
+
+	public Boolean getExactlocation() {
+		return exactlocation;
+	}
+
+	public void setExactlocation(Boolean exactlocation) {
+		this.exactlocation = exactlocation;
+	}
+
+	public String getExactlocation_lat() {
+		return exactlocation_lat;
+	}
+
+	public void setExactlocation_lat(String exactlocation_lat) {
+		this.exactlocation_lat = exactlocation_lat;
+	}
+
+	public String getExactlocation_lon() {
+		return exactlocation_lon;
+	}
+
+	public void setExactlocation_lon(String exactlocation_lon) {
+		this.exactlocation_lon = exactlocation_lon;
 	}
 }

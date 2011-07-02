@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -26,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -85,26 +87,28 @@ public class AmpLocationFormTableFeature extends
 		};
 		
 		add(percentageValidationField);
-		
-
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
 				final MarkupContainer listParent = this.getParent();
 				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"locationPercentage");
-				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",
-						percModel,"locationPercentage",percentageValidationField);				
+				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField);				
 				item.add(percentageField);
-				item.add(new Label("locationLabel",
-						getFormattedLocationName(item.getModelObject()
-								.getLocation().getLocation())));
-
-				AmpDeleteLinkField delLocation = new AmpDeleteLinkField(
-						"delLocation",
-						"Delete Location",
-						new Model<String>(
-								"Delete this location and any related funding elements, if any?")) {
+				item.add(new Label("locationLabel",getFormattedLocationName(item.getModelObject().getLocation().getLocation())));
+				
+				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", new PropertyModel<String>
+						(item.getModel(), "latitude"),"Latitude",false);
+				item.add(latitude);
+				
+				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>
+				("longitudeid", new PropertyModel<String>(item.getModel(), "Longitude"),"Longitude",false);
+				item.add(longitude);
+				
+				
+				AmpDeleteLinkField delLocation = new AmpDeleteLinkField("delLocation","Delete Location",new Model<String>
+					("Delete this location and any related funding elements, if any?")) {
+					
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						

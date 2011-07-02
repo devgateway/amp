@@ -15,6 +15,8 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	private AmpActivityVersion activity;
 	private AmpLocation location;
 	private Float locationPercentage;
+	private String latitude;
+	private String longitude;
 	
 	public Long getId() {
 		return id;
@@ -69,5 +71,17 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	public Object prepareMerge(AmpActivityVersion newActivity) {
 		this.activity = newActivity;
 		return this;
+	}
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }

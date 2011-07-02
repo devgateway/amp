@@ -383,9 +383,13 @@ function MapFind(activity){
     	    findParams.searchFields = ["GEO_ID"];
     		execute(location.geoId);
     		totallocations ++;
-    	}else{
+		}else{
+    		if (location.exactlocation){
+    			var pt = new esri.geometry.Point(location.exactlocation_lat,location.exactlocation_lon,new esri.SpatialReference({"wkid":4326}));
+    		}else{
+    			var pt = new esri.geometry.Point(location.lat,location.lon,new esri.SpatialReference({"wkid":4326}));
+    		}
     		//Create a graphic point based on the x y coordinates wkid(Well-known ID) 4326 for GCS_WGS_1984 projection
-    		var pt = new esri.geometry.Point(location.lat,location.lon,new esri.SpatialReference({"wkid":4326}));
     		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
     		var attr = {"Temp":"Temporal Attribute"};
     		var infoTemplate = new esri.InfoTemplate("");   

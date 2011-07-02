@@ -1,5 +1,9 @@
 package org.digijava.module.esrigis.action;
 
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ * @author Diego Dimunzio
+ */
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;

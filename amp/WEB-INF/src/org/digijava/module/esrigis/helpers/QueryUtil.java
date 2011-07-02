@@ -140,7 +140,17 @@ public class QueryUtil {
 		}
 		return qry;
 	}
-	
+	public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups, String typeCode) {
+		String qry = "";
+		if (orgGroupView) {
+			qry = " and  role.organisation.ampOrgGrpId in ("
+					+ getInStatement(selectedOrgGroups) + ") and role.roleCode = '" + typeCode +"' ";
+		} else {
+			qry = " and role.organisation.orgGrpId in ("
+					+ getInStatement(selectedOrganizations) + ") and role.roleCode = '" + typeCode +"' ";
+		}
+		return qry;
+	}	
 	public static String getOrganizationTypeQuery(boolean orgTypeView, Long[] selectedOrganizations, Long[] selectedtypes) {
 		String qry = "";
 		if (orgTypeView) {
@@ -254,7 +264,7 @@ public class QueryUtil {
 		filter.setOrganizations(orgs);
 		
 		List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
-		filter.setOrganizationstype(orgtypes);
+		filter.setOrganizationsType(orgtypes);
 		
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
 		filter.setSectors(sectors);

@@ -20,8 +20,10 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -30,6 +32,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
+import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.Constants;
@@ -41,10 +44,23 @@ public class MainMap extends Action{
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 		DataDispatcherForm dataDispatcherForm = (DataDispatcherForm) form;
 		MapFilter filter = dataDispatcherForm.getFilter();
+		if(request.getParameter("reset") != null && request.getParameter("reset").equals("true")){
+			filter = null;
+		}
 		if (filter == null){
 			filter = new MapFilter();
-			dataDispatcherForm.setFilter(filter);
 			initializeFilter(filter);
+			dataDispatcherForm.setFilter(filter);
+		}
+		else
+		{
+			//Check if needed structures are loaded TODO: Check why this is happening.
+			if(filter.getStructureTypes() == null){
+				List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+				sts = (List<AmpStructureType>) DbHelper.getAllStructureTypes();
+				filter.setStructureTypes(sts);
+			}
+			
 		}
 		if(request.getParameter("popup") != null && request.getParameter("popup").equalsIgnoreCase("true")){
 			return mapping.findForward("popup");
@@ -162,6 +178,14 @@ public class MainMap extends Action{
 				e.printStackTrace();
 			}
         }
+        
+        List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
+		filter.setOrganizationsType(orgtypes);        
+
+		List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+		sts = (List<AmpStructureType>) DbHelper.getAllStructureTypes();
+		filter.setStructureTypes(sts);
+
 	}
 	
 	

@@ -41,6 +41,9 @@ public class DbHelper {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
 		List<AmpActivityVersion> activities = null;
 		Long[] orgIds = filter.getOrgIds();
+		Long[] implOrgIds = filter.getImplOrgIds();
+		Long[] implOrgGroupIds = filter.getImplOrgGroupIds();
+
 		Long[] orgtypeids = filter.getOrgtypeIds();
 		int transactionType = filter.getTransactionType();
 		TeamMember teamMember = filter.getTeamMember();
@@ -53,6 +56,11 @@ public class DbHelper {
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+		
+		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
+		
+		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !filter.getSelStructureTypes().equals(-1l);
+		
 		/*
 		 * We are selecting sectors which are funded In selected year by the
 		 * selected organization
@@ -70,6 +78,17 @@ public class DbHelper {
 			if (sectorCondition) {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			}
+			//Organization Type
+			if(organizationTypeCondition){
+				oql += " inner join act.orgrole role  ";
+			}
+			if(structureTypeCondition){
+				oql += " inner join act.structures str  ";
+			}
+			//Status
+		    if (filter.getProjectStatusId()!=null){
+		    	oql+=" join  act.categories as categories ";
+		    }
 			oql += "  where fd.adjustmentType = 1";
 			if (filter.getTransactionType() < 2) {
 				oql += " and fd.transactionType =:transactionType  ";
@@ -91,7 +110,6 @@ public class DbHelper {
 			} else {
 				oql += QueryUtil.getOrganizationTypeQuery(true, orgIds, orgtypeids);;
 			}
-			
 			oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 
 			if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
@@ -104,6 +122,41 @@ public class DbHelper {
 			}
 			if (sectorCondition) {
 				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds) + ") ";
+			}
+			
+			//Organization Type
+			if(organizationTypeCondition) {
+				oql += " and role.organisation.orgGrpId.orgType = " + filter.getOrganizationsTypeId();
+			}
+			
+			//Implementing Agency
+			if (implOrgIds == null || implOrgIds.length == 0 || implOrgIds[0] == -1) {
+				if (implOrgGroupIds != null && implOrgGroupIds.length > 0 && implOrgGroupIds[0] != -1) {
+					oql += QueryUtil.getOrganizationQuery(true, implOrgIds, implOrgGroupIds, Constants.IMPLEMENTING_AGENCY);
+				}
+			} else {
+				oql += QueryUtil.getOrganizationQuery(false, implOrgIds, implOrgGroupIds, Constants.IMPLEMENTING_AGENCY);
+			}
+
+			//Project Status
+			if (filter.getProjectStatusId() != null && !filter.getProjectStatusId().equals(0l)) {
+				oql += " and categories.id in ("+filter.getProjectStatusId()+") ";
+	        }
+			// On/Off budget
+			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0l)) {
+				oql += " and act.budget is not null";
+	        }
+			// Type of assistance
+			if (filter.getTypeAssistanceId() != null && !filter.getTypeAssistanceId().equals(0l)) {
+				oql += " and categories.id in ("+filter.getTypeAssistanceId()+") ";
+	        }
+			// Financing instrument
+			if (filter.getFinancingInstrumentId() != null && !filter.getFinancingInstrumentId().equals(0l)) {
+				oql += " and categories.id in ("+filter.getFinancingInstrumentId()+") ";
+	        }
+			// Structure Types
+			if(structureTypeCondition){
+				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes())+") ";
 			}
 
 			if (filter.getShowOnlyApprovedActivities() != null

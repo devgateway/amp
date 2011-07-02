@@ -1,5 +1,6 @@
 package org.digijava.module.esrigis.helpers;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -9,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.springframework.beans.BeanWrapperImpl;
@@ -23,8 +25,20 @@ public class MapFilter {
 	private List<AmpCurrency> currencies;
 	private List<AmpOrganisation> organizations;
 	private List<AmpOrganisation> organizationsSelected;
-	private List<AmpOrgType> organizationstype;
-	private List<AmpOrgType> organizationstypeselected;
+	private List<AmpOrgType> organizationsType;
+	private List<AmpStructureType> structureTypes;
+	private Long[] selStructureTypes;
+	private Long organizationsTypeId;
+	private BigDecimal fundingLimit;
+	private Boolean fundingLimitAbove;
+	private Boolean onBudget;
+	private Long typeAssistanceId;
+	private Long financingInstrumentId;
+	
+
+	//	private List<AmpOrgType> projectStatuses;
+	private Long projectStatusId;
+	private List<AmpOrgType> organizationsTypeSelected;
 	private List<AmpOrgGroup> orgGroups;
 	private List<AmpSector> sectors;
 	private List<AmpCategoryValueLocations> regions;
@@ -33,6 +47,10 @@ public class MapFilter {
 	private Long[] orgtypeIds;
 	private Long[] orgGroupIds;
 	private Long orgGroupId;
+
+	private Long[] implOrgGroupIds;
+	private Long[] implOrgIds;
+	
 	private Long[] orgIds;
 	private Long orgId;
 	private Long[] sectorIds;
@@ -490,24 +508,24 @@ public class MapFilter {
 	}
 
 
-	public List<AmpOrgType> getOrganizationstype() {
-		return organizationstype;
+	public List<AmpOrgType> getOrganizationsType() {
+		return organizationsType;
 	}
 
 
-	public void setOrganizationstype(List<AmpOrgType> organizationstype) {
-		this.organizationstype = organizationstype;
+	public void setOrganizationsType(List<AmpOrgType> organizationstype) {
+		this.organizationsType = organizationstype;
 	}
 
 
-	public List<AmpOrgType> getOrganizationstypeselected() {
-		return organizationstypeselected;
+	public List<AmpOrgType> getOrganizationsTypeSelected() {
+		return organizationsTypeSelected;
 	}
 
 
-	public void setOrganizationstypeselected(
+	public void setOrganizationsTypeSelected(
 			List<AmpOrgType> organizationstypeselected) {
-		this.organizationstypeselected = organizationstypeselected;
+		this.organizationsTypeSelected = organizationstypeselected;
 	}
 
 
@@ -519,5 +537,115 @@ public class MapFilter {
 	public void setOrgtypeIds(Long[] orgtypeIds) {
 		this.orgtypeIds = orgtypeIds;
 	}
+
+
+	public void setImplOrgGroupIds(Long[] implOrgGroupIds) {
+		this.implOrgGroupIds = implOrgGroupIds;
+	}
+
+
+	public Long[] getImplOrgGroupIds() {
+		return implOrgGroupIds;
+	}
+
+
+	public void setImplOrgIds(Long[] implOrgIds) {
+		this.implOrgIds = implOrgIds;
+	}
+
+
+	public Long[] getImplOrgIds() {
+		return implOrgIds;
+	}
+
+
+	public void setOrganizationsTypeId(Long organizationsTypeId) {
+		this.organizationsTypeId = organizationsTypeId;
+	}
+
+
+	public Long getOrganizationsTypeId() {
+		return organizationsTypeId;
+	}
+
+
+	public void setProjectStatusId(Long projectStatusId) {
+		this.projectStatusId = projectStatusId;
+	}
+
+
+	public Long getProjectStatusId() {
+		return projectStatusId;
+	}
+
+
+	public void setFundingLimit(BigDecimal fundingLimit) {
+		this.fundingLimit = fundingLimit;
+	}
+
+
+	public BigDecimal getFundingLimit() {
+		return fundingLimit;
+	}
+
+
+	public void setFundingLimitAbove(Boolean fundingLimitAbove) {
+		this.fundingLimitAbove = fundingLimitAbove;
+	}
+
+
+	public Boolean getFundingLimitAbove() {
+		return fundingLimitAbove;
+	}
+
+
+	public void setOnBudget(Boolean onBudget) {
+		this.onBudget = onBudget;
+	}
+
+
+	public Boolean getOnBudget() {
+		return onBudget;
+	}
+
+
+	public void setTypeAssistanceId(Long typeAssistanceId) {
+		this.typeAssistanceId = typeAssistanceId;
+	}
+
+
+	public Long getTypeAssistanceId() {
+		return typeAssistanceId;
+	}
+
+
+	public void setFinancingInstrumentId(Long financingInstrumentId) {
+		this.financingInstrumentId = financingInstrumentId;
+	}
+
+
+	public Long getFinancingInstrumentId() {
+		return financingInstrumentId;
+	}
+
+
+	public void setStructureTypes(List<AmpStructureType> structureTypes) {
+		this.structureTypes = structureTypes;
+	}
+
+	public List<AmpStructureType> getStructureTypes() {
+		return this.structureTypes;
+	}
+
+
+	public void setSelStructureTypes(Long[] selStructureTypes) {
+		this.selStructureTypes = selStructureTypes;
+	}
+
+
+	public Long[] getSelStructureTypes() {
+		return selStructureTypes;
+	}
+
 
 }

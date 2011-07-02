@@ -688,9 +688,9 @@ var structureGraphicLayer;
 function getStructures(clear) {
 	if (clear){
 		try {
-			map.removeLayer(map.getLayer("structuresMap"));
-			map.removeLayer(map.getLayer("activitiesMap"));
+			structureGraphicLayer = null;
 			structures = [];
+			map.removeLayer(map.getLayer("structuresMap"));
 		}catch(e){
 			console.log(e);
 		}

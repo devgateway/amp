@@ -295,24 +295,38 @@ public class DataDispatcher extends MultiAction {
 		 List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		 list = DbHelper.getActivities(maphelperform.getFilter());
    		 boolean structuresExists = false;
+   		 Long[] selectedStructures = maphelperform.getFilter().getSelStructureTypes();
+   		 
 		 for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			 ActivityPoint ap = new ActivityPoint();
 			 AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			 ap.setActivityname(aA.getName());
 			 
 			ArrayList<Structure> structures = new ArrayList<Structure>();
+			
 			for (Iterator<AmpStructure> iterator2 =aA.getStructures().iterator(); iterator2.hasNext();) {
 				AmpStructure structure = iterator2.next();
 				Structure structureJSON = new Structure();
-				structureJSON.setDescription(structure.getDescription());
-				structureJSON.setLat(structure.getLatitude());
-				structureJSON.setLon(structure.getLongitude());
-				structureJSON.setName(structure.getTitle());
-				structureJSON.setShape(structure.getShape());
-				structureJSON.setType(structure.getType().getName());
-				structureJSON.setTypeId(structure.getType().getTypeId());
-				structures.add(structureJSON);
-				structuresExists = true;
+				boolean structureMatch = false;
+				if(selectedStructures != null){
+					for(int idx = 0; idx < selectedStructures.length; idx++){
+						if(selectedStructures[idx].equals(structure.getType().getTypeId())){
+							structureMatch = true;
+						}
+					}
+				}
+					
+				if(structureMatch || selectedStructures == null || selectedStructures.length == 0 ){
+					structureJSON.setDescription(structure.getDescription());
+					structureJSON.setLat(structure.getLatitude());
+					structureJSON.setLon(structure.getLongitude());
+					structureJSON.setName(structure.getTitle());
+					structureJSON.setShape(structure.getShape());
+					structureJSON.setType(structure.getType().getName());
+					structureJSON.setTypeId(structure.getType().getTypeId());
+					structures.add(structureJSON);
+					structuresExists = true;
+				}
 			}
 			ap.setStructures(structures);
 			if(structuresExists) {
@@ -343,7 +357,7 @@ public class DataDispatcher extends MultiAction {
 
 		// Gets children object according to objectType
 
-		if (parentId != null && objectType != null && (objectType.equals("Organizations")||objectType.equals("Organization"))) {
+		if (parentId != null && objectType != null && (objectType.equals("Organizations")||objectType.equals("Organization")||objectType.equals("ImplementingOrganizations"))) {
 			// Get list of sub organizations
 			Long orgGroupId = Long.parseLong(parentId);
 
@@ -462,7 +476,7 @@ public class DataDispatcher extends MultiAction {
 		datadispatcherform.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		datadispatcherform.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		datadispatcherform.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
-		datadispatcherform.getFilter().setOrgtypeIds(getLongArrayFromParameter(request.getParameter("orgtypeIds")));
+		datadispatcherform.getFilter().setOrganizationsTypeId(Long.parseLong(request.getParameter("organizationsTypeId")));
 		Long[] orgsGrpIds =  datadispatcherform.getFilter().getOrgGroupIds();
 		Long orgsGrpId =  datadispatcherform.getFilter().getOrgGroupId();
 		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {

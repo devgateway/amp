@@ -117,7 +117,7 @@
 	
  </head> 
   <body class="soria">
-   <img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;" />
+   <img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;border: 8px solid white;-moz-border-radius: 8px;" />
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   		<div id="map" dojotype="dijit.layout.ContentPane" class="roundedCorners" region="center">
        </div>
@@ -168,7 +168,7 @@
 					</tr>
 			</table>
 		</div>
-		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 500px;margin-top: 50px;display: none;">
+		<div id="filterdiv" style="position:absolute;z-Index:100;right: 5px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 

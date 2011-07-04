@@ -8,6 +8,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:context name="digiContext" property="context" />
+<style type="text/css">
+
+table.inside, .desktop_project_name_sel{
+ background-color:transparent;
+}
+.desktop_project_name_sel{
+border: none;
+}
+</style>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
@@ -69,7 +78,7 @@ function toggleSettings(){
 	
 </script>
 
-<div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
+<div id="content"  style="padding-left:10px;width:98%;min-width:680px;"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 
 <logic:present name="firstReportName">

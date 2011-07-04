@@ -57,11 +57,13 @@
 	</digi:secure><center>
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
+		<digi:secure authenticated="true">
          <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
    			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
 				<digi:trn key="aim:logout">LOGOUT</digi:trn>
 			</digi:link>
 		</div>	
+		</digi:secure>
 	</div>
    
 	<div class="breadcrump_1">

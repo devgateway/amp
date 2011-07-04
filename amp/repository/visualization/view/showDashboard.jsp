@@ -958,14 +958,14 @@ function changeChild (selected){
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
-</center>
+
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
     <td width=296 bgcolor="#F4F4F4" valign="top">
 	<div style="background-color:#FFFFFF; height:7px;">&nbsp;</div>
 	<div class="dash_left">
 	<fieldset>
-	<legend><span class=legend_label>Quick Filter</span></legend>
+	<legend><span class=legend_label><digi:trn>Quick Filter</digi:trn></span></legend>
 <!--	<html:checkbox property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox>-->
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%"> 
@@ -1106,7 +1106,31 @@ function changeChild (selected){
 	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>
 	</center>
 </fieldset>
-	
+
+<fieldset>
+	<legend><span class=legend_label><digi:trn>Quick Access</digi:trn></span></legend>
+	<table cellspacing="0" cellpadding="0" width="100%"> 
+		<tr>
+			<td>
+				<a href="javascript:document.getElementById('fundingChartTitle').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('aidPredChartTitle').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('aidTypeChartTitle').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('finInstChartTitle').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
+				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+					<a href="javascript:document.getElementById('donorChartTitle').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
+				</c:if>
+				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+					<a href="javascript:document.getElementById('sectorChartTitle').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
+				</c:if>
+				<c:if test="${visualizationform.filter.dashboardType ne '2' }">
+					<a href="javascript:document.getElementById('regionChartTitle').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
+				</c:if>
+				
+			</td>
+		</tr>
+	</table>
+</fieldset>
+
 <fieldset>
 	<legend><span id="topProjectsTitle" class=legend_label></span></legend>
 	<div id="divTopProjects" class="field_text">
@@ -1114,7 +1138,7 @@ function changeChild (selected){
 		<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
 		<c:set var="index" value="${index+1}"/>
 		
-		 <c:out value="${index}"/>. <c:out value="${projectItem.key}"/>  <b>($<c:out value="${projectItem.value}"/>)</b>
+		 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
 			<hr />
 		</c:forEach>
 	
@@ -1125,7 +1149,7 @@ function changeChild (selected){
 		<c:forEach items="${visualizationform.ranksInformation.fullProjects}" var="projectItem">
 		<c:set var="index" value="${index+1}"/>
 		
-		 <c:out value="${index}"/>. <c:out value="${projectItem.key}"/>  <b>($<c:out value="${projectItem.value}"/>)</b>
+		 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a>  <b>($<c:out value="${projectItem.value}"/>)</b>
 			<hr />
 		</c:forEach>
 	
@@ -1224,8 +1248,8 @@ function changeChild (selected){
 	<ul class="yui-nav">
 		<li><a href="#tab1"><div>Visualization</div></a></li>
 		<!--<li><a href="#tab2"><div>Contact Information</div></a></li>
-		<li><a href="#tab3"><div>Additional Notes</div></a></li>-->
-	</ul>
+		<li><a href="#tab3"><div>Additional Notes</div></a></li>
+	--></ul>
 	<div class="yui-content">
 	<div id="tab1">
 		<fieldset>
@@ -1239,6 +1263,9 @@ function changeChild (selected){
 					</a>
 				</div>
 			</div>
+			<div align="right">
+				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+			</div> 
 		</fieldset>
 		<fieldset>
 			<legend><span id="aidPredChartTitle" class=legend_label></span></legend>
@@ -1251,6 +1278,9 @@ function changeChild (selected){
 					</a>
 				</div>
 			</div>
+			<div align="right">
+				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+			</div> 
 		</fieldset>
 		<fieldset>
 			<legend><span id="aidTypeChartTitle" class=legend_label></span></legend>
@@ -1263,6 +1293,9 @@ function changeChild (selected){
 					</a>
 				</div>
 			</div>
+			<div align="right">
+				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+			</div> 
 		</fieldset>
 		<fieldset>
 			<legend><span id="finInstChartTitle" class=legend_label></span></legend>
@@ -1275,6 +1308,9 @@ function changeChild (selected){
 					</a>
 				</div>
 			</div>
+			<div align="right">
+				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+			</div> 
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
  			<fieldset>
@@ -1288,6 +1324,9 @@ function changeChild (selected){
 						</a>
 					</div>
 				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
 			</fieldset>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
@@ -1302,6 +1341,9 @@ function changeChild (selected){
 						</a>
 					</div>
 				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
 			</fieldset>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
@@ -1316,6 +1358,9 @@ function changeChild (selected){
 						</a>
 					</div>
 				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
 			</fieldset>
 		</c:if>
 	</div>
@@ -1325,8 +1370,8 @@ function changeChild (selected){
 	<div id="tab3">
 		Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.
 		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
-	</div>-->
 	</div>
+	--></div>
 </div>
 
 </td>
@@ -1594,14 +1639,15 @@ function refreshBoxes(o){
 			case "ProjectsList":
 				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
-					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a href='/aim/selectActivityTabs.do~ampActivityId=" + child.list[i].id + "'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a>";
 				var div = document.getElementById("divFullProjects");
 				div.innerHTML = inner;
 				inner = "";
 				for(var i = 0; i < child.top.length; i++){
-					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+					//inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";  
+					inner = inner + (i+1) + ". " + "<a href='/aim/selectActivityTabs.do~ampActivityId=" + child.top[i].id + "'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
@@ -1611,14 +1657,14 @@ function refreshBoxes(o){
 				if (dashboardType!=1) {
 					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullDonors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullDonors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
@@ -1629,14 +1675,14 @@ function refreshBoxes(o){
 				if (dashboardType!=3) {
 					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullSectors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullSectors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
@@ -1647,14 +1693,14 @@ function refreshBoxes(o){
 				if (dashboardType!=2) {
 					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullRegions");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");

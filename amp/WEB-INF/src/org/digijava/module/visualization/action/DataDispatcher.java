@@ -296,7 +296,9 @@ public class DataDispatcher extends DispatchAction {
 			list = new LinkedList(projectsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
-				child.put("name", entry.getKey().toString());
+				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
+				child.put("name", act.getName());
+				child.put("id", act.getAmpActivityId());
 				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				rankProjects.add(child);
 			}
@@ -306,7 +308,9 @@ public class DataDispatcher extends DispatchAction {
 			list = new LinkedList(projectsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
-				child.put("name", entry.getKey().toString());
+				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
+				child.put("name", act.getName());
+				child.put("id", act.getAmpActivityId());
 				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
 				topProjects.add(child);
 			}
@@ -1069,7 +1073,7 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
-		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 
 
 		boolean typeOfAid = request.getParameter("typeofaid") != null ? Boolean.parseBoolean(request.getParameter("typeofaid")) : false;
@@ -1091,6 +1095,8 @@ public class DataDispatcher extends DispatchAction {
             else
             	divideByDenominator=new BigDecimal(1000);
         }
+        Date startDate = null;
+        Date endDate = null;
         Long year = filter.getYear();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -1112,30 +1118,52 @@ public class DataDispatcher extends DispatchAction {
         	yearsInRange=filter.getYearsInRangePie()-1;
 		}
 
-        if(selectedYear != null){
+        /*if(selectedYear != null){
         	year = selectedYear;
         	yearsInRange = 0;
-        }
+        }*/
+        if (selectedYear!=null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+		} else {
+			startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+		}
         
-		if(format != null && format.equals("xml")){
+        BigDecimal amtTotal = BigDecimal.ZERO;
+        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			DecimalWraper funding = null;
+            if (typeOfAid) {
+                funding = DbUtil.getFunding(filter, startDate, endDate, ampCategoryValue.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+            } else {
+                funding = DbUtil.getFunding(filter, startDate, endDate, null, ampCategoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
+            }
+            amtTotal = amtTotal.add(funding.getValue());
+		}
+       
+        
+       if(format != null && format.equals("xml")){
 			
 			StringBuffer xmlString = new StringBuffer();
 			if(donut){
-				Iterator<AmpCategoryValue> it = categoryValues.iterator();
-				while (it.hasNext()){
-					AmpCategoryValue value = it.next();
-					xmlString.append("<aidtype name=\"" + value.getValue() + "\">\n");
-					for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
-						Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-						Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-		                DecimalWraper funding = null;
-		                if (typeOfAid) {
+				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
+					Iterator<AmpCategoryValue> it = categoryValues.iterator();
+					while (it.hasNext()){
+						AmpCategoryValue value = it.next();
+						DecimalWraper funding = null;
+						if (typeOfAid) {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
 		                } else {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
-						xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
+		                if(percentage.compareTo(new BigDecimal(1)) == 1){
+	                		xmlString.append("<aidtype name=\"" + value.getValue() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                	}
 					}
+				} else {
+					xmlString.append("<aidtype name=\"\">\n");
 					xmlString.append("</aidtype>\n");
 				}
 			}
@@ -1149,8 +1177,8 @@ public class DataDispatcher extends DispatchAction {
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
-						Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-						Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+						startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+						endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 		                DecimalWraper funding = null;
 		                if (typeOfAid) {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
@@ -1198,8 +1226,8 @@ public class DataDispatcher extends DispatchAction {
     		while (it.hasNext()){
     			AmpCategoryValue value = it.next();
                 // apply calendar filter
-                Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
+                endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                 DecimalWraper funding = null;
                 if (typeOfAid) {
                     funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);

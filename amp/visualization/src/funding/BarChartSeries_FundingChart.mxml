@@ -24,14 +24,10 @@
 	 OTHER DEALINGS IN THE SOFTWARE.
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:charts="org.axiis.charts.*"
 	xmlns:axiis="http://www.axiis.org/2009"
-	xmlns:series="org.axiis.charts.series.*"
 	xmlns:groupings="org.axiis.charts.groupings.*"
 	xmlns:degrafa="http://www.degrafa.com/2007"
-	xmlns:states="org.axiis.states.*"
 	xmlns:paint="org.axiis.paint.*"
-	xmlns:Examples="Examples.*"
 	xmlns:axis="org.axiis.charts.axis.*"
 	xmlns:labels="org.axiis.charts.labels.*"
 	backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
@@ -39,7 +35,7 @@
 	creationComplete="application1_creationCompleteHandler(event);"
 >
 
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
 		</mx:request>
@@ -118,7 +114,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -173,7 +169,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -456,12 +452,14 @@
 			If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
-		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
+		<axiis:LayoutPalette layout="{hLayout}" colors="[0x111111]" id="outerPalette"/> 
+		<axiis:LayoutPalette layout="{myCluster}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="clusterPalette"/> 
+		<axiis:LayoutPalette layout="{legendLayout}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="legendPalette"/> 
+		<!--<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<axiis:LayoutAutoPalette id="clusterPalette" colorFrom="0xCC3333" 
 								 colorTo="0x3333CC" layout="{myCluster}"/> 
-<!--		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>-->
 		<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xCC3333" 
-								 colorTo="0x3333CC" layout="{legendLayout}"/> 
+								 colorTo="0x3333CC" layout="{legendLayout}"/> -->
 	</mx:Array>
 	
 	<!--

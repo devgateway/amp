@@ -54,6 +54,7 @@
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+			import mx.events.SliderEvent;
 			import com.exportUtil.*;
 			
 			private var ds:DataSet = new DataSet();
@@ -69,33 +70,25 @@
 			 */
 			public function start():void
 			{
-				/** Sums up all the counts of medals within a country ( you also get min, max, avg) This will be used to draw the overlaid total
-				 *    bar that shows up on the chart, one for each country.
-				 *  This only works for data that is read in through the axiis DataSet object otherwise you'd need to provide your own approach to aggregate
-				 	Provides 4 values under ds.data.object where is X is the final drill point and Y is each of the array elements
-						object.aggregates.X_Y_sum  EG: aggregates.medal_count_sum
-						object.aggregates.X_Y_avg
-						object.aggregates.X_Y_min
-						object.aggregates.X_Y_max
-				 */ 
-				//ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
-				/**
-				 * Now aggregate all the sums per country. Ultimately to get the max value so we can scale the chart appropriately
-				 */
-				//ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
-				/**
-				 * Note the odd syntax regarding how you access aggregates of aggregated data
-				 */
-				//vScale.maxValue = service.lastResult.aggregates['sector_aggregates:amount_amount_sum_max'];
-				//vScale.minValue = 0;
-				/**
-				 * So each iteration of the repeater in the graph will have a country node
-				 */
-				//dataProvider = service.lastResult.sector;
-				/**
-				 * Anytime the DataCanvas dp is set this must be called
-				 */
+				
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				if(isNaN(sliderYear.value))
+				{
+					try {
+						startYear = service.lastResult.donor.startYear;
+						endYear = service.lastResult.donor.endYear;
+						sliderYear.value = endYear;
+					} catch (errObject:Error) {
+						startYear = service.lastResult.donor[0].startYear;
+						endYear = service.lastResult.donor[0].endYear;
+						sliderYear.value = endYear;
+					}
+					var labelArray:Array = new Array(); 
+					for (var index:Number=startYear; index <= endYear; index++){
+						labelArray[labelArray.length] = index;
+					}
+					sliderYear.labels = labelArray;
+				}
 				
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
@@ -193,6 +186,34 @@
 				start();
 			}
 
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				// TODO Auto-generated method stub
+				allYears.selected = false;
+				var params:Object = {};
+				params["year"] = sliderYear.value;
+				params["format"] = "xml";
+				params["typeofaid"] = "true";
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+			}
+			
+			protected function updateAllYears():void
+			{
+				if(allYears.selected){
+					sliderYear.visible = false;
+					var params:Object = {};
+					params["format"] = "xml";
+					params["typeofaid"] = "true";
+					service.send(params);
+					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				}
+				else
+				{
+					sliderYear.visible = true;
+					sliderYear_changeHandler(new SliderEvent(mx.events.SliderEvent.CHANGE));
+				}
+			}
 		]]>
 	</mx:Script>
 
@@ -206,6 +227,8 @@
 						  useThousandsSeparator="true"/>
 
 	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:String id="dataField">value</mx:String>
@@ -229,8 +252,8 @@
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="20"
-		bottom="50"
+	<axiis:DataCanvas top="50"
+		bottom="20"
 		width="{this.width*.9}"
 		id="dc"
 		left="40"
@@ -426,6 +449,10 @@
 			</axiis:HBoxLayout>
 		</axiis:layouts>
 	</axiis:DataCanvas>
+		
+		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="250" x="80" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		
 	</mx:Canvas>
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
@@ -443,8 +470,8 @@
 			If you want a series with repeating colors from series to series use Layout. 
 			If you want different colors for all bars, use LayoutAuto
 	-->
+	<axiis:LayoutPalette layout="{hLayout}" colors="[0xFF0033,0xFFCC00,0x000099,0x009900,0x990099,0x660000,0xCC3399]" id="outerPalette"/> 
 	<mx:Array id="palettes">
-		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 	</mx:Array>
 	

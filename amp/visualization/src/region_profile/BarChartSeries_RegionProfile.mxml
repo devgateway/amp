@@ -52,6 +52,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
 			import com.exportUtil.*;
@@ -70,7 +71,23 @@ OTHER DEALINGS IN THE SOFTWARE.
 			public function start():void
 			{
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
-				
+				if(isNaN(sliderYear.value))
+				{
+					try {
+						startYear = service.lastResult.region.startYear;
+						endYear = service.lastResult.region.endYear;
+						sliderYear.value = endYear;
+					} catch (errObject:Error) {
+						startYear = service.lastResult.region[0].startYear;
+						endYear = service.lastResult.region[0].endYear;
+						sliderYear.value = endYear;
+					}
+					var labelArray:Array = new Array(); 
+					for (var index:Number=startYear; index <= endYear; index++){
+						labelArray[labelArray.length] = index;
+					}
+					sliderYear.labels = labelArray;
+				}
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
 				try {
@@ -168,6 +185,34 @@ OTHER DEALINGS IN THE SOFTWARE.
 				start();
 			}
 			
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				// TODO Auto-generated method stub
+				allYears.selected = false;
+				var params:Object = {};
+				params["year"] = sliderYear.value;
+				params["format"] = "xml";
+				params["typeofaid"] = "true";
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+			}
+			
+			protected function updateAllYears():void
+			{
+				if(allYears.selected){
+					sliderYear.visible = false;
+					var params:Object = {};
+					params["format"] = "xml";
+					params["typeofaid"] = "true";
+					service.send(params);
+					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				}
+				else
+				{
+					sliderYear.visible = true;
+					sliderYear_changeHandler(new SliderEvent(mx.events.SliderEvent.CHANGE));
+				}
+			}
 		]]>
 	</mx:Script>
 	
@@ -181,6 +226,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 						  useThousandsSeparator="true"/>
 	
 	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:String id="dataField">value</mx:String>
@@ -204,8 +251,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="20"
-					  bottom="50"
+	<axiis:DataCanvas top="50"
+					  bottom="20"
 					  width="{this.width*.9}"
 					  id="dc"
 					  left="40"
@@ -382,6 +429,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 			</axiis:HBoxLayout>
 		</axiis:layouts>
 	</axiis:DataCanvas>
+	
+		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="250" x="80" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		
 	</mx:Canvas>
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
@@ -399,9 +450,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 	If you want a series with repeating colors from series to series use Layout. 
 	If you want different colors for all bars, use LayoutAuto
 	-->
+	<axiis:LayoutPalette layout="{hLayout}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="outerPalette"/> 
 	<mx:Array id="palettes">
-		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
-		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+		<axiis:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 	</mx:Array>
 	
 	<!--

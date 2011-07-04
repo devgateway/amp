@@ -1,29 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright (c) 2009 Team Axiis
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
--->
-
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 				xmlns:axiis="http://www.axiis.org/2009"
 				xmlns:degrafa="http://www.degrafa.com/2007"
@@ -58,25 +32,47 @@ OTHER DEALINGS IN THE SOFTWARE.
 			public function start():void
 			{
 				
-				//Determine start and end year
+				//perform aggregations to create data values for our nested wedges
+				//ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
+				//ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
+				
+				//Set our max scale value.
+				//dataProvider = service.lastResult.sector;
 				
 				//perform aggregations to create data values for our nested wedges
 				if(isNaN(sliderYear.value))
 				{
-					startYear = service.lastResult.aidtype[0].year[0].category;
-					endYear = service.lastResult.aidtype[0].year[service.lastResult.aidtype[0].year.length-1].category;
-					sliderYear.value = endYear;
+					try {
+						startYear = service.lastResult.aidtype.startYear;
+						endYear = service.lastResult.aidtype.endYear;
+						sliderYear.value = endYear;
+					} catch (errObject:Error) {
+						startYear = service.lastResult.aidtype[0].startYear;
+						endYear = service.lastResult.aidtype[0].endYear;
+						sliderYear.value = endYear;
+					}
 					var labelArray:Array = new Array(); 
 					for (var index:Number=startYear; index <= endYear; index++){
 						labelArray[labelArray.length] = index;
 					}
 					sliderYear.labels = labelArray;
 				}
-				ds.aggregateData(service.lastResult, "aidtype.year", ["amount"]);
-				ds.aggregateData(service.lastResult, "aidtype", ["aggregates.year_amount_sum"]);
 				
 				//Set our max scale value.
 				dataProvider = service.lastResult.aidtype;
+				if("length" in service.lastResult.aidtype) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
+				dc.setStyle("borderStyle","solid");
 				
 				dc.invalidateDisplayList();
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
@@ -98,9 +94,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "4");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "5");
 			}
-			
 			//Used to rotate wedge labels 180 degrees for readability
 			private function transposeLabel1(wedge:Object):Boolean
 			{
@@ -121,10 +116,20 @@ OTHER DEALINGS IN THE SOFTWARE.
 			public function wrapIt(val:String):String
 			{
 				if (val != null){
-					return val.replace(" ","\n");
+					return val + "%";
 				}
-				return val;
+				return "";
 			}
+			
+			public function dataTipFunction(val:Object):String
+			{
+				if (val != null){
+					return val.data.label + "\n" + val.data.value;
+				}
+				return "cadena";
+			}
+			
+			
 			protected function service_resultHandler(event:ResultEvent):void
 			{
 				start();
@@ -161,13 +166,26 @@ OTHER DEALINGS IN THE SOFTWARE.
 			}
 			
 			
-			protected function updateAllYears():void
+			protected function sliderYear_changeHandler(event:SliderEvent):void
 			{
 				// TODO Auto-generated method stub
+				allYears.selected = false;
+				var params:Object = {};
+				params["year"] = sliderYear.value;
+				params["format"] = "xml";
+				params["typeofaid"] = "true";
+				params["donut"] = "true";
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1);
+			}
+			
+			protected function updateAllYears():void
+			{
 				if(allYears.selected){
 					sliderYear.visible = false;
 					var params:Object = {};
 					params["format"] = "xml";
+					params["typeofaid"] = "true";
 					params["donut"] = "true";
 					service.send(params);
 					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
@@ -179,18 +197,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 			}
 			
-			protected function sliderYear_changeHandler(event:SliderEvent):void
-			{
-				// TODO Auto-generated method stub
-				allYears.selected = false;
-				var params:Object = {};
-				params["year"] = sliderYear.value;
-				params["format"] = "xml";
-				params["donut"] = "true";
-				service.send(params);
-				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
 			}
-			
 		]]>
 	</mx:Script>
 	<mx:Style source="styles/Axiis_Examples.css"/>
@@ -212,84 +222,124 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<axiis:NumericExpression id="center" value="{boundsRadius.value/2}"/>
 	<axiis:NumericExpression id="boundsRadius" value="{Math.min(this.height,this.width)}"/>
 	
+	<mx:Resize id="resize" />
+	
 	<mx:Canvas id="mxc1" 
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
 			   height="350">
 		
-	<!-- Data Canvas that holds our geometries -->
-	<axiis:DataCanvas id="dc"
-					  width="{boundsRadius.value}"
-					  height="{boundsRadius.value}"
-					  horizontalCenter="0"
-					  verticalCenter="0"
-					  showDataTips="false">
-		<axiis:layouts>
-			<!-- innerWedgeGroup:  This renders the inner ring of wedges -->
+		<!-- Data Canvas that holds our geometries -->
+		<axiis:DataCanvas id="dc"
+						  width="{634}"
+						  height="{350}"
+						  horizontalCenter="0"
+						  verticalCenter="0"
+						  showDataTips="false"
+						  >
+			<axiis:layouts>
+				<!-- innerWedgeGroup:  This renders the inner ring of wedges -->
+				
+				<axiis:WedgeStackGroup id="innerWedgeGroup"
+									   x="50"
+									   y="15"
+									   dataProvider="{dataProvider}"
+									   startAngle="0"
+									   outerRadiusRatio=".85"
+									   innerRadiusRatio=".4"
+									   width="{300}"
+									   height="{300}"
+									   labelField="percentage"
+									   dataField="percentage"
+									   fill="{innerWedgeFill}"
+									   fontFamily="Myriad Pro"
+									   fontSize="10"
+									   fontColor="0xFFFFFF"
+									   labelFunction="wrapIt"
+									   dataTipLabelFunction="dataTipFunction"
+									   >
+					<!--
+					targets="{[innerWedgeFillStop1,outerWedgeFill, outerWedgeGroup ,outerWedgeGroup.label]}"	
+					properties="{['color','color','outerRadiusRatio','fontWeight']}"
+					values="{[colorFunction,colorFunction,1.1,'bold']}"/>
+					
+					-->	
+					
+					<axiis:states>
+						<axiis:State enterStateEvent="mouseOver"
+									 exitStateEvent="mouseOut"
+									 propagateToAncestorsSiblings="false"
+									 propagateToAncestors="false"
+									 propagateToDescendents="true"
+									 targets="{[innerWedgeFillStop1, innerWedgeGroup]}"	
+									 properties="{['color', 'outerRadiusRatio']}"
+									 values="{[colorFunction, 1]}"/>
+					</axiis:states>
+					
+				</axiis:WedgeStackGroup>
+				<axiis:VBoxLayout id="legendLayout" 
+								  x="{innerWedgeGroup.width+70}"
+								  y="50"
+								  height="200"
+								  width="400"	
+								  dataProvider="{dataProvider}"
+								  dataField="value" 
+								  showDataTips="false"
+								  > 
+					<axiis:drawingGeometries> 
+						<degrafa:RegularRectangle 
+							id="legendSquare" width="20" height="10"
+							fill="{legendFill}"
+							y="{legendLayout.currentReference.y+4}" 
+							x="{legendLayout.currentReference.x}"/> 
+						<degrafa:RasterText 
+							id="legendText" 
+							y="{legendLayout.currentReference.y}" 
+							x="{legendLayout.currentReference.x+22}" 
+							text="{legendLayout.currentDatum['label']}" 
+							fontFamily="Myriad Pro"
+							fontSize="11"
+							width="300"
+							/> 
+					</axiis:drawingGeometries> 
+				</axiis:VBoxLayout> 
+			</axiis:layouts>
 			
-			<axiis:WedgeStackGroup id="innerWedgeGroup"
-								   dataProvider="{dataProvider}"
-								   startAngle="0"
-								   outerRadiusRatio=".85"
-								   innerRadiusRatio=".4"
-								   width="{dc.width}"
-								   height="{dc.height}"
-								   labelField="name"
-								   dataField="aggregates.year_amount_sum"
-								   fill="{innerWedgeFill}"
-								   fontFamily="Myriad Pro"
-								   fontSize="12"
-								   fontColor="0xFFFFFF"
-								   labelFunction="wrapIt"
-								   >
-				<!--
-				targets="{[innerWedgeFillStop1,outerWedgeFill, outerWedgeGroup ,outerWedgeGroup.label]}"	
-				properties="{['color','color','outerRadiusRatio','fontWeight']}"
-				values="{[colorFunction,colorFunction,1.1,'bold']}"/>
-				
-				-->	
-				
-				<axiis:states>
-					<axiis:State enterStateEvent="mouseOver"
-								 exitStateEvent="mouseOut"
-								 propagateToAncestorsSiblings="false"
-								 propagateToAncestors="false"
-								 propagateToDescendents="true"
-								 targets="{[innerWedgeFillStop1, innerWedgeGroup]}"	
-								 properties="{['color', 'outerRadiusRatio']}"
-								 values="{[colorFunction, 1]}"/>
-				</axiis:states>
-				
-			</axiis:WedgeStackGroup>
-		</axiis:layouts>
+			<!-- Palletes used to generate our colors -->
+			<axiis:palettes>
+				<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="[0xFF0033,0xFFCC00,0x000099,0x009900,0x990099,0x660000,0xCC3399]" id="wedgePalette"/> 
+				<axiis:LayoutPalette layout="{legendLayout}" colors="[0xFF0033,0xFFCC00,0x000099,0x009900,0x990099,0x660000,0xCC3399]" id="legendPalette"/> 
+				<!--<axiis:LayoutAutoPalette id="wedgePalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{innerWedgeGroup}"/>
+				<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{legendLayout}"/>-->
+			</axiis:palettes>
+			
+			<!-- Fills that use the colors generated by our palettes -->
+			<axiis:fills>
+				<degrafa:RadialGradientFill id="legendFill" cx="{legendLayout.width/2}" cy="{legendLayout.width/2}" radius="{(legendLayout.width/2)*innerRadi2}">
+					<degrafa:GradientStop color="{legendPalette.currentColor | 0x333333}" ratio=".6" />
+					<degrafa:GradientStop color="{legendPalette.currentColor}" id="innerWedgeFillStop2" ratio=".92" />
+					<degrafa:GradientStop color="{legendPalette.currentColor &amp; -0x352234}" ratio="1"/>
+				</degrafa:RadialGradientFill>
+				<degrafa:RadialGradientFill id="innerWedgeFill" cx="{innerWedgeGroup.width/2}" cy="{innerWedgeGroup.width/2}" radius="{(innerWedgeGroup.width/2)*innerRadi2}">
+					<degrafa:GradientStop color="{wedgePalette.currentColor | 0x333333}" ratio=".6" />
+					<degrafa:GradientStop color="{wedgePalette.currentColor}" id="innerWedgeFillStop1" ratio=".92" />
+					<degrafa:GradientStop color="{wedgePalette.currentColor &amp; -0x352234}" ratio="1"/>
+				</degrafa:RadialGradientFill>
+				<degrafa:SolidFill color="0xFFFF00" id="rollOverFill0" alpha=".9"/>
+				<degrafa:SolidFill color="0xFF00FF" id="rollOverFill1" alpha=".9"/>
+			</axiis:fills>
+			
+			<axiis:strokes>
+				<degrafa:SolidStroke color="0" alpha=".6" pixelHinting="true" id="outerWedgeStroke"/>
+			</axiis:strokes>
+			
+		</axiis:DataCanvas>
 		
-		<!-- Palletes used to generate our colors -->
-		<axiis:palettes>
-			<axiis:LayoutAutoPalette id="wedgePalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{innerWedgeGroup}"/>
-			<!--			<axiis:LayoutAutoPalette id="outerWedgePalette" colorFrom="{wedgePalette.currentColor | 0x2B2B11}" colorTo="{wedgePalette.currentColor | 0x151511}" layout="{outerWedgeGroup}"/>-->
-		</axiis:palettes>
-		
-		<!-- Fills that use the colors generated by our palettes -->
-		<axiis:fills>
-			<degrafa:RadialGradientFill id="innerWedgeFill" cx="{innerWedgeGroup.width/2}" cy="{innerWedgeGroup.width/2}" radius="{(innerWedgeGroup.width/2)*innerRadi2}">
-				<degrafa:GradientStop color="{wedgePalette.currentColor | 0x333333}" ratio=".6" />
-				<degrafa:GradientStop color="{wedgePalette.currentColor}" id="innerWedgeFillStop1" ratio=".92" />
-				<degrafa:GradientStop color="{wedgePalette.currentColor &amp; -0x352234}" ratio="1"/>
-			</degrafa:RadialGradientFill>
-			<!--			<degrafa:SolidFill color="{outerWedgePalette.currentColor}" id="outerWedgeFill"/>-->
-			<degrafa:SolidFill color="0xFFFF00" id="rollOverFill0" alpha=".9"/>
-			<degrafa:SolidFill color="0xFF00FF" id="rollOverFill1" alpha=".9"/>
-		</axiis:fills>
-		
-		<axiis:strokes>
-			<degrafa:SolidStroke color="0" alpha=".6" pixelHinting="true" id="outerWedgeStroke"/>
-		</axiis:strokes>
-		
-	</axiis:DataCanvas>
+		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
+		<mx:VSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="17" x="20" y="35" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
 	</mx:Canvas>
-	<mx:CheckBox x="50" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
-	<mx:VSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="17" x="70" y="35" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
-	
-	
+	<mx:Panel x="{(this.width-300)/2}" y="20" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data for the selected year"/>
+	</mx:Panel>
 </mx:Application>

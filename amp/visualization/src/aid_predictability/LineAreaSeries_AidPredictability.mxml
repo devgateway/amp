@@ -423,9 +423,12 @@
 			If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
-		<paint:LayoutAutoPalette id="outerPalette" layout="{myLineGroup}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="outerPalette"/> 
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="clusterPalette"/> 
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="areaPalette"/> 
+		<!--<paint:LayoutAutoPalette id="outerPalette" layout="{myLineGroup}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<paint:LayoutAutoPalette id="clusterPalette" layout="{myLineGroup}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
-		<paint:LayoutAutoPalette id="areaPalette" layout="{myLineGroup}" colorFrom="0x3333CC" colorTo="0xCC3333"/>
+		<paint:LayoutAutoPalette id="areaPalette" layout="{myLineGroup}" colorFrom="0x3333CC" colorTo="0xCC3333"/>-->
 	</mx:Array>
 	
 	<!--

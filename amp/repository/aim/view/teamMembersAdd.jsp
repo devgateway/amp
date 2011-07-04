@@ -35,7 +35,42 @@
 
 
 <digi:instance property="aimTeamMemberForm" />
- 
+
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
+	<tr>
+		<td>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+				<tr>
+					<td height=33>
+						<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+							<tr>
+								<td valign="top">
+									<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+										<c:set var="selectedTab" value="1" scope="request"/>
+										<jsp:include page="teamSetupMenu.jsp" flush="true" />
+										<table width="100%" cellpadding="0" cellspacing="0">
+											<tr>
+												<td>
+													<div >
+														<jsp:include page="addTeamMember.jsp" flush="true"/>									
+								                     </div>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+						</table>						
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+
+<%--
 <table cellspacing="0" cellpadding="0" width="100%" valign="top" align="left">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -87,8 +122,11 @@
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="1" scope="request"/>
+									<div id="demo" >
+										<c:set var="selectedTab" value="1" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									</div>
+									
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -110,6 +148,8 @@
 </table>
 </td></tr>
 </table>
+ --%>
+
 
 
 

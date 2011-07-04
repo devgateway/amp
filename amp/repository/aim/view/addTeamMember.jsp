@@ -98,8 +98,10 @@ function clearForms()
 </c:if>
 	<tr>
 		<td align="right" valign="top" width="30%">
-			<FONT color="red">*</FONT>
-			<digi:trn key="aim:userId">User Id</digi:trn>&nbsp;
+			<span style="font-size:12px;">
+				<FONT color="red">*</FONT>
+				<strong><digi:trn>User Email</digi:trn>&nbsp;</strong>			
+			</span>
 		</td>
 		<td align="left" width="70%">
 			<html:select property="email" >
@@ -113,14 +115,15 @@ function clearForms()
 	</tr>
 	<tr>
 		<td align="right">
-			<FONT color="red">*</FONT>		
-			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;
+			<span style="font-size:12px;">
+				<FONT color="red">*</FONT>
+				<strong><digi:trn>Role</digi:trn>&nbsp;</strong>			
+			</span>
+			 
 		</td>
 		<td align="left">
 			<html:select property="role" styleClass="inp-text">
 				<%@include file="teamMemberRolesDropDown.jsp" %>
-				<%--<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
-				value="ampTeamMemRoleId" label="role" /> --%>
 			</html:select>
 		</td>
 	</tr>
@@ -131,12 +134,12 @@ function clearForms()
 				<tr>
 					<td width="50%" align="right">
 						<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validate()">
-							<digi:trn key="btn:save">Save</digi:trn> 
+							<digi:trn>Save</digi:trn> 
 						</html:submit>
 					</td>
 					<td width="50%" align="left">
 						<html:button  styleClass="dr-menu" property="submitButton" onclick="return cancel();">
-							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+							<digi:trn>Cancel</digi:trn> 
 						</html:button>
 
 					</td>
@@ -145,9 +148,13 @@ function clearForms()
 		</td>
 	</tr>	
 	<tr>
-		<td colspan="2" align="center">
-			<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-			</B></FONT> are required.</digi:trn>			
+		<td colspan="2">
+			<span style="font-size:12px;">
+				<FONT color="red">*</FONT>
+				<digi:trn>All fields marked with <FONT color=red><B><BIG>*</BIG>
+			</B></FONT> are required.</digi:trn>&nbsp;			
+			</span>
+						
 		</td>
 	</tr>		
 </table>

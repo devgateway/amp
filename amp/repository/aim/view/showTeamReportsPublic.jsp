@@ -480,6 +480,7 @@ function popup(mylink, windowname)
 												</tr>
 												<tr>
 													<td style="font-size: 11px; font-family: Aria, sans-serif;">
+													<c:if test="${reportNumber != 0}">
 														<c:set target="${urlParamsPagination}" property="action"value="getPage" />
 														 <c:if test="${aimTeamReportsForm.currentPage >0}">
 															<c:set target="${urlParamsFirst}" property="page" value="0" />
@@ -567,6 +568,7 @@ function popup(mylink, windowname)
 															</digi:link>
 					                          								&nbsp;&nbsp; 
 					                        							</c:if> <!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
+					                        			</c:if>
 													</td>
 												</tr>
 												<tr>

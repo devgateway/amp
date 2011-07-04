@@ -7,6 +7,7 @@
   &dialect;
   <property name="current_session_context_class">thread</property>
   <property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+  <property name="cache.use_query_cache">true</property> 
   <property name="show_sql">false</property>
   <property name="jdbc.use_get_generated_keys">true</property>
   <property name="jdbc.use_streams_for_binary">true</property>

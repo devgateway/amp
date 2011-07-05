@@ -2497,62 +2497,57 @@ public class TeamUtil {
         return teams;
     }
 
-     public static Set getAmpLevel0Teams(Long ampTeamId) {
-         Session session = null;
-         Set teams = new TreeSet();
+    public static Set getAmpLevel0Teams(Long ampTeamId) {
+        Session session = null;
+        Set teams = new TreeSet();
 
-         try {
-             logger.debug("Team Id:" + ampTeamId);
-             session = PersistenceManager.getSession();
-             String queryString = "select t from " + AmpTeam.class.getName()
-                 + " t " + "where (t.parentTeamId.ampTeamId=:ampTeamId)";
-             logger.debug("Query String:" + queryString);
-             Query qry = session.createQuery(queryString);
-             qry.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
-             Iterator itrTemp = qry.list().iterator();
-             AmpTeam ampTeam = null;
-             LinkedList list = new LinkedList();
-             list.addAll(qry.list());
-             while(list.size() > 0) {
-                 ampTeam = (AmpTeam) list.removeFirst();
-                 //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
-                 if(ampTeam.getAccessType().equals("Team") || 
-                			(ampTeam.getComputation()!=null && ampTeam.getComputation()==true) ) {
-             		 if ((ampTeam.getParentTeamId() != null) 
-                     		 && (ampTeam.getParentTeamId().getComputation() != null) 
-                     		 && (ampTeam.getParentTeamId().getComputation() == true)) {
-             			 teams.add(ampTeam);
-             		 } else {
-             			 //
-             		 }
-             	 } else {
-	                   queryString = "select t from " + AmpTeam.class.getName()
-	                       + " t " + "where (t.parentTeamId.ampTeamId="
-	                       + ampTeam.getAmpTeamId() + ")";
-	                   qry = session.createQuery(queryString);
-	                   list.addAll(qry.list());
-	               }
-                 // ampTeam = (AmpTeam) itrTemp.next();
-                 // teams.add(ampTeam.getAmpTeamId());
-             }
-             logger.debug("Size: " + teams.size());
+        try {
+            logger.debug("Team Id:" + ampTeamId);
+            session = PersistenceManager.getSession();
+            String queryString = "select t from " + AmpTeam.class.getName()
+                + " t " + "where (t.parentTeamId.ampTeamId=:ampTeamId)";
+            logger.debug("Query String:" + queryString);
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+            Iterator itrTemp = qry.list().iterator();
+            AmpTeam ampTeam = null;
+            LinkedList list = new LinkedList();
+            list.addAll(qry.list());
+            while(list.size() > 0) {
+                ampTeam = (AmpTeam) list.removeFirst();
+                //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
+                if(ampTeam.getAccessType().equals("Team") || 
+                			(ampTeam.getComputation()!=null && ampTeam.getComputation()==true) )
+                    teams.add(ampTeam);
+                else {
+                    queryString = "select t from " + AmpTeam.class.getName()
+                        + " t " + "where (t.parentTeamId.ampTeamId="
+                        + ampTeam.getAmpTeamId() + ")";
+                    qry = session.createQuery(queryString);
+                    list.addAll(qry.list());
+                }
 
-         } catch(Exception e) {
-             logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
-             logger.debug(e.toString());
-             throw new RuntimeException(e);
-         } finally {
-             try {
-                 if(session != null) {
-                     PersistenceManager.releaseSession(session);
-                 }
-             } catch(Exception ex) {
-                 logger.debug("releaseSession() failed");
-                 logger.debug(ex.toString());
-             }
-         }
-         return teams;
-     }
+                // ampTeam = (AmpTeam) itrTemp.next();
+                // teams.add(ampTeam.getAmpTeamId());
+            }
+            logger.debug("Size: " + teams.size());
+
+        } catch(Exception e) {
+            logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
+        }
+        return teams;
+    }
 
     public static Collection getAmpLevel0TeamIds(Long ampTeamId) {
         Set teams = getAmpLevel0Teams(ampTeamId);

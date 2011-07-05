@@ -292,6 +292,29 @@ public class LocationUtil {
 		return loc;
 		
 	}
+	public static AmpLocation getAmpLocationByGeoCode(String geoCode) {
+		Session session = null;
+		AmpLocation loc = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			
+			String queryString 	= "select l from " + AmpLocation.class.getName()
+					+ " l where location.geoCode =:geoCode order by l.ampLocationId";
+			Query qry = session.createQuery(queryString);
+			qry.setString("geoCode", geoCode);
+			
+			Collection result	= qry.list();
+			if ( result != null && result.size() > 0 ) {
+				return (AmpLocation)result.iterator().next();
+			}
+			
+		} catch (Exception e) {
+			logger.error("Uanble to get location :" + e);
+		} 
+		return loc;
+		
+	}
 	
 	@Deprecated
 	public static AmpLocation getAmpLocation(String countryId, Long regionId,

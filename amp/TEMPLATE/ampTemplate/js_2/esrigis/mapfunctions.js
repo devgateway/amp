@@ -116,6 +116,7 @@ function createMapAddLayers(myService1, myService2) {
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
 	
 	dojo.connect(map, "onClick", doBuffer);
+	dojo.connect(map, "onMouseMove", selectionFunction);
 	
 	
 	map.addLayer(myService1);
@@ -242,6 +243,11 @@ function doBuffer(evt) {
 	    params.outSpatialReference = map.spatialReference;
 		geometryService.buffer(params, showBuffer);
 		findbydistance(evt);
+//		hideTooltip(); //Moved to showStInfoWindow()
+	}
+	if(addActivityMode)
+	{
+		MapFindPoint(implementationLevel[1], evt);
 	}
 }
 
@@ -312,6 +318,7 @@ function findbydistance(evt){
 
 function showStInfoWindow () {
 	 searchactive = false;
+	 hideTooltip();
 	 var content = "<table border='1' width='100%'>" 
 	 			+ "<tr>" 
 	 			+ "<td align='center' width='200px'>Name</td>" 
@@ -777,4 +784,92 @@ function MapFindStructure(activity, structureGraphicLayer){
 		structureGraphicLayer.add(pgraphic);
 		structures.push(pgraphic);
 	});
+}
+
+
+//Section for adding activities
+var addActivityMode = false;
+function addActivity(){
+	addActivityMode = true;
+}
+
+function selectionFunction(evt){
+	if(addActivityMode || searchactive){
+		var tooltipHolder = dojo.byId("tooltipHolder");
+		tooltipHolder.innerHTML = "Select a point";
+		tooltipHolder.style.display = "block";
+		tooltipHolder.style.top = evt.pageY+5 + "px";
+		tooltipHolder.style.left = evt.pageX+5 + "px";
+	}
+}
+function hideTooltip(){
+	var tooltipHolder = dojo.byId("tooltipHolder");
+	tooltipHolder.style.display = "none";
+}
+
+function showAddActivityInfoWindow (results) {
+	hideTooltip();
+	
+	addActivityMode = false;
+	var county = results.features[0].attributes["COUNTY"];
+	var district = results.features[0].attributes["DISTRICT"];
+	var geoId = results.features[0].attributes["GEO_ID"];
+	var content = "<table border='0' width='100%'>" 
+		+ "<tr>" 
+		+ "<td align='center' width='200px'>Name</td>" 
+		+ "<td align='center' width='100px'><input id=\"activityName\" type=\"text\"></td>" 
+		+ "</tr>"
+		+ "<tr>" 
+		+ "<td align='center' width='200px'>Location</td>" 
+		+ "<td align='center' width='100px'><input type=\"text\" READONLY value=\"" + county + ", " + district + "\"></td>" 
+		+ "</tr>"
+		+ "<tr>" 
+		+ "<td align='center' width='200px'>Geo Id</td>" 
+		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"geoId\" value=\"" + geoId + "\"></td>" 
+		+ "</tr>"
+		+ "<tr>" 
+		+ "<td align='center' width='200px'>Latitude</td>" 
+		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"lat\" value=\"" + esri.geometry.webMercatorToGeographic(searchpoint.mapPoint).y + "\"></td>" 
+		+ "</tr>"
+		+ "<tr>" 
+		+ "<td align='center' width='200px'>Longitude</td>" 
+		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"lon\" value=\"" + esri.geometry.webMercatorToGeographic(searchpoint.mapPoint).x+ "\"></td>" 
+		+ "</tr>"
+		+ "<tr>" 
+		+ "<td align='center' width='300px' colspan=\"2\"><input type=\"button\" value=\"Create new activity\" onclick=\"submitActivity()\"></td>" 
+		+ "</tr>";
+	if (map.infoWindow.isShowing) {
+		map.infoWindow.hide();
+	}
+	map.infoWindow.setTitle("Add new activity");
+	content = content + "</table>";
+	map.infoWindow.setContent(content);
+	map.infoWindow.resize(400, 200);
+	map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
+//	dojo.connect(map.infoWindow, "onHide", clearbuffer);
+	hideLoading();
+}
+
+function MapFindPoint(level, evt){
+	searchpoint = evt;
+	showLoading();
+	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
+    var query = new esri.tasks.Query();
+    query.geometry = evt.mapPoint;
+    query.outSpatialReference = {wkid:map.spatialReference.wkid};
+    query.returnGeometry = false;
+    query.outFields = ["COUNT", "COUNTY", "DISTRICT", "GEO_ID"];
+    queryTask.execute(query, showAddActivityInfoWindow);
+}
+
+function submitActivity(){
+	var name, lat, lon, geoid;
+	name = dojo.byId("activityName");
+	lat = dojo.byId("lat");
+	lon = dojo.byId("lon");
+	geoId = dojo.byId("geoId");
+	//Removing district, problem with Locations
+	geoIdShort = geoId.value.substring(0,4)
+	window.open("/wicket/onepager/activity/new/name/" + name.value + "/lat/"+lat.value+"/lon/"+lon.value+"/geoId/"+geoIdShort);
+	
 }

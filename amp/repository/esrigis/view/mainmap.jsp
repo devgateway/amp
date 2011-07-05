@@ -152,6 +152,7 @@
 						<td valign="middle" class="mapMenuItem" align="center" id="search" style="cursor: pointer;"><digi:trn>Search Structures</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></td>
@@ -200,5 +201,7 @@
 		    <div class="mapButton" dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
  		</div></div>
     </div>  
+	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
+
   </body>
 </html>

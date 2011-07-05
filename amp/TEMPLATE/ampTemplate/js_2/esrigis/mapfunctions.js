@@ -42,20 +42,17 @@ function init() {
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
-	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
+	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/8";
 	
 	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
 	povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, {
-        mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-        outFields: ["*"],
-        id:'indicator',
-        opacity : 0.50,
-        visible:false
+		mode: esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
+		id:'indicator',opacity : 0.50,
+		visible:false
       });
 	
 	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
-	//esri.config.defaults.io.alwaysUseProxy = true;
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
 	
 	var layerLoadCount = 0;
@@ -130,46 +127,6 @@ function createMapAddLayers(myService1, myService2) {
 	maxExtent = map.extent;
 	searchactive = false;
 }
-
-
-function showExtent(extent, delta, levelChange, lod) {
-	//In javascript, object passes byref. so it's not correct to difine new extent using
-	//"var adjustedEx = extent;"
-	var adjustedEx = new esri.geometry.Extent(extent.xmin, extent.ymin, extent.xmax, extent.ymax);
-	var flag = false;	
-	//set a buffer to make the max extent a slightly bigger to void minor differences
-	//the map unit for this case is meter. 
-	var buffer = 100;
-	console.log(extent.xmin + "," + maxExtent.xmin);
-	var onLoadHandle = dojo.connect(basemap, "onUpdate", function() {
-		//cancel the connection because it should'n only be triggered when extent changes. Other events causing tiles loading shoudn't trigger this.
-        dojo.disconnect(onLoadHandle);
-        if(extent.xmin < maxExtent.xmin-buffer) {
-			adjustedEx.xmin = maxExtent.xmin;
-			adjustedEx.xmax = Math.abs(extent.xmin - maxExtent.xmin) + extent.xmax;
-            flag = true;
-        }
-		if(extent.ymin < maxExtent.ymin-buffer) {
-		    adjustedEx.ymin = maxExtent.ymin;
-		    adjustedEx.ymax = Math.abs(extent.ymin - maxExtent.ymin) + extent.ymax;
-            flag = true;
-        }
-		if(extent.xmax-buffer > maxExtent.xmax) {
-		    adjustedEx.xmax = maxExtent.xmax;
-		    adjustedEx.xmin =extent.xmin - Math.abs(extent.xmax - maxExtent.xmax);
-            flag = true;
-        }
-		if(extent.ymax-buffer > maxExtent.ymax) {
-		    adjustedEx.ymax = maxExtent.ymax;
-		    adjustedEx.ymin =extent.ymin - Math.abs(extent.ymax - maxExtent.ymax);
-            flag = true;
-        }
-		if (flag === true) {
-			map.setExtent(adjustedEx);				
-		}
-		flag = false;
-	});		
-  }
 
 function toggleindicatormap(id) {
 	  var layer = map.getLayer(id);
@@ -422,21 +379,14 @@ function MapFind(activity){
     		});
     		
     		pgraphic.setAttributes( {
-    			  "Activity":'<b>'+activity.activityname+'</b>',
-    			  "Activity Preview":'<a href="/aim/selectActivityTabs.do~ampActivityId='+activity.id+'" target="_blank">Click here</a>',	
-    			  "AMP Activity ID":activity.ampactivityid,	
-    			  "Activity commitments":'<b>'+activity.commitments+' '+activity.currecycode+'</b>',
-  				  "Activity disbursements":'<b>'+activity.disbursements+' '+activity.currecycode+'</b>',
-  				  "Activity expenditures":'<b>'+activity.expenditures+' '+activity.currecycode+'</b>',
-  				  "Donors":'<b>'+donorname+'</b>',
-  				  "Location":'<b>'+location.name+'</b>',
-  				  "Location commitments":'<b>'+location.commitments+' '+activity.currecycode+'</b>',
-  				  "Location disbursements":'<b>'+location.disbursements+' '+activity.currecycode+'</b>',
-  				  "Location expenditures":'<b>'+location.expenditures+' '+activity.currecycode+'</b>',
-  				  "Location percentage":location.percentage,
-  				  "Primary Sector":'<b>'+primarysector+'</b>',
-  				  "Primary Schema":primarysectorschema,
-  				  "Primary Percentage":primarypercentage
+    			  "Activity":'<a href="/aim/selectActivityTabs.do~ampActivityId='+activity.id+'" target="_blank">'+activity.activityname+'</a>',	
+    			  "Donors":'<b>'+donorname+'</b>',
+    			  "Location":'<b>'+location.name+'</b>',
+    			  "Primary Sector":'<b>'+primarysector+'</b>',
+    			  "Total commitments":'<b>'+activity.commitments+' '+activity.currecycode+'</b>',
+  				  "Total disbursements":'<b>'+activity.disbursements+' '+activity.currecycode+'</b>',
+  				  "Commitments for this location":'<b>'+location.commitments+' '+activity.currecycode+'</b>',
+  				  "Disbursements for this location":'<b>'+location.disbursements+' '+activity.currecycode+'</b>'
   				  });
   			location.isdisplayed = true;
   			features.push(pgraphic);
@@ -503,9 +453,17 @@ function drawpoints(){
 			id: "activitiesMap",
 			features: features,
 			infoWindow: {
-				template: new esri.InfoTemplate("Activity Details", "${*}"),
-			width: 300,
-			height: 300
+				template: new esri.InfoTemplate("Activity Details", "<table style='font-size: 11px;'>" +
+						"<tr><td><b>Activity<b></td><td> ${Activity}</td></tr>" +
+						"<tr><td nowrap><b>Donors<b></td><td>${Donors}</td></tr>" +
+						"<tr><td nowrap><b>Location<b></td><td>${Location}</td></tr>" +
+						"<tr><td nowrap><b>Primary Sector<b></td><td>${Primary Sector}</td></tr>" +
+						"<tr><td nowrap><b>Total commitments<b></td><td>${Total commitments}</td></tr>" +
+						"<tr><td nowrap><b>Total disbursements<b></td><td>${Total disbursements}</td></tr>" +
+						"<tr><td nowrap><b>Commitments for this location<b></td><td>${Commitments for this location}</td></tr>" +
+						"<tr><td nowrap><b>Disbursements for this location<b></td><td>${Disbursements for this location}</td></tr></table>"),
+			width: 400,
+			height: 260
 		},
 		flareLimit: 15,
 		flareDistanceFromCenter: 20
@@ -514,8 +472,6 @@ function drawpoints(){
 	timer_on=0;
 	}
 }
-
-
 
 //--------------------------------------FFerreyra Functions
 var locations = new Array();

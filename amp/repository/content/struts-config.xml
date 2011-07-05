@@ -8,8 +8,8 @@
   </form-beans>
   <action-mappings>
     <action name="contentForm" path="/content/contentManager" parameter="action" scope="session" type="org.digijava.module.content.action.ContentManager" validate="false">
-      <forward name="list" path="/showLayout.do?layout=list" />
-      <forward name="addEdit" path="/showLayout.do?layout=edit"  />
+      <forward name="list" path="/showLayout.do?layout=contentList" />
+      <forward name="addEdit" path="/showLayout.do?layout=contentEdit"  />
       <forward name="save" path="/content/contentManager.do?action=list" redirect="true" />
       <forward name="homepage" path="/content/contentManager.do?action=list" redirect="true" />
       <forward name="delete" path="/content/contentManager.do?action=list" redirect="true" />

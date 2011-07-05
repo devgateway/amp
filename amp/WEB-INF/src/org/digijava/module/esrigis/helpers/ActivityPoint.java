@@ -30,6 +30,7 @@ public class ActivityPoint {
     private String implementationlevel;
     private List<ActivitySector> sectors;
     private List<SimpleDonor> donors;
+    private String currecycode; 
     
     public ActivityPoint() {
 		super();
@@ -132,6 +133,14 @@ public class ActivityPoint {
 
 	public void setDonors(List<SimpleDonor> donors) {
 		this.donors = donors;
+	}
+
+	public String getCurrecycode() {
+		return currecycode;
+	}
+
+	public void setCurrecycode(String currecycode) {
+		this.currecycode = currecycode;
 	}
 
 }

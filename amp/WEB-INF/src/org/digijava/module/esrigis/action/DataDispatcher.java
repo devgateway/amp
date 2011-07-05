@@ -124,7 +124,7 @@ public class DataDispatcher extends MultiAction {
 			ap.setDisbursements(calculations.getTotActualDisb().toString());
 			ap.setExpenditures(calculations.getTotPlannedExp().toString());
 			ap.setSectors(SectorsToJson(aA));
-			
+			ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
 			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();

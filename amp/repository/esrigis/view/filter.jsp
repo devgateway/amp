@@ -370,6 +370,7 @@ function countSelected (selector){
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
+				  showLoading();
 				  getActivities(true);
 				  getStructures(true);
 				}
@@ -536,6 +537,7 @@ function resetToDefaults(){
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
+	currencies_dropdown_ids
 	removeOptions("org_dropdown_ids");
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");

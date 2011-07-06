@@ -36,6 +36,7 @@
     </script>
     <!-- Map Scripts -->
     <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
@@ -78,9 +79,14 @@
 
 	$(function(){
   		$('#sbyd').click(function(){
-  			searchdistance = $('#distance').val();
-     		$('#distancediv').toggle();
-     		searchactive = true;
+  	  		var value = $('#distance').val();
+  	  		if (isNumber(value)){
+  				searchdistance = value;
+     			$('#distancediv').toggle();
+     			searchactive = true;
+  	  		}else{
+				alert('The value must be numeric and positive');
+  	  	  	}
      	});
 	});
 	

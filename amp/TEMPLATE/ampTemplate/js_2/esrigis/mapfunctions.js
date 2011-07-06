@@ -29,11 +29,13 @@ var activitieson;
 var structureson;
 var maxExtent;
 var basemap;
+var structureGraphicLayer;
 /*---- Search  ----*/ 
 var searchactive=new Boolean();
 var searchdistance;
 var foundstr = new Array();
 var searchpoint;
+var rangegraphicLayer;
 /*-----------------Indicators Layers------------*/
 
 
@@ -85,12 +87,15 @@ function init() {
 
 }
 
-// Create a map, set the extent, and add the services to the map.
-function createMapAddLayers(myService1, myService2) {
-	// create map
-	lods = 
-	map = new esri.Map("map", {extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
+/**
+ * Create a map, set the extent, and add the services to the map.
+ * @param myService1
+ * @param myService2
+ */
 
+function createMapAddLayers(myService1, myService2) {
+	
+	map = new esri.Map("map", {extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
         dojo.byId('map_zoom_slider').style.top = '95px';
@@ -128,6 +133,10 @@ function createMapAddLayers(myService1, myService2) {
 	searchactive = false;
 }
 
+/**
+ * 
+ * @param id
+ */
 function toggleindicatormap(id) {
 	  var layer = map.getLayer(id);
 	  var functionalayer = map.getLayer('liberia');
@@ -142,39 +151,18 @@ function toggleindicatormap(id) {
 	  }
 	}
 
-function showLoading() {
-    esri.show(loading);
-    map.disableMapNavigation();
-    map.hideZoomSlider();
-  }
-
-  function hideLoading(error) {
-    esri.hide(loading);
-    map.enableMapNavigation();
-    map.showZoomSlider();
-    
-  
-  }
-
-function showCoordinates(evt) {
-    //get mapPoint from event
-    //The map is in web mercator - modify the map point to display the results in geographic
-    var mp = esri.geometry.webMercatorToGeographic(evt.mapPoint);
-    //display mouse coordinates
-    //console.log(mp.x + ", " + mp.y);
-     
-  }
-
 function extentHistoryChangeHandler() {
 	dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
 	dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
 }
 
+/**
+ *  resize the map when the browser resizes - view the 'Resizing and
+ *	repositioning the map' section in
+ *	the following help topic for more details
+ *	http://help.esri.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/inside_faq.htm
+ */
 function resizeMap() {
-	// resize the map when the browser resizes - view the 'Resizing and
-	// repositioning the map' section in
-	// the following help topic for more details
-	// http://help.esri.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/inside_faq.htm
 	var resizeTimer;
 	clearTimeout(resizeTimer);
 	resizeTimer = setTimeout(function() {
@@ -183,10 +171,15 @@ function resizeMap() {
 	}, 500);
 }
 
-// show map on load
-dojo.addOnLoad(init);
+/** 
+ *  show map on load
+ */
+	dojo.addOnLoad(init);
 
-
+/**
+ * 
+ * @param evt
+ */
 function doBuffer(evt) {
 	if (searchactive && searchdistance){
 		showLoading();
@@ -200,7 +193,6 @@ function doBuffer(evt) {
 	    params.outSpatialReference = map.spatialReference;
 		geometryService.buffer(params, showBuffer);
 		findbydistance(evt);
-//		hideTooltip(); //Moved to showStInfoWindow()
 	}
 	if(addActivityMode)
 	{
@@ -208,7 +200,24 @@ function doBuffer(evt) {
 	}
 }
 
-var rangegraphicLayer;
+/**
+ * 
+ */
+function clearbuffer(){
+	try{
+		if (rangegraphicLayer){
+			map.removeLayer(map.getLayer("rangelayer"));
+		}
+		map.infoWindow.hide;
+	}catch(e){
+		console.log(e);
+	}
+}
+
+/**
+ * Create a buffered point to show the search range
+ * @param geometries
+ */
 function showBuffer(geometries) {
 	  var symbol = new esri.symbol.SimpleFillSymbol( esri.symbol.SimpleFillSymbol.STYLE_SOLID,new esri.symbol.SimpleLineSymbol(
     		esri.symbol.SimpleLineSymbol.STYLE_DASH,new dojo.Color([112,0,0,0.60]), 2),new dojo.Color([112,0,0,0.15])
@@ -231,17 +240,10 @@ function showBuffer(geometries) {
     map.reorderLayer(map.getLayer("rangelayer"),0);
 }
 
-function clearbuffer(){
-	try{
-		if (rangegraphicLayer){
-			map.removeLayer(map.getLayer("rangelayer"));
-		}
-		map.infoWindow.hide;
-	}catch(e){
-		console.log(e);
-	}
-}
-
+/**
+ * Iterate structures and query the geometry server to calculate the distance. 
+ * @param evt
+ */
 function findbydistance(evt){
 	searchpoint = evt;
 	foundstr = [];
@@ -251,7 +253,6 @@ function findbydistance(evt){
 		var t=setTimeout("showStInfoWindow();",tasktime);
 	   
 		var distParams = new esri.tasks.DistanceParameters();
-		//Iterate structures and query the geometry server to calculate the distance. 
 		for ( var int = 0; int < structures.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;    
 			distParams.geometry1 = evt.mapPoint;
@@ -268,11 +269,13 @@ function findbydistance(evt){
 					showStInfoWindow();
 					}
 				});
-			
 		}
 	}
 }
 
+/**
+ *  Show the search structures resutl in a infowindow
+ */
 function showStInfoWindow () {
 	 searchactive = false;
 	 hideTooltip();
@@ -303,6 +306,10 @@ function showStInfoWindow () {
     hideLoading();
 }
 
+/**
+ * Use the clear parameter to remove all activities fron the map 
+ * @param clear
+ */
 function getActivities(clear) {
 	if (clear && cL){
 		cL.clear();
@@ -333,6 +340,10 @@ function getActivities(clear) {
 	showLoading();
 }
 
+/**
+ * 
+ * @param activity
+ */
 function MapFind(activity){
 	dojo.forEach(activity.locations,function(location) {
     	//If the location has lat and lon not needs to find the point in the map
@@ -394,6 +405,10 @@ function MapFind(activity){
     });
 }
 
+/**
+ * 
+ * @param searchText
+ */
 function execute(searchText) {
     //set the search text to find parameters
     findParams.searchText = searchText;
@@ -402,7 +417,10 @@ function execute(searchText) {
     timer_on = 1;
   }
 
-
+/**
+ * 
+ * @param results
+ */
 function showResults(results) {
     //find results return an array of findResult.
     dojo.forEach(results, function(result) {
@@ -441,6 +459,9 @@ function showResults(results) {
   	});
 }
 
+/**
+ * 
+ */
 function drawpoints(){
 	if (timer_on){
 	 if(cL!=null){ 
@@ -498,14 +519,7 @@ function getHighlights(level) {
 	var deferred = dojo.xhrGet(xhrArgs);
 }
 
-function closeHide(){
-	$('#legenddiv').hide('slow');
-	try{
-		map.removeLayer(map.getLayer("highlightMap"));
-	}
-	catch(e){}
-//	cL.clear();
-}
+
 var currentLevel;
 function MapFindLocation(level){
 	showLoading();
@@ -519,6 +533,10 @@ function MapFindLocation(level){
     queryTask.execute(query, addResultsToMap);
 }
 
+/**
+ * 
+ * @param featureSet
+ */
 function addResultsToMap(featureSet) {
     var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([150,150,150]), 1);
     var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([150, 150, 150, 0.5]));
@@ -570,6 +588,11 @@ function addResultsToMap(featureSet) {
     showLegend(rangeColors, colors);
   }
 
+/**
+ * 
+ * @param rangeColors
+ * @param colors
+ */
 function showLegend(rangeColors, colors){
 	//TODO: Should support currencies
 	var currencyString = "USD";
@@ -588,49 +611,12 @@ function showLegend(rangeColors, colors){
 	$('#legenddiv').show('slow');
 }
 
-var colorsBlue = [
-		new dojo.Color([ 222, 235, 247, 0.7]),
-		new dojo.Color([ 198, 219, 239, 0.7]),
-		new dojo.Color([ 158, 202, 225, 0.7]),
-		new dojo.Color([ 107, 174, 214, 0.7]),
-		new dojo.Color([ 66, 146, 198, 0.7]),
-		new dojo.Color([ 33, 113, 181, 0.7]),
-		new dojo.Color([ 8, 81, 156, 0.7]),
-		new dojo.Color([ 8, 48, 107, 0.7])];
 
-var colorsOrange = [
-		new dojo.Color([255, 255, 229, 0.8]),
-		new dojo.Color([255, 247, 188, 0.8]),
-		new dojo.Color([254, 227, 145, 0.8]), 
-		new dojo.Color([254, 196, 79, 0.8]), 
-		new dojo.Color([254, 153, 41, 0.8]), 
-		new dojo.Color([236, 112, 20, 0.8]), 
-		new dojo.Color([204, 76, 2, 0.8]), 
-		new dojo.Color([153, 52, 4, 0.8]), 
-		new dojo.Color([102, 37, 6 , 0.8])];
-
-
-function getMaxValue(array, measure){
-	var maxValue = 0;
-	for(var i=0; i < array.length; i++){
-		var currentMeasure = parseFloat(array[i][measure]);
-		if(currentMeasure > maxValue)
-			maxValue = currentMeasure; 
-	}
-	return maxValue+10;
-}
-
-function getMinValue(array, measure){
-	var minValue = 0;
-	for(var i=0; i < array.length; i++){
-		var currentMeasure = parseFloat(array[i][measure]);
-		if(minValue == 0) minValue = currentMeasure; 
-		if(currentMeasure < minValue)
-			minValue = currentMeasure; 
-	}
-	return minValue-10;
-}
-
+/**
+ * 
+ * @param graphicLayer
+ * @returns
+ */
 function updateLocationAttributes(graphicLayer){
     var count = graphicLayer.graphics.length;
     for(var i=0;i<count;i++) {
@@ -647,7 +633,10 @@ function updateLocationAttributes(graphicLayer){
     return graphicLayer;
 }
 
-var structureGraphicLayer;
+/**
+ * 
+ * @param clear
+ */
 function getStructures(clear) {
 	if (clear){
 		try {
@@ -688,6 +677,11 @@ function getStructures(clear) {
 	}
 }
 
+/**
+ * 
+ * @param activity
+ * @param structureGraphicLayer
+ */
 function MapFindStructure(activity, structureGraphicLayer){
 	dojo.forEach(activity.structures,function(structure) {
 		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
@@ -742,13 +736,19 @@ function MapFindStructure(activity, structureGraphicLayer){
 	});
 }
 
+/**
+ * Section for adding activities 
+ */
 
-//Section for adding activities
 var addActivityMode = false;
 function addActivity(){
 	addActivityMode = true;
 }
 
+/**
+ * 
+ * @param evt
+ */
 function selectionFunction(evt){
 	if(addActivityMode || searchactive){
 		var tooltipHolder = dojo.byId("tooltipHolder");
@@ -758,11 +758,11 @@ function selectionFunction(evt){
 		tooltipHolder.style.left = evt.pageX+5 + "px";
 	}
 }
-function hideTooltip(){
-	var tooltipHolder = dojo.byId("tooltipHolder");
-	tooltipHolder.style.display = "none";
-}
 
+/**
+ * 
+ * @param results
+ */
 function showAddActivityInfoWindow (results) {
 	hideTooltip();
 	
@@ -806,6 +806,11 @@ function showAddActivityInfoWindow (results) {
 	hideLoading();
 }
 
+/**
+ * 
+ * @param level
+ * @param evt
+ */
 function MapFindPoint(level, evt){
 	searchpoint = evt;
 	showLoading();
@@ -818,6 +823,9 @@ function MapFindPoint(level, evt){
     queryTask.execute(query, showAddActivityInfoWindow);
 }
 
+/**
+ * 
+ */
 function submitActivity(){
 	var name, lat, lon, geoid;
 	name = dojo.byId("activityName");

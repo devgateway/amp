@@ -773,7 +773,7 @@ function collapseAll() {
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 										<div id="budget_dots">...</div>
 										<div id="act_budget" style="display: none;">
-										<field:display name="On/Off/Treasure Budget" feature="Budget">
+										<field:display name="On/Off/Treasury Budget" feature="Budget">
 
 											<c:choose>
 												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">

@@ -394,7 +394,7 @@ function commentWin(val, commentId) {
 																				<table>
 																				<c:if test="${aimChannelOverviewForm.budgetCV != null && 
 																						aimChannelOverviewForm.budgetCV.value=='On'}">
-																					<field:display name="On/Off/Treasure Budget" feature="Budget">
+																					<field:display name="On/Off/Treasury Budget" feature="Budget">
 																						<tr>
 																							<td>
 																								<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
@@ -534,7 +534,7 @@ function commentWin(val, commentId) {
 																						</tr>
 																					</field:display>
 																				</table>
-																			<field:display name="On/Off/Treasure Budget" feature="Budget">
+																			<field:display name="On/Off/Treasury Budget" feature="Budget">
 																			<c:choose>
 																				<c:when test="${aimChannelOverviewForm.budgetCV!=null && aimChannelOverviewForm.budgetCV.value=='Off'}">
 																					<digi:trn>Activity is Off Budget</digi:trn>

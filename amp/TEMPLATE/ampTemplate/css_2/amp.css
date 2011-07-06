@@ -417,4 +417,5 @@ td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:underline;}
 div.yui-ac-hd{border:1px solid red;}
 div.adminicon{float:right;}
 .t-name {font-size:11px;}
-.activity_me {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:15px; padding:10px;}
+.activity_me {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:15px; padding:10px; display:block;}
+.activity_me td {padding-bottom:8px;}

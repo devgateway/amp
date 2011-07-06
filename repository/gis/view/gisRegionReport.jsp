@@ -340,7 +340,7 @@
 		<script language="JavaScript">
 		function showSelActivity(activityId) {
 			//var actUrl = "/aim/selectActivityTabs.do~pageId=2~ampActivityId=" + activityId;
-			var actUrl = "/aim/viewActivityPreview.do~isPreview=1~activityId=" + activityId;
+			var actUrl = "/aim/viewActivityPreview.do~isPreview=1~pageId=2~activityId=" + activityId;
 			
 			if (window.opener.opener == null) {
 				window.open(actUrl, null, null);

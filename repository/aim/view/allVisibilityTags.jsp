@@ -699,7 +699,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off/Treasure Budget" feature="Budget"></field:display>
+ <field:display name="On/Off/Treasury Budget" feature="Budget"></field:display>
  <field:display name="Project Code" feature="Budget"></field:display>
  <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 

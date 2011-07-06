@@ -764,7 +764,7 @@ target.style.cursor = "default"
 											<feature:display name="Budget" module="Project ID and Planning">
 											
 											
-												<field:display name="On/Off/Treasure Budget" feature="Budget">
+												<field:display name="On/Off/Treasury Budget" feature="Budget">
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 

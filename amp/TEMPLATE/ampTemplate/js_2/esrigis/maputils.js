@@ -68,6 +68,32 @@ var colorsOrange = [ new dojo.Color([ 255, 255, 229, 0.8 ]),
 		new dojo.Color([ 153, 52, 4, 0.8 ]),
 		new dojo.Color([ 102, 37, 6, 0.8 ]) ];
 
+var colorsDiverge = [new dojo.Color([165, 0, 38, 0.8 ]),
+                     new dojo.Color([215, 48, 39, 0.8 ]),
+                     new dojo.Color([244, 109, 67, 0.8 ]),
+                     new dojo.Color([253, 174, 97, 0.8 ]),
+                     new dojo.Color([254, 224, 144, 0.8 ]),
+                     new dojo.Color([255, 255, 191, 0.8 ]),
+                     new dojo.Color([224, 243, 248, 0.8 ]),
+                     new dojo.Color([171, 217, 233, 0.8 ]),
+                     new dojo.Color([116, 173, 209, 0.8 ]),
+                     new dojo.Color([69, 117, 180, 0.8 ]),
+                     new dojo.Color([49, 54, 149, 0.8 ])];
+
+var colorsCualitative = [
+new dojo.Color([166, 206, 227, 0.8 ]),
+new dojo.Color([31, 120, 180, 0.8 ]),
+new dojo.Color([178, 223, 138, 0.8 ]),
+new dojo.Color([51, 160, 44, 0.8 ]),
+new dojo.Color([251, 154, 153, 0.8 ]),
+new dojo.Color([227, 26, 28, 0.8 ]),
+new dojo.Color([253, 191, 111, 0.8 ]),
+new dojo.Color([255, 127, 0, 0.8 ]),
+new dojo.Color([202, 178, 214, 0.8 ]),
+new dojo.Color([106, 61, 154, 0.8 ]),
+new dojo.Color([255, 255, 153, 0.8 ])
+];
+
 /**
  * 
  * @param array
@@ -101,3 +127,16 @@ function getMinValue(array, measure) {
 	}
 	return minValue - 10;
 }
+
+
+function containsDonor(donor, donorArray) {
+    var i;
+    for (i = 0; i < donorArray.length; i++) {
+        if (donorArray[i].donorCode == donor.donorCode) {
+            return true;
+        }
+    }
+    return false;
+}
+
+

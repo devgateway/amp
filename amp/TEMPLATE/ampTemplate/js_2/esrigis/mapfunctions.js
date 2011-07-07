@@ -351,6 +351,8 @@ function getActivities(clear) {
  * 
  * @param activity
  */
+var donorArray = new Array();
+
 function MapFind(activity){
 	dojo.forEach(activity.locations,function(location) {
     	//If the location has lat and lon not needs to find the point in the map
@@ -388,9 +390,15 @@ function MapFind(activity){
     		});
     		
     		var donorname;
+    		var donorCode;
     		dojo.forEach(activity.donors,function(donor) {
+    			if(!containsDonor(donor, donorArray)){
+    	  			donorArray.push(donor);
+    				
+    			}
     			if (donorname==null){
     				donorname = donor.donorname;
+    				donorCode = donor.donorCode;
     			}else{
     				donorname = donorname +","+ donor.donorname;
     			}
@@ -403,7 +411,8 @@ function MapFind(activity){
     			  "Total commitments":'<b>'+activity.commitments+' '+activity.currecycode+'</b>',
   				  "Total disbursements":'<b>'+activity.disbursements+' '+activity.currecycode+'</b>',
   				  "Commitments for this location":'<b>'+location.commitments+' '+activity.currecycode+'</b>',
-  				  "Disbursements for this location":'<b>'+location.disbursements+' '+activity.currecycode+'</b>'
+  				  "Disbursements for this location":'<b>'+location.disbursements+' '+activity.currecycode+'</b>',
+  				  "Code":''+donorCode+''
   				  });
   			location.isdisplayed = true;
   			features.push(pgraphic);
@@ -465,6 +474,8 @@ function showResults(results) {
   	});
 }
 
+
+
 /**
  * 
  */
@@ -474,9 +485,60 @@ function drawpoints(){
 		 cL._features=[];
 		 cL.levelPointTileSpace = [];
 	 }
+	 //Create palette for individual donors
+	 var pointSymbolBank = new Array();
+	 for(var i=0; i < donorArray.length; i++){
+		 var pointObject = new esri.symbol.SimpleMarkerSymbol( esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, colorsCualitative[i], 1), colorsCualitative[i]);
+		 pointSymbolBank[donorArray[i].donorCode] = pointObject;
+	 }
+	 //Add standard symbols
+	 pointSymbolBank["single"] = new esri.symbol.SimpleMarkerSymbol(
+             esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
+             10,
+             new esri.symbol.SimpleLineSymbol(
+                     esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                     new dojo.Color([0, 0, 0, 1]),
+                     1
+                 ),
+             new dojo.Color([255, 215, 0, 1]));
+	 
+	 pointSymbolBank["less16"] =  new esri.symbol.SimpleMarkerSymbol(
+             esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
+             20,
+             new esri.symbol.SimpleLineSymbol(
+                     esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                     new dojo.Color([0, 0, 0, 1]),
+                     1
+                 ),
+             new dojo.Color([255, 215, 0, 1]));
+	 pointSymbolBank["less30"] = new esri.symbol.SimpleMarkerSymbol(
+             esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
+             30,
+             new esri.symbol.SimpleLineSymbol(
+                     esri.symbol.SimpleLineSymbol.STYLE_NULL,
+                     new dojo.Color([0, 0, 0, 0]),
+                     1
+                 ),
+             new dojo.Color([100, 149, 237, .85]));
+	 pointSymbolBank["less50"] = new esri.symbol.SimpleMarkerSymbol(
+             esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
+             30,
+             new esri.symbol.SimpleLineSymbol(
+                     esri.symbol.SimpleLineSymbol.STYLE_NULL,
+                     new dojo.Color([0, 0, 0, 0]),
+                     1
+                 ),
+             new dojo.Color([65, 105, 225, .85]));
+	 pointSymbolBank["over50"] = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
+             new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_NULL,
+                     new dojo.Color([0, 0, 0]), 0),
+                     new dojo.Color([255, 69, 0, 0.65]));
+     var symbolBank = pointSymbolBank;
+	 
 	  	cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,
 			map: map,
+			symbolBank: symbolBank,
 			id: "activitiesMap",
 			features: features,
 			infoWindow: {
@@ -493,9 +555,10 @@ function drawpoints(){
 			height: 260
 		},
 		flareLimit: 15,
-		flareDistanceFromCenter: 20
+		flareDistanceFromCenter: 30
 	});
 	map.addLayer(cL);
+    showLegendClusterDonor(pointSymbolBank);
 	timer_on=0;
 	}
 }
@@ -842,4 +905,31 @@ function submitActivity(){
 	geoIdShort = geoId.value.substring(0,4)
 	window.open("/wicket/onepager/activity/new/name/" + name.value + "/lat/"+lat.value+"/lon/"+lon.value+"/geoId/"+geoIdShort);
 	
+}
+
+function showLegendCluster(pointSymbolBank){
+	var htmlDiv = "";
+	htmlDiv += "<div onclick='closeHide()' style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div class='legendHeader'>Cluster color reference<br/><hr/></div>";
+	for (i in pointSymbolBank) {
+		htmlDiv += "<div class='legendContentContainer'>"
+				+ "<div class='legendContentValue' style='background-color:rgba(" + pointSymbolBank[i].color.toRgba() + ");' ></div>"
+				+"</div>"
+				+ "<div class='legendContentLabel'>" + i + " </div><br/>";
+	}
+	$('#legenddiv').html(htmlDiv);
+	$('#legenddiv').show('slow');
+}
+function showLegendClusterDonor(pointSymbolBank){
+	var htmlDiv = "";
+	htmlDiv += "<div onclick=\"$('#legenddiv').hide('slow');\" style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div class='legendHeader'>Point color reference<br/><hr/></div>";
+	for (var i=0; i < donorArray.length; i++) {
+		htmlDiv += "<div class='legendContentContainer'>"
+				+ "<div class='legendContentValue' style='background-color:rgba(" + pointSymbolBank[donorArray[i].donorCode].color.toRgba() + ");' ></div>"
+				+"</div>"
+				+ "<div class='legendContentLabel'>" + donorArray[i].donorname + " </div><br/>";
+	}
+	$('#legenddiv').html(htmlDiv);
+	$('#legenddiv').show('slow');
 }

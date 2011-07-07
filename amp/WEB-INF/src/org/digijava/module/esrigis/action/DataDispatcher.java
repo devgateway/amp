@@ -117,6 +117,7 @@ public class DataDispatcher extends MultiAction {
 				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}

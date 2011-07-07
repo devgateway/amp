@@ -50,48 +50,8 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         
         //default symbol bank for clusters and single graphics
         //TODO: allow for user supplied symbol bank to override.  just use an ESRI renderer somehow?
-        this.symbolBank = {
-            "single": new esri.symbol.SimpleMarkerSymbol(
-                            esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
-                            10,
-                            new esri.symbol.SimpleLineSymbol(
-                                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                                    new dojo.Color([0, 0, 0, 1]),
-                                    1
-                                ),
-                            new dojo.Color([255, 215, 0, 1])),
-            "less16": new esri.symbol.SimpleMarkerSymbol(
-                            esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
-                            20,
-                            new esri.symbol.SimpleLineSymbol(
-                                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                                    new dojo.Color([0, 0, 0, 1]),
-                                    1
-                                ),
-                            new dojo.Color([255, 215, 0, 1])),
-            "less30": new esri.symbol.SimpleMarkerSymbol(
-                            esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
-                            30,
-                            new esri.symbol.SimpleLineSymbol(
-                                    esri.symbol.SimpleLineSymbol.STYLE_NULL,
-                                    new dojo.Color([0, 0, 0, 0]),
-                                    1
-                                ),
-                            new dojo.Color([100, 149, 237, .85])),
-            "less50": new esri.symbol.SimpleMarkerSymbol(
-                            esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
-                            30,
-                            new esri.symbol.SimpleLineSymbol(
-                                    esri.symbol.SimpleLineSymbol.STYLE_NULL,
-                                    new dojo.Color([0, 0, 0, 0]),
-                                    1
-                                ),
-                            new dojo.Color([65, 105, 225, .85])),
-            "over50": new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
-                       new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_NULL,
-                       new dojo.Color([0, 0, 0]), 0),
-                       new dojo.Color([255, 69, 0, 0.65]))
-        };
+        
+        this.symbolBank = options.symbolBank;
 
         //how far away the flare will be from the center of the cluster in pixels - Number
         this._flareDistanceFromCenter = options.flareDistanceFromCenter || 20;
@@ -215,11 +175,21 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
                 //constructing the flare graphic point
                 pt = new esri.geometry.Point(x, y, this._map.spatialReference)
-                ptGraphic = new esri.Graphic(pt, this.symbolBank.single, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
+                var currentSymbol;
+                //Get donor code and draw
+                if (this.symbolBank[graphic.attributes[i].Code] != null)
+                	currentSymbol = this.symbolBank[graphic.attributes[i].Code];
+                else
+                	currentSymbol = this.symbolBank.single;
+                
+                ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
+//                alert(ptGraphic.attributes["Code"]);
 
                 //try to always bring flare graphic to front of everything else
                 p = this.add(ptGraphic);
                 p.getDojoShape().moveToFront();
+                //p holds the attribute information. Construct a symbol based on the id for coloring donors
+                
 
                 //reset our 0,0 placeholder point in line to the actual point of the recently created flare graphic
                 line.setPoint(0, 1, pt);
@@ -383,7 +353,6 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 } else {
                                     sym = this.symbolBank.over50;
                                 }
-                                
                                 //get attributes for info window
                                 var atts = dojo.map(col, function(item) {
                                     return item.attributes;
@@ -393,7 +362,22 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 var graphicAtts = dojo.mixin(atts, { isCluster: true, clusterSize: col.length });
 
                                 //add cluster to map
-                                this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), sym, graphicAtts));
+                                if (col.length <= 4) {
+                                	var growth = 12;
+                                    dojo.forEach(col, function(point) {
+                                    	var currentSymbol;
+                                    	if(point.attributes.Code){
+                                        	currentSymbol = Object.create(this.symbolBank[point.attributes.Code]);
+                                        	currentSymbol.size = currentSymbol.size+growth;
+                                        	growth = growth - 4;
+                                    	}
+                                        this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), currentSymbol, graphicAtts));
+                                    }, this);
+                                }
+                                else
+                                {
+                                    this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), sym, graphicAtts));
+                                }
 
                                 //initial testing w/ IE8 shows that TextSymbols are not displayed for some reason
                                 //this may be an isolated issue.  more testing needed.
@@ -402,7 +386,12 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
-                                    this.add(new esri.Graphic(point, this.symbolBank.single, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
+                                	var currentSymbol;
+                                	if(point.attributes.Code)
+                                    	currentSymbol = this.symbolBank[point.attributes.Code];
+                                	else
+                                		currentSymbol = this.symbolBank.single;
+                                    this.add(new esri.Graphic(point, currentSymbol, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
                                 }, this);
                             }
                         }

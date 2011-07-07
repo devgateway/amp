@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpTeamPageFilters"
+		table="AMP_TEAM_PAGE_FILTERS">
+		<cache usage="read-write" />
+		<id name="ampTeamPageFilterId" column="amp_team_page_filter_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_TEAMPAGEFILTER_seq</param>
+			</generator>
+		</id>
+
+		<many-to-one name="team" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+		<many-to-one name="page" class="org.digijava.module.aim.dbentity.AmpPages" cascade="none" />
+		<many-to-one name="filter" class="org.digijava.module.aim.dbentity.AmpFilters"
+			cascade="none" />
+
+	</class>
+</hibernate-mapping>
+

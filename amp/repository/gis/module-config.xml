@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>gis</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/showGisDashboard" /> 
+		<action login-required="true" pattern="/mapLoader" /> 
+		<action login-required="true" pattern="/gisService" /> 
+		<action login-required="false" pattern="/getFoundingDetails" /> 
+		<action login-required="false" pattern="/showPublicGis" />
+		<action login-required="false" pattern="/ShowRegionReport" />
+		<action login-required="false" pattern="/pdfExport" />
+		<action login-required="true" pattern="/showGisSettings" />
+	</security>
+	
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMap</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapPoint</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapSegment</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapShape</hibernate-class>
+        <hibernate-class>org.digijava.module.gis.dbentity.GisSettings</hibernate-class>
+	</hibernate-classes>
+	
+</module-config>

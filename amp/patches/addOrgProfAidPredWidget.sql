@@ -1,0 +1,1 @@
+Insert into amp_widget (widget_type,widget_name,chart_type) values("orgprofile","Aid predictability",8);

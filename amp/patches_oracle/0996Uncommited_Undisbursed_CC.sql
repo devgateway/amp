@@ -1,0 +1,4 @@
+update amp_measures set expression='uncommitedBalance', description='Proposed Project Cost - Total Actual Commitments' where expression='uncommitedCumulativeBalance';
+update amp_measures set expression='undisbursedBalance',description='Total Actual Commitment - Total Actual Disbursement' where expression='undisbursedCumulativeBalance';
+insert into amp_columns (columnName,cellType,tokenExpression,description) values ('Uncommitted Cumulative Balance','org.dgfoundation.amp.ar.cell.ComputedAmountCell','uncommitedCumulativeBalance','Proposed Project Cost - Cumulative Commitment');
+insert into amp_columns (columnName,cellType,tokenExpression,description) values ('Undisbursed Cumulative Balance','org.dgfoundation.amp.ar.cell.ComputedAmountCell','undisbursedCumulativeBalance','Cumulative Commitment - Cumulative Disbursements');

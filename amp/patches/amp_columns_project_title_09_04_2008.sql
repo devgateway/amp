@@ -1,0 +1,1 @@
+UPDATE amp_columns SET cellType='org.dgfoundation.amp.ar.cell.MetaTextCell' WHERE columnName='Project Title';

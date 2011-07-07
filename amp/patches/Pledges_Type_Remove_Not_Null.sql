@@ -1,0 +1,1 @@
+ALTER TABLE `amp_funding_pledges_details` Modify pledge_type BIGINT(20);

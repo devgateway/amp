@@ -81,17 +81,17 @@ var colorsDiverge = [new dojo.Color([165, 0, 38, 0.8 ]),
                      new dojo.Color([49, 54, 149, 0.8 ])];
 
 var colorsCualitative = [
-new dojo.Color([166, 206, 227, 0.8 ]),
-new dojo.Color([31, 120, 180, 0.8 ]),
-new dojo.Color([178, 223, 138, 0.8 ]),
-new dojo.Color([51, 160, 44, 0.8 ]),
-new dojo.Color([251, 154, 153, 0.8 ]),
-new dojo.Color([227, 26, 28, 0.8 ]),
-new dojo.Color([253, 191, 111, 0.8 ]),
-new dojo.Color([255, 127, 0, 0.8 ]),
-new dojo.Color([202, 178, 214, 0.8 ]),
-new dojo.Color([106, 61, 154, 0.8 ]),
-new dojo.Color([255, 255, 153, 0.8 ])
+new dojo.Color([166, 206, 227, 1]),
+new dojo.Color([31, 120, 180, 1]),
+new dojo.Color([178, 223, 138, 1]),
+new dojo.Color([51, 160, 44, 1]),
+new dojo.Color([251, 154, 153, 1]),
+new dojo.Color([227, 26, 28, 1]),
+new dojo.Color([253, 191, 111, 1]),
+new dojo.Color([255, 127, 0, 1]),
+new dojo.Color([202, 178, 214, 1]),
+new dojo.Color([106, 61, 154, 1]),
+new dojo.Color([255, 255, 153, 1])
 ];
 
 /**

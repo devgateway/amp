@@ -162,6 +162,7 @@
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
 						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></td>
+						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></td>
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 								<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="<digi:trn>Select base Map</digi:trn>" style="background:#fff;border:1px solid #fff;">
@@ -180,7 +181,7 @@
  		</div>
  		 
         <div id="legenddiv" class="legendContent roundedCornersLegend"></div>
-         <div id="legendDiv" class="legendContent roundedCornersLegend" style="position: absolute;margin-left: 8%;margin-top: 35%;z-index: 100;display: none;"></div>
+         <div id="legendDiv" class="legendContent roundedCornersLegend" style="position: absolute;margin-left: 8%;margin-top: 32%;z-index: 100;display: none;"></div>
         <div id="distancediv" class="searchContent">
         	<table>
         		<tr>

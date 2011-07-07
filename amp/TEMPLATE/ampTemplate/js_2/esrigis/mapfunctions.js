@@ -38,21 +38,28 @@ var searchpoint;
 var rangegraphicLayer;
 /*-----------------Indicators Layers------------*/
 
-
+/**
+ * 
+ */
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer";
 	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
-	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/8";
+	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
+	var population = "http://4.79.228.117:8399/arcgis/rest/services/LiberiaPopulaitionDensity/MapServer";
 	
 	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
+	
+	
 	povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, {
 		mode: esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
 		id:'indicator',opacity : 0.50,
 		visible:false
       });
+	
+	populationmap = new esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity : 0.80,visible:false,id:'census'});
 	
 	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
@@ -123,7 +130,7 @@ function createMapAddLayers(myService1, myService2) {
 	
 	map.addLayer(myService1);
 	map.addLayer(myService2);
-	map.addLayers([povertyratesmap]);
+	map.addLayers([povertyratesmap,populationmap]);
 	
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
@@ -388,9 +395,8 @@ function MapFind(activity){
     				donorname = donorname +","+ donor.donorname;
     			}
     		});
-    		
     		pgraphic.setAttributes( {
-    			  "Activity":'<a href="/aim/selectActivityTabs.do~ampActivityId='+activity.id+'" target="_blank">'+activity.activityname+'</a>',	
+    			  "Activity":'<a href="/aim/viewActivityPreview.do~activityId='+activity.id+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',	
     			  "Donors":'<b>'+donorname+'</b>',
     			  "Location":'<b>'+location.name+'</b>',
     			  "Primary Sector":'<b>'+primarysector+'</b>',

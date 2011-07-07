@@ -460,7 +460,8 @@ function addActionToURL(actionName){
   }
 	
   function validate(){
-	        var titleSize=document.messageForm.messageName.value.length;
+	  	
+	        var titleSize=document.messageForm.messageName.value.trim().length;
             var descSize=document.messageForm.description.value.length;
             <c:set var="message">
         		<digi:trn>Please enter name </digi:trn>						

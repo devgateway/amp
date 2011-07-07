@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -54,12 +55,14 @@ public class AmpCategoryValueByKeyModel implements
 
 	@Override
 	public void setObject(Set<AmpCategoryValue> newValues) {
-		Collection oldValues = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject());
-		model.getObject().removeAll(oldValues);
+		if (model.getObject() != null){
+			Collection oldValues = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject());
+			model.getObject().removeAll(oldValues);
+		}
+		else{
+			model.setObject(new HashSet<AmpCategoryValue>());
+		}
 		model.getObject().addAll(newValues);
-		
 	}
-
-	
 
 }

@@ -82,6 +82,7 @@ public class ActivityUtil {
 			a.setAmpActivityGroup(group);
 			a.setModifiedDate(Calendar.getInstance().getTime());
 			a.setModifiedBy(wicketSession.getAmpCurrentMember());
+			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
 			saveIndicators(a, session);
 			saveResources(a);

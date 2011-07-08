@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
@@ -165,7 +166,9 @@ public class DbHelper {
 			}
 			
 			//Additional clause to get the last version
-			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+			if (ActivityVersionUtil.isVersioningEnabled()){
+				oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";			
+			}
 			
 
 			Session session = PersistenceManager.getRequestDBSession();

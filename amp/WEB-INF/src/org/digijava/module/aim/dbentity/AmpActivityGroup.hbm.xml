@@ -12,7 +12,7 @@
 		
 		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
-			not-null="true" />
+			not-null="false" />
 
 		<set name="activities" inverse="true" lazy="true">
 			<cache usage="read-write" />

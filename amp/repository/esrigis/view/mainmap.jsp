@@ -50,7 +50,7 @@
    	
    	 <style type="text/css">
       @import "http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css";
-      .zoominIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomin.png); width:16px; height:16px; }
+      .zoominIcon { background:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomin.png) no-repeat right; width:16px; height:16px;}
       .zoomoutIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomout.png); width:16px; height:16px; }
       .zoomfullextIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_fullextent.png); width:16px; height:16px; }
       .zoomprevIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_previous.png); width:16px; height:16px; }
@@ -175,6 +175,8 @@
 						</field:display>
 					</tr>
 			</table>
+                    <div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
+
 		</div>
 		<div id="filterdiv" style="position:absolute;z-Index:100;right: 5px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
@@ -197,8 +199,9 @@
         		</tr>
         	</table>
         </div>
-        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:10px; z-Index:999;display: none;margin-top: 40px;">
-        <div class="toolscontainer" style="margin:5px 0px 0px 40px;">
+        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:25px; z-Index:999;display: none;margin-top: 40px;">
+        <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
+        	<h3>Control Panel</h3>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>

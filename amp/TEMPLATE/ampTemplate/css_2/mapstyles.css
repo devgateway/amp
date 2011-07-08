@@ -58,7 +58,6 @@ body {
 .headerBackground {
     background:url(/TEMPLATE/ampTemplate/img_2/mapbg.jpg) repeat-x top;
 	height: 50px;
-    opacity: 0.7;
     position: absolute;
     top: 0;
     width: 100%;
@@ -109,16 +108,18 @@ body {
 }
 
 .legendContent {
-    background-color: rgba(0, 0, 0, 0.3);
+    background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
 	left: 100px;
 	bottom: 10px;
 	display: none;
 	width:200px;
-	padding:10px;    
+	padding:10px; 
+	filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;   
     
 }
+.legendContent *{filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
 
 .legendContentValue {
 	width:100%;
@@ -179,23 +180,23 @@ body {
 
 .esriBasemapGallery {
 	position:absolute;
+	background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	z-index:100;
 	margin-top:5%;
 	margin-left:70%;
 	font-size: 11px;
 	display:none;
-	width:400px;
-	background:#fff;
+	width:410px;
 	overflow:auto;
-	height:300px;
-	border:10px solid #fff;
-	-moz-border-radius: 15px;
-border-radius: 15px;
+	height:310px;
+	padding:10px;
+	filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;
+	color:#fff;
+	
+
 
 }
-.roundedCornersLegend {
-	-moz-border-radius: 15px;
-}
+
 
 
 .tooltip {

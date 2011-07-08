@@ -404,7 +404,7 @@ function MapFind(activity){
     			}
     		});
     		pgraphic.setAttributes( {
-    			  "Activity":'<a href="/aim/viewActivityPreview.do~activityId='+activity.id+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',	
+    			  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.id+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',	
     			  "Donors":'<b>'+donorname+'</b>',
     			  "Location":'<b>'+location.name+'</b>',
     			  "Primary Sector":'<b>'+primarysector+'</b>',
@@ -764,8 +764,9 @@ function MapFindStructure(activity, structureGraphicLayer){
 			
 			pgraphic.setAttributes( {
 				  "Structure Name":structure.name,
-				  "Activity": activity.activityname,
-				  "Structure Type":structure.type
+				  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
+				  "Structure Type":structure.type,
+				  "Coordinates":pt.x + " " + pt.y
 				  });
 			structures.push(pgraphic);
 		}
@@ -776,8 +777,9 @@ function MapFindStructure(activity, structureGraphicLayer){
 				pgraphic = new esri.Graphic(jsonObject);
 				pgraphic.setAttributes( {
 					  "Structure Name":structure.name,
-					  "Activity": activity.activityname,
-					  "Structure Type":structure.type
+					  "Structure Type":structure.type,
+					  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
+					  "Coordinates":pgraphic.geometry.x + " " + pgraphic.geometry.y 
 					  });
 				pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
 				if(jsonObject.symbol.style == "esriSMSCircle") //If it's a point, put the appropriate icon
@@ -794,8 +796,9 @@ function MapFindStructure(activity, structureGraphicLayer){
 				pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
 				pgraphic.setAttributes( {
 					  "Structure Name":structure.name,
-					  "Activity": activity.activityname,
-					  "Structure Type":structure.type
+					  "Structure Type":structure.type,
+					  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
+					  "Coordinates":pgraphic.geometry.x + " " + pgraphic.geometry.y
 					  });
 				
 			}

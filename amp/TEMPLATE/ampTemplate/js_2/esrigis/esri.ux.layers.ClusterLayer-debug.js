@@ -292,7 +292,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
         var df = dojox.lang.functional,
             map = this._map,
-            level = this._map.getLevel() ,
+            level = this._map.getLevel(),
             extent = this._map.extent;
 
         var tileInfo = map.getLayer(map.layerIds[0]).tileInfo;  //get current tiling scheme.  This restriction can be removed.  the only thing required is origin, array of grid pixel resolution, & grid pixel size

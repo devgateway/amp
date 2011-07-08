@@ -148,7 +148,9 @@
 						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight<br/>regions</digi:trn></td>
 						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight<br/>Zones</digi:trn></td>
 						<td valign="top" class="mapMenuItem" align="left" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add<br/>Activity</digi:trn></td>
+						<!-- 
 						<td valign="middle" class="mapMenuItem" align="left" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
+						-->
 						<td valign="middle" class="mapMenuItem" align="left" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
 						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty<br/>Map</digi:trn></td>
 						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census<br/>Map</digi:trn></td>

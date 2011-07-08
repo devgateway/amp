@@ -12,6 +12,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
@@ -69,11 +70,11 @@ public class UserLevelGate extends Gate {
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		
-		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		AmpActivityVersion act = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		
 		//AMP-9768 - apply permissions to teamHead for other workspaces than his own 
 		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
-		if(act==null) act=(AmpActivity) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+		if(act==null) act=(AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		boolean owner=false;
 		if (act.getActivityCreator()==null){
 			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -363,8 +364,11 @@ public class ExportToPDF extends Action {
             }
             if (fundingOpt.equals("2") || fundingOpt.equals("3")){
 	            PdfPTable fundingGraph = new PdfPTable(1);
-	            fundingGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
+	            fundingGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
 	            fundingGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(fundingTrn, HEADERFONT));
 	            fundingGraph.addCell(cell);
@@ -400,8 +404,11 @@ public class ExportToPDF extends Action {
             }
             if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
 	            PdfPTable aidPredGraph = new PdfPTable(1);
-	            aidPredGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getAidPredictabilityGraph(),null);
+	            aidPredGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getAidPredictabilityGraph(),null);
 	            aidPredGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(aidPredTrn, HEADERFONT));
 	            aidPredGraph.addCell(cell);
@@ -438,8 +445,11 @@ public class ExportToPDF extends Action {
             }
             if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
 	            PdfPTable aidTypeGraph = new PdfPTable(1);
-	            aidTypeGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getAidTypeGraph(),null);
+	            aidTypeGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getAidTypeGraph(),null);
 	            aidTypeGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(aidTypeTrn, HEADERFONT));
 	            aidTypeGraph.addCell(cell);
@@ -477,8 +487,11 @@ public class ExportToPDF extends Action {
             }
             if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
                 PdfPTable finInstGraph = new PdfPTable(1);
-	            finInstGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getFinancingInstGraph(),null);
+	            finInstGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getFinancingInstGraph(),null);
 	            finInstGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(finInstTrn, HEADERFONT));
 	            finInstGraph.addCell(cell);
@@ -516,8 +529,11 @@ public class ExportToPDF extends Action {
             }
             if (sectorOpt.equals("2") || sectorOpt.equals("3")){
                 PdfPTable sectorGraph = new PdfPTable(1);
-	            sectorGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getSectorGraph(),null);
+	            sectorGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getSectorGraph(),null);
 	            sectorGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(sectorProfTrn, HEADERFONT));
 	            sectorGraph.addCell(cell);
@@ -555,8 +571,11 @@ public class ExportToPDF extends Action {
             }
             if (regionOpt.equals("2") || regionOpt.equals("3")){
 	            PdfPTable regionGraph = new PdfPTable(1);
-	            regionGraph.setWidthPercentage(60);
-	            img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
+	            regionGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
 	            regionGraph.addCell(img);
 	            cell = new PdfPCell(new Paragraph(regionProfTrn, HEADERFONT));
 	            regionGraph.addCell(cell);

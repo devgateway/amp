@@ -1647,7 +1647,7 @@ function refreshBoxes(o){
 				inner = "";
 				for(var i = 0; i < child.top.length; i++){
 					//inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";  
-					inner = inner + (i+1) + ". " + "<a href='/aim/selectActivityTabs.do~ampActivityId=" + child.top[i].id + "'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");

@@ -130,11 +130,12 @@ public class ActivityUtil {
 		Session session = am.getSession();
 		am.setTransaction(session.beginTransaction());
 		
+		AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
 		//check the activity group for the last version of an activity
-		AmpActivityGroup group = (AmpActivityGroup)session.load(AmpActivityGroup.class, id);
+		AmpActivityGroup group = act.getAmpActivityGroup();
 		if (group == null){
 			//Activity created previous to the versioning system?
-			AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
+			//AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
 			if (act == null) //inexistent?
 				return null;
 			

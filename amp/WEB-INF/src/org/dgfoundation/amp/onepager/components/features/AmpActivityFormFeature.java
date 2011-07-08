@@ -97,7 +97,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				am.setObject(am.getObject());
 				info("Activity saved successfully");
 				if (newActivity){
-					Long actId = am.getObject().getAmpActivityGroup().getAmpActivityGroupId();
+					Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
 					target.appendJavascript("window.location.replace(window.location.href.replace(\"new\" , \"" + actId + "\"));");
 				}
 				target.addComponent(feedbackPanel);

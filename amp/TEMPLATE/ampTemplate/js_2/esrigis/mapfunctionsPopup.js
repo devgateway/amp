@@ -339,8 +339,8 @@ function selectLocationCaller(currentLocation){
 	//This takes an identifier for the element shape (the sibling of the Map button) and replaces shape with latitude and longitude
 	var callerIdentifierLatitude = callerButton.nextSibling.name.replace("shape","latitude");
 	var callerIdentifierLongitude = callerButton.nextSibling.name.replace("shape","longitude");
-	window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value = esri.geometry.webMercatorToGeographic(currentLocation).x;
-	window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value = esri.geometry.webMercatorToGeographic(currentLocation).y;
+	window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value = esri.geometry.webMercatorToGeographic(currentLocation).y;
+	window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value = esri.geometry.webMercatorToGeographic(currentLocation).x;
 
 	//Very experimental, storing the point as Json Object
 	var shapeField = callerButton.nextSibling; //this is the "shape" field

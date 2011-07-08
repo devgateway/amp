@@ -130,39 +130,28 @@
         <div id="basemapGallery"></div>
        	<div id="basemapGalleryesri"></div>
        <div class="headerBackground"> </div>
-       <div class="header">
-            <table style="height: 100%;">
-                <tbody>
-                	<tr valign="middle">
-                    	<td style="width: 45%;">
-                        	<table>
-                            	<tbody>
-                            		<tr>
-                                		<div>
+       <div class="header"style="float:left;">
+         
+                                		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
 											<img src="/TEMPLATE/ampTemplate/img_2/amp_trans.png" align=left>
 											<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 										</div>
-                            		</tr>
-                        		</tbody>
-                        	</table>
-                    </td>
-                </tr>
-            </tbody></table>
+                      
         </div>
         <div class="headerContent" align="right" style="vertical-align: middle;">
 			<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
-						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;"><digi:trn>Tools</digi:trn></td>
-						<td id="filterbtn" class="mapMenuItem" valign="middle" align="right" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" id="search" style="cursor: pointer;"><digi:trn>Search Structures</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></td>
-						<td valign="middle" class="mapMenuItem" align="center" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></td>
+						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Tools</digi:trn></td>
+						<td id="filterbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" id="search" style="cursor: pointer;"><digi:trn>Search<br/>Structures</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight<br/>regions</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight<br/>Zones</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add<br/>Activity</digi:trn></td>
+						<td valign="middle" class="mapMenuItem" align="left" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
+						<td valign="middle" class="mapMenuItem" align="left" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty<br/>Map</digi:trn></td>
+						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census<br/>Map</digi:trn></td>
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 								<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="<digi:trn>Select base Map</digi:trn>" style="background:#fff;border:1px solid #fff;">

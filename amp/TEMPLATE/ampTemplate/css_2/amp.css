@@ -82,7 +82,8 @@ html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_
 .min_max_info {font-size:11px; width:500px; margin-left:auto; margin-right:auto; text-align:left;}
 
 /* HEADER */
-.header { height:51px;text-align:center;overflow:hidden;width:1000px;margin:0 auto;}
+.header { height:51px;text-align:center;width:1000px;margin:0 auto;}
+
 .logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 0px;}
 .amp_label {padding-top:5px;float:left;}
 .top_nav {position:absolute; right:30px; top:30px;}
@@ -416,7 +417,7 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #navToolbar .toolscontainer .mapButton .dijitIcon{float:right;margin:0px 0px 0px 10px;background-position:0px 3px;background-repeat:no-repeat;padding:0px 0px 7px 0px;}
 #navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:125px;text-align:right;}
 #navToolbar .toolscontainer h3 {margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
-td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:5px 15px;background-position:0px -5px;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
 .soria .dijitToolbar {border:none;}
 .infowindow .window{background:#fcf6c7;}
 div.yui-ac-hd{border:1px solid red;}

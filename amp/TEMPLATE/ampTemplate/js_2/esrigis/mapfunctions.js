@@ -631,7 +631,7 @@ function addResultsToMap(featureSet) {
                 parseFloat(minLog + ((i+1)*breaksLog)),
                 new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
       }
-
+    
     dojo.forEach(featureSet.features,function(feature){
     	//Read current attributes and assign a new set
     	var count = feature.attributes["COUNT"];
@@ -672,10 +672,17 @@ function showLegend(rangeColors, colors){
 	htmlDiv += "<div class='legendHeader'>Showing " + typeOfFunding + " for " + currentLevel.name + "<br/><hr/></div>";
 	for(var i=0; i< rangeColors.length; i++){
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");' ></div>"
+				+ "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");'></div>"
 				+"</div>"
-				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + " " + currencyString + " - " + Math.floor(rangeColors[i][1]) + " " + currencyString + " </div><br/>";
+				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + " " + currencyString + " - " + Math.floor(rangeColors[i][1]) + " " + currencyString + " </div><br/>"
+				;
 	}
+	htmlDiv += "<div class='legendContentContainer'>"
+			+ "<div class='legendContentValue' style='background-color:rgba(201,195,197,0.8);'></div>"
+			+"</div>"
+			+ "<div class='legendContentLabel'>No Data</div><br/>"
+		;
+	
 	$('#legenddiv').html(htmlDiv);
 	$('#legenddiv').show('slow');
 }

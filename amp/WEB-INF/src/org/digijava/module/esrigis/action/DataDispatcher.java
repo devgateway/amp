@@ -302,7 +302,7 @@ public class DataDispatcher extends MultiAction {
 			 ActivityPoint ap = new ActivityPoint();
 			 AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			 ap.setActivityname(aA.getName());
-			 
+			 ap.setAmpactivityid(aA.getAmpActivityId().toString());
 			ArrayList<Structure> structures = new ArrayList<Structure>();
 			
 			for (Iterator<AmpStructure> iterator2 =aA.getStructures().iterator(); iterator2.hasNext();) {

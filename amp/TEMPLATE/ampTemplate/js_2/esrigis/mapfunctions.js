@@ -369,9 +369,9 @@ function MapFind(activity){
     		totallocations ++;
 		}else{
     		if (location.exactlocation){
-    			var pt = new esri.geometry.Point(location.exactlocation_lat,location.exactlocation_lon,new esri.SpatialReference({"wkid":4326}));
+    			var pt = new esri.geometry.Point(location.exactlocation_lon,location.exactlocation_lat,new esri.SpatialReference({"wkid":4326}));
     		}else{
-    			var pt = new esri.geometry.Point(location.lat,location.lon,new esri.SpatialReference({"wkid":4326}));
+    			var pt = new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid":4326}));
     		}
     		//Create a graphic point based on the x y coordinates wkid(Well-known ID) 4326 for GCS_WGS_1984 projection
     		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
@@ -763,7 +763,7 @@ function MapFindStructure(activity, structureGraphicLayer){
 		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
 		var pgraphic;
 		if(structure.shape == ""){
-			var pt = new esri.geometry.Point(structure.lat,structure.lon,map.spatialReference);
+			var pt = new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);
 			var transpt = esri.geometry.geographicToWebMercator(pt);
 			var infoTemplate = new esri.InfoTemplate("");   
 			var attr = {"Temp":"Temporal Attribute"};

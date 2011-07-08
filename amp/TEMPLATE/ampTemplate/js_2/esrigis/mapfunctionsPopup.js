@@ -290,7 +290,7 @@ function selectCurrentLocation(){
 		var latitude = window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value;
 		var longitude = window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value;
 
-		var pt = new esri.geometry.Point(latitude,longitude,map.spatialReference);
+		var pt = new esri.geometry.Point(longitude,latitude,map.spatialReference);
 		var transpt = esri.geometry.geographicToWebMercator(pt);
 		var infoTemplate = new esri.InfoTemplate("");   
 		var attr = {"Temp":"Temporal Attribute"};

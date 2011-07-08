@@ -406,7 +406,7 @@ public class ExportToPDF extends Action {
 	            PdfPTable aidPredGraph = new PdfPTable(1);
 	            aidPredGraph.setWidthPercentage(100);
 	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(vForm.getExportData().getAidPredictabilityGraph(), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
 	            //img = Image.getInstance(vForm.getExportData().getAidPredictabilityGraph(),null);
 	            aidPredGraph.addCell(img);
@@ -447,7 +447,7 @@ public class ExportToPDF extends Action {
 	            PdfPTable aidTypeGraph = new PdfPTable(1);
 	            aidTypeGraph.setWidthPercentage(100);
 	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(vForm.getExportData().getAidTypeGraph(), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
 	            //img = Image.getInstance(vForm.getExportData().getAidTypeGraph(),null);
 	            aidTypeGraph.addCell(img);
@@ -489,7 +489,7 @@ public class ExportToPDF extends Action {
                 PdfPTable finInstGraph = new PdfPTable(1);
 	            finInstGraph.setWidthPercentage(100);
 	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(vForm.getExportData().getFinancingInstGraph(), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
 	            //img = Image.getInstance(vForm.getExportData().getFinancingInstGraph(),null);
 	            finInstGraph.addCell(img);
@@ -531,7 +531,7 @@ public class ExportToPDF extends Action {
                 PdfPTable sectorGraph = new PdfPTable(1);
 	            sectorGraph.setWidthPercentage(100);
 	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
 	            //img = Image.getInstance(vForm.getExportData().getSectorGraph(),null);
 	            sectorGraph.addCell(img);
@@ -573,7 +573,7 @@ public class ExportToPDF extends Action {
 	            PdfPTable regionGraph = new PdfPTable(1);
 	            regionGraph.setWidthPercentage(100);
 	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
 	            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
 	            regionGraph.addCell(img);

@@ -103,7 +103,7 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
-.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;margin-top:-5px;}
+.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;}
 .gisbody .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}

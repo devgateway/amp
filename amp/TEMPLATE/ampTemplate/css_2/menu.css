@@ -1,6 +1,6 @@
 /*Copyright (c) 2008, Yahoo! Inc. All rights reserved.Code licensed under the BSD License:http://developer.yahoo.net/yuiamp/license.txtversion: 2.5.1*/
-.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both; width:75%;float:left;z-index:9999;}
-.yuiamp-skin-amp ul{background:none;border:none;z-index:9999;}
+.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both; width:75%;float:left;position:absolute;top:5px;}
+.yuiamp-skin-amp ul{background:none;border:none;}
 .yuiampmenubar {
 	visibility: visible;
 	position: static;
@@ -143,7 +143,10 @@ ul.first-of-type {
 	z-index:9999;
 
 }
+.main_menu ul.first-of-type {
+	border-width: 0;
 
+}
 ul.first-of-type ul {
 	border-width: 0;
 	margin-top:0px;

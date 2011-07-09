@@ -81,7 +81,6 @@ ${fn:replace(message,quote,escapedQuote)}
 		<div class="logo">
             <logic:notEmpty name="defFlagExist" scope="application">
                 <logic:equal name="defFlagExist" scope="application" value="true">
-        			<img src="<%=displayFlag%>" align=left>
                 </logic:equal>
             </logic:notEmpty>
 			<div class="amp_label"> 

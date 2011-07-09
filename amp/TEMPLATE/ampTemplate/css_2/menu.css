@@ -140,16 +140,10 @@
 }
 ul.first-of-type {
 	border-width: 0;
-	margin-top:5px;
 	z-index:9999;
 
 }
-.main_menu ul.first-of-type {
-	border-width: 0;
-	margin-top:-8px;
-	z-index:9999;
 
-}
 ul.first-of-type ul {
 	border-width: 0;
 	margin-top:0px;

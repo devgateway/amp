@@ -206,3 +206,14 @@ body {
 	background-color: rgba(255,255,255,1);
 	font-size: 8pt;
 }
+
+.esriLegendServiceLabel
+{
+	color:white; 
+	font-size:11pt;
+} 
+
+.esriLegendLayer {
+	color:white; 
+	font-size:9pt;
+}

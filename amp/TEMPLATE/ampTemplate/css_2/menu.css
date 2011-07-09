@@ -146,7 +146,7 @@ ul.first-of-type {
 }
 .main_menu ul.first-of-type {
 	border-width: 0;
-	margin-top:0px;
+	margin-top:-5px;
 	z-index:9999;
 
 }

@@ -27,9 +27,9 @@
 <digi:form action="/orgProfileManager.do~actType=save">
   
     <html:hidden name="widgetOrgProfileWidgetForm" property="id"/>
-    <table width="60%" border="0" cellpadding="15">
+    <table width="1000" border="0" cellpadding="0" align=center>
         <tr>
-            <td>
+            <td height=40 bgcolor="#f2f2f2" style="padding-left:10px;">
                 <span class="crumb">
                     <c:set var="translation">
                         <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -42,12 +42,12 @@
                     </html:link>
                     &nbsp;&gt;&nbsp;
                     
-                    <digi:trn key="widget:Navigation:createOrgProfile">Create/Edit Org Profile</digi:trn>
+                    <digi:trn key="widget:Navigation:createOrgProfile"><b>Create/Edit Org Profile</b></digi:trn>
                 </span>
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="padding-top:10px; padding-bottom:10px; font-size:12px;">
                 <span class="subtitle-blue">
                     <c:if test="${empty widgetOrgProfileWidgetForm.id}">
                         <digi:trn key="widget:createOrgProfile">Create Org Profile</digi:trn>
@@ -59,22 +59,18 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="background-color:#f2f2f2; border:1px solid #CCCCCC;">
                 
-                <table>
+                <table border="0" align=center style="margin-bottom:15px;">
                     <tr>
                      <td colspan="2">
-                            <digi:errors/>
-                    </td>
-                        <td colspan="2">&nbsp;</td>
+                            <digi:errors/>                    </td>
                     </tr>
                     <tr>
                         <td nowrap="nowrap" align="left">
                             <font color="red">*</font>
                             <strong>
-                                <digi:trn key="widget:createOrgProfile:type">Type</digi:trn>:&nbsp;
-                            </strong>
-                        </td>
+                                <digi:trn key="widget:createOrgProfile:type">Type</digi:trn>:&nbsp;                            </strong>                        </td>
                         <td  colspan="2">
                             <html:select name="widgetOrgProfileWidgetForm" property="type">
                                 <html:option value="1"><digi:trn>Summary</digi:trn></html:option>
@@ -85,45 +81,32 @@
                                 <html:option value="5"><digi:trn>Sector Breakdown</digi:trn></html:option>
                                 <html:option value="6"><digi:trn>Regional Breakdown</digi:trn></html:option>
                                 <html:option value="7"><digi:trn>Paris Declaration</digi:trn></html:option>
-                                
-                            </html:select>
-                            
-                                                       
-                            
-                        </td>
-                        
+                            </html:select>                        </td>
                     </tr>
                       <tr>
                         <td nowrap="nowrap" align="left">
                             <font color="red">*</font>
                             <strong>
-                                <digi:trn key="widget:createOrgProfile:type">Place</digi:trn>:&nbsp;
-                            </strong>
-                        </td>
+                                <digi:trn key="widget:createOrgProfile:type">Place</digi:trn>:&nbsp;                            </strong>                        </td>
                         <td  colspan="2">
                             <html:select name="widgetOrgProfileWidgetForm" property="selPlaces" multiple="true" style="width: 300px">
 				<html:optionsCollection name="widgetOrgProfileWidgetForm" property="places" value="id" label="name"/>
-                            </html:select>
-                        </td>
-                        
+                            </html:select>                        </td>
                     </tr>
                     
                     <tr>
                         <td colspan="2">
-                            <hr>
-                        </td>
+                            <hr>                        </td>
                     </tr>
                     <tr>
-                        <td align="right">
-                            <html:submit onclick="return validate()">
-                                <digi:trn key="widget:createOrgProfile:btnSave">Save</digi:trn>
+                        <td colspan="2" align="center">
+                           
+  					    <html:submit styleClass="buttonx" onclick="return validate()">
+                               <digi:trn key="widget:createOrgProfile:btnSave">Save</digi:trn>
                             </html:submit>
-                        </td>
-                        <td>
-                            <input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancel()">
-                        </td>
+                            <input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancel()" class="buttonx">                        </td>
                     </tr>
-                </table>
+              </table>
                 
             </td>
         </tr>

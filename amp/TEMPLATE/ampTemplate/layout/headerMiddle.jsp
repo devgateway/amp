@@ -871,7 +871,7 @@ YAHOO.util.Event.onDOMReady(function () {
 });
 
 </script>
-
+</center>
 
 <script language="javascript">
 	function buildCrumbs() {

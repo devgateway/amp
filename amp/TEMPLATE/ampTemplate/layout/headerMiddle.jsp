@@ -2,7 +2,6 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -870,62 +869,5 @@ YAHOO.util.Event.onDOMReady(function () {
 	oMenuBar.render();
 });
 
+
 </script>
-</center>
-
-<script language="javascript">
-	function buildCrumbs() {
-      	$.ajax({
-      		type: "POST",
-            url: "/action",
-            data: ({
-               	 	curl 	: location.href,
-           		 	ctitle 	: document.title,
-           		 	crumbupdate	: true
-	            }),
-	        dataType: "text",	           
-            success: function (data) {
-            			$('div#breadcrumbs').html(data);
-		            },
-            error : function (xhr, status, error) {
-		                alert('Error while processing crumbs.');
-		            } 
-		});
-	}	
-</script>
-
-<br />
-<br />
-
-<style>
-#breadcrumbs .bd ul li {
-	display:inline;
-}
-#breadcrumbs, #breadcrumbs .bd li.yuimenuitem a {
-	color: #376091; 
-	font-size: 10px; 
-	font-family:arial; 
-	padding:3px; 
-	font-weight:bold; 
-	text-decoration:none;
-	float: left;
-}
-#breadcrumbs .bd li.yuimenuitem  a:hover {
-	text-decoration:underline;
-}
-</style>
-
-<div id="breadcrumbs" class="yuimenu">
-    
-</div>
-
-<script language="javascript">
-	YAHOO.util.Event.onDOMReady(function () {
-		var oCrumb = new YAHOO.widget.MenuBar("breadcrumbs");
-		oCrumb.render();
-		buildCrumbs();
-	});
-</script>
-
-<br />
-<br />

@@ -383,6 +383,11 @@ function selectLocationCallerShape(selectedGraphic){
 	var callerIdentifierLongitude = shapeField.name.replace("shape","longitude");
 	window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value = "";
 	window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value = "";
+	//Except in the case of a point which has coordinates
+	if(selectedGraphic.geometry.type === "point"){
+		window.opener.document.getElementsByName(callerIdentifierLatitude)[0].value = esri.geometry.webMercatorToGeographic(selectedGraphic.geometry).y;
+		window.opener.document.getElementsByName(callerIdentifierLongitude)[0].value = esri.geometry.webMercatorToGeographic(selectedGraphic.geometry).x;
+	}
 	
 	window.close();
 }

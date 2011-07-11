@@ -4,11 +4,15 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <c:set var="translation">
 	<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 </c:set>
-<div class="right_menu">
+<feature:display name="Content Repository" module="Document Management">
+	<div class="right_menu">
 	<div class="right_menu_header">
 		<div class="right_menu_header_cont">
 			<digi:trn key="aim:resources">Resources</digi:trn>
@@ -37,5 +41,7 @@
           	<digi:trn key="aim:noResources">No Resources</digi:trn></div>
           </logic:empty>       		
 		</div>
-</div>
+	</div>
+</feature:display>
+
     

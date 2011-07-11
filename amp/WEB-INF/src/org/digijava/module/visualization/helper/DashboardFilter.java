@@ -24,6 +24,7 @@ public class DashboardFilter {
     private Long year;
     private Long currencyId;
     private Boolean workspaceOnly;
+    private Boolean showMonochrome;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
@@ -562,6 +563,14 @@ public class DashboardFilter {
 
 	public void setGroupSeparator(String groupSeparator) {
 		this.groupSeparator = groupSeparator;
+	}
+
+	public Boolean getShowMonochrome() {
+		return showMonochrome;
+	}
+
+	public void setShowMonochrome(Boolean showMonochrome) {
+		this.showMonochrome = showMonochrome;
 	}
 
 	

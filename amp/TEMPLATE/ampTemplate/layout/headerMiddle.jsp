@@ -153,12 +153,12 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                	</li>
 	                              		</feature:display>
 									</module:display>
-									<li class="yuiampmenuitem_drop">
+									<!--<li class="yuiampmenuitem_drop">
 		                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
-		                                	<digi:trn key="donorDashboard">Donor Dashboard</digi:trn>
+		                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>
 		                                </a> 
 	                                </li>
-								</ul>
+								--></ul>
 						</div>
 						</div>                    
 					</li>
@@ -660,7 +660,7 @@ function adminHelp(){
                                         </module:display>
                                         <li class="yuiampmenuitem_drop">
 			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
-			                                	<digi:trn key="donorDashboard">Donor Dashboard</digi:trn>
+			                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>
 			                                </a> 
 		                                </li>
 		                                <li class="yuiampmenuitem_drop">

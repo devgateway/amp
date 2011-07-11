@@ -147,7 +147,7 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	private static Map sortByValue(Map map) {
+	public static Map sortByValue(Map map) {
 	     List list = new LinkedList(map.entrySet());
 	     Collections.sort(list, new Comparator() {
 	          public int compare(Object o1, Object o2) {

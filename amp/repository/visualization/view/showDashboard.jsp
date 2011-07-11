@@ -106,7 +106,7 @@ yuiLoadingPanel.prototype = {
 <div class="centering">
  <digi:trn>Dashboards</digi:trn><span class="breadcrump_sep"><b>»</b></span>
  	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
- 		<span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
+ 		<span class="bread_sel"><digi:trn>Organization Profile Dashboard</digi:trn></span>
  	</c:if>
  	<c:if test="${visualizationform.filter.dashboardType eq '2' }">
  		<span class="bread_sel"><digi:trn>Region Profile Dashboard</digi:trn></span>
@@ -194,6 +194,7 @@ function doExport(){
 	var options = "?";
 	options += "typeOpt=" + getOptionChecked("export_type_");
 	options += "&summaryOpt=" + getOptionChecked("export_summary_");
+	options += "&ODAGrowthOpt=" + getOptionChecked("export_ODAGrowth_");
 	options += "&fundingOpt=" + getOptionChecked("export_funding_");
 	options += "&aidPredicOpt=" + getOptionChecked("export_aid_pred_");
 	options += "&aidTypeOpt=" + getOptionChecked("export_aid_type_");
@@ -805,14 +806,24 @@ function changeChild (selected){
 	<div id="exportDiv" class="yui-navset">
 		<table width="100%" height=400 cellpadding="0" cellspacing="0">
 			<tr>
-				<td class="inside" width="45%" >
+				<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" "><br />
 		            <html:radio property="exportData.typeOpt" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif" "><br />
+		        	<html:radio property="exportData.typeOpt" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif" "><br />
 		        </div>
 		        </td>
-		        <td class="inside" width="45%" >
+				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			        <td class="inside" width="30%" >
+					<div class="selector_type"><b><digi:trn>ODA Growth</digi:trn></b></div>
+					<div>
+			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>Exclude ODA Growth</digi:trn></html:radio><br />
+			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_1" value="1"><digi:trn>Inculde ODA Growth</digi:trn></html:radio><br />
+			        </div>
+			        </td>
+		    	</c:if>
+				<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
@@ -821,7 +832,7 @@ function changeChild (selected){
 		        </td>
 		    </tr>
 		    <tr>
-				<td class="inside" width="45%" >
+				<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Funding</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -830,7 +841,7 @@ function changeChild (selected){
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		        <td class="inside" width="45%" >
+		        <td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Aid Predictability</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -839,9 +850,7 @@ function changeChild (selected){
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		    </tr>
-		    <tr>
-				<td class="inside" width="45%" >
+		    	<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Aid Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -850,7 +859,9 @@ function changeChild (selected){
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		        <td class="inside" width="45%" >
+		    </tr>
+		    <tr>
+				<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Financing Instrument</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -859,10 +870,8 @@ function changeChild (selected){
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		    </tr>
-		    <tr>
-				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-    			<td class="inside" width="45%" >
+		    	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+    			<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -873,7 +882,7 @@ function changeChild (selected){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '3' }">
-    			<td class="inside" width="45%" >
+    			<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Sector</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -884,7 +893,7 @@ function changeChild (selected){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '2' }">
-    			<td class="inside" width="45%" >
+    			<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Region</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -901,7 +910,7 @@ function changeChild (selected){
 
 <input type="button" value="Export" class="buttonx" onclick="doExport()" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="Close" class="buttonx" onclick="hideExport()" style="margin-right:10px; margin-top:10px;">
-
+		        
 </div>
 </td>
 </tr>
@@ -916,6 +925,7 @@ function changeChild (selected){
 <html:hidden property="filter.yearsInRangePie" styleId="yearsInRangePie" />
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
+<html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
 <html:hidden property="filter.expendituresVisible" styleId="expendituresVisible" />
@@ -932,7 +942,7 @@ function changeChild (selected){
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     	<div class="dashboard_name" id="dashboard_name">
-    		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+    		<!--<c:if test="${visualizationform.filter.dashboardType eq '1' }">
     			<digi:trn>ALL DONORS</digi:trn>
     		</c:if>
     		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
@@ -941,7 +951,7 @@ function changeChild (selected){
     		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
     			<digi:trn>ALL REGIONS</digi:trn>
     		</c:if>
-    	</div>
+    	--></div>
     <td>
     	<table>
     		<tr>
@@ -967,6 +977,8 @@ function changeChild (selected){
 	<fieldset>
 	<legend><span class=legend_label><digi:trn>Quick Filter</digi:trn></span></legend>
 <!--	<html:checkbox property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox>-->
+	<hr />
+	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onchange="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -1252,9 +1264,28 @@ function changeChild (selected){
 	--></ul>
 	<div class="yui-content">
 	<div id="tab1">
+		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<fieldset>
+				<legend><span id="ODAGrowthTitle" class=legend_label></span></legend>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/></div>
+				<br />
+				<br />
+				<div class="flashcontent" name="flashContent">
+					<div id="ODAGrowth">
+						<a href="http://www.adobe.com/go/getflashplayer">
+							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						</a>
+					</div>
+				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
+			</fieldset>
+		</c:if>
 		<fieldset>
 			<legend><span id="fundingChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FundingChart')">Data View</a></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
+			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
@@ -1269,7 +1300,8 @@ function changeChild (selected){
 		</fieldset>
 		<fieldset>
 			<legend><span id="aidPredChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictability')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictability')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictability')">Data View</a></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability')" title="Data View"/></div>
+			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictability">
@@ -1284,7 +1316,8 @@ function changeChild (selected){
 		</fieldset>
 		<fieldset>
 			<legend><span id="aidTypeChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidType')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidType')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidType')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidType')">Data View</a></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidType')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidType')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidType')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidType')" title="Data View"/></div>
+			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidType">
@@ -1299,7 +1332,8 @@ function changeChild (selected){
 		</fieldset>
 		<fieldset>
 			<legend><span id="finInstChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FinancingInstrument')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FinancingInstrument')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FinancingInstrument')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FinancingInstrument')">Data View</a></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FinancingInstrument')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'FinancingInstrument')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FinancingInstrument')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FinancingInstrument')" title="Data View"/></div>
+			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FinancingInstrument">
@@ -1315,7 +1349,8 @@ function changeChild (selected){
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
  			<fieldset>
 				<legend><span id="donorChartTitle" class=legend_label></span></legend>
-				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'DonorProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'DonorProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'DonorProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'DonorProfile')">Data View</a></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'DonorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile')" title="Data View"/></div>
+				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="DonorProfile">
@@ -1332,7 +1367,8 @@ function changeChild (selected){
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
 			<fieldset>
 				<legend><span id="sectorChartTitle" class=legend_label></span></legend>
-				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'SectorProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'SectorProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'SectorProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'SectorProfile')">Data View</a></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'SectorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile')" title="Data View"/></div>
+				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
@@ -1349,7 +1385,8 @@ function changeChild (selected){
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 			<fieldset>
 				<legend><span id="regionChartTitle" class=legend_label></span></legend>
-				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'RegionProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'RegionProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'RegionProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'RegionProfile')">Data View</a></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'RegionProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile')" title="Data View"/></div>
+				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
@@ -1537,6 +1574,7 @@ var allGraphs = document.getElementsByName("flashContent");
 		document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
 	}
 	document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
 		document.getElementById("transactionType").value = document.getElementById("transaction_type_0").value;
@@ -1610,6 +1648,12 @@ function refreshBoxes(o){
 	var trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	var trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	var trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
+	var trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
+	var trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
+	var trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	var trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
+	var trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
+	var trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
 	var valTotalDisbs="";
 	var valNumOfProjs="";
 	var valNumOfSecs="";
@@ -1838,18 +1882,18 @@ function refreshBoxes(o){
 				
 		}
 	}
-	inner = trnTotalDisbs + "<b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
-	inner = inner + trnNumOfProjs + "<b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
+	inner = "<a title='" + trnTotalDisbsDescription + "' style='color: black;'>" + trnTotalDisbs + "</a> <b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
+	inner = inner + "<a title='" + trnNumOfProjsDescription + "' style='color: black;'>" + trnNumOfProjs + "</a> <b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
 	if (dashboardType!=1) {
-		inner = inner + trnNumOfDons + "<b>" + valNumOfDons + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + "<a title='" + trnNumOfDonsDescription + "' style='color: black;'>" + trnNumOfDons + "</a> <b>" + valNumOfDons + "</b><span class='breadcrump_sep'>|</span>";
 	}
 	if (dashboardType!=3) {
-		inner = inner + trnNumOfSecs + "<b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + "<a title='" + trnNumOfSecsDescription + "' style='color: black;'>" + trnNumOfSecs + "</a> <b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
 	}
 	if (dashboardType!=2) {
-		inner = inner + trnNumOfRegs + "<b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + "<a title='" + trnNumOfRegsDescription + "' style='color: black;'>" + trnNumOfRegs + "</a> <b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
 	}
-	inner = inner + trnAvgProjSize + "<b>" + valAvgProjSize;
+	inner = inner + "<a title='" + trnAvgProjSizeDescription + "' style='color: black;'>" + trnAvgProjSize + "</a> <b>" + valAvgProjSize;
 	var div = document.getElementById("divSummaryInfo");
 	div.innerHTML = inner;
 
@@ -1868,7 +1912,7 @@ function refreshBoxes(o){
 		}
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
-				name2 = "<digi:trn jsFriendly='true'>ALL Organizations</digi:trn>";
+				//name2 = "<digi:trn jsFriendly='true'>ALL Organizations</digi:trn>";
 			} else {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 			}
@@ -1935,7 +1979,15 @@ function refreshBoxes(o){
 		}
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
-
+	if (dashboardType==1) {
+		var currentYear = document.getElementById("currentYear").value;
+		var startYear =  "" + (currentYear - 1);
+		var endYear =  "" + currentYear;
+		div = document.getElementById("ODAGrowthTitle");
+		inner = "ODA Growth Percentage (" + startYear + "-" + endYear + ")";
+		div.innerHTML = inner;
+	}
+	
 	div = document.getElementById("fundingChartTitle");
 	inner = "";
 	if (document.getElementById("commitments_visible").checked==true) {
@@ -2056,6 +2108,7 @@ window.onload=initPanel;
 function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
+	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
@@ -2083,11 +2136,19 @@ function changeChart(e, chartType, container){
 	    }
 	    caller.className = "sel_sm_b";
 	}
+
+	var palette = "0xff6600,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c";
+	//alert ("show_monochrome: " + document.getElementById("show_monochrome").checked);
+	//alert ("showMonochrome: " + document.getElementById("showMonochrome").value);
+	if (document.getElementById("show_monochrome").checked){
+		palette = "0x000000,0x333333,0x666666,0x999999,0xcccccc,0xffffff";
+	}
+	 
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
 	var groupSeparator = document.getElementById("groupSeparator").value;
 	//var minSlider =  "" + (currentYear - yearsInRange + 1);
 	//var maxSlider =  "" + currentYear;
-	var flashvars = { decimalSeparator: decimalSeparator, groupSeparator: groupSeparator };
+	var flashvars = { decimalSeparator: decimalSeparator, groupSeparator: groupSeparator, palette: palette };
 	
 	var params = {};
 	var attributes = {};
@@ -2171,6 +2232,24 @@ function hideFullDonors(){
 	divTop.style.display = "";
 }
 
+
+function reloadGraphs(){
+	var dashboardType = document.getElementById("dashboardType").value;
+	changeChart(null, 'bar', 'ODAGrowth');
+	changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'AidPredictability');
+	changeChart(null, 'bar', 'AidType');
+	changeChart(null, 'bar', 'FinancingInstrument');
+	if (dashboardType!=1) {
+		changeChart(null, 'bar', 'DonorProfile');
+	}
+	if (dashboardType!=3) {
+		changeChart(null, 'bar', 'SectorProfile');
+	}
+	if (dashboardType!=2) {
+		changeChart(null, 'bar', 'RegionProfile');
+	}
+}
 
 //-->
 </script>

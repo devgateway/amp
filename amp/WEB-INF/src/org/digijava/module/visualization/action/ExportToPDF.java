@@ -106,9 +106,11 @@ public class ExportToPDF extends Action {
         String sectorOpt = request.getParameter("sectorOpt");
         String regionOpt = request.getParameter("regionOpt");
         String summaryOpt = request.getParameter("summaryOpt");
+        String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
         	String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
             String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
+            String odaGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
             String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
@@ -334,6 +336,21 @@ public class ExportToPDF extends Action {
 	            doc.add(new Paragraph(" "));
             }
             */
+            
+            //ODA Growth 
+            if (ODAGrowthOpt.equals("1")) {
+	            PdfPTable ODAGraph = new PdfPTable(1);
+	            ODAGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+	            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
+	            ODAGraph.addCell(img);
+	            cell = new PdfPCell(new Paragraph(odaGrowthTrn, HEADERFONT));
+	            ODAGraph.addCell(cell);
+	            doc.add(ODAGraph);
+	            doc.add(new Paragraph(" "));
+            }
           
           //Funding Table.
             if (fundingOpt.equals("1") || fundingOpt.equals("3")){

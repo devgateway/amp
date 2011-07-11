@@ -1989,7 +1989,7 @@ public class DataDispatcher extends DispatchAction {
 		        }
 	        }
 	        visualizationForm.getExportData().setRegionTableData(regionData);
-	        	
+	        
 			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 				PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
@@ -2010,6 +2010,85 @@ public class DataDispatcher extends DispatchAction {
             throw new DgException("Cannot load region fundings from db", e);
         }
 	      
+	}	
+
+	public ActionForward getODAGrowthGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
+		
+		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+		String othersTitle = "Other";
+        
+		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            divideByMillionDenominator = new BigDecimal(1000);
+        }
+        String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} else {
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+		}
+
+        Date startDate = null;
+        Date endDate = null;
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        int yearsInRange=filter.getYearsInRange()-1;
+        
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
+        Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
+        
+        for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
+			AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			Long[] ids = {ampOrganisation.getAmpOrgId()};
+			newFilter.setOrgIds(ids);
+            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-1);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue()-1);
+            fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
+            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
+                map.put(ampOrganisation, growthPercent);
+            }
+		}
+        
+        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map);
+        
+        StringBuffer xmlString = new StringBuffer();
+        List list = new LinkedList(mapSorted.entrySet());
+		Iterator it = list.iterator();
+		int index = 0;
+		while(it.hasNext()){
+			Map.Entry entry = (Map.Entry)it.next();
+			AmpOrganisation org = (AmpOrganisation) entry.getKey();
+			xmlString.append("<organization name=\"" + org.getAcronym() + "\" value=\""+ entry.getValue() + "\" label=\"" + org.getName() + "\" />\n");
+		}
+        
+		if (xmlString.length()==0) {
+			xmlString.append("<organization name=\"\">\n");
+			xmlString.append("</organization>\n");
+		}
+        PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    			response.getOutputStream(), "UTF-8"), true);
+		out.println(xmlString.toString());
+		out.close();
+		return null;
+			
 	}	
 
 	
@@ -2087,6 +2166,11 @@ public class DataDispatcher extends DispatchAction {
 					case 7:
 						vForm.getExportData().setRegionGraph(image);
 						logger.info("Creating image from Region graph");
+						break;
+					
+					case 8:
+						vForm.getExportData().setODAGrowthGraph(image);
+						logger.info("Creating image from ODA growth graph");
 						break;
 					
 					}

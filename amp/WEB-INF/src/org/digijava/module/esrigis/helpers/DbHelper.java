@@ -60,7 +60,7 @@ public class DbHelper {
 		
 		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
 		
-		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !filter.getSelStructureTypes().equals(-1l);
+		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
 		
 		/*
 		 * We are selecting sectors which are funded In selected year by the

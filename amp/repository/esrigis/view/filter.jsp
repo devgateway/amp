@@ -97,6 +97,7 @@
 										outerstyle="width: 145px" styleClass="dropdwn_sm"
 										property="filter.projectStatusId" size="3"
 										name="datadispatcherform" multiselect="false"
+										styleId="project_status_id"
 										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
 								</td>
 							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
@@ -108,6 +109,7 @@
 										outerstyle="width: 145px" styleClass="dropdwn_sm"
 										name="datadispatcherform"
 										property="filter.typeAssistanceId" multiselect="false"
+										styleId="type_assistance_id"
 										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
 								</td>
 							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
@@ -119,6 +121,7 @@
 										outerstyle="width: 145px" styleClass="dropdwn_sm"
 										name="datadispatcherform"
 										property="filter.financingInstrumentId" multiselect="false"
+										styleId="financing_instrument_id"
 										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 								</td>
 							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
@@ -127,6 +130,7 @@
 							    <td><b>Structure Types:</b></td>
 							    <td>
 						    		<html:select property="filter.selStructureTypes" styleId="structureTypes_dropdown" styleClass="dropdwn_sm" style="width:145px;" multiple="true">
+			                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 			                            <html:optionsCollection property="filter.structureTypes" label="name" value="typeId" />
 			                        </html:select>
 								</td>
@@ -239,7 +243,8 @@
 			<td width=40% height=25 align="center" class="inside" style="background-color:white;">&nbsp;</td>
 			<td width=60% class="inside" align="center" style="background-color:white;">
 				<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
-				<input type="button" value="Reset" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
+				<input type="button" value="Reset" onclick="resetToDefaults()" class="buttonx" style="margin-top:10px;">
+				<input type="button" value="Close" onclick="closeFilter()" class="buttonx" style="margin-top:10px;">
 			</td>
 		</tr>
 	</table>
@@ -259,6 +264,9 @@
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
 </digi:form>
 <script type="text/javascript">
+function closeFilter(){
+	$('#filterdiv').toggle();
+}
 
 function changeTab (selected){
 	document.getElementById("selGeneral").className = "selector_type";
@@ -386,6 +394,7 @@ var callbackApplyFilterCall = {
 					//allGraphs[idx].style.display = "";
 				//}
 			  hideLoading();
+			  closeFilter();
 		  },failure: function(o) {
 			  hideLoading();
 		  }
@@ -537,7 +546,11 @@ function resetToDefaults(){
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
-	currencies_dropdown_ids
+	document.getElementById("project_status_id").selectedIndex = 0;
+	document.getElementById("type_assistance_id").selectedIndex = 0;
+	document.getElementById("financing_instrument_id").selectedIndex = 0;
+	document.getElementById("structureTypes_dropdown").selectedIndex = 0;
+	document.getElementById("fundingLimit_checkbox").checked = false;
 	removeOptions("org_dropdown_ids");
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");

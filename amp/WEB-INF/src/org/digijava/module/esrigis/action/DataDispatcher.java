@@ -314,6 +314,9 @@ public class DataDispatcher extends MultiAction {
 						if(selectedStructures[idx].equals(structure.getType().getTypeId())){
 							structureMatch = true;
 						}
+						else if(selectedStructures[idx].equals(-1l)){
+							structureMatch = true;
+						}
 					}
 				}
 					

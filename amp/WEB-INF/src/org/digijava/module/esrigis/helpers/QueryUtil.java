@@ -354,5 +354,11 @@ public class QueryUtil {
     public static String getPercentage(BigDecimal base, BigDecimal pct){
         return FormatHelper.formatNumber(base.multiply(pct).divide(ONEHUNDERT).doubleValue()); 
     }
+    public static boolean inArray(Object comparableObject, Object[] objects){
+    	for(Object oC : objects){
+    		if(oC.equals(comparableObject)) return true;
+    	}
+    	return false;
+    }
 
 }

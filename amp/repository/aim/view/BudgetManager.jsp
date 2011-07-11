@@ -81,18 +81,18 @@ function setprogram() {
 					<td style="font-size:12px;" height=16 valign="center" width=571><digi:errors /></td>
 				</tr>
 				<tr>
-					<td style="font-size:12px; border-top:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC;">
-						<table style="margin-top:10px; margin-bottom:10px;">
+					<td style="font-size:12px;">
+						<table width=100% style="margin-top:10px; margin-bottom:10px; padding:7px; border:1px solid #CCCCCC;" bgcolor="#f2f2f2">
 							<tr>
 								<td style="font-size:12px;"><font color="red" >*</font></td>
-								<td style="font-size:12px;"><digi:trn>Sector Name</digi:trn>:</td>
-								<td style="font-size:12px;"><html:text property="budgetsectorname" styleId="secname" size="30"></html:text></td>
+								<td style="font-size:12px;" width=100><digi:trn>Sector Name</digi:trn>:</td>
+								<td style="font-size:12px;"><html:text property="budgetsectorname" styleClass="inputx" styleId="secname" size="30"></html:text></td>
 							</tr>
 							<tr>
 								<td style="font-size:12px;"><font color="red" >*</font></td>
 								<td style="font-size:12px;"><digi:trn>Sector Code</digi:trn>:</td>
 								<td style="font-size:12px;">
-									<html:text property="budgetsectorcode" size="5" styleId="bcode"></html:text>
+									<html:text property="budgetsectorcode" size="5" styleClass="inputx" styleId="bcode"></html:text>
 								</td>
 							</tr>
 							<tr>
@@ -184,11 +184,11 @@ function setprogram() {
 								border="0">
 								<tr>
 									<td style="font-size:12px;"><!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="230">
+									<table cellpadding="0" cellspacing="0" width="125">
 										<tr>
 											<td style="font-size:12px;" bgColor=#c9c9c7 class=box-title><digi:trn
 												key="aim:otherLinks">
-												<b>Other links</b>
+												<b style="padding-left:5px;">Other links</b>
 												</digi:trn></td>
 											<td style="font-size:12px;" background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>

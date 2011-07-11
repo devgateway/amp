@@ -55,14 +55,13 @@ function setprogram() {
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
 	<!-- End of Logo -->
 	<html:hidden property="event" value="view" />
-	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 		<tr>
-			<td style="font-size:12px;" class=r-dotted-lg width=14>&nbsp;</td>
 			<td style="font-size:12px;" align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td style="font-size:12px;" height=33><span class=crumb> <c:set
+					<td style="font-size:12px;" height=33 bgcolor="#f2f2f2"><span class=crumb> <c:set
 						var="clickToViewAdmin">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set> <digi:link href="/admin.do" styleClass="comment"
@@ -70,20 +69,20 @@ function setprogram() {
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
-					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:budgetManager">Budget Manager</digi:trn></td>
+					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:budgetManager"><b>Budget Manager</b></digi:trn></td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td style="font-size:12px;" height=16 valign="center" width=571><span
 						class=subtitle-blue> <digi:trn key="aim:budgetManager">Budget Manager</digi:trn></span>
 					</td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td style="font-size:12px;" height=16 valign="center" width=571><digi:errors /></td>
 				</tr>
 				<tr>
-					<td style="font-size:12px;">
-						<table>
+					<td style="font-size:12px; border-top:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC;">
+						<table style="margin-top:10px; margin-bottom:10px;">
 							<tr>
 								<td style="font-size:12px;"><font color="red" >*</font></td>
 								<td style="font-size:12px;"><digi:trn>Sector Name</digi:trn>:</td>
@@ -98,7 +97,7 @@ function setprogram() {
 							</tr>
 							<tr>
 								<td style="font-size:12px;" colspan="3" align="center"> 
-									<html:button property="submitButton" onclick="validatesector();">
+									<html:button property="submitButton" styleClass="buttonx" onclick="validatesector();">
 										<digi:trn>Add Sector</digi:trn>
 									</html:button>
 								</td>	
@@ -108,24 +107,23 @@ function setprogram() {
 				</tr>
 				<tr>
 					<td style="font-size:12px;" noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
+					<table width="100%" cellspacing="1" border="0">
 						<tr>
-							<td style="font-size:12px;" noWrap width=600 vAlign="top">
-							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%"
-								valign="top">
+							<td style="font-size:12px;" noWrap width=750 vAlign="top">
+							<table cellpadding="1" cellspacing="1" width="100%" valign="top">
 								<tr bgColor=#ffffff>
 									<td style="font-size:12px;" vAlign="top" width="100%">
-									<table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors" align="left" width="100%">		
+									<table cellSpacing="1" cellPadding="5" class="inside" id="selectedSectors" align="left" width="100%">		
 										<tr>
-										  <td style="font-size:12px;" bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+										  <td style="font-size:12px;" class=inside bgcolor="#c7d4db" height="25" align="center" colspan="3">
 										  	<!-- Table title --> 
-										  	<digi:trn>Budget Sectors</digi:trn>
+										  	<digi:trn><b>Budget Sectors</b></digi:trn>
 										    <!-- end table title -->
 											</td>
 										</tr>
 										<logic:empty name="BudgetManagerForm" property="budgetsectors">
 											<tr bgcolor="#ffffff">
-												<td style="font-size:12px;" colspan="5" align="center">
+												<td style="font-size:12px;" colspan="5" align="center" class="inside">
 													<b>
 														<digi:trn> No Sector present</digi:trn>
 													</b>
@@ -135,10 +133,10 @@ function setprogram() {
 										<logic:notEmpty name="BudgetManagerForm" property="budgetsectors">
 										<logic:iterate name="BudgetManagerForm" property="budgetsectors" id="sector" type="org.digijava.module.budget.dbentity.AmpBudgetSector">
 											<tr> 
-												<td style="font-size:12px;" bgcolor="#ffffff">
+												<td style="font-size:12px;" bgcolor="#ffffff" class="inside">
 													<bean:write name="sector" property="code"/> - <bean:write name="sector" property="sectorname"/>
 												</td>
-												<td style="font-size:12px;" bgcolor="#ffffff" width="75" align="center">
+												<td style="font-size:12px;" class="inside" bgcolor="#ffffff" width="75" align="center">
 													<c:set var="clickToEditSector">
 														<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 													</c:set>
@@ -150,7 +148,7 @@ function setprogram() {
 													  </a>
 													 ]
 												</td>
-												<td style="font-size:12px;" bgcolor="#ffffff" width="75" align="center">
+												<td style="font-size:12px;" class="inside" bgcolor="#ffffff" width="75" align="center">
 													<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams2}" property="sectorid">
 															<bean:write name="sector" property="idsector" />
@@ -181,29 +179,28 @@ function setprogram() {
 				</tr>
 			</table>
 			</td>
-            <td style="font-size:12px;" noWrap width="100%" vAlign="top">
-							<table align="center" cellpadding="0" cellspacing="0" width="90%"
+            <td style="font-size:12px;" noWrap width=250 vAlign="top">
+							<table align="center" cellpadding="0" cellspacing="0" width="230"
 								border="0">
 								<tr>
 									<td style="font-size:12px;"><!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="200"0>
+									<table cellpadding="0" cellspacing="0" width="230">
 										<tr>
 											<td style="font-size:12px;" bgColor=#c9c9c7 class=box-title><digi:trn
 												key="aim:otherLinks">
-												Other links
+												<b>Other links</b>
 												</digi:trn></td>
-											<td style="font-size:12px;" background="module/aim/images/corner-r.gif" height="17"
-												width=17>&nbsp;</td>
+											<td style="font-size:12px;" background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
 								</tr>
 								<tr>
 									<td style="font-size:12px;" bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="230" class="inside">
 										<field:display name="Add Scheme Link" feature="Sectors">
 											<tr>
-												<td style="font-size:12px;">
+												<td style="font-size:12px;" class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" /> 
 													<a href="javascript:setprogram();">
 													<digi:trn>
@@ -214,7 +211,7 @@ function setprogram() {
 											</tr>
 										</field:display>
 										<tr>
-											<td style="font-size:12px;"><digi:img src="module/aim/images/arrow-014E86.gif"
+											<td style="font-size:12px;" class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 												width="15" height="10" /> <c:set var="trnViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 											</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">

@@ -12,6 +12,11 @@
 <digi:instance property="calendarViewForm"/>
 
 <script type="text/javascript">
+function addEvent () {	
+	<digi:context name="refreshUrl" property="context/module/moduleinstance/showCalendarEvent.do~selectedCalendarTypeId=0~method=new" />
+    document.calendarViewForm.action= "<%= refreshUrl %>";
+    document.calendarViewForm.submit();
+}
 function submitFilterForm(view, timestamp) {
 	changeState();	
   	var form = document.getElementById('filterForm');

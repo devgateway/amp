@@ -387,7 +387,7 @@ window.onload=init;
 			</div>
 		</div>
 		<feature:display name="Filter" module="Calendar">
-			<div style="padding-top:30px;width:200px;height:28px;">
+			<div style="padding-top:30px;width:250px;height:28px;white-space: nowrap;">
 				<field:display name="Run Filter Button" feature="Filter">
 					<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
 				</field:display>
@@ -397,6 +397,8 @@ window.onload=init;
 		    	</field:display>
 		    	&nbsp;
 		      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
+		      	&nbsp;
+		      	<input type="button" class="buttonx" value="<digi:trn>Add New Event</digi:trn>"  onclick="addEvent();" />
 			</div>
 		</feature:display>		
 	</div>

@@ -36,11 +36,7 @@
 				</span>
 			</td>
 		</tr>      
-       	<tr>
-       		<td valign="top" width="100%">
-				<!-- CELLS SECTION -->
-	            <jsp:include page="viewEventsBody.jsp" flush="true"/>
-	        </td>
+       	<tr>       		
 			<td valign="top" width="223px;" > 
 	        	<digi:form action="/showCalendarView.do" styleId="filterForm">   
 	            	<table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -69,6 +65,10 @@
 	            	</table>
 	        	</digi:form>
 			</td>
+			<td valign="top" width="100%">
+				<!-- CELLS SECTION -->
+	            <jsp:include page="viewEventsBody.jsp" flush="true"/>
+	        </td>
     	</tr>
 	</table>
 </c:if>	    

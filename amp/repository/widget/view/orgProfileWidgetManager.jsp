@@ -21,9 +21,9 @@
 
 
 
-<table width="60%" border="0" cellpadding="15">
+<table width="1000" border="0" cellpadding="0" align=center>
 	<tr>
-		<td>
+		<td height=40 bgcolor=#f2f2f2 style="padding-left:10px;">
 			<span class="crumb">
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -31,7 +31,7 @@
               <html:link  href="/aim/admin.do" styleClass="comment" title="${translation}" >
                 <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
               </html:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="admin:Navigation:orgProfileManager">Org Profile Manager</digi:trn>
+                <digi:trn key="admin:Navigation:orgProfileManager"><b>Org Profile Manager</b></digi:trn>
 			</span>
 		</td>
         	</tr>
@@ -40,33 +40,33 @@
                         <digi:errors/>
                     </td>
                 </tr>
-	<tr>
+	<!-- <tr>
 		<td>
 			<span class="subtitle-blue"><digi:trn key="widget:orgProfileManager:pageHeader">Org Profile Manager</digi:trn></span>
 		</td>
-	</tr>
+	</tr>-->
 	<tr>
-		<td>
-			<a href="/widget/orgProfileManager.do~actType=create"><digi:trn key="widget:orgProfileManager:createNew">Create new</digi:trn></a>
+		<td style="padding-top:10px; padding-bottom:10px; font-size:12px;">
+			<a href="/widget/orgProfileManager.do~actType=create"><digi:trn key="widget:orgProfileManager:createNew"><b>Create new</b></digi:trn></a>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			
-			<table border="0" width="60%"  style="font-family:verdana;font-size:11px;">
-				<tr bgColor="#d7eafd">
+			<table border="0" width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;" class="inside">
+				<tr bgColor="#c7d4db">
 					
-					<td nowrap="nowrap" width="80%">
+					<td nowrap="nowrap" width="900" class="inside" height=25 style="padding-left:5px;">
 						<strong><digi:trn key="widget:orgProfileManager:type">Type</digi:trn></strong>
                                             </td>
-                                            <td nowrap="nowrap">
+                                            <td nowrap="nowrap" class="inside" width=100 align=center>
 						<strong><digi:trn key="widget:orgProfileManager:operations">Operations</digi:trn></strong>
 					</td>
 				</tr>
 				<c:forEach var="orgProfile" items="${widgetOrgProfileWidgetForm.orgProfilePages}" varStatus="stat">
 					<tr>
 			
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" class="inside">
                                                     <c:choose>
                                                         <c:when test="${orgProfile.type==1}">
                                                             <digi:trn>Summary</digi:trn>
@@ -96,7 +96,7 @@
 				
 						</td>
                                                
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" class="inside" align=center>
 							<a href="/widget/orgProfileManager.do~actType=update~id=${orgProfile.id}">
 								<digi:trn key="widget:editLink">Edit</digi:trn>
 							</a>

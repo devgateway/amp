@@ -61,9 +61,9 @@
         <tr>
             <td style="background-color:#f2f2f2; border:1px solid #CCCCCC;">
                 
-                <table border="0" align=center style="margin-bottom:15px;">
+                <table border="0" align=center style="margin-bottom:15px; margin-top:15px; font-size:12px;">
                     <tr>
-                     <td colspan="2">
+                     <td colspan="3">
                             <digi:errors/>                    </td>
                     </tr>
                     <tr>
@@ -71,7 +71,7 @@
                             <font color="red">*</font>
                             <strong>
                                 <digi:trn key="widget:createOrgProfile:type">Type</digi:trn>:&nbsp;                            </strong>                        </td>
-                        <td  colspan="2">
+                        <td colspan="2">
                             <html:select name="widgetOrgProfileWidgetForm" property="type">
                                 <html:option value="1"><digi:trn>Summary</digi:trn></html:option>
                                 <html:option value="2"><digi:trn>Type of Aid</digi:trn></html:option>
@@ -95,11 +95,11 @@
                     </tr>
                     
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <hr>                        </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center">
+                        <td colspan="3" align="center">
                            
   					    <html:submit styleClass="buttonx" onclick="return validate()">
                                <digi:trn key="widget:createOrgProfile:btnSave">Save</digi:trn>

@@ -76,7 +76,7 @@
 <digi:instance id="wform" property="gisTableWidgetCreationForm"/>
 <digi:form action="/adminTableWidgets.do?actType=save">
 
-<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center>
+<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center style="font-size:12px;">
 	<tr>
 		<td colspan="2" bgcolor=#f2f2f2 height=40 style="padding-left:10px; padding-top:10px; padding-bottom:10px;">
 			<span class=crumb>
@@ -162,8 +162,8 @@
 	  </td>
 		<td width="50%" valign="top" bgcolor=#f2f2f2 style="padding-top:20px; padding-bottom:20px;"> 
 		
-			<table id="columns_list" width="100%"  align="center" style="font-family:verdana;font-size:11px;border:1px solid silver;">
-				<tr bgColor="#d7eafd">
+			<table id="columns_list" width="90%"  align="center" style="font-size:11px;border:1px solid silver;">
+				<tr bgColor="#c7d4db">
 					<td><strong><digi:trn key="gis:editTableWidget:colName">Column Name</digi:trn></strong></td>
                                         <field:display name="Table Column Code" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colCode">Code</digi:trn></strong></td></field:display>
 					<field:display name="Table Column CSS class" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colCssClass">CSS class</digi:trn></strong></td></field:display>

@@ -64,6 +64,7 @@ function init() {
 			}
 		});
 	}
+	esri.hide(loading);
 
 }
 

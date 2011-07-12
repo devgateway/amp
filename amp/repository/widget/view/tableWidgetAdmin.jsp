@@ -46,7 +46,7 @@
 	<tr>
 		<td>
 		
-			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;" class="inside">
+			<table border="0" width="100%" align="center" style="font-size:12px;" class="inside">
 				<tr bgcolor=#C7D4DB>
 					<td width="800" class="inside" height=25 style="padding-left:5px;">
 						<strong><digi:trn key="gis:tableWidgetList:nameCol">Name</digi:trn></strong>

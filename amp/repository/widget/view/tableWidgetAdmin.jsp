@@ -34,7 +34,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-bottom:10px;">
+		<td style="padding-bottom:10px; padding-top:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetList:pageTitle">Table Widget Manager</digi:trn></span>
 		</td>
 	</tr>

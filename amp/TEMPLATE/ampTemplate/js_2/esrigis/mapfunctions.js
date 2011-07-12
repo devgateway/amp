@@ -15,6 +15,7 @@ dojo.require("dijit.TitlePane");
 dojo.require("dijit.Menu");
 dojo.require("esri.dijit.Legend");
 dojo.require("esri.layers.FeatureLayer");
+dojo.require("dojo.dnd.Moveable");
 /*----variables---------*/
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
@@ -91,6 +92,7 @@ function init() {
 			}
 		});
 	}
+	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 
 }
 
@@ -713,6 +715,7 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode){
 	
 	$('#highlightLegend').html(htmlDiv);
 	$('#highlightLegend').show('slow');
+	var dnd = new dojo.dnd.Moveable(dojo.byId("highlightLegend"));
 }
 
 
@@ -949,19 +952,6 @@ function submitActivity(){
 	
 }
 
-function showLegendCluster(pointSymbolBank){
-	var htmlDiv = "";
-	htmlDiv += "<div onclick='closeHide(\"pointsLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
-	htmlDiv += "<div class='legendHeader'>Cluster color reference<br/><hr/></div>";
-	for (i in pointSymbolBank) {
-		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' style='background-color:rgba(" + pointSymbolBank[i].color.toRgba() + ");' ></div>"
-				+"</div>"
-				+ "<div class='legendContentLabel'>" + i + " </div><br/>";
-	}
-	$('#pointsLegend').html(htmlDiv);
-	$('#pointsLegend').show('slow');
-}
 function showLegendClusterDonor(pointSymbolBank){
 	var htmlDiv = "";
 	htmlDiv += "<div onclick=\"$('#pointsLegend').hide('slow');\" style='color:white;float:right;cursor:pointer;'>X</div>";
@@ -974,4 +964,5 @@ function showLegendClusterDonor(pointSymbolBank){
 	}
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');
+	var dnd = new dojo.dnd.Moveable(dojo.byId("pointsLegend"));
 }

@@ -111,9 +111,8 @@ body {
     background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
-	left: 100px;
-	bottom: 10px;
 	display: none;
+	top:320px;
 	width:200px;
 	padding:10px; 
 	filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;   

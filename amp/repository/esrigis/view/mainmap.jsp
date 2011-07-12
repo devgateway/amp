@@ -176,9 +176,9 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 
-        <div id="highlightLegend" class="legendContent roundedCornersLegend"></div>
-        <div id="pointsLegend" class="legendContent roundedCornersLegend"></div>
-         <div id="legendDiv" class="legendContent roundedCornersLegend" style="position: absolute;margin-left: 8%;margin-top: 32%;z-index: 100;display: none;"></div>
+        <div id="pointsLegend" class="legendContent" style="left:15px;"></div>
+        <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
+        <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
         <div id="distancediv" class="searchContent">
         	<table>
         		<tr>

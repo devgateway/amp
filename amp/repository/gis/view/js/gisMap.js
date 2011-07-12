@@ -50,14 +50,17 @@
   var actionChangeFundType = false;
   var getIndValuesAction = false;
   var getFundDataValues = false;
+
+	$("#testMap").mousemove(function(e){
+			$("#tooltipContainer").css({"left" : e.pageX + 2 + "px"});
+			$("#tooltipContainer").css({"top" : e.pageY +2 + "px"});
+		});	
+
 	
 	$(document).ready(function(){
 		
 		actionImgLoading = false;
-		$().mousemove(function(e){
-			$("#tooltipContainer").css({"left" : e.pageX + 2 + "px"});
-			$("#tooltipContainer").css({"top" : e.pageY +2 + "px"});
-		});
+		
 		
 		jQuery.fn.getRadioValue = function() {
 			var mapLevel = $("input[name='mapLevelRadio']:checked").val();
@@ -1345,6 +1348,8 @@
 			
 		
 			document.getElementById("tooltipContainer").style.display = "block";
+			
+			
 			
 			//Set year caption
 			var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);

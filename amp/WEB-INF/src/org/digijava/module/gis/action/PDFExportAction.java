@@ -52,14 +52,7 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
-import org.digijava.module.gis.util.ColorRGB;
-import org.digijava.module.gis.util.CoordinateRect;
-import org.digijava.module.gis.util.DateInterval;
-import org.digijava.module.gis.util.FundingData;
-import org.digijava.module.gis.util.GisUtil;
-import org.digijava.module.gis.util.HilightData;
-import org.digijava.module.gis.util.MapColorScheme;
-import org.digijava.module.gis.util.SegmentData;
+import org.digijava.module.gis.util.*;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues;
@@ -206,27 +199,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		// GIS Map parameters
 		String secIdStr = null;
 		Long indId = null;
+        Long secId = null;
 		if (request.getParameter("sectorId") != null && !request.getParameter("sectorId").equals("-1")) {
 			secIdStr = request.getParameter("sectorId");
+            secId = Long.parseLong(secIdStr);
 		}
 
-        Long secId = null;
-        Long prgId = null;
-        int sectorQueryType = 0;
-        if (secIdStr.startsWith("sec_scheme_id_")) {
-            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
-            secId = new Long(secIdStr.substring(14));
-        } else if (secIdStr.startsWith("sec_id_")) {
-            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
-            secId = new Long(secIdStr.substring(7));
-        } else if (secIdStr.startsWith("prj_id_")) {
-            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
-            prgId = new Long(secIdStr.substring(7));
-        } else {
-            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
-            secId = new Long(secIdStr);
-        }
-        
+
+
+
 		if (request.getParameter("indicatorId") != null
 				&& !request.getParameter("indicatorId").equals("-1")) {
 			indId = Long.parseLong(request.getParameter("indicatorId"));
@@ -347,33 +328,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				}
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
-            /*
-
-            if (request.getParameter("sectorId") != null && !request.getParameter("sectorId").equals("-1")) {
-                secIdStr = request.getParameter("sectorId");
-            }
-
-            if (secIdStr.startsWith("sec_scheme_id_")) {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
-                secId = new Long(secIdStr.substring(14));
-            } else if (secIdStr.startsWith("sec_id_")) {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
-                secId = new Long(secIdStr.substring(7));
-            } else if (secIdStr.startsWith("prj_id_")) {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
-                prgId = new Long(secIdStr.substring(7));
-            } else {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
-                secId = new Long(secIdStr);
-            }
 
             /*
-			if (request.getParameter("sectorId") != null) {
-				secId = Long.parseLong(request.getParameter("sectorId"));
-			}*/
-    		
-
-
             if (sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME) {
                 AmpSectorScheme scheme = SectorUtil.getAmpSectorScheme(secId);
                 if (scheme != null) {
@@ -387,21 +343,6 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             }
 
 
-
-            /*
-			if (secId.longValue() == -1f || sectorQueryType != org.digijava.module.gis.util.DbUtil.SELECT_SECTOR) {
-				sectorName = "All Sectors";
-			} else {
-				sectorName = SectorUtil.getAmpSector(secId).getName();
-        	}*/
-			// Old if, when the <select> had -2 as "select sector".
-			// if (secId.longValue() == -2f) {
-			// sectorName = "None";
-			// } else if (secId.longValue() == -1f) {
-			// sectorName = "All";
-			// } else {
-			// sectorName = SectorUtil.getAmpSector(secId).getName();
-			// }
 
 			String fromYear = request.getParameter("selectedFromYear");
 			Calendar fStartDate = null;
@@ -420,13 +361,20 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			}
 
             Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
+              */
+
+            GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
+            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm);
 
             if (mapCode != null && mapCode.trim().length() > 0) {
 
-                outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                //outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
             } else {
-                outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                //outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
                 }
+
+
+            outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", mapLevel);
 
 
 		// Get the Map Image
@@ -447,7 +395,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName,
 					subGroupName, timeInterval));
 		} else {
-			Long donorId = Long.parseLong(request.getParameter("donorId"));
+			Long donorId = request.getParameter("donorId") != null ? Long.parseLong(request.getParameter("donorId")):new Long(-1);
 			String donorName = null;
 			if (donorId.longValue() == -1l) {
 				donorName = "All Donors";
@@ -1698,7 +1646,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-   private ByteArrayOutputStream getMapImageFinancial(String mapCode, Long secId, int mapMode, Long donorId, String fundingType, Date fStartDate, Date fEndDate, String mapLevel) throws Exception {
+   private ByteArrayOutputStream getMapImageFinancial(Object[] fundingList, String fundingType, String mapCode, String mapLevel) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1706,23 +1654,6 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (mapCode != null && mapCode.trim().length() > 0) {
 			map = GisUtil.getMap(mapCode);
 		}
-
-		// Get segments with funding for dashed paint map
-		List secFundings = null;
-
-		if (secId.longValue() > -2l) {
-                        if (mapMode != org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM) {
-                            secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null);
-                        } else {
-                            secFundings = org.digijava.module.gis.util.DbUtil.getProgramFoundings(secId);
-                        }
-		} else {
-			secFundings = new ArrayList();
-		}
-
-		Object[] fundingList = GetFoundingDetails.getFundingsByLocations(
-				secFundings, Integer.parseInt(mapLevel), fStartDate, fEndDate,
-				donorId);
 
 		Map fundingLocationMap = (Map) fundingList[0];
 

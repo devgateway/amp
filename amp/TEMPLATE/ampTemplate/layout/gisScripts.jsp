@@ -61,6 +61,7 @@ window.onload = function(){
 	}
 
 
+
 	if (showDevinfo) {
 			var sectorId =  document.getElementById("sectorsMapCombo").value;
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
@@ -68,12 +69,45 @@ window.onload = function(){
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
 			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&indYear=" + timeInterval, 780, 500);
 		} else {
+			/*
 			var sectorId =  document.getElementById("sectorsMapComboFin").value;
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
+			*/
 			var mapModeFin = document.getElementById("mapModeFin").value;
+			
+			
+			var popup = window.open("about:blank", "regReportWnd", "height=500,width=780,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+			var filterForm = $("#gisFilterForm");
+			filterForm.attr("method", "post");
+			filterForm.attr("action", "/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr);
+			filterForm.attr("target", "regReportWnd");
+			
+			var allSectors = false;
+			if ($("input[name='selectedSectors']:checked").length + 
+					$("input[name='selectedSecondarySectors']:checked").length + 
+					$("input[name='selectedTertiarySectors']:checked").length == 0) {
+				$("input[name='selectedSectors']").attr("checked", "true");
+				$("input[name='selectedSecondarySectors']").attr("checked", "true");
+				$("input[name='selectedTertiarySectors']").attr("checked", "true");
+				allSectors = true;
+			}
+			
+			filterForm[0].submit();
+			
+	    if (allSectors) {
+	    	$("input[name='selectedSectors']").removeAttr("checked");
+				$("input[name='selectedSecondarySectors']").removeAttr("checked");
+				$("input[name='selectedTertiarySectors']").removeAttr("checked");
+	    }
+
+		
+		
+		
+			popup.focus();
+			
 		  
-			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
+			//openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
 
 		}
   }

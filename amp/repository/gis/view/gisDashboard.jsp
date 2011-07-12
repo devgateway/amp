@@ -487,7 +487,7 @@
     </tr>
     
     
-    
+    <%--
     <feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">    
         <field:display name="Map Level Switch" feature="GIS DASHBOARD">
         <tr>
@@ -495,10 +495,6 @@
                     <b><digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:</b>
             </td>
             <td width="90%" colspan="2">
-             <!-- 
-                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
-                <input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
-                -->
                 <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked ><span style="font-size:12px"><digi:trn>Region view</digi:trn></span> &nbsp;
 								<input title="District view" type="Radio" value="3" name="mapLevelRadio" ><span style="font-size:12px"><digi:trn>District view</digi:trn></span>
                 
@@ -506,94 +502,8 @@
         </tr>
         </field:display>
     </feature:display>
-
+		--%>
     
-    <tr>
-        <td nowrap width="200" style="font-size:12px">
-             <b><digi:trn>Selected Funding type</digi:trn></b>&nbsp;: 
-             <br>
-        </td>
-        <td id="fundingTypeSelected" style="font-size:12px">&nbsp;
-        	<%--
-            <select id="fundingType" onChange="" style="width:250px" value="commitment">
-            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
-            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
-            </field:display>
-            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
-            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
-            </field:display>
-            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
-            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
-            </field:display>
-        </select>
-        
-        </td>
-		<td>
-	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
-		</td>--%>
-    </tr>
-    
-    
-    
-    <tr>
-        <td nowrap width="200" style="font-size:12px">
-             <b><digi:trn>Selected Sector</digi:trn>:</b>
-             <input type="hidden" id="sectorsMapComboFin" value="-1">
-        </td>
-        <td id="sectorSelected" style="font-size:12px">&nbsp;
-        		<%--
-            <select id="sectorsMapComboFin" onChange="" style="width:250px">
-            <option value="-1"><digi:trn>All Sectors</digi:trn></option>
-            <logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
-                <option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
-            </logic:iterate>
-        		</select>
-        		
-        
-        </td>
-			<td>
-	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
-			--%></td>
-    </tr>
-
-    <%--
-    <tr>
-    	<td nowrap width="200" style="font-size:12px">
-    		<digi:trn>Select Sector</digi:trn>:
-    	</td>
-    	<td>
-    		<input type="hidden" id="sectorsMapComboFin" value="-1">
-    		<div style="font-size:12px; width:250px; border: 1px solid; background-color:white; border-top-color:#abadb3; border-bottom-color:#e3e9ef; border-left-color:#e2e3ea; border-right-color:#dbdfe6;">
-	    		<table id="sector_selector_expander" width="100%" style="cursor:pointer;">
-	    			<tr>
-	    				<td width="234"  nowrap >
-	    					<div id="sel_sec_filter_display" style="color:black; height:12px; overflow-x: hidden;">&nbsp;</div>
-	    				</td>
-	    				<td width="16">
-	    					<img src="/repository/gis/view/images/sec_filter_expand.png" style="float:top;">
-	    				</td>
-	    			</tr>
-	    		</table>
-    		</div>
-    		
-    		
-    	</td>
-    </tr>	
-    --%>
-    
-    
-    <tr>
-       <td nowrap width="200" style="font-size:12px">
-            <b><digi:trn>Selected Donor</digi:trn>:</b>
-        </td>    
-        <td id="donorSelected" style="font-size:12px;">&nbsp;
-        	<%--
-        <select id="donorsCombo" onchange="" style="width:250px; font-size:12px;">    
-            <option value=-1><digi:trn>All donors</digi:trn></option>
-        </select>
-        --%>
-        </td>
-    </tr>
     
     <tr>
     	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFilter()" class="buttonx"></td>

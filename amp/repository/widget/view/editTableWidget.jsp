@@ -76,9 +76,9 @@
 <digi:instance id="wform" property="gisTableWidgetCreationForm"/>
 <digi:form action="/adminTableWidgets.do?actType=save">
 
-<table id="widgetOuter" border="0" cellpadding="15">
+<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" bgcolor=#f2f2f2 height=40 style="padding-left:10px; padding-top:10px; padding-bottom:10px;">
 			<span class=crumb>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -89,22 +89,23 @@
               <digi:link href="/adminTableWidgets.do" styleClass="comment">
                 <digi:trn key="admin:Navigation:WidgetList">Table Widgets</digi:trn>
               </digi:link>&nbsp;&gt;&nbsp;
-              <digi:trn key="admin:Navigation:createEditWidget">table widget form</digi:trn>		
+              <digi:trn key="admin:Navigation:createEditWidget"><b>table widget form</b></digi:trn>		
 			</span>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" style="padding-bottom:10px; padding-top:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:editTableWidget:pageTitle">Edit table widget</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td width="50%" bgcolor=#f2f2f2 style="padding-top:20px; padding-bottom:20px;">
 
-			<table id="tableNames" border="0" cellpadding="5" align="center" style="font-family:verdana;font-size:11px; border:1px solid silver;">
+			<table width="90%" border="0" align="center" cellpadding="5" id="tableNames" style="font-family:verdana;font-size:11px; border:1px solid silver;" bgcolor=#FFFFFF>
 				<tr>
-					<td align="right" nowrap="nowrap"><font color="red">*</font><strong><digi:trn key="gis:editTableWidget:nameTitle">Name:</digi:trn></strong></td>
-					<td><html:text name="wform" property="name" style="width : 200px"/></td>
+					<td width="50%" align="right" nowrap="nowrap"><font color="red">*</font><strong>
+				  <digi:trn key="gis:editTableWidget:nameTitle">Name:</digi:trn></strong></td>
+					<td width="50%"><html:text name="wform" property="name" style="width : 200px"/></td>
 				</tr>
                                 <field:display name="Table Show name as widget title" feature="Table Widgets">
 				<tr>
@@ -149,19 +150,19 @@
 				<tr>
 					<td align="right">
 						<c:set var="cancelButton"><digi:trn key="gis:cancelButton">Cancel</digi:trn></c:set>
-						<input type="button" value="${cancelButton}" title="Cancel and return to list" onclick="cancelEdit()">
+						<input type="button" value="${cancelButton}" title="Cancel and return to list" class="buttonx" onclick="cancelEdit()">
 					</td>
 					<td>
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
 						<html:submit title="Save table widget" value="${saveButton}" />
 					</td>
 				</tr>
-			</table>
+		  </table>
 
-		</td>
-		<td width="100%" valign="top">
+	  </td>
+		<td width="50%" valign="top" bgcolor=#f2f2f2 style="padding-top:20px; padding-bottom:20px;"> 
 		
-			<table id="columns_list" width="50%"  align="center" style="font-family:verdana;font-size:11px;border:1px solid silver;">
+			<table id="columns_list" width="100%"  align="center" style="font-family:verdana;font-size:11px;border:1px solid silver;">
 				<tr bgColor="#d7eafd">
 					<td><strong><digi:trn key="gis:editTableWidget:colName">Column Name</digi:trn></strong></td>
                                         <field:display name="Table Column Code" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colCode">Code</digi:trn></strong></td></field:display>
@@ -212,16 +213,16 @@
 						</td>
 					</tr>
 				</c:forEach>
-			</table>
+		  </table>
 			<br>
 			<c:set var="addColumnButton"><digi:trn key="gis:addColumnButton">Add Column</digi:trn></c:set>
 			<c:if test="${not empty wform.id}">
-				<input type="button" onclick="addColumn(${wform.id})" value="${addColumnButton}" title="Submit">
+				<input type="button" onclick="addColumn(${wform.id})" class="buttonx" value="${addColumnButton}" title="Submit" style="margin-left:25px;">
 			</c:if>			
 			<c:if test="${empty wform.id}">
-				<input type="button" onclick="addColumn(null)" value="${addColumnButton}" title="Submit">
+				<input type="button" onclick="addColumn(null)" class="buttonx" value="${addColumnButton}" title="Submit" style="margin-left:25px;">
 			</c:if>			
-		</td>
+	  </td>
 	</tr>
 </table>
 <html:hidden styleId="tableId" property="id"/>

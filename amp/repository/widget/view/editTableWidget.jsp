@@ -154,7 +154,7 @@
 					</td>
 					<td>
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
-						<html:submit title="Save table widget" value="${saveButton}" />
+						<html:submit title="Save table widget" styleClass="buttonx" value="${saveButton}" />
 					</td>
 				</tr>
 		  </table>

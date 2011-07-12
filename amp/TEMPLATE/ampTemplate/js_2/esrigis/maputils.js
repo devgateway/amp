@@ -41,11 +41,13 @@ function hideLoading(error) {
 /**
  * Hide legend div and remove the highlight
  */
-function closeHide() {
-	$('#legenddiv').hide('slow');
-	try {
-		map.removeLayer(map.getLayer("highlightMap"));
-	} catch (e) {
+function closeHide(divId) {
+	$('#'+divId).hide('slow');
+	if(divId =="highlightLegend") {
+		try {
+			map.removeLayer(map.getLayer("highlightMap"));
+		} catch (e) {
+		}
 	}
 }
 
@@ -140,3 +142,19 @@ function containsDonor(donor, donorArray) {
 }
 
 
+function getCheckedValue(radioObj) {
+	if(!radioObj)
+		return "";
+	var radioLength = radioObj.length;
+	if(radioLength == undefined)
+		if(radioObj.checked)
+			return radioObj.value;
+		else
+			return "";
+	for(var i = 0; i < radioLength; i++) {
+		if(radioObj[i].checked) {
+			return radioObj[i].value;
+		}
+	}
+	return "";
+}

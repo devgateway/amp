@@ -31,7 +31,7 @@
 				<div id="divGeneralFilter">
 					<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
 					<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><b><digi:trn>Show Only Data From This Workspace</digi:trn></b></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;
-					<b><digi:trn>Decimals to show</digi:trn>: </b>
+<!-- 					<b><digi:trn>Decimals to show</digi:trn>: </b>
 						<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
                             <html:option value="0">0</html:option>
                             <html:option value="1">1</html:option>
@@ -39,7 +39,7 @@
                             <html:option value="3">3</html:option>
                             <html:option value="4">4</html:option>
                             <html:option value="5">5</html:option>
-                        </html:select>
+                        </html:select> -->
 					<hr />
 						<fieldset>
 							<b><digi:trn>Type of funding for highlighting</digi:trn></b>&nbsp;&nbsp;<br/>
@@ -379,8 +379,18 @@ var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
 				  showLoading();
+				  var refreshHighlight = false;
+				  //if the highlight layer is activated, refresh it
+				  if(map.getLayer("highlightMap") !== undefined && map.getLayer("highlightMap").visible){
+					  refreshHighlight = true;
+					  
+				  }
 				  getActivities(true);
 				  getStructures(true);
+
+				  if(refreshHighlight){
+				  	getHighlights(currentLevel.mapId);
+				  }
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -402,7 +412,7 @@ var callbackApplyFilterCall = {
 
 
 function callbackApplyFilter(e){
-	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
+//	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
@@ -535,7 +545,7 @@ function resetToDefaults(){
 	removeOptions("org_dropdown_ids");
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");
-	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
+//	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
 	
 	document.getElementById("workspace_only").checked = false;

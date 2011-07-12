@@ -274,6 +274,7 @@ public class DataDispatcher extends MultiAction {
 			locationJSON.setCommitments(amountCommitments.toPlainString());
 			locationJSON.setDisbursements(amountDisbursements.toPlainString());
 			locationJSON.setExpenditures(amountExpenditures.toPlainString());
+			locationJSON.setAmountsCurrencyCode(filter.getCurrencyCode());
 			jsonArray.add(locationJSON);
 		}
 

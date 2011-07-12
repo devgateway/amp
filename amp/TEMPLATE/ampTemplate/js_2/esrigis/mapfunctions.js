@@ -569,7 +569,8 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
                            {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}
                           ];
 function getHighlights(level) {
-	closeHide();
+	locations = new Array();
+	closeHide("highlightLegend");
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
@@ -612,13 +613,26 @@ function addResultsToMap(featureSet) {
     var colors = colorsOrange;
     var numRanges = colors.length;
     var localGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: true, id: "highlightMap", visible: true});
+    var typeFundingValue = getCheckedValue(document.getElementsByName("filter.transactionType"));
+	var typeFunding = "commitments";
+    switch(typeFundingValue){
+	    case "0":
+	    	typeFunding = "commitments";
+	    	break;
+	    case "1":
+	    	typeFunding = "disbursements";
+	    	break;
+	    case "2":
+	    	typeFunding = "expenditures";
+	    	break;
+    }
 
     //Using logarithmic scale
-    var maxLog = Math.log(getMaxValue(locations, "commitments"));
-    var minLog = Math.log(getMinValue(locations, "commitments"));
+    var maxLog = Math.log(getMaxValue(locations, typeFunding));
+    var minLog = Math.log(getMinValue(locations, typeFunding));
 
-    var max = getMaxValue(locations, "commitments");
-    var min = getMinValue(locations, "commitments");
+    var max = getMaxValue(locations, typeFunding);
+    var min = getMinValue(locations, typeFunding);
 
     var breaksLog = (maxLog - minLog) / numRanges;
     var breaks = (max - min) / numRanges;
@@ -639,22 +653,37 @@ function addResultsToMap(featureSet) {
     	var geoId = feature.attributes["GEO_ID"];
     	feature.setAttributes( {
 			  "COUNT": count,
-			  "AMOUNT": count,
+			  "COMMITMENTSFMT": 0,
+			  "DISBURSEMENTSFMT": 0,
+			  "EXPENDITURESFMT": 0,
 			  "COUNTY": county,
 			  "GEO_ID": geoId
 			  });
-    	//TODO: Should support all types of funding
-    	feature.setInfoTemplate(new esri.InfoTemplate("Funding", "County: ${COUNTY} <br/>Commitments: ${AMOUNT}<br/> "));
+    	feature.setInfoTemplate(new esri.InfoTemplate("Funding", currentLevel.name + ": ${"+ currentLevel.mapField +"} <br/>"+
+				"Commitments: ${COMMITMENTSFMT}<br/> " +
+				"Disbursements: ${DISBURSEMENTSFMT}<br/> " +
+				"Expenditures: ${EXPENDITURESFMT}<br/> "
+    			
+    	));
     	localGraphicLayer.add(feature);
     });
     
-    localGraphicLayer = updateLocationAttributes(localGraphicLayer);
+    localGraphicLayer = updateLocationAttributes(localGraphicLayer, typeFunding);
     localGraphicLayer.setRenderer(renderer);
     map.addLayer(localGraphicLayer);
     map.reorderLayer(map.getLayer("highlightMap"),0);
     map.setExtent(map.extent.expand(1.01));
     hideLoading();
-    showLegend(rangeColors, colors);
+    var currencyCode;
+    for(var j=0;j<locations.length;j++){
+    	var currentLocation = locations[j];
+  	  	if(currentLocation.amountsCurrencyCode != ""){
+  	  	  currencyCode = currentLocation.amountsCurrencyCode;
+  	  	  break;
+  	  	}
+    }
+
+    showLegend(rangeColors, colors, typeFunding, currencyCode);
   }
 
 /**
@@ -662,19 +691,18 @@ function addResultsToMap(featureSet) {
  * @param rangeColors
  * @param colors
  */
-function showLegend(rangeColors, colors){
-	//TODO: Should support currencies
-	var currencyString = "USD";
-	//TODO: Should support all types of funding
-	var typeOfFunding = "Commitments";
+function showLegend(rangeColors, colors, typeFunding, currencyCode){
+	var df = new DecimalFormat(currentFormat);
+	var currencyString = currencyCode;
+	
 	var htmlDiv = "";
-	htmlDiv += "<div onclick='closeHide()' style='color:white;float:right;cursor:pointer;'>X</div>";
-	htmlDiv += "<div class='legendHeader'>Showing " + typeOfFunding + " for " + currentLevel.name + "<br/><hr/></div>";
+	htmlDiv += "<div onclick='closeHide(\"highlightLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div class='legendHeader'>Showing " + typeFunding + " for " + currentLevel.name + "<br/><hr/></div>";
 	for(var i=0; i< rangeColors.length; i++){
 		htmlDiv += "<div class='legendContentContainer'>"
 				+ "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");'></div>"
 				+"</div>"
-				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + " " + currencyString + " - " + Math.floor(rangeColors[i][1]) + " " + currencyString + " </div><br/>"
+				+ "<div class='legendContentLabel'>" + df.format(Math.ceil(rangeColors[i][0])) + " " + currencyString + " - " + df.format(Math.floor(rangeColors[i][1])) + " " + currencyString + " </div><br/>"
 				;
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
@@ -683,8 +711,8 @@ function showLegend(rangeColors, colors){
 			+ "<div class='legendContentLabel'>No Data</div><br/>"
 		;
 	
-	$('#legenddiv').html(htmlDiv);
-	$('#legenddiv').show('slow');
+	$('#highlightLegend').html(htmlDiv);
+	$('#highlightLegend').show('slow');
 }
 
 
@@ -693,15 +721,19 @@ function showLegend(rangeColors, colors){
  * @param graphicLayer
  * @returns
  */
-function updateLocationAttributes(graphicLayer){
+function updateLocationAttributes(graphicLayer, typeFunding){
+	var df = new DecimalFormat(currentFormat);
     var count = graphicLayer.graphics.length;
     for(var i=0;i<count;i++) {
       var g = graphicLayer.graphics[i];
       for(var j=0;j<locations.length;j++){
     	  var currentLocation = locations[j];
           if(g.attributes["GEO_ID"] == currentLocation.geoId){
-        	  g.attributes["COUNT"] = Math.log(currentLocation.commitments);
-        	  g.attributes["AMOUNT"] = currentLocation.commitments;
+        	  
+        	  g.attributes["COUNT"] = Math.log(currentLocation[typeFunding]);
+        	  g.attributes["COMMITMENTSFMT"] = df.format(currentLocation.commitments) + " " + currentLocation.amountsCurrencyCode;
+        	  g.attributes["DISBURSEMENTSFMT"] = df.format(currentLocation.disbursements) + " " + currentLocation.amountsCurrencyCode;
+        	  g.attributes["EXPENDITURESFMT"] = df.format(currentLocation.expenditures) + " " + currentLocation.amountsCurrencyCode;
         	  break;
           }
       }
@@ -919,7 +951,7 @@ function submitActivity(){
 
 function showLegendCluster(pointSymbolBank){
 	var htmlDiv = "";
-	htmlDiv += "<div onclick='closeHide()' style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div onclick='closeHide(\"pointsLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>Cluster color reference<br/><hr/></div>";
 	for (i in pointSymbolBank) {
 		htmlDiv += "<div class='legendContentContainer'>"
@@ -927,12 +959,12 @@ function showLegendCluster(pointSymbolBank){
 				+"</div>"
 				+ "<div class='legendContentLabel'>" + i + " </div><br/>";
 	}
-	$('#legenddiv').html(htmlDiv);
-	$('#legenddiv').show('slow');
+	$('#pointsLegend').html(htmlDiv);
+	$('#pointsLegend').show('slow');
 }
 function showLegendClusterDonor(pointSymbolBank){
 	var htmlDiv = "";
-	htmlDiv += "<div onclick=\"$('#legenddiv').hide('slow');\" style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div onclick=\"$('#pointsLegend').hide('slow');\" style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>Point color reference<br/><hr/></div>";
 	for (var i=0; i < donorArray.length; i++) {
 		htmlDiv += "<div class='legendContentContainer'>"
@@ -940,6 +972,6 @@ function showLegendClusterDonor(pointSymbolBank){
 				+"</div>"
 				+ "<div class='legendContentLabel'>" + donorArray[i].donorname + " </div><br/>";
 	}
-	$('#legenddiv').html(htmlDiv);
-	$('#legenddiv').show('slow');
+	$('#pointsLegend').html(htmlDiv);
+	$('#pointsLegend').show('slow');
 }

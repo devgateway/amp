@@ -20,6 +20,7 @@ public class SimpleLocation {
 	private Boolean exactlocation; 
 	private String exactlocation_lat;
 	private String exactlocation_lon;
+	private String amountsCurrencyCode;
 	
     //This field is used only in the view to mark the location. 
     private String isdisplayed;
@@ -140,5 +141,13 @@ public class SimpleLocation {
 
 	public void setExactlocation_lon(String exactlocation_lon) {
 		this.exactlocation_lon = exactlocation_lon;
+	}
+
+	public void setAmountsCurrencyCode(String amountsCurrencyCode) {
+		this.amountsCurrencyCode = amountsCurrencyCode;
+	}
+
+	public String getAmountsCurrencyCode() {
+		return amountsCurrencyCode;
 	}
 }

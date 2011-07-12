@@ -9,7 +9,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   
@@ -36,6 +37,7 @@
     </script>
     <!-- Map Scripts -->
     <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
@@ -101,6 +103,7 @@
      		$('#basemapGallery').toggle();
      	});
 	});
+	var currentFormat = "<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %>";
 </script>
 
  	<!-- Filter Styles -->
@@ -173,7 +176,8 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 
-        <div id="legenddiv" class="legendContent roundedCornersLegend"></div>
+        <div id="highlightLegend" class="legendContent roundedCornersLegend"></div>
+        <div id="pointsLegend" class="legendContent roundedCornersLegend"></div>
          <div id="legendDiv" class="legendContent roundedCornersLegend" style="position: absolute;margin-left: 8%;margin-top: 32%;z-index: 100;display: none;"></div>
         <div id="distancediv" class="searchContent">
         	<table>

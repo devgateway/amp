@@ -50,9 +50,9 @@
 <digi:form action="/tableWidgetData.do?actType=save">
 
 
-<table id="widgetOuter" border="0" cellpadding="15">
+<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" bgcolor=#f2f2f2 height=40>
 			<span class=crumb>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -63,12 +63,12 @@
               <digi:link href="/adminTableWidgets.do" styleClass="comment">
                 <digi:trn key="admin:Navigation:WidgetList">Table Widgets</digi:trn>
               </digi:link>&nbsp;&gt;&nbsp;
-              <digi:trn key="admin:Navigation:editWidgetData">table widget data</digi:trn>
+              <digi:trn key="admin:Navigation:editWidgetData"><b>table widget data</b></digi:trn>
 			</span>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" style="padding-top:10px; padding-bottom:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetData:pageTitle">Table widget data</digi:trn></span>
 		</td>
 	</tr>
@@ -95,7 +95,7 @@
 							</c:if>
 						</td>
 					</c:forEach>
-					<td>
+					<td bgcolor="#c7d4db" height=25>
 						<strong>
 							<digi:trn key="gis:tableWidgetData:operationsCol">Operations</digi:trn>
 						</strong>
@@ -111,8 +111,8 @@
 						<td>
 							<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
 							<c:set var="removeButton"><digi:trn key="gis:removeButton">Remove</digi:trn></c:set>
-							<input type="button" value="${addButton}" onclick="addRow(this.form,${drow.pk})">
-							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${drow.pk})">
+							<input type="button" value="${addButton}" onclick="addRow(this.form,${drow.pk})" class="buttonx">
+							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${drow.pk})" class="buttonx">
 						</td>
 					</tr>
 				</c:forEach>
@@ -120,21 +120,21 @@
 			</table>
 		</td>
 	</tr>
-	<tr align="right">
-		<td>
+	<tr>
+		<td align="center" style="padding-top:10px;">
 			<table>
 				<tr>
 					<td>
 						<c:set var="cancelButton"><digi:trn key="gis:cancelButton">Cancel</digi:trn></c:set>
-						<input type="button" value="${cancelButton}" title="Cancel and return to list" onclick="cancelEdit(this.form)">
+						<input type="button" value="${cancelButton}" title="Cancel and return to list" onclick="cancelEdit(this.form)" class="buttonx">
 					</td>
 					<td>
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
-						<html:submit title="Submit all moidications" value="${saveButton}"/>
+						<html:submit title="Submit all moidications" styleClass="buttonx" value="${saveButton}"/>
 					</td>
 					<td>
 						<c:set var="previewButton"><digi:trn key="gis:previewButton">Preview</digi:trn></c:set>	
-						<input type="button" value="${previewButton}" onclick="gotoPreview(this.form)">
+						<input type="button" value="${previewButton}" class="buttonx" onclick="gotoPreview(this.form)">
 						
 					</td>
 				</tr>

@@ -107,6 +107,25 @@ body {
     width: 100px;
 }
 
+div#mainGisMenu{  background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+	position:absolute;
+	z-Index:100;
+	right:10px;
+	top:60px;
+	width:160px;
+	filter:alpha(opacity=90);
+	opacity: .90;
+	-moz-opacity:.90;   
+    color:#fff;}
+div#mainGisMenu ul, div#mainGisMenu ul li {margin:0px;padding:0px;}
+div#mainGisMenu ul li {background-position:10px 125px;list-style:none;text-align:right;font-size:12px;width:127px;border-bottom:1px #000 solid;padding:8px 30px 8px 0px;font-weight:bold;border-left:3px solid #000;}
+div#mainGisMenu ul li#search{background:url(/TEMPLATE/ampTemplate/img_2/gis/searchstr.png) no-repeat right;background-position:135px 8px;} 
+div#mainGisMenu ul li#hlight{background:url(/TEMPLATE/ampTemplate/img_2/gis/highlightregions.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#hlightz{background:url(/TEMPLATE/ampTemplate/img_2/gis/highlightzones.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#add{background:url(/TEMPLATE/ampTemplate/img_2/gis/addactivity.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#structures{background:url(/TEMPLATE/ampTemplate/img_2/gis/structures.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#povmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/povertymap.png) no-repeat right;background-position:135px 8px;}
+div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/censusmap.png) no-repeat right;background-position:135px 8px;}
 .legendContent {
     background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
@@ -115,7 +134,7 @@ body {
 	top:320px;
 	width:200px;
 	padding:10px; 
-	filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;   
+	filter:alpha(opacity=80);opacity: .80;-moz-opacity:.80;   
     color:#fff;
 }
 .legendContent *{color:#fff;}
@@ -149,14 +168,16 @@ body {
 }
 
 .searchContent {
-    background-color: rgba(0, 0, 0, 0.5);
+   background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;
 	z-Index:100;
 	margin-left: 600px;
 	margin-top: 53px;
 	display: none;
 	width:250px;
-	padding:10px;    
+	padding:10px; 
+	filter:alpha(opacity=80);opacity: .80;-moz-opacity:.80;   
+	
     
 }
 

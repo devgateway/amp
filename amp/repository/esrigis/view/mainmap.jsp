@@ -141,22 +141,15 @@
 										</div>
                       
         </div>
-        <div class="headerContent" align="right" style="vertical-align: middle;">
+        <div class="headerContent" align="right" style="vertical-align: middle; position:relative;">
+      
+        
 			<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
 						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Tools</digi:trn></td>
 						<td id="filterbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" id="search" style="cursor: pointer;"><digi:trn>Search<br/>Structures</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight<br/>regions</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight<br/>Zones</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add<br/>Activity</digi:trn></td>
-						<!-- 
-						<td valign="middle" class="mapMenuItem" align="left" onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></td>
-						-->
-						<td valign="middle" class="mapMenuItem" align="left" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty<br/>Map</digi:trn></td>
-						<td valign="top" class="mapMenuItem" align="left" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census<br/>Map</digi:trn></td>
+						
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
 							<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
 								<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="<digi:trn>Select base Map</digi:trn>" style="background:#fff;border:1px solid #fff;">
@@ -169,6 +162,21 @@
 						</field:display>
 					</tr>
 			</table>
+              <div id="mainGisMenu">
+			  <h3>Main Menu</h3>
+              <ul>
+              	<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
+						<li  id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
+						<li  id="hlightz"  onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
+						<li   id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
+						<!-- 
+						<li onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></li>
+						-->
+						<li   id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+						<li   id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
+						<li  id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+                        </ul>
+              </div>
                     <div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
 
 		</div>
@@ -194,9 +202,9 @@
         		</tr>
         	</table>
         </div>
-        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:30px; top:25px; z-Index:999;display: none;margin-top: 40px;">
+        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
-        	<h3>Control Panel</h3>
+        	<h3>Tools Panel</h3>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>

@@ -208,9 +208,16 @@ function doExport(){
 		document.visualizationform.action="${url1}" + options ;
 		document.visualizationform.target="_blank";
 		document.visualizationform.submit();
-	} else {
+	} 
+	if (type=="1") {
 		<digi:context name="url2" property="/visualization/wordExport.do"/>
 		document.visualizationform.action="${url2}" + options ;
+		document.visualizationform.target="_blank";
+		document.visualizationform.submit();
+	}
+	if (type=="2") {
+		<digi:context name="url3" property="/visualization/excelExport.do"/>
+		document.visualizationform.action="${url3}" + options ;
 		document.visualizationform.target="_blank";
 		document.visualizationform.submit();
 	}
@@ -579,7 +586,12 @@ function changeChild (selected){
 	                            <html:option value="5">5</html:option>
 	                        </html:select>
 						</td>
-						
+						<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b></td>
+				    	<td>
+				    		 <html:select property="filter.yearToCompare" styleId="yearToCompare_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+	                        </html:select>
+						</td>
 					</tr>
 					<tr>
 						<td><b><digi:trn>Fiscal Year Start</digi:trn>:</b></td>
@@ -920,6 +932,7 @@ function changeChild (selected){
 
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.year" styleId="currentYear"/>
+<html:hidden property="filter.yearToCompare" styleId="yearToCompare"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
 <html:hidden property="filter.yearsInRangeLine" styleId="yearsInRangeLine" />
 <html:hidden property="filter.yearsInRangePie" styleId="yearsInRangePie" />
@@ -1264,6 +1277,22 @@ function changeChild (selected){
 	--></ul>
 	<div class="yui-content">
 	<div id="tab1">
+		<fieldset>
+			<legend><span id="fundingChartTitle" class=legend_label></span></legend>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
+			<br />
+			<br />
+			<div class="flashcontent" name="flashContent">
+				<div id="FundingChart">
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				</div>
+			</div>
+			<div align="right">
+				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+			</div> 
+		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 			<fieldset>
 				<legend><span id="ODAGrowthTitle" class=legend_label></span></legend>
@@ -1282,22 +1311,6 @@ function changeChild (selected){
 				</div> 
 			</fieldset>
 		</c:if>
-		<fieldset>
-			<legend><span id="fundingChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
-			<br />
-			<br />
-			<div class="flashcontent" name="flashContent">
-				<div id="FundingChart">
-					<a href="http://www.adobe.com/go/getflashplayer">
-						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-					</a>
-				</div>
-			</div>
-			<div align="right">
-				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
-			</div> 
-		</fieldset>
 		<fieldset>
 			<legend><span id="aidPredChartTitle" class=legend_label></span></legend>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability')" title="Data View"/></div>
@@ -1559,6 +1572,7 @@ var allGraphs = document.getElementsByName("flashContent");
 
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
+	document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRangeLine").value = document.getElementById("yearsInRangeLine_dropdown").options[document.getElementById("yearsInRangeLine_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRangePie").value = document.getElementById("yearsInRangePie_dropdown").options[document.getElementById("yearsInRangePie_dropdown").selectedIndex].value;
@@ -1979,18 +1993,10 @@ function refreshBoxes(o){
 		}
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
-	if (dashboardType==1) {
-		var currentYear = document.getElementById("currentYear").value;
-		var startYear =  "" + (currentYear - 1);
-		var endYear =  "" + currentYear;
-		div = document.getElementById("ODAGrowthTitle");
-		inner = "ODA Growth Percentage (" + startYear + "-" + endYear + ")";
-		div.innerHTML = inner;
-	}
 	
 	div = document.getElementById("fundingChartTitle");
-	inner = "";
-	if (document.getElementById("commitments_visible").checked==true) {
+	inner = "<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>";
+	/*if (document.getElementById("commitments_visible").checked==true) {
 		inner = inner + trnCommitments + " - ";
 		}
 	if (document.getElementById("disbursements_visible").checked==true) {
@@ -2005,7 +2011,7 @@ function refreshBoxes(o){
 		if (document.getElementById("pledge_visible").checked==true) {
 			inner = inner + trnPledges;
 		}
-	}
+	}*/
 	div.innerHTML = inner;
 
 	var type = "" + getOptionChecked("transaction_type_");
@@ -2019,6 +2025,18 @@ function refreshBoxes(o){
 	if (type=="2") {
 		fundType = trnExpenditures;
 	}
+	if (dashboardType==1) {
+		var currentYear = document.getElementById("currentYear").value;
+		var startYear = document.getElementById("yearToCompare").value;
+		if (startYear == "0" || startYear == "" || startYear == null || startYear >= currentYear){
+			startYear =  "" + (currentYear - 1);
+		}
+		var endYear =  "" + currentYear;
+		div = document.getElementById("ODAGrowthTitle");
+		inner = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+		div.innerHTML = inner;
+	}
+
 	div = document.getElementById("aidPredChartTitle");
 	inner = trnAidPredictability + " - " + fundType;
 	div.innerHTML = inner;
@@ -2137,11 +2155,9 @@ function changeChart(e, chartType, container){
 	    caller.className = "sel_sm_b";
 	}
 
-	var palette = "0xff6600,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c";
-	//alert ("show_monochrome: " + document.getElementById("show_monochrome").checked);
-	//alert ("showMonochrome: " + document.getElementById("showMonochrome").value);
+	var palette = "0xff6600,0x7eae58,0x88bff5,0xbe0035,0x8b007e,0x99431c";
 	if (document.getElementById("show_monochrome").checked){
-		palette = "0x000000,0x333333,0x666666,0x999999,0xcccccc,0xffffff";
+		palette = "0x000000,0x999999,0x333333,0xcccccc,0x666666,0xeeeeee";
 	}
 	 
 	var decimalSeparator = document.getElementById("decimalSeparator").value;

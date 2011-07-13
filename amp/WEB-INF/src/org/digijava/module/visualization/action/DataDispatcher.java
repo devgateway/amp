@@ -2044,6 +2044,9 @@ public class DataDispatcher extends DispatchAction {
         }
         int yearsInRange=filter.getYearsInRange()-1;
         
+        if (filter.getYearToCompare()==null || filter.getYearToCompare().intValue()==0 || filter.getYearToCompare().intValue()>= filter.getYear()){
+        	filter.setYearToCompare(filter.getYear()-1);
+        }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
         Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
@@ -2057,8 +2060,8 @@ public class DataDispatcher extends DispatchAction {
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
             BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-1);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue()-1);
+            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYearToCompare().intValue());
             fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
             BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
@@ -2105,7 +2108,7 @@ public class DataDispatcher extends DispatchAction {
         String name = request.getParameter("name");
         String type = request.getParameter("type");
         String length = request.getParameter("length");
-        int graph = Integer.valueOf(request.getParameter("graph"));
+        String graph = request.getParameter("graph");
         logger.info("About to create image from swf - " + " Type:" + type + " Graph:" + graph + " Length:" + bytes.length);
         try {
 			ServletInputStream si = request.getInputStream();
@@ -2132,49 +2135,38 @@ public class DataDispatcher extends DispatchAction {
 	                byte[] imagen=decoder.decodeBuffer(new String(bytes));
 	                InputStream in = new ByteArrayInputStream(imagen);
 	                BufferedImage image =  ImageIO.read(in);
-	               switch (graph) {
-					case 1:
+	                if (graph.equals("FundingChart")) {
 						vForm.getExportData().setFundingGraph(image);
 						logger.info("Creating image from Funding graph");
-						break;
-					
-					case 2:
+	                }
+	                if (graph.equals("AidPredictability")) {
 						vForm.getExportData().setAidPredictabilityGraph(image);
 						logger.info("Creating image from Aid Predictability graph");
-						break;
-					
-					case 3:
+	                }
+	                if (graph.equals("AidType")) {
 						vForm.getExportData().setAidTypeGraph(image);
 						logger.info("Creating image from Aid Type graph");
-						break;
-					
-					case 4:
+	                }
+	                if (graph.equals("FinancingInstrument")) {
 						vForm.getExportData().setFinancingInstGraph(image);
 						logger.info("Creating image from Financing Instrument graph");
-						break;
-					
-					case 5:
+	                }
+	                if (graph.equals("DonorProfile")) {
 						vForm.getExportData().setDonorGraph(image);
 						logger.info("Creating image from Donor graph");
-						break;
-					
-					case 6:
+	                }
+	                if (graph.equals("SectorProfile")) {
 						vForm.getExportData().setSectorGraph(image);
 						logger.info("Creating image from Sector graph");
-						break;
-					
-					case 7:
+	                }
+	                if (graph.equals("RegionProfile")) {
 						vForm.getExportData().setRegionGraph(image);
 						logger.info("Creating image from Region graph");
-						break;
-					
-					case 8:
+	                }
+	                if (graph.equals("ODAGrowth")) {
 						vForm.getExportData().setODAGrowthGraph(image);
 						logger.info("Creating image from ODA growth graph");
-						break;
-					
 					}
-	                
 	            }
 	        } else {
 	        	response.setContentType("text");

@@ -66,6 +66,7 @@ public class DashboardFilter {
     private int yearsInRange = 5;
     private int yearsInRangePie = 7;
     private int yearsInRangeLine = 8;
+    private Long yearToCompare;
     private Boolean commitmentsVisible = true;
     private Boolean disbursementsVisible= true;
     private Boolean pledgeVisible= true;
@@ -151,7 +152,15 @@ public class DashboardFilter {
         this.yearsInRangeLine = yearsInRangeLine;
     }
 
-    public List<AmpCategoryValueLocations> getRegions() {
+    public Long getYearToCompare() {
+		return yearToCompare;
+	}
+
+	public void setYearToCompare(Long yearToCompare) {
+		this.yearToCompare = yearToCompare;
+	}
+
+	public List<AmpCategoryValueLocations> getRegions() {
         return regions;
     }
 

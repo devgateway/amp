@@ -29,6 +29,7 @@
     
     	<action name="visualizationform" path="/visualization/pdfExport" type="org.digijava.module.visualization.action.ExportToPDF"/>
     	<action name="visualizationform" path="/visualization/wordExport" type="org.digijava.module.visualization.action.ExportToWord"/>
+    	<action name="visualizationform" path="/visualization/excelExport" type="org.digijava.module.visualization.action.ExportToExcel"/>
     
 	</action-mappings>
 </struts-config>

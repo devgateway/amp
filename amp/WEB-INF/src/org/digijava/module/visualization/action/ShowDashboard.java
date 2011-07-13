@@ -144,6 +144,7 @@ public class ShowDashboard extends Action {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}
 			filter.setYear(year);
+			filter.setYearToCompare(year-1);
 		}
 		filter.setYears(new ArrayList<BeanWrapperImpl>());
 		long yearFrom = Long

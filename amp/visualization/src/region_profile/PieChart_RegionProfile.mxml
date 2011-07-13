@@ -53,7 +53,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
-			
+			private var palette:Array = new Array();
+
 			private var ds:DataSet = new DataSet();
 			
 			public function start():void
@@ -92,7 +93,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 					sizePanel(300, 200);
 				}
 				dc.setStyle("borderStyle","solid");
-				
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+
 				dc.invalidateDisplayList();
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
@@ -113,7 +122,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "7");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "RegionProfile");
 			}
 			
 			//Used to rotate wedge labels 180 degrees for readability
@@ -245,6 +254,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Resize id="resize" />
 	
 	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
@@ -320,8 +330,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 		<!-- Palletes used to generate our colors -->
 		
 		<axiis:palettes>
-			<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="wedgePalette"/> 
-			<axiis:LayoutPalette layout="{legendLayout}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="legendPalette"/> 
+			<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="{palette}" id="wedgePalette"/> 
+			<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
 			<!--<axiis:LayoutAutoPalette id="wedgePalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{innerWedgeGroup}"/>
 			<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{legendLayout}"/>-->
 		</axiis:palettes>

@@ -34,7 +34,7 @@
 	xmlns:Examples="Examples.*"
 	xmlns:axis="org.axiis.charts.axis.*"
 	xmlns:labels="org.axiis.charts.labels.*"
-	backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
+	backgroundGradientColors="[0xDDDDDD,0xDDDDDD]"
 	layout="absolute"
 	creationComplete="application1_creationCompleteHandler(event);"
 >
@@ -57,6 +57,7 @@
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
+			private var palette:Array = new Array();
 			
 			/**
 			 * This example is using xml data read from the file system. 
@@ -99,10 +100,30 @@
 				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.year;
+				if("length" in service.lastResult.year) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
 				dc.visible = true;
 				dc.invalidateDisplayList();
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
 				if (groupSeparator == ""){
 					groupSeparator = " ";
 				}
@@ -125,7 +146,7 @@
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "4");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "FinancingInstrument");
 			}
 			protected function labelRender(object:Object):String {
 				var wrappedLabel:String = null;
@@ -195,7 +216,11 @@
 				service.send();
 				start();
 			}
-			
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+
 		]]>
 	</mx:Script>
 	
@@ -218,7 +243,7 @@
 	<mx:String id="childLabelField">category</mx:String>
 	<mx:Number id="maxLabelWidth">8</mx:Number>
 	<mx:Number id="percentGap">.02</mx:Number>
-	
+	<mx:Resize id="resize" />
 	
 	<!--  
 	A scale that deals with linear numeric data.
@@ -226,6 +251,7 @@
 	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{hLayout.height}" />
 	
 	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
@@ -278,6 +304,7 @@
 						fontColor="0"
 						fontSize="12"
 						tickGap="5"
+						showGridArea="false"
 						labelFunction="{axisLabel}"/>
 		</axiis:backgroundGeometries>
 		
@@ -456,9 +483,9 @@
 	If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
-		<axiis:LayoutPalette layout="{hLayout}" colors="[0x111111]" id="outerPalette"/> 
-		<axiis:LayoutPalette layout="{myCluster}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="clusterPalette"/> 
-		<axiis:LayoutPalette layout="{legendLayout}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="legendPalette"/> 
+		<axiis:LayoutPalette layout="{hLayout}" colors="[0x000000]" id="outerPalette"/> 
+		<axiis:LayoutPalette layout="{myCluster}" colors="{palette}" id="clusterPalette"/> 
+		<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
 		<!--<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<axiis:LayoutAutoPalette id="clusterPalette" colorFrom="0xCC3333" 
 								 colorTo="0x3333CC" layout="{myCluster}"/> 
@@ -494,7 +521,7 @@
 			alpha=".3"/>
 		<degrafa:SolidStroke 
 			id="axisStroke" 
-			color="0x222222" 
+			color="0x000000" 
 			pixelHinting="true"/>
 		<degrafa:SolidStroke
 			id="myStroke" 
@@ -507,5 +534,8 @@
 			weight="6"
 			caps="none"/>
 	</mx:Array>
+	<mx:Panel x="{(this.width-300)/2}" y="20" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
+	</mx:Panel>
 
 </mx:Application>

@@ -28,7 +28,8 @@
 			import org.axiis.data.DataSet;
 			
 			private var ds:DataSet = new DataSet();
-			
+			private var palette:Array = new Array();
+
 			public function start():void
 			{
 				
@@ -73,7 +74,15 @@
 					sizePanel(300, 200);
 				}
 				dc.setStyle("borderStyle","solid");
-				
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+
 				dc.invalidateDisplayList();
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				
@@ -94,7 +103,7 @@
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "5");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "FinancingInstrument");
 			}
 			//Used to rotate wedge labels 180 degrees for readability
 			private function transposeLabel1(wedge:Object):Boolean
@@ -225,6 +234,7 @@
 	<mx:Resize id="resize" />
 	
 	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
@@ -308,8 +318,8 @@
 			
 			<!-- Palletes used to generate our colors -->
 			<axiis:palettes>
-				<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="[0xFF0033,0xFFCC00,0x000099,0x009900,0x990099,0x660000,0xCC3399]" id="wedgePalette"/> 
-				<axiis:LayoutPalette layout="{legendLayout}" colors="[0xFF0033,0xFFCC00,0x000099,0x009900,0x990099,0x660000,0xCC3399]" id="legendPalette"/> 
+				<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="{palette}" id="wedgePalette"/> 
+				<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
 				<!--<axiis:LayoutAutoPalette id="wedgePalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{innerWedgeGroup}"/>
 				<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{legendLayout}"/>-->
 			</axiis:palettes>

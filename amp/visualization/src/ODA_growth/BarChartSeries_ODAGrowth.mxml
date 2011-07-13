@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:charts="org.axiis.charts.*"
+				xmlns:axiis="http://www.axiis.org/2009"
+				xmlns:series="org.axiis.charts.series.*"
+				xmlns:groupings="org.axiis.charts.groupings.*"
+				xmlns:degrafa="http://www.degrafa.com/2007"
+				xmlns:states="org.axiis.states.*"
+				xmlns:paint="org.axiis.paint.*"
+				xmlns:Examples="Examples.*"
+				xmlns:axis="org.axiis.charts.axis.*"
+				xmlns:labels="org.axiis.charts.labels.*"
+				backgroundGradientColors="[0xDDDDDD,0xDDDDDD]"
+				layout="absolute"
+				creationComplete="application1_creationCompleteHandler(event);"
+				>
+	
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getODAGrowthGraphData" result="service_resultHandler(event)" >
+		<mx:request>
+			<format>xml</format>
+			<typeofaid>true</typeofaid>
+		</mx:request>
+	</mx:HTTPService>
+	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
+	<mx:Script>
+		<![CDATA[
+			import com.exportUtil.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.SliderEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
+			
+			import org.axiis.charts.groupings.BarCluster;
+			import org.axiis.data.DataSet;
+			
+			private var ds:DataSet = new DataSet();
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
+			private var palette:Array = new Array();
+			
+			/**
+			 * This example is using xml data read from the file system. 
+			 * In practical usage, you'ld have some data in a model that you want to display
+			 * that may be XML or may be in arrayCollections or arrays. In most cases, you'll
+			 * need to massage the data into a format that's suitable for the display you're
+			 * trying to achieve. 
+			 */
+			public function start():void
+			{
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				var maxValue:Number = 0;
+				var minValue:Number = 0;
+				var totalResults:Number = service.lastResult.organization.length;
+				var fillCategories:Boolean = false;
+				try {
+					maxValue =  service.lastResult.organization.value;
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.organization.length; i++){
+						var currentValue:Number = service.lastResult.organization[i].value;
+						if (maxValue < currentValue) maxValue = currentValue;
+						if (minValue > currentValue) minValue = currentValue;
+					}
+				}
+				if (totalResults * 30 > 350){
+					mxc1.height = totalResults * 30;
+				} else {
+					mxc1.height = 350;
+				}
+				
+				//				categories = categoriesLocal; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
+				vScale.minValue = Math.round(minValue * 1.05);
+				dataProvider = service.lastResult.organization;
+				if("length" in service.lastResult.organization) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
+				dc.visible = true;
+				dc.invalidateDisplayList();
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray:Array = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				
+			}
+			
+			private function captureSnapshot():void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "ODAGrowth");
+			}
+			
+			protected function myStack_preRenderHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+			}
+			protected function service_resultHandler(event:ResultEvent):void
+			{
+				start();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getODAGrowthGraphData";
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				service.url = strProtocol + "//" + strDomain + strUrl;
+				service.send();
+				try {
+					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+				}
+				catch(errObject:Error){
+					//Fail silently when running standalone
+				}
+			}
+			
+			/**
+			 * The labelFunction property of the LineSeriesGroup, and other components, allow you to 
+			 * to determine how each to format each label the component displays
+			 */
+			private function axisLabel(obj:Object):String
+			{
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.useThousandsSeparator=true;
+				return formatter.format(obj);
+			}
+
+			private function dataTipLabelFunction(obj:Object):String
+			{
+				var label:String = obj.label;
+				var newlabel:String = "";
+				var labelArray:Array = label.split(" ");
+				for (var i:Number = 0; i < labelArray.length; i++){
+					newlabel = newlabel + labelArray[i] + " ";
+					if (i % 3 == 0)
+						newlabel = newlabel + "\r";
+				}
+				return "<b>" + newlabel + "</b>" + "\r" + obj.value + " %";
+			}
+			
+			private function labelFunction(obj:Object):String
+			{
+				return obj.value + " %";
+			}
+			public function refreshGraph():void
+			{
+				service.send();
+				start();
+			}
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- 
+	Provide nice background to chart 
+	-->
+	<mx:CurrencyFormatter currencySymbol=""
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
+	
+	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
+	<mx:Object id="dataProvider"/>
+	<mx:String id="verticalField"/>
+	<mx:String id="dataField">value</mx:String>
+	<mx:String id="labelField">name</mx:String>
+	<mx:String id="childDataField">value</mx:String>
+	<mx:String id="childLabelField">label</mx:String>
+	<mx:Number id="percentGap">.02</mx:Number>
+	<axiis:NumericExpression id="labelLayout" value="1"></axiis:NumericExpression>
+	<mx:Resize id="resize" />
+	
+	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0" maxLayout="{dc.width}"/>
+	
+	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634"
+			   height="350">
+	<axiis:DataCanvas top="50"
+					  bottom="20"
+					  width="{this.width*.9}"
+					  id="dc"
+					  left="40"
+					  right="120"
+					  verticalCenter="0" horizontalCenter="0">
+		<axiis:backgroundGeometries>
+			<axiis:HAxis
+				x="20"
+				horizontalScale="{vScale}"
+				width="{dc.width}"
+				height="{dc.height}"
+				tickGap="5"
+				showGridArea="false"
+				/>
+		</axiis:backgroundGeometries>
+		<axiis:layouts> 
+			<axiis:VBoxLayout id="hLayout"
+								  width="{dc.width}" 
+								  height="{dc.height}"
+								  dataProvider="{dataProvider}"
+								  dataField="{dataField}"
+								  labelField="{labelField}">
+				<axiis:layouts>
+				<axiis:BarCluster id="myCluster"
+									  width="{hLayout.currentReference.width}"
+									  height="{hLayout.currentReference.height*.73}"
+									  y="0"
+									  x="0"
+									  dataProvider="{hLayout.currentDatum}"
+									  dataField="{childDataField}"
+									  labelField="{childLabelField}"
+									  labelFunction="{labelFunction}"
+									  dataTipLabelFunction="{dataTipLabelFunction}"
+									  percentGap="1"
+									  fill="{clusterFill}"
+									  stroke="{colStroke}"
+									  horizontalScale="{vScale}"
+									  fontFamily="Myriad Pro"
+									  showLabel="false"
+									  fontColor="[0x000000]"/>
+					<axiis:BarCluster id="myCluster2"
+									  width="{hLayout.currentReference.width}"
+									  height="{hLayout.currentReference.height*.73}"
+									  y="0"
+									  x="-80"
+									  dataProvider="{hLayout.currentDatum}"
+									  labelField="{labelField}"
+									  labelLayout="{labelLayout}"
+									  showValueLabel="false"
+									  percentGap="1"
+									  fill="{clusterFill}"
+									  stroke="{colStroke}"
+									  horizontalScale="{vScale}"
+									  fontFamily="Myriad Pro"
+									  fontColor="[0x000000]"/>
+				</axiis:layouts>
+
+			</axiis:VBoxLayout>
+		</axiis:layouts>
+	</axiis:DataCanvas>
+	</mx:Canvas>
+	
+	<axiis:LayoutPalette layout="{hLayout}" colors="{palette}" id="outerPalette"/> 
+	<mx:Array id="palettes">
+		<axiis:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+	</mx:Array>
+	
+	<!--
+	A LinearGradientFill lets you specify a gradient fill
+	angle defines the transition across the content
+	A GradientStop defines the objects that control a transition as part of a gradient fill. Stops will be equally spaced unless ratio is specified
+	-->
+	
+	<mx:Array id="fills">
+		<degrafa:LinearGradientFill id="clusterFill" angle="45">
+			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
+			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>
+		</degrafa:LinearGradientFill>
+		<degrafa:LinearGradientFill id="stackFill" angle="90">
+			<degrafa:GradientStop color="{outerPalette.currentColor}" alpha=".5"/>
+			<degrafa:GradientStop color="{outerPalette.currentColor | 0x333333}" alpha=".1"/>
+		</degrafa:LinearGradientFill>
+	</mx:Array> 
+	
+	<!--
+	LinearGradientStroke is gradient filled stroke as opposed to just one color. pixelHinting is used to hint strokes to full pixels.
+	SolidStroke is typicaly solid stroke. caps define line ends and can put additional lenght on a line. Useful where lines overlap
+	-->
+	
+	<mx:Array id="strokes">
+		<degrafa:LinearGradientStroke id="colStroke" pixelHinting="true" angle="45">
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".7"/>
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".3"/>
+		</degrafa:LinearGradientStroke>
+		<degrafa:SolidStroke 
+			color="0xFFFFFF" 
+			alpha=".3"/>
+		<degrafa:SolidStroke 
+			id="axisStroke" 
+			color="0x000000" 
+			pixelHinting="true"/>
+		<degrafa:SolidStroke
+			id="myStroke" 
+			color="{outerPalette.currentColor}" 
+			alpha=".5"/>
+		<degrafa:SolidStroke 
+			id="myStroke2"
+			color="{outerPalette.currentColor}"
+			alpha=".7"
+			weight="6"
+			caps="none"/>
+	</mx:Array>
+	<mx:Panel x="{(this.width-300)/2}" y="20" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
+	</mx:Panel>
+</mx:Application>

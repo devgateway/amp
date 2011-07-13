@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				xmlns:Examples="Examples.*"
 				xmlns:axis="org.axiis.charts.axis.*"
 				xmlns:labels="org.axiis.charts.labels.*"
-				backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
+				backgroundGradientColors="[0xDDDDDD,0xDDDDDD]"
 				layout="absolute"
 				creationComplete="application1_creationCompleteHandler(event);"
 				>
@@ -56,10 +56,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
 			import com.exportUtil.*;
-			
+	
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
+			private var palette:Array = new Array();
 			
 			/**
 			 * This example is using xml data read from the file system. 
@@ -102,10 +103,30 @@ OTHER DEALINGS IN THE SOFTWARE.
 				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.region;
+				if("length" in service.lastResult.region) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
 				dc.visible = true;
 				dc.invalidateDisplayList();
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
 				if (groupSeparator == ""){
 					groupSeparator = " ";
 				}
@@ -128,7 +149,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "7");
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "RegionProfile");
 			}
 			
 			protected function myStack_preRenderHandler(event:Event):void
@@ -213,6 +234,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 					sliderYear_changeHandler(new SliderEvent(mx.events.SliderEvent.CHANGE));
 				}
 			}
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
 		]]>
 	</mx:Script>
 	
@@ -235,13 +260,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:String id="childDataField">value</mx:String>
 	<mx:String id="childLabelField">label</mx:String>
 	<mx:Number id="percentGap">.02</mx:Number>
-	
+	<mx:Resize id="resize" />
 	<!--  
 	A scale that deals with linear numeric data.
 	-->
 	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{hLayout.height}" />
 	
 	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
@@ -291,6 +317,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 						fontColor="0"
 						fontSize="12"
 						tickGap="5"
+						showGridArea="false"
 						labelFunction="{axisLabel}"/>
 		</axiis:backgroundGeometries>
 		
@@ -334,7 +361,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 							  x="25"
 							  y="0"
 							  showDataTips="false"
-							  height="{dc.height-70}"
+							  height="{dc.height-30}"
 							  width="{dc.width-25}"
 							  percentGap="{percentGap}"
 							  dataProvider="{dataProvider}" 
@@ -418,10 +445,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 						x="{hLayout.currentReference.x}"
 						y="{hLayout.height+5}"
 						width="{hLayout.currentReference.width}"
-						height="60"
+						height="30"
 						fontFamily="Myriad Pro"
 						fontSize="10"
-						fontColor="{outerPalette.currentColor}"
+						fontColor="0x000000"
 						labelValue="{hLayout.currentLabel}"
 						markerStroke="{myStroke}"/>
 				</axiis:drawingGeometries>
@@ -450,7 +477,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	If you want a series with repeating colors from series to series use Layout. 
 	If you want different colors for all bars, use LayoutAuto
 	-->
-	<axiis:LayoutPalette layout="{hLayout}" colors="[0xe7b800,0x7eae58,0x88bfd5,0xbe0035,0x8b007e,0x99431c]" id="outerPalette"/> 
+	<axiis:LayoutPalette layout="{hLayout}" colors="{palette}" id="outerPalette"/> 
 	<mx:Array id="palettes">
 		<axiis:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 	</mx:Array>
@@ -485,7 +512,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			alpha=".3"/>
 		<degrafa:SolidStroke 
 			id="axisStroke" 
-			color="0x222222" 
+			color="0x000000" 
 			pixelHinting="true"/>
 		<degrafa:SolidStroke
 			id="myStroke" 
@@ -498,5 +525,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			weight="6"
 			caps="none"/>
 	</mx:Array>
-	
+	<mx:Panel x="{(this.width-300)/2}" y="20" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
+	</mx:Panel>
 </mx:Application>

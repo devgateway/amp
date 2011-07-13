@@ -44,9 +44,9 @@
 <digi:instance property="gisIndicatorChartForm" />
 <digi:form action="/indicatorchartwidgets.do~actType=save">
 
-<table width="60%" border="0" cellpadding="15">
+<table width="1000" border="0" cellpadding="0" align=center>
 	<tr>
-		<td>
+		<td height=40 bgcolor="#f2f2f2">
 			<span class="crumb">
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -56,19 +56,19 @@
               </html:link>&nbsp;&gt;&nbsp;
                 <digi:trn key="admin:Navigation:indicatorchartWidgets">Indicator chart widgets</digi:trn>
                 &nbsp;&gt;&nbsp;
-                <digi:trn key="admin:Navigation:indicatorchartWidgetsCreateEdit">Input widget fields</digi:trn>
+                <digi:trn key="admin:Navigation:indicatorchartWidgetsCreateEdit"><b>Input widget fields</b></digi:trn>
 			</span>
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td style="padding-top:10px; padding-bottom:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetCreateEdit:pageHeader">Edit widget data</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td align=center bgcolor=#F2F2F2 style="border:1px solid #CCCCCC; padding-top:10px; padding-bottom:10px;">
 			<html:hidden name="gisIndicatorChartForm" property="widgetId"/>
-			<table>
+			<table style="font-size:12px;">
 				<tr>
 					<td nowrap="nowrap" align="right">
 						<font color="red">*</font>
@@ -95,8 +95,8 @@
 							<html:optionsCollection name="gisIndicatorChartForm" property="indicators" label="generatedName" value="id"/>
 						</html:select>
 					</td>
-					<td>
-						&nbsp;
+					<td>&nbsp;
+						
 					</td>
 				</tr>
 				<tr>
@@ -111,22 +111,20 @@
 						</html:select>
 					</td>
 					<td valign="top">
-						<input type="button" value="Unselect All" onclick="unselectAll()">
+						<input type="button" value="Unselect All" class="buttonx" onclick="unselectAll()">
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td colspan="3">
 						<hr>
 					</td>
 				</tr>
 				<tr>
-					<td align="right">
-                        <html:submit onclick="return validateSave()">
+					<td align="center" colspan=3>
+                        <html:submit onclick="return validateSave()" styleClass="buttonx">
 							<digi:trn key="gis:editIndicatorChartWidget:btnSave">Save</digi:trn>
 						</html:submit>
-					</td>
-					<td>
-						<input type="button" value="Cancel" onclick="cancelEdit(this.form)">
+						<input type="button" value="Cancel" onclick="cancelEdit(this.form)" class="buttonx">
 					</td>
 				</tr>
 			</table>

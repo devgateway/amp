@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.AbstractChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -18,19 +21,20 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author dan
@@ -78,11 +82,12 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
 		super(id, model, fmName, hideLabel);
-		
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		
 		//final IModel<AmpContact> ampContact = new Model(model);
 		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public List<AmpContactProperty> getObject() {
 				List<AmpContactProperty> specificContacts = new ArrayList<AmpContactProperty>();
@@ -104,12 +109,19 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		final WebMarkupContainer resultcontainer = new   WebMarkupContainer("resultcontainer");
 		final ListView<AmpContactProperty> detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 
-                @Override
+			private static final long serialVersionUID = 1L;
+
+				@Override
                 protected void populateItem(final ListItem<AmpContactProperty> item) {
-                    AmpContactProperty property = item.getModelObject();
+                	final AmpContactProperty property = item.getModelObject();
                     final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>( "Are you sure you want to delete this?")) {
 
-                        @Override
+                        /**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
+						@Override
                         public void onClick(AjaxRequestTarget target) {
                             setModel.getObject().remove(item.getModelObject());
                             target.addComponent(resultcontainer);
@@ -124,7 +136,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
                         	detailTextField.setRequired(true);
-                        	detailTextField.add(EmailAddressValidator.getInstance());
+                        	ContactEmailValidator validator=new ContactEmailValidator(model.getObject().getId());
+                        	detailTextField.add(validator);
                         }
                         else{
                         	TextField<String> detailTextField=detailField.getTextContainer();
@@ -137,8 +150,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         item.add(frg1);
                     } else {
                         try {
-                            IModel<String> valueModel = new PropertyModel(property, "actualValue");
-                            IModel<AmpCategoryValue> catValueModel = new PropertyModel(property, "categoryValue");
+                            IModel<String> valueModel = new PropertyModel<String>(property, "actualValue");
+                            IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(property, "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
                             AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true);
                             TextField<String> detailTextField=phn.getTextContainer();
@@ -146,7 +159,11 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         	String expression = "^\\+?\\s?\\d+[\\s\\d]*";
                         	detailTextField.add(new PatternValidator(expression));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
-                            phoneTitle.getChoiceContainer().setRequired(true);
+                            AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
+                        	final List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
+                        	collectionByKey.addAll(CategoryManagerUtil
+        							.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_PHONE_TYPE_KEY));
+							choiceContainer.setRequired(true);
                             frg2.add(phoneTitle);
                             frg2.add(phn);
                             frg2.add(propertyDeleteLink);
@@ -180,7 +197,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 //				contactProperties.addAll(detailsList.getModelObject());
 				Set<AmpContactProperty> contactProperties=setModel.getObject();
                                 if(contactProperties==null){
-                                    contactProperties=new HashSet<AmpContactProperty>();
+                                    contactProperties=new TreeSet<AmpContactProperty>();
                                     setModel.setObject(contactProperties);
                                 }
 				contactProperties.add(fakeContact1);

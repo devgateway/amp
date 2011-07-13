@@ -29,7 +29,37 @@ function ac_left_padding(str,level) {
    return (level>0?"<span style='color:#"+color+"'>":"")+Array(level*3).join("&nbsp;")+str+(level>0?"</span>":"");
 };
 
-YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache) {
+
+/* Function that is executed when mouse over an element */
+function eventFunction(e, bodyText) {
+    var x = 0;
+    var y = 0;
+    if (e.pageX || e.pageY) 	{
+        x = e.pageX;
+        y = e.pageY;
+    }
+    else if (e.clientX || e.clientY) 	{
+        x = e.clientX + document.body.scrollLeft;
+        y = e.clientY + document.body.scrollTop;
+    }
+
+	showPanel(bodyText, x,  y);
+}
+
+/* Updates the panels header, body and position and makes it visible */
+function showPanel(bodyText, posX, posY) {
+	informationPanel.setBody(bodyText);
+	informationPanel.moveTo(posX+2, posY+2);
+	informationPanel.show();
+}
+
+/* Just makes the panel invisible */
+function hidePanel() {
+	informationPanel.hide();
+}
+
+
+YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache,applyLocalFilter) {
     this.dataSource = new YAHOO.widget.WicketDataSource(callbackUrl);
     if(useCache) {
     	this.dataSource.maxCacheEntries = 100;
@@ -44,10 +74,15 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.minQueryLength=0;
     this.autoComplete.queryDelay=1;
     this.autoComplete.forceSelection=true;
-    this.autoComplete.maxResultsDisplayed = 1000;   
+    this.autoComplete.maxResultsDisplayed = 1000;
+    this.autoComplete.applyLocalFilter=applyLocalFilter; // for adding custom data in resultset
     this.autoComplete.formatResult = function(pResultData, pQuery, pResultMatch) {
     	if(pQuery=="") return ac_left_padding(pResultMatch,pResultData[1]);
-    	return ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    	var formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    	if(pResultData[2]!=''){
+    		return "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
+    	}
+    	return formatedResult;
     }; 
     var autoComplete=this.autoComplete;
     //handler for selected items

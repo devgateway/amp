@@ -3,20 +3,18 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.digijava.kernel.exception.DgException;
 
-import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel.PARAM;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 /**
  * @author dan
  *
@@ -24,7 +22,6 @@ import org.hibernate.Session;
 public class AmpContactSearchModel extends AbstractAmpAutoCompleteModel<AmpContact> {
 
 	private Session session;
-	
 	/**
 	 * @param input
 	 * @param params
@@ -37,24 +34,37 @@ public class AmpContactSearchModel extends AbstractAmpAutoCompleteModel<AmpConta
 	/* (non-Javadoc)
 	 * @see org.apache.wicket.model.LoadableDetachableModel#load()
 	 */
-	@Override
-	protected List<AmpContact> load() {
-		try {
-			List<AmpContact> ret = new ArrayList<AmpContact>();
-			session = PersistenceManager.getSession();
-			Query query = session.createQuery("from "+ AmpContact.class.getName()+ " o WHERE o.name like :name OR o.lastname like :name ORDER BY o.name");
-			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
-			if (maxResults != null)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			ret = query.list();
-			session.close();
-			return ret;
-		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	   @Override
+	 protected List<AmpContact> load() {
+	        try {
+	            session = PersistenceManager.getRequestDBSession();
+	            Criteria crit = session.createCriteria(AmpContact.class);
+	            crit.setCacheable(true);
+	            if (input.trim().length() > 0) {
+	                crit.add(Restrictions.disjunction().add(Restrictions.ilike("fullname", "%" + input + "%"))).addOrder(Order.asc("name"));
+	                }
+
+	                Integer maxResults = (Integer) getParams().get(
+	                        PARAM.MAX_RESULTS);
+	                if (maxResults != null && maxResults.intValue() != 0) {
+	                    crit.setMaxResults(maxResults);
+	            }
+	            
+	            List<AmpContact> ret = null;
+	            ret = crit.list();
+	            if(ret==null){
+	                ret=new ArrayList<AmpContact>();
+	            }		
+	            AmpContact newContact=new AmpContact();
+	            newContact.setName("Change Name");
+	            newContact.setLastname("Change Lastname");
+	            ret.add(newContact);
+	            return ret;
+	        } catch (DgException ex) {
+	            throw new RuntimeException(ex);
+	        } catch (HibernateException e) {
+	            throw new RuntimeException(e);
+	        }
+	    }
 
 }

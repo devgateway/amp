@@ -76,6 +76,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * If YUI client side datasource cache should be used (some instances of this control may require no cache)
 	 */
 	private boolean useCache=true;
+	
+	/**
+	 * If YUI client side datasource cache should be used (some instances of this control may require no cache)
+	 */
+	private boolean applyLocalFilter=true;
+	
 
 	/**
 	 * Behavior that is invoked when an item is selected in YUI list. The
@@ -159,6 +165,25 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
 		this(id,fmName,hideLabel,objectListModelClass);
 		this.useCache=useCache;
+	}
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param fmName
+	 * @param hideLabel  the FM name @see {@link AmpFMTypes}
+	 * @param objectListModelClass the model to retrieve the list of items
+	 * @param useCache if YUI should use client side cache
+	 * @param applyLocalFilter if YUI should apply local filter
+	 */
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache,boolean applyLocalFilter) {
+		this(id,fmName,hideLabel,objectListModelClass,useCache);
+		this.applyLocalFilter=applyLocalFilter;
 	}
 	
 
@@ -256,6 +281,10 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 *            the <CHOICE> object selected
 	 */
 	protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
+	
+	protected  String getAdditionalDetails(CHOICE choice){
+		return "";
+	}
 
 	// @Override
 	// public void updateModel() {
@@ -287,8 +316,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
 			// choiceValues.add(getChoiceValue(choice));
+			String entityId=getAdditionalDetails(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
-					choiceLevel != null ? choiceLevel.toString() : "0" });
+					choiceLevel != null ? choiceLevel.toString() : "0" ,entityId != null ? entityId.toString() : "0" });
 		}
 
 		return choiceValues.toArray(new String[0][0]);
@@ -355,7 +385,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 					+ textField.getMarkupId() + "', '" + getCallbackUrl()
 					+ "', '" + container.getMarkupId() + "', '"
 					+ toggleButton.getMarkupId() + "', '"
-					+ indicator.getMarkupId() + "', " +useCache+ ");");
+					+ indicator.getMarkupId() + "', " +useCache+ ", "+applyLocalFilter+ ");");
 		}
 
 		@Override

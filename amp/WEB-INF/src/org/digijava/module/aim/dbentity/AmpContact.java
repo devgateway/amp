@@ -21,6 +21,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable {
 	private String temporaryId;
 	
 	private String nameAndLastName;
+	private String fullname;
 	
 
 	/**
@@ -146,6 +147,14 @@ public class AmpContact implements Comparable, Serializable, Cloneable {
 
 	public void setNameAndLastName(String nameAndLastName) {
 		this.nameAndLastName = nameAndLastName;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	@Override

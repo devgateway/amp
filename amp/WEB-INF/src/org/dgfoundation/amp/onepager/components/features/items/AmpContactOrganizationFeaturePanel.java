@@ -3,8 +3,10 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
@@ -23,6 +25,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
@@ -65,9 +68,13 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 	 */
 	public AmpContactOrganizationFeaturePanel(String id, final IModel<AmpContact> model,String fmName, boolean hideLabel) throws Exception {
 		super(id, model, fmName, hideLabel);
-		// TODO Auto-generated constructor stub
+		
 		
 		final IModel<Set<AmpOrganisationContact>> setModel=new PropertyModel<Set<AmpOrganisationContact>>(model,"organizationContacts");
+		// TODO Auto-generated constructor stub
+		if (setModel.getObject() == null) {
+            setModel.setObject(new TreeSet<AmpOrganisationContact>());
+        }
 		
 		AbstractReadOnlyModel<List<AmpOrganisationContact>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 

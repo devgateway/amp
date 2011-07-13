@@ -37,6 +37,12 @@
 	    }
 	
 	}
+	var informationPanel;
+	function initInfoPanel(){
+	informationPanel= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:false } );
+		    informationPanel.render("additionalDetailsContainer");
+	}
+	YAHOO.util.Event.addListener(window, "load", initInfoPanel);
 </script>
 </head>
 

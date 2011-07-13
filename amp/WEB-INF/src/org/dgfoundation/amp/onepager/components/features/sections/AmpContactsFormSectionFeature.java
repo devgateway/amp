@@ -4,9 +4,9 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContactsSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpContactsFromTableFeature;
 
 /**
  * @author dan
@@ -23,11 +23,11 @@ public class AmpContactsFormSectionFeature extends AmpFormSectionFeaturePanel {
 		//AmpContactsSubsectionFeaturePanel donors =new AmpContactsSubsectionFeaturePanel("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
 		//donors.setOutputMarkupId(true);
 		//add(donors);
-		add(new AmpContactsSubsectionFeaturePanel("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT));
-		add(new AmpContactsSubsectionFeaturePanel("mofedContactInformation", "Mofed Contact Information", am, org.digijava.module.aim.helper.Constants.MOFED_CONTACT));
-		add(new AmpContactsSubsectionFeaturePanel("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
-		add(new AmpContactsSubsectionFeaturePanel("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));
-		add(new AmpContactsSubsectionFeaturePanel("implExecAgencyContactInformation", "Implementing/Executing Agency Contact Information", am, org.digijava.module.aim.helper.Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
+		add(new AmpContactsFromTableFeature("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT));
+		add(new AmpContactsFromTableFeature("mofedContactInformation", "Mofed Contact Information", am, org.digijava.module.aim.helper.Constants.MOFED_CONTACT));
+		add(new AmpContactsFromTableFeature("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
+		add(new AmpContactsFromTableFeature("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));
+		add(new AmpContactsFromTableFeature("implExecAgencyContactInformation", "Implementing/Executing Agency Contact Information", am, org.digijava.module.aim.helper.Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
  
 				
 	}

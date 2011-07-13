@@ -34,6 +34,7 @@
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 	</set>
+	<property name="fullname"  formula="name||' '||lastname||'('||contact_Id||')'" />
 
 	<!-- 
 		<set name="organizations" table="AMP_ORG_CONTACTS" lazy="false" >

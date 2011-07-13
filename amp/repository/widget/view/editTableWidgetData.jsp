@@ -50,9 +50,9 @@
 <digi:form action="/tableWidgetData.do?actType=save">
 
 
-<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center>
+<table id="widgetOuter" border="0" cellpadding="0" width=1000 align=center style="font-size:12px;">
 	<tr>
-		<td colspan="2" bgcolor=#f2f2f2 height=40>
+		<td colspan="2" bgcolor=#f2f2f2 height=40 style="padding-left:10px;">
 			<span class=crumb>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -74,10 +74,10 @@
 	</tr>
 	<tr>
 		<td>
-			<table width="100%">
+			<table width="100%" class="inside">
 				<tr bgColor="#d7eafd">
 					<c:forEach var="col" items="${dform.columns}" varStatus="cvarstat">
-						<td>
+						<td class="inside">
 							<c:if test="${col.type==1}">
 								<strong>
 									${col.name}
@@ -95,7 +95,7 @@
 							</c:if>
 						</td>
 					</c:forEach>
-					<td bgcolor="#c7d4db" height=25>
+					<td bgcolor="#c7d4db" height=25 class="inside">
 						<strong>
 							<digi:trn key="gis:tableWidgetData:operationsCol">Operations</digi:trn>
 						</strong>
@@ -104,11 +104,11 @@
 				<c:forEach var="drow" items="${dform.table.dataRows}" varStatus="statRow">
 					<tr>
 						<c:forEach var="dcell" items="${drow.cells}" varStatus="statCell">
-							<td> 
+							<td class="inside"> 
 								<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value"/>
 							</td>
 						</c:forEach>
-						<td>
+						<td class="inside">
 							<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
 							<c:set var="removeButton"><digi:trn key="gis:removeButton">Remove</digi:trn></c:set>
 							<input type="button" value="${addButton}" onclick="addRow(this.form,${drow.pk})" class="buttonx">
@@ -135,7 +135,6 @@
 					<td>
 						<c:set var="previewButton"><digi:trn key="gis:previewButton">Preview</digi:trn></c:set>	
 						<input type="button" value="${previewButton}" class="buttonx" onclick="gotoPreview(this.form)">
-						
 					</td>
 				</tr>
 				

@@ -448,7 +448,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			<div style="width:1000px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
-			        <feature:display name="My Resources" module="Resources">
+			        <feature:display name="My Resources" module="Content Repository">
 			        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
 			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
 			        	</c:if>
@@ -456,7 +456,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			        		<li id="tab1"><a href="#my_res"><div> <digi:trn>My Resources</digi:trn></div></a></li>
 			        	</c:if>
 			        </feature:display>
-			        <feature:display name="Team Resources" module="Resources">
+			        <feature:display name="Team Resources" module="Content Repository">
 			        	<c:if  test="${selectedType=='team'}">
 			        		<li id="tab2" class="selected"><a href="#team_res"><div class="tab_link"><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
@@ -464,7 +464,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			        		<li id="tab2"><a href="#team_res"><div class="tab_link"><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
 					</feature:display>
-					<feature:display name="Shared Resources" module="Resources">
+					<feature:display name="Shared Resources" module="Content Repository">
 						<c:if  test="${selectedType=='shared'}">
 			        		<li id="tab3" class="selected"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
 			        	</c:if>
@@ -473,13 +473,13 @@ function setHoveredTable(tableId, hasHeaders) {
 			        	</c:if>
 					</feature:display>					
 					
-					<feature:display name="Public Resources" module="Resources">
+					<feature:display name="Public Resources" module="Content Repository">
 			        	<li id="tab4"><a href="#public_res"><div class="tab_link"><digi:trn>Public Resources</digi:trn></div></a></li>
 			       </feature:display>
 			    </ul> 
 			     
 			    <div class="yui-content" style="border-color: #d0d0d0">
-			    	<feature:display name="My Resources" module="Resources">
+			    	<feature:display name="My Resources" module="Content Repository">
 			      		<div id="my_res" class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
@@ -522,7 +522,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					</feature:display>
 					
 					
-					<feature:display name="Team Resources" module="Resources">
+					<feature:display name="Team Resources" module="Content Repository">
 						<div id="team_res" class="resource_popin"  style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
@@ -573,7 +573,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					</feature:display>					
 					
 					<!-- Shared Resources Start  -->
-					<feature:display name="Shared Resources" module="Resources">
+					<feature:display name="Shared Resources" module="Content Repository">
 						<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
@@ -606,7 +606,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					<!-- Shared Resources end  -->
 					
 					<!-- Public resources -->
-					<feature:display name="Public Resources" module="Resources">
+					<feature:display name="Public Resources" module="Content Repository">
 				        <div id="public_res"  class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >
 								<tr>

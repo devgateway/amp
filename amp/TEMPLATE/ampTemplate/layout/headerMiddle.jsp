@@ -518,7 +518,7 @@ function adminHelp(){
                               </div>                    
                           </li>
                           </module:display>
-						  <feature:display name="Content Repository" module="Document Management">
+						  <module:display name="Content Repository" parentModule="Resources">
                           	<li class="yuiampmenuitem" style="float:left;">
                                 <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
@@ -538,7 +538,7 @@ function adminHelp(){
                                 </div>
                               </div>  
                          	</li>
-                          </feature:display>
+                          </module:display>
                           
 						  <module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 						  	<!-- On which view calendar link should redirect. depends on FM -->

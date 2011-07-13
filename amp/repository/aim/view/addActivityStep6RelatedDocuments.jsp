@@ -34,7 +34,7 @@
 														</html:button>
 													 
 														
-														<feature:display name="Content Repository" module="Document Management">
+														<module:display name="Content Repository" parentModule="Resources">
 																<field:display name="Add Documents From Repository Button" feature="Related Documents">											
 																<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>												
 
@@ -43,7 +43,7 @@
 																		<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
 																</html:button>
 																</field:display>
-														</feature:display>
+														</module:display>
 													</td>
 												</tr>
 											</table>

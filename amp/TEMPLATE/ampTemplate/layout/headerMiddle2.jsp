@@ -73,12 +73,12 @@ border-right:1px solid white;
                 <digi:trn key='aim:PublicSite'>PUBLIC SITE</digi:trn>
                 </a>
             </li>
-<!--            <feature:display name="Public Documents" module="Document Management">
+<!--           <module:display name="Content Repository" parentModule="Resources">
 	            <li class="yuiampmenuitem">
 	                <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">
 	                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
 	            </li>
-	            </feature:display>
+	            </module:display>
 -->
             <feature:display name="Language Option" module="Tools">
 		            <li>

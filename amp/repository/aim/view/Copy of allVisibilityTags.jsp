@@ -13,7 +13,6 @@
 
 <module:display name="PROJECT MANAGEMENT"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
-<module:display name="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="REPORTING"></module:display>
 <module:display name="TREND ANALYSIS"></module:display>
 <module:display name="MONITORING AND EVALUATING"></module:display>
@@ -37,10 +36,6 @@
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
 
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
-
-<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
-
-
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>

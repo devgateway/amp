@@ -11,7 +11,7 @@
 <c:set var="translation">
 	<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 </c:set>
-<feature:display name="Content Repository" module="Document Management">
+<module:display name="Content Repository" parentModule="Resources">
 	<div class="right_menu">
 	<div class="right_menu_header">
 		<div class="right_menu_header_cont">
@@ -42,6 +42,6 @@
           </logic:empty>       		
 		</div>
 	</div>
-</feature:display>
+</module:display>
 
     

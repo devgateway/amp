@@ -31,8 +31,8 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="DOCUMENTS MANAGEMENT"></module:display> 
-<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
+<module:display name="Content Repository" parentModule="Resources"></module:display>
+<module:display name="Public Documents" parentModule="Resources"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
@@ -95,11 +95,13 @@
 <feature:display name="Map Options" module="Map Module"></feature:display>
 <field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
 
-<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display> 
-<feature:display name="My Resources" module="Resources"></feature:display> 
-<feature:display name="Team Resources" module="Resources"></feature:display>
-<feature:display name="Public Resources" module="Resources"></feature:display>
-<feature:display name="Shared Resources" module="Resources"></feature:display>
+<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
+
+<feature:display name="My Resources" module="Content Repository"></feature:display> 
+<feature:display name="Team Resources" module="Content Repository"></feature:display>
+<feature:display name="Public Resources" module="Content Repository"></feature:display>
+<feature:display name="Shared Resources" module="Content Repository"></feature:display>
+
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
@@ -149,7 +151,7 @@
 <feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
-<feature:display name="Content Repository" module="Document Management"></feature:display> 
+
 <feature:display name="Contracting Agency" module="Organizations"></feature:display> 
 <feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
@@ -230,8 +232,7 @@
 <feature:display name="Undisbursed Balance" module="Measures"></feature:display> 
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
-<feature:display name="Widget Places" module="WIDGETS"></feature:display> 
-<feature:display name="Public Documents" module="Document Management"></feature:display>
+<feature:display name="Widget Places" module="WIDGETS"></feature:display>
 <feature:display name="orgprof_chart_place1" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place2" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place3" module="Org Profile"></feature:display>

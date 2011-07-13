@@ -728,10 +728,10 @@
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
-<module:display name="Resources"></module:display>
-<feature:display name="My Resources" module="Resources"></feature:display> 
-<feature:display name="Team Resources" module="Resources"></feature:display>
-<feature:display name="Public Resources" module="Resources"></feature:display>
+<module:display name="Content Repository"></module:display>
+<feature:display name="My Resources" module="Content Repository"></feature:display> 
+<feature:display name="Team Resources" module="Content Repository"></feature:display>
+<feature:display name="Public Resources" module="Content Repository"></feature:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

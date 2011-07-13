@@ -25,9 +25,9 @@
 <digi:form action="/indicatorchartwidgets.do">
 
 
-<table width="60%" border="0" cellpadding="15">
+<table width="1000" border="0" cellpadding="0" align=center style="font-size:12px;">
 	<tr>
-		<td>
+		<td bgcolor=#f2f2f2 height=40 style="padding-left:10px;">
 			<span class="crumb">
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -35,44 +35,44 @@
               <html:link  href="/aim/admin.do" styleClass="comment" title="${translation}" >
                 <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
               </html:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="admin:Navigation:indicatorchartWidgets">Indicator chart widgets</digi:trn>
+                <digi:trn key="admin:Navigation:indicatorchartWidgets"><b>Indicator chart widgets</b></digi:trn>
 			</span>
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td style="padding-top:10px; padding-bottom:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetManager:pageHeader">Indicator chart widget Manager</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
-		<td>
-			<a href="/widget/indicatorchartwidgets.do~actType=create"><digi:trn key="gis:indicatorchartwidgets:createNew">Create new widget</digi:trn></a>
+		<td style="padding-bottom:10px;">
+			<a href="/widget/indicatorchartwidgets.do~actType=create"><digi:trn key="gis:indicatorchartwidgets:createNew"><b>Create new widget</b></digi:trn></a>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			
-			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
-				<tr bgColor="#d7eafd">
-					<td nowrap="nowrap" width="40%">
+			<table border="0" width="100%" align="center" style="font-size:12px;" class="inside">
+				<tr bgColor="#c7d4db">
+					<td nowrap="nowrap" width="40%" class="inside">
 						<strong><digi:trn key="gis:indicatorChartWidget:widgetName">Widget Name</digi:trn></strong>
 					</td>
-					<td nowrap="nowrap" width="40%">
+					<td nowrap="nowrap" width="40%" class="inside">
 						<strong><digi:trn key="gis:indicatorChartWidget:indicatorName">Indicator Name</digi:trn></strong>
 					</td>
-					<td>
+					<td class="inside">
 						<strong><digi:trn key="gis:indicatorChartWidget:oeprations">Operation</digi:trn></strong>
 					</td>
 				</tr>
 				<c:forEach var="wi" items="${gisIndicatorChartForm.widgets}" varStatus="stat">
 					<tr>
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" class="inside">
 							${wi.name}
 						</td>
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" class="inside">
 						 	${wi.indicator.indicator.name}
 						</td>
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" class="inside">
 							<a href="/widget/indicatorchartwidgets.do~actType=edit~widgetId=${wi.id}">
 								<digi:trn key="gis:editLink">Edit</digi:trn>
 							</a>

@@ -117,9 +117,9 @@
 
     <html:hidden name="sectorTableWidgetForm" property="sectorTableId"/>
     <html:hidden name="sectorTableWidgetForm" property="donorColumn" styleId="donorCheckboxHidden"/>
-    <table width="60%" border="0" cellpadding="15">
+    <table width="1000" border="0" cellpadding="0" align=center style="font-size:12px;">
         <tr>
-            <td>
+            <td bgcolor=#f2f2f2 height=40>
                 <span class="crumb">
                     <c:set var="translation">
                         <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -132,24 +132,24 @@
                     </html:link>
                     &nbsp;&gt;&nbsp;
 
-                    <digi:trn>Create/Edit Sector Table Widget</digi:trn>
+                    <digi:trn><b>Create/Edit Sector Table Widget</b></digi:trn>
                 </span>
             </td>
         </tr>
         <tr>
-            <td>
-                <span class="subtitle-blue">
+            <td style="padding-top:10px; padding-bottom:10px;">
+                
                     <c:if test="${empty sectorTableWidgetForm.sectorTableId}">
                         <digi:trn>Create Sector Table Widget</digi:trn>
                     </c:if>
                     <c:if test="${not empty sectorTableWidgetForm.sectorTableId}">
                         <digi:trn>Edit Sector Table Widget</digi:trn>
                     </c:if>
-                </span>
+                
             </td>
         </tr>
         <tr>
-            <td>
+            <td align=center style="padding-bottom:10px; padding-top:10px; border:1px solid #CCCCCC;" bgcolor=#f2f2f2>
 
                 <table>
                     <tr>
@@ -164,7 +164,7 @@
                             <strong>
                                 <digi:trn>Name</digi:trn>:&nbsp;
                             </strong>
-                            <html:text name="sectorTableWidgetForm" property="name"/>
+                            <html:text name="sectorTableWidgetForm" styleClass="inputx" property="name"/>
                         </td>
                     </tr>
 
@@ -232,7 +232,7 @@
 
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" style="padding-top:10px; padding-bottom:10px;">
                             <digi:trn>Places</digi:trn>:
                             <html:select name="sectorTableWidgetForm" property="selPlaces" style="width: 300px">
                                 <html:optionsCollection name="sectorTableWidgetForm" property="places" value="id" label="name"/>
@@ -261,7 +261,7 @@
                         <td align="right">
                             <input type="button" onclick="validate()" value="<digi:trn>Next</digi:trn>"/>
                         </td>
-                        <td>
+                        <td style="padding-top:10px;">
                             <input type="button" value="Cancel" onclick="cancel()">
                         </td>
                     </tr>

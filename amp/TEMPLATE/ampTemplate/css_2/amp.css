@@ -444,4 +444,27 @@ div.adminicon{float:right;}
 
 .soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset{z-index:50px;}
+#breadcrumbs {width:1000px;padding:0px;height:30px;margin:0px 0px 0px 0px;margin:0 auto;position:relative;text-align:left;}
+#breadcrumbs ul{float:left;}
+#breadcrumbs ul li {
+	display:inline;
+	padding:0px;
+	margin:0px;
+	line-height:30px;
+}
+#breadcrumbs, #breadcrumbs  li.yuimenuitem a {
+	color: #376091; 
+	font-size: 10px; 
+	font-family:arial; 
+	padding:3px 10px 3px 0px;
+	margin:0px;	
+	padding-top:0px; 
+	font-weight:bold; 
+	text-decoration:none;
+	text-align: left;
+	background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
+}
+#breadcrumbs .bd li.yuimenuitem  a:hover {
+	text-decoration:underline;
+}
 

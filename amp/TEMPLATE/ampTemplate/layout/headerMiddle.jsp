@@ -905,30 +905,8 @@ YAHOO.util.Event.onDOMReady(function () {
 	}	
 </script>
 
-<br />
-<br />
-
-<style>
-#breadcrumbs .bd ul li {
-	display:inline;
-}
-#breadcrumbs, #breadcrumbs .bd li.yuimenuitem a {
-	color: #376091; 
-	font-size: 12px; 
-	font-family:arial; 
-	padding:3px; 
-	padding-top:0px; 
-	font-weight:bold; 
-	text-decoration:none;
-	float: left;
-	text-align: left;
-}
-#breadcrumbs .bd li.yuimenuitem  a:hover {
-	text-decoration:underline;
-}
-</style>
-
-<div id="breadcrumbs" class="yuimenu">
+</div>
+<div id="breadcrumbs" class="yuimenu" >
     
 </div>
 
@@ -939,5 +917,3 @@ YAHOO.util.Event.onDOMReady(function () {
 		buildCrumbs();
 	});
 </script>
-<br />
-<br />

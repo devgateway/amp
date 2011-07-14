@@ -73,7 +73,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		final IModel<Set<AmpOrganisationContact>> setModel=new PropertyModel<Set<AmpOrganisationContact>>(model,"organizationContacts");
 		// TODO Auto-generated constructor stub
 		if (setModel.getObject() == null) {
-            setModel.setObject(new TreeSet<AmpOrganisationContact>());
+            setModel.setObject(new HashSet<AmpOrganisationContact>());
         }
 		
 		AbstractReadOnlyModel<List<AmpOrganisationContact>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);

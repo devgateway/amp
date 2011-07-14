@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
@@ -416,6 +418,9 @@ public class ActivityUtil {
 	    			Set<AmpOrganisationContact> dbOrgConts=ampContact.getOrganizationContacts();
 	    			if(dbOrgConts!=null){
 	    				for (AmpOrganisationContact orgCont :dbOrgConts) {
+	    					AmpOrganisation organization = orgCont.getOrganisation();
+							organization.getOrganizationContacts().remove(orgCont);
+							session.update(organization);
 							session.delete(orgCont);
 						}
 	    			}
@@ -455,9 +460,15 @@ public class ActivityUtil {
 							orgCont.setContact(contact);
 						}
 						AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
-						newOrgCont.setOrganisation(orgCont.getOrganisation());
+						AmpOrganisation organization =(AmpOrganisation)session.load(AmpOrganisation.class, orgCont.getOrganisation().getAmpOrgId());
+						if(organization.getOrganizationContacts()==null){
+							organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+						}
+						newOrgCont.setOrganisation(organization);
 						newOrgCont.setContact(orgCont.getContact());
 						newOrgCont.setPrimaryContact(orgCont.getPrimaryContact());
+						organization.getOrganizationContacts().add(newOrgCont);
+						session.save(organization);
 						session.save(newOrgCont);
 					}
 	    		}

@@ -179,12 +179,32 @@ function setHoveredTable(tableId, hasHeaders) {
 	var breadCrumbObj = null;
 		
 	function loadTab() {
-		for (var i=0; i<4; i++) {
-			var tab		= repositoryTabView.getTab(i);
-			if ( tab.get("active") && !repositoryTabView.activatedLists[i] ) {				
-				repositoryTabView.dynLists[i].sendRequest();
-				repositoryTabView.activatedLists[i]		= true;
-			}
+		var visibleTabs =0;
+		var myDoc =  document.getElementById("my_res");
+		var teamDoc =  document.getElementById("team_res");
+		var sharedDoc =  document.getElementById("shared_res");
+		var publicDoc =  document.getElementById("public_res");
+		
+		if (myDoc !=null) {
+			visibleTabs ++;
+		}
+		if (teamDoc !=null) {
+			visibleTabs ++;
+		}
+		if (sharedDoc !=null) {
+			visibleTabs ++;
+		}
+		if (publicDoc !=null) {
+			visibleTabs ++;
+		}
+		for (var i=0; i<visibleTabs; i++) {			
+				var tab		= repositoryTabView.getTab(i);
+				if ( tab.get("active") && !repositoryTabView.activatedLists[i] ) {				
+					repositoryTabView.dynLists[i].sendRequest();
+					repositoryTabView.activatedLists[i]		= true;
+				}
+			
+			
 		}
 	}
 	
@@ -210,13 +230,32 @@ function setHoveredTable(tableId, hasHeaders) {
 		repositoryTabView.addListener("activeTabChange", loadTab);
 		
 		repositoryTabView.dynLists	= new Array();
-		repositoryTabView.dynLists.push( privateListObj );
-		repositoryTabView.dynLists.push( teamListObj );
-		repositoryTabView.dynLists.push( sharedListObj );
-		repositoryTabView.dynLists.push( publicListObj );
+		var visibleTabs =0;
+		var myDoc =  document.getElementById("my_res");
+		var teamDoc =  document.getElementById("team_res");
+		var sharedDoc =  document.getElementById("shared_res");
+		var publicDoc =  document.getElementById("public_res");
+		
+		if (myDoc !=null) {
+			repositoryTabView.dynLists.push( privateListObj );
+			visibleTabs ++;
+		}
+		if (teamDoc !=null) {
+			repositoryTabView.dynLists.push( teamListObj );
+			visibleTabs ++;
+		}
+		if (sharedDoc !=null) {
+			repositoryTabView.dynLists.push( sharedListObj );
+			visibleTabs ++;
+		}
+		if (publicDoc !=null) {
+			repositoryTabView.dynLists.push( publicListObj );
+			visibleTabs ++;
+		}	
+		
 
 		repositoryTabView.activatedLists	= new Array();
-		for (var i=0; i<4; i++)
+		for (var i=0; i<visibleTabs; i++)
 			repositoryTabView.activatedLists.push(false);
 		
 		initFileUploads();
@@ -474,7 +513,10 @@ function setHoveredTable(tableId, hasHeaders) {
 					</feature:display>					
 					
 					<feature:display name="Public Resources" module="Content Repository">
-			        	<li id="tab4"><a href="#public_res"><div class="tab_link"><digi:trn>Public Resources</digi:trn></div></a></li>
+						<c:set var="selectedClass">
+							<c:if test="${selectedType!='private' && selectedType!='version' && selectedType!='team' && selectedType!='shared'}">selected</c:if>
+						</c:set>
+			        	<li id="tab4" class="${selectedClass}"><a href="#public_res"><div class="tab_link"><digi:trn>Public Resources</digi:trn></div></a></li>
 			       </feature:display>
 			    </ul> 
 			     

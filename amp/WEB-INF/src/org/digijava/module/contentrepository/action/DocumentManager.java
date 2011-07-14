@@ -13,6 +13,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -155,7 +156,7 @@ public class DocumentManager extends Action {
 			source			= DocumentFilter.SOURCE_PUBLIC_DOCUMENTS;
 		}
 		
-		myRequest.setAttribute("tabType", myForm.getType());
+		myRequest.setAttribute("tabType", myForm.getType());		
 		
 		List<String> filterLablesUUID	= null;
 		if ( myForm.getFilterLabelsUUID() != null ){
@@ -275,7 +276,18 @@ public class DocumentManager extends Action {
 			// resourceTab and no type set then select the first tab.
 			if (httpSession.getAttribute("resourcesTab") == null || httpSession.getAttribute("resourcesTab").toString().equals("")) {
 				if (myForm.getType() == null || myForm.getType().equals("")) {
-					myForm.setType("private");
+					ServletContext ampContext = null;					
+					ampContext = getServlet().getServletContext();					
+					if(FeaturesUtil.isVisibleFeature("My Resources", ampContext)){
+						myForm.setType("private");
+					}else if (FeaturesUtil.isVisibleFeature("Team Resources", ampContext)){
+						myForm.setType("team");
+					}else if (FeaturesUtil.isVisibleFeature("Shared Resources", ampContext)){
+						myForm.setType("shared");
+					}else if (FeaturesUtil.isVisibleFeature("Public Resources", ampContext)){
+						myForm.setType("public");
+					}
+					
 				}
 			} else {
 				myForm.setType(httpSession.getAttribute("resourcesTab").toString());

@@ -119,7 +119,7 @@
     <html:hidden name="sectorTableWidgetForm" property="donorColumn" styleId="donorCheckboxHidden"/>
     <table width="1000" border="0" cellpadding="0" align=center style="font-size:12px;">
         <tr>
-            <td bgcolor=#f2f2f2 height=40>
+            <td bgcolor=#f2f2f2 height=40 style="padding-left:10px;">
                 <span class="crumb">
                     <c:set var="translation">
                         <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -258,7 +258,7 @@
                     </tr>
 
                     <tr>
-                        <td align="right">
+                        <td align="right" style="padding-top:10px;">
                             <input type="button" onclick="validate()" value="<digi:trn>Next</digi:trn>"/>
                         </td>
                         <td style="padding-top:10px;">

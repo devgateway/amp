@@ -12,7 +12,7 @@
 		
 				<logic:notEmpty name="crumb" property="link">
 					<html:link styleClass="pageNav" page="${crumb.link}" onclick="location.href=this.href; document.title=this.innerHTML;">
-						<c:out value='${crumb.title}'/>
+						<c:out value='${crumb.title}'/> 
 					</html:link>
 					&nbsp;&nbsp;&nbsp;&nbsp;			
 				</logic:notEmpty>

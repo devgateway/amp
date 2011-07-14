@@ -55,7 +55,6 @@ ${fn:replace(message,quote,escapedQuote)}
 	cursor:pointer;
 }
 </style>
-<center>
 <div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   
@@ -872,6 +871,13 @@ YAHOO.util.Event.onDOMReady(function () {
 
 </script>
 
+<digi:secure authenticated="true">
+	<div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
+ 			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
+		<digi:trn key="aim:logout">LOGOUT</digi:trn>
+	</digi:link>
+</div>
+</digi:secure>
 
 <script language="javascript">
 	function buildCrumbs() {
@@ -908,12 +914,14 @@ YAHOO.util.Event.onDOMReady(function () {
 }
 #breadcrumbs, #breadcrumbs .bd li.yuimenuitem a {
 	color: #376091; 
-	font-size: 10px; 
+	font-size: 12px; 
 	font-family:arial; 
 	padding:3px; 
+	padding-top:0px; 
 	font-weight:bold; 
 	text-decoration:none;
 	float: left;
+	text-align: left;
 }
 #breadcrumbs .bd li.yuimenuitem  a:hover {
 	text-decoration:underline;
@@ -931,6 +939,5 @@ YAHOO.util.Event.onDOMReady(function () {
 		buildCrumbs();
 	});
 </script>
-
 <br />
 <br />

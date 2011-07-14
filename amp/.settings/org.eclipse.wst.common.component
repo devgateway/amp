@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="amp-1.15-release">
+    <wb-module deploy-name="amp-2.0-release">
             <wb-resource deploy-path="/" source-path="/"/>
             <property name="context-root" value="/"/>
     </wb-module>

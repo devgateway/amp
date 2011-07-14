@@ -58,33 +58,6 @@ public class AMPActionServlet
     String sessId = session.getId();
     String url = request.getRequestURL().toString();
 
-    String crumbupdate = request.getParameter("crumbupdate");
-    if (crumbupdate != null) {
-    	String curl = request.getParameter("curl");
-    	String ctitle = request.getParameter("ctitle");    	
-    	//
-        ArrayList<Crumb> crumbs = (ArrayList<Crumb>) session.getAttribute("Crumbs");
-        if ((crumbs == null) || (crumbs.isEmpty())) {
-        	crumbs = new ArrayList<Crumb>();
-        	//
-        	Crumb crumb = new Crumb(ctitle, curl);
-        	crumbs.add(crumb);
-        } else {
-        	Crumb crumb = new Crumb(ctitle, curl);
-        	if (crumbs.contains(crumb)) {
-        		int index = crumbs.indexOf(crumb);        
-        		if (index == 1) index = 0;
-    			for (int i = (crumbs.size()-1); i > index; i--) {
-    				crumbs.remove(i);
-    			}
-    		} else {
-    			crumbs.add(crumb);
-    		}
-        }
-    	session.setAttribute("Crumbs", crumbs);
-    	request.getRequestDispatcher("/TEMPLATE/ampTemplate/layout/crumb.jsp").include(request, response);
-    } else {  
-    
     /*
      * Check whether user have initiated an edit session.
      * When ever user starts an edit session, his session id is stored in an application
@@ -165,7 +138,5 @@ public class AMPActionServlet
     }
     // Call the struts default ActionServlet process() method
     super.process(request, response);
-    }
-  }
-  
+    }  
 }

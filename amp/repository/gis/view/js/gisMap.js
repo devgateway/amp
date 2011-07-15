@@ -50,12 +50,13 @@
   var actionChangeFundType = false;
   var getIndValuesAction = false;
   var getFundDataValues = false;
-
+	
+	/*
 	$("#testMap").mousemove(function(e){
 			$("#tooltipContainer").css({"left" : e.pageX + 2 + "px"});
 			$("#tooltipContainer").css({"top" : e.pageY +2 + "px"});
 		});	
-
+*/
 	
 	$(document).ready(function(){
 		
@@ -1263,6 +1264,11 @@
 				applySectorFilter();
 			}
 			
+			$("map[name='areaMap']").mousemove(function(e){
+					$("#tooltipContainer").css({"left" : e.pageX + 2 + "px"});
+					$("#tooltipContainer").css({"top" : e.pageY +2 + "px"});
+				});	
+			
 	}
 	
 	
@@ -1287,7 +1293,7 @@
 					}
 				}
 				retVal += "\"";
-				retVal += " href=\"javascript:return null\"";
+				retVal += " href=\"javascript:return false;\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
 				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
 				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "','" + segment.attributes.getNamedItem("regLocId").value + "')\">";

@@ -13,6 +13,46 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@include file="../documentManagerJsHelper.jsp" %>
+<style>
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
+}
+
+
+
+.yui-skin-sam span.yui-pg-first,
+.yui-skin-sam span.yui-pg-previous,
+.yui-skin-sam span.yui-pg-next,
+.yui-skin-sam span.yui-pg-last {
+display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+margin-left: 2px;
+padding-right: 7px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+</style>
 <script type="text/javascript">
 	var labelFilterCallbackObj	= {
 		click: function(e, label) {
@@ -201,13 +241,19 @@
 								    	<button id="publicLabelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
 								    	</button>								    </td>								    
-								</tr>
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>
+								</tr>								
 								<tr>
 									<td>
-										<br />
-											<div id="publicFilterInfoDiv"  >											</div>
-											<div id="public_markup" align="left">											</div>									</td>
+										<div style="width:1000px;" class="yui-skin-sam" id="content"> 
+											<div id="demo" class="yui-navset">
+												<div class="yui-content" style="border-color: #d0d0d0">
+													<div id="publicFilterInfoDiv"  ></div>
+													<div id="public_markup" align="left">
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
 								</tr>
 							</table>
 							<center><button class="buttonx" type="button" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button></center>

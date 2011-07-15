@@ -78,7 +78,6 @@
 
                 }
                 function processSectorTableResponse_${gisWidgetTeaserForm.id}(responseXML){
-                	alert("aaa");
                     var sectorTableDiv=document.getElementById('sectorTableWidgetDiv_${gisWidgetTeaserForm.id}');
                     var sectorTableLoadingDiv=document.getElementById('sectorTableWidgetDivLoad_${gisWidgetTeaserForm.id}');
                     while (sectorTableDiv.firstChild) {

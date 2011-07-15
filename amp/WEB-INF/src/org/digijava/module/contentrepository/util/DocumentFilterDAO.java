@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.hibernate.Query;
@@ -14,11 +15,22 @@ public class DocumentFilterDAO {
 	private static Logger logger	= Logger.getLogger(DocumentFilterDAO.class);
 	public void saveObject(DocumentFilter obj) {
 		Session hbSession;
+		Transaction tx=null;
 		try{
 			hbSession	= PersistenceManager.getRequestDBSession();
+			tx=hbSession.beginTransaction();
 			hbSession.saveOrUpdate(obj);
+			tx.commit();
 		}
 		catch (Exception e) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception ex ) {
+					logger.error("...Rollback failed");
+					throw new RuntimeException("Can't rollback", e);
+				}			
+			}
 			e.printStackTrace();
 		}
 	}

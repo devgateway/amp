@@ -4,6 +4,7 @@ package org.digijava.module.esrigis.action;
  * @author Diego Dimunzio
  */
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -82,8 +83,27 @@ public class DataDispatcher extends MultiAction {
 		}else if (request.getParameter("applyfilter") != null) { 
 			return modeapplyFilter(mapping, form, request, response);
 		}else if (request.getParameter("showstructures") != null) { 
-				return modeShowStructures(mapping, form, request, response);
-			}
+			return modeShowStructures(mapping, form, request, response);
+		}else if (request.getParameter("selectedfilter") != null) { 
+			return modeGetSelectedFilter(mapping, form, request, response);
+		}
+		return null;
+	}
+
+	private ActionForward modeGetSelectedFilter(ActionMapping mapping,ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
+		PrintWriter pw;
+		try {
+			pw = response.getWriter();
+			pw.write(maphelperform.getFilter().toJson().toString());
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 

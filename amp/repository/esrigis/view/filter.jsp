@@ -387,10 +387,7 @@ var callbackApplyFilterCall = {
 				  }
 				  getActivities(true);
 				  getStructures(true);
-
-				  if(refreshHighlight){
-				  	getHighlights(currentLevel.mapId);
-				  }
+				  getSelectedFilter();
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -545,6 +542,9 @@ function resetToDefaults(){
 	removeOptions("org_dropdown_ids");
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");
+	removeOptions("imp_org_dropdown_ids");
+	
+	
 //	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
 	
@@ -556,6 +556,8 @@ function resetToDefaults(){
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
+	document.getElementById("imp_org_group_dropdown_ids").selectedIndex = 0;
+	
 	document.getElementById("project_status_id").selectedIndex = 0;
 	document.getElementById("type_assistance_id").selectedIndex = 0;
 	document.getElementById("financing_instrument_id").selectedIndex = 0;
@@ -564,6 +566,8 @@ function resetToDefaults(){
 	removeOptions("org_dropdown_ids");
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");
+	
+	$("#selectedfilter").hide();
 	callbackApplyFilter();
 }
 

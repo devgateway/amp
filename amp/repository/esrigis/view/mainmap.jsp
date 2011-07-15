@@ -134,17 +134,13 @@
        	<div id="basemapGalleryesri"></div>
        <div class="headerBackground"> </div>
        <div class="header"style="float:left;">
-         
-                                		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
-											<img src="/TEMPLATE/ampTemplate/img_2/amp_trans.png" align=left>
-											<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
-										</div>
-                      
+	 		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
+				<img src="/TEMPLATE/ampTemplate/img_2/amp_trans.png" align=left>
+				<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+			</div>
         </div>
-        <div class="headerContent" align="right" style="vertical-align: middle; position:relative;">
-      
-        
-			<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
+        <div class="headerContent" align="right" style="vertical-align: middle; position:relative;" id="mainmenu">
+      	<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
 						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Tools</digi:trn></td>
@@ -180,13 +176,28 @@
                     <div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
 
 		</div>
-		<div id="filterdiv" style="position:absolute;z-Index:100;right: 5px;margin-top: 50px;display: none;">
+		<div id="filterdiv" style="position:absolute;z-Index:100;right: 5px;margin-top: 50px;display: none;cursor: pointer;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		 
         <div id="pointsLegend" class="legendContent" style="left:15px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
+        <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
+        	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
+        	<div class="legendHeader">Selected Filters<br/><hr/></div>
+        	<table width="90%" cellspacing="0" cellpadding="0" border="0">
+        		<tbody>
+					<tr>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif" id="sfilterid">
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+					</tr>
+				</tbody>
+        	</table>
+        </div>
         <div id="distancediv" class="searchContent">
         	<table>
         		<tr>

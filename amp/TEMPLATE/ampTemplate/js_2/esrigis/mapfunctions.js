@@ -93,7 +93,8 @@ function init() {
 		});
 	}
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
-
+	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
+	var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
 }
 
 /**
@@ -313,6 +314,80 @@ function showStInfoWindow () {
     }
     dojo.connect(map.infoWindow, "onHide", clearbuffer);
     hideLoading();
+}
+
+/**
+ * 
+ */
+function getSelectedFilter() {
+	$("#sfilterid").html("");
+	var xhrArgs = {
+		url : "/esrigis/datadispatcher.do?selectedfilter=true",
+		handleAs : "json",
+		   load: function(jsonData) {
+			   
+			   $("#sfilterid").append("<i>Currency</i>: ");
+			   $("#sfilterid").append(jsonData[0].currency);
+			   
+			   $("#sfilterid").append(" <i>| Fiscal Year Start</i> : ");
+			   $("#sfilterid").append(jsonData[0].year);
+			   
+			   if (jsonData[0].projectstatus!=''){
+				   $("#sfilterid").append(" <i>| Status</i> : ");
+				   $("#sfilterid").append(jsonData[0].projectstatus);
+			   }
+			   if (jsonData[0].sector!=''){
+				   $("#sfilterid").append(" <i>| Sector</i> : ");
+				   $("#sfilterid").append(jsonData[0].sector);
+			   }
+			   
+			   			   if (jsonData[0].financinginstrument!=''){
+				   $("#sfilterid").append(" <i>| Financing Instrument</i> : ");
+				   $("#sfilterid").append(jsonData[0].financinginstrument);
+			   }
+			   if (jsonData[0].typeofassistance!=''){
+				   $("#sfilterid").append(" <i>| Type of Assistance</i> : ");
+				   $("#sfilterid").append(jsonData[0].typeofassistance);
+			   }
+			   
+			   if (jsonData[0].onbudget='true'){
+				   $("#sfilterid").append(" <i>| Only on budget projects</i> : True");
+			   }
+			  
+			   if (jsonData[0].organizationtype!=''){
+				   $("#sfilterid").append(" <i>| Organization Type</i> : ");
+				   $("#sfilterid").append(jsonData[0].organizationtype);
+			   }
+			   
+			   if (jsonData[0].organizationgroup!=''){
+				   $("#sfilterid").append(" <i>| Organization Group</i> : ");
+				   $("#sfilterid").append(jsonData[0].organizationgroup);
+			   }
+			   
+		       if (jsonData[0].selecteddonors.length>0){
+		    	   $("#sfilterid").append(" <i>| Donors</i> : ");
+		       }
+			   dojo.forEach(jsonData[0].selecteddonors,function(donor) {
+				   $("#sfilterid").append(donor.donorname+ " ");
+				});
+			  
+			   
+			   if (jsonData[0].structuretypes.length>0){
+		    	   $("#sfilterid").append(" <i>| Structure Types</i> : ");
+		       }
+			   
+			   dojo.forEach(jsonData[0].structuretypes,function(structures) {
+				   $("#sfilterid").append(structures+ " ");
+				});
+			   
+			},
+				error : function(error) {
+				console.log(error);
+		}
+	}
+	// Call the asynchronous xhrGet
+	var deferred = dojo.xhrGet(xhrArgs);
+	$("#selectedfilter").show();
 }
 
 /**

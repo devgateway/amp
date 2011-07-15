@@ -108,10 +108,12 @@ public class DbHelper {
 				if (orgtypeids != null && orgtypeids.length > 0 && orgtypeids[0] != -1) {
 					oql += QueryUtil.getOrganizationTypeQuery(true, orgIds, orgtypeids);
 				}
-			} else {
+			}
+			else if(orgtypeids!=null){
 				oql += QueryUtil.getOrganizationTypeQuery(true, orgIds, orgtypeids);;
 			}
-			oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+			
+			oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)";
 
 			if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
 				oql += QueryUtil.getTeamQueryManagement();

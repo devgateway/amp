@@ -1,18 +1,29 @@
 package org.digijava.module.esrigis.helpers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import net.sf.json.JSONArray;
+
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class MapFilter {
@@ -65,9 +76,7 @@ public class MapFilter {
 	private Long[] selSectorIds;
 	private Long[] selLocationIds;
 	private Long[] selOrgGroupIds;
-
 	private List<AmpSector> sectorsSelected;
-
 	private List<AmpCategoryValueLocations> locationsSelected;
 
 	private Collection<BeanWrapperImpl> years;
@@ -99,12 +108,157 @@ public class MapFilter {
 		newFilter.setSelLocationIds(this.getSelLocationIds());
 		newFilter.setSelSectorIds(this.getSelSectorIds());
 		newFilter.setActivityId(this.getActivityId());
-		newFilter.setShowOnlyApprovedActivities(this
-				.getShowOnlyApprovedActivities());
+		newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
 		newFilter.setFromPublicView(this.getFromPublicView());
 		return newFilter;
 	}
 	
+	public JSONArray toJson(){
+		JSONArray result = new JSONArray();
+		SimpleFilter selectedfilter = new SimpleFilter();
+		selectedfilter.setCurrency(this.getCurrencyCode());
+		selectedfilter.setYear(this.getYear().toString());
+		
+		Collection<AmpCategoryValue> categoryValues = null;
+		categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		for (Iterator<AmpCategoryValue> iterator = categoryValues.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			if (ampCategoryValue.getId() == financingInstrumentId.longValue()){
+				selectedfilter.setFinancinginstrument(ampCategoryValue.getValue());
+			}
+		}
+		
+		if (orgGroupIds!=null && orgGroupIds.length>0){
+			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator.hasNext();) {
+				AmpOrgGroup group = (AmpOrgGroup) iterator.next();
+				for (int i = 0; i < orgGroupIds.length; i++) {
+					if (group.getIdentifier() == orgGroupIds[i]){
+						selectedfilter.setOrganizationgroup(group.getOrgGrpName());
+					}
+				}
+			}
+		}
+		ArrayList<SimpleDonor> donorslist = new ArrayList<SimpleDonor>();
+		if (organizationsSelected != null && !organizationsSelected.isEmpty()){
+			for (Iterator<AmpOrganisation> iterator = organizationsSelected.iterator(); iterator.hasNext();) {
+				AmpOrganisation org = (AmpOrganisation) iterator.next();
+				if (org!=null){
+					SimpleDonor donor = new SimpleDonor();
+					donor.setDonorname(org.getName());
+					donorslist.add(donor);
+				}
+			}
+			selectedfilter.setSelecteddonors(donorslist);
+		}
+		
+		if (implOrgGroupIds!=null && implOrgGroupIds.length>0 ){
+			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator.hasNext();) {
+				AmpOrgGroup group = (AmpOrgGroup) iterator.next();
+				for (int i = 0; i < implOrgGroupIds.length; i++) {
+					if (group.getIdentifier() == implOrgGroupIds[i]){
+						selectedfilter.setImplementingagency(group.getOrgGrpName());
+					}
+				}
+			}
+		}
+		
+		boolean exit = false;
+		ArrayList<SimpleDonor> impdonorslist = new ArrayList<SimpleDonor>();
+		if (organizationsSelected != null && !organizationsSelected.isEmpty()){
+			for (Iterator<AmpOrganisation> iterator = organizationsSelected.iterator(); iterator.hasNext();) {
+				AmpOrganisation org = (AmpOrganisation) iterator.next();
+				if (org!=null){
+					SimpleDonor donor = new SimpleDonor();
+					donor.setDonorname(org.getName());
+					donorslist.add(donor);
+				}else{
+					exit = true;
+				}
+			}
+			if (exit){
+				selectedfilter.setImpselecteddonors(impdonorslist);
+			}
+		}
+		
+		if (projectStatusId!=null){
+			Collection<AmpCategoryValue> categoryvaluesstatus = null;
+			categoryvaluesstatus = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+			for (Iterator<AmpCategoryValue> iterator = categoryvaluesstatus.iterator(); iterator.hasNext();) {
+				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+				if (ampCategoryValue.getId() == projectStatusId.longValue()){
+					selectedfilter.setProjectstatus(ampCategoryValue.getValue());
+				}
+			}
+		}
+		Collection<AmpCategoryValue> categoryvaluesfinanceintrument = null;
+		categoryvaluesfinanceintrument = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		for (Iterator<AmpCategoryValue> iterator = categoryvaluesfinanceintrument.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			if (ampCategoryValue.getId() == financingInstrumentId.longValue()){
+				selectedfilter.setFinancinginstrument(ampCategoryValue.getValue());
+			}
+		}
+		
+		Collection<AmpCategoryValue> categoryvaluestypeofassis = null;
+		categoryvaluestypeofassis = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		for (Iterator<AmpCategoryValue> iterator = categoryvaluestypeofassis.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			if (ampCategoryValue.getId() == typeAssistanceId.longValue()){
+				selectedfilter.setTypeofassistance(ampCategoryValue.getValue());
+			}
+		}
+		
+		if (selStructureTypes!=null){
+			ArrayList<String> selstructurestr = new ArrayList<String>();
+			for (Iterator iterator = DbHelper.getAllStructureTypes().iterator(); iterator.hasNext();) {
+				AmpStructureType type = (AmpStructureType) iterator.next();
+				for (int i = 0; i < selStructureTypes.length; i++) {
+					if (type.getTypeId() == selStructureTypes[i].longValue()){
+						selstructurestr.add(type.getName());
+					}
+				}
+				
+			}
+			selectedfilter.setStructuretypes(selstructurestr);
+		}
+		
+		
+		if (selSectorIds!=null && selSectorIds.length>0 ){
+			for (Iterator<AmpSector> iterator = sectors.iterator(); iterator.hasNext();) {
+				AmpSector sector = (AmpSector) iterator.next();
+				for (int i = 0; i < selSectorIds.length; i++) {
+					if (sector.getAmpSectorId() == selSectorIds[i].longValue()){
+						selectedfilter.setSector(sector.getName());
+					}
+				}
+			}
+		}
+		
+		ArrayList<String> selregions = new ArrayList<String>();
+		if (regionIds != null && regionIds.length>0){
+			for (Iterator<AmpCategoryValueLocations> iterator = regions.iterator(); iterator.hasNext();) {
+				AmpCategoryValueLocations region = (AmpCategoryValueLocations) iterator.next();
+				for (int i = 0; i < regionIds.length; i++) {
+					if(region.getId() == regionIds [i].longValue()){
+						selregions.add(region.getName());
+					}
+				}
+			}
+			
+			selectedfilter.setRegions(selregions);
+		}
+		
+		if (onBudget!=null){
+			selectedfilter.setOnbudget(onBudget);
+		}
+		
+		if (organizationsTypeId !=null){
+			AmpOrgType orgtype = (AmpOrgType) DbUtil.getAmpOrgType(organizationsTypeId);
+			selectedfilter.setOrganizationtype(orgtype.getOrgType());
+		}
+		result.add(selectedfilter);
+		return result;
+	}
 
 	public boolean isIsinitialized() {
 		return isinitialized;

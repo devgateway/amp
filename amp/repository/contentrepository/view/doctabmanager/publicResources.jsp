@@ -22,7 +22,7 @@
 <bean:define id="myForm" toScope="request" name="crDocTabManagerForm" />
 
 <%@include file="../documentManagerJsHelper.jsp" %>
-
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
 	var replaceableTabObject = null;
@@ -106,17 +106,17 @@
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 
 		
-		myTabsObject 	= new YAHOOAmp.widget.TabView("demo");
+		myTabsObject 	= new YAHOO.widget.TabView("demo");
 		<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
 			var tabs		= myTabsObject.get("tabs");
 			var moreTab		= myTabsObject.getTab(tabs.length-1);
 			moreTab.set("disabled", true);
 		</logic:notEmpty>
 	
-		var region = YAHOOAmp.util.Dom.getRegion("moreTabsTab");
+		var region = YAHOO.util.Dom.getRegion("moreTabsTab");
 		var xPos = region.left;
 		var yPos = region.bottom;
-		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
+		allTabsPanel = new YAHOO.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
 		allTabsPanel.setHeader("Please select from the list below");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);
@@ -143,7 +143,7 @@
 YAHOO.util.Event.on(window, "load", afterPageLoad); 
 
 </script>
-<digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
+
 <style>
 .yui-skin-sam a.yui-pg-page{
 margin-left: 2px;
@@ -191,14 +191,12 @@ border-right: 1px solid rgb(208, 208, 208);
 }
 </style>
 
-	
-<div id="menuContainerDiv"></div>	
-<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center" height="100%">	
-	<tbody>
-		<tr>
-		<td align=left valign="top">
+
+			
+			<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center">
+			<tr><td>
 			<div style="width:1000px;" class="yui-skin-sam" id="content">
-			<div id="demo" class="yui-navset">			
+				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
 					<li id="allPublicResourcesTab" class="selected"><a href="#allPublicResourcesRef"><div><digi:trn>All Public Documents</digi:trn></div></a>
 					<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
@@ -207,47 +205,32 @@ border-right: 1px solid rgb(208, 208, 208);
 					<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
 						<li id="moreTabsTab"><a><div onclick="allTabsPanel.show()"><digi:trn>More Tabs</digi:trn>...</div></a></li>
 					</logic:notEmpty>
-				</ul>
-				<div class="yui-content" style="border-color: #d0d0d0">
-					<div id="allPublicResourcesRef" class="resource_box">
-						<div id="allPublicResources_markup" align="left" style="clear: both;" >	
-					</div>
-						<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
-							<tr>
-								<td>
-												        	       
-										<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
-											<tr>
-									        	<td>
-										        	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
-											    		<div id="Ref${filter.id}">
-											    			<br />
-											    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
-											    			<div id="${filter.id}_markup" align="left"></div>
-											    		</div>
-											    	</c:forEach>
-											    </td>								    
-											</tr>								
-										</table>
-								</td>
-							</tr>
-						</table>						
-					</div>					
+			    </ul>            
+			    <div class="yui-content" style="border-color: #d0d0d0">
+			    	<div id="allPublicResourcesRef">
+			    		<div id="allPublicResources_markup" align="left"></div>
+			    	</div>
+			    	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
+			    		<div id="Ref${filter.id}">
+			    			<br />
+			    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
+			    			<div id="${filter.id}_markup" align="left"></div>
+			    		</div>
+			    	</c:forEach>
+			    	
+					<!--End public Resources-->
 				</div>
 			</div>
-			</div>			
+			</div>
+			
+			
+		</td></tr></table>
 		
-        <br />
-      </td>
-	</tr>
-	</tbody>
-</table>
-
 
 <br/>
 
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
-    	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
+    <div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
 		<logic:iterate name="myForm" property="publicFiltersUnpositioned" id="filter">
           
 	                    <c:if test="${fn:length(report.name) > 25}" >
@@ -258,5 +241,5 @@ border-right: 1px solid rgb(208, 208, 208);
 	                    </c:if>
 					
 		</logic:iterate>
-        </div>
+        </div>	
 </div>

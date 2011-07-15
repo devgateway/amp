@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactDetailFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactOrganizationFeaturePanel;
@@ -27,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
+import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -114,7 +114,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                     CategoryConstants.CONTACT_TITLE_KEY,
                                     new PropertyModel<AmpCategoryValue>(contact, "title"),
                                     CategoryConstants.CONTACT_TITLE_NAME, true, true, true);
-                    IModel<AmpContact> contactModel = new Model<AmpContact>(contact);
+                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(contact);
 
                     AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",true,Constants.CONTACT_PROPERTY_NAME_PHONE); 
                     AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",true,Constants.CONTACT_PROPERTY_NAME_FAX);  

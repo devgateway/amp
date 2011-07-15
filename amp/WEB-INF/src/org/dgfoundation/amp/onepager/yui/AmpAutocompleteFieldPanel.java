@@ -29,6 +29,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -316,9 +317,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
 			// choiceValues.add(getChoiceValue(choice));
-			String entityId=getAdditionalDetails(choice);
+			String details=getAdditionalDetails(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
-					choiceLevel != null ? choiceLevel.toString() : "0" ,entityId != null ? entityId.toString() : "0" });
+					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "" });
 		}
 
 		return choiceValues.toArray(new String[0][0]);

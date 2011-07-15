@@ -76,7 +76,6 @@
 <module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
 <module:display name="WIDGETS"></module:display>
-<module:display name="Org Profile"></module:display>
 <module:display name="Resources"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -233,16 +232,6 @@
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display>
-<feature:display name="orgprof_chart_place1" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place2" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place3" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place4" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place5" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place6" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
-<feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
-<feature:display name="Enable Org. Profile in Public View" module="Org Profile"></feature:display>
-<feature:display  name="Org Profile Widget Manager" module="Org Profile"></feature:display>
 
 <feature:display name="Yearly View" module="Calendar"></feature:display>
 <feature:display name="Monthly View" module="Calendar"></feature:display>

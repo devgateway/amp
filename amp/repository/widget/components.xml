@@ -22,8 +22,6 @@
         <page page="indicatorSectorRegionManager" name="gis_indicatorSectorManager" title=" Indicator Sector Manager"/>
         <page page="createIndicatorSector" name="gis_createIndicatorSector" title="Create Indicator Sector "/>
         <page page="addEditValue" name="gis_addEditValue" title="Add/Edit Value"/>
-        <page page="orgProfileWidgetManager" name="widget_orgProfileManager" title=" Org Profile Manager"/>
-        <page page="createOrgProfile" name="widget_orgProfileCreate" title=" Create/Update Org Profile"/>
         <page page="sectorDonorWidgetReport" name="showSectorDonorReport" title="Show Sector Donor Report"/>
         <page page="sectorTableWidgetAdmin" name="widget_sectorTableManager" title="Sector Table Manager"/>
         <page page="createSectorTableWidget" name="widget_createSectorTable" title="Create Sector Table"/>

@@ -47,7 +47,6 @@ import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.WidgetVisitor;
 import org.digijava.module.widget.helper.WidgetVisitorAdapter;
@@ -84,7 +83,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.orgProfile.helper.ExportSettingHelper;
+
 
 public class ExportToWord extends Action {
 

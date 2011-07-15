@@ -16,7 +16,6 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.orgProfile.form.OrgProfileFilterForm;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 /**
@@ -175,45 +174,7 @@ public class FilterHelper implements Serializable {
         this.divideThousandsDecimalPlaces = divideThousandsDecimalPlaces;
     }
 
-    public FilterHelper(OrgProfileFilterForm form) throws DgException {
-        this.currId = form.getCurrencyId();
-        this.year = form.getYear();
-        this.transactionType = form.getTransactionType();
-        this.orgGroupId = form.getOrgGroupId();
-        this.fiscalCalendarId = form.getFiscalCalendarId();
-        this.orgIds = form.getOrgIds();
-        this.largestProjectNumb=form.getLargestProjectNumb();
-        this.regionId=form.getSelRegionId();
-        this.zoneIds=form.getSelZoneIds();
-        this.yearsInRange=form.getYearsInRange();
-        this.divideThousands=form.getDivideThousands();
-        this.divideThousandsDecimalPlaces=form.getDivideThousandsDecimalPlaces();
-        this.pledgeVisible=form.getPledgeVisible();
-        this.expendituresVisible=form.getExpendituresVisible();
-        this.fromPublicView=form.getFromPublicView();
-        this.showOnlyApprovedActivities=form.getShowOnlyApprovedActivities();
-        initDerivedProperties();
-    }
-     public FilterHelper(FilterHelper helper) throws DgException {
-        this.currId = helper.getCurrId();
-        this.year = helper.getYear();
-        this.transactionType = helper.getTransactionType();
-        this.orgGroupId = helper.getOrgGroupId();
-        this.fiscalCalendarId = helper.getFiscalCalendarId();
-        this.orgIds = helper.getOrgIds();
-        this.largestProjectNumb=helper.getLargestProjectNumb();
-        this.regionId=helper.getRegionId();
-        this.zoneIds=helper.getZoneIds();
-        this.teamMember=helper.getTeamMember();
-        this.yearsInRange=helper.getYearsInRange();
-        this.divideThousands=helper.getDivideThousands();
-        this.divideThousandsDecimalPlaces=helper.getDivideThousandsDecimalPlaces();
-        this.startDate=helper.getStartDate();
-        this.endDate=helper.getEndDate();
-        this.locationIds=helper.getLocationIds();
-        this.fromPublicView=helper.getFromPublicView();
-        this.showOnlyApprovedActivities=helper.getShowOnlyApprovedActivities();
-    }
+
 
     public FilterHelper(Long orgGroupId, Long year, Long fiscalCalendarId) {
         this.year = year;
@@ -221,10 +182,7 @@ public class FilterHelper implements Serializable {
         this.fiscalCalendarId = fiscalCalendarId;
     }
 
-    public FilterHelper(OrgProfileFilterForm form, TeamMember tm) throws DgException {
-        this(form);
-        this.teamMember = tm;
-    }
+
 
     public Long getCurrId() {
         return currId;

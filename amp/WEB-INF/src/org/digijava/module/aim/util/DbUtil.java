@@ -124,21 +124,30 @@ import org.hibernate.Transaction;
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-           public static String filter(String text) {
-
-		String result = null;
-             
-		if (text != null) {
-			result=text.replaceAll("&", "&amp;");
-			result = result.replaceAll(">", "&gt;");
-			result = result.replaceAll("<", "&lt;");
-			result = result.replaceAll("'", "&acute;");//"&acute;");
-			result = result.replaceAll("\"", "&quot;");
-			
-		}
-		return result;
+       public static String filter(String text) {
+		return filter(text,false);
 
 	}
+           public static String filter(String text,boolean  acute) {
+
+       		String result = null;
+                    
+       		if (text != null) {
+       			result=text.replaceAll("&", "&amp;");
+       			result = result.replaceAll(">", "&gt;");
+       			result = result.replaceAll("<", "&lt;");
+       			if(acute){
+       				result = result.replaceAll("'", "&acute;");//"&acute;");
+       			}
+       			else{
+       				result = result.replaceAll("'", "\'");//"&acute;");
+       			}
+       			result = result.replaceAll("\"", "&quot;");
+       			
+       		}
+       		return result;
+
+       	}
 	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();

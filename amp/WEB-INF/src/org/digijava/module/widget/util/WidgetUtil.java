@@ -50,20 +50,12 @@ public class WidgetUtil {
 	public static final int TABLE = 3;
 	public static final int CHART_INDICATOR = 4;
         
-    public static final int ORG_PROFILE = 5;
+
     public static final int SECTOR_TABLE = 6;
     public static final int PARIS_INDICAROR_TABLE = 7;
     public static final int TOP_TEN_DONORS = 8;
         
-        // org profile pages
-    public static final int ORG_PROFILE_SUMMARY = 1;
-    public static final int ORG_PROFILE_TYPE_OF_AID = 2;
-    public static final int ORG_PROFILE_PLEDGES_COMM_DISB = 3;
-    public static final int ORG_PROFILE_ODA_PROFILE = 4;
-    public static final int ORG_PROFILE_SECTOR_BREAKDOWN = 5;
-    public static final int ORG_PROFILE_REGIONAL_BREAKDOWN = 6;
-    public static final int ORG_PROFILE_PARIS_DECLARATION = 7;
-    public static final int ORG_PROFILE_AID_PREDICTIBLITY = 8;
+
               
 	
 	

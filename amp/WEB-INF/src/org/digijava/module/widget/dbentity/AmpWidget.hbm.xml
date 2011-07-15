@@ -34,10 +34,6 @@
 			</set>
 		</subclass>
 
-		<subclass name="org.digijava.module.widget.dbentity.AmpWidgetOrgProfile"
-			discriminator-value="orgprofile">
-			<property name="type" column="chart_type" type="java.lang.Long" />
-		</subclass>
 	<subclass discriminator-value="secTbl" name="org.digijava.module.widget.dbentity.AmpSectorTableWidget">
       <set cascade="all-delete-orphan" inverse="true" lazy="true" name="sectorsColumns" order-by="order_number asc">
         <key column="sector_widget_table_id"/>

@@ -22,7 +22,6 @@ import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
-import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.helper.WidgetVisitor;
@@ -80,20 +79,7 @@ public class WidgetTeaser extends TilesAction {
                 rendertype.add(WidgetUtil.CHART_INDICATOR);
             }
 
-            @Override
-            public void visit(AmpWidgetOrgProfile orgProfile) {
-                rendertype.add(WidgetUtil.ORG_PROFILE);
-                rendertype.add(orgProfile.getType());
-                if (orgProfile.getType() == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
-                    try {
-                        List<AmpClassificationConfiguration> sectorClassifications = SectorUtil.getAllClassificationConfigs();
-                        rendertype.add(sectorClassifications);
-                    } catch (Exception ex) {
-                        logger.error("Unable to load  configs", ex);
-                    }
-                }
-
-            }
+      
 
         
             @Override
@@ -116,14 +102,7 @@ public class WidgetTeaser extends TilesAction {
         widget.accept(adapter);
         int rType = (Integer) rendertype.get(0);
         wform.setRendertype(rType);
-        // if size>1 then we are working with AmpWidgetOrgProfile and so we need to know type...
-        if (rendertype.size() > 1) {
-            Long type = (Long) rendertype.get(1);
-            wform.setType(type);
-            if(rendertype.size()==3){
-                wform.setSectorClassificationConfigs((List<AmpClassificationConfiguration>)rendertype.get(2));
-            }
-        }
+       
 
         return null;
     }

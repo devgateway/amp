@@ -134,15 +134,6 @@ ${fn:replace(message,quote,escapedQuote)}
 	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                    	<div class="bd bd_drop">                    
 	                    		<ul class="first-of-type"> 
-	                        		<module:display name="Org Profile" >
-	                        			<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
-			                            	<li class="yuiampmenuitem_drop">
-			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
-			                                	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
-			                                </a> 
-		                                	</li>    
-                                		</feature:display>
-									</module:display>
 															
 									<module:display name="GIS DASHBOARD" >
 										<feature:display name="Show in public view" module="GIS DASHBOARD">
@@ -612,9 +603,6 @@ function adminHelp(){
 						  	if(FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext())) {
 						  		showDashboard = true;
 						  	}
-                            if(FeaturesUtil.isVisibleModule("Org Profile", request.getSession().getServletContext())) {
-						  		showDashboard = true;
-						  	}
 						%>
 						<%if (showDashboard) {%>
                           <li class="yuiampmenuitem" style="float:left;">
@@ -650,14 +638,6 @@ function adminHelp(){
 			                            </li> 
                                         </module:display>
                                         
-                                        <module:display name="Org Profile" >
-                                            <li class="yuiampmenuitem_drop">
-                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
-                                                    <digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
-                                                </a> 
-                                       
-                                            </li>    
-                                        </module:display>
                                         <li class="yuiampmenuitem_drop">
 			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
 			                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>

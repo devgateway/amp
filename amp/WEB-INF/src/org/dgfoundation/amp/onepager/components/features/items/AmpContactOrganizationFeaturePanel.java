@@ -12,6 +12,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.HiddenField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -79,6 +81,8 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		AbstractReadOnlyModel<List<AmpOrganisationContact>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 
 		idsList = new ListView<AmpOrganisationContact>("listOrgs", listModel) {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(final ListItem<AmpOrganisationContact> item) {
 				

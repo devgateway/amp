@@ -38,15 +38,12 @@ public class WidgetTeaserForm extends ActionForm {
 	private boolean showPlaceInfo;
     private List<AmpClassificationConfiguration> sectorClassificationConfigs;
 
-    // used for Org Profile to determine which chart/text render
-    private Long type;
+   
     private String selectedFromYear;
 	private String selectedToYear;
 	private String baseCurr;
         
-    public Long getType() {
-        return type;
-    }
+   
 
     public List<AmpClassificationConfiguration> getSectorClassificationConfigs() {
         return sectorClassificationConfigs;
@@ -56,10 +53,7 @@ public class WidgetTeaserForm extends ActionForm {
         this.sectorClassificationConfigs = sectorClassificationConfigs;
     }
 
-    public void setType(Long type) {
-        this.type = type;
-    }
-	
+   
 	public boolean isShowPlaceInfo() {
 		return showPlaceInfo;
 	}

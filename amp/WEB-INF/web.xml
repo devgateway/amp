@@ -167,7 +167,6 @@
 				/repository/message/struts-config.xml,
 				/repository/gis/struts-config.xml,
 				/repository/widget/struts-config.xml,
-				/repository/orgProfile/struts-config.xml,
 				/repository/mondrian/struts-config.xml,
 				/repository/dataExchange/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,

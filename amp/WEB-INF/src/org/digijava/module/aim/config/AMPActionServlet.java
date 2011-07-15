@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionServlet;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.Crumb;
 
 /**
  * Overrides the default struts ActionServlet

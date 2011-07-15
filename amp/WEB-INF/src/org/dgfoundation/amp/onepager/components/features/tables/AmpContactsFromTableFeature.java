@@ -227,7 +227,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             	details.append("Organizations: ");
             	details.append(orgs);
             	details.append("<br/>");
-                return DbUtil.filter(details.toString());
+                return DbUtil.filter(details.toString(),true);
             }
         };
         add(searchContacts);

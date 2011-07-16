@@ -252,7 +252,7 @@ public class MapFilter {
 			selectedfilter.setOnbudget(onBudget);
 		}
 		
-		if (organizationsTypeId !=null){
+		if (organizationsTypeId !=null && organizationsTypeId!=-1){
 			AmpOrgType orgtype = (AmpOrgType) DbUtil.getAmpOrgType(organizationsTypeId);
 			selectedfilter.setOrganizationtype(orgtype.getOrgType());
 		}

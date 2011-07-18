@@ -410,13 +410,13 @@ table#addUserContainer td.addUserButContainer input, td.addUserButContainer inpu
 #auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
 #actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
 /*---RAFY GIS STYLES---*/
-#navToolbar {width:150px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
-#navToolbar .toolscontainer{margin-top:5px;width:125px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
-#navToolbar .toolscontainer .dijitButtonNode {width:150px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
+#navToolbar {width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar .toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
+#navToolbar .toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
 #navToolbar .toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
 #navToolbar .toolscontainer .mapButton{padding:0px 5px;height:30px;}
 #navToolbar .toolscontainer .mapButton .dijitIcon{float:right;margin:0px 0px 0px 10px;background-position:0px 3px;background-repeat:no-repeat;padding:0px 0px 7px 0px;}
-#navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:125px;text-align:right;}
+#navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
 #navToolbar .toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
 #mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
 td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}

@@ -203,7 +203,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 	background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	z-index:100;
 	margin-top:5%;
-	margin-left:70%;
+	margin-left:60%;
 	font-size: 11px;
 	display:none;
 	width:410px;
@@ -237,3 +237,6 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 	color:white; 
 	font-size:9pt;
 }
+div.gisBoxHeader{width:100%;height:40px;position:relative}
+div.gisBoxHeader a{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;background:url(/TEMPLATE/ampTemplate/img_2/gis/close.gif);background-position:-10px 0px;}
+div.gisBoxHeader a:hover{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;background:url(/TEMPLATE/ampTemplate/img_2/gis/close.gif);}

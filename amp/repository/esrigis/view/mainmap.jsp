@@ -159,7 +159,9 @@
 					</tr>
 			</table>
               <div id="mainGisMenu">
-			  <h3>Main Menu</h3>
+              	<div class="gisBoxHeader">
+			  	<h3>Main Menu</h3>              	<a href="#"></a>
+              </div>
               <ul>
               	<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
 						<li  id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
@@ -215,7 +217,9 @@
         </div>
         <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
-        	<h3>Tools Panel</h3>
+        	<div class="gisBoxHeader">
+			  	<h3>Tools panel</h3>              	<a href="#"></a>
+              </div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>

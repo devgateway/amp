@@ -557,6 +557,7 @@ function resetToDefaults(){
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
 	document.getElementById("imp_org_group_dropdown_ids").selectedIndex = 0;
+	document.getElementById("organization_type_dropdown_ids").selectedIndex = 0;
 	
 	document.getElementById("project_status_id").selectedIndex = 0;
 	document.getElementById("type_assistance_id").selectedIndex = 0;

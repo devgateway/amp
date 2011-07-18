@@ -94,7 +94,7 @@ function init() {
 	}
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
-	var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
+	//var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
 }
 
 /**

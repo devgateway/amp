@@ -1,5 +1,7 @@
 package org.digijava.module.orgProfile.helper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.AttributedString;
 import java.text.NumberFormat;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
@@ -33,7 +35,8 @@ public class PieChartCustomLabelGenerator implements  PieSectionLabelGenerator  
             }
         }
         // don't show percent for sectors which value are less then 6
-        if(Math.round(percent*100)>=6){
+        BigDecimal bd = new BigDecimal(percent*100).setScale(percentFormat.getMaximumFractionDigits(),percentFormat.getRoundingMode());
+        if(bd.doubleValue()>=6){
              label =percentFormat.format(percent);
         }
         return label;

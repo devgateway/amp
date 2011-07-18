@@ -1404,25 +1404,7 @@ public class ChartWidgetUtil {
                 } else {
                     ds.setValue(keyName, amount);
                 }
-                regionalTotal = regionalTotal.add(total.getValue());
-            }
-            List<String> keys = ds.getKeys();
-            Iterator<String> keysIter = keys.iterator();
-            BigDecimal othersValue = BigDecimal.ZERO;
-            while (keysIter.hasNext()) {
-                String key = keysIter.next();
-                if (key.equals(nationalTitle)||key.equals(regionalTitle)) {
-                    continue;
-                }
-                BigDecimal value = (BigDecimal) ds.getValue(key);
-                Double percent = (value.divide(regionalTotal.divide(divideByMillionDenominator), 3, RoundingMode.HALF_UP)).doubleValue();
-                if (percent <= 0.05) {
-                    othersValue = othersValue.add(value);
-                    ds.remove(key);
-                }
-            }
-            if (!othersValue.equals(BigDecimal.ZERO)) {
-                ds.setValue(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
+                regionalTotal = regionalTotal.add(amount);
             }
             Collection<Long> locationIds = filter.getLocationIds();
             boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
@@ -1442,9 +1424,30 @@ public class ChartWidgetUtil {
                     total = cal.getTotActualDisb();
                 }
                 if (total != null && total.doubleValue() != 0) {
-                    ds.setValue(unallocatedTitle, total.doubleValue() / divideByMillionDenominator.doubleValue());
+                    double unallocatedAmount = total.doubleValue() / divideByMillionDenominator.doubleValue();
+                    ds.setValue(unallocatedTitle, unallocatedAmount);
+                    regionalTotal = regionalTotal.add(new BigDecimal(unallocatedAmount));
                 }
             }
+            List<String> keys = ds.getKeys();
+            Iterator<String> keysIter = keys.iterator();
+            BigDecimal othersValue = BigDecimal.ZERO;
+            while (keysIter.hasNext()) {
+                String key = keysIter.next();
+                if (key.equals(nationalTitle)||key.equals(regionalTitle)||key.equals(unallocatedTitle)) {
+                    continue;
+                }
+                BigDecimal value = (BigDecimal) ds.getValue(key);
+                Double percent = (value.divide(regionalTotal, 3, RoundingMode.HALF_UP)).doubleValue();
+                if (percent <= 0.05) {
+                    othersValue = othersValue.add(value);
+                    ds.remove(key);
+                }
+            }
+            if (!othersValue.equals(BigDecimal.ZERO)) {
+                ds.setValue(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
+            }
+           
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);

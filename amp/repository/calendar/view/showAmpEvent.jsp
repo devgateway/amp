@@ -10,16 +10,16 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
-<!-- Dependencies -->        
-<script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>        
-<script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+<!-- Dependencies -->
+<script type="text/javascript" src="<digi:file src="js_2/yui/container_core-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="js_2/yui/connection-min.js"/>"></script>
         
 <!-- Source File -->
-<script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script>       
-<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>        
+<script type="text/javascript" src="<digi:file src="js_2/yui/menu-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="js_2/yui/yahoo-dom-event.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="js_2/yui/container-min.js"/>"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
         
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -93,6 +93,22 @@
 	.bd a {
 	  	color:black;
 	  	font-size:10px;
+	}
+	
+	div.charcounter-progress-container {
+	width:inherit; 
+	height:3px;
+	max-height:3px;
+	border: 1px solid gray; 
+	filter:alpha(opacity=20); 
+	opacity:0.2;
+	}
+	
+	div.charcounter-progress-bar {
+		height:3px; 
+		max-height:3px;
+		font-size:3px;
+		background-color:#5E8AD1;
 	}
 		
 </style>
@@ -726,8 +742,19 @@ function removeGuest(obj) {
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table border="0" align="center" cellpadding="3" cellspacing="3" class="t_mid">
 			                    	<tr>
-			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=48%>
-			                    			<digi:trn key="calendar:evntTitle"><div style="margin-bottom:5px;"><font color="red" size="3px">*</font><b>Event title</b></div></digi:trn><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/><br /><br /><digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b>Calendar type</b></div></digi:trn><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=48%>			                    			
+			                    			<div style="margin-bottom:5px;"><font color="red" size="3px">*</font><b><digi:trn>Title</digi:trn></b>
+			                    				<span style="font-size:11px;" id="titleCharCounter"></span>
+			                    			</div>			                    			
+										    <div class="charcounter-progress-container" style="width: 220px;">
+										    	<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
+										    </div>
+										    <div style="height:5px;width:220px;">&nbsp; </div>
+										    
+			                    			<html:text name="calendarEventForm" styleId="titleMax" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
+			                    			<br /><br />
+			                    			<digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b>Calendar type</b></div></digi:trn>
+			                    			<html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
@@ -1004,11 +1031,17 @@ function removeGuest(obj) {
 																</html:button>															</td> 
 														</tr>
 													</field:display>													
-												</table>	</div></div>	
-												
+												</table>
+												</div></div>												
 												<br /><br />
-												<digi:trn key="calendar:Description"><b>Description</b></digi:trn><br />
-											<div style="margin-top:7px;"><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></div>													                    						                    		</td>
+												
+												
+												<digi:trn key="calendar:Description"><b>Description</b></digi:trn><span style="font-size:11px;" id="descCharCounter"></span>
+											    <div class="charcounter-progress-container" style="width: 100%">
+											    	<div id="descProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
+											    </div>
+											    <div style="height:5px;width:220px;">&nbsp; </div>
+												<div style="margin-top:7px;"><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></div>													                    						                    		</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
 
@@ -1170,31 +1203,49 @@ function removeGuest(obj) {
 		<jsp:include page="/calendar/recurringEvent.do" />
 	</div>
 </digi:form>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
 <script type="text/javascript">
-	var selContacts = new Array();
-	<logic:present name="calendarEventForm" property="selectedAtts">
-		<logic:iterate indexId="idxId" name="calendarEventForm" property="selectedAtts" id="selectedAtts">
-			selContacts[<bean:write name="idxId"/>] = '<bean:write name="selectedAtts"/>';
-		</logic:iterate>
-		fillExternalContact();
-	</logic:present>
-
-	$(".group_checkbox").bind("change", function (event) { 
-		var selGrpCtrl = $(this);
-		var childUsers = selGrpCtrl.parent().parent().find("input[name='selectedAtts']");
-		
-		childUsers.each(
-			function (idx){
-				this.checked = selGrpCtrl.attr("checked");
-			})
-		});
-
-	//attach character counters 
-	$("#eventTitle").charCounter(50,{
-									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
-									pulse: false});
-	$("#descMax").charCounter(300,{
-									format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
-									pulse: false});
+	
+	//Char counters	
+	var titleLength = 50;
+	var titleCounter = $("#titleCharCounter");
+	var titleProgressBar = $("#titleProgressBar");
+	initTitleCharCounter();
+	
+	function initTitleCharCounter() {
+		var titleCounterTxt = ["(", titleLength - $("#titleMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		titleCounter.html(titleCounterTxt.join(""));
+		titleProgressBar.css("width", $("#titleMax").val().length/titleLength*100 + "%");
+	}
+	$("#titleMax").bind("keyup", function (event) {
+		if (this.value.length > titleLength) {
+			this.value = this.value.substring(0, titleLength);
+		}
+		var titleCounterTxt = ["(", titleLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		titleCounter.html(titleCounterTxt.join(""));
+		titleProgressBar.css("width", this.value.length/titleLength*100 + "%");
+	});
+	
+	var descLength = 500;
+	var descCounter = $("#descCharCounter");
+	var descProgressBar = $("#descProgressBar");
+	
+	initDescCharCounter();
+	
+	function initDescCharCounter() {
+		var descCounterTxt = ["(", descLength - $("#descMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		descCounter.html(descCounterTxt.join(""));
+		descProgressBar.css("width", $("#descMax").val().length/descLength*100 + "%");
+	}
+	$("#descMax").bind("keyup", function (event) {
+		if (this.value.length > descLength) {
+			this.value = this.value.substring(0, descLength);
+		}
+		var descCounterTxt = ["(", descLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		descCounter.html(descCounterTxt.join(""));
+		descProgressBar.css("width", this.value.length/descLength*100 + "%");
+	});
+	//End of char counters	
 </script>
+
+

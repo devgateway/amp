@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
  *
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
@@ -23,26 +23,24 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 
 /**
- * @author fferreyra@dginternational.org since May 16, 2011
+ * @author fferreyra@developmentgateway.org since May 16, 2011
  */
 public class AmpStructuresFormSectionFeature extends
 		AmpFormSectionFeaturePanel {
 
-	private static final long serialVersionUID = -6654390083784446344L;
+	private static final long serialVersionUID = -6654390083754446344L;
 
 	public AmpStructuresFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
-		if (setModel.getObject() == null){
+		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet());
-		}
-		
 		final ListView<AmpStructure> list;
 
 		
 		IModel<List<AmpStructure>> listModel = new AbstractReadOnlyModel<List<AmpStructure>>() {
-//			private static final long serialVersionUID = 3706184421459839210L;
+			private static final long serialVersionUID = 3706184421459839220L;
 
 			@Override
 			public ArrayList<AmpStructure> getObject() {
@@ -66,6 +64,8 @@ public class AmpStructuresFormSectionFeature extends
 				AmpStructure stru = new AmpStructure();
 				setModel.getObject().add(stru);
 				target.addComponent(this.getParent());
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(this.getParent()));
+				list.removeAll();
 			}
 		};
 		add(addbutton);

@@ -727,6 +727,7 @@ function addResultsToMap(featureSet) {
     	//Read current attributes and assign a new set
     	var count = feature.attributes["COUNT"];
     	var county = feature.attributes["COUNTY"];
+    	var district = feature.attributes["DISTRICT"];
     	var geoId = feature.attributes["GEO_ID"];
     	feature.setAttributes( {
 			  "COUNT": count,
@@ -734,6 +735,7 @@ function addResultsToMap(featureSet) {
 			  "DISBURSEMENTSFMT": 0,
 			  "EXPENDITURESFMT": 0,
 			  "COUNTY": county,
+			  "DISTRICT": district,
 			  "GEO_ID": geoId
 			  });
     	feature.setInfoTemplate(new esri.InfoTemplate("Funding", currentLevel.name + ": ${"+ currentLevel.mapField +"} <br/>"+

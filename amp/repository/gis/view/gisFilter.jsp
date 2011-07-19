@@ -521,6 +521,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 		</div>
 		<input type="hidden" name="filterStartYear" id="filterStartYear">
 		<input type="hidden" name="filterEndYear" id="filterEndYear">
+		<input type="hidden" name="filterAllSectors" id="filterAllSectors">
 	</form>
 </div>
 

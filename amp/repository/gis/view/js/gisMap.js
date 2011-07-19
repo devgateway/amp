@@ -1199,6 +1199,8 @@
 			jQuery.fn.getImageMap();			
 		}
 		
+		jQuery.fn.dataForSectorFin();
+		
 		
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
 		
@@ -1221,19 +1223,23 @@
 			allSectors = true;
 		}
 	
+		$("#filterAllSectors").val(allSectors);
+		
 		var requestURL = "../../gis/getFoundingDetails.do?mapCode=TZA&action=filter";
+		
     $.post(requestURL, $("#gisFilterForm").serialize(), filterSet);
-    
     
     if (allSectors) {
     	$("input[name='selectedSectors']").removeAttr("checked");
 			$("input[name='selectedSecondarySectors']").removeAttr("checked");
 			$("input[name='selectedTertiarySectors']").removeAttr("checked");
     }
+    
+    
 	
 		hideFilter();
 		
-		jQuery.fn.dataForSectorFin();
+		//jQuery.fn.dataForSectorFin();
 		
 		
 	}
@@ -1293,7 +1299,8 @@
 					}
 				}
 				retVal += "\"";
-				retVal += " href=\"javascript:return false;\"";
+				//retVal += " href=\"javascript:{return false};\"";
+				retVal += " style=\"cursor:pointer;\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
 				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
 				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "','" + segment.attributes.getNamedItem("regLocId").value + "')\">";
@@ -1360,7 +1367,9 @@
 			//Set year caption
 			var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
 			var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
-      var selectedCurrency=document.getElementById("selCurr").value;
+      //var selectedCurrency=document.getElementById("selCurr").value;
+      var selectedCurrency=$("#selectedCurrency").val();
+      
 			var newCapt = "("+selectedCurrency+") " + fromYear + " - " + toYear;
 			document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
 			
@@ -1747,6 +1756,8 @@
 		
 		
 		popup.focus();
+		
+		return false;
 	}
 	
 	var logged = false

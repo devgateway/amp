@@ -51,7 +51,14 @@ public class ShowRegionReport extends Action {
 
         Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
 
-        FundingData fndDat = (FundingData)((Map)filterResults[0]).values().iterator().next();
+        FundingData fndDat = null;
+        if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {
+            fndDat = (FundingData)((Map)filterResults[0]).values().iterator().next();
+        } else {
+            fndDat = new FundingData();
+        }
+
+
 
         gisRegReportForm.setActivityLocationFundingList(fndDat.getActivityLocationFundingList());
 
@@ -79,12 +86,18 @@ public class ShowRegionReport extends Action {
         }
 
 
+        /*
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
         if (baseCurr == null) {
             baseCurr = "USD";
         }
         //currently we are using base currency but in the future we may use value, selected from currency breakdown.
         gisRegReportForm.setSelectedCurrency(baseCurr);
+        */
+
+
+        gisRegReportForm.setSelectedCurrency(filterForm.getSelectedCurrency());
+
 
 
 

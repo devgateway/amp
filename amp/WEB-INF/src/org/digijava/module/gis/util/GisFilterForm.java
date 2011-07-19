@@ -22,6 +22,15 @@ public class GisFilterForm {
     private int mapLevel;
     private String filterStartYear;
     private String filterEndYear;
+    private boolean filterAllSectors;
+
+    public boolean isFilterAllSectors() {
+        return filterAllSectors;
+    }
+
+    public void setFilterAllSectors(boolean filterAllSectors) {
+        this.filterAllSectors = filterAllSectors;
+    }
 
     public String getFilterStartYear() {
         return filterStartYear;

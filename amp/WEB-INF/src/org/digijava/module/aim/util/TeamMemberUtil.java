@@ -15,8 +15,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -25,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -1951,6 +1955,74 @@ public class TeamMemberUtil {
 		}
 		return result;
 
+	}
+	public static  void addDesktopTab(Long reportId, Long teamMemberId,Integer position) {
+		Transaction tr=null;
+		Session dbSession =null;
+		AmpDesktopTabSelection sel=null;
+		try{
+			dbSession 	= PersistenceManager.getRequestDBSession();
+			tr		= dbSession.beginTransaction();
+			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMemberId );
+			sel	= new AmpDesktopTabSelection();
+			sel.setIndex(position);
+			sel.setOwner(atm);
+			AmpReports report = (AmpReports)dbSession.load(AmpReports.class, reportId );
+			sel.setReport(report);
+			if ( atm.getDesktopTabSelections() == null ) {
+				atm.setDesktopTabSelections( new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator) );	
+			}
+			Set<AmpDesktopTabSelection>	tabs=atm.getDesktopTabSelections();
+			Iterator<AmpDesktopTabSelection> iter=tabs.iterator();
+			while(iter.hasNext()){
+				AmpDesktopTabSelection tab=iter.next();
+				AmpReports rep = tab.getReport();
+				if(rep.getAmpReportId().equals(reportId)){
+					iter.remove();
+					report.getDesktopTabSelections().remove(tab);
+					dbSession.delete(tab);
+					break;
+				}
+			}
+			tabs.add(sel);
+			report.getDesktopTabSelections().add(sel);
+			dbSession.save(sel);
+			tr.commit();
+			dbSession.flush();
+			
+		}
+		catch (Exception e) {
+			logger.error("unable to save tab", e);
+			tr.rollback();
+		}
+	}
+	public static void removeDesktopTab(Long reportId, Long teamMemberId,Integer position) {
+		Transaction tr=null;
+		Session dbSession =null;
+		AmpDesktopTabSelection sel=null;
+		try{
+			dbSession 	= PersistenceManager.getRequestDBSession();
+			tr		= dbSession.beginTransaction();
+			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMemberId );
+			Set<AmpDesktopTabSelection>	tabs=atm.getDesktopTabSelections();
+			AmpDesktopTabSelection tabToRemove=null;
+			Iterator<AmpDesktopTabSelection> iter=tabs.iterator();
+			while(iter.hasNext()){
+				AmpDesktopTabSelection tab=iter.next();
+				AmpReports report = tab.getReport();
+				if(report.getAmpReportId().equals(reportId)){
+					iter.remove();
+					report.getDesktopTabSelections().remove(tab);
+					dbSession.delete(tab);
+				}
+			}
+			tr.commit();
+			dbSession.flush();
+		}
+		catch (Exception e) {
+			logger.error("unable to save tab", e);
+			tr.rollback();
+		}
 	}
 
     

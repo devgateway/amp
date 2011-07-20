@@ -100,6 +100,7 @@
     <form-bean name="aimReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimTeamReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimTabManagerForm" type="org.digijava.module.aim.form.TabManagerForm" />
+    <form-bean name="aimTabPositionForm" type="org.digijava.module.aim.form.TabPositionForm" />
     <form-bean name="aimTeamAuditListForm" type="org.digijava.module.aim.form.TeamAuditForm" />
     <form-bean name="aimMemberReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
@@ -1101,6 +1102,10 @@
     <action name="aimTabManagerForm" path="/aim/tabManager" scope="request" type="org.digijava.module.aim.action.TabManagerAction">
     	<forward name="forward" path="/showLayout.do?layout=tabManagerData" />
     </action>
+     <action name="aimTabPositionForm" path="/aim/saveTabPosition" scope="request" type="org.digijava.module.aim.action.SaveTabPosition"/>
+     <action name="aimTabPositionForm" path="/aim/getTabPositionSize" scope="request" type="org.digijava.module.aim.action.GetTabPositionsCount"/>
+     <action name="aimTabPositionForm" path="/aim/getTakenTabPositions" scope="request" type="org.digijava.module.aim.action.GetTakenTabPositions"/>
+
     <action path="/aim/configureTeam" scope="request" type="org.digijava.module.aim.action.ConfigureTeam">
       <forward name="forward" path="/showLayout.do?layout=teamConfiguration" />
       <forward name="index" path="/aim/index.do" redirect="true" />

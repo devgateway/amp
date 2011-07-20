@@ -96,7 +96,104 @@ function popup(mylink, windowname)
 
 function confirmFunc() {
   return confirm("${translation}");
+  
 }
+function activate(id){
+	var number=0;
+	$.ajax({
+		   type: 'GET',
+		   url: '/aim/getTabPositionSize.do',
+		   cache : false,
+		   	success: function(data,msg){
+			number=parseInt(data);
+			if(number<5){
+				$(".activateTab"+id).hide();
+				$(".savePosition"+id).show();	
+			}
+			else{
+				alert("Please deactivate other tabs first!");
+			}
+		   },
+	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');} 
+	});
+	
+	return false;
+}
+function showHidePositions(id,selectedPosition){
+	$.ajax({
+	   	url:'/aim/getTakenTabPositions.do',
+	    cache : false,
+	    type: 'get',
+	    success: function(data, status) {
+	    	var arrayPosition = jQuery.parseJSON(data);
+	    	var selects=$("select[class^='savePositionDropDow']");
+	    	for(var j=0;j<selects.length;j++){
+	    		var index=1;
+	    		var select=selects[j];
+	    		var val = select.options[select.selectedIndex].value;
+	    		select.options.length=0;
+	    		select.options[0]=new Option("<digi:trn>None</digi:trn>", "-1", true, false);
+	    		for(var label=1;label<=5;label++){
+	    			var selected=false;
+	    			var skip=false;
+	    			var currvalue=label-1;
+	    			for (var l = 0; l<arrayPosition.length;  l++) {
+	            	    if(currvalue==arrayPosition[l].position){
+	            	    	if(val==arrayPosition[l].position){
+	            	    		skip=false;
+	            	    		selected=true;
+	            	    	}
+	            	    	else{
+	            	    		skip=true;
+	            	    	}
+	            	    	break;
+	            	    }
+	            	 }
+	    			if(!skip){
+	    				select.options[index]=new Option(label, currvalue, false, selected);	
+		    			index++;
+	    			}
+	    			
+	    		}
+	    	}
+	    	if(id!=null){
+	    		if(selectedPosition==-1){
+	        		$(".activateTab"+id).show();
+	        		$(".savePosition"+id).hide();
+	        	}
+	    	}
+	    	$("select[class^='savePositionDropDow']").removeAttr('disabled');
+	       },
+	    error: function(xhr, desc, err) {
+	       		alert("unable to perform action!");
+	        }
+	    });
+	
+}
+
+function savePosition(id){
+	var selectId="select.savePositionDropDown"+id;
+	var selectedPosition=$(selectId+  " option:selected").val();
+	$("select[class^='savePositionDropDow']").attr('disabled', 'disabled');
+	$.ajax({
+   	url:'/aim/saveTabPosition.do',
+    type: 'post',
+    data: {position:selectedPosition, reportId:id},
+    success: function(data, status) {
+    	showHidePositions(id,selectedPosition);   
+        },
+    error: function(xhr, desc, err) {
+       		alert("unable to perform action!");
+        }
+    });
+
+}
+
+$(document).ready(function() {
+	$("select[class^='savePositionDropDow']").attr('disabled', 'disabled');
+	showHidePositions();
+	});
+
 </SCRIPT>
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -346,6 +443,11 @@ function confirmFunc() {
 					                              								<td align="center" class="inside_header">
 																					<b><digi:trn>Fields</digi:trn></b>
 																				</td>
+																				<c:if test="${aimTeamReportsForm.showTabs}">
+																				<td align="center" class="inside_header">
+					                                								<b><digi:trn>Position</digi:trn></b>
+					                              								</td>
+																				</c:if>
 					                              								<td align="center" class="inside_header">
 					                                								<b><digi:trn key="aim:reportAction">Action</digi:trn></b>
 					                              								</td>
@@ -534,6 +636,34 @@ function confirmFunc() {
 						                                							</div>
 						                                							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
 					                                							</td>
+					                                							<c:if test="${aimTeamReportsForm.showTabs}">
+					                                							<td class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
+					                                						
+					                                							<c:forEach var="desktopTab" items="${report.desktopTabSelections}">
+					                                								<c:set var="position">
+					                            
+					                                								<c:if test="${desktopTab.owner.ampTeamMemId==aimTeamReportsForm.currentMemberId}">
+					                                									${desktopTab.index}
+					                                								</c:if>
+
+					                                								</c:set>
+					                                								</c:forEach>
+					                                								<a class="activateTab${report.ampReportId}" onclick="activate(${report.ampReportId})" <c:if test="${not empty position}">style="display:none"</c:if>><digi:trn>activate</digi:trn></a>
+					                                								<div class="savePosition${report.ampReportId}" <c:if test="${empty position}">style="display:none"</c:if>  >
+					                                								<select class="savePositionDropDown${report.ampReportId}" 
+																								onchange="savePosition(${report.ampReportId})">
+																									<option value="-1"><digi:trn>none</digi:trn></option>
+																									 <c:forEach var="i" begin="0" end="4">
+            																							<option value="${i}" <c:if test="${position==i}">selected</c:if>><c:out value="${i+1}" /></option>
+            																						</c:forEach>	
+																					</select>
+																					</div>
+
+					                                								 <c:remove var="position" />
+					                                								
+					                                				
+																				</td>
+					                                							</c:if>
 					                                							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 						                                							<p style="white-space: nowrap">
 						                                								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

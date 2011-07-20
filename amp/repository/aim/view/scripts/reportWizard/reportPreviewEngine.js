@@ -43,6 +43,15 @@ function ReportPreviewEngine (rpSettings) {
 	this.rows		= new Array();
 	this.rdArray	= new Array();
 	
+	this.rpSettings.colCounter	= new Array();
+	for (var i = 0; i < this.rpSettings.columns.length; i++) {
+		this.rpSettings.colCounter.push(1);
+	}
+	this.rpSettings.hierCounter	= new Array();
+	for (var i = 0; i < this.rpSettings.hierarchies.length; i++) {
+		this.rpSettings.hierCounter.push(1);
+	}
+	
 	this.parentEl	= null;
 	this.tableEl	= null;
 	
@@ -349,11 +358,11 @@ ActivityRow.prototype.renderRow	= function( ) {
 	this.parent.prototype.renderRow.call(this );
 	if ( this.hierarchyIdx >= 0)
 		for ( var i=this.hierarchyIdx; i<this.rpSettings.hierarchies.length; i++ ) {
-			var hCell	= new HierarchyCell(this.rpSettings, this.rpSettings.hierarchies[i] + " " + (i+1), i );
+			var hCell	= new HierarchyCell(this.rpSettings, this.rpSettings.hierarchies[i] + " " + this.rpSettings.hierCounter[i]++, i );
 			this.cells.push(hCell);
 		}
 	for ( var i=0; i<this.rpSettings.columns.length; i++ ) {
-		var tCell	= new TextCell(this.rpSettings, this.rpSettings.columns[i] + " " + (i+1) );
+		var tCell	= new TextCell(this.rpSettings, this.rpSettings.columns[i] + " " + this.rpSettings.colCounter[i]++ );
 		this.cells.push(tCell);
 	}
 	if ( !this.rpSettings.totalsOnly) {

@@ -13,8 +13,10 @@ function createPreview () {
 		fakeDivEl.style.display		= "";
 		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewSectionDiv');		
 	}
-	else
+	else {
 		fakeDivEl.style.display		= "none";
+		divEl.style.display		= "none";
+	}
 	
 	
 }

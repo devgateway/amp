@@ -640,14 +640,13 @@ $(document).ready(function() {
 					                                							<td class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 					                                						
 					                                							<c:forEach var="desktopTab" items="${report.desktopTabSelections}">
-					                                								<c:set var="position">
-					                            
 					                                								<c:if test="${desktopTab.owner.ampTeamMemId==aimTeamReportsForm.currentMemberId}">
+					                                									<c:set var="position">
 					                                									${desktopTab.index}
-					                                								</c:if>
-
-					                                								</c:set>
+					                                									</c:set>
+					                                								</c:if>	                                								
 					                                								</c:forEach>
+
 					                                								<a class="activateTab${report.ampReportId}" onclick="activate(${report.ampReportId})" <c:if test="${not empty position}">style="display:none"</c:if>><digi:trn>activate</digi:trn></a>
 					                                								<div class="savePosition${report.ampReportId}" <c:if test="${empty position}">style="display:none"</c:if>  >
 					                                								<select class="savePositionDropDown${report.ampReportId}" 

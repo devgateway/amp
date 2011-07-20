@@ -656,7 +656,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
 							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="selectedOrgName" type='text' id="${nameId}" value='${pledgeForm.selectedOrgName}' style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
+							                              <input name="selectedOrgName" type='text' id="${nameId}" value="${pledgeForm.selectedOrgName}" style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
 													

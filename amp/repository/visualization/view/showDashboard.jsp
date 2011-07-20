@@ -1310,15 +1310,15 @@ function changeChild (selected){
 			</select>
 			Show legend <input type="checkbox" id="fundingChartShowLegend">
 			Show data label <input type="checkbox" id="fundingChartShowDataLabel"></br>
-			<input type="button" value="Update chart" onclick="updateGraph(event, 'fundingChart')">
+			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'fundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'fundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'fundingChart')" title="Data View"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
 			<br />
 			<br />
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
-				<div id="fundingChart">
+				<div id="FundingChart">
 					<a href="http://www.adobe.com/go/getflashplayer">
 						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
@@ -2162,7 +2162,7 @@ function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'fundingChart');
+	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');
@@ -2337,7 +2337,7 @@ function hideFullDonors(){
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'fundingChart');
+	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');

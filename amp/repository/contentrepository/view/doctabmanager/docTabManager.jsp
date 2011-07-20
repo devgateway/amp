@@ -123,7 +123,22 @@ border-right: 1px solid rgb(208, 208, 208);
 		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId='+filterId, new RetrieveFilters(publicListObj) );
 	}
 	
-	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+	YAHOO.util.Event.on(window, "load", afterPageLoad);
+	
+	
+	function savePositions () {
+		var params ='';
+		var positions = $("select[id^='pos_']");
+		if(positions!=null){
+        	for(var i=0;i < positions.length; i++){
+        		params+= "&publicViewPosition="+positions[i].value;
+        	}
+    	}
+		
+		document.forms["crDocTabManagerForm"].action	= "/contentrepository/publicDocTabManager.do?action=savePositions"+params;
+		document.forms["crDocTabManagerForm"].submit();
+		
+	}
 </script>
 <digi:instance property="crDocTabManagerForm" />
 <bean:define id="myForm" toScope="request" name="crDocTabManagerForm" />
@@ -173,65 +188,27 @@ border-right: 1px solid rgb(208, 208, 208);
 						<table border="0" cellPadding="1" cellSpacing="0" width="980" style="position: relative; font-size:12px;" align=center>
 								<tr>
 									<td>
-										<form name="publicViewPositionForm" method="POST" action="/contentrepository/publicDocTabManager.do?action=savePositions">
-										<span style="white-space: nowrap;">
-											<digi:trn>Position 1</digi:trn>:
-											<select name="select" class="inp-text" style="font-size: 10px; margin-right:20px;">
-                                              <option value="-1">
-                                                <digi:trn>Please select from below</digi:trn>
-                                              </option>
-                                              <c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-                                                <c:set var="optionSelected"> </c:set>
-                                                <c:if test="${filter.publicViewPosition==0}">
-                                                  <c:set var="optionSelected">selected="selected"</c:set>
-                                                </c:if>
-                                                <option value="${filter.id}" ${optionselected}>${filter.name}</option>
-                                              </c:forEach>
-                                            </select>
-</span>&nbsp;
-										<span style="white-space: nowrap;">
-											<digi:trn>Position 2</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px; margin-right:20px;">
-												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-													<c:set var="optionSelected"> </c:set>
-													<c:if test="${filter.publicViewPosition==1}">
-														<c:set var="optionSelected">selected="selected"</c:set>
-													</c:if>
-													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-												</c:forEach>
-											</select>&nbsp;
-										</span>
-										<span style="white-space: nowrap;">
-											<digi:trn>Position 3</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px; margin-right:20px;">
-												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-													<c:set var="optionSelected"> </c:set>
-													<c:if test="${filter.publicViewPosition==2}">
-														<c:set var="optionSelected">selected="selected"</c:set>
-													</c:if>
-													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-												</c:forEach>
-											</select>&nbsp;
-										</span>
-										<span style="white-space: nowrap;">
-											<digi:trn>Position 4</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
-												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-													<c:set var="optionSelected"> </c:set>
-													<c:if test="${filter.publicViewPosition==3}">
-														<c:set var="optionSelected">selected="selected"</c:set>
-													</c:if>
-													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-												</c:forEach>
-											</select>
-										</span>
+										<c:forEach var="iterateIndex" begin="1" end="4">
+											<span style="white-space: nowrap;">
+												<digi:trn>Position</digi:trn>${iterateIndex}:
+												<select name="select" class="inp-text" style="font-size: 10px; margin-right:20px;" id="pos_${iterateIndex-1}">
+	                                              <option value="-1">
+	                                                <digi:trn>Please select from below</digi:trn>
+	                                              </option>
+	                                              <c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+	                                                <c:set var="optionSelected"> </c:set>
+	                                                <c:if test="${filter.publicViewPosition==iterateIndex-1}">
+	                                                  <c:set var="optionSelected">selected="selected"</c:set>
+	                                                </c:if>
+	                                                <option value="${filter.id}" ${optionSelected}>${filter.name}</option>
+	                                              </c:forEach>
+	                                            </select>
+											</span>&nbsp;											
+										</c:forEach>
 										<br/><br/>
-										<center><input type="submit" class="buttonx" value="<digi:trn>Submit</digi:trn>" /></center>
-										</form>
-										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />									</td>
+										<center><input type="button" class="buttonx" value="<digi:trn>Submit</digi:trn>" onclick="savePositions()"/></center>
+										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />									
+									</td>
 								</tr>
 								<tr>
 						        	<td>
@@ -240,8 +217,9 @@ border-right: 1px solid rgb(208, 208, 208);
 								    	</button>
 								    	<button id="publicLabelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
-								    	</button>								    </td>								    
-								</tr>								
+								    	</button>
+								    </td>
+								</tr>
 								<tr>
 									<td>
 										<div style="width:1000px;" class="yui-skin-sam" id="content"> 
@@ -284,22 +262,21 @@ border-right: 1px solid rgb(208, 208, 208);
 </table>
 
 <div id="titlePanel" style="display: none">
-		<div class="hd" style="font-size: 8pt">
-			<digi:trn>Please enter a name for the filter</digi:trn>
-		</div>
-		<div class="bd" id="titlePanelBody">
-			<digi:form action="/publicDocTabManager.do" method="POST">	
+	<div class="hd" style="font-size: 8pt">
+		<digi:trn>Please enter a name for the filter</digi:trn>
+	</div>
+	<div class="bd" id="titlePanelBody">
+		<digi:form action="/publicDocTabManager.do" method="POST">	
 			<html:text onkeypress="return checkEnter(event);" property="savingFilterName" styleClass="inp-text" 
-				style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
-			</digi:form>
-		</div>
-		<div class="ft" align="right">
-			<button id="save_button" type="button" class="buton" 
-				 onclick="saveFilter();">
-					<digi:trn>Save</digi:trn>
-			</button>
-			&nbsp;&nbsp;&nbsp;
-		</div>
+			style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
+		</digi:form>
+	</div>
+	<div class="ft" align="right">
+		<button id="save_button" type="button" class="buton" onclick="saveFilter();">
+			<digi:trn>Save</digi:trn>
+		</button>
+		&nbsp;&nbsp;&nbsp;
+	</div>
 </div>
 
 

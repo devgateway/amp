@@ -48,6 +48,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
 		<![CDATA[
+			import flash.external.ExternalInterface;
+			import org.axiis.events.LayoutItemEvent;
+			
 			import com.exportUtil.*;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -238,7 +241,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
-
+			public function itemClick(evt:LayoutItemEvent):void{
+				var year:Number = null;
+				if (sliderYear.visible == true){
+					year = sliderYear.value;
+				}
+				ExternalInterface.call("itemClick",evt.item.data.id,"sector",year);
+			}
 		]]>
 	</mx:Script>
 	
@@ -424,6 +433,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
 						showDataLabel="false"
+						itemClick="this.itemClick(event);"
 						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
 					
 					

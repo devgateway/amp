@@ -43,6 +43,9 @@
 	</mx:HTTPService>
 	<mx:Script>
 		<![CDATA[
+			import flash.external.ExternalInterface;
+			import org.axiis.events.LayoutItemEvent;
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
@@ -229,6 +232,14 @@
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
+			public function itemClick(evt:LayoutItemEvent):void{
+				var year:Number = null;
+				if (sliderYear.visible == true){
+					year = sliderYear.value;
+				}
+				ExternalInterface.call("itemClick",evt.item.data.id,"sector",year);
+			}
+
 		]]>
 	</mx:Script>
 	<mx:Style source="styles/Axiis_Examples.css"/>
@@ -286,6 +297,7 @@
 				fontSize="10"
 				fontColor="0xFFFFFF"
 				labelFunction="wrapIt"
+				itemClick="this.itemClick(event);"
 				dataTipLabelFunction="dataTipFunction"
 				>
 				<axiis:states>

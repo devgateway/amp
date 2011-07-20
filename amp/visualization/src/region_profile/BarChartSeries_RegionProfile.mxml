@@ -48,15 +48,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
 		<![CDATA[
-			import org.axiis.data.DataSet;
+			import com.exportUtil.*;
+			
+			import flash.external.ExternalInterface;
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-			import com.exportUtil.*;
-	
+			
+			import org.axiis.data.DataSet;
+			import org.axiis.events.LayoutItemEvent;
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
@@ -238,6 +242,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
+			
+			public function itemClick(evt:LayoutItemEvent):void{
+				//Alert.show(evt.item.data.percentage);
+				var year:Number = null;
+				if (sliderYear.visible == true){
+					year = sliderYear.value;
+				}
+				ExternalInterface.call("itemClick",evt.item.data.id,"region",year);
+			}
 		]]>
 	</mx:Script>
 	
@@ -413,6 +426,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 						dataProvider="{hLayout.currentDatum}"
 						dataField="{childDataField}"
 						labelField="{childLabelField}"
+						
 						showLabel="false"
 						percentGap=".1"
 						fill="{clusterFill}"
@@ -422,8 +436,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
 						showDataLabel="false"
+						itemClick="this.itemClick(event);"
 						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
-					
+						
 					
 				</axiis:layouts>
 				

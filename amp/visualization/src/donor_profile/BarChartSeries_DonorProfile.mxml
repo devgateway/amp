@@ -48,6 +48,9 @@
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
 		<![CDATA[
+			import flash.external.ExternalInterface;
+			import org.axiis.events.LayoutItemEvent;
+			
 			import org.axiis.data.DataSet;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -238,6 +241,14 @@
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
 				messagePanel.height = h;
+			}
+			public function itemClick(evt:LayoutItemEvent):void{
+				//Alert.show(evt.item.data.percentage);
+				var year:Number = null;
+				if (sliderYear.visible == true){
+					year = sliderYear.value;
+				}
+				ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
 			}
 
 		]]>
@@ -444,7 +455,8 @@
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
 						showDataLabel="false"
-					    minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
+						itemClick="this.itemClick(event);"
+						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
 
 
 				</axiis:layouts>

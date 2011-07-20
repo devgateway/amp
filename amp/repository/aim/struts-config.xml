@@ -1583,6 +1583,8 @@
     <action name="aimReportWizardForm" path="/aim/reportWizard" scope="session" type="org.digijava.module.aim.action.reportwizard.ReportWizardAction">
     	 <forward name="showReport" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
     	 <forward name="showTab" path="/showLayout.do?layout=aim_dhtmlTabWizard" />
+    	 <forward name="showReport_onepager" path="/showLayout.do?layout=aim_dhtmlReportWizard_onepager" />
+    	 <forward name="showTab_onepager" path="/showLayout.do?layout=aim_dhtmlTabWizard_onepager" />
     	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
     </action>
 <!--    <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">-->

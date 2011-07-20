@@ -79,6 +79,16 @@ function getSelectedFields( ulId, name ) {
 	}
 	return ret;	
 }
+function getSelectedFieldsNames( ulId ) {
+	var ret			= new Array();
+	var ulEl		= document.getElementById( ulId );
+	
+	var fields		= ulEl.getElementsByTagName( "input" );
+	for ( var i=0; i<fields.length; i++ ) {
+		ret.push(fields[i].parentNode.innerHTML.replace(/<[^>]*>/g, "").replace(/^\s+|\s+$/g, '') );
+	}
+	return ret;	
+}
 
 function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.failureMessage	= failureMessage;

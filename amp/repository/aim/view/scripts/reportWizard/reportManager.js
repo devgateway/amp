@@ -1,3 +1,146 @@
+function createPreview () {
+	var divEl		= document.getElementById("previewSectionDiv");
+	if (divEl == null)
+		return;
+	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
+	divEl.innerHTML	= "";
+	
+	var colArray		= getSelectedFieldsNames("dest_col_ul");
+	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
+	
+	if ( colArray.length != 0 || hierArray.length != 0 ) {
+		divEl.style.display		= "";
+		fakeDivEl.style.display		= "";
+		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewSectionDiv');		
+	}
+	else
+		fakeDivEl.style.display		= "none";
+	
+	
+}
+function populateRPS(rpSettings) {
+	var colArray		= getSelectedFieldsNames("dest_col_ul");
+	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
+	var measArray		= getSelectedFieldsNames("dest_measures_ul");
+	for ( var i=0; i<hierArray.length; i++ ) {
+		var hier	= hierArray[i];
+		for (var j = 0; j < colArray.length; j++) {
+			var col = colArray[j];
+			if ( hier == col ) {
+				colArray.splice(j, 1);
+				break;
+			}
+		}
+	}
+	if ( measArray == null || measArray.length == 0 ) {
+		measArray.push("UNSELECTED MEASURE");
+	}
+	
+	var period			= getReportPeriod();
+	if (  period == "M" ) {
+		rpSettings.months		= true;
+	}
+	else
+		rpSettings.months		= false;
+	if (  period == "Q" ) {
+		rpSettings.quarters		= true;
+	}
+	else
+		rpSettings.quarters		= false;
+	if (  period == "N" ) {
+		rpSettings.totalsOnly		= true;
+	}
+	else
+		rpSettings.totalsOnly		= false;
+	
+	
+	rpSettings.columns			= colArray;
+	rpSettings.hierarchies		= hierArray;
+	rpSettings.measures			= measArray;
+	rpSettings.summary			= getHideActivities();
+	
+	
+	
+	return rpSettings;
+}
+
+function continueInitialization( e, rmParams ){
+		if (rmParams.onePager)
+			new KeepWithScroll("toolbarMarkerDiv", "toolbarDivStep0" );
+	
+		aimReportWizardForm.reportDescriptionClone.value	= unescape(aimReportWizardForm.reportDescription.value);
+		treeObj = new DHTMLSuite.JSDragDropTree();
+		treeObj.setTreeId('dhtmlgoodies_tree');
+		treeObj.init();
+		//treeObj.minusImage = 'DHTMLSuite_plus.gif';
+		treeObj.showHideNode(false,'dhtmlgoodies_tree');
+
+		
+		
+		if ( rmParams.desktopTab )
+			if ( rmParams.onePager )
+				repManager	= new OPTabReportManager();
+			else
+				repManager		= new TabReportManager();
+		else
+			if ( rmParams.onePager )
+				repManager		= new OPNormalReportManager();
+			else
+				repManager		= new NormalReportManager();
+		
+		var saveBtns		= document.getElementsByName("save");	
+		for (var i=0; i<saveBtns.length; i++  ) {
+			repManager.addStyleToButton(saveBtns[i]);
+		}
+		for (var i=0; i<YAHOO.amp.reportwizard.numOfSteps; i++) {
+			repManager.addStyleToButton("step"+ i +"_prev_button");
+			repManager.addStyleToButton("step"+ i +"_next_button");
+			repManager.addStyleToButton("step"+ i +"_add_filters_button");
+			repManager.addStyleToButton("step"+ i +"_cancel");
+		}
+		
+		columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
+		columnsDragAndDropObject.createDragAndDropItems();
+		new YAHOO.util.DDTarget('source_measures_ul');
+		new YAHOO.util.DDTarget('dest_measures_ul');
+		new YAHOO.util.DDTarget('source_hierarchies_ul');
+		new YAHOO.util.DDTarget('dest_hierarchies_ul');
+		measuresDragAndDropObject	= new MyDragAndDropObject('source_measures_ul');
+		measuresDragAndDropObject.createDragAndDropItems();
+		
+		//createDragAndDropItems('source_ul');
+		//createDragAndDropItems('dest_col_ul');
+		//new YAHOO.util.DDTarget('dest_li_1');
+		//new YAHOO.util.DD('logDiv');
+		if ( !rmParams.onePager ) {
+			for (var i=1; i<YAHOO.amp.reportwizard.numOfSteps; i++) {
+				tab		= YAHOO.amp.reportwizard.tabView.getTab(i);
+				tab.set("disabled", true);
+			}
+			tab2	= YAHOO.amp.reportwizard.tabView.getTab(2);
+			tab2.addListener("beforeActiveChange", generateHierarchies);
+		}
+		ColumnsDragAndDropObject.selectObjsByDbId ("source_col_div", "dest_col_ul", selectedCols);
+		generateHierarchies();
+		MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
+		MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
+
+		repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
+											"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
+		
+		saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
+											
+		var dg			= document.getElementById("DHTMLSuite_treeNode1");
+		var cn			= dg.childNodes;
+		
+		for (var i=0; i<cn.length; i++) {
+			if ( cn[i].nodeName.toLowerCase()=="input" || cn[i].nodeName.toLowerCase()=="img" ||
+				cn[i].nodeName.toLowerCase()=="a" )
+				cn[i].style.display		= "none";
+		}
+		repManager.checkSteps();
+	}
+
 function NormalReportManager () {
 	;
 }
@@ -76,6 +219,7 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 }
 
 NormalReportManager.prototype.checkSteps	= function () {
+	createPreview();
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
@@ -280,4 +424,30 @@ TabReportManager.prototype.checkMeasures	= function () {
 TabReportManager.prototype.cancelWizard	= function () {
 	window.location = "/viewTeamReports.do?tabs=true";
 }
+
+
+
+
+
+OPNormalReportManager.prototype					= new NormalReportManager();
+OPNormalReportManager.prototype.constructor		= OPNormalReportManager;
+function OPNormalReportManager() {
+	;
+}
+
+
+OPNormalReportManager.prototype.enableTab		= function(tabIndex){}
+OPNormalReportManager.prototype.disableTab		= function(tabIndex){}
+
+
+
+OPTabReportManager.prototype					= new TabReportManager();
+OPTabReportManager.prototype.constructor		= OPTabReportManager;
+function OPTabReportManager() {
+	;
+}
+
+
+OPTabReportManager.prototype.enableTab		= function(tabIndex){}
+OPTabReportManager.prototype.disableTab		= function(tabIndex){}
 

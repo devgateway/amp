@@ -19,6 +19,8 @@
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
+
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
@@ -28,8 +30,10 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/ScrollEvent.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportPreviewEngine.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>		
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 
 <!-- leave this to make the trees work. -->
@@ -147,7 +151,7 @@
 	selectedCols						= new Array();
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
-		
+	
 	function initializeDragAndDrop() {
 		var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 		//alert( YAHOO.util.Dom.getDocumentHeight() );
@@ -155,14 +159,14 @@
 		var rd				= document.getElementsByName("reportDescription")[0];
 		rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
 		
-		
 		var repManagerParams	= {
-									desktopTab: ${myForm.desktopTab},
-									onePager: ${myForm.onePager}
-								};
+				desktopTab: ${myForm.desktopTab},
+				onePager: ${myForm.onePager}
+			};
 		
-		YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
-		YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization, repManagerParams);
+		//YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
+		//YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization);
+		continueInitialization(null, repManagerParams );
 	}
 
 	
@@ -231,12 +235,11 @@ body {
 	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
 		<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 			<tr>
-				<td width="768">
+				<td width="1000">
 					<div class="step_head">
 						<div id="rgTitle" class="step_head_cont">${pageTitle}</div>
 					</div>
 				</td>
-				<td width="232">&nbsp;</td>
 			</tr>
 		  	<tr valign="top">
 				<td class="main_side">
@@ -246,34 +249,6 @@ body {
 						<jsp:include page="dhtmlReportWizard_step3.jsp"></jsp:include>
 						<jsp:include page="dhtmlReportWizard_step4.jsp"></jsp:include>
 					</div>
-				</td>
-				<td style="padding-top:35px;">
-					<ul class="yui-nav" style="width: 70%; position: static;">
-						<div class="tab selected" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">1</span>
-								<a href="#type_step_div" class="l_big_b"><digi:trn>Report Details</digi:trn></a>
-							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">2</span>
-								<a href="#columns_step_div" class="l_big_b"><digi:trn>Columns</digi:trn></a>
-							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">3</span>
-								<a href="#hierarchies_step_div" class="l_big_b"><digi:trn>Hierarchies</digi:trn></a>
-							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">4</span>
-								<a href="#measures_step_div" class="l_big_b"><digi:trn>Measures</digi:trn></a>
-							</div>
-						</div>
-					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -294,6 +269,9 @@ body {
 				</div>
 			</tr>
 		</table>
+	</div>
+	<div id="fakePreviewSectionDiv" style="display: none; height: 210px;">&nbsp;</div>
+	<div id="previewSectionDiv" style="display: none;overflow:auto; position:fixed; bottom: 0px; width: 100%; height: 200px; border-top: 1px solid black; padding-top: 5px; background-color: white;">
 	</div>
 </digi:form>
 <!-- MAIN CONTENT PART END -->

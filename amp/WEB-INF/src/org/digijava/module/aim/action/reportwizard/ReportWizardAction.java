@@ -87,6 +87,9 @@ public class ReportWizardAction extends MultiAction {
 		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
+		if ( request.getParameter("onepager")!=null && "true".equals(request.getParameter("onepager")) )
+			myForm.setOnePager(true);
+		
 		if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
 			modeReset(mapping, form, request, response);
 		
@@ -157,6 +160,10 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
+		
+		String onePager				= "";
+		if ( myForm.getOnePager() )
+			onePager	= "_onepager";
 
 		//Add pledges reports support, the goals is to remove all not pledges columns
 		Integer typereport=0;
@@ -190,9 +197,9 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		if ( myForm.getDesktopTab() )
-			return mapping.findForward("showTab");
+			return mapping.findForward("showTab" + onePager);
 		else
-			return mapping.findForward("showReport");
+			return mapping.findForward("showReport" + onePager);
 	}
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {

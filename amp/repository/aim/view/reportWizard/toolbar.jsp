@@ -11,14 +11,16 @@
 	
 <div>
 	<div style="float:left;">
-		<button type="button" class="${className}" ${disabledString} onclick="repManager.previousStep(${stepNum + 1});" id="step${stepNum}_prev_button"/>
-			<digi:trn key='btn:previous'>Previous</digi:trn>
-		</button>
-		<button type="button" value="Next" class="buttonx" onclick="repManager.nextStep(${stepNum + 1})" id="step${stepNum}_next_button"/>
-			<digi:trn key="btn:next">Next</digi:trn>
-		</button>
+		<c:if test="${!myForm.onePager}">
+			<button type="button" class="${className}" ${disabledString} onclick="repManager.previousStep(${stepNum + 1});" id="step${stepNum}_prev_button"/>
+				<digi:trn key='btn:previous'>Previous</digi:trn>
+			</button>
+			<button type="button" value="Next" class="buttonx" onclick="repManager.nextStep(${stepNum + 1})" id="step${stepNum}_next_button"/>
+				<digi:trn key="btn:next">Next</digi:trn>
+			</button>
+		</c:if>
 	</div>
-	<div style="float:right;">
+	<div style="float:right; z-index: 3000;" id="toolbarDivStep${stepNum}">
 		<feature:display  name="Filter Button" module="Report and Tab Options">
 			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" onclick="repFilters.showFilters()"/>
 				<digi:trn key="btn:repFilters">Filters</digi:trn>

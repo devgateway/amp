@@ -39,6 +39,8 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean useFilters			= false;
 	
 	private Boolean allowEmptyFundingColumns	= false;
+	private Boolean onePager			= false;
+	
 	private String projecttitle= "Project Title";
 	
 	public String getProjecttitle() {
@@ -193,6 +195,14 @@ public class ReportWizardForm extends ActionForm {
 
 	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
+	}
+
+	public Boolean getOnePager() {
+		return onePager;
+	}
+
+	public void setOnePager(Boolean onePager) {
+		this.onePager = onePager;
 	}
 	
 }

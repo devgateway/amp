@@ -50,11 +50,20 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
 			import com.exportUtil.*;
+
+			import mx.events.MoveEvent;
+			import mx.managers.DragManager;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import flash.events.MouseEvent;
 			
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
 			private var palette:Array = new Array();
+			
+			private var xS:int; 
+			private var yS:int;
 
 			/**
 			 * This example is using xml data read from the file system. 
@@ -124,6 +133,28 @@
 					groupSeparator = " ";
 				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				
+				
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
+				
+				chartLabel.text = title;
+				chartLabel.setStyle("fontFamily", fontFamily);
+				chartLabel.setStyle("fontSize", fontSize);
+				if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+				
+				if(showDataLabel == "true")
+					myCluster.showDataLabel = true;
+				else
+					myCluster.showDataLabel = false;
 				
 			}
 			
@@ -201,6 +232,7 @@
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
 				}
 				catch(errObject:Error){
 					//Fail silently when running standalone
@@ -212,11 +244,43 @@
 				service.send();
 				start();
 			}
+			public function refreshGraphNoData():void
+			{
+				start();
+			}
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
 
+			//
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
 		]]>
 	</mx:Script>
 
@@ -251,13 +315,16 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="350">
+			   height="450" 
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="20"
+	<axiis:DataCanvas top="170"
 		bottom="0"
 		width="{this.width*.9}"
 		id="dc"
@@ -461,6 +528,7 @@
 			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
+	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" width="202" height="36" fontSize="12"/>
 </mx:Canvas>
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 

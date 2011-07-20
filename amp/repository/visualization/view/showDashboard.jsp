@@ -22,7 +22,7 @@
 		padding:0px 0px 0px 0px;
 		vertical-align:top;
 		width:634px;
-		height:350px;
+		height:450px;
 	}
 	.side_opt_sel {
 		background-color: rgb(191, 210, 223); 
@@ -1137,7 +1137,7 @@ function changeChild (selected){
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 		<tr>
 			<td>
-				<a href="javascript:document.getElementById('fundingChartTitle').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('fundingChartHeader').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('aidPredChartTitle').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('aidTypeChartTitle').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('finInstChartTitle').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
@@ -1278,12 +1278,33 @@ function changeChild (selected){
 	<div class="yui-content">
 	<div id="tab1">
 		<fieldset>
-			<legend><span id="fundingChartTitle" class=legend_label></span></legend>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
+			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			Title <input type="text" id="fundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>">
+<!-- 			Font 
+			<select id="fundingChartShowFontFamily">
+				<option value="Verdana">Verdana</option>
+				<option value="Arial">Arial</option>
+			</select> -->
+			<input type="hidden" id="fundingChartShowFontFamily" value="Verdana"/>
+			Size
+			<select id="fundingChartFontSize">
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+			</select>
+			Show legend <input type="checkbox" id="fundingChartShowLegend">
+			Show data label <input type="checkbox" id="fundingChartShowDataLabel"></br>
+			<input type="button" value="Update chart" onclick="updateGraph(event, 'fundingChart')">
+			</div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'fundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'fundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'fundingChart')" title="Data View"/></div>
+			<br />
+			<br />
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
-				<div id="FundingChart">
+				<div id="fundingChart">
 					<a href="http://www.adobe.com/go/getflashplayer">
 						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
@@ -1994,8 +2015,8 @@ function refreshBoxes(o){
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	
-	div = document.getElementById("fundingChartTitle");
-	inner = "<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>";
+//	div = document.getElementById("fundingChartTitle");
+//	inner = "<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>";
 	/*if (document.getElementById("commitments_visible").checked==true) {
 		inner = inner + trnCommitments + " - ";
 		}
@@ -2012,7 +2033,7 @@ function refreshBoxes(o){
 			inner = inner + trnPledges;
 		}
 	}*/
-	div.innerHTML = inner;
+//	div.innerHTML = inner;
 
 	var type = "" + getOptionChecked("transaction_type_");
 	var fundType = "";
@@ -2127,7 +2148,7 @@ function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'fundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');
@@ -2141,6 +2162,36 @@ function initDashboard(){
 		changeChart(null, 'bar', 'RegionProfile');
 	}
 	callbackApplyFilter();
+}
+
+function getValueToFlash(idContainer, field){
+	var inputObject = document.getElementById(idContainer + field);
+	var returnValue;
+	
+	if(inputObject != undefined && inputObject.type == "checkbox"){
+		returnValue = (inputObject == undefined) ? "" : inputObject.checked;
+	}
+	else
+	{
+		returnValue = (inputObject == undefined) ? "" : inputObject.value;
+	}
+	return returnValue;
+}
+
+
+function updateGraph(e, chartName){
+
+	//Get array of graphs
+	var allGraphs = document.getElementsByName("flashContent");
+	
+	//Iterate and refresh the graph
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		// Get flash object and refresh it by calling internal
+		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
+			allGraphs[idx].children[0].refreshGraphNoData();
+			break;
+		}
+	}
 }
 
 function changeChart(e, chartType, container){
@@ -2162,16 +2213,36 @@ function changeChart(e, chartType, container){
 	 
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
 	var groupSeparator = document.getElementById("groupSeparator").value;
+	
+	var title = document.getElementById(container + "Title") == undefined ? "" : document.getElementById(container + "Title").value;
+	var fontSize = document.getElementById(container + "FontSize") == undefined ? "" : document.getElementById(container + "FontSize").value;
+	var fontFamily = document.getElementById(container + "FontFamily") == undefined ? "" : document.getElementById(container + "FontFamily").value;
+	var showLegend = document.getElementById(container + "ShowLegend") == undefined ? "" : document.getElementById(container + "ShowLegend").value;
+	var showDataLabel = document.getElementById(container + "ShowDataLabel") == undefined ? "" : document.getElementById(container + "ShowDataLabel").value;
+
+	console.log("title:" + title);
+	console.log("showLegend:" + showLegend);
+	console.log("showDataLabel:" + showDataLabel);
 	//var minSlider =  "" + (currentYear - yearsInRange + 1);
 	//var maxSlider =  "" + currentYear;
-	var flashvars = { decimalSeparator: decimalSeparator, groupSeparator: groupSeparator, palette: palette };
+	var flashvars = { 
+			decimalSeparator: decimalSeparator, 
+			groupSeparator: groupSeparator, 
+			palette: palette, 
+			title: title, 
+			fontSize: fontSize, 
+			fontFamily: fontFamily, 
+			showLegend: showLegend, 
+			showDataLabel: showDataLabel,
+			id: container
+		};
 	
 	var params = {};
 	var attributes = {};
 	attributes.id = container;
 	switch(chartType){
 		case "bar":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "450", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "donut":
 			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
@@ -2252,7 +2323,7 @@ function hideFullDonors(){
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'fundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');

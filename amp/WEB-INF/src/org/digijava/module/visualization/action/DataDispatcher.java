@@ -520,15 +520,16 @@ public class DataDispatcher extends DispatchAction {
 					int index = 0;
 					 while(it.hasNext() && index <= 4){
 						Map.Entry entry = (Map.Entry)it.next();
+						AmpSector sec = (AmpSector) entry.getKey();
 	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), sectorTotal);
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<sector name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<sector name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -826,16 +827,17 @@ public class DataDispatcher extends DispatchAction {
     				int index = 0;
     				 while(it.hasNext() && index <= 4){
     					Map.Entry entry = (Map.Entry)it.next();
+    					AmpOrganisation org = (AmpOrganisation) entry.getKey();
      	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), donorTotal);
      	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
      	                if (donut){
      	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-     	                		xmlString.append("<donor name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
      	                		index++;
      	                	}
      	                } else {
      	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-     	                		xmlString.append("<donor name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
      	                		index++;
  	     	                }
      	                }
@@ -1159,7 +1161,7 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<aidtype name=\"" + value.getValue() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<aidtype name=\"" + value.getValue() + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
@@ -1185,7 +1187,7 @@ public class DataDispatcher extends DispatchAction {
 		                } else {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
-						xmlString.append("<aidtype category=\"" + value.getValue() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+						xmlString.append("<aidtype category=\"" + value.getValue() + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 						aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 					xmlString.append("</year>\n");
@@ -1320,10 +1322,10 @@ public class DataDispatcher extends DispatchAction {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
-				xmlString.append("<fundingtype category=\"Planned\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+				xmlString.append("<fundingtype category=\"Planned\" id=\"" + Constants.PLANNED + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
-				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+				xmlString.append("<fundingtype category=\"Actual\" id=\"" + Constants.ACTUAL + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				xmlString.append("</year>\n");
 			}
@@ -1490,7 +1492,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					.append("<fundingtype category=\"Disbursements\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
@@ -1498,7 +1500,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					.append("<fundingtype category=\"Commitments\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
@@ -1506,7 +1508,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Expenditures\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					.append("<fundingtype category=\"Expenditures\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
@@ -1515,7 +1517,7 @@ public class DataDispatcher extends DispatchAction {
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				xmlString.append("</year>\n");
@@ -1609,6 +1611,7 @@ public class DataDispatcher extends DispatchAction {
 		return null;
 	}
 
+	
 	public ActionForward getJSONObject(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -1791,15 +1794,16 @@ public class DataDispatcher extends DispatchAction {
 					int index = 0;
 					 while(it.hasNext() && index <= 4){
 						Map.Entry entry = (Map.Entry)it.next();
+						AmpCategoryValueLocations loc = (AmpCategoryValueLocations) entry.getKey();
 	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), regionTotal);
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -2178,5 +2182,139 @@ public class DataDispatcher extends DispatchAction {
 		return null;
 	}
         
+	public ActionForward getActivitiesList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm)form;
+		DashboardFilter filter = visualizationForm.getFilter();
+		String type = request.getParameter("type");
+		String id = request.getParameter("id");
+		String year = request.getParameter("year");
+
+		if (id==null && id.equals("0") && id.length()!=0) {
+			return null;
+		}
+        JSONObject root = new JSONObject();
+	    JSONArray children = new JSONArray();
+	    JSONObject child = new JSONObject();
+	    
+	    Date startDate = null;
+        Date endDate = null;
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        if (year!=null && !year.equals("0") && year.length()!=0) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, Integer.parseInt(year));
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, Integer.parseInt(year));
+    	} else {
+    		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange()-1);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+    	}
+    	
+        if (type.equals("region")){
+	    	Long[] ids = {Long.parseLong(id)};
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelLocationIds(ids);
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("sector")){
+	    	Long[] ids = {Long.parseLong(id)};
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelSectorIds(ids);
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("donor")){
+	    	Long[] ids = {Long.parseLong(id)};
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setOrgIds(ids);
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("funding")){
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("aidPredictability")){
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), Integer.parseInt(id));
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("aidType")){
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+        if (type.equals("finInstrument")){
+            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), Constants.ACTUAL);
+            Iterator<AmpActivityVersion> it = activities.iterator();
+            while(it.hasNext()){
+            	AmpActivityVersion act = it.next();
+				child.put("ID", act.getAmpActivityId());
+				child.put("name", act.getName());
+				children.add(child);
+			}
+			root.put("children", children);
+	    }
+
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+		return null;
+	}
 	
 }

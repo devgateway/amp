@@ -102,7 +102,7 @@ yuiLoadingPanel.prototype = {
 <digi:instance property="visualizationform"/>
 <digi:form action="/filters.do">
 
-<!-- BREADCRUMB START -->
+<!-- BREADCRUMB START
 <div class="centering">
  <digi:trn>Dashboards</digi:trn><span class="breadcrump_sep"><b>»</b></span>
  	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -116,7 +116,7 @@ yuiLoadingPanel.prototype = {
  	</c:if>
 </div>
 <br/>
-<!-- BREADCRUMB END -->
+BREADCRUMB END -->
 
 <!-- POPUPS START -->
 <script language="javascript">
@@ -126,6 +126,7 @@ YAHOO.namespace("YAHOO.amp");
 
 var myPanel = new YAHOO.widget.Panel("newPanel", {
 	width:"750px",
+	maxHeight:"500px",
 	fixedcenter: true,
     constraintoviewport: false,
     underlay:"none",
@@ -928,6 +929,19 @@ function changeChild (selected){
 </tr>
 </table>
 
+<table>
+<tr>
+<td>
+<div id="listPopin" class="dialog" title="List of Activities">
+	<div id="popinContent3" class="dash_left"  style="max-height: 500px; overflow: auto;">
+		
+	</div>
+</div>
+</td>
+</tr>
+</table>
+
+
 <!-- MAIN CONTENT PART START -->
 
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
@@ -1718,7 +1732,7 @@ function refreshBoxes(o){
 			case "ProjectsList":
 				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
-					inner = inner + (i+1) + ". " + "<a href='/aim/selectActivityTabs.do~ampActivityId=" + child.list[i].id + "'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a>";
 				var div = document.getElementById("divFullProjects");
@@ -2338,6 +2352,43 @@ function reloadGraphs(){
 	}
 }
 
+function itemClick(id, type, year){
+	//showListPopin(id, type, year);
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
+}
+
+
+var showListPopinCall = {
+	success: function(o) {
+		  try {
+			  	var inner = "";
+				var results = YAHOO.lang.JSON.parse(o.responseText);
+			    for(var i = 0; i < results.children.length; i++){
+				    inner = inner + "<li><a href='/aim/viewActivityPreview.do~pageId=2~activityId=" + results.children[i].ID + "~isPreview=1'>" + results.children[i].name + "</a></li>";//<hr />
+	    		}
+
+	    		inner = inner + "<input type='button' value='Close' class='buttonx' onclick='hidePopin()' style='margin-right:10px; margin-top:10px;'>"
+			    var msg='\n<digi:trn>List of Activities</digi:trn>';
+				myPanel.setHeader(msg);
+				var element = document.getElementById("listPopin");
+				element.style.display 	= "inline";
+				myPanel.setBody(element);
+				myPanel.show();
+				//var allGraphs = document.getElementsByName("flashContent");
+				//for(var idx = 0; idx < allGraphs.length; idx++){
+				//	allGraphs[idx].style.display = "none";
+				//}
+				var div = document.getElementById("popinContent3");
+				div.innerHTML = inner;
+		  	}
+			catch (e) {
+			    alert("Invalid respose.");
+			}
+	  },
+	  failure: function(o) {//Fail silently
+		}
+	};
+			    
 //-->
 </script>
 

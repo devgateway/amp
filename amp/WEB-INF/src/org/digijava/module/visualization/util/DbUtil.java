@@ -210,11 +210,11 @@ public class DbUtil {
         oql += "  where  "
                 + "   fd.adjustmentType = 1 ";
         oql += " inner join act.ampActivityGroup actGroup ";
-        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+        //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
             oql += " and fd.transactionType =:transactionType  ";
-        } else {
-            oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
-        }
+        //} else {
+        //    oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
+        //}
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -300,11 +300,11 @@ public class DbUtil {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
 	            oql += "  where fd.adjustmentType = 1";
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                oql += " and fd.transactionType =:transactionType  ";
-	            } else {
-	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            }
+	            //} else {
+	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            //}
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -396,11 +396,11 @@ public class DbUtil {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
 	            oql += "  where fd.adjustmentType = 1";
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                oql += " and fd.transactionType =:transactionType  ";
-	            } else {
-	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            }
+	            //} else {
+	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            //}
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -486,11 +486,11 @@ public class DbUtil {
                 oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
             }
             oql += "  where fd.adjustmentType = 1";
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
                 oql += " and fd.transactionType =:transactionType  ";
-            } else {
-                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-            }
+            //} else {
+            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+            //}
             if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
                 if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                     oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -589,11 +589,11 @@ public class DbUtil {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
 	            oql += "  where fd.adjustmentType = 1";
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                oql += " and fd.transactionType =:transactionType  ";
-	            } else {
-	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            }
+	            //} else {
+	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            //}
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -844,5 +844,112 @@ public class DbUtil {
         logger.debug("Getting organisation successfully ");
         return orgGrp;
     }
+    
+    /**
+     * Returns Activity List using filter
+     */
+    @SuppressWarnings("unchecked")
+    public static List<AmpActivityVersion> getActivityList(DashboardFilter filter, Date startDate,
+            Date endDate, Long assistanceTypeId,
+            Long financingInstrumentId,
+            int transactionType,int adjustmentType) throws DgException {
+        DecimalWraper total = null;
+        String oql = "";
+        List<AmpActivityVersion> activities = null;
+        String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} 
+        
+        Long[] orgIds = filter.getOrgIds();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+        
+        TeamMember tm = filter.getTeamMember();
+        Long[] locationIds = filter.getSelLocationIds();
+        Long[] sectorIds = filter.getSelSectorIds();
+        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 
+        oql = "select distinct act from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        oql += " inner join act.ampActivityGroup actGroup ";
+        if (locationCondition) {
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+
+        if (sectorCondition) {
+            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+        }
+
+        oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+            }
+        } else {
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+        }
+        if (locationCondition) {
+            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        }
+
+        if (sectorCondition) {
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+        }
+
+        if (filter.getActivityId()!=null) {
+            oql += " and act.ampActivityId =:activityId ";
+        }
+
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        if (assistanceTypeId != null) {
+            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
+        }
+        if (financingInstrumentId != null) {
+            oql += "   and f.financingInstrument=:financingInstrumentId  ";
+        }
+
+        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        if(filter.getFromPublicView() != filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+        }
+        else
+        {
+            oql += DashboardUtil.getTeamQuery(tm);
+        }
+
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+
+            if (assistanceTypeId != null) {
+                query.setLong("assistanceTypeId", assistanceTypeId);
+            }
+            if (financingInstrumentId != null) {
+                query.setLong("financingInstrumentId", financingInstrumentId);
+            }
+            query.setLong("transactionType", transactionType);
+            query.setLong("adjustmentType",adjustmentType);
+            
+            if (filter.getActivityId()!=null) {
+                query.setLong("activityId", filter.getActivityId());
+            }
+            activities = query.list();
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(
+                    "Cannot load fundings from db", e);
+        }
+
+
+        return activities;
+    }
 }

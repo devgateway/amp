@@ -90,6 +90,7 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 
+	
 	private ActionForward modeGetSelectedFilter(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) {
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;

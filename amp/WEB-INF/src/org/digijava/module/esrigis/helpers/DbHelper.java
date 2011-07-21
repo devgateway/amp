@@ -4,6 +4,7 @@ package org.digijava.module.esrigis.helpers;
  * @author Diego Dimunzio
  */
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -50,16 +51,13 @@ public class DbHelper {
 		TeamMember teamMember = filter.getTeamMember();
 		// apply calendar filter
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 		Long[] locationIds = filter.getSelLocationIds();
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-		
 		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
-		
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
 		
 		/*
@@ -172,6 +170,19 @@ public class DbHelper {
 				oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";			
 			}
 			
+			if (filter.isModeexport()){
+				String inactivities= "";
+				ArrayList<BigInteger> filteractivities = getInActivities(filter.getReportfilterquery());
+				for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
+					BigInteger id = (BigInteger) iterator.next();
+					if (inactivities ==""){
+						inactivities += id.toString();
+					}else{
+						inactivities +="," + id.toString();
+					}
+				}
+				oql += " and act.ampActivityId in("+ inactivities +")";
+			}
 
 			Session session = PersistenceManager.getRequestDBSession();
 			Query query = session.createQuery(oql);
@@ -189,7 +200,13 @@ public class DbHelper {
 		return activities;
 
 	}
-
+	
+	public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
+		Session session = PersistenceManager.getRequestDBSession();
+		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery(query).list();
+		return result;
+	}
+	
     public static List<AmpCategoryValueLocations> getLocations(MapFilter filter, String implementationLevel) throws DgException {
     	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
     	if (filter.getSelLocationIds()!=null && filter.getSelLocationIds().length > 0 && filter.getSelLocationIds()[0] != -1) {

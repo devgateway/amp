@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -206,13 +206,13 @@ addLoadEvent(addpanel);
 			</digi:link>
 		</td>
 		
-		<feature:display name="Show Printer Friendly option" module="Public Reports">
+		<module:display name="Map Module" parentModule="MAP MODULE">
 			<td noWrap align=left valign="center">
-				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-					<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
-				</digi:link>
+				<a href="/esrigis/mainmap.do?exportreport=true" target="_blank">
+					<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
+				</a>
 			</td>
-		</feature:display>
+		</module:display>
 	</tr>
 </table>
 </div>

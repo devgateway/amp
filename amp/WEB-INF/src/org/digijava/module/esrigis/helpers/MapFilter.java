@@ -45,8 +45,9 @@ public class MapFilter {
 	private Boolean onBudget;
 	private Long typeAssistanceId;
 	private Long financingInstrumentId;
+	private boolean modeexport;
+	private String reportfilterquery;
 	
-
 	//	private List<AmpOrgType> projectStatuses;
 	private Long projectStatusId;
 	private List<AmpOrgType> organizationsTypeSelected;
@@ -799,6 +800,22 @@ public class MapFilter {
 
 	public Long[] getSelStructureTypes() {
 		return selStructureTypes;
+	}
+
+	public boolean isModeexport() {
+		return modeexport;
+	}
+
+	public void setModeexport(boolean modeexport) {
+		this.modeexport = modeexport;
+	}
+
+	public String getReportfilterquery() {
+		return reportfilterquery;
+	}
+
+	public void setReportfilterquery(String reportfilterquery) {
+		this.reportfilterquery = reportfilterquery;
 	}
 
 

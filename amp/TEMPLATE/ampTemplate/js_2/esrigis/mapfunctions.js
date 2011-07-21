@@ -94,7 +94,7 @@ function init() {
 	}
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
-	//var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
+	var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
 }
 
 /**
@@ -1031,7 +1031,7 @@ function submitActivity(){
 
 function showLegendClusterDonor(pointSymbolBank){
 	var htmlDiv = "";
-	htmlDiv += "<div onclick=\"$('#pointsLegend').hide('slow');\" style='color:white;float:right;cursor:pointer;'>X</div>";
+	htmlDiv += "<div onclick=\"$('#pointsLegend').hide('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/TEMPLATE/ampTemplate/img_2/gis/close.gif'></div>";
 	htmlDiv += "<div class='legendHeader'>Point color reference<br/><hr/></div>";
 	for (var i=0; i < donorArray.length; i++) {
 		htmlDiv += "<div class='legendContentContainer'>"

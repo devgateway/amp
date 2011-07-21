@@ -16,6 +16,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -40,20 +41,19 @@ import org.springframework.beans.BeanWrapperImpl;
 
 public class MainMap extends Action{
 
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		DataDispatcherForm dataDispatcherForm = (DataDispatcherForm) form;
 		MapFilter filter = dataDispatcherForm.getFilter();
 		if(request.getParameter("reset") != null && request.getParameter("reset").equals("true")){
 			filter = null;
 		}
+		
+		
 		if (filter == null){
 			filter = new MapFilter();
 			initializeFilter(filter);
 			dataDispatcherForm.setFilter(filter);
-		}
-		else
-		{
+		}else{
 			//Check if needed structures are loaded TODO: Check why this is happening.
 			if(filter.getStructureTypes() == null){
 				List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
@@ -62,12 +62,28 @@ public class MainMap extends Action{
 			}
 			
 		}
+		
+		if (request.getParameter("exportreport") != null){
+			filter.setModeexport(true);
+			AmpARFilter reportfilter = (AmpARFilter) request.getSession().getAttribute("ReportsFilter");
+			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
+		}else{
+			filter.setModeexport(false);
+		}
+		
 		if(request.getParameter("popup") != null && request.getParameter("popup").equalsIgnoreCase("true")){
 			return mapping.findForward("popup");
 			
 		}
+		
 		return mapping.findForward("forward");
 	}
+	
+	
+	/**
+	 * 
+	 * @param filter
+	 */
 	private void initializeFilter(MapFilter filter) {
 		List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
@@ -76,15 +92,11 @@ public class MainMap extends Action{
 		if (filter.getOrgGroupId() == null
 				|| filter.getOrgGroupId() == -1) {
 
-			filter.setOrgGroupId(-1l);// -1 option denotes
-												// "All Groups", which is the
-												// default choice.
+			filter.setOrgGroupId(-1l);// -1 option denotes "All Groups", which is the default choice.
 		}
 
 		orgs = DbUtil.getDonorOrganisationByGroupId(
-				filter.getOrgGroupId(), false); // TODO: Determine how
-															// this will work in
-															// the public view
+				filter.getOrgGroupId(), false); // TODO: Determine how this will work in the public view
 		filter.setOrganizations(orgs);
 		
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
@@ -101,12 +113,8 @@ public class MainMap extends Action{
 			filter.setYear(year);
 		}
 		filter.setYears(new ArrayList<BeanWrapperImpl>());
-		long yearFrom = Long
-				.parseLong(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-		long countYear = Long
-				.parseLong(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+		long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 		long maxYear = yearFrom + countYear;
 		if (maxYear < filter.getYear()) {
 			maxYear = filter.getYear();
@@ -120,8 +128,7 @@ public class MainMap extends Action{
 			filter.setFiscalCalendars(new ArrayList(calendars));
 		}
 
-		String value = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);

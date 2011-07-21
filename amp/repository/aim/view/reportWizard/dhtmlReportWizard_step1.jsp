@@ -18,7 +18,12 @@
 							<div id="toolbarMarkerDiv"></div>
 							<jsp:include page="toolbar.jsp" />
 							<br />
-							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<fieldset style="background-color: #F6F6F6;">
+							<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>More Settings</digi:trn></legend>
+							<div id="moreSettingsInfoDiv" onclick="toggleMoreSettings()" style="cursor: pointer;">
+								<digi:trn>Click 'More Settings' to expand</digi:trn>....
+							</div>	
+							<table style="display: none;" width="100%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">
 								<tr>
 									<td width="365" valign="top">
 										<fieldset class="main_side_cont">
@@ -154,5 +159,6 @@
 				  					</tr>
 								</c:if>
 							</table>
+						</fieldset>
 							<br />
 						</div>

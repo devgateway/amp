@@ -87,8 +87,13 @@ public class ReportWizardAction extends MultiAction {
 		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
-		if ( request.getParameter("onepager")!=null && "true".equals(request.getParameter("onepager")) )
+		//if ( request.getParameter("onepager")!=null && "true".equals(request.getParameter("onepager")) )
+		//	myForm.setOnePager(true);
+		String onePagerGS	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_GENERATOR_ONE_PAGER);
+		if ("true".equals(onePagerGS) ) 
 			myForm.setOnePager(true);
+		else
+			myForm.setOnePager(false);
 		
 		if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
 			modeReset(mapping, form, request, response);

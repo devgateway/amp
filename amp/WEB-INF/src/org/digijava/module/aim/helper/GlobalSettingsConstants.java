@@ -70,5 +70,7 @@ public class GlobalSettingsConstants {
     public static final String PROJECT_TITLE_HIRARCHY = "Project Title Hierarchy";
     
 	public static final String VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
+	
+	public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
 
 }

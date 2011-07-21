@@ -127,8 +127,8 @@ function continueInitialization( e, rmParams ){
 		MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
 		MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
 
-		repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
-											"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
+		repFilters					= new Filters(rmParams.filterPanelName, rmParams.failureMessage, rmParams.filterProblemsMessage, 
+											rmParams.loadingDataMessage, rmParams.savingDataMessage, rmParams.cannotSaveFiltersMessage ) ;
 		
 		saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
 											
@@ -141,7 +141,23 @@ function continueInitialization( e, rmParams ){
 				cn[i].style.display		= "none";
 		}
 		repManager.checkSteps();
+		
 	}
+
+function toggleMoreSettings() {
+	var infoDivSH	= new ShowHideElement("moreSettingsInfoDiv");
+	var tableSH		= new ShowHideElement("moreSettingsTable");
+	var legendEl	= document.getElementById("moreSettingsLegend");
+	
+	infoDivSH.toggle();
+	var visible	= tableSH.toggle();
+	
+	if (visible) {
+		legendEl.innerHTML	= "-" + legendEl.innerHTML.substring(1);
+	}
+	else
+		legendEl.innerHTML	= "+" + legendEl.innerHTML.substring(1);
+}
 
 function NormalReportManager () {
 	;
@@ -452,4 +468,33 @@ function OPTabReportManager() {
 
 OPTabReportManager.prototype.enableTab		= function(tabIndex){}
 OPTabReportManager.prototype.disableTab		= function(tabIndex){}
+
+
+function ShowHideElement ( elId ) {
+	this.elId	= elId;
+}
+
+ShowHideElement.prototype.show	= function(  ) {
+	var el	= document.getElementById(this.elId);
+	el.style.display	= "";
+};
+
+ShowHideElement.prototype.hide	= function(  ) {
+	var el		= document.getElementById(this.elId);
+	el.style.display	= "none";
+};
+
+ShowHideElement.prototype.toggle	= function( ) {
+	var el	= document.getElementById(this.elId);
+	if ( el.style.display	== "none") {
+		el.style.display	= "";
+		return true;
+	}
+	else {
+		var currH	= YAHOO.util.Dom.getStyle(el, "height");
+		el.style.display	= "none";
+		return false;
+	}
+};
+
 

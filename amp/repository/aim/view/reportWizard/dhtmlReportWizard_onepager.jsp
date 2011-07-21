@@ -23,7 +23,8 @@
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>  
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" ></script>
@@ -161,7 +162,14 @@
 		
 		var repManagerParams	= {
 				desktopTab: ${myForm.desktopTab},
-				onePager: ${myForm.onePager}
+				onePager: ${myForm.onePager},
+				loadingDataMessage: "${loadingDataMessage}",
+				filterProblemsMessage: "${filterProblemsMessage}",
+				failureMessage: "${failureMessage}",
+				savingDataMessage: "${savingDataMessage}",
+				filterPanelName: "${filterPanelName}",
+				cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}"
+				
 			};
 		
 		//YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
@@ -270,9 +278,11 @@ body {
 			</tr>
 		</table>
 	</div>
-	<div id="fakePreviewSectionDiv" style="display: none; height: 210px;">&nbsp;</div>
-	<div id="previewSectionDiv" style="display: none;overflow:auto; position:fixed; bottom: 0px; width: 100%; height: 200px; border-top: 1px solid black; padding-top: 5px; background-color: white;">
-	</div>
+	<c:if test="${!myForm.desktopTab}">
+		<div id="fakePreviewSectionDiv" style="display: none; height: 210px;">&nbsp;</div>
+		<div id="previewSectionDiv" style="display: none;overflow:auto; position:fixed; bottom: 0px; width: 100%; height: 200px; border-top: 1px solid black; padding-top: 5px; background-color: white;">
+		</div>
+	</c:if>
 </digi:form>
 <!-- MAIN CONTENT PART END -->
 

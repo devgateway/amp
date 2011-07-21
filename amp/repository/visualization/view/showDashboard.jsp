@@ -1293,7 +1293,7 @@ function changeChild (selected){
 	<div id="tab1">
 		<fieldset>
 			<div id="fundingChartHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="fundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>">
+			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>">
 <!-- 			Font 
 			<select id="fundingChartShowFontFamily">
 				<option value="Verdana">Verdana</option>
@@ -1301,15 +1301,15 @@ function changeChild (selected){
 			</select> -->
 			<input type="hidden" id="fundingChartShowFontFamily" value="Verdana"/>
 			Size
-			<select id="fundingChartFontSize">
+			<select id="FundingChartFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
 				<option value="14">14</option>
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			Show legend <input type="checkbox" id="fundingChartShowLegend">
-			Show data label <input type="checkbox" id="fundingChartShowDataLabel"></br>
+			Show legend <input type="checkbox" id="FundingChartShowLegend">
+			Show data label <input type="checkbox" id="FundingChartShowDataLabel"></br>
 			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>

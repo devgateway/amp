@@ -1,43 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="funding/DataViewSeries_FundingChart.mxml" projectUUID="b8cb5eaf-66a0-4df1-b556-a9df2fc1dd04" version="6">
-  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="false" copyDependentFiles="true" flexSDK="Flex 3.5" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties analytics="false" mainApplicationPath="funding/BarChartSeries_FundingChart.mxml" projectUUID="b8cb5eaf-66a0-4df1-b556-a9df2fc1dd04" version="6">
+  <compiler additionalCompilerArguments="-locale en_US -link-report=report.xml -use-network=false" autoRSLOrdering="false" copyDependentFiles="true" flexSDK="Flex 3.5" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="3">
       <libraryPathEntry kind="4" path="">
+        <modifiedEntries>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" rslUrl="automation.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" rslUrl="automation_agent.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" rslUrl="automation_dmv.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" rslUrl="automation_flashflexkit.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" rslUrl="datavisualization.swf" sourcepath="${PROJECT_FRAMEWORKS}/projects/datavisualization/src" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/qtp.swc" rslUrl="qtp.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/rpc.swc" rslUrl="rpc.swf" useDefaultLinkType="false"/>
+          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/utilities.swc" rslUrl="utilities.swf" useDefaultLinkType="false"/>
+        </modifiedEntries>
         <excludedEntries>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="1" linkType="1" path="libs"/>
       <libraryPathEntry kind="1" linkType="1" path="${DCD_LIB_LOCATION}"/>
       <libraryPathEntry kind="1" linkType="1" path="${DCD_LOCALE_LOCATION}"/>
+      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="libs/AxiisLibrary.swc" rslUrl="AxiisLibrary.swf" useDefaultLinkType="false"/>
+      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="libs/DegrafaLibrary.swc" rslUrl="DegrafaLibrary.swf" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/fiber.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}/fiber_rb.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/playerfds.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/datavisualization/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" rslUrl="datavisualization.swf" sourcepath="${PROJECT_FRAMEWORKS}/projects/datavisualization/src" useDefaultLinkType="false"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>
-    <application path="funding/DataViewSeries_FundingChart.mxml"/>
-    <application path="funding/BarChartSeries_FundingChart.mxml"/>
-    <application path="financing_instrument/BarChartSeries_FinancingInstrument.mxml"/>
-    <application path="financing_instrument/PieChart_FinancingInstrument.mxml"/>
-    <application path="financing_instrument/LineAreaSeries_FinancingInstrument.mxml"/>
     <application path="funding/LineAreaSeries_FundingChart.mxml"/>
+    <application path="donor_profile/PieChart_DonorProfile.mxml"/>
+    <application path="financing_instrument/BarChartSeries_FinancingInstrument.mxml"/>
     <application path="aid_predictability/LineAreaSeries_AidPredictability.mxml"/>
-    <application path="aid_type/LineAreaSeries_AidType.mxml"/>
+    <application path="sector_profile/BarChartSeries_SectorProfile.mxml"/>
+    <application path="donor_profile/LineAreaSeries_DonorProfile.mxml"/>
+    <application path="sector_profile/LineAreaSeries_SectorProfile.mxml"/>
     <application path="financing_instrument/DataViewSeries_FinancingInstrument.mxml"/>
-    <application path="aid_predictability/BarChartSeries_AidPredictability.mxml"/>
-    <application path="aid_type/BarChartSeries_AidType.mxml"/>
-    <application path="aid_type/PieChart_AidType.mxml"/>
-    <application path="aid_type/DataViewSeries_AidType.mxml"/>
-    <application path="aid_predictability/DataViewSeries_AidPredictability.mxml"/>
-    <application path="region_profile/BarChartSeries_RegionProfile.mxml"/>
-    <application path="region_profile/DataViewSeries_RegionProfile.mxml"/>
-    <application path="region_profile/LineAreaSeries_RegionProfile.mxml"/>
+    <application path="financing_instrument/PieChart_FinancingInstrument.mxml"/>
+    <application path="donor_profile/BarChartSeries_DonorProfile.mxml"/>
+    <application path="donor_profile/DataViewSeries_DonorProfile.mxml"/>
     <application path="region_profile/PieChart_RegionProfile.mxml"/>
+    <application path="aid_type/DataViewSeries_AidType.mxml"/>
+    <application path="sector_profile/PieChart_SectorProfile.mxml"/>
+    <application path="funding/BarChartSeries_FundingChart.mxml"/>
+    <application path="region_profile/LineAreaSeries_RegionProfile.mxml"/>
+    <application path="aid_type/BarChartSeries_AidType.mxml"/>
+    <application path="financing_instrument/LineAreaSeries_FinancingInstrument.mxml"/>
+    <application path="aid_predictability/DataViewSeries_AidPredictability.mxml"/>
+    <application path="aid_predictability/BarChartSeries_AidPredictability.mxml"/>
+    <application path="aid_type/LineAreaSeries_AidType.mxml"/>
+    <application path="ODA_growth/BarChartSeries_ODAGrowth.mxml"/>
+    <application path="aid_type/PieChart_AidType.mxml"/>
+    <application path="region_profile/DataViewSeries_RegionProfile.mxml"/>
+    <application path="sector_profile/DataViewSeries_SectorProfile.mxml"/>
+    <application path="funding/DataViewSeries_FundingChart.mxml"/>
+    <application path="region_profile/BarChartSeries_RegionProfile.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

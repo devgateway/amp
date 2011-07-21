@@ -125,11 +125,13 @@ public class ShowDashboard extends Action {
 												// "All Groups", which is the
 												// default choice.
 		}
+		if(filter.getOrgGroupId()!=-1){
 
 		orgs = DbUtil.getDonorOrganisationByGroupId(
 				filter.getOrgGroupId(), false); // TODO: Determine how
 															// this will work in
 															// the public view
+		}
 		filter.setOrganizations(orgs);
 		
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());

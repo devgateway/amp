@@ -1631,9 +1631,11 @@ public class DataDispatcher extends DispatchAction {
 			//Get list of sub organizations
 	        Long orgGroupId = Long.parseLong(parentId);
 
-	        List<AmpOrganisation> orgs;
+	        List<AmpOrganisation> orgs=new ArrayList<AmpOrganisation>();
 	        try {
-	            orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, false); //TODO: Second parameter for public view
+	        	if(orgGroupId!=null&&orgGroupId!=-1){
+	        		orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, false); //TODO: Second parameter for public view
+	        	}
 				JSONObject child = new JSONObject();
 				Iterator<AmpOrganisation> it = orgs.iterator();
 				while(it.hasNext()){

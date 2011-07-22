@@ -201,7 +201,7 @@ public class ExportWizardAction extends DispatchAction {
 			//outputStream.println("There is no error while Export");
 			JAXBContext jc;
 			try {
-				jc = JAXBContext.newInstance(org.digijava.module.dataExchange.utils.Constants.JAXB_INSTANCE);
+				jc = JAXBContext.newInstance(org.digijava.module.dataExchange.utils.Constants.IDML_JAXB_INSTANCE);
 				Marshaller m = jc.createMarshaller();
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 				//java.io.StringWriter sw = new StringWriter();

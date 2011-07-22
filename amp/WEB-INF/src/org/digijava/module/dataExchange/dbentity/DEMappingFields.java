@@ -23,13 +23,9 @@
 package org.digijava.module.dataExchange.dbentity;
 
 import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.user.User;
 
 /**
  * 
@@ -37,48 +33,124 @@ import org.digijava.kernel.user.User;
  *
  */
 
-public class DEMappingFields
-    implements Serializable {
+
+public class DEMappingFields implements Serializable {
 
     private static Logger logger = Logger.getLogger(DEMappingFields.class);
 
     private Long id;
-    private String importedFieldValue;
-    private String importedFieldCode;
-    private Long ampFieldId;
-    private String fieldType;
+    private String iatiPath;
+    private String iatiItems;
+    private String iatiValues;
+    private String iatiLang;
+    private Long ampId;    
+    private String ampClass;
+    private Long sourceId;
+    private String feedFileName;
     private String status;
+    private Timestamp creationDate;
+
     
+    
+	public DEMappingFields(Long id, String iatiPath, String iatiItems,
+			String iatiValues, String iatiLang, Long ampId, String ampClass,
+			Long sourceId, String feedFileName, String status,
+			Timestamp creationDate) {
+		super();
+		this.id = id;
+		this.iatiPath = iatiPath;
+		this.iatiItems = iatiItems;
+		this.iatiValues = iatiValues;
+		this.iatiLang = iatiLang;
+		this.ampId = ampId;
+		this.ampClass = ampClass;
+		this.sourceId = sourceId;
+		this.feedFileName = feedFileName;
+		this.status = status;
+		this.creationDate = creationDate;
+	}
+
+	public boolean compare(DEMappingFields o){
+		return 
+			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
+			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
+			this.getIatiValues().compareTo(o.getIatiValues())==0 && 
+			this.getIatiLang().compareTo(o.getIatiLang())==0 &&
+			this.getAmpClass().compareTo(o.getAmpClass())==0
+			;
+	}
 	
+
+	public DEMappingFields(String iatiPath, String iatiItems,
+			String iatiValues, String iatiLang, Long ampId, String ampClass,
+			Long sourceId, String feedFileName, String status) {
+		super();
+		this.iatiPath = iatiPath;
+		this.iatiItems = iatiItems;
+		this.iatiValues = iatiValues;
+		this.iatiLang = iatiLang;
+		this.ampId = ampId;
+		this.ampClass = ampClass;
+		this.sourceId = sourceId;
+		this.feedFileName = feedFileName;
+		this.status = status;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getImportedFieldValue() {
-		return importedFieldValue;
+	public String getIatiPath() {
+		return iatiPath;
 	}
-	public void setImportedFieldValue(String importedFieldValue) {
-		this.importedFieldValue = importedFieldValue;
+	public void setIatiPath(String iatiPath) {
+		this.iatiPath = iatiPath;
 	}
-	public String getImportedFieldCode() {
-		return importedFieldCode;
+	public String getIatiItems() {
+		return iatiItems;
 	}
-	public void setImportedFieldCode(String importedFieldCode) {
-		this.importedFieldCode = importedFieldCode;
+	public void setIatiItems(String iatiItems) {
+		this.iatiItems = iatiItems;
 	}
-	public Long getAmpFieldId() {
-		return ampFieldId;
+	public String getIatiValues() {
+		return iatiValues;
 	}
-	public void setAmpFieldId(Long ampFieldId) {
-		this.ampFieldId = ampFieldId;
+	public void setIatiValues(String iatiValues) {
+		this.iatiValues = iatiValues;
 	}
-	public String getFieldType() {
-		return fieldType;
+	public String getIatiLang() {
+		return iatiLang;
 	}
-	public void setFieldType(String fieldType) {
-		this.fieldType = fieldType;
+	public void setIatiLang(String iatiLang) {
+		this.iatiLang = iatiLang;
+	}
+	public Long getAmpId() {
+		return ampId;
+	}
+	public void setAmpId(Long ampId) {
+		this.ampId = ampId;
+	}
+	public String getAmpClass() {
+		return ampClass;
+	}
+	public void setAmpClass(String ampClass) {
+		this.ampClass = ampClass;
+	}
+	public Long getSourceId() {
+		return sourceId;
+	}
+	public void setSourceId(Long sourceId) {
+		this.sourceId = sourceId;
+	}
+	public String getFeedFileName() {
+		return feedFileName;
+	}
+	public void setFeedFileName(String feedFileName) {
+		this.feedFileName = feedFileName;
 	}
 	public String getStatus() {
 		return status;
@@ -86,6 +158,12 @@ public class DEMappingFields
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public Timestamp getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(Timestamp creationDate) {
+		this.creationDate = creationDate;
+	}
     
-    
+	   
 }

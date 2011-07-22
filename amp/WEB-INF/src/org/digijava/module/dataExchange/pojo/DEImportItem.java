@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import org.digijava.module.dataExchange.engine.SourceBuilder;
 import org.digijava.module.dataExchange.jaxb.Activities;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
 
 /**
  * @author dan
@@ -18,6 +19,17 @@ import org.digijava.module.dataExchange.jaxb.Activities;
 public class DEImportItem {
 	private SourceBuilder sourceBuilder;
 	private Activities activities;
+	private IatiActivities iatiActivities;
+	
+	public IatiActivities getIatiActivities() {
+		return iatiActivities;
+	}
+
+
+	public void setIatiActivities(IatiActivities iatiActivities) {
+		this.iatiActivities = iatiActivities;
+	}
+
 	private HashMap<String,Boolean> hashFields;
 	
 	

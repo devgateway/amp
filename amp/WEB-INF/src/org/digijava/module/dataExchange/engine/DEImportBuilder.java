@@ -3,7 +3,9 @@
  */
 package org.digijava.module.dataExchange.engine;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -17,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
@@ -71,7 +72,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
@@ -102,18 +102,18 @@ import org.digijava.module.dataExchange.pojo.DEImplLevelMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
-import org.digijava.module.dataExchange.pojo.DEMockTest;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramMissingLog;
 import org.digijava.module.dataExchange.pojo.DEProgramPercentageLog;
 import org.digijava.module.dataExchange.pojo.DESectorMissingLog;
-import org.digijava.module.dataExchange.pojo.DESectorPercentageLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
@@ -121,8 +121,6 @@ import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.hibernate.HibernateException;
 import org.hibernate.type.NullableType;
 import org.xml.sax.SAXException;
-
-import com.mockrunner.mock.web.MockHttpServletRequest;
 
 /**
  * @author dan
@@ -1721,7 +1719,7 @@ public class DEImportBuilder {
 		Activities acts = null;
 		DEImportValidationEventHandler log = new DEImportValidationEventHandler();
 		try {
-			JAXBContext jc = JAXBContext.newInstance(Constants.JAXB_INSTANCE);
+			JAXBContext jc = JAXBContext.newInstance(Constants.IDML_JAXB_INSTANCE);
 	        Unmarshaller m = jc.createUnmarshaller();
 	        URL rootUrl   = this.getClass().getResource("/");
 	        String path="";
@@ -1762,6 +1760,53 @@ public class DEImportBuilder {
 	        
 	}
 
+	public boolean checkIATIInputString(String inputLog){
+		boolean isOk = true;
+		IatiActivities iActs = null;
+		//DEImportValidationEventHandler log = new DEImportValidationEventHandler();
+		try {
+			JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
+	        Unmarshaller m = jc.createUnmarshaller();
+	        URL rootUrl   = this.getClass().getResource("/");
+	        String path="";
+	        try {
+				path     = rootUrl.toURI().resolve("../../").getPath();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+	        boolean xsdValidate = true;
+	        
+	        	if(xsdValidate){
+	                // create a SchemaFactory that conforms to W3C XML Schema
+	                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+	                 // parse the purchase order schema
+	                 Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));
+
+	                 m.setSchema(schema);
+                     
+	                 System.out.println("-----------------"+path+"doc/dataExchange/iati.xml");
+	                 iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
+	           }
+	        } 
+			catch (SAXException e) {
+				isOk = false;
+				e.printStackTrace();
+			}
+	        catch (javax.xml.bind.JAXBException jex) {
+	        	jex.printStackTrace();
+	        }
+	        catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	       // inputLog += log.getLog();
+	        if(isOk)
+	        	this.getAmpImportItem().setIatiActivities(iActs);
+	        else this.getAmpImportItem().setIatiActivities(null);
+	        return isOk;
+	        
+	}
+	
 	public DEImportItem getAmpImportItem() {
 		return ampImportItem;
 	}
@@ -2063,5 +2108,93 @@ public class DEImportBuilder {
 		}
 	}
 
+	//*****************************IATI import
+	//private void validateIATIActivity(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
+	private String validateIATIActivity(IatiActivity iActivity, String log) {
+		log = "";
+		IatiActivityWorker iWorker= new IatiActivityWorker(iActivity, log);
+		iWorker.checkifActivityExists();
+		
+		iWorker.checkContent();
+		return log;
+	}
+
+	public void runIATI(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
+		if(execLog.getLogItems() == null)
+			execLog.setLogItems(new ArrayList<DELogPerItem>());
+		execLog.setDeSourceSetting(this.getDESourceSetting());
+		this.getDESourceSetting().getLogs().add(execLog);
+		SourceSettingDAO iLog	 		= null;
+		
+		try {
+				iLog		 = 	new SessionSourceSettingDAO();
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		execLog.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+		iLog.saveObject(this.getDESourceSetting());
+		execLog.setDescription("");
+		boolean ok 	 =	checkIATIInputString(execLog.getDescription());
+		iLog.saveObject(this.getDESourceSetting());
+		if(!ok) return;
+		generateFieldHashMap();
+		processIATIFeed(execLog, iLog, request);
+	}
+
+	private void processIATIFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		logger.info("SYSOUT: processing iati activities");
+		
+			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
+			AmpActivity activity 	= new AmpActivity();//getAmpActivity(actType);
+			
+			iatiActs.getIatiActivityOrAny();
+			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
+				IatiActivity iAct = (IatiActivity) it.next();
+				String logAct = "";
+				validateIATIActivity(iAct,logAct);
+			}
+			DELogPerItem	item	= new DELogPerItem();
+			item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
+			DEActivityLog contentLogger = new DEActivityLog();
+			//validateActivityContent(actType, contentLogger);
+			
+			
+			if(log.getLogItems() == null) 
+				log.setLogItems(new ArrayList<DELogPerItem>());
+			
+			item.setDeLogPerExecution(log);
+			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+
+			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
+			{
+				item.setDescription("Activity: " +contentLogger.display());
+				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
+				//iLog.saveObject(item);
+				log.getLogItems().add(item);
+				iLog.saveObject(log.getDeSourceSetting());
+				//continue;
+			}
+			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+			item.setDescription("Activity: "+" OK");
+			
+
+			log.getLogItems().add(item);
+			//item.setDeLogPerExecution(log);
+			//item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+			iLog.saveObject(log.getDeSourceSetting());
+		
+	}
+	
+	
 	
 }

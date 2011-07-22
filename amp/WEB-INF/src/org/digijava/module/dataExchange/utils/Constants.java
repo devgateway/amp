@@ -48,14 +48,16 @@ public class Constants {
 	public static final String CATEG_VALUE_FINANCING_INSTRUMENT = "financing_instrument";
 	public static final String CATEG_VALUE_MTEF_PROJECTION = "mtef_projection";
 	
-	public static final String JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
+	public static final String IDML_JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
+	public static final String IATI_JAXB_INSTANCE = "org.digijava.module.dataExchangeIATI.iatiSchema.jaxb";
 	//this.getServlet().getServletContext().getRealPath("/")+
-	public static final String IATI_SCHEMA_LOCATION = "/doc/iati/schemas/iati-activities-schema.xsd";
+	//public static final String IATI_SCHEMA_LOCATION = "/doc/iati/schemas/iati-activities-schema.xsd";
 	public static final String IDML_IATI_XSL= "/doc/iati/xslt/idml2iati.xslt";
 	public static final String IATI_IDML_XSL = "/doc/iati/xslt/iati2idml.xslt";
 	public static final String SYNERGY_IATI_IDML_XSL = "/doc/iati/xslt/synergyIati2idml.xslt";
 	public static final String CATEG_VALUE_ACTIVITY_EXPORT_OPTIONS = "activity_export_filter_options";
 	public static final String IDML_SCHEMA_LOCATION = "/doc/iati/schemas/IDML2.0.xsd";
+	public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema.xsd";
 
 	
 	public static final String FIELD_ACTIVITY="activity";

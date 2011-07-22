@@ -72,6 +72,8 @@ public class ManageSourceAction extends MultiAction {
 			return mapping.findForward("showSources");
 		}
 		
+	//	modeExecuteSource(mapping, msForm, request, response);
+		
 		return modeShowSourceList(mapping, msForm, request, response);
 	}
 	
@@ -122,6 +124,7 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
+//		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( new Long(1));
 		if(ss.getLogs() == null)
 			ss.setLogs(new ArrayList<DELogPerExecution>());
 		
@@ -129,6 +132,7 @@ public class ManageSourceAction extends MultiAction {
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
 		deib.run(request);
+//		deib.runIATI(request);
 	}
 
 }

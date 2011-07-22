@@ -6,7 +6,6 @@ package org.digijava.module.dataExchange.action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -29,7 +28,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.form.ImportForm;
 import org.digijava.module.dataExchange.utils.Constants;
-import org.digijava.module.dataExchange.utils.ImportBuilder;
 import org.digijava.module.dataExchange.webservice.SinergyClient;
 import org.springframework.util.FileCopyUtils;
 
@@ -97,71 +95,71 @@ public class ImportAction extends MultiAction {
 
 	private ActionForward modeSaveImport(ActionMapping mapping, ImportForm form, HttpServletRequest request,HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		
-		ImportForm deImportForm= (ImportForm) form;
-		TeamMember tm = null;
-        if (session.getAttribute("currentMember") != null)
-        	tm = (TeamMember) session.getAttribute("currentMember");
-        AmpDEImportLog iLog = deImportForm.getActivityTree();
-        ImportBuilder iBuilder = (ImportBuilder) session.getAttribute("importBuilder");
-        iBuilder.saveActivities(request, tm);
+//		HttpSession session = request.getSession();
+//		
+//		ImportForm deImportForm= (ImportForm) form;
+//		TeamMember tm = null;
+//        if (session.getAttribute("currentMember") != null)
+//        	tm = (TeamMember) session.getAttribute("currentMember");
+//        AmpDEImportLog iLog = deImportForm.getActivityTree();
+//        ImportBuilder iBuilder = (ImportBuilder) session.getAttribute("importBuilder");
+//        iBuilder.saveActivities(request, tm);
 		
         return mapping.findForward("forward");
 	}
 
 	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
 		// TODO Auto-generated method stub
-		
-		HttpSession session = request.getSession();
-		String siteId = RequestUtils.getSite(request).getId().toString();
-		String locale= RequestUtils.getNavigationLanguage(request).getCode();
-
-		ImportForm deImportForm= (ImportForm) form;
-		
-		FormFile myFile = deImportForm.getUploadedFile();
-        byte[] fileData    = myFile.getFileData();
-        if(fileData == null || fileData.length < 1)
-        	{
-        		logger.info("The file is empty or not choosed any file");
-        		//return error
-        	}
-        
-        InputStream inputStream= new ByteArrayInputStream(fileData);
-        InputStream inputStream1= new ByteArrayInputStream(fileData);
-        
-        OutputStream outputStream = new ByteArrayOutputStream(); 
-        FileCopyUtils.copy(inputStream1, outputStream);
-        
-        TeamMember tm = null;
-        if (session.getAttribute("currentMember") != null)
-        	tm = (TeamMember) session.getAttribute("currentMember");
-        
-        ImportBuilder importBuilder = new ImportBuilder();
-        boolean importOk = false;
-		importOk = importBuilder.splitInChunks(inputStream);
-		if(!importOk) {
-			ActionMessages errors = new ActionMessages();
-			errors.add("title", new ActionMessage("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
-			request.setAttribute("loadFile",null);
-			
-			if (errors.size() > 0){
-				session.setAttribute("DEimportErrors", errors);
-			}
-			else session.setAttribute("DEimportErrors", null);
-			return mapping.findForward("forwardError");
-		}
-		
-		importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
-        
-        importBuilder.createActivityTree();
-        
-        deImportForm.setActivityTree(importBuilder.getRoot());
-        
-        session.setAttribute("DELogGenerated", importBuilder.printLogs());
-        session.setAttribute("importBuilder", importBuilder);
-        session.setAttribute("DEfileUploaded", "true");
-        
+//		
+//		HttpSession session = request.getSession();
+//		String siteId = RequestUtils.getSite(request).getId().toString();
+//		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+//
+//		ImportForm deImportForm= (ImportForm) form;
+//		
+//		FormFile myFile = deImportForm.getUploadedFile();
+//        byte[] fileData    = myFile.getFileData();
+//        if(fileData == null || fileData.length < 1)
+//        	{
+//        		logger.info("The file is empty or not choosed any file");
+//        		//return error
+//        	}
+//        
+//        InputStream inputStream= new ByteArrayInputStream(fileData);
+//        InputStream inputStream1= new ByteArrayInputStream(fileData);
+//        
+//        OutputStream outputStream = new ByteArrayOutputStream(); 
+//        FileCopyUtils.copy(inputStream1, outputStream);
+//        
+//        TeamMember tm = null;
+//        if (session.getAttribute("currentMember") != null)
+//        	tm = (TeamMember) session.getAttribute("currentMember");
+//        
+//        ImportBuilder importBuilder = new ImportBuilder();
+//        boolean importOk = false;
+//		importOk = importBuilder.splitInChunks(inputStream);
+//		if(!importOk) {
+//			ActionMessages errors = new ActionMessages();
+//			errors.add("title", new ActionMessage("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
+//			request.setAttribute("loadFile",null);
+//			
+//			if (errors.size() > 0){
+//				session.setAttribute("DEimportErrors", errors);
+//			}
+//			else session.setAttribute("DEimportErrors", null);
+//			return mapping.findForward("forwardError");
+//		}
+//		
+//		importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
+//        
+//        importBuilder.createActivityTree();
+//        
+//        deImportForm.setActivityTree(importBuilder.getRoot());
+//        
+//        session.setAttribute("DELogGenerated", importBuilder.printLogs());
+//        session.setAttribute("importBuilder", importBuilder);
+//        session.setAttribute("DEfileUploaded", "true");
+//        
 		return mapping.findForward("afterUploadFile");
 	}
 	
@@ -179,56 +177,56 @@ public class ImportAction extends MultiAction {
 	 */
 	
 	private ActionForward modeLoadFromWs(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
-		String URL = "http://production.arm.synisys.com/sampleservice/";
-		String LOGIN = "testuser";
-		String PASSWORD = "testpassword"; 
-		String xsltfile = this.getServlet().getServletContext().getRealPath("/")+Constants.SYNERGY_IATI_IDML_XSL;
-		
-		HttpSession session = request.getSession();
-		ImportForm deImportForm= (ImportForm) form;
-		
-		String siteId = RequestUtils.getSite(request).getId().toString();
-		String locale= RequestUtils.getNavigationLanguage(request).getCode();
-		SinergyClient client = new SinergyClient(URL);
-		
-		InputStream inputStream= client.OutToIn(client.getFileFromService(LOGIN, PASSWORD,xsltfile));
-		
-		if (inputStream!=null){
-			InputStream inputStream1= client.OutToIn(client.getFileFromService(LOGIN, PASSWORD,xsltfile));
-			OutputStream outputStream = new ByteArrayOutputStream(); 
-	        FileCopyUtils.copy(inputStream1, outputStream);
-	        
-	        TeamMember tm = null;
-	        if (session.getAttribute("currentMember") != null)
-	        	tm = (TeamMember) session.getAttribute("currentMember");
-	        
-	        ImportBuilder importBuilder = new ImportBuilder();
-	        boolean importOk = false;
-			importOk = importBuilder.splitInChunks(inputStream);
-			if(!importOk) {
-				ActionMessages errors = new ActionMessages();
-				errors.add("title", new ActionMessage("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The Data could not be downloaded",locale,siteId)));
-				request.setAttribute("loadFile",null);
-				
-				if (errors.size() > 0){
-					session.setAttribute("DEimportErrors", errors);
-				}
-				else session.setAttribute("DEimportErrors", null);
-				return mapping.findForward("forwardError");
-			}
-			
-			importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
-	        
-	        importBuilder.createActivityTree();
-	        
-	        deImportForm.setActivityTree(importBuilder.getRoot());
-	        
-	        session.setAttribute("DELogGenerated", importBuilder.printLogs());
-	        session.setAttribute("importBuilder", importBuilder);
-	        session.setAttribute("DEfileUploaded", "true");
-	        
-			return mapping.findForward("afterUploadFile");
-		}
+//		String URL = "http://production.arm.synisys.com/sampleservice/";
+//		String LOGIN = "testuser";
+//		String PASSWORD = "testpassword"; 
+//		String xsltfile = this.getServlet().getServletContext().getRealPath("/")+Constants.SYNERGY_IATI_IDML_XSL;
+//		
+//		HttpSession session = request.getSession();
+//		ImportForm deImportForm= (ImportForm) form;
+//		
+//		String siteId = RequestUtils.getSite(request).getId().toString();
+//		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+//		SinergyClient client = new SinergyClient(URL);
+//		
+//		InputStream inputStream= client.OutToIn(client.getFileFromService(LOGIN, PASSWORD,xsltfile));
+//		
+//		if (inputStream!=null){
+//			InputStream inputStream1= client.OutToIn(client.getFileFromService(LOGIN, PASSWORD,xsltfile));
+//			OutputStream outputStream = new ByteArrayOutputStream(); 
+//	        FileCopyUtils.copy(inputStream1, outputStream);
+//	        
+//	        TeamMember tm = null;
+//	        if (session.getAttribute("currentMember") != null)
+//	        	tm = (TeamMember) session.getAttribute("currentMember");
+//	        
+//	        ImportBuilder importBuilder = new ImportBuilder();
+//	        boolean importOk = false;
+//			importOk = importBuilder.splitInChunks(inputStream);
+//			if(!importOk) {
+//				ActionMessages errors = new ActionMessages();
+//				errors.add("title", new ActionMessage("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The Data could not be downloaded",locale,siteId)));
+//				request.setAttribute("loadFile",null);
+//				
+//				if (errors.size() > 0){
+//					session.setAttribute("DEimportErrors", errors);
+//				}
+//				else session.setAttribute("DEimportErrors", null);
+//				return mapping.findForward("forwardError");
+//			}
+//			
+//			importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
+//	        
+//	        importBuilder.createActivityTree();
+//	        
+//	        deImportForm.setActivityTree(importBuilder.getRoot());
+//	        
+//	        session.setAttribute("DELogGenerated", importBuilder.printLogs());
+//	        session.setAttribute("importBuilder", importBuilder);
+//	        session.setAttribute("DEfileUploaded", "true");
+//	        
+//			return mapping.findForward("afterUploadFile");
+//		}
 		return mapping.findForward("forwardError");
 	}	
 }

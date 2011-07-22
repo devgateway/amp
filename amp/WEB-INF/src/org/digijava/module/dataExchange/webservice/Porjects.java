@@ -18,7 +18,7 @@ public class Porjects {
     public String getActivities() {
     	JAXBContext jc;
 		try {
-			jc = JAXBContext.newInstance(Constants.JAXB_INSTANCE);
+			jc = JAXBContext.newInstance(Constants.IDML_JAXB_INSTANCE);
 			Marshaller m = jc.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			java.io.StringWriter sw = new StringWriter();

@@ -8,10 +8,15 @@
 				<param name="sequence">AMP_DE_MAPPING_FIELDS_seq</param>
 			</generator>
 		</id>
-		<property name="importedFieldValue" column="imported_field_value" type="java.lang.String" />
-		<property name="importedFieldCode" column="imported_field_code" type="java.lang.String" />
-		<property name="ampFieldId" column="amp_field_id" type="java.lang.Long" />
-		<property name="fieldType" column="field_type" type="java.lang.String" />
+		<property name="iatiPath" column="iati_path" type="java.lang.String" />
+		<property name="iatiItems" column="iati_items" type="java.lang.String" />
+		<property name="iatiValues" column="iati_values" type="java.lang.String" />
+		<property name="iatiLang" column="iati_lang" type="java.lang.String" />
+		<property name="ampId" column="amp_id" type="java.lang.Long" />
+		<property name="ampClass" column="amp_class" type="java.lang.String" />
+		<property name="sourceId" column="source_id" type="java.lang.Long" />
+		<property name="feedFileName" column="feed_file_name" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
+		<property name="creationDate" type="java.sql.Timestamp" column="creation_date" generated="always" />
 	</class>
 </hibernate-mapping>

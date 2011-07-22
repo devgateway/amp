@@ -94,7 +94,7 @@ public class DataExchangeUtils {
 	
 	
 	
-	public static Collection getAmpDEMappingFields() {
+	public static Collection getAllAmpDEMappingFields() {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
@@ -132,46 +132,46 @@ public class DataExchangeUtils {
 	 * @return
 	 */
 	public static boolean insertDEMappingField(String code, String value, Long ampFieldId, String fieldType, String status ) {
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
-			//tx = session.beginTransaction();
-			DEMappingFields demf = new DEMappingFields();
-			if(code == null && value == null) return false;
-			if(code!=null) demf.setImportedFieldCode(code);
-			 else demf.setImportedFieldCode(null);
-			
-			if(value!=null) demf.setImportedFieldValue(value);
-			 else demf.setImportedFieldValue(null);
-			
-			if(ampFieldId!=null) demf.setAmpFieldId(ampFieldId);
-			 else demf.setAmpFieldId(null);
-			
-			if(fieldType!=null) demf.setFieldType(fieldType);
-			 else demf.setFieldType(null);
-			
-			if(status!=null) demf.setStatus(status);
-			 else demf.setStatus(null);
-			
-			session.save(demf);
-			//tx.commit();
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
+//		Session session = null;
+//		Transaction tx = null;
+//
+//		try {
+//			//session = PersistenceManager.getSession();
+//			session = PersistenceManager.getRequestDBSession();
+//			//tx = session.beginTransaction();
+//			DEMappingFields demf = new DEMappingFields();
+//			if(code == null && value == null) return false;
+//			if(code!=null) demf.setImportedFieldCode(code);
+//			 else demf.setImportedFieldCode(null);
+//			
+//			if(value!=null) demf.setImportedFieldValue(value);
+//			 else demf.setImportedFieldValue(null);
+//			
+//			if(ampFieldId!=null) demf.setAmpFieldId(ampFieldId);
+//			 else demf.setAmpFieldId(null);
+//			
+//			if(fieldType!=null) demf.setFieldType(fieldType);
+//			 else demf.setFieldType(null);
+//			
+//			if(status!=null) demf.setStatus(status);
+//			 else demf.setStatus(null);
+//			
+//			session.save(demf);
+//			//tx.commit();
+//		}
+//		catch (Exception ex) {
+//			logger.error("Exception : " + ex.getMessage());
+//		}
+//		finally {
+//			if (session != null) {
+//				try {
+//					;//PersistenceManager.releaseSession(session);
+//				}
+//				catch (Exception rsf) {
+//					logger.error("Release session failed :" + rsf.getMessage());
+//				}
+//			}
+//		}
 
 		return true;
 	}
@@ -1093,6 +1093,46 @@ public class DataExchangeUtils {
 		return activities;
 	}
 
+
+	public static void insertDEMappingField(DEMappingFields mf) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			session.save(mf);
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+	}
+
+	public static Collection<AmpOrganisation> getAllOrganizations() {
+		Session session = null;
+		Collection<AmpOrganisation> col = new ArrayList<AmpOrganisation>();
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg ";
+			
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get Organizations, " + ex);
+		} 
+		return col;
+	}
 	
 }
 

@@ -1,7 +1,7 @@
 function DataSourceBuilder(dataSourceUrl, columnDefs, responseSchema) {
-	this.dataSource 				= new YAHOOAmp.util.DataSource(dataSourceUrl);
+	this.dataSource 				= new YAHOO.util.DataSource(dataSourceUrl);
 	this.dataSource.connMethodPost 	= true;
-	this.dataSource.responseType 	= YAHOOAmp.util.DataSource.TYPE_XML;
+	this.dataSource.responseType 	= YAHOO.util.DataSource.TYPE_XML;
 	this.dataSource.responseSchema	= responseSchema;
 	this.columnDefs					= columnDefs;
 	this.dtConfig					= null;
@@ -15,7 +15,7 @@ DataSourceBuilder.prototype.getDataSource	= function () {
 DataSourceBuilder.prototype.createConfig	= function (configObj) {
 	if ( configObj == null ) {
 		this.dtConfig	= {
-				paginator: new YAHOOAmp.widget.Paginator(
+				paginator: new YAHOO.widget.Paginator(
 						{rowsPerPage:20}
 						)
 		} ;
@@ -26,7 +26,7 @@ DataSourceBuilder.prototype.createConfig	= function (configObj) {
 }
 
 DataSourceBuilder.prototype.createDataTable	= function (divId) {
-	this.dataTable	= new YAHOOAmp.widget.DataTable(divId, this.columnDefs, this.dataSource,{formatRow:function(){alert("I wish!")}} );
+	this.dataTable	= new YAHOO.widget.DataTable(divId, this.columnDefs, this.dataSource,{formatRow:function(){}} );
 	return this.dataTable;
 };
 
@@ -44,13 +44,13 @@ DataSourceBuilder.prototype.getValueOfFirstColumn	= function () {
 SampleConfig = {
 			columnDefs: [
                        	   {key:"Name"},
-                       	{key:"Age", sortable: true, formatter: YAHOOAmp.widget.DataTable.formatNumber},
+                       	{key:"Age", sortable: true, formatter: YAHOO.widget.DataTable.formatNumber},
                        	{key:"Test"},
                        	   ],
 
 			responseSchema: {
 						resultNode: "Result",
-						fields: ["Name", {key:"Age" ,parser:YAHOOAmp.util.DataSource.parseNumber}, "Test"]
+						fields: ["Name", {key:"Age" ,parser:YAHOO.util.DataSource.parseNumber}, "Test"]
 					}
 
 }
@@ -60,14 +60,14 @@ SampleConfig = {
 function MyPanelWrapper(header, url) {
 	var panel	= MyPanelWrapper.panels[url];
 	if (panel == null) {
-		panel 		= new YAHOOAmp.widget.Panel("MyPanel"+url, { width:"400px", visible:true, draggable:true, close:true } );
+		panel 		= new YAHOO.widget.Panel("MyPanel"+url, { width:"400px", visible:true, draggable:true, close:true } );
 		panel.setHeader('<digi:trn>'+header+'</digi:trn>');
 		panel.setBody("<div style='text-align: center;'><img src='/TEMPLATE/ampTemplate/images/ajax-loader.gif' /></div>");
 		panel.render(document.body);
 		panel.center();
 		
 		MyPanelWrapper.panels[url] = panel;
-		YAHOOAmp.util.Connect.asyncRequest('GET', url, this.getCallback(this) );
+		YAHOO.util.Connect.asyncRequest('GET', url, this.getCallback(this) );
 	}
 	this.panel		= panel;
 	this.url		= url;

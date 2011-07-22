@@ -71,7 +71,7 @@ window.onload = function(){
 			var sectorId =  document.getElementById("sectorsMapComboFin").value;
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
-			var mapModeFin = document.getElementById("mapModeFin").value;
+			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
 		  
 			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
 

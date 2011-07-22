@@ -17,7 +17,7 @@
 		<many-to-one name="program" column="amp_program_id"
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
 
-		<property name="programPercentage" column="program_percentage" type="java.lang.Float" />
+		<property name="programPercentage" column="program_percentage" type="java.lang.Long" />
 
 		<many-to-one name="programSetting" column="program_setting"
 			class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" cascade="none"

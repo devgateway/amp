@@ -13,17 +13,157 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/fonts-min.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/datatable.css'/>">
+
+
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script> 
+<script type="text/javascript" src="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/dom/dom-min.js'/>" > </script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<!-- 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/yuiloader-beta-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datasource-beta-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datatable-beta-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/button-min.js'/>" > </script>
+
+ -->
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/logHelper.js'/>" > </script>
+
+
+<script language="JavaScript">
+	var msgDataError = '<digi:trn>Data error</digi:trn>';
+	var msgLoading	 = '<digi:trn>Loading...</digi:trn>';
+	
+	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
+		function initDynamicTable1() {	
+				
+		    YAHOO.example.XHR_JSON = new function() {		    			        
+		        
+		        var lastTimeStamp = new Date().getTime();
+
+		        this.myDataSource = new YAHOO.util.DataSource("/dataExchange/manageSource.do?lastTimeStamp"+lastTimeStamp+"&");
+		        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+		        //this.myDataSource.connXhrMode = "queueRequests";
+		        this.myDataSource.responseSchema = {
+		            resultsList: "SourceSetting",
+		            fields: ["ID","Name", "Source", "Workspace"],
+		            metaFields: {
+		            	totalRecords: "totalRecords" // Access to value in the server response
+		        	}    
+		        };        
+		        
+		        var myColumnDefs = [
+		            {key:"Name", label:"Name",sortable: true},
+	                {key:"Source", label:"Source", sortable: true},
+	                {key:"Workspace", label:"Workspace used", sortable:true}
+		        ];
+		  
+		        //var div = document.getElementById('errors');
+		
+		        var handleSuccess = function(o){
+		        	if(o.responseText != undefined){
+		        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
+		        	}
+		        }
+		
+		        //var handleFailure = function(o){
+		        //	if(o.responseText != undefined){
+		        //		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+		        //		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+		        //		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+		        //	}
+		        //}
+		        
+		        // Create the Paginator 
+		        var myPaginator = new YAHOO.widget.Paginator({ 
+		        	rowsPerPage:10,
+		        	//totalRecords:document.getElementById("totalResults").value,
+		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
+		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
+		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
+		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+		        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
+		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+		        	firstPageLinkClass : "yui-pg-first l_sm",
+		        	lastPageLinkClass: "yui-pg-last l_sm",
+		        	nextPageLinkClass: "yui-pg-next l_sm",
+		        	previousPageLinkClass: "yui-pg-previous l_sm",
+		        	rowsPerPageDropdownClass:"l_sm",
+		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
+		        	 // use custom page link labels
+		            pageLabelBuilder: function (page,paginator) {
+		                var curr = paginator.getCurrentPage();
+		                if(curr==page){
+		                	return "<span class='current-page'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</span>|";
+		                }
+		                else{
+		                	return page;
+		                }
+		                
+		            }
+
+		        });
+		         
+		        var myConfigs = {
+		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+		            dynamicData: true, // Enables dynamic server-driven data
+		            sortedBy : {key:"Name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+		            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
+		            paginator:myPaginator,
+		            MSG_ERROR:msgDataError,
+		            MSG_LOADING:msgLoading
+		        };
+		    	 
+		        this.myDataTable = new YAHOO.widget.DataTable("sourcesDiv", myColumnDefs, this.myDataSource, myConfigs);
+		        //this.myDataTable.subscribe("rowClickEvent", onRowSelect);
+		        this.myDataTable.subscribe("rowClickEvent", function (ev) {
+	                var target = YAHOO.util.Event.getTarget(ev);
+	                var record = this.getRecord(target);
+	                alert(record);
+	                document.getElementById("selectFileDiv").style.display = "none";
+	        		refreshDetails(record.getData('ID'));
+	               
+	            });
+		        
+		        
+		        //this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+		        //this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+		       
+		        
+		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+		        // Programmatically bring focus to the instance so arrow selection works immediately 
+		        this.myDataTable.focus(); 
+		
+		        // Update totalRecords on the fly with value from server
+		        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+		           oPayload.totalRecords = oResponse.meta.totalRecords;
+		           return oPayload;
+		        }
+		    };
+	    
+		}
+		
+</script>
+
+
+
+
+
+
+
+
+
 
 <script type="text/javascript">
 	LogPerExecutionConfig = {
-			columnDefs: [	{key:"DbId", sortable:true, formatter:YAHOOAmp.widget.DataTable.formatNumber, hidden: true},
+			columnDefs: [	{key:"DbId", sortable:true, formatter:YAHOO.widget.DataTable.formatNumber, hidden: true},
 	                   	   {key:"Name", sortable: true},
 	                   	{key:"Source", label:"Source", sortable: true},
 	                   	{key:"Workspace", label:"Workspace used", sortable:true}
@@ -31,14 +171,14 @@
 	
 			responseSchema: {
 						resultNode: "SourceSetting",
-						fields: [{key:"DbId", parser:YAHOOAmp.util.DataSource.parseNumber},"Name", "Source", "Workspace"]
+						fields: [{key:"DbId", parser:YAHOO.util.DataSource.parseNumber},"Name", "Source", "Workspace"]
 					}
 	
 	}
 	dataSourceBuilder 	= new DataSourceBuilder("/dataExchange/manageSource.do",
 			LogPerExecutionConfig.columnDefs ,LogPerExecutionConfig.responseSchema);
 	
-	YAHOOAmp.util.Event.addListener(window, "load", createDataTable );
+	//YAHOO.util.Event.addListener(window, "load", createDataTable );
 
 
 	function createDataTable() {
@@ -71,7 +211,7 @@
 	}
 	
 	function refreshDetails( sourceId ) {
-		YAHOOAmp.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForSources("detailsDiv"), "selectedSourceId="+sourceId+"&action=showDetails" );
+		YAHOO.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForSources("detailsDiv"), "selectedSourceId="+sourceId+"&action=showDetails" );
 	}
 
 	function executeSource( sourceId, sourceType ) {
@@ -108,7 +248,7 @@
 	
 	function deleteSource(sourceId) {
 		document.getElementById("detailsDiv").innerHTML = '<digi:trn>Deleting</digi:trn>...';
-		YAHOOAmp.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForDelete(sourceId), "selectedSourceId="+sourceId+"&action=delete" );
+		YAHOO.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForDelete(sourceId), "selectedSourceId="+sourceId+"&action=delete" );
 	}
 	
 	

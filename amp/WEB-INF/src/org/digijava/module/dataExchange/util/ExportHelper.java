@@ -81,7 +81,7 @@ public class ExportHelper {
 		String key = matcher.replaceAll("");
 		StringBuffer retValue = new StringBuffer();
 		String nodeVarName = "atn_"+ key;
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + node.getName() + "\", " + parentNode + ", ");
+		retValue.append("var "+ nodeVarName +" = new YAHOO.widget.TaskNode(\"" + node.getName() + "\", " + parentNode + ", ");
 		retValue.append("false , ");
 		retValue.append(Boolean.toString(node.isSelect()) + ", ");
 		retValue.append(Boolean.toString(node.isMandatory()) + ", ");

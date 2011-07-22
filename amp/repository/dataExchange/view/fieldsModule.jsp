@@ -14,22 +14,12 @@
 
 <%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
 
-
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
-
 <script type="text/javascript">
-  if (YAHOOAmp != null){
-    var YAHOO = YAHOOAmp;
-  }
   var tree;
   
 </script>
 
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
-
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/fonts/fonts-min.css" />
 
 
 <style type="text/css">
@@ -42,75 +32,52 @@
 #treeDiv1 { background: #fff }
 </style> 
 
-
-	
-<!--
-  <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
-    <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
--->
-	
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
-
-	<br>
-
   
-	<script type="text/javascript">
+<script type="text/javascript">
 
-
-
-    function treeInit() {
-      tabView = new YAHOO.widget.TabView('wizard_container');
-      buildRandomTaskNodeTree();
+	function treeInit() {
+    	buildRandomTaskNodeTree();
     }
     
     //handler for expanding all nodes
-    YAHOOAmp.util.Event.on("expand", "click", function(e) {
+    YAHOO.util.Event.on("expand", "click", function(e) {
       tree.expandAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for collapsing all nodes
-    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+    YAHOO.util.Event.on("collapse", "click", function(e) {
       tree.collapseAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //handler for checking all nodes
-    YAHOOAmp.util.Event.on("check", "click", function(e) {
+    YAHOO.util.Event.on("check", "click", function(e) {
       checkAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
     
     //handler for unchecking all nodes
-    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+    YAHOO.util.Event.on("uncheck", "click", function(e) {
       uncheckAll();
-      YAHOOAmp.util.Event.preventDefault(e);
+      YAHOO.util.Event.preventDefault(e);
     });
 
 
-    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
-      YAHOOAmp.util.Event.preventDefault(e);
+    YAHOO.util.Event.on("getchecked", "click", function(e) {
+      YAHOO.util.Event.preventDefault(e);
     });
 
     //Function  creates the tree and 
     //builds between 3 and 7 children of the root node:
-      function buildRandomTaskNodeTree() {
-    
-      //instantiate the tree:
-          tree = new YAHOOAmp.widget.TreeView("dataExportTree");
+      function buildRandomTaskNodeTree() {    
+      	//instantiate the tree:
+        tree = new YAHOO.widget.TreeView("dataExportTree");
             
-          <bean:define id="tree" name="fieldsModuleTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-          <%= ExportHelper.renderActivityTree(tree) %>
+        <bean:define id="tree" name="fieldsModuleTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
+        <%= ExportHelper.renderActivityTree(tree) %>
 
-      //The tree is not created in the DOM until this method is called:
+      	//The tree is not created in the DOM until this method is called:
           tree.draw();
           
       }
@@ -168,25 +135,13 @@
        }  
 
          
-		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
+		YAHOO.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
-
-
-                      <div style="text-align: left; width: 87.5%;margin-left: auto;margin-right: auto; ">
-                        <div id="expandcontractdiv" style="margin-bottom: 0px;" >
-                          <a id="expand" href="#">Expand all</a>
-                          <a id="collapse" href="#">Collapse all</a>
-                        
-                          <a id="check" href="#">Check all</a>
-                          <a id="uncheck" href="#">Uncheck all</a>
-                        </div>
-                      </div>
-        <div class="draglist" style="height:80%; border-width: 0px;margin-left: auto;margin-right: auto;">
-        	<div id="dataExportTree"></div>
-                  
-        
-        </div>
+                      
+<div class="draglist" style="width:100%; height:410px; border:1px solid; margin-top:15px; overflow:scroll; border:1px solid #CCCCCC;">
+   	<div id="dataExportTree"></div>
+</div>
 
 
 <%= ExportHelper.renderHiddenElements(tree) %>

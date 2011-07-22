@@ -48,17 +48,19 @@
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
 		<![CDATA[
-			import flash.external.ExternalInterface;
-			import org.axiis.events.LayoutItemEvent;
+			import com.exportUtil.*;
 			
-			import org.axiis.data.DataSet;
+			import flash.external.ExternalInterface;
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-			import mx.events.SliderEvent;
-			import com.exportUtil.*;
+			
+			import org.axiis.data.DataSet;
+			import org.axiis.events.LayoutItemEvent;
 			
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
@@ -248,7 +250,10 @@
 				if (sliderYear.visible == true){
 					year = sliderYear.value;
 				}
-				ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
+				var idStr:String = "" + evt.item.data.id;
+				if (idStr != "undefined"){
+					ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
+				}
 			}
 
 		]]>

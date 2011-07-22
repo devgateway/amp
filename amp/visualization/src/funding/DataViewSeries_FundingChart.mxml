@@ -27,7 +27,8 @@
 				}
 				var arrHeader:Array = arr[0].split(',');
 				for (var i2:int=0; i2<arrHeader.length; i2++) {
-					addDataGridColumn(i2.toString(), arrHeader[i2]);
+					var array = arrHeader[i2].split("#");
+					addDataGridColumn(i2.toString(), array[0]);
 				}
 				datagrid_id.dataProvider = arrDest;
 			}

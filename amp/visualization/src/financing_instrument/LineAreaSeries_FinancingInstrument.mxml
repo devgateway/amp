@@ -48,6 +48,10 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import flash.external.ExternalInterface;
+			import org.axiis.events.LayoutItemEvent;
+			import org.axiis.core.AxiisSprite;
+			import org.axiis.utils.ObjectUtils;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
@@ -207,7 +211,25 @@
 				service.send();
 				start();
 			}
-
+			public function itemClick(evt:LayoutItemEvent):void{
+				var axiisSprite:AxiisSprite = evt.item;
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				//Alert.show("Year: " + data.name + " Type: " + ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField));
+				if (array[1]!=null){
+					ExternalInterface.call("itemClick",array[1],"finInstrument",data.name);
+				}
+			}
+			
+			private function dataTipLabelFunction(axiisSprite:AxiisSprite):String
+			{
+				if (myLineGroup.currentPlotIndex < 0)
+					return "";
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField);
+				
+			}
 		]]>
 	</mx:Script>
 	
@@ -409,7 +431,9 @@
 				horizontalScale="{hScale}"
 				stroke="{myStroke}"
 				fill="{areaFill}"
-				 enableRollOver="true"/>
+				itemClick="this.itemClick(event);"
+				dataTipLabelFunction="{dataTipLabelFunction}"
+				enableRollOver="true"/>
 				 
 		</axiis:layouts>
 		

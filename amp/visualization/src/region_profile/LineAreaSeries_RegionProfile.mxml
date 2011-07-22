@@ -49,6 +49,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Script>
 		<![CDATA[
 			import com.exportUtil.*;
+			import flash.external.ExternalInterface;
+			import org.axiis.events.LayoutItemEvent;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -57,7 +59,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import mx.utils.ArrayUtil;
 			
 			import org.axiis.data.DataSet;
-			
+			import org.axiis.core.AxiisSprite;
+			import org.axiis.utils.ObjectUtils;
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
@@ -98,7 +101,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 					groupSeparator = " ";
 				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
-				
 			}
 			
 			private function captureSnapshot():void
@@ -207,6 +209,26 @@ OTHER DEALINGS IN THE SOFTWARE.
 			{
 				service.send();
 				start();
+			}
+			public function itemClick(evt:LayoutItemEvent):void{
+				var axiisSprite:AxiisSprite = evt.item;
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				//Alert.show("Year: " + data.name + " Type: " + ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField));
+				var idStr:String = "" + array[1];
+				if (idStr!=null && idStr != "undefined"){
+					ExternalInterface.call("itemClick",array[1],"region",data.name);
+				}
+			}
+
+			private function dataTipLabelFunction(axiisSprite:AxiisSprite):String
+			{
+				if (myLineGroup.currentPlotIndex < 0)
+					return "";
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField);
+
 			}
 			
 		]]>
@@ -410,6 +432,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 									   horizontalScale="{hScale}"
 									   stroke="{myStroke}"
 									   fill="{areaFill}"
+									   itemClick="this.itemClick(event);"
+									   dataTipLabelFunction="{dataTipLabelFunction}"
 									   enableRollOver="true"/>
 			
 		</axiis:layouts>

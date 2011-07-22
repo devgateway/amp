@@ -246,7 +246,10 @@
 				if (sliderYear.visible == true){
 					year = sliderYear.value;
 				}
-				ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
+				var idStr:String = "" + evt.item.data.id;
+				if (idStr != "undefined"){
+					ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
+				}
 			}
 
 		]]>

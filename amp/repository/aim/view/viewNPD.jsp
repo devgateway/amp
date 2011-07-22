@@ -801,7 +801,7 @@ function showFilter(){
 		setUpActivityList(responseXML);
 	}
 
-	function setUpActivityList(xml){
+	function setUpActivityList(xml){ 
 		var tr= document.getElementById('activityResultsPlace');
 		var paginationTr=document.getElementById('paginationPlace');
 		var tbl= tr.parentNode;

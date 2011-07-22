@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -94,7 +95,7 @@ public class DataExchangeUtils {
 	
 	
 	
-	public static Collection getAllAmpDEMappingFields() {
+	public static Collection<DEMappingFields> getAllAmpDEMappingFields() {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
@@ -1131,6 +1132,30 @@ public class DataExchangeUtils {
 		} catch (Exception ex) {
 			logger.error("Unable to get Organizations, " + ex);
 		} 
+		return col;
+	}
+	
+	public static Collection<AmpSectorScheme> getAllSectorSchemes() {
+		Session session = null;
+		Collection<AmpSectorScheme> col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select ss from "
+					+ AmpSectorScheme.class.getName() + " ss "
+					+ "order by ss.secSchemeName";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get all sector schemes, " + ex);
+		} finally {
+			try {
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
 		return col;
 	}
 	

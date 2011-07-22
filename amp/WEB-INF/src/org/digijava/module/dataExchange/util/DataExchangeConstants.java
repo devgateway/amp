@@ -52,5 +52,7 @@ public class DataExchangeConstants {
 	public static final String IATI_ORGANIZATION_TYPE = "CodeLists.Organization Type";
 	public static final String IATI_ORGANIZATION = "Organization";
 	public static final String IATI_ACTIVITY_STATUS = "Activity Status";
+	public static final String IATI_VOCABULARY_CODE = "Vocabulary Code";
+	public static final String IATI_SECTOR = "Sector";
 	
 }

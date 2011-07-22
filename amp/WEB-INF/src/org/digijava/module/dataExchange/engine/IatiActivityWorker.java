@@ -11,20 +11,22 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
-import org.codehaus.jackson.map.deser.CollectionDeserializer;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
-import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ParticipatingOrg;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ReportingOrg;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Sector;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType;
 
 /**
@@ -116,7 +118,7 @@ public class IatiActivityWorker {
 				if(!existOrganizationType)
 					//TODO log the exception!
 					;
-				checkOrganization(printList(item.getContent()),item.getLang(), item.getRef(), item.getType());
+				checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
 			}
 			
 			if(contentItem instanceof ParticipatingOrg){
@@ -126,7 +128,18 @@ public class IatiActivityWorker {
 				if(!existOrganizationType)
 					//TODO log the exception!
 					;
-				checkOrganization(printList(item.getContent()),item.getLang(), item.getRef(), item.getType());
+				checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
+			}
+			
+			if(contentItem instanceof Sector){
+				Sector item = (Sector)contentItem;
+				System.out.println("sector" + printList(item.getContent()));
+				Collection<AmpSectorScheme> allSectorSchemes = DataExchangeUtils.getAllSectorSchemes();
+				DEMappingFields existVocabularyCode = checkVocabularyCode(item.getVocabulary(),allSectorSchemes);
+				if(existVocabularyCode !=null)
+					//TODO log the exception!
+					;
+				checkSector(printList(item.getContent()),item.getLang(), item.getCode(), item.getVocabulary(), existVocabularyCode, allSectorSchemes);
 			}
 		}
 	}
@@ -173,7 +186,7 @@ public class IatiActivityWorker {
 		
 	}
 	
-	private boolean checkOrganization(String content, String lang, String ref, String type) {
+	private boolean checkOrganization(String content, String lang, String ref) {
 		Collection<AmpOrganisation> allOrganizations = DataExchangeUtils.getAllOrganizations();
 		boolean ok = true;
 		for (Iterator iterator = allOrganizations.iterator(); iterator.hasNext();) {
@@ -181,8 +194,8 @@ public class IatiActivityWorker {
 			if(ampOrganisation.getName().compareTo(content) == 0 && ampOrganisation.getOrgCode().compareTo(ref) == 0)
 				return ok;
 		}
-		boolean checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,"organizationName|||organizationCode",content+"|||"+ref,this.getLang(),null,AmpOrganisation.class,null,null,"inactive");
-		if(!checkMappedField)
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,"organizationName|||organizationCode",content+"|||"+ref,this.getLang(),null,AmpOrganisation.class,null,null,"inactive");
+		if(checkMappedField!=null)
 			addMappingField(DataExchangeConstants.IATI_ORGANIZATION,"organizationName|||organizationCode",content+"|||"+ref,this.getLang(),null,AmpOrganisation.class,null,null,"inactive");
 		return !ok;
 	}
@@ -194,30 +207,99 @@ public class IatiActivityWorker {
 			AmpOrgType ampOrgType = (AmpOrgType) iterator.next();
 			if(type.compareTo(ampOrgType.getOrgType()) == 0) return ok;
 		}
-		boolean checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class,null,null,"inactive");
-		if(!checkMappedField)
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class,null,null,"inactive");
+		if(checkMappedField!=null)
 			addMappingField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class,null,null,"inactive");
 		return !ok;
 	}
+	
+	private boolean checkSector(String content, String lang, String code, String vocabularyName, DEMappingFields mappedVocabulary, Collection<AmpSectorScheme> allSectorSchemes) {
+		
+		AmpSectorScheme ampSS = null;
+		boolean ok = true;
+		if(mappedVocabulary == null) {
+			for (Iterator<AmpSectorScheme> iterator = allSectorSchemes.iterator(); iterator.hasNext();) {
+				ampSS = (AmpSectorScheme) iterator.next();
+				if(vocabularyName.compareTo(ampSS.getSecSchemeName()) == 0) break;
+			}
+			List<AmpSector> allSectorsFromScheme = SectorUtil.getAllSectorsFromScheme(ampSS.getAmpSecSchemeId());
+			for (Iterator<AmpSector> it = allSectorsFromScheme.iterator(); it.hasNext();) {
+				AmpSector ampSector = (AmpSector) it.next();
+				if(ampSector.getName().compareTo(content) == 0 && ampSector.getSectorCodeOfficial().compareTo(code) == 0) return ok;
+			}
+		}
+		//it is a mapped sector scheme
+		else{
+			if(mappedVocabulary.getAmpId()!=null) {
+				for (Iterator<AmpSectorScheme> iterator = allSectorSchemes.iterator(); iterator.hasNext();) {
+					ampSS = (AmpSectorScheme) iterator.next();
+					if(mappedVocabulary.getAmpId().compareTo(mappedVocabulary.getAmpId()) == 0) break;
+				}
+				List<AmpSector> allSectorsFromScheme = SectorUtil.getAllSectorsFromScheme(ampSS.getAmpSecSchemeId());
+				for (Iterator<AmpSector> it = allSectorsFromScheme.iterator(); it.hasNext();) {
+					AmpSector ampSector = (AmpSector) it.next();
+					if(ampSector.getName().compareTo(content) == 0 && ampSector.getSectorCodeOfficial().compareTo(code) == 0) return ok;
+				}
+			}
+			else {
+				DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+				if(checkMappedField !=null)
+					addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+			}
+		}
 
-	private boolean checkMappedField(String iatiPath, String iatiItems,
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+		if(checkMappedField !=null)
+			addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+		
+		return !ok;
+	}
+	
+	private DEMappingFields checkVocabularyCode(String name, Collection<AmpSectorScheme> allSectorSchemes) {
+		boolean ok = true;
+		DEMappingFields mf = null;
+		
+		for (Iterator<AmpSectorScheme> iterator = allSectorSchemes.iterator(); iterator.hasNext();) {
+			AmpSectorScheme ampSS = (AmpSectorScheme) iterator.next();
+			if(name.compareTo(ampSS.getSecSchemeName()) == 0) return mf;
+		}
+		mf = checkMappedField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class,null,null,"inactive");
+		if(mf != null)
+			mf = addMappingField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class,null,null,"inactive");
+		return mf;
+	}
+
+	private String toIATIValues(String a, String b){
+		return a+"|||"+b;
+	}
+
+	private String toIATIValues(String a, String b, String c){
+		return a+"|||"+b+"|||"+c;
+	}
+
+	private String toIATIValues(String a, String b, String c, String d, String e){
+		return toIATIValues(a,b)+"|||"+toIATIValues(c,d,e);
+	}
+
+	
+	private DEMappingFields checkMappedField(String iatiPath, String iatiItems,
 			String iatiValues, String iatiLang, Long ampId, Class ampClass,
 			Long sourceId, String feedFileName, String status) {
-		boolean ok = false;
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
 		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		for (Iterator ot = allAmpDEMappingFields.iterator(); ot.hasNext();) {
 			DEMappingFields deMappingFields = (DEMappingFields) ot.next();
-			if(mf.compare(deMappingFields)) {ok=true; break;}
+			if(mf.compare(deMappingFields)) return deMappingFields;
 		}
-		return ok;
+		return null;
 	}
 
-	private void addMappingField(String iatiPath, String iatiItems,
+	private DEMappingFields addMappingField(String iatiPath, String iatiItems,
 			String iatiValues, String iatiLang, Long ampId, Class ampClass,
 			Long sourceId, String feedFileName, String status) {
 		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		DataExchangeUtils.insertDEMappingField(mf);
+		return mf;
 	}
 
 	//return JAXBElement<TextType> content

@@ -36,7 +36,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="javascript">
 <!--
 
@@ -2353,11 +2353,17 @@ function reloadGraphs(){
 }
 
 function itemClick(id, type, year){
-	//showListPopin(id, type, year);
-	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
+	  openNewWindow(600, 400);
+	  <digi:context name="showList" property="context/module/moduleinstance/showProjectsList.do?" />
+	  var url="<%= showList %>&id=" + id + "&type=" + type + "&year=" + year;
+	  document.visualizationform.action = url;
+	  document.visualizationform.target = popupPointer.name;
+	  document.visualizationform.submit();
+
+		//var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
 }
 
-
+/*
 var showListPopinCall = {
 	success: function(o) {
 		  try {
@@ -2388,7 +2394,7 @@ var showListPopinCall = {
 	  failure: function(o) {//Fail silently
 		}
 	};
-			    
+	*/		    
 //-->
 </script>
 

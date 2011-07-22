@@ -26,6 +26,9 @@
 			<forward name="donor" path="/visualization/showDashboard.do" />
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
+	    <action name="visualizationform" path="/visualization/showProjectsList" scope="session" type="org.digijava.module.visualization.action.ShowProjectsList">
+	      <forward name="forward" path="/showLayout.do?layout=showProjectsList" />
+	    </action>
     
     	<action name="visualizationform" path="/visualization/pdfExport" type="org.digijava.module.visualization.action.ExportToPDF"/>
     	<action name="visualizationform" path="/visualization/wordExport" type="org.digijava.module.visualization.action.ExportToWord"/>

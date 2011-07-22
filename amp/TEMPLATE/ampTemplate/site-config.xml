@@ -751,6 +751,9 @@
 				<page>mainmap</page>
 				<page>mainmapPopup</page>
             </module>
-		</page-group>
+			<module name="visualization">
+				<page>showProjectsList</page>
+            </module>
+        </page-group>
 	</site-layout>
 </site-config>

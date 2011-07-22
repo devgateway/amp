@@ -31,7 +31,17 @@ public class VisualizationForm extends ActionForm {
 	private SummaryInformation summaryInformation;
 	private RanksInformation ranksInformation;
 	private ExportData exportData;
+	private Map<AmpActivityVersion, BigDecimal> itemProjectsList;
 	
+	public Map<AmpActivityVersion, BigDecimal> getItemProjectsList() {
+		return itemProjectsList;
+	}
+
+	public void setItemProjectsList(
+			Map<AmpActivityVersion, BigDecimal> itemProjectsList) {
+		this.itemProjectsList = itemProjectsList;
+	}
+
 	public void setFilter(DashboardFilter filter) {
 		this.filter = filter;
 	}

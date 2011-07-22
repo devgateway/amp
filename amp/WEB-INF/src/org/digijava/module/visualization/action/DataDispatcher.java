@@ -609,6 +609,8 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpSector sec = (AmpSector) entry.getKey();
 	            csvString.append(sec.getName());
+	            csvString.append("#");
+	            csvString.append(sec.getAmpSectorId());
 	            csvString.append(",");
 	            sectorData += sec.getName() + ">";
 	            for (Long i = year - yearsInRange; i <= year; i++) {
@@ -921,7 +923,9 @@ public class DataDispatcher extends DispatchAction {
                 Map.Entry entry = (Map.Entry)it.next();
                 AmpOrganisation org = (AmpOrganisation) entry.getKey();
                 csvString.append(org.getName());
-                csvString.append(",");
+                csvString.append("#");
+	            csvString.append(org.getAmpOrgId());
+	            csvString.append(",");
                 donorData += org.getName() + ">";
                 for (Long i = year - yearsInRange; i <= year; i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -1216,7 +1220,9 @@ public class DataDispatcher extends DispatchAction {
 			AmpCategoryValue value = it.next();
 //            String title = TranslatorWorker.translateText(categoryValue.getValue(), opt.getLangCode(), opt.getSiteId());
 			csvString.append(value.getValue());
-			if(it.hasNext()) 
+			csvString.append("#");
+            csvString.append(value.getId());
+            if(it.hasNext()) 
 				csvString.append(",");
 			else
 				csvString.append("\n");
@@ -1348,16 +1354,20 @@ public class DataDispatcher extends DispatchAction {
 		csvString.append("Year");
 		csvString.append(",");
 		csvString.append(plannedTitle);
-		csvString.append(",");
+		csvString.append("#");
+        csvString.append(Constants.PLANNED);
+        csvString.append(",");
 		csvString.append(actualTitle);
-		csvString.append("\n");
+		csvString.append("#");
+        csvString.append(Constants.ACTUAL);
+        csvString.append("\n");
 
         for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
             // apply calendar filter
 			csvString.append(i);
 			csvString.append(",");
-            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
-            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
             DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
 			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			csvString.append(",");
@@ -1464,12 +1474,18 @@ public class DataDispatcher extends DispatchAction {
 		csvString.append("Year");
 		csvString.append(",");
 		csvString.append(actComTranslatedTitle);
-		csvString.append(",");
+		csvString.append("#");
+        csvString.append(Constants.COMMITMENT);
+        csvString.append(",");
 		csvString.append(actDisbTranslatedTitle);
-		if (filter.isExpendituresVisible()) {
+		csvString.append("#");
+        csvString.append(Constants.DISBURSEMENT);
+        if (filter.isExpendituresVisible()) {
 			csvString.append(",");
 			csvString.append(actExpTranslatedTitle);
-		}
+			csvString.append("#");
+	        csvString.append(Constants.EXPENDITURE);
+	    }
 		if (filter.isPledgeVisible()) {
 			csvString.append(",");
 			csvString.append(pledgesTranslatedTitle);
@@ -1885,6 +1901,8 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) entry.getKey();
 	            csvString.append(loc.getName());
+	            csvString.append("#");
+	            csvString.append(loc.getId());
 	            csvString.append(",");
 	            regionData += loc.getName() + ">";
 	            for (Long i = year - yearsInRange; i <= year; i++) {
@@ -2183,7 +2201,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 		return null;
 	}
-        
+    /*   
 	public ActionForward getActivitiesList(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -2318,5 +2336,5 @@ public class DataDispatcher extends DispatchAction {
 		}
 		return null;
 	}
-	
+	*/
 }

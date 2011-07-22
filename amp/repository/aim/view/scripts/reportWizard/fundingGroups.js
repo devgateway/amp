@@ -185,6 +185,6 @@ function generateHierarchies(e) {
 				
 		}
 	}
-	
+	repManager.showHideHierarchies();
 }
 

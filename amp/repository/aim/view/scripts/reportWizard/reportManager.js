@@ -67,6 +67,7 @@ function populateRPS(rpSettings) {
 }
 
 function continueInitialization( e, rmParams ){
+	
 		if (rmParams.onePager)
 			new KeepWithScroll("toolbarMarkerDiv", "toolbarDivStep0" );
 	
@@ -89,6 +90,9 @@ function continueInitialization( e, rmParams ){
 				repManager		= new OPNormalReportManager();
 			else
 				repManager		= new NormalReportManager();
+		
+		repManager.hierarchiesVisibility	= new ShowHideElement("hierarchies_step_div");
+		repManager.hFieldsetVisibility		= new ShowHideElement("hierarchiesInfoFieldset");
 		
 		var saveBtns		= document.getElementsByName("save");	
 		for (var i=0; i<saveBtns.length; i++  ) {
@@ -160,7 +164,8 @@ function toggleMoreSettings() {
 }
 
 function NormalReportManager () {
-	;
+	this.hierarchiesVisibility	= null;
+	this.hFieldsetVisibility	= null;
 }
 NormalReportManager.prototype.enableTab		= function (tabIndex) {
 	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps ) {
@@ -381,6 +386,8 @@ NormalReportManager.prototype.decideStrikeFilters	= function () {
 NormalReportManager.prototype.cancelWizard	= function () {
 	window.location = "/viewTeamReports.do?tabs=false";
 }
+NormalReportManager.prototype.showHideHierarchies	= function(){};
+
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
@@ -443,7 +450,7 @@ TabReportManager.prototype.cancelWizard	= function () {
 	window.location = "/viewTeamReports.do?tabs=true";
 }
 
-
+OPTabReportManager.prototype.showHideHierarchies	= function(){};
 
 
 
@@ -454,8 +461,22 @@ function OPNormalReportManager() {
 }
 
 
-OPNormalReportManager.prototype.enableTab		= function(tabIndex){}
-OPNormalReportManager.prototype.disableTab		= function(tabIndex){}
+OPNormalReportManager.prototype.enableTab		= function(tabIndex){
+}
+OPNormalReportManager.prototype.disableTab		= function(tabIndex){
+}
+OPNormalReportManager.prototype.showHideHierarchies	= function(){
+	var availableHierchies	= document.getElementById("source_hierarchies_ul").getElementsByTagName("li");
+	if (availableHierchies.length > 0 ) {
+		this.hFieldsetVisibility.hide();
+		this.hierarchiesVisibility.show();
+	}
+	else {
+		this.hierarchiesVisibility.hide();
+		this.hFieldsetVisibility.show();
+	}
+};
+
 
 
 
@@ -466,8 +487,26 @@ function OPTabReportManager() {
 }
 
 
-OPTabReportManager.prototype.enableTab		= function(tabIndex){}
-OPTabReportManager.prototype.disableTab		= function(tabIndex){}
+OPTabReportManager.prototype.enableTab		= function(tabIndex){
+}
+OPTabReportManager.prototype.disableTab		= function(tabIndex){
+}
+
+OPTabReportManager.prototype.showHideHierarchies	= function(){
+	var availableHierchies	= document.getElementById("source_hierarchies_ul").getElementsByTagName("li");
+	if (availableHierchies.length > 0 ) {
+		this.hFieldsetVisibility.hide();
+		this.hierarchiesVisibility.show();
+	}
+	else {
+		this.hierarchiesVisibility.hide();
+		this.hFieldsetVisibility.show();
+	}
+};
+
+
+
+
 
 
 function ShowHideElement ( elId ) {

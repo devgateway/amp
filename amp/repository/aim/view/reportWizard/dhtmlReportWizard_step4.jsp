@@ -13,7 +13,7 @@
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
-						<div id="measures_step_div" class="main_side_cont yui-hidden">
+						<div id="measures_step_div" class="main_side_cont yui-hidden" style="${topBottomPadding}">
 							<c:set var="stepNum" value="3" scope="request" />
 							<c:if test="${!myForm.onePager}">
 								<jsp:include page="toolbar.jsp" />

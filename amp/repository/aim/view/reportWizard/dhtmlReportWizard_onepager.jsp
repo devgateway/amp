@@ -252,8 +252,16 @@ body {
 		  	<tr valign="top">
 				<td class="main_side">
 					<div class="yui-content">
+						<c:set var="topBottomPadding" scope="request">padding-bottom: 0px; padding-top:0px;</c:set>
 						<jsp:include page="dhtmlReportWizard_step1.jsp"></jsp:include>
 						<jsp:include page="dhtmlReportWizard_step2.jsp"></jsp:include>
+						<c:set var="hierarchiesVisibility" scope="request">display: none;</c:set>
+						<fieldset id="hierarchiesInfoFieldset" style="margin-left: 10px;margin-right: 10px;background-color: #F6F6F6;">
+							<legend><digi:trn>Hiearchies</digi:trn></legend>
+							<div>
+								<digi:trn>Hierarchies will appear here when available</digi:trn>....
+							</div>	
+						</fieldset>
 						<jsp:include page="dhtmlReportWizard_step3.jsp"></jsp:include>
 						<jsp:include page="dhtmlReportWizard_step4.jsp"></jsp:include>
 					</div>
@@ -261,7 +269,7 @@ body {
 			</tr>
 			<tr>
 				<div id="titlePanel" style="display: none">
-					<div class="hd" style="font-size: 8pt">
+					<div class="hd" style="font-size: 8pt;">
 						${plsEnterTitle}
 					</div>
 					<div class="bd" id="titlePanelBody">

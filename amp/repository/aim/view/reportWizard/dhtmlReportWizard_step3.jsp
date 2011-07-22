@@ -13,7 +13,7 @@
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
-						<div id="hierarchies_step_div" class="main_side_cont yui-hidden">
+						<div id="hierarchies_step_div" class="main_side_cont yui-hidden" style="${topBottomPadding} ${hierarchiesVisibility}">
 							<c:set var="stepNum" value="2" scope="request" />
 							<c:if test="${!myForm.onePager}">
 								<jsp:include page="toolbar.jsp" />

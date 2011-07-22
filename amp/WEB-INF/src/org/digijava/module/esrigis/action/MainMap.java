@@ -67,6 +67,7 @@ public class MainMap extends Action{
 			filter.setModeexport(true);
 			AmpARFilter reportfilter = (AmpARFilter) request.getSession().getAttribute("ReportsFilter");
 			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
+			filter.setCurrencyId(reportfilter.getCurrency().getAmpCurrencyId());
 		}else{
 			filter.setModeexport(false);
 		}

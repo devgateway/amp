@@ -262,6 +262,7 @@
 <html:hidden property="filter.transactionType" styleId="transactionType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+
 </digi:form>
 <script type="text/javascript">
 function closeFilter(){
@@ -580,5 +581,9 @@ function removeOptions (obj){
 	  }
 }
 
+function filterenable(){
+	isenable = <bean:write name='datadispatcherform' property='filter.modeexport'/>;
+	return !isenable;
+}
 //-->
 </script>

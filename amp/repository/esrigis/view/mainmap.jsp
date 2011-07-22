@@ -64,7 +64,11 @@
 <script type="text/javascript">
 	$(function(){
   		$('#filterbtn').click(function(){
-     		$('#filterdiv').toggle();
+			if (filterenable()){
+     			$('#filterdiv').toggle();
+			}else{
+				alert('If you click filters, you will lose all your previus filter from reports - Filter is disable');
+			}
      	});
 	});
 	$(function(){

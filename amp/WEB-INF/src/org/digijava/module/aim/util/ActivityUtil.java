@@ -1553,8 +1553,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
-      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) " +
-      		"	from " + AmpActivityProgram.class.getName() + " prog ";
+      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
     
       

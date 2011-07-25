@@ -15,7 +15,7 @@
 <div class="main_menu" id="userHomeMenu" >
     	<table cellpadding="0"cellspacing="0" width="1000">
         	<tr>
-            	<td style="width:1000px;" valign="top"><digi:insert attribute="headerMiddle"/></td>
+            	<td style="width:900px;" valign="top"><digi:insert attribute="headerMiddle"/></td>
                 <td><digi:secure authenticated="true">
          <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
    			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">

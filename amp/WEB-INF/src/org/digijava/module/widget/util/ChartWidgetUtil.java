@@ -1604,7 +1604,7 @@ public class ChartWidgetUtil {
 
     public static Collection<DonorSectorFundingHelper> getDonorSectorFundingHelperList(FilterHelper filter,Long sectorClassConfigId) throws DgException {
         int transactionType = filter.getTransactionType();
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
+        String currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
         List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
         Iterator<AmpSector> sectorIter = sectors.iterator();
         Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();

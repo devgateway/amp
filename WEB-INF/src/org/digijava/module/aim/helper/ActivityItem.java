@@ -101,7 +101,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
      * @see ActivityItem#ActivityItem(AmpActivity)
 	 */
 
-    public ActivityItem(AmpActivity act,Long percent) {
+	public ActivityItem(AmpActivity act,Long percent) {
         this.act=act;
         this.percent=percent;
 

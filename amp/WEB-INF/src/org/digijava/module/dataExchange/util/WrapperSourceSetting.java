@@ -18,10 +18,10 @@ public class WrapperSourceSetting implements XmlWrapper{
 		StringBuffer sb	= new StringBuffer();
 		sb.append("<SourceSetting>");
 		
-		
-		sb.append("<Name>" + ss.getName() + "</Name>");
-		
 		sb.append("<DbId>" + ss.getId() + "</DbId>");
+		
+		sb.append("<Name>" + ss.getName() + "</Name>");		
+		
 		
 		sb.append("<Source>" + ss.getSource() + "</Source>");
 		

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -32,6 +31,51 @@ public class SourceSettingDAO {
 		try{
 			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
 			Query query			= hbSession.createQuery(queryString);
+			List<DESourceSetting> resultList	=  query.list();
+			return resultList;
+		}
+		finally {
+			this.releaseSession();
+		}
+	}
+	
+	public int getAllAmpSourceSettingsObjectsCount() {
+		try{
+			String queryString 	= "select count(*) from "	+ DESourceSetting.class.getName() + " ss";
+			Query query			= hbSession.createQuery(queryString);
+			int resultList	=  (Integer)query.uniqueResult();
+			return resultList;
+		}
+		finally {
+			this.releaseSession();
+		}
+	}
+	
+	public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy,String sortDir) {
+		try{
+			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
+			//sort
+			if(sortBy!=null && sortDir!=null){
+				if (sortBy.equals("Name") && sortDir.equals("asc")) {
+					queryString += " order by ss.name " ;
+				} else if (sortBy.equals("Name") && sortDir.equals("desc")) {
+					queryString += " order by ss.name desc " ;
+				}else if(sortBy.equals("Source") && sortDir.equals("asc")){
+					queryString += " order by ss.source ";
+				}else if(sortBy.equals("Source") && sortDir.equals("desc")){
+					queryString += " order by ss.source desc ";
+				}else if(sortBy.equals("Workspace") && sortDir.equals("asc")){
+					queryString += " order by ss.importWorkspace.name ";
+				}else if(sortBy.equals("Workspace") && sortDir.equals("desc")){
+					queryString += " order by ssimportWorkspace.name desc ";
+				}
+			}
+			Query query			= hbSession.createQuery(queryString);
+			query.setFirstResult(fromIndex);
+			query.setMaxResults(10);
+//			if(resultNum!=-1){
+//				query.setMaxResults(resultNum);
+//			}
 			List<DESourceSetting> resultList	=  query.list();
 			return resultList;
 		}

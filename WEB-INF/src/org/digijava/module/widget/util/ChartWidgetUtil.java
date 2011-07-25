@@ -262,7 +262,7 @@ public class ChartWidgetUtil {
 		if (currId == null) {
 			currCode = "USD";
 		} else {
-			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+			currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
 		}
 		int yearsInRange = filter.getYearsInRange() - 1;
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -561,7 +561,7 @@ public class ChartWidgetUtil {
 		if (currId == null) {
 			currCode = "USD";
 		} else {
-			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+			currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
 		}
 		int yearsInRange = filter.getYearsInRange() - 1;
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -1339,7 +1339,7 @@ public class ChartWidgetUtil {
         }
         BigDecimal regionalTotal = BigDecimal.ZERO;
         Long currId = filter.getCurrId();
-        String currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        String currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
         int transactionType = filter.getTransactionType();
         DefaultPieDataset ds = new DefaultPieDataset();
         /*
@@ -1839,7 +1839,7 @@ public class ChartWidgetUtil {
             throws DgException {
         List<AmpFundingDetail> fundingDets = getSectorFunding(filter,sectorId,sectorClassConfigId);
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
+        String currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
         cal.doCalculations(fundingDets, currCode);
         DecimalWraper amount = null;
         /*Depending on what is selected in the filter
@@ -1871,7 +1871,7 @@ public class ChartWidgetUtil {
             int transactionType,int adjustmentType) throws DgException {
         DecimalWraper total = null;
         String oql = "";
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
+        String currCode = CurrencyUtil.getAmpcurrency(filter.getCurrId()).getCurrencyCode();
         Long[] orgIds = filter.getOrgIds();
         Long orgGroupId = filter.getOrgGroupId();
         TeamMember tm = filter.getTeamMember();

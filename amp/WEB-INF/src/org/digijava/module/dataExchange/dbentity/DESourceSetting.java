@@ -64,6 +64,8 @@ public class DESourceSetting implements XmlWrappable{
 	 * In case the source would be a URL
 	 */
 	private String url;
+	
+	private String language ; //non-db field
 
 	/**
 	 * @return the isImport
@@ -308,6 +310,14 @@ public class DESourceSetting implements XmlWrappable{
 	@Override
 	public XmlWrapper getXmlWrapperInstance() {
 		return new WrapperSourceSetting(this);
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	

@@ -5,12 +5,16 @@ package org.digijava.module.dataExchange.action;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,7 +28,6 @@ import org.digijava.module.dataExchange.form.ManageSourceForm;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
-import org.digijava.module.dataExchange.util.XmlCreator;
 import org.springframework.util.FileCopyUtils;
 
 /**
@@ -64,7 +67,7 @@ public class ManageSourceAction extends MultiAction {
 		}
 		if ( "delete".equals( msForm.getAction() ) && msForm.getSelectedSourceId() != null) {
 			new SessionSourceSettingDAO().deleteObject(msForm.getSelectedSourceId() );
-			return null;
+			//return null;
 		}
 		if ( "execute".equals( msForm.getAction() ) ) {
 			request.setAttribute("htmlView","true");
@@ -72,21 +75,101 @@ public class ManageSourceAction extends MultiAction {
 			return mapping.findForward("showSources");
 		}
 		
-	//	modeExecuteSource(mapping, msForm, request, response);
-		
 		return modeShowSourceList(mapping, msForm, request, response);
 	}
 	
-	public ActionForward modeShowSourceList(ActionMapping mapping, ManageSourceForm msForm,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward modeShowSourceList(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
+	throws Exception {
+		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
+		int lastPage = 1;
+		if (allSourcesAmount > msForm.getTempNumResults()) {
+			lastPage = allSourcesAmount%10==0 ? allSourcesAmount%10 : allSourcesAmount%10 +1;
+		}
+		
+		
+		int startIndex = 0;
+		if (msForm.getPage() != 0) {
+			startIndex = msForm.getTempNumResults()*msForm.getPage();
+		}
+		
+		//get sources
+		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort(),msForm.getSortOrder());
+		msForm.setPagedSources(sources);
+		if (msForm.getCurrentPage() == null || msForm.getCurrentPage() == 0) {
+			msForm.setCurrentPage(new Integer(1));
+		}
+		msForm.setLastPage(lastPage);
+		return mapping.findForward("showSources");
+		
+	}
+	public ActionForward modeShowSourceListOld(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		response.setCharacterEncoding("UTF-16");
-		response.setContentType("text/xml");
-		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
-		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAllAmpSourceSettingsObjects();
-		XmlCreator xmlCreator	= new XmlCreator(sources);
-		ps.print(xmlCreator.createXml());
+		//sorting options
+		String sortBy = request.getParameter("sort");
+		String sortDir = request.getParameter("dir");
+		//pagination options
+		String startIndex = request.getParameter("startIndex");
+		String results = request.getParameter("results");
+		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
+		//get sources
+		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(new Integer(startIndex).intValue(), sortBy,sortDir);
+
+        JSONObject json = null;
+        try {
+		    json = new JSONObject();
+        } catch (Exception ex) {
+            System.out.print("a");
+        }
+		JSONArray jsonArray = new JSONArray();
+		
+		//fill array
+		if(sources!=null && sources.size() > 0){
+			for (Iterator<DESourceSetting> it = sources.iterator(); it.hasNext();) {
+				DESourceSetting source = (DESourceSetting) it.next();
+				JSONObject jsource = new JSONObject();
+				jsource.put("ID", source.getId());				
+				jsource.put("Name", source.getName());
+				jsource.put("Source", source.getSource());
+				jsource.put("Workspace", source.getImportWorkspace().getName());				
+				jsonArray.add(jsource);
+			}			
+		}
+    	
+		
+		if (sources!=null) {
+			json.put("recordsReturned", sources.size());
+		}else{
+			json.put("recordsReturned", 0);
+		}
+		
+		json.put("totalRecords", allSourcesAmount);
+		json.put("startIndex", startIndex);
+		json.put("sort", null);
+		json.put("dir", "asc");
+		json.put("pageSize", 10);
+		json.put("rowsPerPage", 10);
+
+		json.put("SourceSetting", jsonArray);
+
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(json.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}		
+		
+//		response.setCharacterEncoding("UTF-16");
+//		response.setContentType("text/xml");
+//		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
+//		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAllAmpSourceSettingsObjects();
+//		XmlCreator xmlCreator	= new XmlCreator(sources);
+//		ps.print(xmlCreator.createXml());
 		return null;
 	}
 	
@@ -124,7 +207,6 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
-//		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( new Long(1));
 		if(ss.getLogs() == null)
 			ss.setLogs(new ArrayList<DELogPerExecution>());
 		
@@ -132,7 +214,6 @@ public class ManageSourceAction extends MultiAction {
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
 		deib.run(request);
-//		deib.runIATI(request);
 	}
 
 }

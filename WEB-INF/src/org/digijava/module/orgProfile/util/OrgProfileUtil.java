@@ -814,7 +814,7 @@ public class OrgProfileUtil {
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpCategoryValue> categoryValues = null;
         Long currId = filter.getCurrId();
-        String currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        String currCode = CurrencyUtil.getAmpcurrency(currId).getCurrencyCode();
         int yearRange = filter.getYearsInRange() - 1;
 
         if (type == WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {

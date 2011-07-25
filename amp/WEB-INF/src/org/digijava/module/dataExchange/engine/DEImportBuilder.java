@@ -633,7 +633,7 @@ public class DEImportBuilder {
 				
 				AmpActivityProgram ampActivityProgram = new AmpActivityProgram();
 				ampActivityProgram.setActivity(activity);
-				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage())));
+				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage()).longValue()));
 				ampActivityProgram.setProgram(ampTheme);
 				
 				ArrayList<AmpActivityProgramSettings> allClassifConfigs = (ArrayList<AmpActivityProgramSettings>) getAllAmpActivityProgramSettings();

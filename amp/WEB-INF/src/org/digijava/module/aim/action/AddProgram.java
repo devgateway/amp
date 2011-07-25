@@ -119,7 +119,7 @@ public class AddProgram
 
         if (settingsId == ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY) {
           if(npoPrograms.size()==0) {
-            activityProgram.setProgramPercentage(100f);
+            activityProgram.setProgramPercentage(100L);
           }
           // changed by mouhamad for burkina the 22/02/08
           // for AMP-2666
@@ -142,7 +142,7 @@ public class AddProgram
         else {
           if (settingsId ==ProgramUtil.PRIMARY_PROGRAM_KEY) {
             if( ppPrograms.size()==0){
-               activityProgram.setProgramPercentage(100f);
+               activityProgram.setProgramPercentage(100L);
             }
             // changed by mouhamad for burkina the 26/02/08
             // for AMP-2666
@@ -165,7 +165,7 @@ public class AddProgram
           }
           else {
             if( spPrograms.size()==0){
-            	activityProgram.setProgramPercentage(100f);
+            	activityProgram.setProgramPercentage(100L);
             }
             // changed by mouhamad for burkina the 26/02/08
             // for AMP-2666

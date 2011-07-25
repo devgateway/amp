@@ -52,4 +52,12 @@ public class GisSettings implements Serializable {
     public void setSectorSchemeFilterMode(int sectorSchemeFilterMode) {
         this.sectorSchemeFilterMode = sectorSchemeFilterMode;
     }
+
+    public boolean equals(Object obj) {
+        return this.siteId.equals(((GisSettings)obj).getSiteId()) && this.instanceId.equals(((GisSettings)obj).getInstanceId());
+    }
+
+    public int hashCode() {
+        return new StringBuilder(this.siteId).append(this.instanceId).toString().hashCode();
+    }
 }

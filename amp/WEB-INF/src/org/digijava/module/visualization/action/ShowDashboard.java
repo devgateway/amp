@@ -28,6 +28,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.um.action.addWorkSpaceUser;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
+import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.springframework.beans.BeanWrapperImpl;
@@ -114,8 +115,14 @@ public class ShowDashboard extends Action {
 	private void initializeFilter(DashboardFilter filter) {
 		filter.setDashboardType(Constants.DashboardType.DONOR);
 
-		List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
+		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
+		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
+		for(AmpOrgGroup orgGroup:orgGroups){
+			List<AmpOrganisation> organizations=DbUtil.getOrganisationByGroupId(orgGroup.getAmpOrgGrpId());
+			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
+		}
+		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
 		List<AmpOrganisation> orgs = null;
 
 		if (filter.getOrgGroupId() == null
@@ -136,6 +143,12 @@ public class ShowDashboard extends Action {
 		
 		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
 		filter.setSectors(sectors);
+		List<EntityRelatedListHelper<AmpSector,AmpSector>> primarySectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
+		for(AmpSector sector:sectors){
+			List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+			primarySectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
+		}
+		filter.setPrimarySectorWithSubSectors(primarySectorsWithSubSectors);
 
 		if (filter.getYear() == null) {
 			Long year = null;
@@ -199,8 +212,14 @@ public class ShowDashboard extends Action {
 		if (filter.getRegions() == null) {
 			try {
 				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(
-						DynLocationManagerUtil
-								.getLocationsOfTypeRegionOfDefCountry()));
+						DynLocationManagerUtil.
+						getRegionsOfDefCountryHierarchy()));
+				List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones = new ArrayList<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>>();
+				for(AmpCategoryValueLocations region:filter.getRegions()){
+					List<AmpCategoryValueLocations> zones=new ArrayList<AmpCategoryValueLocations>(region.getChildLocations());
+					regionWithZones.add(new EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>(region,zones));
+				}
+				filter.setRegionWithZones(regionWithZones);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -95,7 +95,34 @@ yuiLoadingPanel.prototype = {
         this.loadingPanel.hide();
     }
 };
+function checkUncheckRelatedEntities(option,name,id){
+	uncheckAllRelatedEntities(name);
+	checkRelatedEntities(option,name,id);
+}
+function allOptionChecked(option,name,subname){
+	if(option.checked){
+		var options=$("input[name='"+name+"']").removeAttr('checked');
+		var options=$("input[name='"+subname+"']").removeAttr('checked');
+		option.checked=true;
+	}
+}
 
+function uncheckAllRelatedEntities(name){
+	$("input[name='"+name+"']").removeAttr('checked');
+}
+function checkRelatedEntities(option,name,id){
+	var options=$("input[class='"+name+"_"+id+"']");
+	if(option.checked){
+		options.attr('checked','checked');
+	}
+	else{
+		options.removeAttr('checked');
+	}
+	
+}
+function uncheckAllOption(name){
+	$("#"+name+"_all").removeAttr('checked');
+}
 -->
 </script>
 
@@ -246,9 +273,9 @@ function resetToDefaults(){
 	unCheckOptions("org_grp_check");
 	unCheckOptions("region_check");
 	unCheckOptions("sector_check");
-	removeOptions("orgDivList");
-	removeOptions("zoneDivList");
-	removeOptions("subSectorDivList");
+	unCheckOptions("organization_check");
+	unCheckOptions("zone_check");
+	unCheckOptions("sub_sector_check");
 	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
@@ -323,97 +350,7 @@ function changeTab (selected){
 	}
 }
 
-function getChildren(e) {
-	var eValue = e.value;
-	var eName = e.name;
-	var objectType = "";
 
-	switch(eName){
-		case "org_grp_check":
-			if (getChecked(eName) == -1) {
-				var div = document.getElementById("orgDivList");
-				div.innerHTML = "";
-			} else {
-				eValue = getChecked(eName);
-			}
-			objectType = "Organizations";
-			break;
-		case "region_check":
-			if (getChecked(eName) == -1) {
-				var div = document.getElementById("zoneDivList");
-				div.innerHTML = "";
-			} else {
-				eValue = getChecked(eName);
-			}
-			objectType = "Regions";
-			break;
-		case "sector_check":
-			if (getChecked(eName) == -1) {
-				var div = document.getElementById("subSectorDivList");
-				div.innerHTML = "";
-			} else {
-				eValue = getChecked(eName);
-			}
-			objectType = "Sectors";
-			break;
-	}
-
-	if (getChecked(eName) != -1 && objectType != ""){
-		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + eValue, getChildrenCall, null);
-	}
-}
-
-var getChildrenCall = {
-  	success: function(o) {
-	  	try {
-		    var results = YAHOO.lang.JSON.parse(o.responseText);
-		    switch(results.objectType)
-		    {
-			    case "Organizations":
-			    	var div = document.getElementById("orgDivList");
-			    	var inner = "";
-					for(var i = 0; i < results.children.length; i++){
-						inner += "<input type='checkbox' name='organization_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
-						inner += "<span style='font-family: Arial; font-size: 12px;'>";
-						inner += results.children[i].name;
-						inner += "</span>";
-						inner += "<br/>";
-		    		}
-					div.innerHTML = inner;
-					break;
-			    case "Regions":
-			    	var div = document.getElementById("zoneDivList");
-			    	var inner = "";
-					for(var i = 0; i < results.children.length; i++){
-						inner += "<input type='checkbox' name='zone_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
-						inner += "<span style='font-family: Arial; font-size: 12px;'>";
-						inner += results.children[i].name;
-						inner += "</span>";
-						inner += "<br/>";
-		    		}
-					div.innerHTML = inner;
-					break;
-				case "Sectors":
-				    	var div = document.getElementById("subSectorDivList");
-				    	var inner = "";
-						for(var i = 0; i < results.children.length; i++){
-							inner += "<input type='checkbox' name='sub_sector_check' title='"+results.children[i].name+"' value='"+results.children[i].ID+"'/>"; 
-							inner += "<span style='font-family: Arial; font-size: 12px;'>";
-							inner += results.children[i].name;
-							inner += "</span>";
-							inner += "<br/>";
-			    		}
-						div.innerHTML = inner;
-						break;
-		    }
-		}
-		catch (e) {
-		    alert("Invalid respose.");
-		}
-  	},
-  	failure: function(o) {//Fail silently
-	}
-};
 		
 function getChecked (checkName){
 	var count = 0;
@@ -434,50 +371,6 @@ function getChecked (checkName){
 	}
 }
 
-function changeChild (selected){
-	document.getElementById("org_grp_selector").className = "";
-	document.getElementById("org_selector").className = "";
-	document.getElementById("region_selector").className = "";
-	document.getElementById("zone_selector").className = "";
-	document.getElementById("sector_selector").className = "";
-	document.getElementById("sub_sector_selector").className = "";
-
-	document.getElementById("orgGrpDivList").style.display = "none";
-	document.getElementById("orgDivList").style.display = "none";
-	document.getElementById("regionDivList").style.display = "none";
-	document.getElementById("zoneDivList").style.display = "none";
-	document.getElementById("sectorDivList").style.display = "none";
-	document.getElementById("subSectorDivList").style.display = "none";
-	switch (selected) {
-	case 0:
-		document.getElementById("org_grp_selector").className = "side_opt_sel";
-		document.getElementById("orgGrpDivList").style.display = "block";
-		break;
-	case 1:
-		document.getElementById("org_selector").className = "side_opt_sel";
-		document.getElementById("orgDivList").style.display = "block";
-		break;
-	case 2:
-		document.getElementById("region_selector").className = "side_opt_sel";
-		document.getElementById("regionDivList").style.display = "block";
-		break;
-	case 3:
-		document.getElementById("zone_selector").className = "side_opt_sel";
-		document.getElementById("zoneDivList").style.display = "block";
-		break;
-	case 4:
-		document.getElementById("sector_selector").className = "side_opt_sel";
-		document.getElementById("sectorDivList").style.display = "block";
-		break;
-	case 5:
-		document.getElementById("sub_sector_selector").className = "side_opt_sel";
-		document.getElementById("subSectorDivList").style.display = "block";
-		break;
-	
-	default:
-		break;
-	}
-}
 -->
 </script>
 <table>
@@ -641,19 +534,12 @@ function changeChild (selected){
 					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel" onclick="changeChild(0)" id="org_grp_selector">
+								<td class="side_opt_sel"  id="org_grp_selector">
 									<div class="selector_type_cont">
-										<digi:trn>Organization Groups</digi:trn>
+										<digi:trn>Organization Groups With Organizations</digi:trn>
 									</div>
 								</td>
 								
-							</tr>
-							<tr style="cursor: pointer;" >
-								<td  onclick="changeChild(1)" id="org_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Organizations</digi:trn>
-									</div>
-								</td>
 							</tr>
 						</table>
 					</div>
@@ -667,19 +553,34 @@ function changeChild (selected){
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
-						<c:forEach items="${visualizationform.filter.orgGroups}" var="item">
+						<ul style="list-style-type: none">
+						<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-								<input type="radio" name="org_grp_check" title="${item.orgGrpName}" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+								<input type="radio"  value="-1" id="org_grp_check_all" name="org_grp_check" onClick="uncheckAllRelatedEntities('organization_check')"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-								<input type="checkbox" name="org_grp_check" title="${item.orgGrpName}" value="${item.ampOrgGrpId}" onchange="getChildren(this)"/> 
+								<input type="checkbox" id="org_grp_check_all"  value="-1" name="org_grp_check" onClick="allOptionChecked(this,'org_grp_check','organization_check')"/> 
 							</c:if>
-								<digi:trn>${item.orgGrpName}</digi:trn>
+							<digi:trn>All</digi:trn>
+						</li>
+						<c:forEach items="${visualizationform.filter.orgGroupWithOrgsList}" var="item">
+						<li>
+							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+								<input type="radio" name="org_grp_check" title="${item.mainEntity.orgGrpName}" value="${item.mainEntity.ampOrgGrpId}" onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})"/> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+								<input type="checkbox" name="org_grp_check" title="${item.mainEntity.orgGrpName}" value="${item.mainEntity.ampOrgGrpId}" onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})"/> 
+							</c:if>
+								<digi:trn>${item.mainEntity.orgGrpName}</digi:trn>
 							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="organization">
+							<li><input type="checkbox" class="organization_check_${item.mainEntity.ampOrgGrpId}" name="organization_check" title="${organization.name}" value="${organization.ampOrgId}" onclick="uncheckAllOption('org_grp_check');"/>${organization.name}</li> 
+							</c:forEach>
+							</ul>
+							</li>
 						</c:forEach>
-					</div>
-					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgDivList">
-						
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -695,19 +596,12 @@ function changeChild (selected){
 					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel" onclick="changeChild(2)" id="region_selector">
+								<td class="side_opt_sel"  id="region_selector">
 									<div class="selector_type_cont">
-										<digi:trn>Regions</digi:trn>
+										<digi:trn>Regions With Zones</digi:trn>
 									</div>
 								</td>
 								
-							</tr>
-							<tr style="cursor: pointer;" >
-								<td  onclick="changeChild(3)" id="zone_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Zones</digi:trn>
-									</div>
-								</td>
 							</tr>
 						</table>
 					</div>
@@ -721,22 +615,38 @@ function changeChild (selected){
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="regionDivList">
-						<c:forEach items="${visualizationform.filter.regions}" var="item">
+						<ul style="list-style-type: none">
+						<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-								<input type="radio" name="region_check" title="${item.name}" value="${item.id}" onchange="getChildren(this)"/> 
+								<input type="radio" id="region_check_all" name="region_check" value="-1"  onClick="uncheckAllRelatedEntities('zone_check')"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-								<input type="checkbox" name="region_check" title="${item.name}" value="${item.id}" onchange="getChildren(this)"/> 
+								<input type="checkbox" id="region_check_all" name="region_check" value="-1" onClick="allOptionChecked(this,'region_check','zone_check')"/> 
+							</c:if>
+							<digi:trn>All</digi:trn>
+						</li>
+						<c:forEach items="${visualizationform.filter.regionWithZones}" var="item">
+						<li>
+							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+								<input type="radio" name="region_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})"/> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
+								<input type="checkbox" name="region_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})"> 
 							</c:if>
 							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${item.name}</digi:trn>
+								<digi:trn>${item.mainEntity.name}</digi:trn>
 							</span>
 							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="zone">
+							<li><input type="checkbox" class="zone_check_${item.mainEntity.id}" name="zone_check" title="${zone.name}" value="${zone.id}" onclick="uncheckAllOption('region_check');"/>${zone.name}</li> 
+							</c:forEach>
+							</ul>
+						</li>
 						</c:forEach>
+						</ul>
 					</div>
-					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="zoneDivList">
-						
-					</div>
+				
 				</div>
 			</div>
 		</div>
@@ -751,19 +661,12 @@ function changeChild (selected){
 					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel" onclick="changeChild(4)" id="sector_selector">
+								<td class="side_opt_sel"  id="sector_selector">
 									<div class="selector_type_cont">
-										<digi:trn>Sectors</digi:trn>
+										<digi:trn>Primary Sectors and Sub Sectors</digi:trn>
 									</div>
 								</td>
 								
-							</tr>
-							<tr style="cursor: pointer;" >
-								<td  onclick="changeChild(5)" id="sub_sector_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Sub Sectors</digi:trn>
-									</div>
-								</td>
 							</tr>
 						</table>
 					</div>
@@ -777,21 +680,37 @@ function changeChild (selected){
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
-						<c:forEach items="${visualizationform.filter.sectors}" var="item">
+						<ul style="list-style-type: none">
+						<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" title="${item.name}" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+								<input type="radio"  value="-1" id="sector_check_all"  name="sector_check" onClick="uncheckAllRelatedEntities('sub_sector_check')"/> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check" title="${item.name}" value="${item.ampSectorId}" onchange="getChildren(this)"/> 
+								<input type="checkbox" id="sector_check_all" name="sector_check" value="-1" onClick="allOptionChecked(this,'sector_check','sub_sector_check')"/> 
+							</c:if>
+							<digi:trn>All</digi:trn>
+						</li>
+						<c:forEach items="${visualizationform.filter.primarySectorWithSubSectors}" var="item">
+						<li>
+							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+								<input type="radio" name="sector_check" title="${item.mainEntity.name}" value="${item.mainEntity.ampSectorId}" onClick="checkUncheckRelatedEntities(this,'sub_sector_check',${item.mainEntity.ampSectorId})"> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+								<input type="checkbox" name="sector_check"  title="${item.mainEntity.name}" value="${item.mainEntity.ampSectorId}" onClick="uncheckAllOption('sector_check');checkRelatedEntities(this,'sub_sector_check',${item.mainEntity.ampSectorId})"/> 
 							</c:if>
 							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${item.name}</digi:trn>
+								<digi:trn>${item.mainEntity.name}</digi:trn>
 							</span>
 							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="subSector">
+							<li><input type="checkbox" class="sub_sector_check_${item.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="uncheckAllOption('sector_check');"/>${subSector.name}</li> 
+							</c:forEach>
+							</ul>
+							</li>
+							
 						</c:forEach>
-					</div>
-					<div style="display: none; height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="subSectorDivList">
-						
+						</ul>
 					</div>
 				</div>
 			</div>

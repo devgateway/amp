@@ -78,8 +78,11 @@ public class DashboardFilter {
     private int decimalsToShow;
     private String groupSeparator = FormatHelper.getGroupSymbol();
     private String decimalSeparator = FormatHelper.getDecimalSymbol();
+    List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupWithOrgsList;
+    List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
+    List<EntityRelatedListHelper<AmpSector,AmpSector>> primarySectorWithSubSectors;
     
-    public DashboardFilter getCopyFilterForFunding(){
+	public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
     	
     	newFilter.setCurrencyId(this.getCurrencyId());
@@ -93,8 +96,40 @@ public class DashboardFilter {
     	newFilter.setFromPublicView(this.getFromPublicView());
     	return newFilter;
     }
+	
+	public List<EntityRelatedListHelper<AmpSector, AmpSector>> getPrimarySectorWithSubSectors() {
+		return primarySectorWithSubSectors;
+	}
 
-    public Boolean getCommitmentsVisible() {
+	public void setPrimarySectorWithSubSectors(
+			List<EntityRelatedListHelper<AmpSector, AmpSector>> primarySectorWithSubSectors) {
+		this.primarySectorWithSubSectors = primarySectorWithSubSectors;
+	}
+	
+
+    public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
+		return orgGroupWithOrgsList;
+	}
+
+
+	public void setOrgGroupWithOrgsList(
+			List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList) {
+		this.orgGroupWithOrgsList = orgGroupWithOrgsList;
+	}
+
+
+	public List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> getRegionWithZones() {
+		return regionWithZones;
+	}
+
+
+	public void setRegionWithZones(
+			List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> regionWithZones) {
+		this.regionWithZones = regionWithZones;
+	}
+
+
+	public Boolean getCommitmentsVisible() {
 		return commitmentsVisible;
 	}
 

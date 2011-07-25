@@ -1,6 +1,13 @@
 /*Copyright (c) 2008, Yahoo! Inc. All rights reserved.Code licensed under the BSD License:http://developer.yahoo.net/yuiamp/license.txtversion: 2.5.1*/
-.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both; width:75%;float:left;position:absolute;top:5px;}
+
+.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both; width:75%;z-index:9999;float:left;padding-top:3px;}
+
+.main_menu .yuiamp-skin-amp{margin:0 auto;}
+
 .yuiamp-skin-amp ul{background:none;border:none;}
+
+.mainmenucontainer{width:1000px; margin:0 auto;}
+
 .yuiampmenubar {
 	visibility: visible;
 	position: static;
@@ -12,14 +19,18 @@
 	position: absolute;
 	top: -10000px;
 	left: -10000px;
+	z-index:9999;
 	
 }
 .yuiampmenubar li, .yuiampmenu li {
 	list-style-type: none;
+		z-index:9999;
+
 }
 .yuiampmenubar ul, .yuiampmenu ul, .yuiampmenubar li, .yuiampmenu li, .yuiampmenu h6, .yuiampmenubar h6 {
 	margin: 0;
 	padding: 0;
+	z-index:9999;
 }
 .yuiampmenuitemlabel, .yuiampmenubaritemlabel {
 	text-align: left;
@@ -125,17 +136,21 @@
 	font-size: 93%;
 	line-height: 1.5;
 	*line-height: 1.45;
+	z-index:9999;
 }
 .yuiamp-skin-amp .yuiampmenubar .yuiampmenu, .yuiamp-skin-amp .yuiampmenu .yuiampmenu {
 	font-size: 100%;
+	z-index:9999;
 }
 .yuiamp-skin-amp .yuiampmenu .bd {
-
+	
 	line-height:1.5em;!important
-	z-index:9999px;
+	z-index:9999;
+
 }
 .yuiamp-skin-amp .yuiampmenu ul {
 	padding: 0px 0;
+	z-index:9999;
 
 }
 ul.first-of-type {
@@ -271,6 +286,21 @@ text-decoration:underline;
 
 
 .yuiampmenuitem_drop {}
+
+#usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
+html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
+#usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
+#usr_menu_logged a:hover {color:#fff; font-size:12px;text-decoration:underline;}
+/*-------menu fixes by rafy-------*/
+html.gecko li#yui-gen10, html.gecko li#yui-gen14 {margin-top:-3px;}
+ html.chrome li#yui-gen14 {margin-top:-2px;}
+html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type,  html.gecko .bd_drop ul.first-of-type {border:none;margin-top:3px;}
+html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;z-index:9999;float:left;}
+html.ie div.header {height:46px;}
+html.ie .yui-navset *{z-index:1;}
+html.ie .main_menu *{z-index:9000;}
+.bd_drop  { line-height:25px;height:25px;padding:0px 0px 0px 0px;}
+
 #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 #usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
@@ -282,3 +312,4 @@ html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7
 html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;}
 html.ie div.header {height:46px;}-------*/
 #content ul.yui-nav {z-index:1000;}
+

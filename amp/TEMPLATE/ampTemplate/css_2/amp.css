@@ -1,10 +1,9 @@
-
-/* GLOBAL */
-html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
-body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
-
+html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;width:100%;}
+body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top}
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
+div#ampcontainer{width:1000px;margin:0 auto;}
+#content{z-index:1;b}
 a {color:#376091;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 .hr_3 {border: 0; color: #D0D0D0; background-color: #D0D0D0; height: 1px; width: 100%; text-align: left;}
@@ -82,7 +81,7 @@ html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_
 .min_max_info {font-size:11px; width:500px; margin-left:auto; margin-right:auto; text-align:left;}
 
 /* HEADER */
-.header { height:51px;text-align:center;width:1000px;margin:0 auto;}
+.header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
 
 .logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 0px;}
 .amp_label {padding-top:5px;float:left;}
@@ -94,23 +93,26 @@ html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
-.workspace_info {width:220px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;float:right;text-align:right;}
-.workspace_info a{font-weight:bold;text-decoration:underline;}
+.workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;float:right;margin:-0px 0px 0px 50px;z-index:9990;}
 .loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}
-html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
-.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;}
+.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
 .gisbody .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
+html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
+html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:-3px;}
+html.chrome .bd_drop{margin-top:-5px;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}
 .menu_item_cont_sel {color:#FFFFFF; padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_cont a {text-decoration:none; color:#376091;}
 .menu_arr {margin-left:5px; margin-bottom:2px;}
+#usr_menu_logged {width:300px;float:right;text-align:right;}
+
 
 
 /* BREADCRUMP */
@@ -123,6 +125,8 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 
 
 /* CONTENT */
+#content{z-index:10;}
+
 .main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
 .main_side_cont {padding:10px; font-size:12px; line-height:22px;}
 .tab {border-top:1px solid #BEBDB6; border-right: 1px solid #BEBDB6; border-bottom:1px solid #BEBDB6; margin-bottom:7px;}
@@ -145,6 +149,8 @@ html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px;}
+html.ie li.tri a{background:(/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left; display:block; font-size:11px; padding-bottom:5px;}
+html.ie li.tri {padding:0px;margin:0px;text-indent:none;}
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
 .desktop_tab_base {border-bottom:1px solid #F2F2F2; padding-left:1px;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
@@ -341,6 +347,141 @@ table.report_indicator{margin-bottom:15px}
 
 ul.first-of-type li.yui-gen14 {border:1px solid red;}
 
+<<<<<<< .mine
+<<<<<<< .mine
+/*-----rafy-----*/
+.login_here{position:absolute;}
+div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
+div.reg_form_container table {margin:0 auto; }
+div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px;}
+div.reg_form_container .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; height:25px;}
+div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
+div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
+div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
+span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
+td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
+div.reg_form_container .f-names {color:#000000; font-size:12px;}
+div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
+#amphome{width:1000px; margin:0 auto;}
+#amphometext{width:750px; float:left;}
+#amphomesidebar{width:220px; float:right;}
+#Tab_Name td#reportsearchform {font-size: 11px;
+    font-weight: bold;}
+#Tab_Name td#reportsearchform input {color: #767676;
+    font-size: 11px;
+    margin: 5px;
+    padding: 2px;
+	background-color: #FFFFFF;
+    border: 1px solid #D0D0D0;}
+#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input	
+	{ background-color: #5E8AD1;
+    border-color: #99BAF1 #225099 #225099 #99BAF1;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px;}
+	
+.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;} 
+table#viewAllUsers, table#viewAllUsers tr td{border:1px solid #ebebeb;padding:3px;font-size:11px; color:#000;}
+table#viewAllUsers tr td table tr td {border:none;}
+td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
+#viewIndicatorsContainer{margin:0 auto;width:1000px;}
+td#sectorSelectContainer select, td#sectorKeywordContainer input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
+table#addUserContainer tr td{color: #000000;
+    font-size: 12px;}
+table#addUserContainer input.inp-text, table#addUserContainer select, table#addUserContainer input#userPassword,  table#addUserContainer input#userPasswordConfirmationm, td#viewUserEditContainer table tr td.inputcontainer input, td.inputcontainer input {color: #767676;
+    font-size: 11px;
+    margin: 5px;
+    padding: 2px;}
+	
+table#addUserContainer td.addUserButContainer input, td.addUserButContainer input 	{background-color: #5E8AD1;
+    border-color: #99BAF1 #225099 #225099 #99BAF1;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: bold;
+    height: 25px;
+    padding: 3px 5px;}
+	.ampFormContainer
+	{width:1000px;
+	margin:0 auto;
+	text-align:left;}
+	.formCheckContainer{text-align:right;font-weight:bold;}
+.formCheckContainer input
+	{float:right;}
+	#auditloggertable{border:1px solid #cccccc;border-left:none;}
+#auditloggertable tr td{border-bottom:1px solid #cccccc;border-left:1px solid #cccccc;padding:10px;}
+#auditloggertable tr td.auditloggername{color:#376091;font-weight:bold;font-size:12px;}
+#auditloggermanagercontainer{background:#f2f2f2; border:1px solid #cccccc;padding:10px;width:980px;margin:0 auto;}
+#actionsMenu_c #actionsMenu_h .yui-panel .hd {font-size:12px;}
+/*---RAFY GIS STYLES---*/
+#navToolbar {width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar .toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
+#navToolbar .toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
+#navToolbar .toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
+#navToolbar .toolscontainer .mapButton{padding:0px 5px;height:30px;}
+#navToolbar .toolscontainer .mapButton .dijitIcon{float:right;margin:0px 0px 0px 10px;background-position:0px 3px;background-repeat:no-repeat;padding:0px 0px 7px 0px;}
+#navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
+#navToolbar .toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
+#mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
+.soria .dijitToolbar {border:none;}
+.infowindow .window{background:#fcf6c7;}
+div.yui-ac-hd{border:1px solid red;}
+div.adminicon{float:right;}
+.t-name {font-size:11px;}
+.activity_me {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:15px; padding:10px;}
+.activity_me td {padding-bottom:8px;}
+.dijitToolbar .dijitButtonContents{padding:0px;}
+.soria .dijitButtonNode {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("images/buttonEnabled.png") repeat-x scroll left top #BCD5F0;
+    border:none;
+    padding: 0.1em 0.2em 0.2em;}
+.soria .dijitToolbar .dijitButtonHover, .soria .dijitToolbar .dijitToggleButtonHover, .soria .dijitToolbar .dijitDropDownButtonHover, .soria .dijitToolbar .dijitComboButton .dijitButtonContentsHover, .soria .dijitToolbar .dijitComboButton .dijitDownArrowButtonHover {
+    background:none;
+    border:none;
+    padding: 0;}
+
+.soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
+.yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
+#breadcrumbs {width:1000px;padding:0px;height:30px;margin:0px 0px 0px 0px;margin:0 auto;position:relative;text-align:left;}
+#breadcrumbs ul{float:left;}
+#breadcrumbs ul li {
+	display:inline;
+	padding:0px;
+	margin:0px;
+	line-height:30px;
+}
+#breadcrumbs, #breadcrumbs  li.yuimenuitem a {
+	color: #376091; 
+	font-size: 10px; 
+	font-family:arial; 
+	padding:3px 10px 3px 0px;
+	margin:0px;	
+	padding-top:0px; 
+	font-weight:bold; 
+	text-decoration:none;
+	text-align: left;
+	background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
+}
+#breadcrumbs .bd li.yuimenuitem  a:hover {
+	text-decoration:underline;
+}
+
+html.ie .main_menu .bd_drop {position:absolute;z-index:9999;}
+html.ie .yui-navset {z-index:1;}
+html.ie ul.first-of-type {z-index:9999;border:1px solid blue;}
+html.ie ul.yui-nav{z-index:10;}=======
+>>>>>>> .r15017
+=======
 /*-----rafy-----*/
 .login_here{position:absolute;}
 div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
@@ -468,3 +609,41 @@ div.adminicon{float:right;}
 	text-decoration:underline;
 }
 
+.usr_menu_logged{position:absolute;top:0px;right:0px;}
+/*---RAFY GIS STYLES---*/
+body.gisbody div#map{z-index:1;}
+#navToolbar {width:160px;margin:0px; padding:0px 0px 0px 25px;    margin-top:-5px; background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);text-align:left;padding:0px 0px 0px 0px;filter:alpha(opacity=85);opacity: .85;-moz-opacity:.85;}
+#navToolbar .toolscontainer{margin-top:5px;width:160px;filter:alpha(opacity=100);opacity: 1;-moz-opacity:1;}
+#navToolbar .toolscontainer .dijitButtonNode {width:160px;border-bottom:1px solid #000;margin:0px 0px 0px -5px;}
+#navToolbar .toolscontainer span{line-height:25px; color:#fff;font-size:12px;text-align:left;}
+#navToolbar .toolscontainer .mapButton{padding:0px 5px;height:30px;}
+#navToolbar .toolscontainer .mapButton .dijitIcon{float:right;margin:0px 0px 0px 10px;background-position:0px 3px;background-repeat:no-repeat;padding:0px 0px 7px 0px;}
+#navToolbar .toolscontainer .mapButton .dijitButtonContents {float:left;width:150px;text-align:right;}
+#navToolbar .toolscontainer h3{margin:0px 0px 5px 0px;padding:5px 0px 0px 15px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;width:135px;font-weight:bold;}
+#mainGisMenu h3 {margin:0px 0px 5px 0px;padding:10px; color:#fff;font-size:16px;border-bottom:1px solid #000;display:block;font-weight:bold;text-align:left;}
+td.mapMenuItem{font-size:12px;font-weight:bold;text-decoration:none;background:url(/TEMPLATE/ampTemplate/img_2/gis/topsepgis.gif) top right no-repeat;padding:3px;background-position:0px -5px;white-space:normal;}
+.soria .dijitToolbar {border:none;}
+.infowindow .window{background:#fcf6c7;}
+div.yui-ac-hd{border:1px solid red;}
+div.adminicon{float:right;}
+.t-name {font-size:11px;}
+.activity_me {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:15px; padding:10px;}
+.activity_me td {padding-bottom:8px;}
+.dijitToolbar .dijitButtonContents{padding:0px;}
+.soria .dijitButtonNode {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("images/buttonEnabled.png") repeat-x scroll left top #BCD5F0;
+    border:none;
+    padding: 0.1em 0.2em 0.2em;}
+.soria .dijitToolbar .dijitButtonHover, .soria .dijitToolbar .dijitToggleButtonHover, .soria .dijitToolbar .dijitDropDownButtonHover, .soria .dijitToolbar .dijitComboButton .dijitButtonContentsHover, .soria .dijitToolbar .dijitComboButton .dijitDownArrowButtonHover {
+    background:none;
+    border:none;
+    padding: 0;}
+
+.soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
+.yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
+html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9999;margin:3px 0px 0px 0px;}

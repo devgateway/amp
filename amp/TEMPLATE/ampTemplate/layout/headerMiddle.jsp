@@ -55,6 +55,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	cursor:pointer;
 }
 </style>
+<div>
 <div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   
@@ -90,7 +91,7 @@ ${fn:replace(message,quote,escapedQuote)}
                     <digi:trn>Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a  style="margin-left:-1px;position:relative;text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<a  style="margin-left:-1px;position:absolute;text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;">
                 		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -714,9 +715,9 @@ function adminHelp(){
                               <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
-                              <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd bd_drop">                    
-                                      <ul>
+                              <div id="tools" class="yuiampmenu" style="opacity:0.9;z-index:9999;">
+                                  <div class="bd bd_drop" >                    
+                                      <ul >
                                       	<feature:display name="Language Option" module="Tools">
                                       		<li style="_width:300px">
 		                                        <a class="yuiampmenuitemlabel" href="#">
@@ -731,11 +732,7 @@ function adminHelp(){
 		                                          </div>                              
 		                                    </li>
                                       	</feature:display>                                     
-                                      	  
-                                      	
-                                      	
-                                      	
-                                      
+   
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li class="yuiampmenuitem_drop">
 	                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
@@ -832,15 +829,17 @@ function adminHelp(){
                           </li>
                           </module:display>
             
-                        </ul>            
+                        </ul>  
                   </div>
+			
               </div>
+			
             </div> 
-            
+           
 		</logic:equal>
 </logic:present>
-
-
+ <div style="clear:both;"></div>
+</div>
 <script language="javascript">
 
 YAHOO.util.Event.onDOMReady(function () {

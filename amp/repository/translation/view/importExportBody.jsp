@@ -283,10 +283,12 @@ div.fakefile2 input{
                                   <html:submit style="dr-menu" value="${translation}" property="export"/>
                                 </td>
 							 </tr>
+							 <tr>
 							 <td align="center">
 									<br/>
 									<hr />
 							</td>
+							</tr>
 					 </digi:form>
 					</logic:notEmpty>
 
@@ -296,7 +298,7 @@ div.fakefile2 input{
 
 					<digi:form action="/importexport.do" method="post" enctype="multipart/form-data">
 						<tr>
-							<td align="center">
+							<td align="left">
 								<!-- <html:file property="fileUploaded"></html:file> -->
 								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 									<!-- CSS content must be put in a separated file and a class must be generated -->

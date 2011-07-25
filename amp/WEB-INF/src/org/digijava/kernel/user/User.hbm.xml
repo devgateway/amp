@@ -29,7 +29,6 @@
 		<property name="referral" column="REFERRAL" type="java.lang.String" />
 		<property column="ORGANIZATION_TYPE_OTHER" name="organizationTypeOther" type="text" />
 		<property name="address" column="ADDRESS" type="java.lang.String" />
-		<property name="pledger" column="PLEDGER" type="boolean" />
 		<many-to-one name="country" column="COUNTRY_ISO"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 		<property name="assignedOrgId" column="assigned_org_id" type="java.lang.Long" />
@@ -66,5 +65,6 @@
  	 	 	<key column="USER_ID" />
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
  	 	</set>
+		<property name="pledger" column="PLEDGER" type="boolean" />
 	</class>
 </hibernate-mapping>

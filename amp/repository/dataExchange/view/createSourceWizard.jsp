@@ -123,7 +123,7 @@ function cancelImportManager() {
 								<a href=# class="t_sm" id="check"><b><digi:trn>Check all</digi:trn></b></a>&nbsp; | &nbsp;
 								<a href=# class="t_sm" id="uncheck"><b><digi:trn>Uncheck all</digi:trn></b></a>
 								<bean:define id="fieldsModuleTree" name="createSourceForm" property="activityTree" toScope="request" />
-								<bean:define id="sourceId" name="createSourceForm" property="sourceId" toScope="request" />
+								
 	                     		<jsp:include page="fieldsModule.jsp"></jsp:include>
 							</fieldset>
 						</td>

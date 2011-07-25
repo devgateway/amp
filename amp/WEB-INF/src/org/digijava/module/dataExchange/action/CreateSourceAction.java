@@ -158,7 +158,7 @@ public class CreateSourceAction extends MultiAction {
 		myForm.setTeamId(null);
 		myForm.setSelectedLanguages(null);
 		myForm.setSelectedOptions(null);
-		
+		myForm.setSourceId(null);
 		
 	}
 

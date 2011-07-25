@@ -46,11 +46,11 @@ function cancelImportManager() {
 	<tr>
 		<td height="33">
 			<div class="breadcrump_cont"> 
-				<span class="sec_name">Partial Data Import Manager</span>
+				<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
 				<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>
-				<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do~htmlView=true" class="l_sm">Projects/Activities</a>
+				<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do~htmlView=true" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
 				<span class="breadcrump_sep"><b>»</b></span>
-				<span class="bread_sel">Partial Data Import Manager</span>
+				<span class="bread_sel"><digi:trn>Create/Edit Source</digi:trn></span>
 			</div>
 			<br>
 		</td>
@@ -63,10 +63,10 @@ function cancelImportManager() {
 					<tr>
 					    <td width=49% valign="top" class="inside" style="border: none;">
 					    	<fieldset>
-								<legend><span class=legend_label>General Details</span></legend>								
+								<legend><span class=legend_label><digi:trn>General Details</digi:trn></span></legend>								
 								<b>Name:</b> <input name="name" type="text" class="inputx" /><br /><br />
 								
-								<b>Please choose the language(s) that exist in imported file:</b><br />
+								<b><digi:trn>Please choose the language(s) that exist in imported file</digi:trn>:</b><br />
 								<logic:iterate name="createSourceForm" property="languages" id="lang">
         							<html:multibox property="selectedLanguages" >
         								<bean:write name="lang"/>
@@ -75,7 +75,7 @@ function cancelImportManager() {
         						</logic:iterate>
 								<br /><br />
 								
-								<b>Please choose the type of source:</b> <br>
+								<b><digi:trn>Please choose the type of source</digi:trn>:</b> <br>
 								<logic:iterate name="createSourceForm" property="sourceValues" id="srcVal">  									
         							<html:radio property="source" value="${srcVal.key}">
 		        						<digi:trn>${srcVal.value}</digi:trn>
@@ -90,7 +90,7 @@ function cancelImportManager() {
         							</html:select>
         							<br /><br />
 								
-								<b>Please choose import strategy:</b><br />
+								<b><digi:trn>Please choose import strategy</digi:trn>:</b><br />
 								<logic:iterate name="createSourceForm" property="importStrategyValues" id="impVal">
        								<html:radio property="importStrategy" value="${impVal.key}">
        									<digi:trn>${impVal.value}</digi:trn>&nbsp;&nbsp;
@@ -100,31 +100,30 @@ function cancelImportManager() {
 							<br />
 							<fieldset>
 								<legend><span class=legend_label>Filter and Identifier</span></legend>
-								<b>Type unique identifier (title,id,ampid,ptip) separatd by '|' </b>: 
+								<b><digi:trn>Type unique identifier (title,id,ampid,ptip) separatd by '|'</digi:trn> </b>: 
 								<input name="uniqueIdentifier" type="text" class="inputx" style="width:95%; margin-top:5px;" /><br /><br />
 								<b>Select the approval status that the new activities will have:</b><br />
 								
 								<logic:iterate id="appStatus" name="createSourceForm" property="approvalStatusValues">
-		                    		<html:radio property="approvalStatus" value="${appStatus.key}">${appStatus.value}</html:radio> <br />
+		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
                     			</logic:iterate>								
 							</fieldset>
-							<br />
-							<%--
+							<br />							
 							<fieldset>
 								<legend><span class=legend_label>Upload a file</span></legend>
 								<input name="" type="file" / style="margin-top:7px;" class="inputx">
-							</fieldset>
-							 --%>							
+							</fieldset>														
 						</td>
 						<td width=2%>&nbsp;</td>
 				    	<td width=49% valign="top">
 				    		<fieldset>
-								<legend><span class=legend_label>Field Selection</span></legend>
-								<a href=# class="t_sm" id="expand"><b>Expand all</b></a>&nbsp; | &nbsp;
-								<a href=# class="t_sm" id="collapse"><b>Collapse all</b></a>&nbsp; | &nbsp;
-								<a href=# class="t_sm" id="check"><b>Check all</b></a>&nbsp; | &nbsp;
-								<a href=# class="t_sm" id="uncheck"><b>Uncheck all</b></a>
+								<legend><span class=legend_label><digi:trn>Field Selection</digi:trn></span></legend>
+								<a href=# class="t_sm" id="expand"><b><digi:trn>Expand all</digi:trn></b></a>&nbsp; | &nbsp;
+								<a href=# class="t_sm" id="collapse"><b><digi:trn>Collapse all</digi:trn></b></a>&nbsp; | &nbsp;
+								<a href=# class="t_sm" id="check"><b><digi:trn>Check all</digi:trn></b></a>&nbsp; | &nbsp;
+								<a href=# class="t_sm" id="uncheck"><b><digi:trn>Uncheck all</digi:trn></b></a>
 								<bean:define id="fieldsModuleTree" name="createSourceForm" property="activityTree" toScope="request" />
+								<bean:define id="sourceId" name="createSourceForm" property="sourceId" toScope="request" />
 	                     		<jsp:include page="fieldsModule.jsp"></jsp:include>
 							</fieldset>
 						</td>

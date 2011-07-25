@@ -731,7 +731,7 @@
 							   <c:set var="trnDataExchangeExportTitle">
 							    <digi:trn key="dataexchange:trnDataExchangePartialImportTitle">Click here to view Partial Data Import Manager</digi:trn>
 							   </c:set>
-							   <digi:link module="dataExchange"  href="/manageSource.do?htmlView=true" title="${trnDataExchangeExportTitle}" >
+							   <digi:link module="dataExchange"  href="/manageSource.do" title="${trnDataExchangeExportTitle}" >
 							      <digi:trn key="dataexchange:PartialDataImportManager">Partial Data Import Manager</digi:trn>
 							   </digi:link>
                             </td>

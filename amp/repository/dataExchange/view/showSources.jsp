@@ -11,304 +11,192 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/fonts-min.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/datatable.css'/>">
-
-
-
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script> 
-<script type="text/javascript" src="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/dom/dom-min.js'/>" > </script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
-<!-- 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/yuiloader-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datasource-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datatable-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/button-min.js'/>" > </script>
-
- -->
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/logHelper.js'/>" > </script>
-
+<digi:instance property="manageSourceForm" />
 
 <script language="JavaScript">
-	var msgDataError = '<digi:trn>Data error</digi:trn>';
-	var msgLoading	 = '<digi:trn>Loading...</digi:trn>';
-	
-	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
-		function initDynamicTable1() {	
-				
-		    YAHOO.example.XHR_JSON = new function() {		    			        
-		        
-		        var lastTimeStamp = new Date().getTime();
+function deleteSource(sourceId) {
+	 var form = document.getElementById('manageForm');
+	form.action = "/dataExchange/manageSource.do?action=delete&selectedSourceId="+sourceId;
+	form.target="_self"
+	form.submit();
+}
 
-		        this.myDataSource = new YAHOO.util.DataSource("/dataExchange/manageSource.do?lastTimeStamp"+lastTimeStamp+"&");
-		        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-		        //this.myDataSource.connXhrMode = "queueRequests";
-		        this.myDataSource.responseSchema = {
-		            resultsList: "SourceSetting",
-		            fields: ["ID","Name", "Source", "Workspace"],
-		            metaFields: {
-		            	totalRecords: "totalRecords" // Access to value in the server response
-		        	}    
-		        };        
-		        
-		        var myColumnDefs = [
-		            {key:"Name", label:"Name",sortable: true},
-	                {key:"Source", label:"Source", sortable: true},
-	                {key:"Workspace", label:"Workspace used", sortable:true}
-		        ];
-		  
-		        //var div = document.getElementById('errors');
-		
-		        var handleSuccess = function(o){
-		        	if(o.responseText != undefined){
-		        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
-		        	}
-		        }
-		
-		        //var handleFailure = function(o){
-		        //	if(o.responseText != undefined){
-		        //		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
-		        //		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
-		        //		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
-		        //	}
-		        //}
-		        
-		        // Create the Paginator 
-		        var myPaginator = new YAHOO.widget.Paginator({ 
-		        	rowsPerPage:10,
-		        	//totalRecords:document.getElementById("totalResults").value,
-		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
-		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
-		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
-		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-		        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
-		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
-		        	firstPageLinkClass : "yui-pg-first l_sm",
-		        	lastPageLinkClass: "yui-pg-last l_sm",
-		        	nextPageLinkClass: "yui-pg-next l_sm",
-		        	previousPageLinkClass: "yui-pg-previous l_sm",
-		        	rowsPerPageDropdownClass:"l_sm",
-		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
-		        	 // use custom page link labels
-		            pageLabelBuilder: function (page,paginator) {
-		                var curr = paginator.getCurrentPage();
-		                if(curr==page){
-		                	return "<span class='current-page'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</span>|";
-		                }
-		                else{
-		                	return page;
-		                }
-		                
-		            }
+function editSource(sourceId) {
+	 var form = document.getElementById('manageForm');
+	form.action = "/dataExchange/editSource.do?action=gotoEditPage&sourceId="+sourceId;
+	form.target="_self"
+	form.submit();
+}
 
-		        });
-		         
-		        var myConfigs = {
-		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
-		            dynamicData: true, // Enables dynamic server-driven data
-		            sortedBy : {key:"Name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
-		            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
-		            paginator:myPaginator,
-		            MSG_ERROR:msgDataError,
-		            MSG_LOADING:msgLoading
-		        };
-		    	 
-		        this.myDataTable = new YAHOO.widget.DataTable("sourcesDiv", myColumnDefs, this.myDataSource, myConfigs);
-		        //this.myDataTable.subscribe("rowClickEvent", onRowSelect);
-		        this.myDataTable.subscribe("rowClickEvent", function (ev) {
-	                var target = YAHOO.util.Event.getTarget(ev);
-	                var record = this.getRecord(target);
-	                alert(record);
-	                document.getElementById("selectFileDiv").style.display = "none";
-	        		refreshDetails(record.getData('ID'));
-	               
-	            });
-		        
-		        
-		        //this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
-		        //this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
-		       
-		        
-		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
-		        // Programmatically bring focus to the instance so arrow selection works immediately 
-		        this.myDataTable.focus(); 
-		
-		        // Update totalRecords on the fly with value from server
-		        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
-		           oPayload.totalRecords = oResponse.meta.totalRecords;
-		           return oPayload;
-		        }
-		    };
-	    
-		}
-		
+function toggleGroup(group_id){
+	var strId='#'+group_id;
+	$(strId+'_minus').toggle();
+	$(strId+'_plus').toggle();
+	$('#source_'+group_id).toggle('fast');
+}
+
 </script>
 
-
-
-
-
-
-
-
-
-
-<script type="text/javascript">
-	LogPerExecutionConfig = {
-			columnDefs: [	{key:"DbId", sortable:true, formatter:YAHOO.widget.DataTable.formatNumber, hidden: true},
-	                   	   {key:"Name", sortable: true},
-	                   	{key:"Source", label:"Source", sortable: true},
-	                   	{key:"Workspace", label:"Workspace used", sortable:true}
-	                   	   ],
-	
-			responseSchema: {
-						resultNode: "SourceSetting",
-						fields: [{key:"DbId", parser:YAHOO.util.DataSource.parseNumber},"Name", "Source", "Workspace"]
-					}
-	
-	}
-	dataSourceBuilder 	= new DataSourceBuilder("/dataExchange/manageSource.do",
-			LogPerExecutionConfig.columnDefs ,LogPerExecutionConfig.responseSchema);
-	
-	//YAHOO.util.Event.addListener(window, "load", createDataTable );
-
-
-	function createDataTable() {
-		var dt	= dataSourceBuilder.createDataTable("sourcesDiv");
-		dt.subscribe("rowClickEvent", onRowSelect);
-	}
-
-	function onRowSelect(o) {
-		var dt 		= 	dataSourceBuilder.dataTable;
-		dt.onEventSelectRow(o);
-		var id		= dataSourceBuilder.getValueOfFirstColumn();
-
-		document.getElementById("selectFileDiv").style.display = "none";
-		refreshDetails(id);
-	}
-	
-	function getCallbackForSources (divIdentifier) {
-		var callbackObj	= new Object();
-		callbackObj.divEl	= document.getElementById(divIdentifier);
-		callbackObj.success	= function (o) {
-									this.divEl.innerHTML = o.responseText ;
-								};
-		callbackObj.failure	= function () {
-								this.divEl.innerHTML = "<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>";
-							};
-			
-
-		return callbackObj;
-		
-	}
-	
-	function refreshDetails( sourceId ) {
-		YAHOO.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForSources("detailsDiv"), "selectedSourceId="+sourceId+"&action=showDetails" );
-	}
-
-	function executeSource( sourceId, sourceType ) {
-		var divEl	= document.getElementById("selectFileDiv");
-		document.getElementById("executingSourceId").value	= sourceId;
-		if (sourceType == "FILE") {
-			divEl.style.display = "block";
-		}
-		else {
-			document.forms['manageSourceForm'].submit();
-		}
-	}
-
-
-	function getCallbackForDelete (sourceId) {
-		var callbackObj	= new Object();
-		callbackObj.sourceId	= sourceId;
-		callbackObj.divEl		= document.getElementById("detailsDiv");
-		callbackObj.success		= function (o) {
-									this.divEl.innerHTML = "" ;
-									var dt 		= 	dataSourceBuilder.dataTable;
-									var trEl 	= (dt.getSelectedTrEls()[0]);
-									dt.deleteRow(trEl);
-									
-								};
-		callbackObj.failure	= function () {
-								this.divEl.innerHTML = "<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>";
-							};
-			
-
-		return callbackObj;
-		
-	}
-	
-	function deleteSource(sourceId) {
-		document.getElementById("detailsDiv").innerHTML = '<digi:trn>Deleting</digi:trn>...';
-		YAHOO.util.Connect.asyncRequest('POST', '/dataExchange/manageSource.do', getCallbackForDelete(sourceId), "selectedSourceId="+sourceId+"&action=delete" );
-	}
-	
-	
-</script>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="90%" class="box-border-nopadding">
-	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
-		
-		<div style="">
-			<c:set var="translation">
-				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-			</c:set>
-			<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
-			<digi:trn key="aim:AmpAdminHome">
-			Admin Home
-			</digi:trn>
-			</digi:link>&nbsp;&gt;&nbsp;
-			
-			
-			<digi:trn>
-				Import Manager
-			</digi:trn>
-		</div>
-		
-<div style="float: left;width: 60%;" class="yui-skin-sam">
-	<div style="width: 500px; margin-left: auto; margin-right: auto;margin-bottom:20px; border: 1px gray solid;text-align: center;">
-		<div style="width: 100%; margin-left: auto; margin-right: auto;background-color:#006699; color: white; ">List of sources</div>
-		<div id="sourcesDiv" style="margin-left: auto; margin-right: auto;width: auto; height: 400px;overflow: auto; "></div>
-		<a href="/dataExchange/createSource.do?htmlView=true"><digi:trn>Create new source</digi:trn></a><br/>
-	</div>
-</div>
-<br />
-
-<div style="float: left; width: 40%;" >
-	<div id="detailsDiv"></div>
-	<div id="selectFileDiv" style="display: none; margin-top: 100px;">
-		<digi:form action="/manageSource.do" enctype="multipart/form-data">
-		<table>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<digi:form action="/manageSource.do" styleId="manageForm">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+		<!-- BREADCRUMP START -->
+		<tr>
+			<td height="33">
+				<div class="breadcrump_cont"> 
+					<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
+					<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>				
+					<span class="breadcrump_sep"><b>»</b></span>
+					<span class="bread_sel"><digi:trn>Partial Data Import Manager</digi:trn></span>
+				</div>
+				<br>
+			</td>
+		</tr>
+		<!-- BREADCRUMP END -->
+	  <tr>
+	    <td class="main_side_1">
+		<table width="980" border="0" cellspacing="0" cellpadding="0" style="margin:10px;">
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td align=right><a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+	  </tr>
+	</table>
+	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">
+		<tr>
+		<td colspan="5" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">List of sources</b></td>
+		</tr>
+		<tr>
+		    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+		    	<b class="ins_title">Name</b>
+		    </td>
+		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+		    	<b class="ins_title">Source</b>
+		    </td>
+		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+		    	<b class="ins_title">Workspace Used</b>
+		    </td>
+		    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+		    	<b class="ins_title">Show/Hide Details</b>
+		    </td>
+		    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
+		    	<b class="ins_title">Actions</b>
+		    </td>
+		</tr>
+		<logic:empty name="manageSourceForm" property="pagedSources">
 			<tr>
-				<td style="text-align: center; background: #006699; color: white;"><digi:trn>File Selector</digi:trn></td>
+				<td colspan="5"><digi:trn>No records found</digi:trn> </td>
 			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<html:hidden property="action" value="execute"/>
-						<html:hidden property="executingSourceId" styleId="executingSourceId"/>
-						<html:file property="xmlFile"></html:file>
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<html:submit>Execute</html:submit>
-				</td>
-			</tr>
-		</table>	
-		</digi:form>
-	</div>
-</div>
-
+		</logic:empty>
+		<logic:notEmpty name="manageSourceForm" property="pagedSources">
+			<logic:iterate id="source" name="manageSourceForm" property="pagedSources">
+				<tr>
+				    <td bgcolor="#FFFFFF" class="inside">${source.name}</td>
+				    <td bgcolor="#FFFFFF" class="inside">${source.source}</td>
+				    <td bgcolor="#FFFFFF" class="inside">${source.importWorkspace.name }</td>
+				    <td bgcolor="#FFFFFF" class="inside" align="center" nowrap="nowrap">
+				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${source.id}_plus" onclick="toggleGroup('${source.id}')"/>
+				    	<div id="source_${source.id}" style="display: none;height: 355px;width:500px; overflow: auto;">				    		
+				    		<table border="0">
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" colspan="2" rowspan="7" class="inside">				    				
+				    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${source.id}_minus" style="display: none; " onclick="toggleGroup('${source.id}')"/>	
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">				    				
+				    				<strong><digi:trn>Name</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				${source.name}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Source</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				${source.source}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Strategy</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				${source.importStrategy}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Language</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				${source.language}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Unique Identifier</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				${source.uniqueIdentifier}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Approval Status</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				${source.approvalStatus}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Fields</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				<logic:notEmpty name="source" property="fields">
+										<ul>
+											<logic:iterate id="field" name="source" property="fields">
+												<li>${field}</li>
+											</logic:iterate>
+										</ul>
+									</logic:notEmpty>
+				    			</td>
+				    		</tr>
+				    	</table>
+				    	</div>
+				    </td>
+				    <td bgcolor="#FFFFFF" class="inside" align="center">
+				    	<!-- 
+				    		<img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
+				    	 -->				    	 
+				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onclick="deleteSource(${source.id});" style="cursor:pointer;"/>
+				    </td>
+				</tr>		
+			</logic:iterate>
+		</logic:notEmpty>
+	</table>
+	<!-- MAIN CONTENT PART END -->
+	<!-- Pagination -->
+		<div class="paging" style="font-size:11px;margin:10px;">
+			<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+			<c:forEach var="page" begin="1" end="${manageSourceForm.lastPage}">
+				<bean:define id="currPage" name="manageSourceForm" property="currentPage" />
+				<c:if test="${manageSourceForm.currentPage == page}">
+					<b class="paging_sel">${page}</b>
+				</c:if>
+				<c:if test="${manageSourceForm.currentPage != page}">
+					<c:set var="translation">
+						<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+					</c:set>
+					<a href="javascript:page(${page})" title="${translation}" class="l_sm">${page}</a>
+				</c:if>
+				|&nbsp;
+			</c:forEach>
+		</div>	
+		<!-- end of Pagination -->
 		</td>
-	</tr>
-</table>
-
+	  </tr>
+	</table>
+</digi:form>
+</body>

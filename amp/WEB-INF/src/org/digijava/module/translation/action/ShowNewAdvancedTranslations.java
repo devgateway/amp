@@ -155,9 +155,26 @@ public class ShowNewAdvancedTranslations extends Action{
 				List<Message> mergedWithBuffer = buffer.merge(lucMessages);
 				//Group the by keys. use also scores
 				Collection<MessageGroup> lucGroups = TrnUtil.groupByKey(mergedWithBuffer, new TrnUtil.StandardMessageGroupFactory() , scoresByKeys);
+				boolean isIncludedInResult=false;
+				for(MessageGroup lucGroup: lucGroups){
+					if(lucGroup.getKey().equals(searchKey)){
+						isIncludedInResult=true;
+						break;
+					}
+				}
+				
 				List<MessageGroup> sortedGroups  = new ArrayList<MessageGroup>(lucGroups);
 				//Sort by scores
 				Collections.sort(sortedGroups, new TrnUtil.MsgGroupScoreComparator()); 
+				if(groupsList!=null&&!groupsList.isEmpty()&&!isIncludedInResult){
+					sortedGroups.add(0,groupsList.get(0));
+					for(Message message:results){
+						String suffix =  message.getLocale();
+						LuceneWorker.deleteItemFromIndex(message, context,suffix);
+						LuceneWorker.addItemToIndex(message, context,suffix);
+					}
+					
+				}
 				trnForm.setResultList(sortedGroups);
 			}
 		}else{

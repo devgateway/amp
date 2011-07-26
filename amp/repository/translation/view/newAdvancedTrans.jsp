@@ -132,7 +132,7 @@
 		<div class="controlPanel">
 			<div class="clearfix">
 				<div style="float:left">
-					<div>Search for:</div>
+					<div><digi:trn>Search for</digi:trn>:</div>
 					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput"/>
 				</div>
 				<div style="float:left">

@@ -67,7 +67,7 @@ yuiLoadingPanel.prototype = {
         });
     
        loadingPanel.setBody(this.conf.header + 
-               '<img src="http://us.i1.yimg.com/us.yimg.com/i/us/per/gr/gp/rel_interstitial_loading.gif" />');
+               '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
                loadingPanel.render(document.body);
                $D.addClass(loadingPanel.id, 'tcc_lightboxLoader');
                var cancelLink = document.createElement('a');
@@ -1239,7 +1239,7 @@ function getChecked (checkName){
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
 					<a href="http://www.adobe.com/go/getflashplayer">
-						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
 			</div>
@@ -1256,7 +1256,7 @@ function getChecked (checkName){
 				<div class="flashcontent" name="flashContent">
 					<div id="ODAGrowth">
 						<a href="http://www.adobe.com/go/getflashplayer">
-							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
 				</div>
@@ -1273,7 +1273,7 @@ function getChecked (checkName){
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictability">
 					<a href="http://www.adobe.com/go/getflashplayer">
-						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
 			</div>
@@ -1289,7 +1289,7 @@ function getChecked (checkName){
 			<div class="flashcontent" name="flashContent">
 				<div id="AidType">
 					<a href="http://www.adobe.com/go/getflashplayer">
-						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
 			</div>
@@ -1305,7 +1305,7 @@ function getChecked (checkName){
 			<div class="flashcontent" name="flashContent">
 				<div id="FinancingInstrument">
 					<a href="http://www.adobe.com/go/getflashplayer">
-						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
 			</div>
@@ -1322,7 +1322,7 @@ function getChecked (checkName){
 				<div class="flashcontent" name="flashContent">
 					<div id="DonorProfile">
 						<a href="http://www.adobe.com/go/getflashplayer">
-							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
 				</div>
@@ -1340,7 +1340,7 @@ function getChecked (checkName){
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
 						<a href="http://www.adobe.com/go/getflashplayer">
-							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
 				</div>
@@ -1358,7 +1358,7 @@ function getChecked (checkName){
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
 						<a href="http://www.adobe.com/go/getflashplayer">
-							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
 				</div>

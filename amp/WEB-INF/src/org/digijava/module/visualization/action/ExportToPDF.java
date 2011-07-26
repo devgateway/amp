@@ -1,14 +1,9 @@
 package org.digijava.module.visualization.action;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.vfs.VFS;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -29,50 +23,19 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.orgProfile.helper.FilterHelper;
-import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
-import org.digijava.module.orgProfile.helper.Project;
-import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
-import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
-import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.helper.ChartOption;
-import org.digijava.module.widget.helper.WidgetVisitor;
-import org.digijava.module.widget.helper.WidgetVisitorAdapter;
-import org.digijava.module.widget.util.ChartWidgetUtil;
-import org.digijava.module.widget.util.WidgetUtil;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.Plot;
-
+import org.digijava.module.visualization.util.DbUtil;
 import com.lowagie.text.Element;
 import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.DefaultFontMapper;
-import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.Font;
 
@@ -107,7 +70,8 @@ public class ExportToPDF extends Action {
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
         	String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
-            String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
+        	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+        	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String odaGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
@@ -183,6 +147,69 @@ public class ExportToPDF extends Action {
             int colspan = 0;
             Image img = null;
             String[] singleRow = null;
+            
+            //Filters.
+            PdfPTable filtersTbl = null;
+            filtersTbl = new PdfPTable(1);
+            filtersTbl.setWidthPercentage(100);
+            PdfPCell filterTitleCell = new PdfPCell(new Paragraph(filtersTrn, HEADERFONT));
+            filterTitleCell.setColspan(1);
+            filtersTbl.addCell(filterTitleCell);
+            
+            cell = new PdfPCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
+            filtersTbl.addCell(cell);
+            cell = new PdfPCell(new Paragraph("Fiscal Start Year: " + vForm.getFilter().getYear()));
+            filtersTbl.addCell(cell);
+            cell = new PdfPCell(new Paragraph("Years in Range: " + vForm.getFilter().getYearsInRange()));
+            filtersTbl.addCell(cell);
+            String itemList = "";
+            Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
+            if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
+				for (int i = 0; i < orgGroupIds.length; i++) {
+					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new PdfPCell(new Paragraph("Organization Groups: " + itemList));
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] orgIds = vForm.getFilter().getOrgIds();
+            if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
+				for (int i = 0; i < orgIds.length; i++) {
+					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new PdfPCell(new Paragraph("Organizations: " + itemList));
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] sectorIds = vForm.getFilter().getSelSectorIds();
+            if (sectorIds != null && sectorIds.length != 0 && sectorIds[0]!=-1) {
+				for (int i = 0; i < sectorIds.length; i++) {
+					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new PdfPCell(new Paragraph("Sectors: " + itemList));
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] locationIds = vForm.getFilter().getSelLocationIds();
+            if (locationIds != null && locationIds.length != 0 && locationIds[0]!=-1) {
+				for (int i = 0; i < locationIds.length; i++) {
+					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new PdfPCell(new Paragraph("Locations: " + itemList));
+            filtersTbl.addCell(cell);
+            
+		    doc.add(filtersTbl);
+            doc.add(new Paragraph(" "));
+            
           //Summary table.
             if (summaryOpt.equals("1")) {
 				PdfPTable summaryTbl = null;
@@ -248,16 +275,18 @@ public class ExportToPDF extends Action {
             cell = new PdfPCell(new Paragraph(fundTypeTrn, HEADERFONT));
             topPrjTbl.addCell(cell);
             Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-            list = new LinkedList(topProjects.entrySet());
-		    for (Iterator it = list.iterator(); it.hasNext();) {
-		        Map.Entry entry = (Map.Entry)it.next();
-		        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
-		        topPrjTbl.addCell(cell);
-            	cell = new PdfPCell(new Paragraph(entry.getValue().toString()));
-            	topPrjTbl.addCell(cell);
-		    }
-		    doc.add(topPrjTbl);
-            doc.add(new Paragraph(" "));
+            if (topProjects!=null){
+	            list = new LinkedList(topProjects.entrySet());
+			    for (Iterator it = list.iterator(); it.hasNext();) {
+			        Map.Entry entry = (Map.Entry)it.next();
+			        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
+			        topPrjTbl.addCell(cell);
+	            	cell = new PdfPCell(new Paragraph(entry.getValue().toString()));
+	            	topPrjTbl.addCell(cell);
+			    }
+			    doc.add(topPrjTbl);
+	            doc.add(new Paragraph(" "));
+            }
             /*
           //Top sectors table.
             if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR){

@@ -37,14 +37,15 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
+import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.helper.ChartOption;
@@ -70,6 +71,7 @@ import com.lowagie.text.SimpleCell;
 import com.lowagie.text.SimpleTable;
 import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfCell;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.rtf.RtfWriter2;
@@ -115,7 +117,8 @@ public class ExportToWord extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
         try {
         	String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
-            String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
+        	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+        	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
             String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
@@ -193,6 +196,73 @@ public class ExportToWord extends Action {
             String[] singleRow = null;
             int count = 0;
             
+          //Filters.
+            Table filtersTbl = null;
+            filtersTbl = new Table(1);
+            filtersTbl.setWidth(100);
+            RtfCell filterTitleCell = new RtfCell(new Paragraph(filtersTrn, HEADERFONTWHITE));
+            filterTitleCell.setColspan(1);
+            filterTitleCell.setBackgroundColor(TITLECOLOR);
+            filtersTbl.addCell(filterTitleCell);
+            
+            cell = new RtfCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
+            cell.setBackgroundColor(CELLCOLOR);
+            filtersTbl.addCell(cell);
+            cell = new RtfCell(new Paragraph("Fiscal Start Year: " + vForm.getFilter().getYear()));
+            filtersTbl.addCell(cell);
+            cell = new RtfCell(new Paragraph("Years in Range: " + vForm.getFilter().getYearsInRange()));
+            cell.setBackgroundColor(CELLCOLOR);
+            filtersTbl.addCell(cell);
+            String itemList = "";
+            Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
+            if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
+				for (int i = 0; i < orgGroupIds.length; i++) {
+					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new RtfCell(new Paragraph("Organization Groups: " + itemList));
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] orgIds = vForm.getFilter().getOrgIds();
+            if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
+				for (int i = 0; i < orgIds.length; i++) {
+					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new RtfCell(new Paragraph("Organizations: " + itemList));
+            cell.setBackgroundColor(CELLCOLOR);
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] sectorIds = vForm.getFilter().getSelSectorIds();
+            if (sectorIds != null && sectorIds.length != 0 && sectorIds[0]!=-1) {
+				for (int i = 0; i < sectorIds.length; i++) {
+					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new RtfCell(new Paragraph("Sectors: " + itemList));
+            filtersTbl.addCell(cell);
+            itemList = "";
+            Long[] locationIds = vForm.getFilter().getSelLocationIds();
+            if (locationIds != null && locationIds.length != 0 && locationIds[0]!=-1) {
+				for (int i = 0; i < locationIds.length; i++) {
+					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            cell = new RtfCell(new Paragraph("Locations: " + itemList));
+            cell.setBackgroundColor(CELLCOLOR);
+            filtersTbl.addCell(cell);
+            
+		    doc.add(filtersTbl);
+            doc.add(new Paragraph(" "));
+            
           //Summary table.
             if (summaryOpt.equals("1")) {
 				Table summaryTbl = null;
@@ -268,22 +338,24 @@ public class ExportToWord extends Action {
             cell.setBackgroundColor(TITLECOLOR);
             topPrjTbl.addCell(cell);
             Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-            list = new LinkedList(topProjects.entrySet());
-            count = 0;
-		    for (Iterator it = list.iterator(); it.hasNext();) {
-		        Map.Entry entry = (Map.Entry)it.next();
-		        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
-		        if (count % 2 == 0)
-		        	cell.setBackgroundColor(CELLCOLOR);
-			    topPrjTbl.addCell(cell);
-			    cell = new RtfCell(new Paragraph(entry.getValue().toString()));
-			    if (count % 2 == 0)
-		        	cell.setBackgroundColor(CELLCOLOR);
-			    topPrjTbl.addCell(cell);
-            	count++;
-		    }
-		    doc.add(topPrjTbl);
-            doc.add(new Paragraph(" "));
+            if (topProjects != null){
+	            list = new LinkedList(topProjects.entrySet());
+	            count = 0;
+			    for (Iterator it = list.iterator(); it.hasNext();) {
+			        Map.Entry entry = (Map.Entry)it.next();
+			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
+			        if (count % 2 == 0)
+			        	cell.setBackgroundColor(CELLCOLOR);
+				    topPrjTbl.addCell(cell);
+				    cell = new RtfCell(new Paragraph(entry.getValue().toString()));
+				    if (count % 2 == 0)
+			        	cell.setBackgroundColor(CELLCOLOR);
+				    topPrjTbl.addCell(cell);
+	            	count++;
+			    }
+			    doc.add(topPrjTbl);
+	            doc.add(new Paragraph(" "));
+            }
             /*
           //Top sectors table.
             if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR){

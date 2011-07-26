@@ -269,6 +269,7 @@ function resetToDefaults(){
 		allGraphs[idx].style.display = "none";
 	}
 	loadingPanel.show();
+	var trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	
 	unCheckOptions("org_grp_check");
 	unCheckOptions("region_check");
@@ -295,8 +296,13 @@ function resetToDefaults(){
 	removeOptionsDropdown("org_dropdown_id");
 	removeOptionsDropdown("zone_dropdown_id");
 	removeOptionsDropdown("sub_sector_dropdown_id");
+	document.getElementById("filterOrganizations").innerHTML = trnAll;
+	document.getElementById("filterOrgGroups").innerHTML = trnAll;
+	document.getElementById("filterSectors").innerHTML = trnAll;
+	document.getElementById("filterRegions").innerHTML = trnAll;
 	applyFilterPopin();
 }
+
 function removeOptionsDropdown(object){
 	obj = document.getElementById(object);
 	for(var i = 1; i < obj.options.length; i++){
@@ -371,6 +377,23 @@ function getChecked (checkName){
 	}
 }
 
+
+function toggleSettings(){
+	var trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter setttings</digi:trn>"; 
+	var trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter setttings</digi:trn>"; 
+	
+	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	if(currentDisplaySettings.style.display == "block"){
+		currentDisplaySettings.style.display = "none";
+		displaySettingsButton.innerHTML = trnShowFilterSetttings;
+	}
+	else
+	{
+		currentDisplaySettings.style.display = "block";
+		displaySettingsButton.innerHTML = trnHideFilterSetttings;
+	}
+}
 -->
 </script>
 <table>
@@ -911,9 +934,30 @@ function getChecked (checkName){
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
+<div class="dashboard_stat" align="right" ><a onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
+<div class="dashboard_stat" style="display:none; padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+	<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr style="background-color:white;" >
+	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+	<strong>
+	<digi:trn>Selected Filters</digi:trn>:</strong>
+	   <i><digi:trn>Currency type</digi:trn>: </i><label id="filterCurrency"></label> | 
+	   <i><digi:trn>Fiscal start year</digi:trn>: </i><label id="filterFiscalYear">${visualizationform.filter.year}</label> | 
+	   <i><digi:trn>Years range</digi:trn>: </i><label id="filterYearsRange">${visualizationform.filter.yearsInRange}</label> | 
+	   <i><digi:trn>Org. groups</digi:trn>: </i><label id="filterOrgGroups"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label>
+	</td>
+	</tr>
+	<tr>
+	</tr>
+	</table>
+</div>
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
+
 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
@@ -1523,11 +1567,12 @@ function callbackApplyFilter(e){
 function applyFilterPopin(e){
 	
 var allGraphs = document.getElementsByName("flashContent");
-
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
+	document.getElementById("filterFiscalYear").innerHTML = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
 	document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
+	document.getElementById("filterYearsRange").innerHTML = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRangeLine").value = document.getElementById("yearsInRangeLine_dropdown").options[document.getElementById("yearsInRangeLine_dropdown").selectedIndex].value;
 	document.getElementById("yearsInRangePie").value = document.getElementById("yearsInRangePie_dropdown").options[document.getElementById("yearsInRangePie_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
@@ -1610,6 +1655,7 @@ function refreshBoxes(o){
 	var dashboardType = document.getElementById("dashboardType").value;
 	var results = YAHOO.lang.JSON.parse(o.responseText);
 	var inner = "";
+	var inner2 = "";
 	var trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	var trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	var trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
@@ -1723,11 +1769,14 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner2 = inner2 + child.list[i].name + " - "
 					}
 					var div = document.getElementById("org_group_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterOrgGroups").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("org_group_dropdown_id").style.display = "none";
 					} else {
@@ -1740,11 +1789,14 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner2 = inner2 + child.list[i].name + " - "
 					}
 					var div = document.getElementById("org_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterOrganizations").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("org_dropdown_id").style.display = "none";
 					} else {
@@ -1757,11 +1809,14 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner2 = inner2 + child.list[i].name + " - "
 					}
 					var div = document.getElementById("region_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterRegions").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("region_dropdown_id").style.display = "none";
 					} else {
@@ -1791,11 +1846,14 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner2 = inner2 + child.list[i].name + " - "
 					}
 					var div = document.getElementById("sector_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterSectors").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("sector_dropdown_id").style.display = "none";
 					} else {
@@ -1828,6 +1886,10 @@ function refreshBoxes(o){
 				inner = "<i><font size='2' color='red'><digi:trn>All amounts in millions</digi:trn> - " + child.curr + "</font></i>";
 				var div = document.getElementById("currencyInfo");
 				div.innerHTML = inner;
+				
+				var div = document.getElementById("filterCurrency");
+				div.innerHTML = "" + child.curr;
+				
 				break;
 			case "TotalDisbs":
 				valTotalDisbs = child.value;

@@ -34,6 +34,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.Region;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
@@ -56,14 +57,15 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
+import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.helper.ChartOption;
@@ -131,6 +133,7 @@ public class ExportToExcel extends Action {
     
     	try {
 			String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
+			String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
 	        String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
 	        String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
@@ -270,9 +273,98 @@ public class ExportToExcel extends Action {
 	        cell.setCellValue(header);
 	        cell.setCellStyle(titleCS);
 	        
+	        //Filters
+	        HSSFRichTextString headerText = null;
+        	row = sheet.createRow(rowNum++);
+        	cell = row.createCell(cellNum++);
+            headerText = new HSSFRichTextString(filtersTrn);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(subHeaderCS);
+            cellNum = 0;
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Currency Type: " + vForm.getFilter().getCurrencyCode());
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Fiscal Start Year: " + vForm.getFilter().getYear());
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Years in Range: " + vForm.getFilter().getYearsInRange());
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            String itemList = "";
+            Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
+            if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
+				for (int i = 0; i < orgGroupIds.length; i++) {
+					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Organization Groups: " + itemList);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            itemList = "";
+            Long[] orgIds = vForm.getFilter().getOrgIds();
+            if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
+				for (int i = 0; i < orgIds.length; i++) {
+					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Organizations : " + itemList);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            itemList = "";
+            Long[] sectorIds = vForm.getFilter().getSelSectorIds();
+            if (sectorIds != null && sectorIds.length != 0 && sectorIds[0]!=-1) {
+				for (int i = 0; i < sectorIds.length; i++) {
+					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Sectors : " + itemList);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyle);
+            itemList = "";
+            Long[] locationIds = vForm.getFilter().getSelLocationIds();
+            if (locationIds != null && locationIds.length != 0 && locationIds[0]!=-1) {
+				for (int i = 0; i < locationIds.length; i++) {
+					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
+				}
+			} else {
+				itemList = "All";
+			}
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("Locations : " + itemList);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(lastCellStyle);
+            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            
+            rowNum++;
 	        //Summary table.
 	        if (summaryOpt.equals("1")) {
-	        	HSSFRichTextString headerText = null;
+	        	headerText = null;
 	        	row = sheet.createRow(rowNum++);
 	        	cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(summaryTrn + " (" + currName + ")");
@@ -362,7 +454,7 @@ public class ExportToExcel extends Action {
 	        rowNum = rowNum + 2;
 	        cellNum = 0;
 	        
-	        HSSFRichTextString headerText = null;
+	        headerText = null;
         	row = sheet.createRow(rowNum++);
         	cell = row.createCell(cellNum++);
             headerText = new HSSFRichTextString(topPrjTrn + " (" + currName + ")");
@@ -385,26 +477,27 @@ public class ExportToExcel extends Action {
             //row = sheet.createRow(rowNum++);
 	        //cellNum = 0;
 	        Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-            List list = new LinkedList(topProjects.entrySet());
-		    for (Iterator it = list.iterator(); it.hasNext();) {
-		    	row = sheet.createRow(rowNum++);
-		        cellNum = 0;
-		        Map.Entry entry = (Map.Entry)it.next();
-		    	HSSFCellStyle st = null;
-		    	if (it.hasNext())
-		    		st = cellStyle;
-	            else
-	            	st = lastCellStyle;
-		        cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(entry.getKey().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(st);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(entry.getValue().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(st);
-		    }
-		   
+	        if(topProjects!=null){
+	            List list = new LinkedList(topProjects.entrySet());
+			    for (Iterator it = list.iterator(); it.hasNext();) {
+			    	row = sheet.createRow(rowNum++);
+			        cellNum = 0;
+			        Map.Entry entry = (Map.Entry)it.next();
+			    	HSSFCellStyle st = null;
+			    	if (it.hasNext())
+			    		st = cellStyle;
+		            else
+		            	st = lastCellStyle;
+			        cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(entry.getKey().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(st);
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(entry.getValue().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(st);
+			    }
+	        }	
 		  //Funding Table.
 		    HSSFSheet sheet2 = null;
 		    if (!fundingOpt.equals("0")){

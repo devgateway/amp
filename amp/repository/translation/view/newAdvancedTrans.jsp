@@ -52,7 +52,7 @@
 	.expandColapse{
 		width: 150px;
 	}
-	.searchResultsSeparator {
+	.ResultsSeparator {
 		margin-bottom: 20px;
 	}
 	.listsBorder{
@@ -127,7 +127,7 @@
 		<html:hidden styleId="hiddenPageNumber" name ="newAdvancedTrnForm" property="pageNumber"/>
 		<html:hidden styleId="hiidenChangesOpened" name ="newAdvancedTrnForm" property="changesOpened"/>
 		<div class="pageTitle">
-			<span class="subtitle-blue">Search Translations</span>
+			<span class="subtitle-blue"><digi:trn>Search Translations</digi:trn></span>
 		</div>
 		<div class="controlPanel">
 			<div class="clearfix">
@@ -144,7 +144,7 @@
 		<div class="listsBorder">
 			<div class="listPanels clearfix">
 				<div class="searchResults">
-					<c:if test="${empty newAdvancedTrnForm.resultList}">Nothing found</c:if>
+					<c:if test="${empty newAdvancedTrnForm.resultList}"><digi:trn>Nothing found</digi:trn></c:if>
 					<c:if test="${!empty newAdvancedTrnForm.resultList}">
 						<div class="searchResulToolBar">
 							<input class="expandColapse" type="button" value="Expand All">

@@ -32,6 +32,6 @@
 	</c:set>
 	&nbsp;
 	<a id="show_legend_pop" style="cursor: pointer;text-decoration: underline;" onclick="javascript:showlegend()">
-		Show Legend <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_dwn.gif"/>
+		<digi:trn>Show Legend</digi:trn> <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_dwn.gif"/>
 	</a>
 

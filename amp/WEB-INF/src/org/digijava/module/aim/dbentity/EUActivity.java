@@ -4,6 +4,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,11 +14,12 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.Output;
 
 /**
  * @author mihai
  */
-public class EUActivity implements Serializable, Identifiable {
+public class EUActivity implements Serializable, Identifiable, Versionable, Cloneable {
 	private static final long serialVersionUID = 7061222006441976421L;
 
 
@@ -199,6 +201,65 @@ public class EUActivity implements Serializable, Identifiable {
 		this.transactionDate = transactionDate;
 	}
 
+
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		EUActivity aux = (EUActivity) obj;
+		String original = this.name != null ? this.name : "";
+		String copy = aux.name != null ? aux.name : "";
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
+
+
+	@Override
+	public Object getValue() {
+		return this.name != null ? this.name : "";
+	}
+
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+						: "Empty Name" }));
+		return out;
+	}
+
+
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		EUActivity aux = (EUActivity) clone();
+		aux.activity = newActivity;
+		aux.id = null;
+		
+		if (aux.contributions != null && aux.contributions.size() > 0){
+			Set<EUActivityContribution> set = new HashSet<EUActivityContribution>();
+			Iterator<EUActivityContribution> i = aux.contributions.iterator();
+			while (i.hasNext()) {
+				EUActivityContribution newAC = (EUActivityContribution) i
+						.next().clone();
+				newAC.setId(null);
+				newAC.setEuActivity(aux);
+				set.add(newAC);
+			}
+			aux.contributions = set;
+		}
+		else
+			aux.contributions = null;
+		
+		return aux;
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 
 
 

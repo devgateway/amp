@@ -22,7 +22,7 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 	/**
 	 * Indicator values.
 	 */
-	private Set<AmpIndicatorValue> values;
+	protected Set<AmpIndicatorValue> values;
 	
 	public Long getId() {
 		return id;

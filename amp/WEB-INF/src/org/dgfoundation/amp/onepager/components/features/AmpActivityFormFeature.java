@@ -96,10 +96,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
 				info("Activity saved successfully");
-				if (newActivity){
+				//if (newActivity){
 					Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
 					target.appendJavascript("window.location.replace(window.location.href.replace(\"new\" , \"" + actId + "\"));");
-				}
+				//}
 				target.addComponent(feedbackPanel);
 			}
 		};
@@ -121,11 +121,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		planningFeature = new AmpPlanningFormSectionFeature(
 				"planning", "Planning", am);
 		activityForm.add(planningFeature);
-
+		
 		regionalFundingFeature = new AmpRegionalFundingFormSectionFeature(
 				"regionalFunding", "Regional Funding", am);
 		activityForm.add(regionalFundingFeature);
-
 		
 		locationFeature = new AmpLocationFormSectionFeature(
 				"location", "Location", am,regionalFundingFeature);
@@ -146,10 +145,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		donorFundingFeature = new AmpDonorFundingFormSectionFeature(
 				"donorFunding", "Donor Funding", am);
 		activityForm.add(donorFundingFeature);
-
+        
 		relatedOrganizations = new AmpRelatedOrganizationsFormSectionFeature(
 				"relatedOrganizations", "Related Organizations", am);
 		activityForm.add(relatedOrganizations);
+		
 		components = new AmpComponentsFormSectionFeature("components", "Components", am);
 		activityForm.add(components);
 
@@ -176,8 +176,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		resources = new AmpResourcesFormSectionFeature("resources", "Related Documents", am);
 		activityForm.add(resources);
-		
-
 
 	}
 

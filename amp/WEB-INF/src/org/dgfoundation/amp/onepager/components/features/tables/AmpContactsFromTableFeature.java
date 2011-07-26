@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactDetailFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactOrganizationFeaturePanel;
@@ -93,8 +94,10 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             protected void populateItem(final ListItem<AmpActivityContact> item) {
                 try {
                     final MarkupContainer listParent=this.getParent();
-                    AmpContact contact = item.getModelObject().getContact();
-                    item.add(new Label("contactName", contact.getNameAndLastName()));
+
+                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(item.getModelObject().getContact());
+
+                    item.add(new Label("contactName", contactModel.getObject().getNameAndLastName()));
                     
                     AmpDeleteLinkField delContact = new AmpDeleteLinkField(
                                                     "delContact", "Delete Contact") {
@@ -106,38 +109,40 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                                     setModel.getObject().remove(item.getModelObject());
                                                     target.addComponent(listParent);
                                             }
-                                    };
-                   
-         
+                    };
+                    item.add(delContact);
+                    
+
                     AmpCategorySelectFieldPanel contactTitle = new AmpCategorySelectFieldPanel(
                                     "title",
                                     CategoryConstants.CONTACT_TITLE_KEY,
-                                    new PropertyModel<AmpCategoryValue>(contact, "title"),
+                                    new PropertyModel<AmpCategoryValue>(contactModel, "title"),
                                     CategoryConstants.CONTACT_TITLE_NAME, true, true, true);
-                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(contact);
-
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",true,Constants.CONTACT_PROPERTY_NAME_PHONE); 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",true,Constants.CONTACT_PROPERTY_NAME_FAX);  
-                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",true,Constants.CONTACT_PROPERTY_NAME_EMAIL);
-
-
-                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);
-                    contactOrganizations.setOutputMarkupId(true);
                     item.add(contactTitle);
+                    
+                    
                     AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact name",true);
                     name.getTextContainer().setRequired(true);
+                    item.add(name);
                     AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true);
                     lastname.getTextContainer().setRequired(true);
-                    item.add(name);
                     item.add(lastname);
+                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",true,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
                     item.add(new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",true));
                     item.add(new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",true));
+                    
+                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);
+                    contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
+                    
+                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",true,Constants.CONTACT_PROPERTY_NAME_PHONE); 
                     item.add(detailPhone);
+
+                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",true,Constants.CONTACT_PROPERTY_NAME_FAX);  
                     item.add(detailFax);
+
                     item.add(new AmpTextAreaFieldPanel<String>("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false));
-                    item.add(delContact);
                 } catch (Exception ex) {
 
                 }

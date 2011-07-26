@@ -73,7 +73,6 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		
 		
 		final IModel<Set<AmpOrganisationContact>> setModel=new PropertyModel<Set<AmpOrganisationContact>>(model,"organizationContacts");
-		// TODO Auto-generated constructor stub
 		if (setModel.getObject() == null) {
             setModel.setObject(new HashSet<AmpOrganisationContact>());
         }
@@ -102,11 +101,10 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 				
 			}
 		};
-		idsList.setReuseItems(true);
 		add(idsList);
 
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchOrgs","Search Organizations",AmpOrganisationSearchModel.class) {			
+		AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchOrgs","Search Organizations",AmpOrganisationSearchModel.class) {			
 			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
@@ -120,7 +118,10 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 				ampOrgCont.setContact(model.getObject());
 				Set<AmpOrganisationContact> set = setModel.getObject();
 				set.add(ampOrgCont);
+				/*
 				idsList.removeAll();
+				target.addComponent(idsList.getParent());
+				*/
 				target.addComponent(idsList.getParent());
 			}
 

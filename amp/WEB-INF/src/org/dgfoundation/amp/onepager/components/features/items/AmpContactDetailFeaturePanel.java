@@ -83,6 +83,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
 		super(id, model, fmName, hideLabel);
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpContactProperty>());
 		
 		//final IModel<AmpContact> ampContact = new Model(model);
 		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
@@ -113,8 +115,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 				@Override
                 protected void populateItem(final ListItem<AmpContactProperty> item) {
-                	final AmpContactProperty property = item.getModelObject();
-                    final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>( "Are you sure you want to delete this?")) {
+                	//AmpContactProperty property = item.getModelObject();
+                    AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>( "Are you sure you want to delete this?")) {
 
                         /**
 						 * 
@@ -129,11 +131,11 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         
 
                     };
-                    if (!property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
-                        IModel<String> value = new PropertyModel<String>(property, "value");
+                    if (!item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                        IModel<String> value = new PropertyModel<String>(item.getModel(), "value");
                         Fragment frg1 = new Fragment("detailPanel", "frag1",this);
                         AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true);
-                        if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+                        if(item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
                         	detailTextField.setRequired(true);
                         	ContactEmailValidator validator=new ContactEmailValidator(model.getObject().getId());
@@ -150,8 +152,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         item.add(frg1);
                     } else {
                         try {
-                            IModel<String> valueModel = new PropertyModel<String>(property, "actualValue");
-                            IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(property, "categoryValue");
+                            IModel<String> valueModel = new PropertyModel<String>(item.getModel(), "actualValue");
+                            IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(item.getModel(), "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
                             AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true);
                             TextField<String> detailTextField=phn.getTextContainer();
@@ -160,7 +162,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         	detailTextField.add(new PatternValidator(expression));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
-                        	final List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
+                        	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
                         	collectionByKey.addAll(CategoryManagerUtil
         							.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_PHONE_TYPE_KEY));
 							choiceContainer.setRequired(true);

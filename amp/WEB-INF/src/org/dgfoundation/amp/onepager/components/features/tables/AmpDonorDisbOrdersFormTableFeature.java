@@ -61,12 +61,17 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 				disbOrderId.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
 				item.add(disbOrderId);
 				
+				ArrayList<IPAContract> contractList;
+				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
+					contractList = new ArrayList<IPAContract>(model.getObject()
+						.getAmpActivityId().getContracts());
+				else
+					contractList = new ArrayList<IPAContract>();
 
 				item.add(new AmpSelectFieldPanel<IPAContract>("contract",
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
-						new ArrayList<IPAContract>(model.getObject()
-								.getAmpActivityId().getContracts()),
+						contractList,
 						"Contract", true, true));
 
 				AmpCheckBoxFieldPanel rejected = new AmpCheckBoxFieldPanel(

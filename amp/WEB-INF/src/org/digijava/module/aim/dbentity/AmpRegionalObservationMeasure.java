@@ -1,9 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class AmpRegionalObservationMeasure implements Serializable {
+public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 	private Long ampRegionalObservationMeasureId;
 	private String name;
 	private AmpRegionalObservation regionalObservation;
@@ -47,5 +49,27 @@ public class AmpRegionalObservationMeasure implements Serializable {
 
 	public void setRegionalObservation(AmpRegionalObservation regionalObservation) {
 		this.regionalObservation = regionalObservation;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		AmpRegionalObservationMeasure aux = (AmpRegionalObservationMeasure) super.clone();
+		aux.setAmpRegionalObservationMeasureId(null);
+		
+		if (aux.actors != null && aux.actors.size() > 0){
+			Set<AmpRegionalObservationActor> set = new HashSet<AmpRegionalObservationActor>();
+			Iterator<AmpRegionalObservationActor> i = aux.actors.iterator();
+			while (i.hasNext()) {
+				AmpRegionalObservationActor newActor = (AmpRegionalObservationActor) i.next().clone();
+				newActor.setAmpRegionalObservationActorId(null);
+				newActor.setMeasure(aux);
+				set.add(newActor);
+			}
+			aux.actors = set;
+		}
+		else
+			aux.actors = null;
+		
+		return aux;
 	}
 }

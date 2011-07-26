@@ -13,7 +13,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author mihai
  *
  */
-public class EUActivityContribution implements Serializable, Comparable {
+public class EUActivityContribution implements Serializable, Comparable, Cloneable {
 	private static final long serialVersionUID = -7752194026135595434L;
 	
 	private Long id;
@@ -114,4 +114,9 @@ public class EUActivityContribution implements Serializable, Comparable {
 		this.financingTypeCategVal = financingTypeCategVal;
 	}
 
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 }

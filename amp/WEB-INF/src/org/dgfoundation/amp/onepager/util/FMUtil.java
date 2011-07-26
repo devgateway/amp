@@ -176,7 +176,7 @@ public final class FMUtil {
 					else{
 						FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, componentPath, "no");
 					}
-					
+					logger.info("Inserting feature in FM Tree: " + componentPath);
 					AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 					context.setAttribute("ampTreeVisibility",ampTreeVisibility);
@@ -266,7 +266,7 @@ public final class FMUtil {
 				AmpModulesVisibility moduleByNameFromRoot = getModuleByNameFromRoot(ampTreeVisibility.getItems().values(), parentPath);
 				FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(), moduleByNameFromRoot.getId(), component, "yes");
 			}
-			logger.debug("Inserting module: " + component);
+			logger.info("Inserting module in FM Tree: " + component);
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			context.setAttribute("ampTreeVisibility", ampTreeVisibility);

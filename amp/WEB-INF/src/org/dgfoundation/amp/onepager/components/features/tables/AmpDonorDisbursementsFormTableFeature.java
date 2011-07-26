@@ -68,11 +68,16 @@ public class AmpDonorDisbursementsFormTableFeature extends
 								,disbOrderIdModel,
 						"Pledges", true, true));
 				
+				ArrayList<IPAContract> contractList;
+				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
+					contractList = new ArrayList<IPAContract>(model.getObject()
+						.getAmpActivityId().getContracts());
+				else
+					contractList = new ArrayList<IPAContract>();
 				item.add(new AmpSelectFieldPanel<IPAContract>("contract",
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
-						new ArrayList<IPAContract>(model.getObject()
-								.getAmpActivityId().getContracts()),
+						contractList,
 						"Contract", true, true));
 
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {

@@ -51,6 +51,10 @@ public class AmpDonorFundingFormSectionFeature extends
 		super(id, fmName, am);
 		final IModel<Set<AmpFunding>> setModel = new PropertyModel<Set<AmpFunding>>(
 				am, "funding");
+		
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpFunding>());
+		
 		AbstractReadOnlyModel<List<AmpFunding>> listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 

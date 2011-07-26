@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityInternalId implements Serializable, Versionable {
+public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
 
 	private static final long serialVersionUID = 469552292854192522L;
 	private Long id;
@@ -72,8 +72,15 @@ public class AmpActivityInternalId implements Serializable, Versionable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) {
-		this.ampActivity = newActivity;
-		return this;
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpActivityInternalId aux = (AmpActivityInternalId) clone();
+		aux.ampActivity = newActivity;
+		aux.id = null;
+		return aux;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

@@ -1,11 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpActivityReferenceDoc implements Serializable {
+public class AmpActivityReferenceDoc implements Serializable, Versionable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 	private Long id;
@@ -67,6 +69,42 @@ public class AmpActivityReferenceDoc implements Serializable {
 		hash += (this.id != null ? this.id.hashCode() : 0);
 		return hash;
 	}
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpActivityReferenceDoc aux = (AmpActivityReferenceDoc) obj;
+		String c1 = aux.getComment() != null ? aux.getComment() : "";
+		String c2 = this.getComment() != null ? this.getComment() : "";
+		return c1.compareTo(c2) == 0;
+	}
+	@Override
+	public Object getValue() {
+		return this.comment;
+	}
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { " Comment:&nbsp;" }, new Object[] { this.comment != null ? this.comment
+						: "Empty Comment" }));
+		if (this.lastEdited != null) {
+			out.getOutputs().add(new Output(null, new String[] { " Last Edited:&nbsp;" }, new Object[] { this.lastEdited }));
+		}
+		return null;
+	}
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpActivityReferenceDoc aux = (AmpActivityReferenceDoc) clone();
+		aux.id = null;
+		aux.activity = newActivity;
+
+		return aux;
+	}
 	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 	
 }

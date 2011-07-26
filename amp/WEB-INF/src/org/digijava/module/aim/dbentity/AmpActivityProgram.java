@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram implements Versionable, Serializable {
+public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
 
         private Long ampActivityProgramId;
         private Long programPercentage;
@@ -87,8 +87,16 @@ public class AmpActivityProgram implements Versionable, Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) {
-		this.activity = newActivity;
-		return this;
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpActivityProgram aux = (AmpActivityProgram) clone();
+		aux.activity = newActivity;
+		aux.ampActivityProgramId = null;
+		
+		return aux;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+	return super.clone();
 	}
 }

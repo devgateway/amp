@@ -10,7 +10,7 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable,Serializable {
+public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
 	private Long id;
 	private AmpActivityVersion activity;
 	private AmpLocation location;
@@ -68,9 +68,11 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) {
-		this.activity = newActivity;
-		return this;
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpActivityLocation aux = (AmpActivityLocation) clone(); 
+		aux.activity = newActivity;
+		aux.id = null;
+		return aux;
 	}
 	public String getLatitude() {
 		return latitude;
@@ -83,5 +85,10 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	}
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

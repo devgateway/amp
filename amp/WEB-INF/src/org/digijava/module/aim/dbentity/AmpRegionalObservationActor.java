@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-public class AmpRegionalObservationActor implements Serializable {
+public class AmpRegionalObservationActor implements Serializable, Cloneable {
 
 	private Long ampRegionalObservationActorId;
 	private String name;
@@ -47,5 +47,11 @@ public class AmpRegionalObservationActor implements Serializable {
 
 	public void setMeasure(AmpRegionalObservationMeasure measure) {
 		this.measure = measure;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

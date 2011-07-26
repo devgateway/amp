@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
@@ -26,6 +28,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -42,9 +45,11 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -227,7 +232,48 @@ public class ActivityVersionUtil {
 	 */
 	public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
 		AmpActivityVersion out = (AmpActivityVersion) in.clone();
+		
+		
+		Class clazz = AmpActivityFields.class;
+		
+		Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
+		for (int i = 0; i < fields.length; i++) {
+			Field field = fields[i];
+			if (Collection.class.isAssignableFrom(field.getType())){
+				logger.info("Init set: " + field.getName());
+				initSet(out, field);
+			}
+		}
+		
+		
+		out.setActivityCreator(member);
+		out.setAmpActivityGroup(null);
+		out.setAmpActivityPreviousVersion(null);
+		out.setAuthor(null);
+		out.setTeam(member.getAmpTeam());
+		out.setThemeId(null);
+		out.setModality(null);
+		out.setModifiedBy(member);
+		// out.setCreatedBy(null);
+		out.setChapter(null);
 
+		//out.setActivityPrograms(null);
+		//out.setActPrograms(null);
+		//out.setActRankColl(null);
+		// out.setApprovedBy(null);
+		//out.setReferenceDocs(null);
+		//out.setProgress(null);
+		//out.setMember(null);
+		//out.setNotes(null);
+		//out.setIndicators(null);
+		//out.setInternalIds(null);
+		//out.setCosts(null);
+		//out.setDocuments(null);
+		//out.setComponentes(null);
+
+
+		
+		/*
 		// Contacts.
 		if (out.getActivityContacts() != null && out.getActivityContacts().size() > 0) {
 			Set<AmpActivityContact> setAmpCont = new HashSet<AmpActivityContact>();
@@ -246,8 +292,6 @@ public class ActivityVersionUtil {
 			out.setActivityContacts(null);
 		}
 
-		out.setActivityCreator(member);
-
 		// Activity Documents.
 		if (out.getActivityDocuments() != null && out.getActivityDocuments().size() > 0) {
 			Set<AmpActivityDocument> set = new HashSet<AmpActivityDocument>();
@@ -262,15 +306,22 @@ public class ActivityVersionUtil {
 			out.setActivityDocuments(null);
 		}
 
-		out.setActivityPrograms(null);
-		out.setActPrograms(null);
-		out.setActRankColl(null);
-		out.setAmpActivityGroup(null);
-		out.setAmpActivityPreviousVersion(null);
-		// out.setApprovedBy(null);
-		out.setAuthor(null);
-		out.setCategories(null);
-		out.setChapter(null);
+		initSet(out, "categories");
+		/*
+		if (out.getCategories() != null && out.getCategories().size() > 0) {
+			HashSet<AmpCategoryValue> set = new HashSet<AmpCategoryValue>();
+			Iterator<AmpCategoryValue> i = out.getCategories().iterator();
+			while (i.hasNext()) {
+				AmpCategoryValue aux = (AmpCategoryValue) i.next();
+				aux = (AmpCategoryValue) aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setCategories(set);
+		} else {
+			out.setCategories(null);
+		}
+		
+		
 
 		// Closing Dates.
 		if (out.getClosingDates() != null && out.getClosingDates().size() > 0) {
@@ -286,7 +337,6 @@ public class ActivityVersionUtil {
 			out.setClosingDates(null);
 		}
 
-		out.setComponentes(null);
 
 		// Component Fundings.
 		if (out.getComponentFundings() != null && out.getComponentFundings().size() > 0) {
@@ -344,9 +394,6 @@ public class ActivityVersionUtil {
 			out.setContracts(null);
 		}
 		
-		out.setCosts(null);
-		// out.setCreatedBy(null);
-		out.setDocuments(null);
 
 		// Fundings.
 		if (out.getFunding() != null && out.getFunding().size() > 0) {
@@ -362,8 +409,6 @@ public class ActivityVersionUtil {
 			out.setFunding(null);
 		}
 
-		out.setIndicators(null);
-		out.setInternalIds(null);
 
 		// Issues - Measures - Actors.
 		if (out.getIssues() != null && out.getIssues().size() > 0) {
@@ -393,10 +438,6 @@ public class ActivityVersionUtil {
 			out.setLocations(null);
 		}
 
-		out.setMember(null);
-		out.setModality(null);
-		out.setModifiedBy(member);
-		out.setNotes(null);
 
 		// Org.Roles.
 		if (out.getOrgrole() != null && out.getOrgrole().size() > 0) {
@@ -412,8 +453,6 @@ public class ActivityVersionUtil {
 			out.setOrgrole(null);
 		}
 
-		out.setProgress(null);
-		out.setReferenceDocs(null);
 
 		// Regional Funding.
 		if (out.getRegionalFundings() != null && out.getRegionalFundings().size() > 0) {
@@ -485,10 +524,37 @@ public class ActivityVersionUtil {
 			out.setStructures(null);
 		}
 
-		out.setTeam(member.getAmpTeam());
-		out.setThemeId(null);
+		 */
 
 		return out;
+	}
+	
+	private static void initSet(AmpActivityVersion out, Field field){
+		String setName = Strings.capitalize(field.getName());
+		Class clazz = out.getClass();
+		try {
+			Method method = clazz.getMethod("get" + setName);
+			Set returnSet = null;
+			Set set = (Set) method.invoke(out);
+			if (set != null && set.size() > 0){
+				Iterator i = set.iterator();
+				returnSet = new HashSet();
+				while (i.hasNext()) {
+					Versionable object = (Versionable) i.next();
+					object = (Versionable) object.prepareMerge(out);
+					returnSet.add(object);
+				}
+			}
+			
+			if (Set.class.isAssignableFrom(field.getType()))
+				method = clazz.getMethod("set" + setName, Set.class);
+			else
+				method = clazz.getMethod("set" + setName, Collection.class);
+			method.invoke(out, returnSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+		}
 	}
 
 	/**

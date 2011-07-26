@@ -13,7 +13,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author George Khakhanashvili
  *
  */
-public class AmpIndicatorValue implements Serializable{
+public class AmpIndicatorValue implements Serializable, Cloneable{
     /*
      * NOTICE
      * 
@@ -182,6 +182,11 @@ public class AmpIndicatorValue implements Serializable{
 
     
     @Override
+    protected Object clone() throws CloneNotSupportedException {
+    	return super.clone();
+    }
+    /*
+    @Override
     public AmpIndicatorValue clone() {
     	AmpIndicatorValue r = new AmpIndicatorValue();
     	
@@ -202,7 +207,7 @@ public class AmpIndicatorValue implements Serializable{
 
     	return r;
     }
-
+	*/
     public void copyValuesTo(AmpIndicatorValue r) {
     	r.setValue(value);
     	r.setValueDate(valueDate);
@@ -219,6 +224,8 @@ public class AmpIndicatorValue implements Serializable{
     	r.setIndicatorSource(indicatorSource);
     	r.setSubgroup(subgroup);
     }
+    
+    
 
 }
 

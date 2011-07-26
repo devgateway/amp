@@ -37,9 +37,11 @@ public class AmpTransactionTypeDonorFundingDetailModel implements
 	@Override
 	public Set<AmpFundingDetail> getObject() {
 		Set<AmpFundingDetail> s = new HashSet<AmpFundingDetail>();
-		for (AmpFundingDetail ampFundingDetail : model.getObject())
-			if (ampFundingDetail.getTransactionType().equals(transactionType))
-				s.add(ampFundingDetail);
+		if (model.getObject() != null){
+			for (AmpFundingDetail ampFundingDetail : model.getObject())
+				if (ampFundingDetail.getTransactionType().equals(transactionType))
+					s.add(ampFundingDetail);
+		}
 		return s;
 	}
 

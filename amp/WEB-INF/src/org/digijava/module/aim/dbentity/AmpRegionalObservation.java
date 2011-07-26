@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -102,6 +103,21 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 		AmpRegionalObservation aux = (AmpRegionalObservation) clone();
 		aux.activity = newActivity;
 		aux.ampRegionalObservationId = null;
+
+		if (aux.regionalObservationMeasures != null && aux.regionalObservationMeasures.size() > 0){
+			Set<AmpRegionalObservationMeasure> set = new HashSet<AmpRegionalObservationMeasure>();
+			Iterator<AmpRegionalObservationMeasure> i = aux.regionalObservationMeasures.iterator();
+			while (i.hasNext()) {
+				AmpRegionalObservationMeasure newMeasure = (AmpRegionalObservationMeasure) i.next().clone();
+				newMeasure.setAmpRegionalObservationMeasureId(null);
+				newMeasure.setRegionalObservation(aux);
+				set.add(newMeasure);
+			}
+			aux.regionalObservationMeasures = set;
+		}
+		else
+			aux.regionalObservationMeasures = null;		
+		
 		return aux;
 	}
 

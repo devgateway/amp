@@ -2143,6 +2143,7 @@ public class FeaturesUtil {
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getFeatures().add(feature);
+				session.update(template);
 				tx.commit();
        		}
 			//session.saveOrUpdate(template);
@@ -2192,6 +2193,7 @@ public class FeaturesUtil {
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getItems().add(module);
+				session.update(template);
 				tx.commit();
        		}
 		}
@@ -2241,6 +2243,7 @@ public class FeaturesUtil {
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getItems().add(module);
+				session.update(template);
 				tx.commit();
        		}
 		}

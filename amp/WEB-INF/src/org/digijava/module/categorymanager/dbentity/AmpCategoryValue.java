@@ -146,7 +146,6 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 			}
 		}
 		return false;
-		// return this.equals(obj);
 	}
 
 	@Override

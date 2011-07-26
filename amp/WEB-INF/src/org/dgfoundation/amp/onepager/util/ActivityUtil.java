@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -93,21 +91,14 @@ public class ActivityUtil {
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
 			saveIndicators(a, session);
-			Set<AmpActivityContact> newActivityContacts=saveContacts(a, session);
+			//?!? a.getActivityContacts().clear();
+			//saveContacts(a, session);
 			saveResources(a);
 			saveEditors(session);
 
 			if (ActivityVersionUtil.isVersioningEnabled()){
 				a.setAmpActivityId(null); //hibernate will save as a new version
-				a.getActivityContacts().clear();
 				session.save(a);
-				  //add or edit activity contact and amp contact
-			    if(newActivityContacts!=null && newActivityContacts.size()>0){
-			    	  for (AmpActivityContact activityContact : newActivityContacts) {
-			    		  session.save(activityContact);
-			    	  }
-			     }
-
 			}
 			else
 				session.saveOrUpdate(a);
@@ -162,22 +153,29 @@ public class ActivityUtil {
 			
 			session.save(group);
 		}
-		
+
 		//last version
-		AmpActivityVersion ret = group.getAmpActivityLastVersion();
+		
+		/**
+		 * TODO:
+		 * 
+		 * Temporary
+		 * REMOVE COMMENT!
+		 */
+		//act = group.getAmpActivityLastVersion();
 		
 		//is versioning activated?
 		if (ActivityVersionUtil.isVersioningEnabled()){
 			AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			try {
-				ret = ActivityVersionUtil.cloneActivity(ret, wicketSession.getAmpCurrentMember());
+				act = ActivityVersionUtil.cloneActivity(act, wicketSession.getAmpCurrentMember());
 			} catch (CloneNotSupportedException e) {
 				logger.error("Can't clone current Activity: ", e);
 			}
 		}
-		ret.setAmpActivityGroup(group);
+		act.setAmpActivityGroup(group);
 		
-		return ret;
+		return act;
 	}
 
 	private static void saveEditors(Session session) {
@@ -186,6 +184,8 @@ public class ActivityUtil {
 		
 		AmpAuthWebSession wicketSession = ((AmpAuthWebSession)org.apache.wicket.Session.get());
 		
+		if (editors == null || editors.keySet() == null)
+			return;
 		Iterator<String> it = editors.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
@@ -223,93 +223,97 @@ public class ActivityUtil {
 		/*
 		 * remove old resources
 		 */
-		Iterator<AmpActivityDocument> it = deletedResources.iterator();
-		while (it.hasNext()) {
-			AmpActivityDocument tmpDoc = (AmpActivityDocument) it
-					.next();
-			a.getActivityDocuments().remove(tmpDoc);
+		if (deletedResources != null){
+			Iterator<AmpActivityDocument> it = deletedResources.iterator();
+			while (it.hasNext()) {
+				AmpActivityDocument tmpDoc = (AmpActivityDocument) it
+				.next();
+				a.getActivityDocuments().remove(tmpDoc);
+			}
 		}
 		
 		/*
 		 * Add new resources
 		 */
-		Iterator<TemporaryDocument> it2 = newResources.iterator();
-		while (it2.hasNext()) {
-			TemporaryDocument temp = (TemporaryDocument) it2
-					.next();
-			TemporaryDocumentData tdd = new TemporaryDocumentData(); 
-			tdd.setTitle(temp.getTitle());
-			tdd.setName(temp.getFileName());
-			tdd.setDescription(temp.getDescription());
-			tdd.setNotes(temp.getNote());
-			tdd.setCmDocTypeId(temp.getType().getId());
-			tdd.setDate(temp.getDate());
-			tdd.setYearofPublication(temp.getYear());
-			
-			if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
-				tdd.setFileSize(temp.getFile().getSize());
+		if (newResources != null){
+			Iterator<TemporaryDocument> it2 = newResources.iterator();
+			while (it2.hasNext()) {
+				TemporaryDocument temp = (TemporaryDocument) it2
+				.next();
+				TemporaryDocumentData tdd = new TemporaryDocumentData(); 
+				tdd.setTitle(temp.getTitle());
+				tdd.setName(temp.getFileName());
+				tdd.setDescription(temp.getDescription());
+				tdd.setNotes(temp.getNote());
+				tdd.setCmDocTypeId(temp.getType().getId());
+				tdd.setDate(temp.getDate());
+				tdd.setYearofPublication(temp.getYear());
 				
-				final FileUpload file = temp.getFile();
-				/**
-				 * For Document Manager compatibility purposes
-				 */
-				final FormFile formFile = new FormFile() {
+				if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
+					tdd.setFileSize(temp.getFile().getSize());
 					
-					@Override
-					public void setFileSize(int arg0) {
-					}
-					
-					@Override
-					public void setFileName(String arg0) {
-					}
-					
-					@Override
-					public void setContentType(String arg0) {
-					}
-					
-					@Override
-					public InputStream getInputStream() throws FileNotFoundException,
-					IOException {
-						return file.getInputStream();
-					}
-					
-					@Override
-					public int getFileSize() {
-						return (int) file.getSize();
-					}
-					
-					@Override
-					public String getFileName() {
-						return file.getClientFileName();
-					}
-					
-					@Override
-					public byte[] getFileData() throws FileNotFoundException, IOException {
-						return file.getBytes();
-					}
-					
-					@Override
-					public String getContentType() {
-						return file.getContentType();
-					}
-					
-					@Override
-					public void destroy() {
-					}
-				};
-				tdd.setFormFile(formFile);
+					final FileUpload file = temp.getFile();
+					/**
+					 * For Document Manager compatibility purposes
+					 */
+					final FormFile formFile = new FormFile() {
+						
+						@Override
+						public void setFileSize(int arg0) {
+						}
+						
+						@Override
+						public void setFileName(String arg0) {
+						}
+						
+						@Override
+						public void setContentType(String arg0) {
+						}
+						
+						@Override
+						public InputStream getInputStream() throws FileNotFoundException,
+						IOException {
+							return file.getInputStream();
+						}
+						
+						@Override
+						public int getFileSize() {
+							return (int) file.getSize();
+						}
+						
+						@Override
+						public String getFileName() {
+							return file.getClientFileName();
+						}
+						
+						@Override
+						public byte[] getFileData() throws FileNotFoundException, IOException {
+							return file.getBytes();
+						}
+						
+						@Override
+						public String getContentType() {
+							return file.getContentType();
+						}
+						
+						@Override
+						public void destroy() {
+						}
+					};
+					tdd.setFormFile(formFile);
+				}
+				
+				tdd.setWebLink(temp.getWebLink());
+				
+				ActionMessages messages = new ActionMessages();
+				NodeWrapper node = tdd.saveToRepository(s.getHttpSession(), messages);
+				
+				AmpActivityDocument aad = new AmpActivityDocument();
+				aad.setAmpActivity(a);
+				aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+				aad.setUuid(node.getUuid());
+				a.getActivityDocuments().add(aad);
 			}
-			
-			tdd.setWebLink(temp.getWebLink());
-			
-			ActionMessages messages = new ActionMessages();
-			NodeWrapper node = tdd.saveToRepository(s.getHttpSession(), messages);
-			
-			AmpActivityDocument aad = new AmpActivityDocument();
-			aad.setAmpActivity(a);
-			aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-			aad.setUuid(node.getUuid());
-			a.getActivityDocuments().add(aad);
 		}
 	}
 
@@ -325,6 +329,8 @@ public class ActivityUtil {
 					.next();
 					
 					boolean found=false;
+					if (a.getIndicators() == null)
+						continue;
 					Iterator<IndicatorActivity> it2 = a.getIndicators().iterator();
 					while (it2.hasNext()) {
 						IndicatorActivity newind = (IndicatorActivity) it2
@@ -354,7 +360,7 @@ public class ActivityUtil {
 			}
 		}
 	}
-	private static Set<AmpActivityContact> saveContacts(AmpActivityVersion a, Session session) throws Exception {
+	private static void saveContacts(AmpActivityVersion a, Session session) throws Exception {
 		Set<AmpActivityContact> activityContacts=a.getActivityContacts();
 	      // if activity contains contact,which is not in contact list, we should remove it
 		Long oldActivityId = a.getAmpActivityId();
@@ -486,7 +492,13 @@ public class ActivityUtil {
     			}
 	    	  }
 	      }
-	      return newActivityContacts;
+	
+	      //add or edit activity contact and amp contact
+	      if(newActivityContacts!=null && newActivityContacts.size()>0){
+	    	  for (AmpActivityContact activityContact : newActivityContacts) {
+	    		  session.save(activityContact);
+	    	  }
+	      }
 	}
 
 }

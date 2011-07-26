@@ -30,6 +30,7 @@
 
 <digi:instance property="aimTeamReportsForm" />
 <digi:form action="/viewTeamReports.do" method="post">
+<html:hidden property="action"/>
 
 <c:if test="${aimTeamReportsForm.showTabs}">
 	<c:set var="translation">
@@ -193,6 +194,12 @@ $(document).ready(function() {
 	$("select[class^='savePositionDropDow']").attr('disabled', 'disabled');
 	showHidePositions();
 	});
+	
+	function submitForm(action){
+		document.aimTeamReportsForm.action.value=action;
+		document.aimTeamReportsForm.submit();
+		
+	}
 
 </SCRIPT>
 
@@ -222,7 +229,7 @@ $(document).ready(function() {
          	<td>
           	<table cellpadding="6" cellspacing="6">
                <tr>
-               <td id="reportsearchform"><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit></td> <td id="reportsearchform2"><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+               <td id="reportsearchform"><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
                </tr>
               </table>
              </td>

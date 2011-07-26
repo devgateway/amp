@@ -11,163 +11,115 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/fonts-min.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/dataExchange/scripts/logJs/css/datatable.css'/>">
-
-<style type="text/css">
-.yui-skin-sam .yui-dt tr.mark,
-.yui-skin-sam .yui-dt tr.mark td.yui-dt-asc,
-.yui-skin-sam .yui-dt tr.mark td.yui-dt-desc,
-.yui-skin-sam .yui-dt tr.mark td.yui-dt-asc,
-.yui-skin-sam .yui-dt tr.mark td.yui-dt-desc
-	{
-	background-color: #a33;
-	color: #fff;
-}
-</style>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/yuiloader-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/event-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/yui/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datasource-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/datatable-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/button-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/dataExchange/scripts/logJs/logHelper.js'/>" > </script>
-
 <script type="text/javascript">
-	LogPerItemConfig = {
-			columnDefs: [
-						{key:"Number", sortable: true, formatter:YAHOOAmp.widget.DataTable.formatNumber},
-						{key:"LogLevel", sortable: true, label: "Log Level", formatter: lpiFormatter},
-						{key:"Name", sortable: true},
-	                   	   {key:"Date", sortable: true, formatter: YAHOOAmp.widget.DataTable.formatDate},
-	                   	   {key:"Time"},
-	                   	{key:"Description", hidden: true},
-	                   	   ],
-	
-			responseSchema: {
-						resultNode: "LogPerItem",
-						fields: [ {key:"Number",parser:YAHOOAmp.util.DataSource.parseNumber},"LogLevel", "Name",
-									{key:"Date", parser: YAHOOAmp.util.DataSource.parseDate}, "Time", "Description"]
-					}
-	
-	};
-	
-	LogPerExecutionConfig = {
-			columnDefs: [
-			             {key:"DbId", sortable: true, formatter:YAHOOAmp.widget.DataTable.formatNumber},
-	                   	   {key:"Date", sortable: true, formatter: YAHOOAmp.widget.DataTable.formatDate},
-	                   	   {key:"Time"},
-	                   	{key:"ExternalTimestamp", label:"External Timestamp", sortable: true},
-	                   	{key:"Description"},
-	                   	   ],
-	
-			responseSchema: {
-						resultNode: "LogPerExecution",
-						fields: [{key:"DbId", parser:YAHOOAmp.util.DataSource.parseNumber},
-									{key:"Date", parser: YAHOOAmp.util.DataSource.parseDate},"Time", "ExternalTimestamp", "Description"]
-					}
-	
-	};
-
-
-	
-	dsBuilderPerExec 	= new DataSourceBuilder("/dataExchange/showLogs.do",
-			LogPerExecutionConfig.columnDefs ,LogPerExecutionConfig.responseSchema);
-	
-
-	function createDataTablePerExecution() {
-		var dt	= dsBuilderPerExec.createDataTable("logsPerExecutionDiv");
-		dt.subscribe("rowClickEvent", onExecRowSelect);
-	}
-
-	function onExecRowSelect(o) {
-		var dt 		= 	dsBuilderPerExec.dataTable;
-		dt.onEventSelectRow(o);
-		var id		= dsBuilderPerExec.getValueOfFirstColumn();
-
-		refreshLogItemDetails(id);
-	}
-
-	function onItemRowSelect(o) {
-		var dt		= dsBuilderPerItem.dataTable;
-		dt.onEventSelectRow(o);
-
-		var id		= dsBuilderPerItem.getValueOfFirstColumn();
-		var pw		= new MyPanelWrapper("Log Details", "/dataExchange/showLogs.do?selectedLogPerItemId="+id );
-	}
-
-	function refreshLogItemDetails( id ){ 
-		dsBuilderPerItem	= new DataSourceBuilder("/dataExchange/showLogs.do?selectedLogPerExecId="+id,
-				LogPerItemConfig.columnDefs ,LogPerItemConfig.responseSchema);
-		//dsBuilderPerItem.errorRows	= new Object();
-		document.getElementById("logsPerItemDivWrapper").style.display	= "";	
-		var dt	= dsBuilderPerItem.createDataTable("logsPerItemDiv");
-		dt.subscribe("rowClickEvent", onItemRowSelect );
-	}
-
-	function lpiFormatter(cell,rec,col,data) {
-		if ( data == "ERROR" ) {
-			//dsBuilderPerItem.errorRows[rec.getId()]	= rec;
-			cell.innerHTML = "<span style='color: red; font-weight:bold;'>" + data  +"<span>"; 
-		}
-		else
-			cell.innerHTML	= "<span>" + data + "</span>";
-			
-	}
-	
-	function refreshColors() {
-		YAHOOAmp.util.Dom.removeClass(YAHOOAmp.util.Dom.getElementsByClassName('mark','tr','logsPerItemDiv'), 'mark'); 
-		for (var recId in dsBuilderPerItem.errorRows) {
-			YAHOOAmp.util.Dom.addClass( dsBuilderPerItem.dataTable.getTrEl(dsBuilderPerItem.errorRows[recId])  ,"mark");
-		}
-	}
-	
-	YAHOOAmp.util.Event.addListener(window, "load", createDataTablePerExecution );
+function changeSource() {
+	var form = document.getElementById('logForm');
+	var selectedSourceSetting = document.getElementById("logFor").value;
+	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+selectedSourceSetting;
+	form.target="_self"
+	form.submit();
+}
 </script>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="90%" class="box-border-nopadding">
-	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
-		
-		<div style="">
-			<c:set var="translation">
-				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-			</c:set>
-			<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
-			<digi:trn key="aim:AmpAdminHome">
-			Admin Home
-			</digi:trn>
-			</digi:link>&nbsp;&gt;&nbsp;
-			<digi:link href="/manageSource.do?htmlView=true" styleClass="comment">
-			<digi:trn>
-			Source Manager
-			</digi:trn>
-			</digi:link>&nbsp;&gt;&nbsp;
-			
-			<digi:trn>
-				Source Wizard
-			</digi:trn>
-		</div>
-			<br />
-			<div class="yui-skin-sam">
-				<div style=" margin-left: auto; margin-right: auto;margin-bottom:20px; border: 1px gray solid;text-align: center; float: left;">
-					<div style="width: 100%; margin-left: auto; margin-right: auto;background-color:#006699; color: white; ">
-						<digi:trn>Source Executions</digi:trn>
-					</div>
-					<div id="logsPerExecutionDiv"></div>
-				</div>
-				<div style="width: 20px; float: left;">&nbsp;</div>
-				<div id="logsPerItemDivWrapper" 
-					style=" margin-left: auto; margin-right: auto;margin-bottom:20px; border: 1px gray solid;text-align: center;float: left; display: none;">
-					<div style="width: 100%; margin-left: auto; margin-right: auto;background-color:#006699; color: white; ">
-						<digi:trn>Execution Log</digi:trn>
-					</div>
-					<div id="logsPerItemDiv"></div>
-				</div>
-			</div>
-			<br />
+<digi:instance property="showLogsForm" />
 
-		</td>
-	</tr>
-</table>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<!-- MAIN CONTENT PART START -->
+<digi:form action="/showLogs.do" styleId="logForm">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<!-- BREADCRUMP START -->
+		<tr>
+			<td height="33">
+				<div class="breadcrump_cont"> 
+					<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
+					<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>
+					<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do~htmlView=true" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
+					<span class="breadcrump_sep"><b>»</b></span>
+					<span class="bread_sel"><digi:trn>Show Logs</digi:trn></span>
+				</div>
+				<br>
+			</td>
+		</tr>
+		<!-- BREADCRUMP END -->
+		<tr>
+		    <td class="main_side_1">
+				<table width="980" border="0" cellspacing="0" cellpadding="0" style="margin:10px; font-size:12px;">
+					<tr>
+					    <td width="33%">
+					    	<a href="/dataExchange/manageSource.do" class="t_sm"><b>« <digi:trn>Back to details</digi:trn></b></a>
+					    </td>
+					    <td width="33%" align=center><b><digi:trn>Log file for:</digi:trn> ${showLogsForm.selectedSourceName }</b></td>
+					    <td width="33%" align=right><a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+					</tr>
+				</table>
+		
+				<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
+					<tr>
+						<td colspan="6" align=right background="images/ins_header.gif" class=inside><b class="ins_header">
+						<digi:trn>See log file for </digi:trn> :
+						  <html:select property="selectedSourceId" styleClass="dropdwn_sm" styleId="logFor">
+						  	<html:optionsCollection property="availableSourceSettings" value="id" label="name" />					    
+						  </html:select>
+						  <input type="button" value="See" class="buttonx_sm" onclick="changeSource()"/>
+						</b></td>
+					</tr>
+					<tr>
+					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">DbID</b></td>
+					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">Date</b></td>
+					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">Time</b></td>
+					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">External Timestamp</b></td>
+					    <td background="images/ins_bg.gif" class=inside align=center><b class="ins_title">Description</b></td>
+					    <td background="images/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
+					</tr>
+					<logic:empty name="showLogsForm" property="logs">
+						<tr>
+							<td bgcolor="#FFFFFF" class="inside" colspan="6"><div class="t_sm"><digi:trn>No Records Found</digi:trn> </div></td>
+						</tr>
+					</logic:empty>
+					<logic:notEmpty name="showLogsForm" property="logs">
+						<logic:iterate id="log" name="showLogsForm" property="logs">
+							<tr>
+							    <td bgcolor=#FFFFFF class=inside>
+							    	<div class="t_sm">${log.id}</div>
+							    </td>
+							    <td bgcolor=#FFFFFF class=inside>
+							    	<div class="t_sm">${log.dateAsString}</div>
+							    </td>
+							    <td bgcolor=#FFFFFF class=inside>
+							    	<div class="t_sm">${log.timeAsString }</div>
+							    </td>
+							    <td bgcolor=#FFFFFF class=inside>
+							    	<div class="t_sm">${log.externalTimestamp }</div>
+							    </td>
+							    <td bgcolor=#FFFFFF class=inside>
+							    	<div class="t_sm">
+							    		${log.description }
+							    			<%-- 
+							    			Name:	  |   ${log.name}
+							    		Database ID:	 ${log.id}	  
+							    		|   Log Level:	 ERROR	  
+							    		|   Date:	 ${log.dateAsString}	  
+							    		|   Time:	 ${log.timeAsString }	  
+							    		|   Description:	${log.logType }	  
+							    		|   Item Type:	Activity
+							    		 --%>						    		
+							    	</div>
+							    </td>
+							    <td bgcolor=#FFFFFF class=inside align="center">
+							    	<div class="t_sm"><a href=# class="t_sm"><b>view</b></a> | 
+							    		<a href=# class="t_sm"><b>check</b></a>
+							    	</div>
+							    </td>
+							</tr>
+						</logic:iterate>
+					</logic:notEmpty>		
+				</table>
+			</td>
+		</tr>
+	</table>
+</digi:form>
+
+<br /><br />
+<!-- MAIN CONTENT PART END -->
+</body>

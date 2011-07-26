@@ -3,8 +3,12 @@
  */
 package org.digijava.module.dataExchange.form;
 
+import java.util.List;
+
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 
 /**
  * @author Alex Gartner
@@ -16,6 +20,9 @@ public class ShowLogsForm extends ActionForm {
 	private Long selectedLogPerItemId;
 	
 	private DELogPerItem lpi;
+	private List<DELogPerExecution> logs;
+	private List <DESourceSetting> availableSourceSettings;
+	private String selectedSourceName ;
 
 	/**
 	 * @return the selectedSourceId
@@ -72,10 +79,30 @@ public class ShowLogsForm extends ActionForm {
 	public void setLpi(DELogPerItem lpi) {
 		this.lpi = lpi;
 	}
-	
-	
 
-	
-	
+	public List<DELogPerExecution> getLogs() {
+		return logs;
+	}
+
+	public void setLogs(List<DELogPerExecution> logs) {
+		this.logs = logs;
+	}
+
+	public String getSelectedSourceName() {
+		return selectedSourceName;
+	}
+
+	public void setSelectedSourceName(String selectedSourceName) {
+		this.selectedSourceName = selectedSourceName;
+	}
+
+	public List<DESourceSetting> getAvailableSourceSettings() {
+		return availableSourceSettings;
+	}
+
+	public void setAvailableSourceSettings(
+			List<DESourceSetting> availableSourceSettings) {
+		this.availableSourceSettings = availableSourceSettings;
+	}
 	
 }

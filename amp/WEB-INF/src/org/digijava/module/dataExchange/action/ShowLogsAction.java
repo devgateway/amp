@@ -15,9 +15,11 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.form.ShowLogsForm;
 import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionImportLogDAO;
+import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.XmlCreator;
 
 /**
@@ -30,11 +32,7 @@ public class ShowLogsAction extends MultiAction {
 	 * @see org.dgfoundation.amp.utils.MultiAction#modePrepare(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		
+	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		return modeSelect(mapping, form, request, response);
 	}
 
@@ -42,9 +40,7 @@ public class ShowLogsAction extends MultiAction {
 	 * @see org.dgfoundation.amp.utils.MultiAction#modeSelect(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ShowLogsForm myForm					= (ShowLogsForm) form;
 		// TODO Auto-generated method stub
 		String htmlView	= request.getParameter("htmlView");
@@ -59,7 +55,7 @@ public class ShowLogsAction extends MultiAction {
 					e.printStackTrace();
 				}
 			}
-			return mapping.findForward("forward");
+			//return mapping.findForward("forward"); commented by me
 		}
 		if ( myForm.getSelectedLogPerExecId() != null )
 			return modeShowItemLogs(mapping, myForm, request, response);
@@ -69,10 +65,30 @@ public class ShowLogsAction extends MultiAction {
 		return modeShowActionLogs(mapping, form, request, response);
 	}
 	
-	public ActionForward modeShowActionLogs(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward modeShowActionLogs(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		// TODO Auto-generated method stub
+		
+		ShowLogsForm myForm					= (ShowLogsForm) form;
+		List<DELogPerExecution> logs		= null;
+		if ( myForm.getSelectedSourceId() == null || myForm.getSelectedSourceId() <= 0 )
+			logs	= new SessionImportLogDAO().getAllAmpLogPerExecutionObjects();
+		else {
+			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId());
+		}
+		myForm.setLogs(logs);
+		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId());
+		if (ss !=null) {
+			myForm.setSelectedSourceName(ss.getName());
+		}
+		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAllAmpSourceSettingsObjects();
+		myForm.setAvailableSourceSettings(sources);
+		return mapping.findForward("forward");  
+		
+		/**
+		 * old method body- commented by dare
+		 * 
+		 * 
+		 * // TODO Auto-generated method stub
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
 		response.setCharacterEncoding("UTF-16");
@@ -92,6 +108,9 @@ public class ShowLogsAction extends MultiAction {
 	 	
 		return null;
 //		return mapping.findForward("feed");
+		 * 
+		 */
+		
 	}
 	
 	public ActionForward modeShowItemLogs(ActionMapping mapping, ActionForm form,

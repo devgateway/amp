@@ -41,7 +41,7 @@
 		<action path="/dataExchange/createSource" scope="session" type="org.digijava.module.dataExchange.action.CreateSourceAction" name="createSourceForm" 
 																								validate="false">
 			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
-			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do?htmlView=true" />
+			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>
 		<action path="/dataExchange/manageSource" scope="request" type="org.digijava.module.dataExchange.action.ManageSourceAction" name="manageSourceForm" 
 																								validate="false">

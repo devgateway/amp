@@ -3,8 +3,11 @@
  */
 package org.digijava.module.dataExchange.action;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -27,6 +31,9 @@ import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.util.CreateSourceUtil;
 import org.digijava.module.dataExchange.util.ExportHelper;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
+import org.digijava.module.sdm.util.DbUtil;
 
 /**
  * @author dan
@@ -107,7 +114,7 @@ public class CreateSourceAction extends MultiAction {
 		return mapping.findForward("forward");
 	}
 
-	private ActionForward modeSave(ActionMapping mapping, CreateSourceForm form, HttpServletRequest request,HttpServletResponse response) {
+	private ActionForward modeSave(ActionMapping mapping, CreateSourceForm form, HttpServletRequest request,HttpServletResponse response) throws Exception{
 		// TODO Auto-generated method stub
 		
 		
@@ -135,10 +142,25 @@ public class CreateSourceAction extends MultiAction {
 			srcSetting.setLanguageId( srcSetting.getLanguageId().substring(0, srcSetting.getLanguageId().length()-1 ) );
 		}
 		
+		//attach doc
+		if(form.getUploadedFile() != null){
+			attachFile(form, srcSetting);
+		}
+		
 		try {
 			//srcSetting.setLogs(new ArrayList<DELogPerExecution>() );
 			//srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
 			//srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
+			
+			//save attached files
+        	Sdm document=srcSetting.getAttachedFile();
+        	Sdm doc=null;
+        	if(document!=null){
+        		document.setName(srcSetting.getName());
+        		doc=DbUtil.saveOrUpdateDocument(document);
+        		srcSetting.setAttachedFile(doc);
+        	}
+			
 			new SourceSettingDAO().saveObject(srcSetting);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,6 +169,27 @@ public class CreateSourceAction extends MultiAction {
 		return mapping.findForward("showSources");
 		
 		
+	}
+
+	private void attachFile(CreateSourceForm form, DESourceSetting srcSetting) throws FileNotFoundException, IOException {
+		Sdm attachmentHolder=null;
+    	if(form.getUploadedFile() != null){
+    		attachmentHolder=new Sdm();
+    		
+    		SdmItem sdmItem = new SdmItem();
+        	sdmItem.setContentType(form.getUploadedFile().getContentType());
+            sdmItem.setRealType(SdmItem.TYPE_FILE);
+            sdmItem.setContent(form.getUploadedFile().getFileData());
+            sdmItem.setContentText(form.getUploadedFile().getFileName());
+            sdmItem.setContentTitle(form.getUploadedFile().getFileName());
+            
+            HashSet items = new HashSet();
+            sdmItem.setParagraphOrder(new Long(0));
+            items.add(sdmItem);
+            attachmentHolder.setItems(items);            
+            
+            srcSetting.setAttachedFile(attachmentHolder);
+    	}		
 	}
 	private void modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		CreateSourceForm myForm	= (CreateSourceForm) form;

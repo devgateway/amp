@@ -39,7 +39,7 @@ function cancelImportManager() {
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- MAIN CONTENT PART START -->
-<digi:form action="/createSource.do" method="post" styleId="form">
+<digi:form action="/createSource.do?saveImport=true" styleId="form" method="post" enctype="multipart/form-data">
 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center >
 	<!-- BREADCRUMP START -->
@@ -111,7 +111,7 @@ function cancelImportManager() {
 							<br />							
 							<fieldset>
 								<legend><span class=legend_label>Upload a file</span></legend>
-								<input name="" type="file" / style="margin-top:7px;" class="inputx">
+								<input name="uploadedFile" type="file" style="margin-top:7px;" class="inputx">
 							</fieldset>														
 						</td>
 						<td width=2%>&nbsp;</td>
@@ -123,15 +123,14 @@ function cancelImportManager() {
 								<a href=# class="t_sm" id="check"><b><digi:trn>Check all</digi:trn></b></a>&nbsp; | &nbsp;
 								<a href=# class="t_sm" id="uncheck"><b><digi:trn>Uncheck all</digi:trn></b></a>
 								<bean:define id="fieldsModuleTree" name="createSourceForm" property="activityTree" toScope="request" />
-								
-	                     		<jsp:include page="fieldsModule.jsp"></jsp:include>
+								<jsp:include page="fieldsModule.jsp"></jsp:include>
 							</fieldset>
 						</td>
 					</tr>
 				</table>
 				<br />
 				<center>
-					<input type="button" value="Save" class="buttonx" onclick="importActivities()"/> &nbsp;&nbsp;
+					<input type="submit" value="Save" class="buttonx" onclick="importActivities()"/> &nbsp;&nbsp;
 					<input type="button" value="Cancel" class="buttonx" onclick="cancelImportManager()"/>
 				</center>
 			</div>	

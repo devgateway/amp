@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.dataExchange.util.WrapperSourceSetting;
 import org.digijava.module.dataExchange.util.XmlWrappable;
 import org.digijava.module.dataExchange.util.XmlWrapper;
+import org.digijava.module.sdm.dbentity.Sdm;
 /**
  * 
  *
@@ -66,6 +67,7 @@ public class DESourceSetting implements XmlWrappable{
 	private String url;
 	
 	private String language ; //non-db field
+	private Sdm attachedFile ;
 
 	/**
 	 * @return the isImport
@@ -312,7 +314,7 @@ public class DESourceSetting implements XmlWrappable{
 		return new WrapperSourceSetting(this);
 	}
 
-	public String getLanguage() {
+	public String getLanguage() {		
 		return language;
 	}
 
@@ -320,5 +322,12 @@ public class DESourceSetting implements XmlWrappable{
 		this.language = language;
 	}
 
+	public Sdm getAttachedFile() {
+		return attachedFile;
+	}
+
+	public void setAttachedFile(Sdm attachedFile) {
+		this.attachedFile = attachedFile;
+	}
 	
 }

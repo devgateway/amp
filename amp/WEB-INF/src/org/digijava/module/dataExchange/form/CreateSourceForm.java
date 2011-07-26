@@ -47,7 +47,7 @@ public class CreateSourceForm extends ActionForm {
 	private String dayOfWeek;
 	private String time;
 	
-	private Long sourceId;
+	private Long sourceId;	
 	
 
 	public String[] getSelectedLanguages() {
@@ -287,7 +287,5 @@ public class CreateSourceForm extends ActionForm {
 	public void setSourceId(Long sourceId) {
 		this.sourceId = sourceId;
 	}
-
-
-
+	
 }

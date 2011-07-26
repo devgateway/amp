@@ -14,8 +14,16 @@
 <digi:instance property="manageSourceForm" />
 
 <script language="JavaScript">
+function viewLog(sourceId) {
+	var form = document.getElementById('manageForm');
+	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+sourceId;
+	form.target="_self"
+	form.submit();	
+}
+
+
 function deleteSource(sourceId) {
-	 var form = document.getElementById('manageForm');
+	var form = document.getElementById('manageForm');
 	form.action = "/dataExchange/manageSource.do?action=delete&selectedSourceId="+sourceId;
 	form.target="_self"
 	form.submit();
@@ -95,12 +103,12 @@ function toggleGroup(group_id){
 				    <td bgcolor="#FFFFFF" class="inside">${source.source}</td>
 				    <td bgcolor="#FFFFFF" class="inside">${source.importWorkspace.name }</td>
 				    <td bgcolor="#FFFFFF" class="inside" align="center" nowrap="nowrap">
-				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${source.id}_plus" onclick="toggleGroup('${source.id}')"/>
+				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${source.id}_plus" onclick="toggleGroup('${source.id}')" style="cursor: pointer;"/>
 				    	<div id="source_${source.id}" style="display: none;height: 355px;width:500px; overflow: auto;">				    		
 				    		<table border="0">
 				    		<tr>
-				    			<td style="border: none;vertical-align: text-top;" colspan="2" rowspan="7" class="inside">				    				
-				    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${source.id}_minus" style="display: none; " onclick="toggleGroup('${source.id}')"/>	
+				    			<td style="border: none;vertical-align: text-top;" colspan="2" rowspan="8" class="inside">				    				
+				    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${source.id}_minus" style="display: none;cursor: pointer; " onclick="toggleGroup('${source.id}')"/>	
 				    			</td>
 				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">				    				
 				    				<strong><digi:trn>Name</digi:trn>:</strong>
@@ -130,7 +138,7 @@ function toggleGroup(group_id){
 				    				<strong><digi:trn>Language</digi:trn>:</strong>
 				    			</td>
 				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
-				    				${source.language}
+				    				${source.languageId}
 				    			</td>
 				    		</tr>
 				    		<tr>
@@ -147,6 +155,20 @@ function toggleGroup(group_id){
 				    			</td>
 				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
 				    				${source.approvalStatus}
+				    			</td>
+				    		</tr>
+				    		<tr>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
+				    				<strong><digi:trn>Attached File</digi:trn>:</strong>
+				    			</td>
+				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap" colspan="2">
+				    				<c:if test="${not empty source.attachedFile}">
+										<c:forEach var="attachedDoc" items="${source.attachedFile.items}">
+											<div>
+												${attachedDoc.contentTitle}
+											</div>											
+										</c:forEach>
+									</c:if>
 				    			</td>
 				    		</tr>
 				    		<tr>
@@ -170,7 +192,9 @@ function toggleGroup(group_id){
 				    	<!-- 
 				    		<img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
 				    	 -->				    	 
-				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onclick="deleteSource(${source.id});" style="cursor:pointer;"/>
+				    	<img src="/TEMPLATE/ampTemplate/img_2/view_log_icon.gif" onclick="viewLog(${source.id});" style="cursor:pointer;" title="<digi:trn>View Log</digi:trn>"/>
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onclick="deleteSource(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>
+				    	
 				    </td>
 				</tr>		
 			</logic:iterate>

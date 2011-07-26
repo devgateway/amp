@@ -256,41 +256,43 @@ public class GetFoundingDetails extends Action {
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                         while (locFoundingMapIt.hasNext()) {
                             String key = (String) locFoundingMapIt.next();
-                            FundingData fData = (FundingData) fundingLocationMap.get(key);
-                            SegmentData segmentData = new SegmentData();
-                            segmentData.setSegmentCode(key);
+                            if (isRegion(map, key)) {
+                                FundingData fData = (FundingData) fundingLocationMap.get(key);
+                                SegmentData segmentData = new SegmentData();
+                                segmentData.setSegmentCode(key);
 
-                            BigDecimal selValue = null;
+                                BigDecimal selValue = null;
 
-                            if (filterForm.getFundingType().equals("commitment")) {
-                                selValue = fData.getCommitment();
-                            } else if (filterForm.getFundingType().equals("disbursement")) {
-                                selValue = fData.getDisbursement();
-                            } else if (filterForm.getFundingType().equals("expenditure")) {
-                                selValue = fData.getExpenditure();
-                            }else{
-                                selValue = new BigDecimal("0");
-                            }
-
-
-                            segmentData.setSegmentValue(selValue.toString());
-
-                            //Hilight only if value is not 0
-                            if (selValue.longValue() != 0l) {
-                                if (min == null) {
-                                    min = selValue;
-                                    max = selValue;
+                                if (filterForm.getFundingType().equals("commitment")) {
+                                    selValue = fData.getCommitment();
+                                } else if (filterForm.getFundingType().equals("disbursement")) {
+                                    selValue = fData.getDisbursement();
+                                } else if (filterForm.getFundingType().equals("expenditure")) {
+                                    selValue = fData.getExpenditure();
+                                }else{
+                                    selValue = new BigDecimal("0");
                                 }
 
-                                if (selValue.compareTo(min) < 0) {
-                                    min = selValue;
-                                }
 
-                                if (selValue.compareTo(max) > 0) {
-                                    max = selValue;
-                                }
+                                segmentData.setSegmentValue(selValue.toString());
 
-                                segmentDataList.add(segmentData);
+                                //Hilight only if value is not 0
+                                if (selValue.longValue() != 0l) {
+                                    if (min == null) {
+                                        min = selValue;
+                                        max = selValue;
+                                    }
+
+                                    if (selValue.compareTo(min) < 0) {
+                                        min = selValue;
+                                    }
+
+                                    if (selValue.compareTo(max) > 0) {
+                                        max = selValue;
+                                    }
+
+                                    segmentDataList.add(segmentData);
+                                }
                             }
                         }
 
@@ -1283,13 +1285,13 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    
-    
+
+
     public static Object[] getFundingsByLocations(List activityList, int level,
             Date start, Date end) throws Exception {
     	return getFundingsByLocations(activityList, level, start, end, null);
     }
-    
+
     public static Object[] getFundingsByLocations(List activityList, int level,
                                             Date start, Date end, Long donorId) throws
             Exception {
@@ -1303,9 +1305,9 @@ public class GetFoundingDetails extends Action {
                 Object[] actData = actIt.next();
                 AmpActivityVersion activity = (AmpActivityVersion) actData[0];
                 Float percentsForSectorSelected = (Float) actData[1];
-                
+
                 if (percentsForSectorSelected != null) {
-                
+
                 FundingData totalFunding = getActivityTotalFundingInBaseCurrency(
                         activity, start, end, donorId);
 
@@ -1393,7 +1395,7 @@ public class GetFoundingDetails extends Action {
 
                 //    Set activiactivity.getFunding();
             }
-            
+
         }
 
         }
@@ -1520,7 +1522,7 @@ public class GetFoundingDetails extends Action {
             Date start, Date end) {
     	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
     }
-    
+
     public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity,
             Date start, Date end, Long donorId) {
         FundingData retVal = null;
@@ -1545,9 +1547,9 @@ public class GetFoundingDetails extends Action {
         try {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
-                
+
                 if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
-                
+
                 Set fundDetails = fund.getFundingDetails();
 
                 Iterator fdIt = fundDetails.iterator();

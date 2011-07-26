@@ -861,12 +861,14 @@
 		
 	
 		$("#busyIndicator").ajaxStart(function(){
+				 
 			   setBusy(true);
 			 });
 			 
 	   $("#busyIndicator").ajaxStop(function(){
+	   		
 			   setBusy(false);
-		 });;
+		 });
 	});
 
 
@@ -1192,6 +1194,7 @@
 	
 	var curMapLevel = 2;
 	function filterSet(data) {
+		document.getElementById("busyIndicator").style.visibility = "hidden";
 		
 		var mapLevelInt = $("#mapLevel").val();
 		if (mapLevelInt != curMapLevel) {
@@ -1225,6 +1228,7 @@
 	
 		$("#filterAllSectors").val(allSectors);
 		
+		document.getElementById("busyIndicator").style.visibility = "visible";
 		var requestURL = "../../gis/getFoundingDetails.do?mapCode=TZA&action=filter";
 		
     $.post(requestURL, $("#gisFilterForm").serialize(), filterSet);

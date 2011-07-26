@@ -47,6 +47,10 @@ public class ShowRegionReport extends Action {
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
 
         GisFilterForm filterForm = GisUtil.parseFilterRequest(request);
+
+        gisRegReportForm.setStartYear(filterForm.getFilterStartYear());
+        gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
+
         Long regLocId = Long.parseLong(request.getParameter("regLocId"));
 
         Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
@@ -112,12 +116,5 @@ public class ShowRegionReport extends Action {
     }
 
 
-    private AmpSector getTopLevelSector(AmpSector sector) {
-        AmpSector retVal = sector;
-        while (retVal.getParentSectorId() != null) {
-           retVal = retVal.getParentSectorId();
-        }
-        return retVal;
-    }
 
 }

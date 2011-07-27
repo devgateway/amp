@@ -76,7 +76,7 @@ public class TagUtil {
         /**
          * Get Teaser(module) name from tiles context
          */
-        String moduleInstanceName = (String) context.getAttribute(Constants.MODULE_INSTANCE);
+        String moduleInstanceName = context!=null? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
 
         /**
          * If Teaser(module) name not set in tiles context then throw exception

@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
@@ -164,7 +165,7 @@ public class ReportWizardAction extends MultiAction {
 		/**
 		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
 		 */
-		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)request.getSession().getAttribute("aimReportsFilterPickerForm");
+		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
 		rfpForm.setIsnewreport(true);
 		new ReportsFilterPicker().reset(rfpForm, request, mapping);
 		rfpForm.setIsnewreport(false);
@@ -273,7 +274,7 @@ public class ReportWizardAction extends MultiAction {
 			FilterUtil.populateFilter(ampReport, filter);
 			FilterUtil.prepare(request, filter);
 			request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
-			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)request.getSession().getAttribute("aimReportsFilterPickerForm");
+			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
 			new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
 			FilterUtil.populateForm(rfpForm, filter);
 			myForm.setUseFilters(true);

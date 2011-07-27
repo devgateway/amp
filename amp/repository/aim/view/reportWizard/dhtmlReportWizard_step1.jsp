@@ -120,7 +120,7 @@
 										<c:set var="spanUseFiltersVisibility">visibility: hidden</c:set>
 										<c:set var="spanUseFiltersHeight">height:90px</c:set>
 										<c:set var="spanUseFiltersDisabled">disabled</c:set>
-										<c:if test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
+										<c:if test="${myForm.useFilters!=null && myForm.useFilters}">
 											<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>
 											<c:set var="spanUseFiltersDisabled">enabled</c:set>
 										</c:if>
@@ -128,7 +128,7 @@
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
 											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
 												<c:choose>
-													<c:when test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
+													<c:when test="${myForm.useFilters!=null && myForm.useFilters}">
 														<jsp:include page="showSelectedFilters.jsp" />				
 													</c:when>
 												</c:choose>

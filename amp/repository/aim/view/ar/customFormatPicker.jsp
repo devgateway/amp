@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.form.ReportsFilterPickerForm"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
@@ -16,8 +17,6 @@
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do" name="aimReportsFilterPickerForm3" type="aimReportsFilterPickerForm"  onsubmit="return validateFormat()">
-<bean:define id="myForm" type="org.digijava.module.aim.form.ReportsFilterPickerForm" name="aimReportsFilterPickerForm" />
-			<% System.out.println("AAAA1:" + myForm.getRenderStartYear() ); %>
 <center>
 	<b style="font-size: 11px;">
 		<digi:trn>Number Format</digi:trn>
@@ -154,7 +153,6 @@
 				<digi:trn>From</digi:trn>: &nbsp;
 				
 			</td>
-			<% System.out.println("AAAA:" + myForm.getRenderStartYear() ); %>
 			<td> 
 				<html:select  styleClass="dropdwn_sm" property="renderStartYear">
 					<html:option value="-1">

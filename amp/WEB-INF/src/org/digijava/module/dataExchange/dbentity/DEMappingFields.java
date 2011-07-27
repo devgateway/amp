@@ -51,7 +51,10 @@ public class DEMappingFields implements Serializable {
     private Timestamp creationDate;
 
     
-    
+	public DEMappingFields() {
+		super();
+	}
+
 	public DEMappingFields(Long id, String iatiPath, String iatiItems,
 			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status,
@@ -71,13 +74,20 @@ public class DEMappingFields implements Serializable {
 	}
 
 	public boolean compare(DEMappingFields o){
-		return 
+		boolean result = false;
+		String lang = o.getIatiLang()==null?"en":o.getIatiLang();
+		try{
+		result	=
 			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
 			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
 			this.getIatiValues().compareTo(o.getIatiValues())==0 && 
-			this.getIatiLang().compareTo(o.getIatiLang())==0 &&
+			this.getIatiLang().compareTo(lang)==0 &&
 			this.getAmpClass().compareTo(o.getAmpClass())==0
 			;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 

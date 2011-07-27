@@ -1101,7 +1101,9 @@ public class DataExchangeUtils {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
 			session.save(mf);
+			tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

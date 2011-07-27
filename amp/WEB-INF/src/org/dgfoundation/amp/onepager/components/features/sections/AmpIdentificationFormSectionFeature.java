@@ -81,7 +81,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 	
 			AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
 					"crisNumber", new PropertyModel<String>(am,
-							"crisNumber"), "Donor Project Code", AmpFMTypes.FEATURE);
+							"crisNumber"), "Cris Number", AmpFMTypes.FEATURE);
 			add(crisNumber);
 
 			AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(

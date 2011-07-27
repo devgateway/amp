@@ -17,6 +17,7 @@ import org.apache.wicket.extensions.yui.YuiLib;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -112,6 +113,11 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 MetaDataRoleAuthorizationStrategy.authorize(OnePager.class, "ROLE_AUTHENTICATED");
 		 //MetaDataRoleAuthorizationStrategy.authorizeAll(OnePager.class);
 		 MetaDataRoleAuthorizationStrategy.authorize(PermissionManager.class, "ROLE_AUTHENTICATED");
+		 
+		 
+		 getApplicationSettings().setPageExpiredErrorPage(AmpLoginRedirectPage.class);
+		 getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
+		 
 		 
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());

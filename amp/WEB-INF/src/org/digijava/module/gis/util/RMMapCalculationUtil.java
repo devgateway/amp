@@ -5,6 +5,8 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.*;
+import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.gis.dbentity.GisMapSegment;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -472,6 +474,71 @@ public class RMMapCalculationUtil {
         for (AmpCurrency currency: currencyList) {
             retVal.put(currency.getCurrencyCode(), currency);
         }
+        return retVal;
+    }
+
+    public static List prepareHilightSegments(List segmentData, GisMap map,
+                                        Double min, Double max, MapColorScheme scheme) {
+
+        float deltaVal = max.floatValue() - min.floatValue();
+
+        int deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
+        int deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
+        int deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+
+        float coeffRed, coeffGreen, coeffBlue;
+        if (deltaVal > 0) {
+        	coeffRed = deltaRed / deltaVal;
+            coeffGreen = deltaGreen / deltaVal;
+            coeffBlue = deltaBlue / deltaVal;
+        } else {
+            coeffRed = 1;
+            coeffGreen = 1;
+            coeffBlue = 1;
+        }
+
+        List retVal = new ArrayList();
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
+                SegmentData sd = (SegmentData) segmentData.get(idx);
+                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
+                    HilightData hData = new HilightData();
+                    hData.setSegmentId((int) segment.getSegmentId());
+
+                    float red = (Float.parseFloat(sd.getSegmentValue()) -
+                                   min.floatValue()) * coeffRed + scheme.getGradientMinColor().getRed();
+                    float green = (Float.parseFloat(sd.getSegmentValue()) -
+                                   min.floatValue()) * coeffGreen + scheme.getGradientMinColor().getGreen();
+                    float blue = (Float.parseFloat(sd.getSegmentValue()) -
+                                   min.floatValue()) * coeffBlue + scheme.getGradientMinColor().getBlue();
+                    if (deltaVal > 0) {
+                    hData.setColor(new ColorRGB((int) red, (int) green, (int) blue));
+                    } else {
+                    	hData.setColor(scheme.getGradientMaxColor());
+
+                    }
+                    retVal.add(hData);
+                }
+            }
+        }
+        return retVal;
+    }
+
+    public static boolean isRegion(GisMap map, String regCode) {
+        boolean retVal = false;
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            if (segment.getSegmentCode().equalsIgnoreCase(regCode)) {
+                retVal = true;
+                break;
+            }
+        }
+
         return retVal;
     }
 }

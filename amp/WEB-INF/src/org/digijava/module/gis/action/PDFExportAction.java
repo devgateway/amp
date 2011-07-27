@@ -1059,7 +1059,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 					.getServlet()
 					.getServletContext()
 					.getRealPath(
-							"/repository/gis/view/images/fundingLegend.png"));
+							"/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png"));
 			// image.scaleAbsoluteWidth(320f);
 			image.setAlignment(Image.ALIGN_RIGHT);
 			// image.scaleAbsoluteHeight(20f);
@@ -1570,30 +1570,34 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			Object[] indData = (Object[]) indsIt.next();
 
 			String segmentCode = (String) indData[1];
-			Double indValue = (Double) indData[0];
 
-			if (isRegion(map, segmentCode)) {
 
-				SegmentData indHilightData = new SegmentData();
-				indHilightData.setSegmentCode(segmentCode);
-				indHilightData.setSegmentValue(indValue.toString());
 
-				if (min == null) {
-					min = indValue;
-					max = indValue;
-				}
+                Double indValue = (Double) indData[0];
 
-				if (indValue < min) {
-					min = indValue;
-				}
+                if (RMMapCalculationUtil.isRegion(map, segmentCode)) {
 
-				if (indValue > max) {
-					max = indValue;
-				}
+                    SegmentData indHilightData = new SegmentData();
+                    indHilightData.setSegmentCode(segmentCode);
+                    indHilightData.setSegmentValue(indValue.toString());
 
-				// regSet.add(segmentCode);
-				segmentDataList.add(indHilightData);
-			}
+                    if (min == null) {
+                        min = indValue;
+                        max = indValue;
+                    }
+
+                    if (indValue < min) {
+                        min = indValue;
+                    }
+
+                    if (indValue > max) {
+                        max = indValue;
+                    }
+
+                    // regSet.add(segmentCode);
+                    segmentDataList.add(indHilightData);
+                }
+
 
 		}
 
@@ -1602,8 +1606,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			max = new Double(0);
 		}
 
-		List hilightData = prepareHilightSegments(segmentDataList, map, min,
-				max);
+		List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList, map, min,
+				max, MapColorScheme.getDefaultScheme());
 
 		int canvasWidth = 700;
 		int canvasHeight = 700;
@@ -1665,36 +1669,40 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		BigDecimal max = null;
 		while (locFoundingMapIt.hasNext()) {
 			String key = (String) locFoundingMapIt.next();
-			FundingData fData = (FundingData) fundingLocationMap.get(key);
-			SegmentData segmentData = new SegmentData();
-			segmentData.setSegmentCode(key);
 
-			BigDecimal selValue = null;
+            if (RMMapCalculationUtil.isRegion(map, key)) {
 
-			if (fundingType.equals("commitment")) {
-				selValue = fData.getCommitment();
-			} else if (fundingType.equals("disbursement")) {
-				selValue = fData.getDisbursement();
-			} else if (fundingType.equals("expenditure")) {
-				selValue = fData.getExpenditure();
-			}
+                FundingData fData = (FundingData) fundingLocationMap.get(key);
+                SegmentData segmentData = new SegmentData();
+                segmentData.setSegmentCode(key);
 
-			segmentData.setSegmentValue(selValue.toString());
+                BigDecimal selValue = null;
 
-			if (min == null) {
-				min = selValue;
-				max = selValue;
-			}
+                if (fundingType.equals("commitment")) {
+                    selValue = fData.getCommitment();
+                } else if (fundingType.equals("disbursement")) {
+                    selValue = fData.getDisbursement();
+                } else if (fundingType.equals("expenditure")) {
+                    selValue = fData.getExpenditure();
+                }
 
-			if (selValue.compareTo(min) < 0) {
-				min = selValue;
-			}
+                segmentData.setSegmentValue(selValue.toString());
 
-			if (selValue.compareTo(max) > 0) {
-				max = selValue;
-			}
+                if (min == null) {
+                    min = selValue;
+                    max = selValue;
+                }
 
-			segmentDataList.add(segmentData);
+                if (selValue.compareTo(min) < 0) {
+                    min = selValue;
+                }
+
+                if (selValue.compareTo(max) > 0) {
+                    max = selValue;
+                }
+
+                segmentDataList.add(segmentData);
+            }
 		}
 
 		if (min == null) {
@@ -1702,8 +1710,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			max = new BigDecimal(0);
 		}
 
-		List hilightData = prepareHilightSegments(segmentDataList, map,
-				new Double(min.doubleValue()), new Double(max.doubleValue()));
+		List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList, map,
+				new Double(min.doubleValue()), new Double(max.doubleValue()), MapColorScheme.getDefaultScheme());
 
 		int canvasWidth = 700;
 		int canvasHeight = 700;
@@ -2106,47 +2114,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return retVal;
 	}
 
-	private boolean isRegion(GisMap map, String regCode) {
-		boolean retVal = false;
-		Iterator it = map.getSegments().iterator();
 
-		while (it.hasNext()) {
-			GisMapSegment segment = (GisMapSegment) it.next();
-			if (segment.getSegmentCode().equalsIgnoreCase(regCode)) {
-				retVal = true;
-				break;
-			}
-		}
 
-		return retVal;
-	}
-
-	private List prepareHilightSegments(List segmentData, GisMap map,
-			Double min, Double max) {
-
-		float delta = max.floatValue() - min.floatValue();
-		float coeff = 205 / delta;
-
-		List retVal = new ArrayList();
-		Iterator it = map.getSegments().iterator();
-
-		while (it.hasNext()) {
-			GisMapSegment segment = (GisMapSegment) it.next();
-			for (int idx = (int) 0; idx < segmentData.size(); idx++) {
-				SegmentData sd = (SegmentData) segmentData.get(idx);
-				if (sd.getSegmentCode().equalsIgnoreCase(
-						segment.getSegmentCode())) {
-					HilightData hData = new HilightData();
-					hData.setSegmentId((int) segment.getSegmentId());
-					float green = (Float.parseFloat(sd.getSegmentValue()) - min
-							.floatValue()) * coeff;
-					hData.setColor(new ColorRGB((int) 0, (int) (green + 50f), 0));
-					retVal.add(hData);
-				}
-			}
-		}
-		return retVal;
-	}
 
 	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity) {
 		FundingData retVal = null;

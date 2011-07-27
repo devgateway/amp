@@ -256,7 +256,7 @@ public class GetFoundingDetails extends Action {
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                         while (locFoundingMapIt.hasNext()) {
                             String key = (String) locFoundingMapIt.next();
-                            if (isRegion(map, key)) {
+                            if (RMMapCalculationUtil.isRegion(map, key)) {
                                 FundingData fData = (FundingData) fundingLocationMap.get(key);
                                 SegmentData segmentData = new SegmentData();
                                 segmentData.setSegmentCode(key);
@@ -303,7 +303,7 @@ public class GetFoundingDetails extends Action {
 
 
 
-                    List hilightData = prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
 
@@ -541,7 +541,7 @@ public class GetFoundingDetails extends Action {
                         }
                     }
                     
-                    List hilightData = prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
 
@@ -724,7 +724,7 @@ public class GetFoundingDetails extends Action {
                         }
                     }
 
-                    List hilightData = prepareHilightSegments(segmentDataList,
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,
                             map, new Double(0), new Double(100), MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
@@ -867,7 +867,7 @@ public class GetFoundingDetails extends Action {
                         }
 
 
-                        if (isRegion(map, segmentCode) &&
+                        if (RMMapCalculationUtil.isRegion(map, segmentCode) &&
                             !regSet.contains(segmentCode)) {
 
                             SegmentData indHilightData = new SegmentData();
@@ -914,7 +914,7 @@ public class GetFoundingDetails extends Action {
                         request.getSession().setAttribute("AMP_INDICATOR_VALUES", segmentDataList);
                     }
 
-                    List hilightData = prepareHilightSegments(segmentDataList,
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,
                             map, min, max, MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
@@ -1186,70 +1186,7 @@ public class GetFoundingDetails extends Action {
 
     }
 
-    private List prepareHilightSegments(List segmentData, GisMap map,
-                                        Double min, Double max, MapColorScheme scheme) {
 
-        float deltaVal = max.floatValue() - min.floatValue();
-
-        int deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
-        int deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
-        int deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
-
-        float coeffRed, coeffGreen, coeffBlue;
-        if (deltaVal > 0) {
-        	coeffRed = deltaRed / deltaVal;
-            coeffGreen = deltaGreen / deltaVal;
-            coeffBlue = deltaBlue / deltaVal;
-        } else {
-            coeffRed = 1;
-            coeffGreen = 1;
-            coeffBlue = 1;
-        }
-
-        List retVal = new ArrayList();
-        Iterator it = map.getSegments().iterator();
-
-        while (it.hasNext()) {
-            GisMapSegment segment = (GisMapSegment) it.next();
-            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
-                SegmentData sd = (SegmentData) segmentData.get(idx);
-                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
-                    HilightData hData = new HilightData();
-                    hData.setSegmentId((int) segment.getSegmentId());
-
-                    float red = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffRed + scheme.getGradientMinColor().getRed();
-                    float green = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffGreen + scheme.getGradientMinColor().getGreen();
-                    float blue = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffBlue + scheme.getGradientMinColor().getBlue();
-                    if (deltaVal > 0) {
-                    hData.setColor(new ColorRGB((int) red, (int) green, (int) blue));
-                    } else {
-                    	hData.setColor(scheme.getGradientMaxColor());
-                    	
-                    }
-                    retVal.add(hData);
-                }
-            }
-        }
-        return retVal;
-    }
-
-    private boolean isRegion(GisMap map, String regCode) {
-        boolean retVal = false;
-        Iterator it = map.getSegments().iterator();
-
-        while (it.hasNext()) {
-            GisMapSegment segment = (GisMapSegment) it.next();
-            if (segment.getSegmentCode().equalsIgnoreCase(regCode)) {
-                retVal = true;
-                break;
-            }
-        }
-
-        return retVal;
-    }
 
     private List prepareDashSegments(List segmentData, ColorRGB dashColor,
                                      GisMap map) {

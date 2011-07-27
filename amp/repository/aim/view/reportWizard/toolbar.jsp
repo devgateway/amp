@@ -26,6 +26,11 @@
 				<digi:trn key="btn:repFilters">Filters</digi:trn>
 			</button>
 		</feature:display>
+		<feature:display  name="Report Settings Button" module="Report and Tab Options">
+			<button type="button" value="Settings" class="buttonx" id="step${stepNum}_add_settings_button" onclick="repFilters.showSettings()"/>
+				<digi:trn key="btn:repFilters">Settings</digi:trn>
+			</button>
+		</feature:display>
 		<button type="button" name="save" disabled="disabled" onclick="saveReportEngine.decideToShowTitlePanel()" class="buttonx_dis"/>
 			<digi:trn key="rep:wizard:Save">Save</digi:trn>
 		</button>

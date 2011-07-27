@@ -16,7 +16,8 @@
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do" name="aimReportsFilterPickerForm3" type="aimReportsFilterPickerForm"  onsubmit="return validateFormat()">
-
+<bean:define id="myForm" type="org.digijava.module.aim.form.ReportsFilterPickerForm" name="aimReportsFilterPickerForm" />
+			<% System.out.println("AAAA1:" + myForm.getRenderStartYear() ); %>
 <center>
 	<b style="font-size: 11px;">
 		<digi:trn>Number Format</digi:trn>
@@ -153,6 +154,7 @@
 				<digi:trn>From</digi:trn>: &nbsp;
 				
 			</td>
+			<% System.out.println("AAAA:" + myForm.getRenderStartYear() ); %>
 			<td> 
 				<html:select  styleClass="dropdwn_sm" property="renderStartYear">
 					<html:option value="-1">
@@ -176,13 +178,13 @@
 	<div style="margin-right: auto; margin-left: auto; text-align: center;">
 			<html:hidden property="ampReportId" /> 
 			<html:hidden property="defaultCurrency" />
-			<html:submit styleClass="buttonx"  property="applyFormat">
+			<html:submit styleClass="buttonx"  property="applyFormat" styleId="applyFormatBtn">
 				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
 			</html:submit>&nbsp; 
 			
 				<input type="hidden" name="apply" value="true">
 				<html:hidden property="resetFormat" value="false"/>
-				<html:button styleClass="buttonx" onclick="ResetCustom();" property="applyFormat">
+				<html:button styleClass="buttonx" onclick="ResetCustom(<%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>);" property="applyFormat">
 				<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
 			</html:button>
 	</div>

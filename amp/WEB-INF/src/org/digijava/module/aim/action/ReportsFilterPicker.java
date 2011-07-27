@@ -134,11 +134,11 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		
-		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
-		if ( existingFilter != null ) { 
-			FilterUtil.populateForm(filterForm, existingFilter);
-			request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
-		}
+//		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+//		if ( existingFilter != null ) { 
+//			FilterUtil.populateForm(filterForm, existingFilter);
+//			request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+//		}
 
 		Long ampTeamId = null;
 		if (teamMember != null)
@@ -183,14 +183,16 @@ public class ReportsFilterPicker extends MultiAction {
 		 filterForm.setCalendars(allFisCalenders);
 			
 	      
-		if(request.getParameter("init")!=null) return null; else 
-		return modeRefreshDropdowns(mapping, form, request, response);
+		if(request.getParameter("init")!=null) return null; 
+		else 
+			modeRefreshDropdowns(mapping, form, request, response, getServlet().getServletContext());
+			return modeSelect(mapping, form, request, response);
 		}
 	
-	public ActionForward modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
 		String ampReportId 	= request.getParameter("ampReportId");
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		ServletContext ampContext = getServlet().getServletContext();
+		//ServletContext ampContext = getServlet().getServletContext();
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 	 	Site site = RequestUtils.getSite(request);
@@ -769,9 +771,6 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
 		}
 
-		
-		return modeSelect(mapping, form, request, response);
-
 	}
 
 	public ActionForward modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -1221,7 +1220,7 @@ public class ReportsFilterPicker extends MultiAction {
 		else 
 			arf.setBudget(null);
 		
-		arf.setJustSearch(filterForm.getJustSearch());
+		arf.setJustSearch( filterForm.getJustSearch()!=null && filterForm.getJustSearch() );
 
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);

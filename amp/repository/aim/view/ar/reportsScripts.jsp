@@ -462,11 +462,11 @@ function resetFormat(){
 	document.aimReportsFilterPickerForm3.submit();
 }
 
-function ResetCustom() {
+function ResetCustom(maxFractionDigits) {
 	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
 	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
 	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
-	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
+	aimReportsFilterPickerForm3.customDecimalPlaces.value = maxFractionDigits;
 	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
 	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
 	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";

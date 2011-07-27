@@ -32,6 +32,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.GlobalSettings;
+import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
@@ -49,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
+import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -159,6 +161,13 @@ public class ReportWizardAction extends MultiAction {
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
 
+		/**
+		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
+		 */
+		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)request.getSession().getAttribute("aimReportsFilterPickerForm");
+		rfpForm.setIsnewreport(true);
+		new ReportsFilterPicker().reset(rfpForm, request, mapping);
+		rfpForm.setIsnewreport(false);
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
@@ -264,7 +273,11 @@ public class ReportWizardAction extends MultiAction {
 			FilterUtil.populateFilter(ampReport, filter);
 			FilterUtil.prepare(request, filter);
 			request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
+			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)request.getSession().getAttribute("aimReportsFilterPickerForm");
+			new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
+			FilterUtil.populateForm(rfpForm, filter);
 			myForm.setUseFilters(true);
+			
 		}
 				
 		

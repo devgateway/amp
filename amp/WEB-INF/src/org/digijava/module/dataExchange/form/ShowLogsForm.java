@@ -21,6 +21,7 @@ public class ShowLogsForm extends ActionForm {
 	
 	private DELogPerItem lpi;
 	private List<DELogPerExecution> logs;
+	private List<DELogPerItem> logItems;
 	private List <DESourceSetting> availableSourceSettings;
 	private String selectedSourceName ;
 
@@ -104,5 +105,12 @@ public class ShowLogsForm extends ActionForm {
 			List<DESourceSetting> availableSourceSettings) {
 		this.availableSourceSettings = availableSourceSettings;
 	}
-	
+
+	public List<DELogPerItem> getLogItems() {
+		return logItems;
+	}
+
+	public void setLogItems(List<DELogPerItem> logItems) {
+		this.logItems = logItems;
+	}	
 }

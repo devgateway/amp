@@ -3,12 +3,14 @@
  */
 package org.digijava.module.dataExchange.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +30,11 @@ import org.digijava.module.dataExchange.form.ManageSourceForm;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
 import org.springframework.util.FileCopyUtils;
+
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 /**
  * @author Alex Gartner
@@ -70,7 +76,7 @@ public class ManageSourceAction extends MultiAction {
 			//return null;
 		}
 		if ( "execute".equals( msForm.getAction() ) ) {
-			request.setAttribute("htmlView","true");
+			//request.setAttribute("htmlView","true");
 			modeExecuteSource(mapping, msForm, request, response);
 			return mapping.findForward("showSources");
 		}
@@ -200,7 +206,16 @@ public class ManageSourceAction extends MultiAction {
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		try {
-			FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
+			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId()).getAttachedFile();
+			SdmItem item = null;
+			for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+				item = sdmItem;
+				break;
+			}
+			ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
+			FileCopyUtils.copy(inStream, outputStream);
+			//new ByteArrayInputStream(xmlContent)
+			//FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

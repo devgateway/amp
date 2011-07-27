@@ -34,7 +34,7 @@ function changeSource() {
 				<div class="breadcrump_cont"> 
 					<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
 					<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>
-					<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do~htmlView=true" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
+					<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
 					<span class="breadcrump_sep"><b>»</b></span>
 					<span class="bread_sel"><digi:trn>Show Logs</digi:trn></span>
 				</div>
@@ -107,7 +107,8 @@ function changeSource() {
 							    	</div>
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside align="center">
-							    	<div class="t_sm"><a href=# class="t_sm"><b>view</b></a> | 
+							    	<div class="t_sm">
+							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b>view</b></a> | 
 							    		<a href=# class="t_sm"><b>check</b></a>
 							    	</div>
 							    </td>

@@ -75,7 +75,7 @@
         tree = new YAHOO.widget.TreeView("dataExportTree");
             
         <bean:define id="tree" name="fieldsModuleTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-        //<bean:define id="sourceId" name="sourceId" type="java.lang.Long" toScope="request"/>
+        
         <%= ExportHelper.renderActivityTree(tree) %>
 
       	//The tree is not created in the DOM until this method is called:

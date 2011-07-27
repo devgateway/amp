@@ -119,7 +119,19 @@ public class ShowLogsAction extends MultiAction {
 		// TODO Auto-generated method stub
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
-		response.setCharacterEncoding("UTF-16");
+		List<DELogPerItem> logItems		= null;
+		if ( myForm.getSelectedLogPerExecId() == null || myForm.getSelectedLogPerExecId() <= 0 )
+			logItems	= new SessionImportLogDAO().getAllAmpLogPerItem();
+		else {
+			logItems	= new SessionImportLogDAO().getAmpLogPerItemObjsByExec( myForm.getSelectedLogPerExecId() );
+			myForm.setSelectedLogPerExecId(null);
+		}
+		myForm.setLogItems(logItems);
+		/**
+		 * old code -- to be deleted !
+		 *
+		 * 
+		 * response.setCharacterEncoding("UTF-16");
 		response.setContentType("text/xml");
 		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
 		
@@ -132,8 +144,10 @@ public class ShowLogsAction extends MultiAction {
 		}
 		XmlCreator xmlCreator	= new XmlCreator(logItems);
 		ps.print(xmlCreator.createXml());
+		 */
+		
 	 	
-		return null;
+		return mapping.findForward("viewExecutionLog");
 	}
 	public ActionForward modeShowItemLogDetails(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)

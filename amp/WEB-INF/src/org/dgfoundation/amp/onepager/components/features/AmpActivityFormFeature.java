@@ -94,11 +94,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.FEATURE) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				Long oldId = am.getObject().getAmpActivityId();
 				am.setObject(am.getObject());
 				info("Activity saved successfully");
 				//if (newActivity){
 					Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
-					target.appendJavascript("window.location.replace(window.location.href.replace(\"new\" , \"" + actId + "\"));");
+					String replaceStr;
+					if (oldId == null)
+						replaceStr = "new";
+					else
+						replaceStr = String.valueOf(oldId);
+					target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
 				//}
 				target.addComponent(feedbackPanel);
 			}

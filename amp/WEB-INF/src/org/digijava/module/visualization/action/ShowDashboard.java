@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -25,6 +26,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.um.action.addWorkSpaceUser;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -140,15 +142,28 @@ public class ShowDashboard extends Action {
 															// the public view
 		}
 		filter.setOrganizations(orgs);
-		
-		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
-		filter.setSectors(sectors);
-		List<EntityRelatedListHelper<AmpSector,AmpSector>> primarySectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
-		for(AmpSector sector:sectors){
-			List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
-			primarySectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
+		try {
+		if(filter.getSelSectorConfigId()==null){
+				filter.setSelSectorConfigId(SectorUtil.getPrimaryConfigClassification().getId());
 		}
-		filter.setPrimarySectorWithSubSectors(primarySectorsWithSubSectors);
+		filter.setSectorConfigs(SectorUtil.getAllClassificationConfigs());
+		filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
+		List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil
+					.getParentSectorsFromConfig(filter.getSelSectorConfigId());
+		filter.setSectors(sectors);
+		for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
+			List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
+			List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
+			for(AmpSector sector:currentConfigSectors){;
+				List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+				sectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
+			}
+			filter.getConfigWithSectorAndSubSectors().add(new EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>(config,sectorsWithSubSectors));
+			}
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (filter.getYear() == null) {
 			Long year = null;

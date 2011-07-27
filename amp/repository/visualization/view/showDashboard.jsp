@@ -123,6 +123,29 @@ function checkRelatedEntities(option,name,id){
 function uncheckAllOption(name){
 	$("#"+name+"_all").removeAttr('checked');
 }
+function manageSectorEntities(option,configId,sectorId){
+	$("li[id^='config_']").each(function() {
+		if(this.id!='config_'+configId){
+			$(this).find("input[name='sub_sector_check']").removeAttr('checked');
+			$(this).find("input[name='sector_check']").removeAttr('checked');
+			$(this).find("#config_"+configId+"_radio").removeAttr('checked');;
+		}
+		else{
+			$(this).find("#config_"+configId+"_radio").attr('checked','checked');
+		}
+	  });
+	if(sectorId!=null){
+		var options=$("input[class='sub_sector_check_"+sectorId+"']");
+		if(option.checked){
+			options.attr('checked','checked');
+		}
+		else{
+			options.removeAttr('checked');
+		}
+	}
+	
+}
+
 -->
 </script>
 
@@ -273,6 +296,7 @@ function resetToDefaults(){
 	
 	unCheckOptions("org_grp_check");
 	unCheckOptions("region_check");
+	unCheckOptions("sector_config_check");
 	unCheckOptions("sector_check");
 	unCheckOptions("organization_check");
 	unCheckOptions("zone_check");
@@ -293,12 +317,15 @@ function resetToDefaults(){
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
+	document.getElementById("sector_config_dropdown_id").selectedIndex = 0;
 	removeOptionsDropdown("org_dropdown_id");
 	removeOptionsDropdown("zone_dropdown_id");
+	removeOptionsDropdown("sector_dropdown_id");
 	removeOptionsDropdown("sub_sector_dropdown_id");
 	document.getElementById("filterOrganizations").innerHTML = trnAll;
 	document.getElementById("filterOrgGroups").innerHTML = trnAll;
 	document.getElementById("filterSectors").innerHTML = trnAll;
+	document.getElementById("filterSectorConfiguration").innerHTML = "<digi:trn jsFriendly='true'>Primary</digi:trn>";;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	applyFilterPopin();
 }
@@ -686,7 +713,7 @@ function toggleSettings(){
 							<tr style="cursor: pointer;" >
 								<td class="side_opt_sel"  id="sector_selector">
 									<div class="selector_type_cont">
-										<digi:trn>Primary Sectors and Sub Sectors</digi:trn>
+										<digi:trn>Sectors and Sub Sectors</digi:trn>
 									</div>
 								</td>
 								
@@ -704,34 +731,99 @@ function toggleSettings(){
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
 						<ul style="list-style-type: none">
-						<li>
+						<c:forEach items="${visualizationform.filter.configWithSectorAndSubSectors}" var="item">
+						<c:choose>
+						<c:when test="${item.mainEntity.name=='Primary'}">
+							<field:display name="Primary Sector" feature="Sectors">
+							<li id="config_${item.mainEntity.id}">
+							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
+								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
+							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
+							<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio"  value="-1" id="sector_check_all"  name="sector_check" onClick="uncheckAllRelatedEntities('sub_sector_check')"/> 
+								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
 							</c:if>
 							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" id="sector_check_all" name="sector_check" value="-1" onClick="allOptionChecked(this,'sector_check','sub_sector_check')"/> 
-							</c:if>
-							<digi:trn>All</digi:trn>
-						</li>
-						<c:forEach items="${visualizationform.filter.primarySectorWithSubSectors}" var="item">
-						<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" title="${item.mainEntity.name}" value="${item.mainEntity.ampSectorId}" onClick="checkUncheckRelatedEntities(this,'sub_sector_check',${item.mainEntity.ampSectorId})"> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check"  title="${item.mainEntity.name}" value="${item.mainEntity.ampSectorId}" onClick="uncheckAllOption('sector_check');checkRelatedEntities(this,'sub_sector_check',${item.mainEntity.ampSectorId})"/> 
+								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
 							</c:if>
 							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${item.mainEntity.name}</digi:trn>
+								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
 							</span>
 							<br/>
 							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="subSector">
-							<li><input type="checkbox" class="sub_sector_check_${item.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="uncheckAllOption('sector_check');"/>${subSector.name}</li> 
+							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
+							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
 							</c:forEach>
 							</ul>
 							</li>
-							
+						</c:forEach> 
+						</ul>
+						</li>
+						</field:display>
+						</c:when>
+						<c:when test="${item.mainEntity.name=='Secondary'}">
+							<field:display name="Secondary Sector" feature="Sectors">
+							<li id="config_${item.mainEntity.id}">
+							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
+								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
+							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
+							<li>
+							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
+							</c:if>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
+							</span>
+							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
+							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
+							</c:forEach>
+							</ul>
+							</li>
+						</c:forEach> 
+						</ul>
+						</li>
+						</field:display>
+						</c:when>
+						<c:when test="${item.mainEntity.name=='Tertiary'}">
+						<field:display name="Tertiary Sector" feature="Sectors">
+							<li id="config_${item.mainEntity.id}">
+							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
+								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
+							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
+							<li>
+							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
+							</c:if>
+							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
+							</c:if>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
+							</span>
+							<br/>
+							<ul style="list-style-type: none">
+							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
+							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
+							</c:forEach>
+							</ul>
+							</li>
+						</c:forEach> 
+						</ul>
+						</li>
+						</field:display>
+						</c:when>
+						</c:choose>
 						</c:forEach>
 						</ul>
 					</div>
@@ -946,7 +1038,8 @@ function toggleSettings(){
 	   <i><digi:trn>Years range</digi:trn>: </i><label id="filterYearsRange">${visualizationform.filter.yearsInRange}</label> | 
 	   <i><digi:trn>Org. groups</digi:trn>: </i><label id="filterOrgGroups"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
-	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Configuration</digi:trn>: </i><label id="filterSectorConfiguration"><digi:trn>Primary</digi:trn></label> | 
+	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> |
 	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label>
 	</td>
 	</tr>
@@ -1014,6 +1107,35 @@ function toggleSettings(){
 	</tr> 
   </c:if>
   <c:if test="${visualizationform.filter.dashboardType eq '3' }">
+  <tr>
+	<td><digi:trn>Configurations</digi:trn>:</td>
+	  <td align="right">
+	  <html:select property="filter.selSectorConfigId" styleId="sector_config_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+	  <c:forEach var="config" items="${visualizationform.filter.sectorConfigs}">
+		<c:choose>
+						<c:when test="${config.name=='Primary'}">
+							<field:display name="Primary Sector" feature="Sectors">
+							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+						<c:when test="${config.name=='Secondary'}">
+							<field:display name="Secondary Sector" feature="Sectors">
+							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+						<c:when test="${config.name=='Tertiary'}">
+							<field:display name="Tertiary Sector" feature="Sectors">
+							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+		</c:choose>
+
+        
+	  </c:forEach>
+	     </html:select>
+	     <div id="sector_config_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+		</td>
+	</tr>
 	<tr>
 	<td><digi:trn>Sector</digi:trn>:</td>
 	  <td align="right">
@@ -1078,6 +1200,33 @@ function toggleSettings(){
 	</tr> 
   </c:if>
   <c:if test="${visualizationform.filter.dashboardType ne '3' }">
+  <tr>
+	<td><digi:trn>Configurations</digi:trn>:</td>
+	  <td align="right">
+	  <html:select property="filter.selSectorConfigId" styleId="sector_config_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+	         <c:forEach var="config" items="${visualizationform.filter.sectorConfigs}">
+		<c:choose>
+						<c:when test="${config.name=='Primary'}">
+							<field:display name="Primary Sector" feature="Sectors">
+							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+						<c:when test="${config.name=='Secondary'}">
+							<field:display name="Secondary Sector" feature="Sectors">
+							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+						<c:when test="${config.name=='Tertiary'}">
+							<field:display name="Tertiary Sector" feature="Sectors">
+							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+	     					 </field:display>
+						</c:when>
+		</c:choose>
+		</c:forEach>
+	     </html:select>
+	     <div id="sector_config_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+		</td>
+	</tr>
 	<tr>
 	<td><digi:trn>Sector</digi:trn>:</td>
 	  <td align="right">
@@ -1467,6 +1616,17 @@ var callbackChildrenCall = {
 			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
+			    	  case "Config":
+				    		var sectorDropdown = document.getElementById("sector_dropdown_id");
+				    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
+				    		subSectorDropdown.options.length = 0;
+				    		sectorDropdown.options.length = 0;
+				    		subSectorDropdown.options[0] = new Option("All", -1);
+				    		sectorDropdown.options[0] = new Option("All", -1);
+				    		for(var i = 1; i < results.children.length; i++){
+				    			sectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		break;
 			    	
 			    }
 			}
@@ -1495,6 +1655,9 @@ function callbackChildren(e) {
 	var objectType = "";
 
 	switch(targetId){
+		case "sector_config_dropdown_id":
+		objectType = "Config";
+		break;
 		case "sector_dropdown_id":
 			objectType = "Sector";
 			break;
@@ -1605,6 +1768,7 @@ var allGraphs = document.getElementsByName("flashContent");
 	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
 	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
+	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 
@@ -1841,6 +2005,19 @@ function refreshBoxes(o){
 						document.getElementById("zone_dropdown_id").style.display = "";
 					}
 				//}
+				break;
+			case "SelSectorConfig":
+					if (child.list.length > 0) {
+					inner =child.list[0].name;
+					var div = document.getElementById("sector_config_list_id");
+					div.innerHTML = inner;
+					document.getElementById("filterSectorConfiguration").innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("sector_config_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("sector_config_list_id").style.display = "none";
+						document.getElementById("sector_config_dropdown_id").style.display = "";
+					}
 				break;
 			case "SelSectorsList":
 				//if (dashboardType!=3) {
@@ -2134,6 +2311,8 @@ YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren
 YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("sector_dropdown_id", callbackChildren);
+YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("sector_config_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
 YAHOO.util.Event.onDOMReady(initDashboard);

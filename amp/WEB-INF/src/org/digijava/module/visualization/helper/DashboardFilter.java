@@ -3,8 +3,8 @@ package org.digijava.module.visualization.helper;
 import java.util.Collection;
 import java.util.List;
 
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -13,8 +13,6 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.LocationUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class DashboardFilter {
@@ -33,6 +31,7 @@ public class DashboardFilter {
     private List<AmpSector>sectors;
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
+    private List<AmpClassificationConfiguration> sectorConfigs;
 
     private Long[] orgGroupIds;
     private Long orgGroupId;
@@ -50,8 +49,10 @@ public class DashboardFilter {
     private Long[] selSectorIds;
     private Long[] selLocationIds;
     private Long[] selOrgGroupIds;
+    private Long selSectorConfigId;
 
-    private List<AmpSector>sectorsSelected;
+
+	private List<AmpSector>sectorsSelected;
     
     private List<AmpCategoryValueLocations> locationsSelected;
    
@@ -78,9 +79,10 @@ public class DashboardFilter {
     private int decimalsToShow;
     private String groupSeparator = FormatHelper.getGroupSymbol();
     private String decimalSeparator = FormatHelper.getDecimalSymbol();
-    List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupWithOrgsList;
-    List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
-    List<EntityRelatedListHelper<AmpSector,AmpSector>> primarySectorWithSubSectors;
+    private List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupWithOrgsList;
+    private List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
+    //private List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorWithSubSectors;
+    private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
     
 	public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
@@ -94,20 +96,27 @@ public class DashboardFilter {
     	newFilter.setActivityId(this.getActivityId());
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
+    	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
     	return newFilter;
     }
 	
-	public List<EntityRelatedListHelper<AmpSector, AmpSector>> getPrimarySectorWithSubSectors() {
-		return primarySectorWithSubSectors;
-	}
-
-	public void setPrimarySectorWithSubSectors(
-			List<EntityRelatedListHelper<AmpSector, AmpSector>> primarySectorWithSubSectors) {
-		this.primarySectorWithSubSectors = primarySectorWithSubSectors;
-	}
+	
 	
 
-    public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
+   /* public List<EntityRelatedListHelper<AmpSector, AmpSector>> getSectorWithSubSectors() {
+		return sectorWithSubSectors;
+	}
+
+
+
+	public void setSectorWithSubSectors(
+			List<EntityRelatedListHelper<AmpSector, AmpSector>> sectorWithSubSectors) {
+		this.sectorWithSubSectors = sectorWithSubSectors;
+	}*/
+
+
+
+	public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
 		return orgGroupWithOrgsList;
 	}
 
@@ -116,6 +125,23 @@ public class DashboardFilter {
 			List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList) {
 		this.orgGroupWithOrgsList = orgGroupWithOrgsList;
 	}
+	
+	
+
+
+	public List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> getConfigWithSectorAndSubSectors() {
+		return configWithSectorAndSubSectors;
+	}
+
+
+
+
+	public void setConfigWithSectorAndSubSectors(
+			List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors) {
+		this.configWithSectorAndSubSectors = configWithSectorAndSubSectors;
+	}
+
+
 
 
 	public List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> getRegionWithZones() {
@@ -615,6 +641,22 @@ public class DashboardFilter {
 
 	public void setShowMonochrome(Boolean showMonochrome) {
 		this.showMonochrome = showMonochrome;
+	}
+
+    public List<AmpClassificationConfiguration> getSectorConfigs() {
+		return sectorConfigs;
+	}
+
+	public void setSectorConfigs(List<AmpClassificationConfiguration> sectorConfigs) {
+		this.sectorConfigs = sectorConfigs;
+	}
+
+	public Long getSelSectorConfigId() {
+		return selSectorConfigId;
+	}
+
+	public void setSelSectorConfigId(Long selSectorConfigId) {
+		this.selSectorConfigId= selSectorConfigId;
 	}
 
 	

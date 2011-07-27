@@ -114,11 +114,12 @@ public class DataDispatcher extends DispatchAction {
         }
 		
 		visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
-		visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));
+		visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+		visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
 		visualizationForm.getFilter().setSectorIds(getLongArrayFromParameter(request.getParameter("sectorIds")));
 		visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
-		visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
+
 		
 		Long[] orgsGrpIds = visualizationForm.getFilter().getOrgGroupIds();
 		Long orgsGrpId = visualizationForm.getFilter().getOrgGroupId();
@@ -149,6 +150,14 @@ public class DataDispatcher extends DispatchAction {
 		Long subSecsId = visualizationForm.getFilter().getSubSectorId();
 		Long[] secsIds = visualizationForm.getFilter().getSectorIds();
 		Long[] subSecsIds = visualizationForm.getFilter().getSubSectorIds();
+		String configIdAsString=request.getParameter("selSectorConfigId");
+		Long configId = null;
+		if(configIdAsString!=null&&!configIdAsString.equals("")){
+			configId = Long.parseLong(configIdAsString);
+			visualizationForm.getFilter().setSelSectorConfigId(configId);
+		}
+		
+		
 		
 		
 		if ((subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) && (subSecsId == null || subSecsId == -1)) {
@@ -227,6 +236,8 @@ public class DataDispatcher extends DispatchAction {
 		JSONArray selZones = new JSONArray();
 		JSONObject rootSelSectors = new JSONObject();
 		JSONArray selSectors = new JSONArray();
+		JSONObject rootSelConfigs = new JSONObject();
+		JSONArray selConfigs = new JSONArray();
 		JSONObject rootSelSubSectors = new JSONObject();
 		JSONArray selSubSectors = new JSONArray();
 		
@@ -269,6 +280,14 @@ public class DataDispatcher extends DispatchAction {
 		rootSelZones.put("type", "SelZonesList");
 		rootSelZones.put("list", selZones);
 		children.add(rootSelZones);
+		
+		if (configId!=null) {
+				child.put("name", SectorUtil.getClassificationConfigById(configId).getName());
+				selConfigs.add(child);
+		}
+		rootSelConfigs.put("type", "SelSectorConfig");
+		rootSelConfigs.put("list", selConfigs);
+		children.add(rootSelConfigs);
 		
 		if (secsIds!=null && secsIds.length>0 && secsIds[0]!=-1) {
 			for (int i = 0; i < secsIds.length; i++) {
@@ -1705,6 +1724,24 @@ public class DataDispatcher extends DispatchAction {
 			root.put("ID", parentId);
 			root.put("objectType", objectType);
 			root.put("children", children);
+		}
+		else{
+			if (parentId != null && objectType != null && (objectType.equals("Config") || objectType.equals("Config"))){
+				Long configId = Long.parseLong(parentId);
+		        if (configId != null) {
+		        	List<AmpSector> sectors=DbUtil.getParentSectorsFromConfig(configId);
+	                for(AmpSector sector:sectors){
+	                	JSONObject child = new JSONObject();
+    					child.put("ID", sector.getAmpSectorId());
+    					child.put("name",sector.getName());
+    					children.add(child);
+	                }
+	            }
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+			}
+			
 		}
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;

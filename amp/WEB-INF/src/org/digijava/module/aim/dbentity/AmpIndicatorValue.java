@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -14,6 +15,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class AmpIndicatorValue implements Serializable, Cloneable{
+	private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
      * NOTICE
      * 
@@ -182,8 +184,13 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 
     
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-    	return super.clone();
+    public Object clone() {
+    	try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			logger.error("Clone not supported!", e);
+			return null;
+		}
     }
     /*
     @Override
@@ -224,8 +231,6 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     	r.setIndicatorSource(indicatorSource);
     	r.setSubgroup(subgroup);
     }
-    
-    
 
 }
 

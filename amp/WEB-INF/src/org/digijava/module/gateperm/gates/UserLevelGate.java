@@ -70,11 +70,19 @@ public class UserLevelGate extends Gate {
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		
-		AmpActivityVersion act = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		
 		//AMP-9768 - apply permissions to teamHead for other workspaces than his own 
-		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
-		if(act==null) act=(AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+		Object o = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		AmpActivityVersion act = null; 
+		if (o instanceof AmpActivityVersion) {
+			act = (AmpActivityVersion) o;
+		}
+		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam() != null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
+		if(act==null){
+			o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+			if (o instanceof AmpActivityVersion)
+				act = (AmpActivityVersion) o;
+		}
 		boolean owner=false;
 		if (act.getActivityCreator()==null){
 			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());

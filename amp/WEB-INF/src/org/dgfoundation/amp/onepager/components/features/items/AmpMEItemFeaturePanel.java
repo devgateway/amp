@@ -149,28 +149,28 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 				Set<AmpIndicatorValue> vals = values.getObject();
 				vals.clear();
 				
-				AmpIndicatorValue tmp = baseVal.clone();
+				AmpIndicatorValue tmp = (AmpIndicatorValue) baseVal.clone();
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());
 				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
 				
-				tmp = revisedVal.clone(); 
+				tmp = (AmpIndicatorValue) revisedVal.clone(); 
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());
 				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
 				
-				tmp = targetVal.clone(); 
+				tmp = (AmpIndicatorValue) targetVal.clone(); 
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());
 				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
 				
-				tmp = currentVal.clone(); 
+				tmp = (AmpIndicatorValue) currentVal.clone(); 
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());

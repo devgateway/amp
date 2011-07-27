@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpFMConfigurable;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -18,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
 
 public final class FMUtil {
@@ -91,8 +95,8 @@ public final class FMUtil {
 					}
 				}
 
-				//TODO: Integrate with permissions
-				return true; //for now
+				return checkIsEnabled(ampTreeVisibility, fmPathString, fmc.getFMType());
+				//return true; //for now
 			}
 			else{
 				logger.error("Can't find ampTreeVisibility in context, all components enabled!");
@@ -127,7 +131,7 @@ public final class FMUtil {
 					return true;
 				}
 				else{
-					return isActive(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					return true;// checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
 				}
 			}
 			else{
@@ -141,7 +145,10 @@ public final class FMUtil {
 		return true;
 	}
 
-	public static boolean isActive(AmpTreeVisibility atv, String name, AmpFMTypes type){
+	private static boolean checkIsVisible(AmpTreeVisibility atv, String name, AmpFMTypes type){
+		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		Map scope=PermissionUtil.getScope(session.getHttpSession());
+
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
 		if(currentTemplate!=null){
 			Set colection;
@@ -154,14 +161,43 @@ public final class FMUtil {
 				Iterator it = colection.iterator();
 				while (it.hasNext()) {
 					AmpObjectVisibility object = (AmpObjectVisibility) it.next();
-					if (object.getName().compareTo(name) == 0)
-						return true;
+					if (object.getName().compareTo(name) == 0){
+						return object.canDo(GatePermConst.Actions.VIEW, scope);
+						//return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
 
+	private static boolean checkIsEnabled(AmpTreeVisibility atv, String name, AmpFMTypes type){
+		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		Map scope=PermissionUtil.getScope(session.getHttpSession());
+		
+		
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
+		if(currentTemplate!=null){
+			Set colection;
+			if (type == AmpFMTypes.MODULE)
+				colection = currentTemplate.getItems();
+			else
+				colection = currentTemplate.getFeatures();
+				
+			if(colection != null){
+				Iterator it = colection.iterator();
+				while (it.hasNext()) {
+					AmpObjectVisibility object = (AmpObjectVisibility) it.next();
+					if (object.getName().compareTo(name) == 0){
+						return object.canDo(GatePermConst.Actions.EDIT, scope);
+						//return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	public static synchronized void addFeatureFM(ServletContext context, AmpTreeVisibility ampTreeVisibility, String componentPath, String componentParentPath) throws Exception{
 		if(FeaturesUtil.getFeatureVisibility(componentPath)==null){
 			AmpModulesVisibility moduleByNameFromRoot = getModuleByNameFromRoot(ampTreeVisibility.getItems().values(), componentParentPath); //ampTreeVisibility.getModuleByNameFromRoot(componentParentPath);

@@ -59,7 +59,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		resetSession();
 
 		AmpActivityVersion ret = ActivityUtil.load(this, id);
-		
+
 		return ret;
 	}
 

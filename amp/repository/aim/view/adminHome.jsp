@@ -771,9 +771,9 @@
 				<fieldset style="background-color:#F2F2F2;">
 			<legend><span class="legend_label">Administrative Tools</span></legend>
 			
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
   <tr>
-    <td width=314 class="admin_landing_page_box">
+    <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
 	<div class="admin_landing_page_box_title">Global administration and maintenance of AMP</div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -783,32 +783,247 @@
   </tr>
     <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td><a href=#>Global permission Manager</a></td>
+    <td class="admin_box_label"><a href=#>Global permission Manager</a></td>
   </tr>
   <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td><a href=#>Global feature Manager</a></td>
+    <td class="admin_box_label"><a href=#>Global feature Manager</a></td>
   </tr>
   <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td><a href=#>Job Manager</a></td>
+    <td class="admin_box_label"><a href=#>Job Manager</a></td>
   </tr>
   <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td><a href=#>Flag uploader</a></td>
+    <td class="admin_box_label"><a href=#>Flag uploader</a></td>
   </tr>
 
 </table>
 
 	</div></td>
     <td width=10>&nbsp;</td>
-    <td width=314>&nbsp;</td>
-    <td width=11>&nbsp;</td>
-    <td width=314>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Workspace, user and Activity managers</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Workspace Manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>User Manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Activity Manager</a></td>
   </tr>
 </table>
 
-			</fieldset>
+	</div></td>
+    <td width=11>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Backbone lists of AMP</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Category Manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Region manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Sector manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Calendar manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Component types manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Organization manager</a></td>
+  </tr>  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Multi-Programme Manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Multi-Programme Configuration</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Indicator Manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+  <tr>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Currencies and rates</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Currency manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Currency rate manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+    <td width=10>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Import and export of data</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Code Chapitre importer</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Budget importer</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Partial data importe</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Translation manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+    <td width=11>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">AMP workflow auditor</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Audit logger manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Activity Manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+  <tr>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Public view toolbox</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Public Document Manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Public view content</a></td>
+  </tr>
+      <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Public filter manager</a></td>
+  </tr>
+
+</table>
+
+	</div></td>
+    <td width=10>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Org Profile toolbox</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Org profile widget manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Widget Place Manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+    <td width=11>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Paris indicator Tools</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Paris indicator target manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+  <tr>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Message tools</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Message Manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+    <td width=10>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Resources tools</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Resource label Manager</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Template documents manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+    <td width=11>&nbsp;</td>
+    <td width=314 class="admin_landing_page_box" valign=top>
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Results dashboard tools</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Results Dashboard Data Manage</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Indicator Chart Widget Manager</a></td>
+  </tr>
+</table>
+
+	</div></td>
+  </tr>
+</table>			</fieldset>
 			
 			
 			

@@ -647,3 +647,9 @@ div.adminicon{float:right;}
 .soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
 html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9999;margin:3px 0px 0px 0px;}
+
+.admin_landing_page_box {background-color:#FFFFFF; border-left:1px solid #DADAD6; border-top:1px solid #DADAD6; border-right:2px solid #DADAD6; border-bottom:2px solid #DADAD6;}
+.admin_landing_page_box_cont {padding:10px;}
+.admin_landing_page_box_title {font-size:12px; color:#000000; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:5px; margin-bottom:10px;}
+.admin_landing_page_box_cont table a {font-size:11px; font-weight:bold;}
+.admin_box_label {padding-left:5px;}

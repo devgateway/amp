@@ -764,7 +764,56 @@
                 </td>
               </tr>
             </table>
-            <br />
+            
+			
+			
+			
+				<fieldset style="background-color:#F2F2F2;">
+			<legend><span class="legend_label">Administrative Tools</span></legend>
+			
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width=314 class="admin_landing_page_box">
+	<div class="admin_landing_page_box_cont">
+	<div class="admin_landing_page_box_title">Global administration and maintenance of AMP</div>
+	<table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label"><a href=#>Global settings</a></td>
+  </tr>
+    <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td><a href=#>Global permission Manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td><a href=#>Global feature Manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td><a href=#>Job Manager</a></td>
+  </tr>
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td><a href=#>Flag uploader</a></td>
+  </tr>
+
+</table>
+
+	</div></td>
+    <td width=10>&nbsp;</td>
+    <td width=314>&nbsp;</td>
+    <td width=11>&nbsp;</td>
+    <td width=314>&nbsp;</td>
+  </tr>
+</table>
+
+			</fieldset>
+			
+			
+			
+			
+			<br />
           </td>
         </tr>
       </table>

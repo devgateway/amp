@@ -11,11 +11,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -33,8 +33,10 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -989,5 +991,52 @@ public class DbUtil {
 
 
         return activities;
+    }
+    public static AmpContact getPrimaryContactForOrganization(Long orgId) throws DgException{
+    	AmpContact contact=null;
+    	Session session = null;
+        StringBuilder queryString = new StringBuilder();
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString.append("select con from ");
+            queryString.append(AmpOrganisation.class.getName());
+            queryString.append(" org inner join org.organizationContacts orgContact  ");
+            queryString.append(" inner join orgContact.contact con ");
+            queryString.append(" where org.ampOrgId=:orgId and orgContact.primaryContact=true ");
+			qry = session.createQuery(queryString.toString());
+			qry.setLong("orgId", orgId);
+			contact=(AmpContact)qry.uniqueResult();
+        } catch (Exception ex) {
+            logger.error("Unable to get contact from database ",ex);
+            throw new DgException(ex);
+
+        }
+    	return contact;
+    }
+    public static void saveAdditionalInfo(Long orgId, String orgBackground,String orgDescription) throws DgException{
+        Session sess = null;
+        Transaction tx = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            tx = sess.beginTransaction();
+            AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
+            org.setOrgBackground(orgBackground);
+            org.setOrgDescription(orgDescription);
+            sess.update(org);
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("Unable to update", e);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }
+              throw new DgException(e);
+        }
+
     }
 }

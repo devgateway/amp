@@ -817,31 +817,7 @@ public class OrgProfileUtil {
     }
 
   
-    public static void saveAdditionalInfo(Long orgId, String orgBackground,String orgDescription) throws DgException{
-        Session sess = null;
-        Transaction tx = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
-            AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
-            org.setOrgBackground(orgBackground);
-            org.setOrgDescription(orgDescription);
-            sess.update(org);
-            tx.commit();
-        } catch (Exception e) {
-            logger.error("Unable to update", e);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }
-              throw new DgException(e);
-        }
-
-    }
+   
 
 	public static long getParisIndicator10bValue(Long year,
 			List<NodeWrapper> nodeWrappers, Long[] orgIds, Long groupId)

@@ -1,12 +1,7 @@
 package org.digijava.module.visualization.action;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -14,23 +9,16 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,24 +31,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -69,22 +52,12 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
-import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
-import org.digijava.module.visualization.util.DbUtil;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
-import org.digijava.module.widget.helper.ChartOption;
-import org.digijava.module.widget.util.ChartWidgetUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.jfree.data.UnknownKeyException;
-import org.jfree.data.category.CategoryDataset;
+import org.digijava.module.visualization.util.DashboardUtil;
+import org.digijava.module.visualization.util.DbUtil;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.digijava.module.aim.helper.FormatHelper;
 
 import sun.misc.BASE64Decoder;
 
@@ -240,6 +213,10 @@ public class DataDispatcher extends DispatchAction {
 		JSONArray selConfigs = new JSONArray();
 		JSONObject rootSelSubSectors = new JSONObject();
 		JSONArray selSubSectors = new JSONArray();
+		JSONObject rootOrgContacts = new JSONObject();
+		JSONArray selOrgContacts = new JSONArray();
+		JSONObject rootAdditionalInfo = new JSONObject();
+		JSONObject selAdditionalInfo = new JSONObject();
 		
 		if (orgsGrpIds!=null && orgsGrpIds.length>0 && orgsGrpIds[0]!=-1) {
 			for (int i = 0; i < orgsGrpIds.length; i++) {
@@ -261,6 +238,67 @@ public class DataDispatcher extends DispatchAction {
 		rootSelOrgs.put("list", selOrgs);
 		children.add(rootSelOrgs);
 		
+		if(visualizationForm.getFilter().getDashboardType()==1){
+			Long currentOrgId=null;
+			if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
+				if(orgsId!=-1){
+					currentOrgId=orgsId;
+				}
+			}
+			else{
+				if(selOrgs.size()==1){
+					currentOrgId=orgsIds[0];
+				}
+			}
+			if( currentOrgId!=null){
+			AmpContact contact=DbUtil.getPrimaryContactForOrganization(currentOrgId);
+			if(contact!=null){
+			JSONObject jcontact = new JSONObject();
+			jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
+			jcontact.put("name", contact.getName()+" "+contact.getLastname());
+			JSONArray emails=new JSONArray();
+			JSONArray phones=new JSONArray();
+			JSONArray faxes=new JSONArray();
+			if(contact.getProperties()!=null){
+				for (AmpContactProperty property : contact.getProperties()) {
+					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+						JSONObject email= new JSONObject();
+						email.put("value",property.getValue());
+						emails.add(email);
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+						JSONObject phone= new JSONObject();
+						phone.put("value",property.getValueAsFormatedPhoneNum());
+						phones.add(phone);
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+						JSONObject fax= new JSONObject();
+						fax.put("value",property.getValue());
+						faxes.add(fax);
+					}
+				}
+			}
+			jcontact.put("email", emails);
+			jcontact.put("phones", phones);
+			jcontact.put("faxes", faxes);
+			selOrgContacts.add(jcontact);
+			
+			}
+				AmpOrganisation organization=DbUtil.getOrganisation(currentOrgId);
+				JSONObject jorganizationInfo = new JSONObject();
+				jorganizationInfo.put("orgId", currentOrgId);
+				jorganizationInfo.put("orgBackground", organization.getOrgBackground());
+				jorganizationInfo.put("orgDescription", organization.getOrgDescription());
+				selAdditionalInfo.put("info", jorganizationInfo);
+				
+			}
+			rootOrgContacts.put("type", "SelOrgContact");
+			rootOrgContacts.put("list", selOrgContacts);
+			children.add(rootOrgContacts);
+			rootAdditionalInfo.put("type","SelAdditionalInfo");
+			rootAdditionalInfo.put("additionalInfo",selAdditionalInfo);
+			children.add(rootAdditionalInfo);
+		}
+		
+		    	
 		if (regsIds!=null && regsIds.length>0 && regsIds[0]!=-1) {
 			for (int i = 0; i < regsIds.length; i++) {
 				child.put("name", LocationUtil.getAmpCategoryValueLocationById(regsIds[i]).getName());

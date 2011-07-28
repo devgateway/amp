@@ -1398,9 +1398,11 @@ function toggleSettings(){
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
 		<li><a href="#tab1"><div>Visualization</div></a></li>
-		<!--<li><a href="#tab2"><div>Contact Information</div></a></li>
-		<li><a href="#tab3"><div>Additional Notes</div></a></li>
-	--></ul>
+		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
+		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
+		</c:if>
+	</ul>
 	<div class="yui-content">
 	<div id="tab1">
 		<fieldset>
@@ -1561,14 +1563,14 @@ function toggleSettings(){
 			</fieldset>
 		</c:if>
 	</div>
-	<!--<div id="tab2">
-		Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
+	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+	<div id="tab2">
+		<digi:trn>No Contact Information available for current filter selection</digi:trn>
 	</div>
 	<div id="tab3">
-		Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.
-		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
 	</div>
-	--></div>
+	</c:if>
+	</div>
 </div>
 
 </td>
@@ -2086,6 +2088,106 @@ function refreshBoxes(o){
 			case "AvgProjSize":
 				valAvgProjSize = child.value;
 				break;
+			case "SelOrgContact":
+				if (child.list.length ==1) {
+					var contact=child.list[0];
+					var contactMarkup = new Array();
+					contactMarkup.push("<table class=\"inside\">");
+					contactMarkup.push("<tr>");
+					contactMarkup.push("<td class=\"inside\"><digi:trn>Title</digi:trn>:</td>");
+					contactMarkup.push("<td class=\"inside\">");
+					contactMarkup.push(contact.title);
+					contactMarkup.push("</td>");
+					contactMarkup.push("</tr>");
+					
+					contactMarkup.push("<tr>");
+					contactMarkup.push("<td class=\"inside\"><digi:trn>Name</digi:trn>:</td>");
+					contactMarkup.push("<td class=\"inside\">");
+					contactMarkup.push(contact.name);
+					contactMarkup.push("</td>");
+					contactMarkup.push("</tr>");
+					
+					contactMarkup.push("<tr>");
+					contactMarkup.push("<td class=\"inside\"><digi:trn>Emails</digi:trn>:</td>");
+					contactMarkup.push("<td class=\"inside\">");
+					var conactEmails=contact.email;
+				
+					for(var i=0;i<conactEmails.length;i++){
+						contactMarkup.push(conactEmails[i].value);
+						contactMarkup.push("<br/>");
+						
+					}
+		
+					contactMarkup.push("</td>");
+					contactMarkup.push("</tr>");
+					
+					contactMarkup.push("<tr>");
+					contactMarkup.push("<td class=\"inside\"><digi:trn>Phones</digi:trn>:</td>");
+					contactMarkup.push("<td class=\"inside\">");
+					var conactPhones=contact.phones;
+					for(var i=0;i<conactPhones.length;i++){
+						contactMarkup.push(conactPhones[i].value);
+						contactMarkup.push("<br/>");
+						
+					}
+					contactMarkup.push("</td>");
+					contactMarkup.push("</tr>");
+					
+					contactMarkup.push("<tr>");
+					contactMarkup.push("<td class=\"inside\"><digi:trn>Faxes</digi:trn>:</td>");
+					contactMarkup.push("<td class=\"inside\">");
+					var conactFaxes=contact.faxes;
+					for(var i=0;i<conactFaxes.length;i++){
+						contactMarkup.push(conactFaxes[i].value);
+						contactMarkup.push("<br/>");
+						
+					}
+					contactMarkup.push("</td>");
+					contactMarkup.push("</tr>");
+					contactMarkup.push("</table>");
+					$("#tab2").html(contactMarkup.join(""));
+					
+				}
+				else{
+					$("#tab2").html("<digi:trn>No Contact Information available for current filter</digi:trn>");
+				}
+				break;
+			case "SelAdditionalInfo":
+				if (typeof child.additionalInfo.info != 'undefined') {
+					var info=child.additionalInfo.info;
+					var infoMarkup = new Array();
+					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
+					infoMarkup.push("<tr>");
+					infoMarkup.push("<td class=\"inside\"><digi:trn>Background of donor</digi:trn>:</td>");
+					infoMarkup.push("<td class=\"inside\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgBackground\">");
+					infoMarkup.push(info.orgBackground);
+					infoMarkup.push("</textarea>");
+					infoMarkup.push("</td>");
+					infoMarkup.push("</tr>");
+
+					infoMarkup.push("<tr>");
+					infoMarkup.push("<td class=\"inside\"><digi:trn>Description</digi:trn>:</td>");
+					infoMarkup.push("<td class=\"inside\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgDescription\">");
+					infoMarkup.push(info.orgDescription);
+					infoMarkup.push("</textarea>");
+					infoMarkup.push("</td>");
+					infoMarkup.push("</tr>");
+					
+					infoMarkup.push("<tr>");
+					infoMarkup.push("<td class=\"inside\" colspan=\"2\">");
+					infoMarkup.push("<input type=\"button\" value=\"<digi:trn>Save</digi:trn>\" onclick=\"saveAdditionalInfo("+info.orgId+")\"/>");
+					infoMarkup.push("</td>");
+					infoMarkup.push("</tr>");
+					infoMarkup.push("</tbody></table>");
+					var markup=infoMarkup.join("");
+					$("#tab3").html(markup);
+				}
+				else{
+					$("#tab3").html("<digi:trn>No Additional Information available for current filter</digi:trn>");
+				}
+				break; 
 				
 		}
 	}
@@ -2337,6 +2439,28 @@ function initDashboard(){
 	}
 	callbackApplyFilter();
 }
+
+function  saveAdditionalInfo(orgId){
+    var postString		="orgBackground=" + document.getElementById("orgBackground").value+
+        "&orgDescription="+document.getElementById("orgDescription").value+"&orgId="+orgId ;
+		<digi:context name="url" property="context/visualization/saveOrgInfo.do"/>
+        var url = "${url}";
+        $("#saveResultMsg").html("<digi:trn>saving information, please wait</digi:trn>...");
+        YAHOO.util.Connect.asyncRequest("POST", url, additionalInfoCallback, postString);
+    }
+
+    var additionalInfoResponseSuccess = function(o){
+    	$("#saveResultMsg").html("<digi:trn>Information was saved</digi:trn>!");
+    }
+
+    var additionalInfoResponseFailure = function(o){
+    	$("#saveResultMsg").html("<digi:trn>Failed to save information</digi:trn>!");
+    }
+    var additionalInfoCallback =
+        {
+        success:additionalInfoResponseSuccess,
+        failure:additionalInfoResponseFailure
+    };
 
 function getValueToFlash(idContainer, field){
 	var inputObject = document.getElementById(idContainer + field);

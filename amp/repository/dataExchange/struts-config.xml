@@ -43,7 +43,7 @@
 			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
 			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>
-		<action path="/dataExchange/manageSource" scope="request" type="org.digijava.module.dataExchange.action.ManageSourceAction" name="manageSourceForm" 							validate="false">
+		<action path="/dataExchange/manageSource" scope="request" type="org.digijava.module.dataExchange.action.ManageSourceAction" name="manageSourceForm" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=de_showSources"/>
 			<forward name="showSources" path="/dataExchange/manageSource.do?htmlView=true"/>
 			<forward name="showSourceDetails" path="/showLayout.do?layout=de_showSourceDetails"/>

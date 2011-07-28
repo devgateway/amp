@@ -11,34 +11,42 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
-import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CodeReqType;
@@ -51,6 +59,7 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Location;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.OtherIdentifier;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ParticipatingOrg;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlainType;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ReportingOrg;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Sector;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType;
@@ -122,7 +131,7 @@ public class IatiActivityWorker {
 		return actExist;
 	}
 
-	public void checkContent() {
+	public ArrayList<AmpMappedField> checkContent() {
 		// TODO Auto-generated method stub
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
@@ -180,6 +189,12 @@ public class IatiActivityWorker {
 				logs.add(existOrganization);
 			}
 			
+			if(contentItem instanceof Location){
+				Location item = (Location)contentItem;
+				AmpMappedField existLocation	  = checkLocation(item);
+				logs.add(existLocation);
+			}
+			
 			if(contentItem instanceof Sector){
 				Sector item = (Sector)contentItem;
 				AmpMappedField existVocabularyCode = checkVocabularyCode(item);
@@ -188,18 +203,17 @@ public class IatiActivityWorker {
 				logs.add(existSector);
 			}
 			
-			
 			if(contentItem instanceof Transaction){
 				Transaction item = (Transaction)contentItem;
 				boolean ok 		 = false;
 				ok 				 = checkIATITransaction(item,logs);
 			}
-			
-			
 		}
-		System.out.println("done");
+		return logs;
 	}
 	
+
+
 	public void importActivity(AmpActivityVersion a){
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		
@@ -248,7 +262,121 @@ public class IatiActivityWorker {
 		processRelOrgsStep(a,iatiPartOrgList);
 		processActInternalIdsStep(a,iatiOtherIdList);
 		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
+		processLocationStep(a,iatiLocationList);
+		processContactsStep(a,iatiContactList);
 	}
+	
+	
+	private void processContactsStep(AmpActivityVersion a, ArrayList<ContactInfo> iatiContactList) {
+		if (iatiContactList.isEmpty()) return;
+		Set<AmpActivityContact> activityContacts=new HashSet<AmpActivityContact>();
+		for (Iterator<ContactInfo> it = iatiContactList.iterator(); it.hasNext();) {
+			ContactInfo contactInfo = (ContactInfo) it.next();
+			AmpContact ampContact = new AmpContact();
+			setAmpContactDetails(contactInfo, ampContact);
+			try {
+				ContactInfoUtil.saveOrUpdateContact(ampContact);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			AmpActivityContact ampActContact = new AmpActivityContact();
+			ampActContact.setActivity(a);
+			ampActContact.setContact(ampContact);
+			ampActContact.setContactType(org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
+			activityContacts.add(ampActContact);
+			
+		}
+		
+		a.setActivityContacts(activityContacts);
+		
+		
+	}
+
+	private void setAmpContactDetails(ContactInfo contactInfo, AmpContact ampContact) {
+		Set<AmpContactProperty> contactProperties=new TreeSet<AmpContactProperty>();
+		for (Iterator<Object> it = contactInfo.getOrganisationOrPersonNameOrTelephone().iterator(); it.hasNext();) {
+			Object contentItem = (Object) it.next();
+			if(contentItem instanceof JAXBElement){
+				JAXBElement i = (JAXBElement)contentItem;
+
+				//name
+				if(i.getName().equals(new QName("person-name"))){
+					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
+					setContactName(item.getValue().getContent().trim(),ampContact);
+				}
+				//organisation
+				if(i.getName().equals(new QName("organisation"))){
+					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
+					ampContact.setOrganisationName(item.getValue().getContent());
+				}
+				//phone
+				if(i.getName().equals(new QName("telephone"))){
+					ContactInfo.Telephone item = (ContactInfo.Telephone)i.getValue();
+					AmpContactProperty acp = new AmpContactProperty();
+					acp.setValue(item.getContent());
+					acp.setName(Constants.CONTACT_PROPERTY_NAME_PHONE);
+					contactProperties.add(acp);
+				}
+
+				//email
+				if(i.getName().equals(new QName("email"))){
+					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
+					AmpContactProperty acp = new AmpContactProperty();
+					acp.setValue(item.getValue().getContent());
+					acp.setName(Constants.CONTACT_PROPERTY_NAME_EMAIL);
+					contactProperties.add(acp);
+				}
+
+				//mailing-address
+				if(i.getName().equals(new QName("mailing-address"))){
+					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
+					ampContact.setOfficeaddress(item.getValue().getContent());
+				}
+			}
+		}
+		ampContact.setProperties(contactProperties);
+	}
+
+	private void setContactName(String s, AmpContact ampContact) {
+		// TODO Auto-generated method stub
+		int i = s.indexOf(" ");
+		ampContact.setName(s.substring(0,i));
+		ampContact.setLastname(s.substring(i+1,s.length()));
+	}
+
+	private void processLocationStep(AmpActivityVersion a, ArrayList<Location> iatiLocationList) {
+		
+		// TODO Implementation Location and Implementation Level 
+		
+		if(iatiLocationList.isEmpty()) return;
+		Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
+		for (Iterator it = iatiLocationList.iterator(); it.hasNext();) {
+			Location location = (Location) it.next();
+			String locationType	= null;
+			String locationName	= null;
+			String locationCountry = null;
+			String adm1 = null;
+			String adm2 = null;
+			String adm3 = null;
+
+			getLocationDetails(location,locationName,locationType,locationCountry,adm1,adm2,adm3);
+			AmpLocation ampLocation = getAmpLocation(toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
+						   toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3));
+			AmpActivityLocation actLoc	=	new AmpActivityLocation();
+			actLoc.setActivity(a);
+			actLoc.setLocation(ampLocation);
+			Double percent=new Double(location.getPercentage().doubleValue());
+            actLoc.setLocationPercentage(percent.floatValue());
+			locations.add(actLoc);
+			
+		}
+		if(a.getLocations() == null)
+			a.setLocations(new HashSet<AmpActivityLocation>());
+		else a.getLocations().clear();
+		a.getLocations().addAll(locations);
+		
+	}
+
 	
 	
 	private void processFundingStep(AmpActivityVersion a, ArrayList<Transaction> iatiTransactionList,	JAXBElement<CodeReqType> iatiDefaultFinanceType,
@@ -774,7 +902,70 @@ public class IatiActivityWorker {
 		return org;
 	}
 	
+	private AmpLocation getAmpLocation(String iatiItems, String iatiValues){
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,iatiItems,iatiValues,lang,null,AmpCategoryValueLocations.class,null,null,"active");
+		AmpCategoryValueLocations ampCVLoc = DynLocationManagerUtil.getLocationByIdRequestSession(checkMappedField.getAmpId());
+		AmpLocation ampLoc = null;
+		try {
+			ampLoc = DynLocationManagerUtil.getAmpLocation(ampCVLoc);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ampLoc;
+	}
 	
+	private AmpMappedField checkLocation(Location l) {
+		
+		String locationType	= null;
+		String locationName	= null;
+		String locationCountry = null;
+		String adm1 = null;
+		String adm2 = null;
+		String adm3 = null;
+
+		getLocationDetails(l,locationName,locationType,locationCountry,adm1,adm2,adm3);
+		
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
+				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class,null,null,"inactive");
+		AmpMappedField log = new AmpMappedField(checkMappedField);
+		logMappingField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
+				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class,null,null,"inactive", checkMappedField, log);
+		return log;
+	}
+	
+
+	private void getLocationDetails(Location l,String locationName, String locationType,
+			String locationCountry, String adm1, String adm2, String adm3) {
+
+		for (Iterator<Object> it = l.getLocationTypeOrNameOrDescription().iterator(); it.hasNext();) {
+			Object contentItem = (Object) it.next();
+			if(contentItem instanceof JAXBElement){
+				JAXBElement i = (JAXBElement)contentItem;
+
+				//location-type
+				if(i.getName().equals(new QName("location-type"))){
+					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+					locationType = item.getValue().getCode();
+				}
+				//location name
+				if(i.getName().equals(new QName("name"))){
+					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
+					locationName = printList(item.getValue().getContent());
+				}
+				
+				//administrative
+				if(i.getName().equals(new QName("administrative"))){
+					Location.Administrative item = (Location.Administrative)i.getValue();
+					locationCountry = item.getCountry();
+					adm1 = item.getAdm1();
+					adm2 = item.getAdm2();
+					adm3 = item.getOtherAttributes().get(new QName("adm3"));
+				}
+				
+			}
+		}
+		
+	}
 
 	private AmpMappedField checkOrganizationType(String type) {
 		if(type==null) return null;
@@ -972,6 +1163,10 @@ public class IatiActivityWorker {
 	private String toIATIValues(String a, String b, String c, String d, String e){
 		return toIATIValues(a,b)+"|||"+toIATIValues(c,d,e);
 	}
+	
+	private String toIATIValues(String a, String b, String c, String d, String e, String f){
+		return toIATIValues(a,b,c)+"|||"+toIATIValues(d,e,f);
+	}
 
 	
 	private DEMappingFields checkMappedField(String iatiPath, String iatiItems,
@@ -1056,6 +1251,22 @@ public class IatiActivityWorker {
 		}
     	
     	return configs;
+	}
+	
+	
+	private AmpCategoryValue getAmpCategoryValueByString(String element, String categoryKey ){
+		if( !isValidString(element) ) return null; 
+		AmpCategoryValue acv=null;
+		Collection<AmpCategoryValue> allCategValues;
+		
+		allCategValues = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
+		
+		
+		for (Iterator itacv = allCategValues.iterator(); itacv.hasNext();) {
+			acv = (AmpCategoryValue) itacv.next();
+			if(acv.getValue().compareTo(element) == 0) return acv;
+		}
+		return null;
 	}
 	
 	//****************************************** Other methods ******************************

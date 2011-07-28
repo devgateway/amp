@@ -77,10 +77,17 @@ public class ManageSourceAction extends MultiAction {
 		}
 		if ( "execute".equals( msForm.getAction() ) ) {
 			//request.setAttribute("htmlView","true");
-			modeExecuteSource(mapping, msForm, request, response);
+			modeExecuteSource(mapping, msForm, request, response, "idml");
+			return mapping.findForward("showSources");
+		}
+		
+		if ( "executeIATI".equals( msForm.getAction() ) ) {
+			//request.setAttribute("htmlView","true");
+			modeExecuteSource(mapping, msForm, request, response,"iati");
 			//return mapping.findForward("forward");
 		}
 		
+	//	modeExecuteSource(mapping, msForm, request, response);
 		return modeShowSourceList(mapping, msForm, request, response);
 	}
 	
@@ -201,10 +208,16 @@ public class ManageSourceAction extends MultiAction {
 	}
 	
 	public void modeExecuteSource(ActionMapping mapping, ManageSourceForm msForm,
-			HttpServletRequest request, HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response, String type)
 			throws Exception {
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//		try {
+//			FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		try {
 			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId()).getAttachedFile();
 			SdmItem item = null;
@@ -224,13 +237,19 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
+	//	DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( new Long(1));
 		if(ss.getLogs() == null)
 			ss.setLogs(new ArrayList<DELogPerExecution>());
 		
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
-		deib.run(request);
+//		deib.run(request);
+		if("iati".compareTo(type) ==0)
+			deib.runIATI(request);
+		if("idml".compareTo(type) ==0)
+			deib.run(request);
+
 	}
 
 }

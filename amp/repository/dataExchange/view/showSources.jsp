@@ -31,7 +31,7 @@ function deleteSource(sourceId) {
 
 function execute(sourceId){
 	var form = document.getElementById('manageForm');
-	form.action = "/dataExchange/manageSource.do?action=execute&executingSourceId="+sourceId;
+	form.action = "/dataExchange/manageSource.do?action=executeIATI&executingSourceId="+sourceId;
 	form.target="_self"
 	form.submit();
 }

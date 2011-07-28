@@ -3,9 +3,7 @@
  */
 package org.digijava.module.dataExchange.engine;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -72,6 +70,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
@@ -1760,52 +1759,7 @@ public class DEImportBuilder {
 	        
 	}
 
-	public boolean checkIATIInputString(String inputLog){
-		boolean isOk = true;
-		IatiActivities iActs = null;
-		//DEImportValidationEventHandler log = new DEImportValidationEventHandler();
-		try {
-			JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
-	        Unmarshaller m = jc.createUnmarshaller();
-	        URL rootUrl   = this.getClass().getResource("/");
-	        String path="";
-	        try {
-				path     = rootUrl.toURI().resolve("../../").getPath();
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-	        boolean xsdValidate = true;
-	        
-	        	if(xsdValidate){
-	                // create a SchemaFactory that conforms to W3C XML Schema
-	                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-	                 // parse the purchase order schema
-	                 Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));
-
-	                 m.setSchema(schema);
-                     
-	                 System.out.println("-----------------"+path+"doc/dataExchange/iati.xml");
-	                 iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
-	           }
-	        } 
-			catch (SAXException e) {
-				isOk = false;
-				e.printStackTrace();
-			}
-	        catch (javax.xml.bind.JAXBException jex) {
-	        	jex.printStackTrace();
-	        }
-	        catch (Exception e) {
-	        	e.printStackTrace();
-	        }
-	       // inputLog += log.getLog();
-	        if(isOk)
-	        	this.getAmpImportItem().setIatiActivities(iActs);
-	        else this.getAmpImportItem().setIatiActivities(null);
-	        return isOk;
-	        
-	}
 	
 	public DEImportItem getAmpImportItem() {
 		return ampImportItem;
@@ -2110,14 +2064,6 @@ public class DEImportBuilder {
 
 	//*****************************IATI import
 	//private void validateIATIActivity(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
-	private String validateIATIActivity(IatiActivity iActivity, String log) {
-		log = "";
-		IatiActivityWorker iWorker= new IatiActivityWorker(iActivity, log);
-		iWorker.checkifActivityExists();
-		
-		iWorker.checkContent();
-		return log;
-	}
 
 	public void runIATI(HttpServletRequest request) {
 		// TODO Auto-generated method stub
@@ -2146,55 +2092,106 @@ public class DEImportBuilder {
 		boolean ok 	 =	checkIATIInputString(execLog.getDescription());
 		iLog.saveObject(this.getDESourceSetting());
 		if(!ok) return;
-		generateFieldHashMap();
+		//generateFieldHashMap();
 		processIATIFeed(execLog, iLog, request);
 	}
 
+	private ArrayList<AmpMappedField> checkIATIActivity(IatiActivity iActivity, String log) {
+		IatiActivityWorker iWorker= new IatiActivityWorker(iActivity, log);
+		iWorker.checkifActivityExists();
+		return iWorker.checkContent();
+	}
+	
 	private void processIATIFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
-			AmpActivity activity 	= new AmpActivity();//getAmpActivity(actType);
+			//AmpActivity activity 	= new AmpActivity();//getAmpActivity(actType);
 			
-			iatiActs.getIatiActivityOrAny();
 			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
 				IatiActivity iAct = (IatiActivity) it.next();
 				String logAct = "";
-				validateIATIActivity(iAct,logAct);
-			}
-			DELogPerItem	item	= new DELogPerItem();
-			item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
-			DEActivityLog contentLogger = new DEActivityLog();
-			//validateActivityContent(actType, contentLogger);
-			
-			
-			if(log.getLogItems() == null) 
-				log.setLogItems(new ArrayList<DELogPerItem>());
-			
-			item.setDeLogPerExecution(log);
-			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-
-			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
-			{
-				item.setDescription("Activity: " +contentLogger.display());
-				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				//iLog.saveObject(item);
+				ArrayList<AmpMappedField> activityLogs = checkIATIActivity(iAct,logAct);
+				
+				DELogPerItem	item	= new DELogPerItem();
+				item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
+				DEActivityLog contentLogger = new DEActivityLog();
+				//validateActivityContent(actType, contentLogger);
+				
+				if(log.getLogItems() == null) 
+					log.setLogItems(new ArrayList<DELogPerItem>());
+				
+				item.setDeLogPerExecution(log);
+				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+	
+				if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
+				{
+					item.setDescription("Activity: " +contentLogger.display());
+					item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
+					//iLog.saveObject(item);
+					log.getLogItems().add(item);
+					iLog.saveObject(log.getDeSourceSetting());
+					//continue;
+				}
+				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+				item.setDescription("Activity: "+" OK");
 				log.getLogItems().add(item);
-				iLog.saveObject(log.getDeSourceSetting());
-				//continue;
 			}
-			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-			item.setDescription("Activity: "+" OK");
 			
-
-			log.getLogItems().add(item);
 			//item.setDeLogPerExecution(log);
 			//item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 			iLog.saveObject(log.getDeSourceSetting());
 		
 	}
 	
-	
+	public boolean checkIATIInputString(String inputLog){
+		boolean isOk = true;
+		IatiActivities iActs = null;
+		DEImportValidationEventHandler log = new DEImportValidationEventHandler();
+		try {
+			JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
+	        Unmarshaller m = jc.createUnmarshaller();
+	        URL rootUrl   = this.getClass().getResource("/");
+	        String path="";
+	        try {
+				path     = rootUrl.toURI().resolve("../../").getPath();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+	        boolean xsdValidate = true;
+	        
+	        	if(xsdValidate){
+	                // create a SchemaFactory that conforms to W3C XML Schema
+	                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+	                 // parse the purchase order schema
+	                 Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));
+
+	                 m.setSchema(schema);
+	                 m.setEventHandler(log);
+	                 //System.out.println("-----------------"+path+"doc/dataExchange/iati.xml");
+	                
+	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
+	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
+	           }
+	        } 
+			catch (SAXException e) {
+				isOk = false;
+				e.printStackTrace();
+			}
+	        catch (javax.xml.bind.JAXBException jex) {
+	        	jex.printStackTrace();
+	        }
+	        catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        inputLog += log.getLog();
+	        if(isOk)
+	        	this.getAmpImportItem().setIatiActivities(iActs);
+	        else this.getAmpImportItem().setIatiActivities(null);
+	        return isOk;
+	        
+	}
 	
 }

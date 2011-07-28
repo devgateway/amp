@@ -18,6 +18,14 @@ function toggleGroup(group_id){
 	$(strId+'_plus').toggle();
 	$('#log_'+group_id).toggle('fast');
 }
+
+function importAll() {
+	alert('needs implementation !');
+}
+
+function importItem(){
+	alert('needs implementation !');
+}
 </script>
 
 <digi:instance property="showLogsForm" />
@@ -137,11 +145,16 @@ function toggleGroup(group_id){
 							    </td>							    
 							    
 							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-							    	<input type="button" class="buttonx_sm" value="Import" />
+							    	<input type="button" class="buttonx_sm" value="Import" onclick="importItem('${item.id}');"/>
 							    </td>
 							</tr>
 						</logic:iterate>						
-									
+						<tr>
+						    <td colspan="5" bgcolor=#FFFFFF class=inside>&nbsp;</td>
+						    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
+						    	<input type="button" class="buttonx_sm" value="Import All" onclick="importAll()"/>
+						    </td>
+						</tr>		
 					</logic:notEmpty>										
 				</table>
 			</td>

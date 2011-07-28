@@ -78,7 +78,7 @@ public class ManageSourceAction extends MultiAction {
 		if ( "execute".equals( msForm.getAction() ) ) {
 			//request.setAttribute("htmlView","true");
 			modeExecuteSource(mapping, msForm, request, response);
-			return mapping.findForward("showSources");
+			//return mapping.findForward("forward");
 		}
 		
 		return modeShowSourceList(mapping, msForm, request, response);
@@ -208,13 +208,15 @@ public class ManageSourceAction extends MultiAction {
 		try {
 			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId()).getAttachedFile();
 			SdmItem item = null;
-			for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
-				item = sdmItem;
-				break;
-			}
-			ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
-			FileCopyUtils.copy(inStream, outputStream);
-			//new ByteArrayInputStream(xmlContent)
+			if (attachedFile!=null) {
+				for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+					item = sdmItem;
+					break;
+				}
+				ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
+				FileCopyUtils.copy(inStream, outputStream);
+			}	
+			
 			//FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

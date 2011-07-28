@@ -19,6 +19,10 @@ function changeSource() {
 	form.target="_self"
 	form.submit();
 }
+
+function chechLog(logId) {
+	alert('needs implementation');
+}
 </script>
 
 <digi:instance property="showLogsForm" />
@@ -109,7 +113,7 @@ function changeSource() {
 							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
 							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b>view</b></a> | 
-							    		<a href=# class="t_sm"><b>check</b></a>
+							    		<a href="javascript:chechLog('${log.id}')" class="t_sm"><b>check</b></a>
 							    	</div>
 							    </td>
 							</tr>

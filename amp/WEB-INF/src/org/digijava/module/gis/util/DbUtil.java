@@ -718,7 +718,7 @@ public class DbUtil {
            querySrc.append(" where ds.sector.ampSectorId=:sectorId and");
            querySrc.append(" (ds.location.regionLocation.parentCategoryValue.value='Region' or");
            querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
-           querySrc.append(" group by ds.indicator.indicatorId order by ds.indicator.name");
+           querySrc.append(" order by ds.indicator.name");
            Query q = session.createQuery(querySrc.toString());
            q.setLong("sectorId", sectorId);
            List allIndicatorList = q.list();
@@ -1143,7 +1143,7 @@ public class DbUtil {
               session = PersistenceManager.getRequestDBSession();
 
               StringBuffer queryString = new StringBuffer("select distinct indVal.subgroup.ampIndicatorSubgroupId, ");
-              queryString.append("indVal.subgroup.subgroupName from ");
+              queryString.append("indVal.subgroup.subgroupName, year(indVal.valueDate) from ");
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
               queryString.append(IndicatorSector.class.getName());

@@ -37,8 +37,11 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 <script language="javascript">
 <!--
+
+
 
 // TODO: Move this to individual script file
 $D = YAHOO.util.Dom;
@@ -145,6 +148,41 @@ function manageSectorEntities(option,configId,sectorId){
 	}
 	
 }
+var currentIndex=-1;
+var searchterm;
+var searchResult;
+function findNext(divId){
+	if(currentIndex==-1){
+		searchterm=$("#"+divId+"_search").val();
+		searchResult=$("#"+divId+" span:containsi('"+searchterm+"')");
+		searchResult.css("font-weight","bold");
+	}
+	if(searchResult.length-1>currentIndex){
+		searchResult.css("color","black");
+		currentIndex++;
+		var currentSpan=searchResult.eq(currentIndex);
+		currentSpan.css("color","red");
+		currentSpan.prev().focus(); 
+	}
+}
+function findPrev(divId){
+	if(currentIndex==-1){
+		searchterm=$("#"+divId+"_search").val();
+		searchResult=$("#"+divId+" span:containsi('"+searchterm+"')");
+		searchResult.css("font-weight","bold");
+	}
+	if(currentIndex>0){	
+		searchResult.css("color","black");
+		currentIndex--;
+		var currentSpan=searchResult.eq(currentIndex);
+		currentSpan.css("color","red");
+		currentSpan.prev().focus(); 
+	}
+}
+function clearSearch(divId){
+	currentIndex=-1;
+	$("#"+divId+" span").css("color","black").css("font-weight","normal");
+}
 
 -->
 </script>
@@ -200,6 +238,16 @@ function initPanel() {
 	myPanel.render(document.body);
 }
 
+function clearAllLocalSearchResults(){
+	$("#orgGrpDivList span").css("color","black").css("font-weight","normal");
+	$("#orgGrpDivList_search").val('');
+	$("#regionDivList span").css("color","black").css("font-weight","normal");
+	$("#regionDivList_search").val('');
+	$("#sectorDivList span").css("color","black").css("font-weight","normal");
+	$("#sectorDivList_search").val('');
+	currentIndex=-1;
+}
+
 function showPopin() {
 	var msg='\n<digi:trn>Advanced Filters</digi:trn>';
 	myPanel.setHeader(msg);
@@ -212,6 +260,8 @@ function showPopin() {
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		allGraphs[idx].style.display = "none";
 	}
+	
+	
 }
 function hidePopin() {
 	myPanel.hide();
@@ -360,6 +410,7 @@ function changeTab (selected){
 	document.getElementById("organizationsTab").style.display = "none";
 	document.getElementById("regionsTab").style.display = "none";
 	document.getElementById("sectorsTab").style.display = "none";
+	clearAllLocalSearchResults();
 	
 	switch (selected) {
 	case 0:
@@ -576,7 +627,7 @@ function toggleSettings(){
 		<div id="organizationsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
@@ -595,11 +646,14 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
+									<input onkeypress="clearSearch('orgGrpDivList')" id="orgGrpDivList_search" type="text"   class="inputx" />
+									 <input type="button" class="buttonx" onclick="findPrev('orgGrpDivList')"  value='&lt;&lt;' />
+									 <input type="button" onclick="findNext('orgGrpDivList')"  class="buttonx" value="&gt;&gt;"/>
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
@@ -611,7 +665,7 @@ function toggleSettings(){
 							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
 								<input type="checkbox" id="org_grp_check_all"  value="-1" name="org_grp_check" onClick="allOptionChecked(this,'org_grp_check','organization_check')"/> 
 							</c:if>
-							<digi:trn>All</digi:trn>
+							<span><digi:trn>All</digi:trn></span>
 						</li>
 						<c:forEach items="${visualizationform.filter.orgGroupWithOrgsList}" var="item">
 						<li>
@@ -621,14 +675,16 @@ function toggleSettings(){
 							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
 								<input type="checkbox" name="org_grp_check" title="${item.mainEntity.orgGrpName}" value="${item.mainEntity.ampOrgGrpId}" onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})"/> 
 							</c:if>
-								<digi:trn>${item.mainEntity.orgGrpName}</digi:trn>
+								<span><digi:trn>${item.mainEntity.orgGrpName}</digi:trn></span>
 							<br/>
 							<ul style="list-style-type: none">
 							<c:forEach items="${item.subordinateEntityList}" var="organization">
-							<li><input type="checkbox" class="organization_check_${item.mainEntity.ampOrgGrpId}" name="organization_check" title="${organization.name}" value="${organization.ampOrgId}" onclick="uncheckAllOption('org_grp_check');"/>${organization.name}</li> 
+							<li><input type="checkbox" class="organization_check_${item.mainEntity.ampOrgGrpId}" name="organization_check" title="${organization.name}" value="${organization.ampOrgId}" onclick="uncheckAllOption('org_grp_check');"/>
+							<span>${organization.name}</span>
+							</li> 
 							</c:forEach>
 							</ul>
-							</li>
+						</li>
 						</c:forEach>
 						</ul>
 					</div>
@@ -638,7 +694,7 @@ function toggleSettings(){
 		<div id="regionsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
@@ -657,11 +713,14 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
+									<input onkeypress="clearSearch('regionDivList')" id="regionDivList_search" type="text"   class="inputx" />
+									 <input type="button" class="buttonx" onclick="findPrev('regionDivList')"  value='&lt;&lt;' />
+									 <input type="button" onclick="findNext('regionDivList')"  class="buttonx" value="&gt;&gt;"/>
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="regionDivList">
@@ -673,7 +732,7 @@ function toggleSettings(){
 							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 								<input type="checkbox" id="region_check_all" name="region_check" value="-1" onClick="allOptionChecked(this,'region_check','zone_check')"/> 
 							</c:if>
-							<digi:trn>All</digi:trn>
+							<span><digi:trn>All</digi:trn></span>
 						</li>
 						<c:forEach items="${visualizationform.filter.regionWithZones}" var="item">
 						<li>
@@ -683,13 +742,13 @@ function toggleSettings(){
 							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 								<input type="checkbox" name="region_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})"> 
 							</c:if>
-							<span style="font-family: Arial; font-size: 12px;">
+							<span>
 								<digi:trn>${item.mainEntity.name}</digi:trn>
 							</span>
 							<br/>
 							<ul style="list-style-type: none">
 							<c:forEach items="${item.subordinateEntityList}" var="zone">
-							<li><input type="checkbox" class="zone_check_${item.mainEntity.id}" name="zone_check" title="${zone.name}" value="${zone.id}" onclick="uncheckAllOption('region_check');"/>${zone.name}</li> 
+							<li><input type="checkbox" class="zone_check_${item.mainEntity.id}" name="zone_check" title="${zone.name}" value="${zone.id}" onclick="uncheckAllOption('region_check');"/><span>${zone.name}</span></li> 
 							</c:forEach>
 							</ul>
 						</li>
@@ -703,7 +762,7 @@ function toggleSettings(){
 		<div id="sectorsTab" style="height: 91%;" >
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
@@ -722,105 +781,35 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
+								<input onkeypress="clearSearch('sectorDivList')" id="sectorDivList_search" type="text"   class="inputx" />
+									 <input type="button" class="buttonx" onclick="findPrev('sectorDivList')"  value='&lt;&lt;' />
+									 <input type="button" onclick="findNext('sectorDivList')"  class="buttonx" value="&gt;&gt;"/>
+								
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
 						<ul style="list-style-type: none">
-						<c:forEach items="${visualizationform.filter.configWithSectorAndSubSectors}" var="item">
+						<c:forEach items="${visualizationform.filter.configWithSectorAndSubSectors}" var="item" >
+						<c:set var="item" scope="request" value="${item}"/>
 						<c:choose>
 						<c:when test="${item.mainEntity.name=='Primary'}">
 							<field:display name="Primary Sector" feature="Sectors">
-							<li id="config_${item.mainEntity.id}">
-							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
-								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
-							<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
-							</c:if>
-							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
-							</span>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
-							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
-							</c:forEach>
-							</ul>
-							</li>
-						</c:forEach> 
-						</ul>
-						</li>
+							<jsp:include page="sectorPopinHelper.jsp" flush="true" />
 						</field:display>
 						</c:when>
 						<c:when test="${item.mainEntity.name=='Secondary'}">
 							<field:display name="Secondary Sector" feature="Sectors">
-							<li id="config_${item.mainEntity.id}">
-							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
-								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
-							<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
-							</c:if>
-							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
-							</span>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
-							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
-							</c:forEach>
-							</ul>
-							</li>
-						</c:forEach> 
-						</ul>
-						</li>
+							<jsp:include page="sectorPopinHelper.jsp" />
 						</field:display>
 						</c:when>
 						<c:when test="${item.mainEntity.name=='Tertiary'}">
 						<field:display name="Tertiary Sector" feature="Sectors">
-							<li id="config_${item.mainEntity.id}">
-							<input type="radio" id="config_${item.mainEntity.id}_radio" name="sector_config_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onclick="uncheckAllRelatedEntities('sector_check');uncheckAllRelatedEntities('sub_sector_check');">
-								<digi:trn>${item.mainEntity.name} configuration</digi:trn>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
-							<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-								<input type="radio" name="sector_check" title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-								<input type="checkbox" name="sector_check"  title="${sectorHelper.mainEntity.name}" value="${sectorHelper.mainEntity.ampSectorId}" onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})"/> 
-							</c:if>
-							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${sectorHelper.mainEntity.name}</digi:trn>
-							</span>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${sectorHelper.subordinateEntityList}" var="subSector">
-							<li><input type="checkbox" class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}" name="sub_sector_check" title="${subSector.name}" value="${subSector.ampSectorId}" onclick="manageSectorEntities(this,${item.mainEntity.id});"/>${subSector.name}</li> 
-							</c:forEach>
-							</ul>
-							</li>
-						</c:forEach> 
-						</ul>
-						</li>
+							<jsp:include page="sectorPopinHelper.jsp" />
 						</field:display>
 						</c:when>
 						</c:choose>

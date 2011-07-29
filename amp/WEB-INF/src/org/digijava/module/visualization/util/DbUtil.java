@@ -115,7 +115,7 @@ public class DbUtil {
 	            session = PersistenceManager.getRequestDBSession();
 	            queryString.append("select distinct sec from ");
 	            queryString.append(AmpActivitySector.class.getName());
-	            queryString.append(" actSec inner join actSec.classificationConfig cls inner join actSec.sectorId sec where cls.id=:configId and sec.parentSectorId is null");
+	            queryString.append(" actSec inner join actSec.classificationConfig cls inner join actSec.sectorId sec where  cls.id=:configId and sec.ampSecSchemeId=cls.classification and sec.parentSectorId is null order by sec.name");
 				qry = session.createQuery(queryString.toString());
 				qry.setLong("configId", configId);
 	            sectors=qry.list();

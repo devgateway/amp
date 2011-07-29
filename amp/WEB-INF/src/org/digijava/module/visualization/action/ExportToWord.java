@@ -1,6 +1,9 @@
 package org.digijava.module.visualization.action;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
@@ -76,6 +79,13 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.media.jai.codec.PNGEncodeParam;
+import com.sun.media.jai.codecimpl.PNGCodec;
+import com.sun.media.jai.codecimpl.PNGImageEncoder;
+
 import javax.servlet.ServletContext;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -91,10 +101,12 @@ public class ExportToWord extends Action {
 
 	private static Logger logger = Logger.getLogger(ExportToPDF.class);
     public static final Color TITLECOLOR = new Color(34, 46, 93);
-    public static final Color BORDERCOLOR = new Color(255, 255, 255);
+    public static final Color BORDERCOLOR = new Color(0, 255, 0);
     public static final Color CELLCOLOR = new Color(219, 229, 241);
     public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
     public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+    public static final Font TITLEFONT = new Font(Font.TIMES_ROMAN, 24, Font.BOLD);
+    public static final Font SUBTITLEFONT = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
     public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, Color.WHITE);
 
     @Override
@@ -115,11 +127,13 @@ public class ExportToWord extends Action {
         String sectorOpt = request.getParameter("sectorOpt");
         String regionOpt = request.getParameter("regionOpt");
         String summaryOpt = request.getParameter("summaryOpt");
+        String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
-        	String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
+        	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
+            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth chart", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
             String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
             String topRegionTrn = TranslatorWorker.translateText("Top 5 Regions", langCode, siteId);
@@ -177,14 +191,14 @@ public class ExportToWord extends Action {
         
             RtfWriter2.getInstance(doc, baos);
             HttpSession session = request.getSession();
-            String footerText = dashboardTypeTrn + " " + dashboardTrn;
-            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
+            String footerText = pageTrn + " - ";
+            doc.setPageCount(1);
+            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), true);
             footer.setBorder(0);
             doc.setFooter(footer);
             doc.setMargins(20, 20, 40, 40);
             doc.open();
-            com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
-            Paragraph pageTitle = new Paragraph(dashboardTypeTrn + " " + dashboardTrn, pageTitleFont);
+            Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
             doc.add(new Paragraph(" "));
@@ -265,8 +279,10 @@ public class ExportToWord extends Action {
             
           //Summary table.
             if (summaryOpt.equals("1")) {
-				Table summaryTbl = null;
-	            summaryTbl = new Table(6);
+				Table summaryTbl = new Table(6);
+				summaryTbl.setBorder(1);
+				summaryTbl.setBorderWidth(5);
+				summaryTbl.setBorderColor(Color.RED);
 	            summaryTbl.setWidth(100);
 	            RtfCell sumamaryTitleCell = new RtfCell(new Paragraph(summaryTrn + " (" + currName + ")", HEADERFONTWHITE));
 	            sumamaryTitleCell.setColspan(6);
@@ -323,14 +339,18 @@ public class ExportToWord extends Action {
 	            doc.add(new Paragraph(" "));
             }
 	            
+            Paragraph subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+            
           //Top projects table.
             Table topPrjTbl = null;
             topPrjTbl = new Table(2);
             topPrjTbl.setWidth(100);
-            RtfCell topPrjTitleCell = new RtfCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONTWHITE));
-            topPrjTitleCell.setColspan(2);
-            topPrjTitleCell.setBackgroundColor(TITLECOLOR);
-            topPrjTbl.addCell(topPrjTitleCell);
+            //RtfCell topPrjTitleCell = new RtfCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //topPrjTitleCell.setColspan(2);
+            //topPrjTitleCell.setBackgroundColor(TITLECOLOR);
+            //topPrjTbl.addCell(topPrjTitleCell);
             cell = new RtfCell(new Paragraph(projectTrn, HEADERFONTWHITE));
             cell.setBackgroundColor(TITLECOLOR);
             topPrjTbl.addCell(cell);
@@ -351,99 +371,52 @@ public class ExportToWord extends Action {
 				    if (count % 2 == 0)
 			        	cell.setBackgroundColor(CELLCOLOR);
 				    topPrjTbl.addCell(cell);
-	            	count++;
+				    count++;
 			    }
 			    doc.add(topPrjTbl);
 	            doc.add(new Paragraph(" "));
             }
-            /*
-          //Top sectors table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR){
-	            Table topSectorTbl = null;
-	            topSectorTbl = new Table(2);
-	            topSectorTbl.setWidth(100);
-	            RtfCell topSectorTitleCell = new RtfCell(new Paragraph(topSectorTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            topSectorTitleCell.setColspan(2);
-	            topSectorTbl.addCell(topSectorTitleCell);
-	            cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
-	            topSectorTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(fundTypeTrn, HEADERFONTWHITE));
-	            topSectorTbl.addCell(cell);
-	            Map<AmpSector, BigDecimal> topSectors = vForm.getRanksInformation().getTopSectors();
-	            list = new LinkedList(topSectors.entrySet());
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			        Map.Entry entry = (Map.Entry)it.next();
-			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
-			        topSectorTbl.addCell(cell);
-	            	cell = new RtfCell(new Paragraph(entry.getValue().toString()));
-	            	topSectorTbl.addCell(cell);
-			    }
-			    doc.add(topSectorTbl);
-	            doc.add(new Paragraph(" "));
-            }
             
-          //Top donors table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR){
-	            Table topDonorTbl = null;
-	            topDonorTbl = new Table(2);
-	            topDonorTbl.setWidth(100);
-	            RtfCell topDonorTitleCell = new RtfCell(new Paragraph(topDonorTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            topDonorTitleCell.setColspan(2);
-	            topDonorTbl.addCell(topDonorTitleCell);
-	            cell = new RtfCell(new Paragraph(donorTrn, HEADERFONTWHITE));
-	            topDonorTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(fundTypeTrn, HEADERFONTWHITE));
-	            topDonorTbl.addCell(cell);
-	            Map<AmpOrganisation, BigDecimal> topDonors = vForm.getRanksInformation().getTopDonors();
-	            list = new LinkedList(topDonors.entrySet());
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			        Map.Entry entry = (Map.Entry)it.next();
-			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
-			        topDonorTbl.addCell(cell);
-	            	cell = new RtfCell(new Paragraph(entry.getValue().toString()));
-	            	topDonorTbl.addCell(cell);
-			    }
-			    doc.add(topDonorTbl);
-	            doc.add(new Paragraph(" "));
+            //ODA Growth 
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            if (ODAGrowthOpt.equals("1")) {
+	            	doc.newPage();
+	            	subTitle = new Paragraph(ODAGrowthTrn, SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+		            SimpleTable ODAGraph = new SimpleTable();
+	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+	                cel.setBorder(0);
+	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(scaleImage(vForm.getExportData().getODAGrowthGraph(),580,410), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+	                cel.add(img);
+	                row.add(cel);
+	                ODAGraph.setWidthpercentage(100);
+	                ODAGraph.addElement(row);
+	                doc.add(ODAGraph);
+		            doc.add(new Paragraph(" "));
+	            }
             }
-            
-          //Top regions table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION){
-	            Table topRegionTbl = null;
-	            topRegionTbl = new Table(2);
-	            topRegionTbl.setWidth(100);
-	            RtfCell topRegionTitleCell = new RtfCell(new Paragraph(topRegionTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            topRegionTitleCell.setColspan(2);
-	            topRegionTbl.addCell(topRegionTitleCell);
-	            cell = new RtfCell(new Paragraph(regionTrn, HEADERFONTWHITE));
-	            topRegionTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(fundTypeTrn, HEADERFONTWHITE));
-	            topRegionTbl.addCell(cell);
-	            Map<AmpCategoryValueLocations, BigDecimal> topRegions = vForm.getRanksInformation().getTopRegions();
-	            list = new LinkedList(topRegions.entrySet());
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			        Map.Entry entry = (Map.Entry)it.next();
-			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
-			        topRegionTbl.addCell(cell);
-	            	cell = new RtfCell(new Paragraph(entry.getValue().toString()));
-	            	topRegionTbl.addCell(cell);
-			    }
-			    doc.add(topRegionTbl);
-	            doc.add(new Paragraph(" "));
+
+            //Funding Table.
+            if (!fundingOpt.equals("0")){
+            	doc.newPage();
+            	subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
             }
-            */
-          
-          //Funding Table.
             if (fundingOpt.equals("1") || fundingOpt.equals("3")){
 	            Table fundingTbl = null;
 	            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
 	            colspan = (fundingRows[1].split(">").length + 1)/2; 
 	            fundingTbl = new Table(colspan);
 	            fundingTbl.setWidth(100);
-	            RtfCell fundingTitleCell = new RtfCell(new Paragraph(fundingTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            fundingTitleCell.setColspan(colspan);
-	            fundingTitleCell.setBackgroundColor(TITLECOLOR);
-	            fundingTbl.addCell(fundingTitleCell);
+	            //RtfCell fundingTitleCell = new RtfCell(new Paragraph(fundingTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //fundingTitleCell.setColspan(colspan);
+	            //fundingTitleCell.setBackgroundColor(TITLECOLOR);
+	            //fundingTbl.addCell(fundingTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
 	            fundingTbl.addCell(cell);
@@ -471,8 +444,9 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable(); //col,row 
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                cel.setBorder(0);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
+	            ImageIO.write(scaleImage(vForm.getExportData().getFundingGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
                 cel.add(img);
                 row.add(cel);
@@ -483,16 +457,22 @@ public class ExportToWord extends Action {
             }
             
           //Aid Predictability Table.
+            if (!aidPredicOpt.equals("0")){
+            	doc.newPage();
+            	subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+            }
             if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
 	            Table aidPredTbl = null;
 	            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
 	            colspan = (aidPredRows[1].split(">").length + 1)/2; 
 	            aidPredTbl = new Table(colspan);
 	            aidPredTbl.setWidth(100);
-	            RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            aidPredTitleCell.setColspan(colspan);
-	            aidPredTitleCell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(aidPredTitleCell);
+	            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //aidPredTitleCell.setColspan(colspan);
+	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
+	            //aidPredTbl.addCell(aidPredTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidPredTbl.addCell(cell);
@@ -520,8 +500,9 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                cel.setBorder(0);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getAidPredictabilityGraph(), "png", ba);
+	            ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
                 cel.add(img);
                 row.add(cel);
@@ -532,16 +513,22 @@ public class ExportToWord extends Action {
             }
             
           //Aid Type Table.
+            if (!aidTypeOpt.equals("0")){
+            	doc.newPage();
+            	subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+            }
             if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
 	            Table aidTypeTbl = null;
 	            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
 	            colspan = (aidTypeRows[1].split(">").length + 1)/2; 
 	            aidTypeTbl = new Table(colspan);
 	            aidTypeTbl.setWidth(100);
-	            RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            aidTypeTitleCell.setColspan(colspan);
-	            aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
-	            aidTypeTbl.addCell(aidTypeTitleCell);
+	            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //aidTypeTitleCell.setColspan(colspan);
+	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
+	            //aidTypeTbl.addCell(aidTypeTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidTypeTbl.addCell(cell);
@@ -569,8 +556,9 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                cel.setBorder(0);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getAidTypeGraph(), "png", ba);
+	            ImageIO.write(scaleImage(vForm.getExportData().getAidTypeGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
                 cel.add(img);
                 row.add(cel);
@@ -582,16 +570,22 @@ public class ExportToWord extends Action {
             
             
           //Financing Instrument Table.
+            if (!financingInstOpt.equals("0")){
+            	doc.newPage();
+            	subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+            }
             if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
                 Table finInstTbl = null;
 	            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
 	            colspan = (finInstRows[1].split(">").length + 1)/2; 
 	            finInstTbl = new Table(colspan);
 	            finInstTbl.setWidth(100);
-	            RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            finInstTitleCell.setColspan(colspan);
-	            finInstTitleCell.setBackgroundColor(TITLECOLOR);
-	            finInstTbl.addCell(finInstTitleCell);
+	            //RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //finInstTitleCell.setColspan(colspan);
+	            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
+	            //finInstTbl.addCell(finInstTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
 	            finInstTbl.addCell(cell);
@@ -619,8 +613,9 @@ public class ExportToWord extends Action {
                 SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                cel.setBorder(0);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFinancingInstGraph(), "png", ba);
+	            ImageIO.write(scaleImage(vForm.getExportData().getFinancingInstGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
                 cel.add(img);
                 row.add(cel);
@@ -632,104 +627,179 @@ public class ExportToWord extends Action {
             
             
           //Sector Profile Table.
-            if (sectorOpt.equals("1") || sectorOpt.equals("3")){
-                Table sectorProfTbl = null;
-	            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-	            colspan = sectorProfRows[1].split(">").length; 
-	            sectorProfTbl = new Table(colspan);
-	            sectorProfTbl.setWidth(100);
-	            RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            sectorProfTitleCell.setColspan(colspan);
-	            sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            sectorProfTbl.addCell(sectorProfTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setBackgroundColor(TITLECOLOR);
-	            sectorProfTbl.addCell(cell);
-	            singleRow = sectorProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
+            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            if (!sectorOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	            }
+	            if (sectorOpt.equals("1") || sectorOpt.equals("3")){
+	                Table sectorProfTbl = null;
+		            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+		            colspan = sectorProfRows[1].split(">").length; 
+		            sectorProfTbl = new Table(colspan);
+		            sectorProfTbl.setWidth(100);
+		            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //sectorProfTitleCell.setColspan(colspan);
+		            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
+		            //sectorProfTbl.addCell(sectorProfTitleCell);
+		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setBackgroundColor(TITLECOLOR);
 		            sectorProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < sectorProfRows.length; i++) {
-	            	singleRow = sectorProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	    			    sectorProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(sectorProfTbl);
-	            doc.add(new Paragraph(" "));
+		            singleRow = sectorProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setBackgroundColor(TITLECOLOR);
+			            sectorProfTbl.addCell(cell);
+					}
+		            count = 0;
+		            for (int i = 2; i < sectorProfRows.length; i++) {
+		            	singleRow = sectorProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		    			    sectorProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(sectorProfTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (sectorOpt.equals("2") || sectorOpt.equals("3")){
+	                SimpleTable fundingGraph = new SimpleTable();
+	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+	                cel.setBorder(0);
+	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(scaleImage(vForm.getExportData().getSectorGraph(),580,410), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+	                cel.add(img);
+	                row.add(cel);
+	                fundingGraph.setWidthpercentage(100);
+	                fundingGraph.addElement(row);
+	                doc.add(fundingGraph);
+		            doc.add(new Paragraph(" "));
+	            }
             }
-            if (sectorOpt.equals("2") || sectorOpt.equals("3")){
-                SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
             
           //Region Profile Table.
-            if (regionOpt.equals("1") || regionOpt.equals("3")){
-                Table regionProfTbl = null;
-	            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
-	            colspan = regionProfRows[1].split(">").length; 
-	            regionProfTbl = new Table(colspan);
-	            regionProfTbl.setWidth(100);
-	            RtfCell regionProfTitleCell = new RtfCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            regionProfTitleCell.setColspan(colspan);
-	            regionProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            regionProfTbl.addCell(regionProfTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setBackgroundColor(TITLECOLOR);
-	            regionProfTbl.addCell(cell);
-	            singleRow = regionProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
+            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+	            if (!regionOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	            }
+	            if (regionOpt.equals("1") || regionOpt.equals("3")){
+	                Table regionProfTbl = null;
+		            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+		            colspan = regionProfRows[1].split(">").length; 
+		            regionProfTbl = new Table(colspan);
+		            regionProfTbl.setWidth(100);
+		            //RtfCell regionProfTitleCell = new RtfCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //regionProfTitleCell.setColspan(colspan);
+		            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
+		            //regionProfTbl.addCell(regionProfTitleCell);
+		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setBackgroundColor(TITLECOLOR);
 		            regionProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < regionProfRows.length; i++) {
-	            	singleRow = regionProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	    			    regionProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(regionProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (regionOpt.equals("2") || regionOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
+		            singleRow = regionProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setBackgroundColor(TITLECOLOR);
+			            regionProfTbl.addCell(cell);
+					}
+		            count = 0;
+		            for (int i = 2; i < regionProfRows.length; i++) {
+		            	singleRow = regionProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		    			    regionProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(regionProfTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (regionOpt.equals("2") || regionOpt.equals("3")){
+		            SimpleTable fundingGraph = new SimpleTable();
+	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+	                cel.setBorder(0);
+	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(scaleImage(vForm.getExportData().getRegionGraph(),580,410), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+	                cel.add(img);
+	                row.add(cel);
+	                fundingGraph.setWidthpercentage(100);
+	                fundingGraph.addElement(row);
+	                doc.add(fundingGraph);
+		            doc.add(new Paragraph(" "));
+	            }
             }
             
+          //Donor Profile Table.
+            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            if (!donorOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(donorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	            }
+	            if (donorOpt.equals("1") || donorOpt.equals("3")){
+	                Table donorProfTbl = null;
+		            String[] donorProfRows = vForm.getExportData().getDonorTableData().split("<");
+		            colspan = donorProfRows[1].split(">").length; 
+		            donorProfTbl = new Table(colspan);
+		            donorProfTbl.setWidth(100);
+		            //RtfCell donorProfTitleCell = new RtfCell(new Paragraph(donorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //donorProfTitleCell.setColspan(colspan);
+		            //donorProfTitleCell.setBackgroundColor(TITLECOLOR);
+		            //donorProfTbl.addCell(donorProfTitleCell);
+		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setBackgroundColor(TITLECOLOR);
+		            donorProfTbl.addCell(cell);
+		            singleRow = donorProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	donorProfTbl.addCell(cell);
+					}
+		            count = 0;
+		            for (int i = 2; i < donorProfRows.length; i++) {
+		            	singleRow = donorProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	donorProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(donorProfTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (donorOpt.equals("2") || donorOpt.equals("3")){
+		            SimpleTable donorGraph = new SimpleTable();
+	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+	                cel.setBorder(0);
+	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(scaleImage(vForm.getExportData().getDonorGraph(),580,410), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+	                cel.add(img);
+	                row.add(cel);
+	                donorGraph.setWidthpercentage(100);
+	                donorGraph.addElement(row);
+	                doc.add(donorGraph);
+		            doc.add(new Paragraph(" "));
+	            }
+            } 
+	           
             //close document
             doc.close();
             response.setContentLength(baos.size());
@@ -742,4 +812,42 @@ public class ExportToWord extends Action {
 
         return null;
     }
+    
+    public static BufferedImage scaleImage(BufferedImage image, int p_width, int p_height) throws Exception {
+
+    	int thumbWidth = p_width;
+        int thumbHeight = p_height;        
+    
+           // Make sure the aspect ratio is maintained, so the image is not skewed
+           double thumbRatio = (double)thumbWidth / (double)thumbHeight;
+           float imageWidth = image.getWidth();
+           float imageHeight = image.getHeight();
+           double imageRatio = (double)imageWidth / (double)imageHeight;
+           if (thumbRatio < imageRatio) {
+             thumbHeight = (int)(thumbWidth / imageRatio);
+           } else {
+             thumbWidth = (int)(thumbHeight * imageRatio);
+           }
+    
+           // Draw the scaled image
+           BufferedImage thumbImage = new BufferedImage(thumbWidth, 
+             thumbHeight, BufferedImage.TYPE_INT_RGB);
+           Graphics2D graphics2D = thumbImage.createGraphics();
+           graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+             RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+           graphics2D.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
+    
+           // Write the scaled image to the outputstream
+           ByteArrayOutputStream out = new ByteArrayOutputStream();
+           PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(thumbImage);
+           PNGImageEncoder encoder = (PNGImageEncoder) PNGCodec.createImageEncoder("png",out,param);
+           encoder.setParam(param);
+           //int quality = 100; // Use between 1 and 100, with 100 being highest quality
+           //quality = Math.max(0, Math.min(quality, 100));
+           //param.setQuality((float)quality / 100.0f, false);
+           encoder.encode(thumbImage);        
+           ImageIO.write(thumbImage, "jpg" , out); 
+    
+           return thumbImage;        
+       }
 }

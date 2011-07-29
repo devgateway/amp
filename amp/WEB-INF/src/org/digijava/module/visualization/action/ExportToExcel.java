@@ -1,27 +1,15 @@
 package org.digijava.module.visualization.action;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -35,76 +23,19 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.Region;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.ExportOrganizationToExcel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.orgProfile.helper.FilterHelper;
-import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
-import org.digijava.module.orgProfile.helper.Project;
-import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.util.DbUtil;
-import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
-import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.helper.ChartOption;
-import org.digijava.module.widget.helper.WidgetVisitor;
-import org.digijava.module.widget.helper.WidgetVisitorAdapter;
-import org.digijava.module.widget.util.ChartWidgetUtil;
-import org.digijava.module.widget.util.WidgetUtil;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.Plot;
-
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.HeaderFooter;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.SimpleCell;
-import com.lowagie.text.SimpleTable;
-import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfCell;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.rtf.RtfWriter2;
-import com.lowagie.text.rtf.table.RtfCell;
 import javax.servlet.ServletContext;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class ExportToExcel extends Action {
 
@@ -564,9 +495,16 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba0);
 	            int pictureIndex0 = wb.addPicture(ba0.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch0 = sheet2.createDrawingPatriarch();
-	            HSSFPicture pic0 =  patriarch0.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex0);
-	            rowNum = rowNum+27;
-	            pic0.resize();
+	            HSSFPicture pic0 =  patriarch0.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex0);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic0.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic0.resize();
 		    }
             
 		  //Aid Predictability Table.
@@ -637,8 +575,15 @@ public class ExportToExcel extends Action {
 	            int pictureIndex1 = wb.addPicture(ba1.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch1 = sheet3.createDrawingPatriarch();
 	            HSSFPicture pic1 =  patriarch1.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum+1), rowNum+25), pictureIndex1);
-	            rowNum = rowNum+27;
-	            pic1.resize();
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic1.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic1.resize();
 		    }
 		    
 		  //Aid Type Table.
@@ -706,9 +651,16 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getAidTypeGraph(), "png", ba2);
 	            int pictureIndex2 = wb.addPicture(ba2.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch2 = sheet4.createDrawingPatriarch();
-	            HSSFPicture pic2 =  patriarch2.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex2);
-	            rowNum = rowNum+27;
-	            pic2.resize();
+	            HSSFPicture pic2 =  patriarch2.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex2);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic2.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic2.resize();
 		    }
             
 		  //Financing Instrument Table.
@@ -776,9 +728,16 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getFinancingInstGraph(), "png", ba3);
 	            int pictureIndex3 = wb.addPicture(ba3.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch3 = sheet5.createDrawingPatriarch();
-	            HSSFPicture pic3 =  patriarch3.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex3);
-	            rowNum = rowNum+27;
-	            pic3.resize();
+	            HSSFPicture pic3 =  patriarch3.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex3);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic3.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic3.resize();
 		    }
             
 		  //Sector Profile Table.
@@ -846,9 +805,16 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba4);
 	            int pictureIndex4 = wb.addPicture(ba4.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch4 = sheet6.createDrawingPatriarch();
-	            HSSFPicture pic4 =  patriarch4.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex4);
-	            rowNum = rowNum+27;
-	            pic4.resize();
+	            HSSFPicture pic4 =  patriarch4.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex4);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic4.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic4.resize();
 		    }
 		    
 		  //Region Profile Table.
@@ -916,9 +882,16 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba5);
 	            int pictureIndex5 = wb.addPicture(ba5.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch5 = sheet7.createDrawingPatriarch();
-				HSSFPicture pic5 =  patriarch5.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex5);
-	            rowNum = rowNum+27;
-	            pic5.resize();
+				HSSFPicture pic5 =  patriarch5.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex5);
+				HSSFClientAnchor anchor = (HSSFClientAnchor) pic5.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic5.resize();
 		    }
             
 		  //Donor Profile Table.
@@ -986,11 +959,56 @@ public class ExportToExcel extends Action {
 	            ImageIO.write(vForm.getExportData().getDonorGraph(), "png", ba6);
 	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch6 = sheet8.createDrawingPatriarch();
-	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum-1), rowNum+25), pictureIndex6);
-	            rowNum = rowNum+27;
-	            pic6.resize();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)4, rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)4);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic6.resize();
 		    }
-            
+	        for(short i=0;i<7;i++){
+	             sheet.setColumnWidth(i , COLUMN_WIDTH);
+	        }
+	        if (sheet2!=null){
+	        	 for(short i=0;i<7;i++){
+		             sheet2.setColumnWidth(i , COLUMN_WIDTH);
+		        } 
+	        }
+	        if (sheet3!=null){
+	        	 for(short i=0;i<7;i++){
+		             sheet3.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet4!=null){ 
+	        	 for(short i=0;i<7;i++){
+		             sheet4.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet5!=null){ 
+	        	 for(short i=0;i<7;i++){
+		             sheet5.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet6!=null){ 
+	        	 for(short i=0;i<7;i++){
+		             sheet6.setColumnWidth(i , COLUMN_WIDTH);
+		        } 
+	        }
+	        if (sheet7!=null){ 
+	        	 for(short i=0;i<7;i++){
+		             sheet7.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet8!=null){ 
+	        	 for(short i=0;i<7;i++){
+		             sheet8.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+            /*
 		    sheet.autoSizeColumn(0); 
 	        sheet.autoSizeColumn(1);
 	        sheet.autoSizeColumn(2);
@@ -1060,7 +1078,7 @@ public class ExportToExcel extends Action {
 		        sheet8.autoSizeColumn(4);
 		        sheet8.autoSizeColumn(5);
 		        sheet8.autoSizeColumn(6); 
-	        }
+	        }*/
 	        wb.write(response.getOutputStream());
 	        
 		} catch (Exception e) {

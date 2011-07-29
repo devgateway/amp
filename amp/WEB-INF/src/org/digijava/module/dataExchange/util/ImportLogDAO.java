@@ -56,6 +56,38 @@ public class ImportLogDAO {
 		}
 	}
 	
+	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId, String sortBy,String sortDir) {
+		try{
+			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe where " +
+					"lpe.deSourceSetting=:deSourceSettingId";
+			//sort
+			if(sortBy!=null && sortDir!=null){
+				if (sortBy.equals("dbId") && sortDir.equals("asc")) {
+					queryString += " order by lpe.id " ;
+				} else if (sortBy.equals("dbId") && sortDir.equals("desc")) {
+					queryString += " order by lpe.id desc " ;
+				}else if(sortBy.equals("date") && sortDir.equals("asc")){
+					queryString += " order by lpe.externalTimestamp ";
+				}else if(sortBy.equals("date") && sortDir.equals("desc")){
+					queryString += " order by lpe.externalTimestamp desc ";
+				}else if(sortBy.equals("time") && sortDir.equals("asc")){
+					queryString += " order by lpe.externalTimestamp ";
+				}else if(sortBy.equals("time") && sortDir.equals("desc")){
+					queryString += " order by lpe.externalTimestamp desc ";
+				}
+			}else{
+				queryString += " order by lpe.id ";
+			}
+			Query query			= hbSession.createQuery(queryString);
+			query.setLong("deSourceSettingId", sourceSettingId );
+			List<DELogPerExecution> resultList	=  query.list();
+			return resultList;
+		}
+		finally {
+			this.releaseSession();
+		}
+	}
+	
 	public List<DELogPerItem> getAllAmpLogPerItem() {
 		try{
 			String queryString 	= "select lpi from "	+ DELogPerItem.class.getName() + " lpi";

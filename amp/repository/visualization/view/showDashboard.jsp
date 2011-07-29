@@ -1413,7 +1413,7 @@ function toggleSettings(){
 				<option value="Verdana">Verdana</option>
 				<option value="Arial">Arial</option>
 			</select> -->
-			<input type="hidden" id="fundingChartShowFontFamily" value="Verdana"/>
+			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
 			Size
 			<select id="FundingChartFontSize">
 				<option value="12">12</option>
@@ -1422,8 +1422,11 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			Show legend <input type="checkbox" id="FundingChartShowLegend">
-			Show data label <input type="checkbox" id="FundingChartShowDataLabel"></br>
+			<input type="checkbox" id="FundingChartBold">Bold<br/>
+			<input type="checkbox" id="FundingChartShowLegend" checked="checked">Show legend
+			<input type="checkbox" id="FundingChartDivide">Divide by thousands
+			<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
+			<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
 			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
@@ -2514,13 +2517,13 @@ function changeChart(e, chartType, container){
 	
 	var title = document.getElementById(container + "Title") == undefined ? "" : document.getElementById(container + "Title").value;
 	var fontSize = document.getElementById(container + "FontSize") == undefined ? "" : document.getElementById(container + "FontSize").value;
+	var boldTitle = document.getElementById(container + "Bold") == undefined ? "" : document.getElementById(container + "Bold").value;
 	var fontFamily = document.getElementById(container + "FontFamily") == undefined ? "" : document.getElementById(container + "FontFamily").value;
 	var showLegend = document.getElementById(container + "ShowLegend") == undefined ? "" : document.getElementById(container + "ShowLegend").value;
 	var showDataLabel = document.getElementById(container + "ShowDataLabel") == undefined ? "" : document.getElementById(container + "ShowDataLabel").value;
+	var rotateDataLabel = document.getElementById(container + "RotateDataLabel") == undefined ? "" : document.getElementById(container + "RotateDataLabel").value;
+	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide").value;
 
-	console.log("title:" + title);
-	console.log("showLegend:" + showLegend);
-	console.log("showDataLabel:" + showDataLabel);
 	//var minSlider =  "" + (currentYear - yearsInRange + 1);
 	//var maxSlider =  "" + currentYear;
 	var flashvars = { 
@@ -2528,10 +2531,13 @@ function changeChart(e, chartType, container){
 			groupSeparator: groupSeparator, 
 			palette: palette, 
 			title: title, 
-			fontSize: fontSize, 
+			fontSize: fontSize,
+			boldTitle: boldTitle,
+			rotateDataLabel: rotateDataLabel,
 			fontFamily: fontFamily, 
 			showLegend: showLegend, 
 			showDataLabel: showDataLabel,
+			divide: divide,
 			id: container
 		};
 	

@@ -1459,9 +1459,14 @@ public class DataDispatcher extends DispatchAction {
 		String format = request.getParameter("format");
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
 		Long year = filter.getYear();
 		BigDecimal divideByDenominator;
+		//Set it here, and unset it at the end. This should go to the Advanced Filters
+		if(divide){
+			filter.setDivideThousands(true);
+		}
 
 		if (filter.getDivideThousands())
 			divideByDenominator = new BigDecimal(1000000000);
@@ -1597,6 +1602,10 @@ public class DataDispatcher extends DispatchAction {
 			}
 
 			visualizationForm.getExportData().setFundingTableData(fundingData);
+			//resetting to avoid affecting all graphs
+			if(divide){
+				filter.setDivideThousands(false);
+			}
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);

@@ -143,12 +143,24 @@
 				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
 				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
 				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
 				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
 				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
-				
+				var rotateDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'RotateDataLabel')}"));
+
 				chartLabel.text = title;
-				chartLabel.setStyle("fontFamily", fontFamily);
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Verdana");
+
 				chartLabel.setStyle("fontSize", fontSize);
+
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+
 				if(showLegend == "true") 
 					legendLayout.visible = true;
 				else
@@ -158,7 +170,11 @@
 					myCluster.showDataLabel = true;
 				else
 					myCluster.showDataLabel = false;
-				
+
+				if(rotateDataLabel == "true")
+					myCluster.dataLabelRotateAngle = -90;
+				else
+					myCluster.dataLabelRotateAngle = 0;
 			}
 			
 			private function captureSnapshot():void
@@ -177,20 +193,6 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "FundingChart");
-			}
-			protected function labelRender(object:Object):String {
-				var wrappedLabel:String = null;
-				
-				if (object != null){
-					if(object[childLabelField].length > maxLabelWidth){
-						wrappedLabel = "Corto" + object[childLabelField].replace(" ", "\n"); 
-					}
-					else
-					{
-						wrappedLabel = object[childLabelField]; 
-					}
-				}
-				return wrappedLabel;
 			}
 
 			/**
@@ -249,6 +251,12 @@
 			}
 			public function refreshGraphNoData():void
 			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				var params:Object = {};
+				params["format"] = "xml";
+				params["divide"] = divide;
+				service.send(params);
 				start();
 			}
 			private function sizePanel(w:uint, h:uint):void {
@@ -472,7 +480,9 @@
 						fontSize="11"
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
-						showDataLabel="false"
+						showDataLabel="true"
+						dataLabelRotateAngle="0"
+						dataLabelRegistrationPoint="topLeft"
 						showLabel="false"
 						itemClick="this.itemClick(event);"
 						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>

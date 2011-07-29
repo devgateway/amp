@@ -59,5 +59,6 @@ public class DataExchangeConstants {
 	public static final String IATI_AID_TYPE = "Aid Type";
 	public static final String IATI_DISBURSEMENT_CHANNEL = "Disbursement Channel";
 	public static final String TEST = "test";
+	public static final String IATI_ACTIVITY = "Activity";
 	
 }

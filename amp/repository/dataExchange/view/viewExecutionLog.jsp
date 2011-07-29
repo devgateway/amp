@@ -97,7 +97,10 @@ function importItem(){
 						<logic:iterate id="item" name="showLogsForm" property="logItems">
 							<tr>
 							    <td bgcolor=#FFFFFF class=inside>
-							    	<input name="id" type="checkbox"/>
+							    	<c:if test="${item.logType=='OK'}">
+							    		<input name="id" type="checkbox"/>
+							    	</c:if>
+							    	
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<div class="t_sm">${item.name}</div>
@@ -109,7 +112,7 @@ function importItem(){
 							    	<c:if test="${item.logType=='INFO' }">
 							    		<img src="/TEMPLATE/ampTemplate/img_2/ico_info.gif" />
 							    	</c:if>
-							    	<c:if test="${item.logType!='ERROR' && item.logType!='INFO'}">
+							    	<c:if test="${item.logType=='OK'}">
 							    		<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />
 							    	</c:if>							    	
 							    </td>
@@ -145,7 +148,9 @@ function importItem(){
 							    </td>							    
 							    
 							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-							    	<input type="button" class="buttonx_sm" value="Import" onclick="importItem('${item.id}');"/>
+							    	<c:if test="${item.logType=='OK'}">
+							    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem('${item.id}');"/>
+							    	</c:if>
 							    </td>
 							</tr>
 						</logic:iterate>						

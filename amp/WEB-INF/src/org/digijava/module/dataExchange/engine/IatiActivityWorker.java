@@ -17,8 +17,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
+import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -149,7 +151,7 @@ public class IatiActivityWorker {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ArrayList<AmpMappedField> checkContent(String title, String iatiID) { 
+	public ArrayList<AmpMappedField> checkContent() { 
 		// TODO Auto-generated method stub
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
@@ -233,7 +235,7 @@ public class IatiActivityWorker {
 				ok 				 = checkIATITransaction(item,logs);
 			}
 		}
-		
+		checkActivity(this.title, this.iatiID, this.lang);
 		return logs;
 	}
 	
@@ -918,6 +920,13 @@ public class IatiActivityWorker {
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class,null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
 		logMappingField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class,null,null,"inactive", checkMappedField, log);
+		return log;
+	}
+	
+	private AmpMappedField checkActivity(String title, String iatiID, String lang) {
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class,null,null,"inactive");
+		AmpMappedField log = new AmpMappedField(checkMappedField);
+		logMappingField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class,null,null,"inactive",checkMappedField, log);
 		return log;
 	}
 	

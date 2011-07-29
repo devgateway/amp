@@ -2107,7 +2107,7 @@ public class DEImportBuilder {
 				String title = "";
 				String iatiID = "";
 				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
-				ArrayList<AmpMappedField> activityLogs = iWorker.checkContent(title, iatiID);
+				ArrayList<AmpMappedField> activityLogs = iWorker.checkContent();
 				title = iWorker.getTitle();
 				iatiID = iWorker.getIatiID();
 				
@@ -2134,7 +2134,7 @@ public class DEImportBuilder {
 					iLog.saveObject(log.getDeSourceSetting());
 					continue;
 				} 
-				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+				item.setLogType(DELogPerItem.LOG_TYPE_OK);
 				item.setDescription("Activity: "+title+" OK");
 				log.getLogItems().add(item);
 			}

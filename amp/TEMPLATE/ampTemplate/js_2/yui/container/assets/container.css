@@ -200,12 +200,12 @@ PLEASE NOTE:
 }
 
 .yui-panel .hd {
-    background-color:#3d77cb;
+    background-color:#C7D4DB;
     color:#FFF;
     font-size:100%;
     line-height:100%;
     border:1px solid #FFF;
-    border-bottom:1px solid #000;
+    border-bottom:1px solid #AEBAC0;
     font-weight:bold;
     padding:4px;
     white-space:nowrap;
@@ -322,3 +322,5 @@ PLEASE NOTE:
 .yui-override-padding {
     padding:0 !important;
 }
+
+.buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}

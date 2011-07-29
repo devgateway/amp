@@ -254,7 +254,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<ul style="list-style-type: none;margin: 0; padding: 0;">
 										<li><input type="checkbox"
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
-											<span style="font-family: Arial; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
+											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
 												page="/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
@@ -334,10 +334,10 @@ var tabView = new YAHOO.widget.TabView('demo');
 						</div>
 						<div class="clear"></div>
 						<div class="tabSubmit">
-							<input type="button" class="buttonx" 
+							<input type="button" class="buttonx_sm" style="font-size: 10px;" 
 								value="<digi:trn>Apply Filters to the Report</digi:trn>" onclick="submitFilters();"/>
-							<input type="button"
-								class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
+							<input type="button" style="font-size: 10px;"
+								class="buttonx_sm" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 						</div>
 					</div>
 					</div>
@@ -384,7 +384,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<ul style="list-style-type: none;margin: 0; padding: 0;">
 										<li><input type="checkbox"
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
-											<span style="font-family: Arial; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
+											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
 												page="/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
@@ -394,11 +394,11 @@ var tabView = new YAHOO.widget.TabView('demo');
 						</div>
 						<div class="clear"></div>
 						<div class="tabSubmit">
-							<input type="button" class="buttonx"
+							<input type="button" class="buttonx_sm" style="font-size: 10px;"
 								value="<digi:trn>Apply Filters to the Report</digi:trn>"
 								onclick="submitFilters();" />
-								<input type="button"
-								class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
+								<input type="button" style="font-size: 10px;"
+								class="buttonx_sm" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 						</div>
 
 					</div>
@@ -447,7 +447,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<ul style="list-style-type: none;margin: 0; padding: 0;">
 										<li><input type="checkbox"
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
-											<span style="font-family: Arial; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
+											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
 												page="/repository/aim/view/filters/hierarchyLister.jsp" />
 										</li>
@@ -457,11 +457,11 @@ var tabView = new YAHOO.widget.TabView('demo');
 						</div>
 						<div class="clear"></div>
 						<div class="tabSubmit">
-							<input type="button" class="buttonx"
+							<input type="button" class="buttonx_sm" style="font-size: 10px;"
 								value="<digi:trn>Apply Filters to the Report</digi:trn>"
 								onclick="submitFilters();" />
-								<input type="button"
-								class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
+								<input type="button" style="font-size: 10px;"
+								class="buttonx_sm" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 						</div>
 
 					</div>

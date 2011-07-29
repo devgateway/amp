@@ -78,6 +78,7 @@
 										style="border-width: 1px; border-color: #D0D0D0; border-style: solid; padding: 5px;">
 											<tr>
 												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
+													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;|&nbsp;
 													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer;" title="<digi:trn>Export to PDF</digi:trn>">
 												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: middle; border-color:#FFFFFF;" border="3" />
 												    	<digi:trn>Export to PDF</digi:trn>
@@ -91,8 +92,7 @@
 														<digi:trn>Print</digi:trn> 
 													</a>|&nbsp;
 												</td>
-												<td noWrap="nowrap" align="right" style="color: #376091;font-weight: bold;">
-													<a style="cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>&nbsp;|&nbsp;
+												<td noWrap="nowrap" align="right" style="color: #376091;font-weight: bold;">													
 													<a style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">
 														<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
 													</a>&nbsp;&nbsp;

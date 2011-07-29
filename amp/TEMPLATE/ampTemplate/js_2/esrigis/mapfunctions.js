@@ -289,22 +289,24 @@ function findbydistance(evt){
 function showStInfoWindow () {
 	 searchactive = false;
 	 hideTooltip();
-	 var content = "<table border='1' width='100%'>" 
+	 var content = "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>" 
 	 			+ "<tr>" 
-	 			+ "<td align='center' width='200px'>Name</td>" 
-	 			+ "<td align='center' width='100px'>Type</td>" 
-	 			+ "<td align='center' width='300px'>Activity</td>"
+	 			+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Name</b></td>" 
+	 			+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Type</b></td>" 
+	 			+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>Activity</b></td>"
 	 			+ "</tr>";
 		if (map.infoWindow.isShowing) {
 	        map.infoWindow.hide();
 		}
     map.infoWindow.setTitle("Structures");
     for ( var int = 0; int < foundstr.length; int++) {
-    	    content = content + "<tr><td>" + foundstr[int].attributes["Structure Name"] + "</a></td>" ;
-    	    content = content + "<td align='left'>" + foundstr[int].attributes["Structure Type"] + "</td>" ;
-    	    content = content + "<td>" + foundstr[int].attributes["Activity"] + "</td></tr>" ;
+    	    content = content + "<tr><td style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Structure Name"] + "</a></td>" ;
+    	    content = content + "<td align='left' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Structure Type"] + "</td>" ;
+    	    content = content + "<td style='border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Activity"] + "</td></tr>" ;
      }
-    content = content + "</table>";
+    content = content + "<tr><td colspan='3'>" 
+    		+ "<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'" 
+    		+ "</td></tr></table>";
     if (foundstr.length>0){
     	map.infoWindow.setContent(content);
     	map.infoWindow.resize(600, 200);
@@ -925,6 +927,34 @@ function MapFindStructure(activity, structureGraphicLayer){
 		structureGraphicLayer.add(pgraphic);
 		structures.push(pgraphic);
 	});
+}
+
+function ExportStructures() {
+	window.open("/esrigis/excelexporter.do?structures=" + structurestorequest());
+	/*
+	var xhrArgs = {
+			url : "/esrigis/excelexporter.do?structures=" + structurestorequest() ,
+			load: function(jsonData) {},
+			error : function(error) {
+				console.log(error);
+			}
+		};
+	// Call the asynchronous xhrGet
+	var deferred = dojo.xhrPost(xhrArgs);*/
+}
+
+function structurestorequest(){
+	var stjson = "{\"Structures\":[";
+	
+	for ( var int = 0; int < foundstr.length; int++) {
+		if (stjson=="{\"Structures\":["){
+			stjson += JSON.stringify(foundstr[int].attributes);
+		}else{
+			stjson += "," + JSON.stringify(foundstr[int].attributes);
+		}
+	}
+	stjson +="]}"; 
+	return stjson;
 }
 
 /**

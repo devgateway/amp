@@ -6,6 +6,7 @@
 		<form-bean name="datadispatcherform" type="org.digijava.module.esrigis.form.DataDispatcherForm"/>
 		<form-bean name="proxyform" type="org.digijava.module.esrigis.form.EsryProxyForm"/>
 		<form-bean name="structuretypeform" type="org.digijava.module.esrigis.form.StructureTypeForm"/>
+		
 	</form-beans>
 	<action-mappings>
 	    <action name="structuretypeform" path="/esrigis/structureTypeManager" parameter="action" scope="session" type="org.digijava.module.esrigis.action.StructureTypeManager" validate="false">
@@ -20,5 +21,6 @@
 		</action>
 		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispatcher"/>
 		<action name="proxyform"  path="/esrigis/esriproxy" type="org.digijava.module.esrigis.action.EsriProxy"/>
+		<action name="exporterform"  path="/esrigis/excelexporter" type="org.digijava.module.esrigis.action.ExcelExporter"/>
 	</action-mappings>
 </struts-config>

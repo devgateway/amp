@@ -23,11 +23,27 @@
 		vertical-align:top;
 		width:634px;
 		height:450px;
+		clear: both;
+	    background-color: #FFFFFF;
 	}
 	.side_opt_sel {
 		background-color: rgb(191, 210, 223); 
 	}
-	
+
+	.chart_header {
+		font-size: 11px;
+		padding: 5px 5px 10px 5px;
+		margin: 0px 0px 10px 0px;
+		font-weight: bold;
+	 	border-color: #DADAD6 #C2C1BA #C2C1BA #DADAD6;
+	    border-style: solid;
+	    border-width: 1px 2px 2px 1px;
+	    width:510px;
+	    background-color: #FFFFFF;
+    }
+    .chartFieldset {
+	    background-color: #F4F4F4;
+    }	
 </style>
 <!-- Visualization's Scripts-->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
@@ -1394,16 +1410,17 @@ function toggleSettings(){
 	</ul>
 	<div class="yui-content">
 	<div id="tab1">
-		<fieldset>
+		<fieldset class="chartFieldset">
+			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="fundingChartHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>">
+			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
 <!-- 			Font 
 			<select id="fundingChartShowFontFamily">
 				<option value="Verdana">Verdana</option>
 				<option value="Arial">Arial</option>
 			</select> -->
 			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
-			Size
+			&nbsp;Size
 			<select id="FundingChartFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
@@ -1411,12 +1428,12 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			<input type="checkbox" id="FundingChartBold">Bold<br/>
+			&nbsp;<input type="checkbox" id="FundingChartBold">Bold<br/>
 			<input type="checkbox" id="FundingChartShowLegend" checked="checked">Show legend
-			<input type="checkbox" id="FundingChartDivide">Divide by thousands
-			<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
-			<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
-			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
+			&nbsp;<input type="checkbox" id="FundingChartDivide">Divide by thousands
+			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
+			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
+			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
 			<br />
@@ -2478,6 +2495,7 @@ function updateGraph(e, chartName){
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
+			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
 			allGraphs[idx].children[0].refreshGraphNoData();
 			break;
 		}
@@ -2535,7 +2553,7 @@ function changeChart(e, chartType, container){
 	attributes.id = container;
 	switch(chartType){
 		case "bar":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "450", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf?rnd=" + Math.floor(Math.random()*25000), container, "634", "450", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "donut":
 			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);

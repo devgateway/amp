@@ -201,7 +201,9 @@ PLEASE NOTE:
 
 .yui-panel .hd {
     background-color:#C7D4DB;
-    color:#FFF;
+    color:#000000;
+	padding-top:3px;
+	padding-bottom:3px;
     font-size:100%;
     line-height:100%;
     border:1px solid #FFF;

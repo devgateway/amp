@@ -2096,23 +2096,20 @@ public class DEImportBuilder {
 		processIATIFeed(execLog, iLog, request);
 	}
 
-	private ArrayList<AmpMappedField> checkIATIActivity(IatiActivity iActivity, String log) {
-		IatiActivityWorker iWorker= new IatiActivityWorker(iActivity, log);
-		iWorker.checkifActivityExists();
-		return iWorker.checkContent();
-	}
-	
 	private void processIATIFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
-			//AmpActivity activity 	= new AmpActivity();//getAmpActivity(actType);
 			
 			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
 				IatiActivity iAct = (IatiActivity) it.next();
 				String logAct = "";
-				ArrayList<AmpMappedField> activityLogs = checkIATIActivity(iAct,logAct);
+				String title = "";
+				String iatiID = "";
+				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
+				ArrayList<AmpMappedField> activityLogs = iWorker.checkContent(title, iatiID);
+				title = iWorker.getTitle();
+				iatiID = iWorker.getIatiID();
 				
 				DELogPerItem	item	= new DELogPerItem();
 				item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
@@ -2124,18 +2121,21 @@ public class DEImportBuilder {
 				
 				item.setDeLogPerExecution(log);
 				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-	
-				if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
+				//item.setName(title+" "+iatiID);
+				item.setName(title+" "+iatiID);
+				item.setItemType("ACTIVITY GROUP ID");
+				String logResult = getLogs(activityLogs);
+				if("".compareTo(logResult)!=0)
 				{
-					item.setDescription("Activity: " +contentLogger.display());
+					item.setDescription("Activity: " +title+" "+logResult);
 					item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 					//iLog.saveObject(item);
 					log.getLogItems().add(item);
 					iLog.saveObject(log.getDeSourceSetting());
-					//continue;
-				}
+					continue;
+				} 
 				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-				item.setDescription("Activity: "+" OK");
+				item.setDescription("Activity: "+title+" OK");
 				log.getLogItems().add(item);
 			}
 			
@@ -2143,6 +2143,20 @@ public class DEImportBuilder {
 			//item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 			iLog.saveObject(log.getDeSourceSetting());
 		
+	}
+	
+	public String getLogs(ArrayList<AmpMappedField> logs){
+		String s="";
+		for (Iterator<AmpMappedField> it = logs.iterator(); it.hasNext();) {
+			AmpMappedField log = (AmpMappedField) it.next();
+			try{
+				if(log!=null && !log.isOK()) 
+					s+=log.getErrors();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return s;
 	}
 	
 	public boolean checkIATIInputString(String inputLog){
@@ -2170,7 +2184,6 @@ public class DEImportBuilder {
 
 	                 m.setSchema(schema);
 	                 m.setEventHandler(log);
-	                 //System.out.println("-----------------"+path+"doc/dataExchange/iati.xml");
 	                
 	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
 	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;

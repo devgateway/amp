@@ -51,15 +51,34 @@ public class AmpMappedField {
 	public boolean isOK(){
 		if(this.getDescription() == null || "".compareTo(this.getDescription().trim()) == 0)
 			return true;
-		else return false;
+		return false;
 	}
- 
+
+	public boolean isMapped(){
+		if(this.getItem().getAmpId()!=null)
+			return true;
+		return false;
+	}
+
+	
 	public void add(String log){
 		this.description += " "+log;
 	}
 
 	public void add(String log, String separator){
 		this.description += separator+log;
+	}
+
+	public String getErrors(){
+		return this.getItem().getIatiPath()+" "+this.getItem().getIatiValues();
+	}
+
+	public String getIatiPath(){
+		return this.getItem().getIatiPath();
+	}
+
+	public String getIatiValues(){
+		return this.getItem().getIatiValues();
 	}
 
 	

@@ -77,9 +77,26 @@ public class IatiActivityWorker {
 	 * 
 	 */
 	private IatiActivity iActivity;
-	private String id;
-	private String title;
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getIatiID() {
+		return iatiID;
+	}
+
+	public void setIatiID(String iatiID) {
+		this.iatiID = iatiID;
+	}
+
+	private String title ="";
+	private String iatiID="";
 	private String lang = "en";
+	
 	
 	public String getLang() {
 		return lang;
@@ -87,6 +104,14 @@ public class IatiActivityWorker {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+
+	public IatiActivityWorker(IatiActivity iActivity, String title,	String iatiID, String log) {
+		super();
+		this.iActivity = iActivity;
+		this.title = title;
+		this.iatiID = iatiID;
+		this.log = log;
 	}
 
 	public IatiActivityWorker(IatiActivity iActivity, String lang, String log) {
@@ -124,14 +149,7 @@ public class IatiActivityWorker {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean checkifActivityExists() {
-		// TODO Auto-generated method stub
-		boolean actExist = false;
-		
-		return actExist;
-	}
-
-	public ArrayList<AmpMappedField> checkContent() {
+	public ArrayList<AmpMappedField> checkContent(String title, String iatiID) { 
 		// TODO Auto-generated method stub
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
@@ -143,6 +161,7 @@ public class IatiActivityWorker {
 				if(i.getName().equals(new QName("title"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
 					System.out.println("activity title:" + printTextType(item)+"#");
+					this.title += printTextType(item);
 				}
 				//status
 				if(i.getName().equals(new QName("activity-status"))){
@@ -165,6 +184,11 @@ public class IatiActivityWorker {
 					logs.add(existAidType);
 				}
 				
+			}
+
+			if(contentItem instanceof IatiIdentifier){
+				IatiIdentifier item = (IatiIdentifier)contentItem;
+				this.iatiID += item.getContent();
 			}
 			
 			if(contentItem instanceof ReportingOrg){
@@ -209,6 +233,7 @@ public class IatiActivityWorker {
 				ok 				 = checkIATITransaction(item,logs);
 			}
 		}
+		
 		return logs;
 	}
 	

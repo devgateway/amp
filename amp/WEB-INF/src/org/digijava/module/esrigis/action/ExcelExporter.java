@@ -53,6 +53,12 @@ public class ExcelExporter extends Action{
 		        cell.setCellValue(columtitle);
 	            cell.setCellStyle(getRowHeadingSt(wb));
 	            
+	            cell = row.createCell(3);
+	            columtitle = new HSSFRichTextString(TranslatorWorker.translateText("Coordinates", langCode, siteId));
+		        cell.setCellValue(columtitle);
+	            cell.setCellStyle(getRowHeadingSt(wb));
+	          
+	            
 	            Integer i = new Integer(1);
 		        for (Iterator iterator = starray.iterator(); iterator.hasNext();) {
 		        	JSONObject json = (JSONObject) iterator.next();
@@ -72,12 +78,18 @@ public class ExcelExporter extends Action{
 		            columtitle = new HSSFRichTextString(getactivityname(json.get("Activity").toString()));
 		        	cell.setCellValue(columtitle);
 		            cell.setCellStyle(getCellSt(wb));
+		            
+		            cell = row.createCell(3);
+		            columtitle = new HSSFRichTextString(json.get("Coordinates").toString());
+		        	cell.setCellValue(columtitle);
+		            cell.setCellStyle(getCellSt(wb));
 		            i++;
 		        }
 		        sheet.autoSizeColumn(0); 
 		        sheet.autoSizeColumn(1);
 		        sheet.autoSizeColumn(2);
-		        sheet.autoSizeColumn(3); 
+		        sheet.autoSizeColumn(3);
+		        
 		        
 		        response.setContentType("application/vnd.ms-excel");
 		        response.setHeader("Content-disposition", "inline; filename=Structures.xls");
@@ -119,7 +131,10 @@ public class ExcelExporter extends Action{
 		return dataitem;
 	}
 	private String getactivityname(String url){
-		String name = url.substring(url.indexOf(">")+1, url.lastIndexOf("<"));
+		String name = "";
+		if (url != null && url !=""){
+			name = url.substring(url.indexOf(">")+1, url.lastIndexOf("<"));
+		}
 		return name;
 	}
 }

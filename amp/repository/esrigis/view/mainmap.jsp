@@ -177,6 +177,7 @@
 				<li   id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
 				<li   id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
 				<li  id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+				<li  id="datasource" onclick="toggleindicatormap('sourcediv');" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
 		     </ul>
 		    </div>
         	<div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
@@ -188,6 +189,7 @@
  		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
+        <!-- Filter -->
         <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
         	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
         	<div class="legendHeader">Selected Filters<br/><hr/></div>
@@ -203,6 +205,33 @@
 				</tbody>
         	</table>
         </div>
+        <!-- Data Source -->
+        <div id="sourcediv" class="legendContent" style="top:80px;left:100px;width: 50%;display:none;"> 
+        	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
+        	<div class="legendHeader">Data Source<br/><hr/></div>
+        	<table width="90%" cellspacing="0" cellpadding="0" border="0">
+        		<tbody>
+					<tr>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+							<digi:trn>Activity Name</digi:trn>
+						</td>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+							<digi:trn>Activity Id</digi:trn>
+						</td>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+							<digi:trn>Currency</digi:trn>
+						</td>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+							<digi:trn>Commitments</digi:trn>
+						</td>
+						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+							<digi:trn>disbursements</digi:trn>
+						</td>
+					</tr>
+				</tbody>
+        	</table>
+        </div>
+        <!-- Search Structures-->
         <div id="distancediv" class="searchContent">
         	<table>
         		<tr>

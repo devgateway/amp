@@ -8,6 +8,7 @@
 		<page name="indexDE" title="Data Exchange Manager"/>
 		<page name="de_showLogs" page="showLogs" title="Data Exchage Log Viewer"/>
 		<page name="de_viewExecutionLog" page="viewExecutionLog" title="Data Exchage Log Execution Viewer"/>
+		<page name="de_mapFields" page="viewMapFields" title="Data Exchage Map Fields Viewer"/>
 		<page name="de_logFeed" page="logFeed" title=""/>
 		<page name="de_createSourceWizard" page="createSourceWizard" title="Create Source Wizard" />
 		<page name="de_showSourceDetails" page="showSourceDetails" title="" />

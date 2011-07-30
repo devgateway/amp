@@ -118,7 +118,8 @@ function importItem(){
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<div class="t_sm">
-							    		<div class="t_sm">Name:	 ${item.name } |
+							    		<div class="t_sm">
+							    		   Name:	 ${item.name } |
 							    		   Database ID:	 ${item.id }	  |
 							    		   Log Level:	 ${item.logType }	  |
 							    		   Date:	 ${item.dateAsString}	  |

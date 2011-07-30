@@ -49,7 +49,7 @@ public class DataExchangeConstants {
 	public static final String COLUMN_KEY_PTIP = "ptip";
 	
 	
-	public static final String IATI_ORGANIZATION_TYPE = "CodeLists.Organization Type";
+	public static final String IATI_ORGANIZATION_TYPE = "Organization Type";
 	public static final String IATI_ORGANIZATION = "Organization";
 	public static final String IATI_LOCATION = "Location";
 	public static final String IATI_ACTIVITY_STATUS = "Activity Status";

@@ -50,7 +50,16 @@ public class DEMappingFields implements Serializable {
     private String status;
     private Timestamp creationDate;
 
+    private Long selectedAmpId;
     
+	public Long getSelectedAmpId() {
+		return selectedAmpId;
+	}
+
+	public void setSelectedAmpId(Long selectedAmpId) {
+		this.selectedAmpId = selectedAmpId;
+	}
+
 	public DEMappingFields() {
 		super();
 	}

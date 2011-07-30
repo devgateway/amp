@@ -412,9 +412,9 @@ public class IatiActivityWorker {
 		if(iatiTransactionList.isEmpty()) return;
 		
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefaultFinanceType, DataExchangeConstants.IATI_FINANCE_TYPE,
-				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefaultFinanceType, DataExchangeConstants.IATI_AID_TYPE,
-				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction t = (Transaction) it.next();
@@ -466,14 +466,14 @@ public class IatiActivityWorker {
 				//disbursement-channel == mode of payment
 				if(i.getName().equals(new QName("disbursement-channel"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					modeOfPayment = getAmpCategoryValue(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+					modeOfPayment = getAmpCategoryValue(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 				}
 				
 				//finance-type == type of assistance
 				if(i.getName().equals(new QName("finance-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					typeOfAssistance = getAmpCategoryValue(item, DataExchangeConstants.IATI_FINANCE_TYPE,
-							toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+							toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 					if(typeOfAssistance == null ) typeOfAssistance = iatiDefaultFinanceType;
 				}
 				
@@ -481,7 +481,7 @@ public class IatiActivityWorker {
 				if(i.getName().equals(new QName("aid-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					financingInstrument = getAmpCategoryValue(item, DataExchangeConstants.IATI_AID_TYPE,
-							toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+							toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 					if( financingInstrument == null) financingInstrument = iatiDefaultAidType;
 				}
 				
@@ -660,7 +660,7 @@ public class IatiActivityWorker {
 			Sector sector = (Sector) it.next();
 			String sectorName = printList(sector.getContent());
 			String vocabulary = sector.getVocabulary()==null?"DAC":sector.getVocabulary();
-			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class,null,null,"active");
+			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class.getName(),null,null,"active");
 			
 			AmpSector ampSector = SectorUtil.getAmpSector(checkMappedField.getAmpId());
 			
@@ -780,7 +780,7 @@ public class IatiActivityWorker {
 		{
 			String code = getAttributeCodeType(item, "code");
 			String value = printCodeType(item);
-			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class,null,null,"active");
+			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"active");
 			//we are sure that activity id is not null - activity is mapped
 			AmpCategoryValue acv = CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
 			if (activity.getCategories() == null) {
@@ -909,35 +909,35 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 		String code = getAttributeCodeType(item, "code");
 		String value = printCodeType(item);
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class,null,null,"inactive", checkMappedField, log);
+		logMappingField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"inactive", checkMappedField, log);
 		return log;
 	}
 
 
 	private AmpMappedField checkOrganization(String content, String lang, String ref) {
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class,null,null,"inactive", checkMappedField, log);
+		logMappingField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(content,ref),lang,null,AmpOrganisation.class.getName(),null,null,"inactive", checkMappedField, log);
 		return log;
 	}
 	
 	private AmpMappedField checkActivity(String title, String iatiID, String lang) {
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class,null,null,"inactive",checkMappedField, log);
+		logMappingField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),lang,null,AmpActivityGroup.class.getName(),null,null,"inactive",checkMappedField, log);
 		return log;
 	}
 	
 	private AmpOrganisation getAmpOrganization(String orgName, String lang, String orgCode){
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(orgName,orgCode),lang,null,AmpOrganisation.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),toIATIValues(orgName,orgCode),lang,null,AmpOrganisation.class.getName(),null,null,"inactive");
 		AmpOrganisation org = (AmpOrganisation) DataExchangeUtils.getOrganizationById(checkMappedField.getAmpId());
 		return org;
 	}
 	
 	private AmpLocation getAmpLocation(String iatiItems, String iatiValues){
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,iatiItems,iatiValues,lang,null,AmpCategoryValueLocations.class,null,null,"active");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,iatiItems,iatiValues,lang,null,AmpCategoryValueLocations.class.getName(),null,null,"active");
 		AmpCategoryValueLocations ampCVLoc = DynLocationManagerUtil.getLocationByIdRequestSession(checkMappedField.getAmpId());
 		AmpLocation ampLoc = null;
 		try {
@@ -960,10 +960,10 @@ public class IatiActivityWorker {
 		getLocationDetails(l,locationName,locationType,locationCountry,adm1,adm2,adm3);
 		
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class,null,null,"inactive");
+				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
 		logMappingField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class,null,null,"inactive", checkMappedField, log);
+				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive", checkMappedField, log);
 		return log;
 	}
 	
@@ -1003,45 +1003,45 @@ public class IatiActivityWorker {
 
 	private AmpMappedField checkOrganizationType(String type) {
 		if(type==null) return null;
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class,null,null,"inactive",checkMappedField,log);
+		logMappingField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive",checkMappedField,log);
 		return log;
 	}
 	
 	private AmpMappedField checkVocabularyCode(Sector item) {
 		DEMappingFields mf = null;
 		String name = item.getVocabulary()==null?"DAC":item.getVocabulary();
-		mf = checkMappedField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class,null,null,"inactive");
+		mf = checkMappedField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(mf);
-		logMappingField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class,null,null,"inactive",mf,log);
+		logMappingField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive",mf,log);
 		return log;
 	}
 	
 	private AmpMappedField checkSector(Sector sector) {
 		String sectorName = printList(sector.getContent());
 		String vocabulary = sector.getVocabulary()==null?"DAC":sector.getVocabulary();
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class,null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class,null,null,"inactive",checkMappedField,log);
+		logMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive",checkMappedField,log);
 		return log;
 	}
 	
 	//mapped to Type of Assistance
 	private AmpMappedField checkFinanceType(JAXBElement<CodeReqType> item) {
-		return checkCodeReqType(item, DataExchangeConstants.IATI_FINANCE_TYPE,toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"inactive");
+		return checkCodeReqType(item, DataExchangeConstants.IATI_FINANCE_TYPE,toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"inactive");
 	}
 	
 	
 	
 	//Financing Instrument
 	private AmpMappedField checkAidType(JAXBElement<CodeReqType> item) {
-		return checkCodeReqType(item, DataExchangeConstants.IATI_AID_TYPE,toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"inactive");
+		return checkCodeReqType(item, DataExchangeConstants.IATI_AID_TYPE,toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"inactive");
 	}
 	
 	//Mode of Payment
 	private AmpMappedField checkDisbursementChannel(JAXBElement<CodeReqType> item) {
-		return checkCodeReqType(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),this.getLang(),null,AmpCategoryValue.class,null,null,"inactive");
+		return checkCodeReqType(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),this.getLang(),null,AmpCategoryValue.class.getName(),null,null,"inactive");
 	}
 	
 	private boolean checkIATITransaction(Transaction t, ArrayList<AmpMappedField> logs) {
@@ -1103,7 +1103,7 @@ public class IatiActivityWorker {
 
 	
 	private AmpMappedField checkCodeReqType(JAXBElement<CodeReqType> item, String iatiPath, String iatiItems,
-			String iatiLang, Long ampId, Class ampClass,
+			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
 		String code = getAttributeCodeReqType(item, "code");
 		String value = printCodeReqType(item);
@@ -1113,7 +1113,7 @@ public class IatiActivityWorker {
 		return log;
 	}
 	private AmpCategoryValue getAmpCategoryValue(JAXBElement<CodeReqType> item, String iatiPath, String iatiItems,
-			String iatiLang, Long ampId, Class ampClass,
+			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status){
 		String code = getAttributeCodeReqType(item, "code");
 		String value = printCodeReqType(item);
@@ -1123,7 +1123,7 @@ public class IatiActivityWorker {
 	}
 
 	private void logMappingField(String iatiPath, String iatiItems,
-			String iatiValues, String iatiLang, Long ampId, Class ampClass,
+			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status,
 			DEMappingFields checkMappedField, AmpMappedField log) {
 		if(checkMappedField==null)
@@ -1204,7 +1204,7 @@ public class IatiActivityWorker {
 
 	
 	private DEMappingFields checkMappedField(String iatiPath, String iatiItems,
-			String iatiValues, String iatiLang, Long ampId, Class ampClass,
+			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
 		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang==null?this.getLang():iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
@@ -1217,7 +1217,7 @@ public class IatiActivityWorker {
 	}
 
 	private DEMappingFields addMappingField(String iatiPath, String iatiItems,
-			String iatiValues, String iatiLang, Long ampId, Class ampClass,
+			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
 		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		DataExchangeUtils.insertDEMappingField(mf);
@@ -1307,7 +1307,7 @@ public class IatiActivityWorker {
 	
 
 	private void checkJAXBAddACV(JAXBElement<CodeType> item,String attribute, String acvKey,String iatiPath, String iatiItems,
-			String iatiLang, Long ampId, Class ampClass,
+			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
 		String code = getAttributeCodeType(item, attribute);
 		String value = printCodeType(item);
@@ -1355,15 +1355,15 @@ public class IatiActivityWorker {
 //				}
 //			}
 //			else {
-//				DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+//				DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
 //				if(checkMappedField !=null)
-//					addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+//					addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
 //			}
 //		}
 //
-//		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+//		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
 //		if(checkMappedField !=null)
-//			addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class,null,null,"inactive");
+//			addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
 //		
 //		return !ok;
 //	}

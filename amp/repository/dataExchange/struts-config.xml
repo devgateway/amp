@@ -6,6 +6,7 @@
 		<form-bean name="deImportForm" type="org.digijava.module.dataExchange.form.ImportForm"/>
 		<form-bean name="importChaptersForm" type="org.digijava.module.dataExchange.form.ImportChaptersForm"/>
 		<form-bean name="showLogsForm" type="org.digijava.module.dataExchange.form.ShowLogsForm"/>
+		<form-bean name="mapFieldsForm" type="org.digijava.module.dataExchange.form.MapFieldsForm"/>
 		<form-bean name="createSourceForm" type="org.digijava.module.dataExchange.form.CreateSourceForm"/>
 		<form-bean name="manageSourceForm" type="org.digijava.module.dataExchange.form.ManageSourceForm"/>
 	</form-beans>
@@ -37,6 +38,10 @@
 			<forward name="feed" path="/showLayout.do?layout=de_logFeed"/>
 			<forward name="showLogItemDetails" path="/showLayout.do?layout=de_showLogItemDetails" />
 			<forward name="viewExecutionLog" path="/showLayout.do?layout=de_viewExecutionLog" />
+		</action> 
+		<action path="/dataExchange/mapFields" scope="session" type="org.digijava.module.dataExchange.action.MapFieldsAction" name="mapFieldsForm" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=de_mapFields"/>
+			<forward name="mapFields" path="/showLayout.do?layout=de_mapFields" />
 		</action> 
 		<action path="/dataExchange/createSource" scope="session" type="org.digijava.module.dataExchange.action.CreateSourceAction" name="createSourceForm" 
 																								validate="false">

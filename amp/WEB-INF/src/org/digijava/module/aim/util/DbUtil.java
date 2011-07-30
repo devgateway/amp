@@ -1601,10 +1601,10 @@ public class DbUtil {
 	}
 	return calendar;
     }
-    public static Collection getAllActivities() {
+    public static Collection<AmpActivity> getAllActivities() {
         Session session = null;
         Query qry = null;
-        Collection activities = new ArrayList();
+        Collection<AmpActivity> activities = new ArrayList<AmpActivity>();
         try {
             session = PersistenceManager.getSession();
             String queryString = "select f from " + AmpActivity.class.getName()
@@ -4952,9 +4952,9 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection getAllOrgTypes() {
+    public static Collection<AmpOrgType> getAllOrgTypes() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpOrgType> col = new ArrayList<AmpOrgType>();
 
         try {
             session = PersistenceManager.getRequestDBSession();

@@ -16,8 +16,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DEMappingFieldsDisplay;
 import org.digijava.module.dataExchange.form.MapFieldsForm;
@@ -50,8 +59,17 @@ public class MapFieldsAction extends MultiAction {
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();
 		
+		
 		Collection<AmpOrgType> allOrgTypes = DbUtil.getAllOrgTypes();
 		Collection<AmpActivity> allActivities = DbUtil.getAllActivities();
+		Collection<AmpOrganisation> allOrgs = DbUtil.getAllOrganisation();
+		Collection<AmpCategoryValue> statusList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+		Collection<AmpCategoryValue> typeOfAssistanceList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		Collection<AmpCategoryValue> financingInstrumentList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		Collection<AmpCategoryValue> modeOfPaymentList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY);
+		Collection<AmpSectorScheme> sectorSchemeList = SectorUtil.getAllSectorSchemes();
+		Collection<AmpSector> sectorList = SectorUtil.getAllSectors();
+		Collection<AmpCategoryValueLocations> locationsList = LocationUtil.getAllLocations(null);
 		
 		
 		for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
@@ -61,6 +79,33 @@ public class MapFieldsAction extends MultiAction {
 				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allActivities));
 			if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(f.getIatiPath())==0){
 				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allOrgTypes));
+			}
+			if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allOrgs));
+			}
+			if(DataExchangeConstants.IATI_LOCATION.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,locationsList));
+			}
+			if(DataExchangeConstants.IATI_ACTIVITY_STATUS.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,statusList));
+			}
+			if(DataExchangeConstants.IATI_VOCABULARY_CODE.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,sectorSchemeList));
+			}
+			if(DataExchangeConstants.IATI_SECTOR.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,sectorList));
+			}
+			//type of assistance
+			if(DataExchangeConstants.IATI_FINANCE_TYPE.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,typeOfAssistanceList));
+			}
+			//financing instrument
+			if(DataExchangeConstants.IATI_AID_TYPE.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,financingInstrumentList));
+			}
+			//mode of payment
+			if(DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL.compareTo(f.getIatiPath())==0){
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,modeOfPaymentList));
 			}
 		}
 		

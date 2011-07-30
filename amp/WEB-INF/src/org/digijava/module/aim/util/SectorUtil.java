@@ -199,9 +199,9 @@ public class SectorUtil {
 
 	}
 
-	public static Collection getAllSectorSchemes() {
+	public static Collection<AmpSectorScheme> getAllSectorSchemes() {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpSectorScheme> col = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -307,9 +307,9 @@ public class SectorUtil {
 		return col;
 	}
 
-	public static Collection getAllSectors() {
+	public static Collection<AmpSector> getAllSectors() {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpSector> col = null;
 
 		try {
 			session = PersistenceManager.getRequestDBSession();

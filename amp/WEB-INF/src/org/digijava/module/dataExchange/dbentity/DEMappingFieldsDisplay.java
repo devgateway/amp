@@ -3,14 +3,17 @@
  */
 package org.digijava.module.dataExchange.dbentity;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 
 /**
@@ -65,34 +68,60 @@ public class DEMappingFieldsDisplay {
 //		public static final String IATI_ACTIVITY = "Activity";
 		
 		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(f.getIatiPath())==0){
-			for (Iterator it = c.iterator(); it.hasNext();) {
-				AmpOrgType ampOrgType = (AmpOrgType) it.next();
-				this.labels.put(ampOrgType.getAmpOrgTypeId(), ampOrgType.getLabel());
+			for (Iterator<AmpOrgType> it = c.iterator(); it.hasNext();) {
+				AmpOrgType item = (AmpOrgType) it.next();
+				this.labels.put(item.getAmpOrgTypeId(), item.getLabel());
 			}
 		}
 		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpOrganisation> it = c.iterator(); it.hasNext();) {
+				AmpOrganisation item = (AmpOrganisation) it.next();
+				this.labels.put(item.getAmpOrgId(), item.getLabel());
+			}
 		}
 		if(DataExchangeConstants.IATI_LOCATION.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpCategoryValueLocations> it = c.iterator(); it.hasNext();) {
+				AmpCategoryValueLocations item = (AmpCategoryValueLocations) it.next();
+				this.labels.put(item.getId(), item.getName());
+			}
 		}
 		if(DataExchangeConstants.IATI_ACTIVITY_STATUS.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpCategoryValue> it = c.iterator(); it.hasNext();) {
+				AmpCategoryValue item = (AmpCategoryValue) it.next();
+				this.labels.put(item.getId(), item.getLabel());
+			}
 		}
 		if(DataExchangeConstants.IATI_VOCABULARY_CODE.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpSectorScheme> it = c.iterator(); it.hasNext();) {
+				AmpSectorScheme item = (AmpSectorScheme) it.next();
+				this.labels.put(item.getAmpSecSchemeId(), item.getSecSchemeName());
+			}
 		}
 		if(DataExchangeConstants.IATI_SECTOR.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpSector> it = c.iterator(); it.hasNext();) {
+				AmpSector item = (AmpSector) it.next();
+				this.labels.put(item.getAmpSectorId(), item.getLabel());
+			}
 		}
+		//type of assistance
 		if(DataExchangeConstants.IATI_FINANCE_TYPE.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpCategoryValue> it = c.iterator(); it.hasNext();) {
+				AmpCategoryValue item = (AmpCategoryValue) it.next();
+				this.labels.put(item.getId(), item.getLabel());
+			}
 		}
+		//financing instrument
 		if(DataExchangeConstants.IATI_AID_TYPE.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpCategoryValue> it = c.iterator(); it.hasNext();) {
+				AmpCategoryValue item = (AmpCategoryValue) it.next();
+				this.labels.put(item.getId(), item.getLabel());
+			}
 		}
 		if(DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL.compareTo(f.getIatiPath())==0){
-			
+			for (Iterator<AmpCategoryValue> it = c.iterator(); it.hasNext();) {
+				AmpCategoryValue item = (AmpCategoryValue) it.next();
+				this.labels.put(item.getId(), item.getLabel());
+			}
 		}
 		if(DataExchangeConstants.IATI_ACTIVITY.compareTo(f.getIatiPath())==0){
 			

@@ -1225,14 +1225,6 @@ public class IatiActivityWorker {
 	}
 	
 	
-	private AmpCategoryValue getACVbyCodeType(JAXBElement<CodeType> e, String categoryKey ){
-		return  getAmpCategoryValue(printCodeType(e), getAttributeCodeType(e, "code"),  categoryKey );
-	}
-	
-	private AmpCategoryValue getACVbyCodeReqType(JAXBElement<CodeReqType> e, String categoryKey ){
-		return  getAmpCategoryValue(printCodeReqType(e), getAttributeCodeReqType(e, "code"),  categoryKey );
-	}
-	
 	private AmpCategoryValue getAmpCategoryValue(String value, String code, String categoryKey ){
 		AmpCategoryValue acv=null;
 		Collection<AmpCategoryValue> allCategValues;
@@ -1306,73 +1298,12 @@ public class IatiActivityWorker {
 	//****************************************** Other methods ******************************
 	
 
-	private void checkJAXBAddACV(JAXBElement<CodeType> item,String attribute, String acvKey,String iatiPath, String iatiItems,
-			String iatiLang, Long ampId, String ampClass,
-			Long sourceId, String feedFileName, String status) {
-		String code = getAttributeCodeType(item, attribute);
-		String value = printCodeType(item);
-		AmpCategoryValue acv = getAmpCategoryValue(value,code, acvKey);
-		if(acv==null) 
-			addMappingField(iatiPath,iatiItems,toIATIValues(value,code),this.getLang(),null,ampClass,null,null,status);
-	}
-
-	
 	private boolean isValidString(String s ){
 		if(s != null && !"".equals(s.trim()))
 			return true;
 		return false;
 		
 	}
-	
-
-	
-//	private boolean checkSector(String content, String lang, String code, String vocabularyName, DEMappingFields mappedVocabulary, Collection<AmpSectorScheme> allSectorSchemes) {
-//		
-//		AmpSectorScheme ampSS = null;
-//		boolean ok = true;
-//		if(mappedVocabulary == null) {
-//			for (Iterator<AmpSectorScheme> iterator = allSectorSchemes.iterator(); iterator.hasNext();) {
-//				ampSS = (AmpSectorScheme) iterator.next();
-//				if(vocabularyName.compareTo(ampSS.getSecSchemeName()) == 0) break;
-//			}
-//			List<AmpSector> allSectorsFromScheme = SectorUtil.getAllSectorsFromScheme(ampSS.getAmpSecSchemeId());
-//			for (Iterator<AmpSector> it = allSectorsFromScheme.iterator(); it.hasNext();) {
-//				AmpSector ampSector = (AmpSector) it.next();
-//				if(ampSector.getName().compareTo(content) == 0 && ampSector.getSectorCodeOfficial().compareTo(code) == 0) return ok;
-//			}
-//		}
-//		//it is a mapped sector scheme
-//		else{
-//			if(mappedVocabulary.getAmpId()!=null) {
-//				for (Iterator<AmpSectorScheme> iterator = allSectorSchemes.iterator(); iterator.hasNext();) {
-//					ampSS = (AmpSectorScheme) iterator.next();
-//					if(mappedVocabulary.getAmpId().compareTo(mappedVocabulary.getAmpId()) == 0) break;
-//				}
-//				List<AmpSector> allSectorsFromScheme = SectorUtil.getAllSectorsFromScheme(ampSS.getAmpSecSchemeId());
-//				for (Iterator<AmpSector> it = allSectorsFromScheme.iterator(); it.hasNext();) {
-//					AmpSector ampSector = (AmpSector) it.next();
-//					if(ampSector.getName().compareTo(content) == 0 && ampSector.getSectorCodeOfficial().compareTo(code) == 0) return ok;
-//				}
-//			}
-//			else {
-//				DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
-//				if(checkMappedField !=null)
-//					addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
-//			}
-//		}
-//
-//		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
-//		if(checkMappedField !=null)
-//			addMappingField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),toIATIValues(vocabularyName,content,code),this.getLang(),null,AmpSector.class.getName(),null,null,"inactive");
-//		
-//		return !ok;
-//	}
-	
-
-
-
-	//return JAXBElement<TextType> content
-
 	
 
 }

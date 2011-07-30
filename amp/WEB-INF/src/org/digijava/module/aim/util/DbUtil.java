@@ -1526,10 +1526,10 @@ public class DbUtil {
      * @author Priyajith C
      */
     // Retreives all organisation;
-    public static Collection getAllOrganisation() {
+    public static Collection<AmpOrganisation> getAllOrganisation() {
         Session session = null;
         Query qry = null;
-        Collection organisation = new ArrayList();
+        Collection<AmpOrganisation> organisation = new ArrayList();
 
         try {
             session = PersistenceManager.getRequestDBSession();

@@ -570,7 +570,7 @@ public class LocationUtil {
 		} 
 		return ampRegions;
 	}
-	
+	/*
 	public static Collection getAllLocations(Long id) {
 		AmpLocation ampLocation = null;
 		ArrayList ampLocations = new ArrayList();
@@ -603,7 +603,7 @@ public class LocationUtil {
 		} 
 		return ampLocations;
 	}
-
+*/
 	public static AmpLocation getAmpLocation(Long id) {
 		AmpLocation ampLocation = null;
 		Session session = null;

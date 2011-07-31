@@ -654,3 +654,8 @@ html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;pos
 .admin_landing_page_box_cont table a {font-size:11px; font-weight:bold;}
 .admin_box_label {}
 .admin_landing_page_tbl {margin-top:10px;}
+.yui-panel {
+    border-collapse: separate;
+    font-family:arial;
+	font-size:12px;
+}

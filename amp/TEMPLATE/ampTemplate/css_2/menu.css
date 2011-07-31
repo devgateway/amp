@@ -230,8 +230,7 @@ text-decoration:underline;
 }
 
 .yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
-
-
+.yuiamp-skin-amp .yuiampmenuitem a:hover {color:#3974bb; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
 .yuiamp-skin-amp .yuiampmenuitemlabel, A.yuiampmenuitemlabel:visited{
 	color:#376091;
 	padding: 0 5px 0 10px;

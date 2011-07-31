@@ -92,7 +92,7 @@
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
-	<mx:HBox width="634" height="350">
+	<mx:HBox width="634" height="400">
 		<mx:DataGrid id="datagrid_id"
 					 editable="false" enabled="true" width="100%" height="100%">
 		</mx:DataGrid>

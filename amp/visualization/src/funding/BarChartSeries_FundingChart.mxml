@@ -330,7 +330,7 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="450" 
+			   height="400" 
 			   dragEnter="dragEnterHandler(event);" 
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -426,7 +426,7 @@
 				x="25"
 				y="0"
 				showDataTips="false"
-				height="{dc.height-50}"
+				height="{dc.height}"
 				width="{dc.width-25}"
 				percentGap="{percentGap}"
 				dataProvider="{dataProvider}" 

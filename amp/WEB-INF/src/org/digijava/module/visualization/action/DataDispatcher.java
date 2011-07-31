@@ -517,6 +517,11 @@ public class DataDispatcher extends DispatchAction {
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
         
 		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
@@ -644,6 +649,9 @@ public class DataDispatcher extends DispatchAction {
 	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        		csvString.append("\n");
 	            }
+	    		if(divide){
+	    			filter.setDivideThousands(false);
+	    		}
 	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
 	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -777,6 +785,9 @@ public class DataDispatcher extends DispatchAction {
 		        }
 	        }
 	        visualizationForm.getExportData().setSectorTableData(sectorData);
+			if(divide){
+				filter.setDivideThousands(false);
+			}
 	        	
 			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 				PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -824,6 +835,14 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
+		
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
+		
+		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
         
@@ -1092,6 +1111,9 @@ public class DataDispatcher extends DispatchAction {
 	        }
             visualizationForm.getExportData().setDonorTableData(donorData);
     		
+    		if(divide){
+    			filter.setDivideThousands(false);
+    		}
 
     		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
     			PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -1142,6 +1164,11 @@ public class DataDispatcher extends DispatchAction {
 		boolean typeOfAid = request.getParameter("typeofaid") != null ? Boolean.parseBoolean(request.getParameter("typeofaid")) : false;
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         BigDecimal divideByDenominator;
@@ -1259,6 +1286,9 @@ public class DataDispatcher extends DispatchAction {
 					visualizationForm.getExportData().setFinancingInstTableData(aidTypeData);
 				}
 			}
+			if(divide){
+				filter.setDivideThousands(false);
+			}
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
@@ -1331,6 +1361,11 @@ public class DataDispatcher extends DispatchAction {
 		boolean nodata = true; // for displaying no data message
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
 
 		Long year = filter.getYear();
 		BigDecimal divideByDenominator;
@@ -1437,6 +1472,9 @@ public class DataDispatcher extends DispatchAction {
 		}
 		if (nodata) {
 //			result = new DefaultCategoryDataset();
+		}
+		if(divide){
+			filter.setDivideThousands(false);
 		}
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF-8"), true);
@@ -1617,6 +1655,10 @@ public class DataDispatcher extends DispatchAction {
 			return null;
 			
 			
+		}
+		//resetting to avoid affecting all graphs
+		if(divide){
+			filter.setDivideThousands(false);
 		}
 
 		for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
@@ -1836,6 +1878,12 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
+		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
         
@@ -1963,6 +2011,10 @@ public class DataDispatcher extends DispatchAction {
 	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        		csvString.append("\n");
 	            }
+	    		if(divide){
+	    			filter.setDivideThousands(false);
+	    		}
+
 	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
 	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -2097,6 +2149,9 @@ public class DataDispatcher extends DispatchAction {
 		        }
 	        }
 	        visualizationForm.getExportData().setRegionTableData(regionData);
+			if(divide){
+				filter.setDivideThousands(false);
+			}
 	        
 			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 				PrintWriter out = new PrintWriter(new OutputStreamWriter(

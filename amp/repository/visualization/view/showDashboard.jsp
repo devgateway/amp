@@ -22,7 +22,7 @@
 		padding:0px 0px 0px 0px;
 		vertical-align:top;
 		width:634px;
-		height:450px;
+		height:400px;
 		clear: both;
 	    background-color: #FFFFFF;
 	}
@@ -40,6 +40,9 @@
 	    border-width: 1px 2px 2px 1px;
 	    width:510px;
 	    background-color: #FFFFFF;
+    }
+	.chart_header label {
+		font-size: 11px;
     }
     .chartFieldset {
 	    background-color: #F4F4F4;
@@ -1269,17 +1272,17 @@ function toggleSettings(){
 		<tr>
 			<td>
 				<a href="javascript:document.getElementById('fundingChartHeader').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('aidPredChartTitle').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('aidTypeChartTitle').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('finInstChartTitle').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('AidPredictabilityTitle').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('AidTypeTitle').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('FinancingInstrumentTitle').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
 				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-					<a href="javascript:document.getElementById('donorChartTitle').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('DonorProfileTitle').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-					<a href="javascript:document.getElementById('sectorChartTitle').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('SectorProfileTitle').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-					<a href="javascript:document.getElementById('regionChartTitle').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('RegionProfileTitle').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
 				</c:if>
 				
 			</td>
@@ -1414,11 +1417,6 @@ function toggleSettings(){
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="fundingChartHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
-<!-- 			Font 
-			<select id="fundingChartShowFontFamily">
-				<option value="Verdana">Verdana</option>
-				<option value="Arial">Arial</option>
-			</select> -->
 			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
 			&nbsp;Size
 			<select id="FundingChartFontSize">
@@ -1428,11 +1426,11 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			&nbsp;<input type="checkbox" id="FundingChartBold">Bold<br/>
-			<input type="checkbox" id="FundingChartShowLegend" checked="checked">Show legend
-			&nbsp;<input type="checkbox" id="FundingChartDivide">Divide by thousands
-			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
-			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
+			&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold">Bold</label><br/>
+			<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend">Show legend</label>
+			&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide">Divide by thousands</label>
+			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel" checked="checked"><label for="FundingChartShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel">Rotate data label</label></br>
 			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
@@ -1452,8 +1450,28 @@ function toggleSettings(){
 			</div> 
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-			<fieldset>
-				<legend><span id="ODAGrowthTitle" class=legend_label></span></legend>
+			<fieldset class="chartFieldset">
+				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
+				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="ODAGrowthTitle" value="" size="50">
+				<input type="hidden" id="ODAGrowthShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="ODAGrowthFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold">Bold</label><br/>
+				<span style="display:none">
+				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel">Rotate data label</label></br>
+				</span>
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'ODAGrowth')">
+				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/></div>
 				<br />
 				<br />
@@ -1469,8 +1487,26 @@ function toggleSettings(){
 				</div> 
 			</fieldset>
 		</c:if>
-		<fieldset>
-			<legend><span id="aidPredChartTitle" class=legend_label></span></legend>
+		<fieldset class="chartFieldset">
+			<legend><span id="AidPredictabilityTitleLegend" class=legend_label></span></legend>
+			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			Title <input type="text" id="AidPredictabilityTitle" value="" size="50">
+			<input type="hidden" id="AidPredictabilityShowFontFamily" value="Verdana"/>
+			&nbsp;Size
+			<select id="AidPredictabilityFontSize">
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+			</select>
+			&nbsp;<input type="checkbox" id="AidPredictabilityBold"><label for="AidPredictabilityBold">Bold</label><br/>
+			<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label for="AidPredictabilityShowLegend">Show legend</label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label for="AidPredictabilityDivide">Divide by thousands</label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel" checked="checked"><label for="AidPredictabilityShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label for="AidPredictabilityRotateDataLabel">Rotate data label</label></br>
+			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidPredictability')">
+			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability')" title="Data View"/></div>
 			<br />
 			<br />
@@ -1485,8 +1521,26 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
-		<fieldset>
-			<legend><span id="aidTypeChartTitle" class=legend_label></span></legend>
+		<fieldset class="chartFieldset">
+			<legend><span id="AidTypeTitleLegend" class=legend_label></span></legend>
+			<div id="aidTypeHeader" class="chart_header" style="float:left">
+			Title <input type="text" id="AidTypeTitle" value="" size="50">
+			<input type="hidden" id="AidTypeShowFontFamily" value="Verdana"/>
+			&nbsp;Size
+			<select id="AidTypeFontSize">
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+			</select>
+			&nbsp;<input type="checkbox" id="AidTypeBold"><label for="AidTypeBold">Bold</label><br/>
+			<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label for="AidTypeShowLegend">Show legend</label>
+			&nbsp;<input type="checkbox" id="AidTypeDivide"><label for="AidTypeDivide">Divide by thousands</label>
+			&nbsp;<input type="checkbox" id="AidTypeShowDataLabel" checked="checked"><label for="AidTypeShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label for="AidTypeRotateDataLabel">Rotate data label</label></br>
+			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidType')">
+			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidType')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidType')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidType')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidType')" title="Data View"/></div>
 			<br />
 			<br />
@@ -1501,8 +1555,26 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
-		<fieldset>
-			<legend><span id="finInstChartTitle" class=legend_label></span></legend>
+		<fieldset class="chartFieldset">
+			<legend><span id="FinancingInstrumentTitleLegend" class=legend_label></span></legend>
+			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			Title <input type="text" id="FinancingInstrumentTitle" value="" size="50">
+			<input type="hidden" id="FinancingInstrumentShowFontFamily" value="Verdana"/>
+			&nbsp;Size
+			<select id="FinancingInstrumentFontSize">
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+			</select>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentBold"><label for="FinancingInstrumentBold">Bold</label><br/>
+			<input type="checkbox" id="FinancingInstrumentShowLegend" checked="checked"><label for="FinancingInstrumentShowLegend">Show legend</label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentDivide"><label for="FinancingInstrumentDivide">Divide by thousands</label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel" checked="checked"><label for="FinancingInstrumentShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentRotateDataLabel"><label for="FinancingInstrumentRotateDataLabel">Rotate data label</label></br>
+			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FinancingInstrument')">
+			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FinancingInstrument')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'FinancingInstrument')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FinancingInstrument')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FinancingInstrument')" title="Data View"/></div>
 			<br />
 			<br />
@@ -1518,8 +1590,26 @@ function toggleSettings(){
 			</div> 
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
- 			<fieldset>
-				<legend><span id="donorChartTitle" class=legend_label></span></legend>
+			<fieldset class="chartFieldset">
+				<legend><span id="DonorProfileTitleLegend" class=legend_label></span></legend>
+				<div id="DonorProfileHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="DonorProfileTitle" value="" size="50">
+				<input type="hidden" id="DonorProfileShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="DonorProfileFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold">Bold</label><br/>
+				<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label for="DonorProfileShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="DonorProfileDivide"><label for="DonorProfileDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel" checked="checked"><label for="DonorProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label for="DonorProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'DonorProfile')">
+				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'DonorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile')" title="Data View"/></div>
 				<br />
 				<br />
@@ -1536,8 +1626,26 @@ function toggleSettings(){
 			</fieldset>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-			<fieldset>
-				<legend><span id="sectorChartTitle" class=legend_label></span></legend>
+			<fieldset class="chartFieldset">
+				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
+				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="SectorProfileTitle" value="" size="50">
+				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="SectorProfileFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold">Bold</label><br/>
+				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel" checked="checked"><label for="SectorProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
+				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'SectorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile')" title="Data View"/></div>
 				<br />
 				<br />
@@ -1554,8 +1662,26 @@ function toggleSettings(){
 			</fieldset>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-			<fieldset>
-				<legend><span id="regionChartTitle" class=legend_label></span></legend>
+			<fieldset class="chartFieldset">
+				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
+				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="RegionProfileTitle" value="" size="50">
+				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="RegionProfileFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold">Bold</label><br/>
+				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel" checked="checked"><label for="RegionProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
+				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'RegionProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile')" title="Data View"/></div>
 				<br />
 				<br />
@@ -2329,6 +2455,10 @@ function refreshBoxes(o){
 	if (type=="2") {
 		fundType = trnExpenditures;
 	}
+	try
+	{
+
+		
 	if (dashboardType==1) {
 		var currentYear = document.getElementById("currentYear").value;
 		var startYear = document.getElementById("yearToCompare").value;
@@ -2336,37 +2466,54 @@ function refreshBoxes(o){
 			startYear =  "" + (currentYear - 1);
 		}
 		var endYear =  "" + currentYear;
-		div = document.getElementById("ODAGrowthTitle");
-		inner = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
-		div.innerHTML = inner;
+		div = document.getElementById("ODAGrowthTitleLegend");
+		input = document.getElementById("ODAGrowthTitle");
+		value = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+		div.innerHTML = value;
+		input.value = value;
+	}
+	div = document.getElementById("AidPredictabilityTitleLegend");
+	input = document.getElementById("AidPredictabilityTitle");
+	value = trnAidPredictability + " - " + fundType;
+	div.innerHTML = value;
+	input.value = value;
+	}
+	catch(e){
+		
 	}
 
-	div = document.getElementById("aidPredChartTitle");
-	inner = trnAidPredictability + " - " + fundType;
-	div.innerHTML = inner;
+	div = document.getElementById("AidTypeTitleLegend");
+	input = document.getElementById("AidTypeTitle");
+	value = trnAidType + " - " + fundType;
+	div.innerHTML = value;
+	input.value = value;
 
-	div = document.getElementById("aidTypeChartTitle");
-	inner = trnAidType + " - " + fundType;
-	div.innerHTML = inner;
-
-	div = document.getElementById("finInstChartTitle");
-	inner = trnFinancingInstrument + " - " + fundType;
-	div.innerHTML = inner;
+	div = document.getElementById("FinancingInstrumentTitleLegend");
+	input = document.getElementById("FinancingInstrumentTitle");
+	value = trnFinancingInstrument + " - " + fundType;
+	div.innerHTML = value;
+	input.value = value;
 
 	if (dashboardType!=1) {
-		div = document.getElementById("donorChartTitle");
-		inner = trnDonorProfile + " - " + fundType;
-		div.innerHTML = inner;
+		div = document.getElementById("DonorProfileTitleLegend");
+		input = document.getElementById("DonorProfileTitle");
+		value = trnDonorProfile + " - " + fundType;
+		div.innerHTML = value;
+		input.value = value;
 	}
 	if (dashboardType!=3) {
-		div = document.getElementById("sectorChartTitle");
-		inner = trnSectorProfile + " - " + fundType;
-		div.innerHTML = inner;
+		div = document.getElementById("SectorProfileTitleLegend");
+		input = document.getElementById("SectorProfileTitle");
+		value = trnSectorProfile + " - " + fundType;
+		div.innerHTML = value;
+		input.value = value;
 	}
 	if (dashboardType!=2) {
-		div = document.getElementById("regionChartTitle");
-		inner = trnRegionProfile + " - " + fundType;
-		div.innerHTML = inner;
+		div = document.getElementById("RegionProfileTitleLegend");
+		input = document.getElementById("RegionProfileTitle");
+		value = trnRegionProfile + " - " + fundType;
+		div.innerHTML = value;
+		input.value = value;
 	}
 	var currentYear = document.getElementById("currentYear").value;
 	var yearsInRange = document.getElementById("yearsInRange").value;
@@ -2432,8 +2579,8 @@ window.onload=initPanel;
 function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');
@@ -2553,19 +2700,71 @@ function changeChart(e, chartType, container){
 	attributes.id = container;
 	switch(chartType){
 		case "bar":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf?rnd=" + Math.floor(Math.random()*25000), container, "634", "450", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "donut":
-			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "line":
-			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "dataview":
-			swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 	}
+	updateChartSettings(container, chartType);
 	return false;
+}
+
+function updateChartSettings(container, chartType){
+	var title = document.getElementById(container + "Title") == undefined ? "" : document.getElementById(container + "Title");
+	var fontSize = document.getElementById(container + "FontSize") == undefined ? "" : document.getElementById(container + "FontSize");
+	var boldTitle = document.getElementById(container + "Bold") == undefined ? "" : document.getElementById(container + "Bold");
+	var showLegend = document.getElementById(container + "ShowLegend") == undefined ? "" : document.getElementById(container + "ShowLegend");
+	var showDataLabel = document.getElementById(container + "ShowDataLabel") == undefined ? "" : document.getElementById(container + "ShowDataLabel");
+	var rotateDataLabel = document.getElementById(container + "RotateDataLabel") == undefined ? "" : document.getElementById(container + "RotateDataLabel");
+	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide");
+
+	switch(chartType){
+	case "bar":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.disabled = false;
+		showDataLabel.disabled = false;
+		rotateDataLabel.disabled = false;
+		divide.disabled = false;
+		break;
+	case "donut":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.disabled = false;
+		showDataLabel.disabled = true;
+		rotateDataLabel.disabled = true;
+		divide.disabled = true;
+		break;
+	case "line":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.disabled = false;
+		showDataLabel.disabled = true;
+		rotateDataLabel.disabled = true;
+		divide.disabled = false;
+		break;
+	case "dataview":
+		title.disabled = true;
+		fontSize.disabled = true;
+		boldTitle.disabled = true;
+		showLegend.disabled = true;
+		showDataLabel.disabled = true;
+		rotateDataLabel.disabled = true;
+		divide.disabled = true;
+		break;
+}
+	
+	
 }
 //var mySelec = new YAHOO.widget.TabView("selectDiv");
 //mySelec.selectTab(0);

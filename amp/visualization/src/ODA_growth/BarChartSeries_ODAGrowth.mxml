@@ -39,7 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				creationComplete="application1_creationCompleteHandler(event);"
 				>
 	
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getODAGrowthGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getODAGrowthGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
 			<typeofaid>true</typeofaid>
@@ -59,6 +59,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 			
 			import org.axiis.charts.groupings.BarCluster;
 			import org.axiis.data.DataSet;
+
+			import mx.events.MoveEvent;
+			import mx.managers.DragManager;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import flash.events.MouseEvent;
+
+			private var xS:int; 
+			private var yS:int;
 			
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
@@ -88,10 +97,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 						if (minValue > currentValue) minValue = currentValue;
 					}
 				}
-				if (totalResults * 30 > 350){
+				if (totalResults * 30 > 400){
 					mxc1.height = totalResults * 30;
 				} else {
-					mxc1.height = 350;
+					mxc1.height = 400;
 				}
 				
 				//				categories = categoriesLocal; 
@@ -126,6 +135,25 @@ OTHER DEALINGS IN THE SOFTWARE.
 					groupSeparator = " ";
 				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				
+				chartLabel.text = title;
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Verdana");
+				
+				chartLabel.setStyle("fontSize", fontSize);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
 				
 			}
 			
@@ -137,7 +165,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -164,7 +192,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -175,6 +203,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
 				}
 				catch(errObject:Error){
 					//Fail silently when running standalone
@@ -217,9 +246,41 @@ OTHER DEALINGS IN THE SOFTWARE.
 				service.send();
 				start();
 			}
+			public function refreshGraphNoData():void
+			{
+				start();
+			}
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
 				messagePanel.height = h;
+			}
+			//Section added for Drag&drop of Title
+			
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
 			}
 		]]>
 	</mx:Script>
@@ -253,10 +314,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634"
-			   height="350">
+			   height="400"
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
 	<axiis:DataCanvas top="50"
 					  bottom="20"
-					  width="{this.width*.9}"
+					  width="{this.width}"
 					  id="dc"
 					  left="40"
 					  right="120"
@@ -315,7 +379,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 			</axiis:VBoxLayout>
 		</axiis:layouts>
+		
 	</axiis:DataCanvas>
+	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	</mx:Canvas>
 	
 	<axiis:LayoutPalette layout="{hLayout}" colors="{palette}" id="outerPalette"/> 

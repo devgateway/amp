@@ -40,7 +40,7 @@
 	xmlns:utils="org.axiis.utils.*">
 
 	<mx:Style source="styles/Axiis_Examples.css"/>
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<linechart>true</linechart>
 		</mx:request>
@@ -48,18 +48,29 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import flash.external.ExternalInterface;
-			import org.axiis.events.LayoutItemEvent;
-			import org.axiis.core.AxiisSprite;
-			import org.axiis.utils.ObjectUtils;
-			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
-			import mx.events.FlexEvent;
-			import mx.rpc.events.ResultEvent;
-			import mx.utils.ArrayUtil;
 			import com.exportUtil.*;
 			
+			import flash.events.MouseEvent;
+			import flash.external.ExternalInterface;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.events.MoveEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
+			
+			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
+			import org.axiis.events.LayoutItemEvent;
+			import org.axiis.utils.ObjectUtils;
+
+			private var xS:int; 
+			private var yS:int;
 
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
@@ -76,12 +87,28 @@
 			{
 				this.ds = new DataSet();
 				ds.processCsvAsTable(String(service.lastResult), false);
-				
+
 				//LineSeriesGroup expects each unique series as a row
 				//Since our data has the time entries on each row (a common format for temporal data) we want to pivot the data
 				//This then makes a column for each unique time entrie and a row for each unique column.
 				ds.pivotTable(0);
 				dataProvider = ds.data.pivot.rows;
+
+				
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				try {
+					for(var j:Number = 0; j < dataProvider.length; j++){
+						var str:String = dataProvider[j].pivotName;
+						if(str.indexOf("#") != -1) //If contains a token, remove it
+						{
+							str = str.split("#")[0];
+						}
+						categoriesLocal.addItem({"pivotName" : str });
+					}
+				} catch (errObject:Error) {
+				}
+				categories = categoriesLocal; 
+				
 				// Set the intial dp to the intial setting of the %data slider
 				hScale.dataProvider=ds.data.pivot.header.slice(1,dataSlice+1);
 				hAxis.invalidateDataProvider();
@@ -101,6 +128,41 @@
 					groupSeparator = " ";
 				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				
+				chartLabel.text = title;
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Verdana");
+				
+				chartLabel.setStyle("fontSize", fontSize);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+				
+				if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+
+				/*				if(showDataLabel == "true")
+					myLineGroup.showDataLabel = true;
+				else
+					myLineGroup.showDataLabel = false;
+				
+				if(rotateDataLabel == "true")
+					myLineGroup.dataLabelRotateAngle = -90;
+				else
+					myLineGroup.dataLabelRotateAngle = 0;*/
 				
 			}
 			
@@ -112,7 +174,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -190,7 +252,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -201,6 +263,7 @@
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
 				}
 				catch(errObject:Error){
 					//Fail silently when running standalone
@@ -212,6 +275,17 @@
 				service.send();
 				start();
 			}
+			public function refreshGraphNoData():void
+			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				var params:Object = {};
+				params["linechart"] = "true";
+				params["divide"] = divide;
+				service.send(params);
+				start();
+			}
+
 			public function itemClick(evt:LayoutItemEvent):void{
 				var axiisSprite:AxiisSprite = evt.item;
 				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
@@ -231,6 +305,36 @@
 				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField);
 				
 			}
+
+			//Section added for Drag&drop of Title
+
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
+
 		]]>
 	</mx:Script>
 	
@@ -243,6 +347,7 @@
 		useThousandsSeparator="true"/>
 
 	<!--  GLOBAL VARIABLES -->
+	<mx:Object id="categories"/>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
@@ -289,23 +394,28 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="350">
+			   height="400"
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas width="100%"
-		id="dc"
-		top="10"
-		bottom="0"
-		left="40"
-		right="80"
-		horizontalCenter="0"
-		strokes="{strokes}"
-		fills="{fills}"
-		palettes="{palettes}"
-		showDataTips="true">
+		<axiis:DataCanvas top="170"
+						  bottom="0"
+						  width="{this.width}"
+						  id="dc"
+						  verticalCenter="0"
+						  horizontalCenter="0" 
+						  left="40"
+						  right="80"
+						  showDataTips="true"
+						  strokes="{strokes}"
+						  fills="{fills}"
+						  palettes="{palettes}"
+						  >
 
 		<!-- Background -->
 		<!-- backgrounds appear behind the graph. There are also foregroundGeometries for doing annotations on top of the graph 
@@ -412,7 +522,7 @@
 			<groupings:LineSeriesGroup id="myLineGroup"
 				x="12"
 				y="0"
-				height="{dc.height-70}"
+				height="{dc.height}"
 				width="{dc.width}"
 				tension="{tension.value}"
 				markerColor="{areaPalette.currentColor}"		
@@ -434,11 +544,38 @@
 				fill="{areaFill}"
 				itemClick="this.itemClick(event);"
 				dataTipLabelFunction="{dataTipLabelFunction}"
-				enableRollOver="true"/>
+				enableRollOver="true"
+				/>
+			<axiis:HBoxLayout id="legendLayout" 
+							  x="0"
+							  y="{myLineGroup.height+50}"
+							  width="{this.width}" 
+							  height="300"
+							  dataProvider="{categories}"
+							  dataField="pivotName" 
+							  showDataTips="false"
+							  > 
+				<axiis:drawingGeometries> 
+					<degrafa:RasterText 
+						id="legendText" 
+						y="{legendLayout.currentReference.y}" 
+						x="{legendLayout.currentReference.x+12}" 
+						text="{legendLayout.currentDatum['pivotName']}" 
+						autoSizeField="true"
+						fontFamily="Myriad Pro"
+						fontSize="12"
+						/> 
+					<degrafa:RegularRectangle 
+						id="legendSquare" width="10" height="10" fill="{legendFill}" 
+						y="{legendLayout.currentReference.y+4}" 
+						x="{legendLayout.currentReference.x}"/> 
+				</axiis:drawingGeometries> 
+			</axiis:HBoxLayout> 
 				 
 		</axiis:layouts>
 		
 	</axiis:DataCanvas>
+	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 
 	</mx:Canvas>
 	<!--  PALLETTES & FILLS & STROKES -->
@@ -463,6 +600,7 @@
 		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="outerPalette"/> 
 		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="clusterPalette"/> 
 		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="areaPalette"/> 
+		<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
 		<!--<paint:LayoutAutoPalette id="outerPalette" layout="{myLineGroup}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<paint:LayoutAutoPalette id="clusterPalette" layout="{myLineGroup}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 		<paint:LayoutAutoPalette id="areaPalette" layout="{myLineGroup}" colorFrom="0x3333CC" colorTo="0xCC3333"/>-->
@@ -478,6 +616,11 @@
 			<degrafa:GradientStop color="{areaPalette.currentColor}" alpha=".95"/>
 			<degrafa:GradientStop color="{areaPalette.currentColor | 0x999933}" alpha=".65"/>
 		</degrafa:LinearGradientFill>
+		<degrafa:LinearGradientFill id="legendFill" angle="90" enableEvents="false">
+			<degrafa:GradientStop color="{legendPalette.currentColor}" alpha=".95"/>
+			<degrafa:GradientStop color="{legendPalette.currentColor | 0x999933}" alpha=".65"/>
+		</degrafa:LinearGradientFill>
+
 		<degrafa:LinearGradientFill id="clusterFill" angle="45" enableEvents="false">
 			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
 			<degrafa:GradientStop color="{clusterPalette.currentColor | 0xFFFFFF}" alpha=".85"/>

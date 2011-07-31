@@ -39,7 +39,7 @@
 	creationComplete="application1_creationCompleteHandler(event);"
 >
 
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getDonorProfileGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getDonorProfileGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
 			<typeofaid>true</typeofaid>
@@ -58,6 +58,14 @@
 			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+			import mx.events.MoveEvent;
+			import mx.managers.DragManager;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import flash.events.MouseEvent;
+			
+			private var xS:int; 
+			private var yS:int;
 			
 			import org.axiis.data.DataSet;
 			import org.axiis.events.LayoutItemEvent;
@@ -138,6 +146,43 @@
 					groupSeparator = " ";
 				}
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
+				var rotateDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'RotateDataLabel')}"));
+				
+				chartLabel.text = title;
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Verdana");
+				
+				chartLabel.setStyle("fontSize", fontSize);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+				
+/*				if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+*/				
+				if(showDataLabel == "true")
+					myCluster.showDataLabel = true;
+				else
+					myCluster.showDataLabel = false;
+				
+				if(rotateDataLabel == "true")
+					myCluster.dataLabelRotateAngle = -90;
+				else
+					myCluster.dataLabelRotateAngle = 0;
 				
 			}
 			
@@ -149,7 +194,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -175,7 +220,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -186,6 +231,7 @@
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
 				}
 				catch(errObject:Error){
 					//Fail silently when running standalone
@@ -209,6 +255,16 @@
 			public function refreshGraph():void
 			{
 				service.send();
+				start();
+			}
+			public function refreshGraphNoData():void
+			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				var params:Object = {};
+				params["format"] = "xml";
+				params["divide"] = divide;
+				service.send(params);
 				start();
 			}
 
@@ -255,6 +311,34 @@
 					ExternalInterface.call("itemClick",evt.item.data.id,"donor",year);
 				}
 			}
+			//
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
 
 		]]>
 	</mx:Script>
@@ -290,13 +374,16 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="350">
+			   height="400" 
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="50"
+	<axiis:DataCanvas top="70"
 		bottom="20"
 		width="{this.width*.9}"
 		id="dc"
@@ -459,7 +546,9 @@
 						fontFamily="Myriad Pro"
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
-						showDataLabel="false"
+						showDataLabel="true"
+						dataLabelRotateAngle="0"
+						dataLabelRegistrationPoint="topLeft"
 						itemClick="this.itemClick(event);"
 						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
 
@@ -497,7 +586,8 @@
 	</axiis:DataCanvas>
 		
 		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
-		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="250" x="80" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="250" x="300" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		<mx:Label mouseMove="mouseOverHandler(event);" x="100" y="10" id="chartLabel" height="36" fontSize="12"/>
 		
 	</mx:Canvas>
 	<!--

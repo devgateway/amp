@@ -1271,18 +1271,18 @@ function toggleSettings(){
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 		<tr>
 			<td>
-				<a href="javascript:document.getElementById('fundingChartHeader').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('AidPredictabilityTitle').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('AidTypeTitle').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('FinancingInstrumentTitle').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('FundingChartTitleLegend').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('AidPredictabilityTitleLegend').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('AidTypeTitleLegend').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('FinancingInstrumentTitleLegend').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
 				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-					<a href="javascript:document.getElementById('DonorProfileTitle').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('DonorProfileTitleLegend').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-					<a href="javascript:document.getElementById('SectorProfileTitle').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('SectorProfileTitleLegend').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-					<a href="javascript:document.getElementById('RegionProfileTitle').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
+					<a href="javascript:document.getElementById('RegionProfileTitleLegend').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
 				</c:if>
 				
 			</td>
@@ -1415,7 +1415,7 @@ function toggleSettings(){
 	<div id="tab1">
 		<fieldset class="chartFieldset">
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
-			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			<div id="FundingChartHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
 			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
 			&nbsp;Size
@@ -1452,7 +1452,7 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
-				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				<div id="ODAGrowthHeader" class="chart_header" style="float:left">
 				Title <input type="text" id="ODAGrowthTitle" value="" size="50">
 				<input type="hidden" id="ODAGrowthShowFontFamily" value="Verdana"/>
 				&nbsp;Size
@@ -1489,7 +1489,7 @@ function toggleSettings(){
 		</c:if>
 		<fieldset class="chartFieldset">
 			<legend><span id="AidPredictabilityTitleLegend" class=legend_label></span></legend>
-			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			<div id="AidPredictabilityHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="AidPredictabilityTitle" value="" size="50">
 			<input type="hidden" id="AidPredictabilityShowFontFamily" value="Verdana"/>
 			&nbsp;Size
@@ -1523,7 +1523,7 @@ function toggleSettings(){
 		</fieldset>
 		<fieldset class="chartFieldset">
 			<legend><span id="AidTypeTitleLegend" class=legend_label></span></legend>
-			<div id="aidTypeHeader" class="chart_header" style="float:left">
+			<div id="AidTypeHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="AidTypeTitle" value="" size="50">
 			<input type="hidden" id="AidTypeShowFontFamily" value="Verdana"/>
 			&nbsp;Size
@@ -1557,7 +1557,7 @@ function toggleSettings(){
 		</fieldset>
 		<fieldset class="chartFieldset">
 			<legend><span id="FinancingInstrumentTitleLegend" class=legend_label></span></legend>
-			<div id="fundingChartHeader" class="chart_header" style="float:left">
+			<div id="FinancingInstrumentHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="FinancingInstrumentTitle" value="" size="50">
 			<input type="hidden" id="FinancingInstrumentShowFontFamily" value="Verdana"/>
 			&nbsp;Size
@@ -1628,7 +1628,7 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
-				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				<div id="SectorProfileHeader" class="chart_header" style="float:left">
 				Title <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
 				&nbsp;Size
@@ -1664,7 +1664,7 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
-				<div id="fundingChartHeader" class="chart_header" style="float:left">
+				<div id="RegionProfileHeader" class="chart_header" style="float:left">
 				Title <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
 				&nbsp;Size

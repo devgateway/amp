@@ -19,7 +19,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 public class AmpPMAddFieldPermissionPanel extends AmpComponentPanel {
 
 	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel, String fmName, IModel<Set<AmpTeam>> teamsModel, IModel<AmpTreeVisibility> ampTreeVisibilityModel) {
-		super(id, ampTreeVisibilityBeanModel, fmName);
+		super(id, ampTreeVisibilityBeanModel, fmName, AmpFMTypes.MODULE);
 		super.setOutputMarkupId(true);
 
 		AmpPMAssignFieldPermissionComponentPanel assignFieldPerm = new AmpPMAssignFieldPermissionComponentPanel("assignFieldPermission", ampTreeVisibilityBeanModel,"Assign Field Permission", teamsModel, ampTreeVisibilityModel);

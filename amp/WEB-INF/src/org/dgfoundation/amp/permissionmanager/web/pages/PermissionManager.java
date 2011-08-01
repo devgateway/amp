@@ -14,6 +14,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.permissionmanager.components.features.PermissionManagerFormFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageFieldPermissionsSectionFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageGlobalPermissionsSectionFeaturePanel;
@@ -44,21 +45,6 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		// TODO Auto-generated constructor stub
 		super();
 		
-		Form adminPMForm = new Form("adminPMForm");
-		
-		//managing users
-		Set<User> s = new TreeSet<User>();
-		List<User> users = new ArrayList<User>();
-		try {
-			users = org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
-		} catch (UMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		s.addAll(users);
-		final IModel<Set<User>> usersModel = new Model((Serializable)s);
-		adminPMForm.add(new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel));
-		
 		
 		//managing workspaces
 		Set<AmpTeam> w = new TreeSet<AmpTeam>();
@@ -71,21 +57,8 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		}
 		w.addAll(teams);
 		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-		AmpPMManageWorkspacesSectionFeature workspaceSection = new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false);
-		adminPMForm.add(workspaceSection);
-		
-		Set<Permission> permissonsSet = new TreeSet<Permission>();
-		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
-		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
-		
-		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
-		ampTreeVisibility.buildAmpTreeVisibility(PMUtil.getDefaultAmpTemplateVisibility());
-		final IModel<AmpTreeVisibility> ampTreeVisibilityModel = new Model(ampTreeVisibility);
-		
-		AmpTreeVisibilityModelBean tree	=	PMUtil.getAmpTreeFMPermissions();
-		final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel =	new Model((Serializable)tree);
-		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityBeanModel, "Manage Field Permissions",teamsModel, false, ampTreeVisibilityModel));
-		add(adminPMForm);
+	
+		add(new PermissionManagerFormFeature("permission", teamsModel, "Permission Manager"));
 	}
 
 

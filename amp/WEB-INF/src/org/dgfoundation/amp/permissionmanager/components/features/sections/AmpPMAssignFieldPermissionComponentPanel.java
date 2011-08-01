@@ -55,7 +55,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	 * @param ampTreeVisibilityModel2 
 	 */
 	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel, String fmName, IModel<Set<AmpTeam>> teamsModel, final IModel<AmpTreeVisibility> ampTreeVisibilityModel) {
-		super(id, ampTreeVisibilityBeanModel, fmName);
+		super(id, ampTreeVisibilityBeanModel, fmName, AmpFMTypes.MODULE);
 		// TODO Auto-generated constructor stub
 		
 		final Form form = new Form("ampFieldPMForm")

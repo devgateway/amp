@@ -9,39 +9,16 @@ import java.util.Set;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
 
 /**
  * @author dan
  *
  */
 public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectionFeaturePanel {
-
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id,String fmName) throws Exception {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id, IModel model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-	}
 
 	/**
 	 * @param id

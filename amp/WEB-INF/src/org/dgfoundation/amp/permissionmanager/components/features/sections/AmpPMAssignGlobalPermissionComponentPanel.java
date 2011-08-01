@@ -38,7 +38,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 
 
 	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName) {
-		super(id, globalPermissionsModel, fmName);
+		super(id, globalPermissionsModel, fmName, AmpFMTypes.MODULE);
 
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
 		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(availablePermissibleCategories.get(0));

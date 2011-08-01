@@ -1,13 +1,15 @@
 <wicket:extend>
 	<fieldset>
-		<legend> 
-			<span class="legend_label"><a wicket:id="featureLabel"></a></span>
+		<legend onclick="$(this).siblings('div:first').slideToggle();return false;"> 
+			<span class="legend_label"><a wicket:id="featureLabel" style="color: white;"></a></span>
 		</legend>
 		<p/>
-		<table width="700" border="0" cellspacing="0" cellpadding="0">
-			<tbody>
-				<wicket:child/>
-			</tbody>
-		</table>
+		<div wicket:id="foldable" style="">
+			<table width="700" border="0" cellspacing="0" cellpadding="0">
+				<tbody>
+					<wicket:child/>
+				</tbody>
+			</table>
+		</div>
 	</fieldset>
 </wicket:extend>

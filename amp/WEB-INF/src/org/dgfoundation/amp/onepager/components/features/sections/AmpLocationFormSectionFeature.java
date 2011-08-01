@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
@@ -38,7 +39,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 	 * @throws Exception
 	 */
 	public AmpLocationFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, AmpRegionalFundingFormSectionFeature regionalFundingFeature) throws Exception {
+			final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
 		super(id, fmName, am);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -78,7 +79,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 		// add location table
 		AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
-				"locationsTable", "Locations", am, regionalFundingFeature, implementationLocation);
+				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, implementationLocation);
 		add(locationsTable);
 	}
 

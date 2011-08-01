@@ -4,19 +4,31 @@
 */
 package org.dgfoundation.amp.onepager.components.features;
 
+import java.lang.reflect.Constructor;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
@@ -32,10 +44,15 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFo
 import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import com.rc.retroweaver.runtime.Arrays;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Main component hub for all activity form subcomponents.
@@ -68,7 +85,50 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	private AmpPIFormSectionFeature pi;
 	private AmpResourcesFormSectionFeature resources;
 	
-
+	static OnepagerSection[] test = {
+	new OnepagerSection("Identification", "org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature", 1, false),
+	new OnepagerSection("Activity Internal IDs", "org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature", 2, false),
+	new OnepagerSection("Planning", "org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature", 3, false),
+	new OnepagerSection("Location", "org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature", 4, false, true, "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature"),
+	new OnepagerSection("Program", "org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature", 5, false),
+	new OnepagerSection("Cross Cutting Issues", "org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature", 6, false),
+	new OnepagerSection("Sectors", "org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature", 7, false),
+	new OnepagerSection("Donor Funding", "org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature", 8, false),
+	new OnepagerSection("Regional Funding", "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature", 9, false),
+	new OnepagerSection("Related Organizations", "org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature", 10, false),
+	new OnepagerSection("Components", "org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature", 11, false),
+	new OnepagerSection("Structures", "org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature", 12, false),
+	new OnepagerSection("Issues Section", "org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature", 13, false),
+	new OnepagerSection("Regional Observations", "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature", 14, false),
+	new OnepagerSection("Contacts", "org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature", 15, false),
+    new OnepagerSection("Contracts", "org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature", 16, false),
+	new OnepagerSection("M&E", "org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature", 17, false),
+	new OnepagerSection("Paris Indicators", "org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature", 18, false),
+	new OnepagerSection("Related Documents", "org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature", 19, false)
+	};
+	public static final LinkedList<OnepagerSection> flist = new LinkedList<OnepagerSection>(Arrays.asList(test));
+	
+	public static OnepagerSection findByName(String name){
+		Iterator<OnepagerSection> it = flist.iterator();
+		while (it.hasNext()) {
+			OnepagerSection os = (OnepagerSection) it.next();
+			if (os.getClassName().compareTo(name) == 0)
+				return os;
+		}
+		return null;
+	}
+	
+	public static OnepagerSection findByPosition(int pos){
+		Iterator<OnepagerSection> it = flist.iterator();
+		while (it.hasNext()) {
+			OnepagerSection os = (OnepagerSection) it.next();
+			if (os.getPosition() == pos)
+				return os;
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * @param id
 	 * @param model
@@ -162,7 +222,100 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		target.addComponent(feedbackPanel);
 	}
 
-	public void initializeFormComponents(IModel<AmpActivityVersion> am) throws Exception {
+	public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {
+
+		Collections.sort(flist, new Comparator<OnepagerSection>() {
+			@Override
+			public int compare(OnepagerSection o1, OnepagerSection o2) {
+				return o1.getPosition() - o2.getPosition();
+			}
+		});
+		AbstractReadOnlyModel<List<AmpComponentPanel>> listModel = new AbstractReadOnlyModel<List<AmpComponentPanel>>() {
+			private List<AmpComponentPanel> list = null;
+			private AmpComponentPanel initObject(OnepagerSection os, LinkedList<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
+				AmpComponentPanel dep = null;
+				if (os.isDependent()){
+					Iterator<OnepagerSection> it = features.iterator();
+					OnepagerSection depOs = null;
+					while (it.hasNext()) {
+						OnepagerSection tmpos = (OnepagerSection) it
+								.next();
+						if (tmpos.getClassName().compareTo(os.getDependentClassName()) == 0){
+							depOs = tmpos;
+							break;
+						}
+					}
+					dep = initObject(depOs, features, temp);
+				}
+				
+				Class clazz = null;
+				try {
+					clazz = Class.forName(os.getClassName());
+				} catch (ClassNotFoundException e) {
+					logger.error("Can't find class for section:" + os.getName(), e);
+				}
+				Constructor constructor = null;
+				try {
+					if (os.isDependent())
+						constructor = clazz.getConstructor(String.class, String.class, IModel.class, AmpComponentPanel.class);
+					else
+						constructor = clazz.getConstructor(String.class, String.class, IModel.class);
+					
+					AmpComponentPanel feature = null;
+					if (os.isDependent())
+						feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am, dep);
+					else
+						feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am);
+					
+					if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())){
+						AmpFormSectionFeaturePanel fsfp = (AmpFormSectionFeaturePanel) feature;
+						fsfp.setFolded(os.isFolded());
+					}
+					
+					temp.put(os.getClassName(), feature);
+					return feature;
+				} catch (Exception e) {
+					logger.error("Can't init constructor for section:" + os.getName(), e);
+					return null;
+				}
+				
+			}
+			
+			public List<AmpComponentPanel> initObjects(){
+				Iterator<OnepagerSection> it = flist.iterator();
+				LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
+				HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
+				while (it.hasNext()) {
+					OnepagerSection os = (OnepagerSection) it
+							.next();
+					AmpComponentPanel fet = initObject(os, flist, temp);
+					ret.add(fet);
+				}
+				return ret;
+			}
+			
+			@Override
+			public List<AmpComponentPanel> getObject() {
+				if (list == null)
+					list = initObjects();
+				
+				return list;
+			}
+		};
+
+		ListView<AmpComponentPanel> list = new ListView<AmpComponentPanel>("featureList", listModel) {
+			private static final long serialVersionUID = 7218457979728871528L;
+			@Override
+			protected void populateItem(final ListItem<AmpComponentPanel> item) {
+				item.add(item.getModelObject());
+			}
+		};
+		list.setReuseItems(true);
+		activityForm.add(list);
+
+	}
+	
+	public void oldInitializeFormComponents(IModel<AmpActivityVersion> am) throws Exception {
 		identificationFeature = new AmpIdentificationFormSectionFeature(
 				"identification", "Identification", am);
 		activityForm.add(identificationFeature);

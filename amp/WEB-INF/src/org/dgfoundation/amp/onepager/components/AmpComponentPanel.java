@@ -16,6 +16,9 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
+import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 
@@ -158,6 +161,57 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		enabledFmButton.setOutputMarkupId(true);
 		enabledFmButton.setVisible(false);
 		add(enabledFmButton);
+		
+		
+		
+		IndicatingAjaxLink upButton = new IndicatingAjaxLink("upButton") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
+				OnepagerSection tmpOs = AmpActivityFormFeature.findByPosition(os.getPosition() - 1);
+				if (tmpOs == null || os == null)
+					return;
+				tmpOs.setPosition(tmpOs.getPosition() + 1);
+				os.setPosition(os.getPosition() - 1);
+				target.appendJavascript("window.location.reload()");
+			}
+		};
+		add(upButton);
+		IndicatingAjaxLink downButton = new IndicatingAjaxLink("downButton") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
+				OnepagerSection tmpOs = AmpActivityFormFeature.findByPosition(os.getPosition() + 1);
+				if (tmpOs == null || os == null)
+					return;
+				tmpOs.setPosition(tmpOs.getPosition() - 1);
+				os.setPosition(os.getPosition() + 1);
+				target.appendJavascript("window.location.reload()");
+			}
+		};
+		add(downButton);
+		IndicatingAjaxLink foldButton = new IndicatingAjaxLink("foldButton") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
+				if (os == null)
+					return;
+				os.setFolded(!os.isFolded());
+				target.appendJavascript("window.location.reload()"); 
+			}
+		};
+		add(foldButton);
+		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
+		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
+			OnepagerSection tmpos = AmpActivityFormFeature.findByName(this.getClass().getName());
+			if (tmpos != null)
+				foldButton.add(new AttributeModifier("value", new Model((tmpos.isFolded()?"Unfold":"Fold"))));
+		}
+		else{
+			upButton.setVisible(false);	
+			downButton.setVisible(false);
+			foldButton.setVisible(false);
+		}
 	}
 	
 	public AmpComponentPanel(String id, IModel<T> model,String fmName) {

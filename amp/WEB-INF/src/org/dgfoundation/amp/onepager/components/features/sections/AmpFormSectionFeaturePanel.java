@@ -4,8 +4,11 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -21,6 +24,7 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 	
 	
 	protected final IModel<AmpActivityVersion> am;
+	private TransparentWebMarkupContainer mrk;
 
 	/**
 	 * @param id
@@ -33,6 +37,16 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 		this.am = am;
 		this.labelContainer.add(new SimpleAttributeModifier("id", id));
 		this.labelContainer.add(new SimpleAttributeModifier("name", id));
+		
+		mrk = new TransparentWebMarkupContainer("foldable");
+		add(mrk);
 	}
 
+	public void setFolded(boolean folded){
+		if (folded)
+			mrk.add(new AttributeAppender("style", new Model("display: none;"), ""));
+		else
+			mrk.add(new AttributeAppender("style", new Model("display: block;"), ""));
+			
+	}
 }

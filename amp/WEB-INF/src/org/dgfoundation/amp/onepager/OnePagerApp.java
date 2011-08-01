@@ -132,7 +132,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 //		 sessionFactory=(SessionFactory) factory.getBean("sessionFactory");
 		 
 		 //Check if One Pager FM root exists, if not try to add it
-		 FMUtil.checkFmRoot();
+		 FMUtil.checkFmRoot(FMUtil.fmRootActivityForm);
+		 FMUtil.checkFmRoot(FMUtil.fmRootPermissionManager);
 	 }
 
 

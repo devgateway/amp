@@ -93,7 +93,6 @@
         border-color:#000000;
     }
 </style>
-<digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
 
 <style type="text/css">
     .mask {
@@ -431,8 +430,7 @@
     
     var responseSuccess = function(o){
         var response = o.responseText; 
-        var content = document.getElementById("popinContent");
-        content.innerHTML = response;
+        myPanel.setBody(response);
         showContent();
     }
  
@@ -446,13 +444,7 @@
     };
 
     function showContent(){
-        var element = document.getElementById("popin");
-        element.style.display = "inline";
-        if (panelStart < 1){
-            myPanel.setBody(element);
-        }
         if (panelStart < 2){
-            document.getElementById("popin").scrollTop=0;
             myPanel.show();
             panelStart = 2;
         }
@@ -475,21 +467,22 @@
     }
 
     function myclose(){
-        var content = document.getElementById("popinContent");
-        content.innerHTML="";
+        myPanel.setBody("");
         myPanel.hide();	
         panelStart=1;
-	
+    	
     }
+    
+
     function closeWindow() {
         myclose();
     }
     function showPanelLoading(msg){
-        myPanel.setHeader(msg);		
-        var content = document.getElementById("popinContent");
-        content.innerHTML = '<div style="text-align: center">' + 
-            '<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-            '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+        myPanel.setHeader(msg);	
+        var bodymsg='<div style="text-align: center">' + 
+        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+        '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>'
+        myPanel.setBody(bodymsg);
         showContent();
     }
     function addNewUser()	{
@@ -514,7 +507,7 @@
     function openNpdSettingsWindow(ampTeamId){
         var msg='\n<digi:trn>AMP View Settings</digi:trn>';
         myPanel.cfg.setProperty("width","450px");
-        myPanel.cfg.setProperty("height","250px"); 			
+        myPanel.cfg.setProperty("height","250px");
         showPanelLoading(msg);
             <digi:context name="commentUrl" property="context/module/moduleinstance/npdSettingsAction.do"/>  
             var url = "<%=commentUrl %>";
@@ -955,6 +948,10 @@
                 <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
+            var bodymsg='<div style="text-align: center">' + 
+            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+            '<digi:trn>Saving, please wait ...</digi:trn><br/><br/></div>'
+            myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
         }
         else{

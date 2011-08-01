@@ -7,73 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-
-<script langauage="JavaScript" type="text/javascript">
-	function validateValues(){
-		 var errmsg='';
-                 var ampTeamId=document.getElementById('ampTeamId').value;
-		 var width=document.getElementById('width').value;
-		 var height=document.getElementById('height').value;
-		 var angle=document.getElementById('angle').value;
-         var pageSize=document.getElementById('pageSize').value;
-		 //*** Validate width
-		 if(parseInt(width)==(width-0)){		   	
-			 if(parseInt(width)<10 || parseInt(width)>1000){
-			 	errmsg+='\n<digi:trn>Width must be in range from 10 to 1000</digi:trn>';
-			 }
-		 }else{
-		 	errmsg+='\n<digi:trn>Please enter correct width</digi:trn>';
-		 }		 
-		 //***Validate height
-		 if(parseInt(height)==(height-0)) {
-		 	if(parseInt(height)<10 || parseInt(height)>1000){
-			 	errmsg+='\n<digi:trn>Height must be in range from 10 to 1000</digi:trn>';
-		 	}
-		 }else{
-		 	errmsg+='\n<digi:trn>Please enter correct height</digi:trn>';
-		 }		 
-		 //***Validate angle	
-
-		if(angle!=''){
-			if(parseInt(angle)==(angle-0)) {
-		 		if(parseInt(angle)<0 || parseInt(angle)>90){
-			 		errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
-			 	}
-		 	}else{
-		 		errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
-		 	}
-		} 
-		 //***Validate page size
-		 if(parseInt(pageSize)==(pageSize-0)) {
-		 	if(parseInt(pageSize)<0){
-			 	errmsg+='\n<digi:trn>Activities per page should be grather than 0</digi:trn>';
-		 	}
-		 }		 
-		 
-		 //***Validate error messages
-		 if (errmsg==''){
-			saveSettings(ampTeamId,width,height,angle,pageSize);
-		 } else{
-			alert(errmsg);
-			return false;
-		 }
-	}
-
-        function saveSettings(ampTeamId,width,height,angle,pageSize){
-		lastTimeStamp = new Date().getTime();
-                <digi:context name="changeSett" property="context/module/moduleinstance/npdSettingsAction.do?actionType=changeSettings"/>
-                var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
-		var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
-		var async=new Asynchronous();
-		async.complete=closeWindow;
-		async.call(url);
-	}
-        function closeWindow(status, statusText, responseText, responseXML){
-            window.close();
-        }
-      		
-</script>
 
 <digi:instance property="npdSettingsForm"/>
 <digi:form action="/npdSettingsAction.do?actionType=changeSettings">
@@ -135,7 +68,7 @@
 						  				<c:set var="trnCancelBtn">
 						  					<digi:trn>Cancel</digi:trn>
 						  				</c:set>
-						  			 	<input type="button" value="${trnCancelBtn}" onclick="window.close();" class="dr-menu"/>
+						  			 	<input type="button" value="${trnCancelBtn}" onclick="myclose()" class="dr-menu"/>
 						  			</td>
 								</tr>
 							</table>

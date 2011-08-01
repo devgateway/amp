@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -30,6 +31,8 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 			throws Exception {
 		super(id, fmName);	
 		this.am = am;
+		this.labelContainer.add(new SimpleAttributeModifier("id", id));
+		this.labelContainer.add(new SimpleAttributeModifier("name", id));
 	}
 
 }

@@ -18,8 +18,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;

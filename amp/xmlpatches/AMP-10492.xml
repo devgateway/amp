@@ -11,7 +11,7 @@
     <script>
       <lang delimiter=";" type="postgres">
 INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section) 
-	values (nextval('amp_global_settings_seq', 'Report Generator - One Pager','false','t_Boolean','Whether to use one-pager or wizard for generating reports','general'));		
+	values (nextval('amp_global_settings_seq'), 'Report Generator - One Pager','false','t_Boolean','Whether to use one-pager or wizard for generating reports','general');		
       </lang>
     </script>
   </apply>

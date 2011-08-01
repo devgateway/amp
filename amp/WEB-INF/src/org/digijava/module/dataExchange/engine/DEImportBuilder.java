@@ -2133,7 +2133,9 @@ public class DEImportBuilder {
 								AmpActivityVersion ampActivity = new AmpActivityVersion();
 								activityLogs	=	iWorker.populateActivity(ampActivity);
 								AmpActivityGroup ampActGroup = null;
-								DataExchangeUtils.saveActivity(request,grpId, ampActivity);
+								AmpTeam team = getAssignedWorkspace();
+								ampActivity.setApprovalStatus(getApprovalStatus());
+								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
 							}
 							else continue;
 						}

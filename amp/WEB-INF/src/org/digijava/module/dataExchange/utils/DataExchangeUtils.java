@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -1234,7 +1235,7 @@ public class DataExchangeUtils {
 		return col;
 	}
 
-	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity) {
+	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity, AmpTeam team) {
 		Session session = null;
 	    Transaction tx = null;
 	    Long activityId = null;
@@ -1246,12 +1247,14 @@ public class DataExchangeUtils {
 				if(grpId.longValue()==-1)
 				{
 					//add new activity
+					ampActivity.setTeam(team);
+					ampActivity.setActivityCreator(team.getTeamLead());
 					ampActGroup = new AmpActivityGroup();
 					ampActGroup.setAmpActivityLastVersion(ampActivity);
 					session.save(ampActGroup);
 				}
 				else{
-					//add a new version of an existing activity
+					//add a new VERSION of an EXISTING activity
 					ampActGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
 					ampActivity.setAmpActivityPreviousVersion(ampActGroup.getAmpActivityLastVersion());
 					ampActGroup.setAmpActivityLastVersion(ampActivity);

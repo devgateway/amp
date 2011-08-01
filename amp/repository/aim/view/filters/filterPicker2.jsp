@@ -73,6 +73,17 @@
 				<div style="width: 76%; height: 100%; padding: 0px; float: left;">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
+				<div style="width:24%; margin-left: 76% ;font-size: 11px; height: 100%; ">
+					<field:display name="Joint Criteria" feature="Budget">
+							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
+							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
+					</field:display>
+                    <br/>
+					<field:display name="Government Approval Procedures" feature="Budget">
+						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
+							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
+					</field:display>
+				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
 				
 			</div>
@@ -87,18 +98,10 @@
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-				<div style="width: 30%; height: 30%; padding: 10px; float: left; ">
-					<c:set var="tooltip_translation">
-						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
-					</c:set>
-					<b><digi:trn>Keyword Search</digi:trn> </b>
-					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
-						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
-						<br />
-						<br />
-						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
+				<div style="width: 15%; height: 30%; padding: 10px; float: left; ">
+					
 				</div>
-				<div style="width: 35%; height:30%; padding: 10px; float: left;">
+				<div style="width: 45%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					<br />
 					<table style="font-family: Arial; font-size: 1em;">
@@ -129,7 +132,7 @@
 					</table>
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
-					<div style="margin-left: 70%;width: 25%; height: 30%; padding: 10px; ">
+					<div style="margin-left: 65%;width: 30%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
 							<br />
 							<br />
@@ -143,33 +146,23 @@
 		</div>
 	</div>
 </div>
-<div style="width:50%; float:left;font-size: 11px">
-					<field:display name="Joint Criteria" feature="Budget">
-							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
-							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
-					</field:display>
-                    <br/>
-					<field:display name="Government Approval Procedures" feature="Budget">
-						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
-							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
-					</field:display>
-				</div>
-<div style="display: block; overflow:hidden;width:50%; float:right;">
-	<table width="100%">
-		<tr>
-			<td width="100%" align="center" style="font-size: 11px; font-weight:bold;">
-				<html:checkbox property="justSearch" value="true" />&nbsp;
-				<digi:trn>Use filter as advanced search</digi:trn>
-			</td>
-		</tr>
-		<tr>
-			<td width="100%" align="center">
-				
-			</td>
-		</tr>
-	</table>
+<div style="width:50%; float:left; font-size: 12px;text-align: center;">
+		<c:set var="tooltip_translation">
+			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
+		</c:set>
+		<digi:trn>Keyword Search</digi:trn>
+		<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
+			src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
+			<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
 </div>
-<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;"><html:hidden property="ampReportId" />
+<div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
+	<html:checkbox property="justSearch" value="true" />&nbsp;
+	<digi:trn>Use filter as advanced search</digi:trn>
+</div>
+
+<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
+				<html:hidden property="ampReportId" />
+
 				<html:hidden property="defaultCurrency" />
 				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 

@@ -46,6 +46,12 @@ function search() {
 									<input onclick="search()" type="button" class="buttonx" value="<digi:trn>Search</digi:trn>" style="margin-top: 10px">
 								</td>
 							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<br />
+									<a style="font-size: 11px;" href="/aim/queryEngine.do"><digi:trn>Advanced Search</digi:trn></a>
+								</td>
+							</tr>
 					</table>
 				</div>
 		</div>

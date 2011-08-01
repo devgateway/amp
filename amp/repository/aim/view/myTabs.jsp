@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <logic:notEmpty name="filterCurrentReport" scope="session">
     <logic:equal name="filterCurrentReport" property="drilldownTab" value="false">
     	<c:remove var="filterCurrentReport" scope="session" />

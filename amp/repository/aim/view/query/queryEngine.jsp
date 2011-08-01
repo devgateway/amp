@@ -15,6 +15,7 @@
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 
@@ -46,9 +47,13 @@
 
 	queryCbObj		= {
 		success: function (o) {
-			debugger;
 			var divObj		= document.getElementById("results");
 			divObj.innerHTML	= o.responseText;
+			var attributes = { 
+				scroll: { to: [0, YAHOO.util.Dom.getY("results")] } 
+			}; 
+			 var anim = new YAHOO.util.Scroll(document.body, attributes, 2); 
+			 anim.animate(); 
 		},
 		failure: function (o) {
 			var divObj		= document.getElementById("results");
@@ -85,15 +90,14 @@
 	YAHOO.util.Event.addListener(window, "load", initializeFilters) ;
 </script>		
 	<br />
+	<div id="myFilter" style="height: 480px; overflow: hidden; width: 900px; margin-left: auto; margin-right: auto; border: 1px solid lightgray;" >
+		<jsp:include page="/aim/reportsFilterPicker.do" />
+	</div>
+	<br />	
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend>Selected Filters</legend>
 		<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>
 	</fieldset>
-	<br />	
-	<div id="myFilter" style="height: 490px; overflow: hidden; width: 900px; margin-left: auto; margin-right: auto; border: 1px solid lightgray;" >
-		<jsp:include page="/aim/reportsFilterPicker.do" />
-	</div>
-	
 	
 	
 	

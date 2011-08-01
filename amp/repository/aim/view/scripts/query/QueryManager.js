@@ -69,7 +69,7 @@ QueryManager.prototype.render	= function( ) {
 			ql.render();
 			htmlStr			+= ql.htmlStr + "&nbsp;";
 		}
-		htmlStr			+= "<br /> <br />";
+		htmlStr			+= "<br />";
 	}
 	
 	parentEl.innerHTML	= htmlStr;

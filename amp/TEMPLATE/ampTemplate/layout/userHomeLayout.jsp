@@ -148,7 +148,7 @@
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">
 						<%if (arf.isPublicView()==false){%>
-							<img src="img_2/close_panel.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px">
+							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px">
 						<%}%>
 					</a>
 				</td>
@@ -179,12 +179,12 @@
 <script language=javascript>
 	$("#closepanel").click(function(){
 		$('#rightpanel').toggle('slow', function() {
-			if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
-	    		$("#closepanel").attr('src','img_2/open_panel.gif');
+			if($("#closepanel").attr("src") == 'img_2/close_panel_notxt.gif') {
+	    		$("#closepanel").attr('src','img_2/open_panel_notxt.gif');
 	    		return false;    
 	 	    }
-			if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
-				$("#closepanel").attr('src','img_2/close_panel.gif');
+			if($("#closepanel").attr("src") == 'img_2/open_panel_notxt.gif') {
+				$("#closepanel").attr('src','img_2/close_panel_notxt.gif');
 				return false;    
 	 	    }
 		});

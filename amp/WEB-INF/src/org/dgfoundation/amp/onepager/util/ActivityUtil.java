@@ -56,7 +56,7 @@ public class ActivityUtil {
 	 * on activation of versioning option
 	 * @param am
 	 */
-	public static void saveActivity(AmpActivityModel am){
+	public static void saveActivity(AmpActivityModel am, boolean draft){
 		
 		Session session = am.getSession();
 		Transaction transaction = am.getTransaction();
@@ -64,6 +64,11 @@ public class ActivityUtil {
 		
 		try {
 			AmpActivityVersion a = (AmpActivityVersion) am.getObject();
+			
+			boolean draftChange = draft != a.getDraft();
+			
+			a.setDraft(draft);
+			
 			AmpActivityGroup group = null;
 			if (a.getAmpActivityId() != null){
 				//existing activity
@@ -86,6 +91,7 @@ public class ActivityUtil {
 			}
 			
 			a.setAmpActivityGroup(group);
+			a.setCreatedDate(Calendar.getInstance().getTime());
 			a.setModifiedDate(Calendar.getInstance().getTime());
 			a.setModifiedBy(wicketSession.getAmpCurrentMember());
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
@@ -96,7 +102,7 @@ public class ActivityUtil {
 			saveResources(a);
 			saveEditors(session);
 
-			if (ActivityVersionUtil.isVersioningEnabled()){
+			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
 			}
@@ -164,8 +170,11 @@ public class ActivityUtil {
 		 */
 		//act = group.getAmpActivityLastVersion();
 		
+		if (act.getDraft() == null)
+			act.setDraft(false);
+		
 		//is versioning activated?
-		if (ActivityVersionUtil.isVersioningEnabled()){
+		if (act != null && !act.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
 			AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			try {
 				act = ActivityVersionUtil.cloneActivity(act, wicketSession.getAmpCurrentMember());

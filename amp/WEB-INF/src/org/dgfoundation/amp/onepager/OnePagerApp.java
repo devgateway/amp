@@ -18,6 +18,7 @@ import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.time.Duration;
+import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -89,6 +90,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
+			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
 			 
 			 mount.clone()
 			 	.setPath("/style/all-23.css")

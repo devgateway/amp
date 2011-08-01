@@ -240,7 +240,7 @@ public class ActivityVersionUtil {
 		for (int i = 0; i < fields.length; i++) {
 			Field field = fields[i];
 			if (Collection.class.isAssignableFrom(field.getType())){
-				logger.info("Init set: " + field.getName());
+				logger.debug("Init set: " + field.getName());
 				initSet(out, field);
 			}
 		}

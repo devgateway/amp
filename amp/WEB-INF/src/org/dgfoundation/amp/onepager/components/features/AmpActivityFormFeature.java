@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -31,6 +32,8 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFo
 import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
@@ -91,30 +94,74 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		add(activityForm);
 		
 		//add ajax submit button
-		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.FEATURE) {
+		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.FEATURE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				Long oldId = am.getObject().getAmpActivityId();
-				am.setObject(am.getObject());
-				info("Activity saved successfully");
-				//if (newActivity){
-					Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
-					String replaceStr;
-					if (oldId == null)
-						replaceStr = "new";
-					else
-						replaceStr = String.valueOf(oldId);
-					target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
-				//}
-				target.addComponent(feedbackPanel);
+				saveMethod(target, am, feedbackPanel, false);
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		activityForm.add(saveAndSubmit);
+
+		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.FEATURE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				saveMethod(target, am, feedbackPanel, true);
+			}
+		};
+		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		activityForm.add(saveAsDraft);
+
+		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.FEATURE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}
+		};
+		if (am.getObject().getAmpActivityId() == null)
+			logframe.setEnabled(false);
+		else{
+			logframe.add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.setEnabled(true);
+		}
+		activityForm.add(logframe);
+		
+		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.FEATURE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.appendJavascript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+			}
+		};
+		preview.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		if (am.getObject().getAmpActivityId() == null)
+			preview.setEnabled(false);
+		
+		activityForm.add(preview);
+		
 		
 		initializeFormComponents(am);
 	}
 	
+	protected void saveMethod(AjaxRequestTarget target,
+			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
+			boolean draft) {
+		Long oldId = am.getObject().getAmpActivityId();
+		
+		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
+
+		am.setObject(am.getObject());
+		info("Activity saved successfully");
+		//if (newActivity){
+			Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
+			String replaceStr;
+			if (oldId == null)
+				replaceStr = "new";
+			else
+				replaceStr = String.valueOf(oldId);
+			target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
+		//}
+		target.addComponent(feedbackPanel);
+	}
+
 	public void initializeFormComponents(IModel<AmpActivityVersion> am) throws Exception {
 		identificationFeature = new AmpIdentificationFormSectionFeature(
 				"identification", "Identification", am);

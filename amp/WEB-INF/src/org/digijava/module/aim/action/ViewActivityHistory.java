@@ -60,21 +60,21 @@ public class ViewActivityHistory extends Action {
 		Session session = PersistenceManager.getRequestDBSession();
 		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm
 				.getActivityId());
-		hForm.setActivities(new ArrayList<AmpActivity>());
+		hForm.setActivities(new ArrayList<AmpActivityVersion>());
 
 		// AMP-7706: Filter last 5 versions.
 		// List<AmpActivity> auxList = new
 		// ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
-		List<AmpActivity> auxList = null;
+		List<AmpActivityVersion> auxList = null;
 		Query qry = session
 				.createQuery("select ag.activities from org.digijava.module.aim.dbentity.AmpActivityGroup ag where ag.ampActivityGroupId = ?");
 		qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
 		auxList = qry.list();
 		Collections.sort(auxList, compareVersions);
-		Iterator<AmpActivity> iter = auxList.iterator();
+		Iterator<AmpActivityVersion> iter = auxList.iterator();
 		int i = 5;
 		while (iter.hasNext()) {
-			AmpActivity auxActivity = iter.next();
+			AmpActivityVersion auxActivity = iter.next();
 			if (i > 0) {
 				hForm.getActivities().add(auxActivity);
 			}

@@ -6,12 +6,13 @@ import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ViewActivityHistoryForm extends ActionForm implements Serializable {
 
 	private Long activityId;
 
-	private List<AmpActivity> activities;
+	private List<AmpActivityVersion> activities;
 
 	public Long getActivityId() {
 		return activityId;
@@ -21,11 +22,11 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 		this.activityId = activityId;
 	}
 
-	public List<AmpActivity> getActivities() {
+	public List<AmpActivityVersion> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<AmpActivity> activities) {
+	public void setActivities(List<AmpActivityVersion> activities) {
 		this.activities = activities;
 	}
 }

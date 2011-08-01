@@ -65,8 +65,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
 	@Override   
 	public void setObject(AmpActivityVersion arg0) {
-		if(a==null) a=(AmpActivityVersion) arg0;
-		ActivityUtil.saveActivity(this);
+		//if(a==null) a=(AmpActivityVersion) arg0;
 	}
 
 	@Override

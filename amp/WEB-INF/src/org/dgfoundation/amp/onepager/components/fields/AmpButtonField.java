@@ -50,8 +50,12 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		addFormComponent(button);
 	}
 	
-	public AmpButtonField(String id, String fmName,boolean hideLabel) {
-		super(id, fmName, hideLabel);
+	public AmpButtonField(String id, String fmName,boolean hideLabel){
+		this(id, fmName, hideLabel, false);
+	}
+	
+	public AmpButtonField(String id, String fmName,boolean hideLabel, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
 		button = new IndicatingAjaxButton("fieldButton",new Model<String>(fmName)) {
 			private static final long serialVersionUID = -5699378405978605979L;
 
@@ -64,6 +68,10 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 	}
 
 
+	public AmpButtonField(String id, String fmName, AmpFMTypes fmType, boolean hideNewLine) {
+		this(id, fmName, true, hideNewLine);
+	}
+	
 	public AmpButtonField(String id, String fmName, AmpFMTypes fmType) {
 		this(id, fmName);
 		this.fmType = fmType;

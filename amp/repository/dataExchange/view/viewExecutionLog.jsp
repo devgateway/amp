@@ -23,8 +23,11 @@ function importAll() {
 	alert('needs implementation !');
 }
 
-function importItem(){
-	alert('needs implementation !');
+function importItem(id){
+	//var actName = document.getElementById("check"+id)
+	<digi:context name="saveRecord" property="context/module/moduleinstance/showLogs.do"/>
+	url = "<%= saveRecord %>?actionType=saveAct&itemId="+id;
+	window.location.replace(url);
 }
 </script>
 
@@ -57,7 +60,7 @@ function importItem(){
 				  <tr>
 				    <td width="33%"><a href="/dataExchange/showLogs.do?htmlView=true&selectedSourceId=${showLogsForm.selectedSourceId }" class="t_sm"><b>« Back to logs</b></a></td>
 				    <td width="33%" align=center><b>Execution Log</b></td>
-				    <td width="33%" align=right><a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+				    <td width="33%" align=right><a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
 				  </tr>
 				</table>
 				
@@ -98,7 +101,7 @@ function importItem(){
 							<tr>
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<c:if test="${item.logType=='OK'}">
-							    		<input name="id" type="checkbox"/>
+							    		<input name="checkItem" type="checkbox"/>
 							    	</c:if>
 							    	
 							    </td>
@@ -150,7 +153,7 @@ function importItem(){
 							    
 							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
 							    	<c:if test="${item.logType=='OK'}">
-							    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem('${item.id}');"/>
+							    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem(${item.id});"/>
 							    	</c:if>
 							    </td>
 							</tr>

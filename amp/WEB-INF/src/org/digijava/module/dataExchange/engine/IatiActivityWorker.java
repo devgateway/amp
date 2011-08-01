@@ -97,6 +97,15 @@ public class IatiActivityWorker {
 
 	private String title ="";
 	private String iatiID="";
+	private Long ampID = null;
+	public Long getAmpID() {
+		return ampID;
+	}
+
+	public void setAmpID(Long ampID) {
+		this.ampID = ampID;
+	}
+
 	private String lang = "en";
 	
 	
@@ -151,97 +160,129 @@ public class IatiActivityWorker {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ArrayList<AmpMappedField> checkContent() { 
-		// TODO Auto-generated method stub
-		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
+	public boolean existActivityByTitleIatiId(String s){
+		if(s==null || "".compareTo(s.trim()) ==0 ) return false;
+		String title = "";
+		String id = "";
 		for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
 			Object contentItem = (Object) it.next();
 			if(contentItem instanceof JAXBElement){
 				JAXBElement i = (JAXBElement)contentItem;
-
-				//title
 				if(i.getName().equals(new QName("title"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-					System.out.println("activity title:" + printTextType(item)+"#");
-					this.title += printTextType(item);
+					title += printTextType(item);
 				}
-				//status
-				if(i.getName().equals(new QName("activity-status"))){
-					JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
-					AmpMappedField existStatusCode = checkStatusCode(item);
-					logs.add(existStatusCode);
-				}
-
-				//default-finance-type == type of assistance
-				if(i.getName().equals(new QName("default-finance-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					AmpMappedField existFinanceType = checkFinanceType(item);
-					logs.add(existFinanceType);
-				}
-
-				//default-aid-type == financing instrument
-				if(i.getName().equals(new QName("default-aid-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					AmpMappedField existAidType = checkAidType(item);
-					logs.add(existAidType);
-				}
-				
 			}
-
 			if(contentItem instanceof IatiIdentifier){
 				IatiIdentifier item = (IatiIdentifier)contentItem;
-				this.iatiID += item.getContent();
+				id += item.getContent();
 			}
 			
-			if(contentItem instanceof ReportingOrg){
-				ReportingOrg item = (ReportingOrg)contentItem;
-				AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
-				AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-				logs.add(existOrganization);
-				logs.add(existOrganizationType);
-			}
-			
-			if(contentItem instanceof ParticipatingOrg){
-				ParticipatingOrg item = (ParticipatingOrg)contentItem;
-				AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
-				AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-				logs.add(existOrganization);
-				logs.add(existOrganizationType);
-			}
-			
-			if(contentItem instanceof OtherIdentifier){
-				OtherIdentifier item = (OtherIdentifier)contentItem;
-				AmpMappedField existOrganization	  = checkOrganization(item.getOwnerName(),this.getLang(), item.getOwnerRef());
-				logs.add(existOrganization);
-			}
-			
-			if(contentItem instanceof Location){
-				Location item = (Location)contentItem;
-				AmpMappedField existLocation	  = checkLocation(item);
-				logs.add(existLocation);
-			}
-			
-			if(contentItem instanceof Sector){
-				Sector item = (Sector)contentItem;
-				AmpMappedField existVocabularyCode = checkVocabularyCode(item);
-				AmpMappedField existSector			= checkSector(item);
-				logs.add(existVocabularyCode);
-				logs.add(existSector);
-			}
-			
-			if(contentItem instanceof Transaction){
-				Transaction item = (Transaction)contentItem;
-				boolean ok 		 = false;
-				ok 				 = checkIATITransaction(item,logs);
-			}
 		}
-		checkActivity(this.title, this.iatiID, this.lang);
+		if( s.toLowerCase().compareTo((title+" "+id).toLowerCase()) == 0 ) 
+			return true;
+		return false;
+	}
+	
+	public ArrayList<AmpMappedField> checkContent() { 
+		// TODO Auto-generated method stub
+		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
+		try{
+			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
+				Object contentItem = (Object) it.next();
+				if(contentItem instanceof JAXBElement){
+					JAXBElement i = (JAXBElement)contentItem;
+	
+					//title
+					if(i.getName().equals(new QName("title"))){
+						JAXBElement<TextType> item = (JAXBElement<TextType>)i;
+						System.out.println("activity title:" + printTextType(item)+"#");
+						this.title += printTextType(item);
+					}
+					//status
+					if(i.getName().equals(new QName("activity-status"))){
+						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
+						AmpMappedField existStatusCode = checkStatusCode(item);
+						logs.add(existStatusCode);
+					}
+	
+					//default-finance-type == type of assistance
+					if(i.getName().equals(new QName("default-finance-type"))){
+						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+						AmpMappedField existFinanceType = checkFinanceType(item);
+						logs.add(existFinanceType);
+					}
+	
+					//default-aid-type == financing instrument
+					if(i.getName().equals(new QName("default-aid-type"))){
+						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+						AmpMappedField existAidType = checkAidType(item);
+						logs.add(existAidType);
+					}
+					
+				}
+	
+				if(contentItem instanceof IatiIdentifier){
+					IatiIdentifier item = (IatiIdentifier)contentItem;
+					this.iatiID += item.getContent();
+				}
+				
+				if(contentItem instanceof ReportingOrg){
+					ReportingOrg item = (ReportingOrg)contentItem;
+					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
+					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
+					logs.add(existOrganization);
+					logs.add(existOrganizationType);
+				}
+				
+				if(contentItem instanceof ParticipatingOrg){
+					ParticipatingOrg item = (ParticipatingOrg)contentItem;
+					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
+					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
+					logs.add(existOrganization);
+					logs.add(existOrganizationType);
+				}
+				
+				if(contentItem instanceof OtherIdentifier){
+					OtherIdentifier item = (OtherIdentifier)contentItem;
+					AmpMappedField existOrganization	  = checkOrganization(item.getOwnerName(),this.getLang(), item.getOwnerRef());
+					logs.add(existOrganization);
+				}
+				
+				if(contentItem instanceof Location){
+					Location item = (Location)contentItem;
+					AmpMappedField existLocation	  = checkLocation(item);
+					logs.add(existLocation);
+				}
+				
+				if(contentItem instanceof Sector){
+					Sector item = (Sector)contentItem;
+					AmpMappedField existVocabularyCode = checkVocabularyCode(item);
+					AmpMappedField existSector			= checkSector(item);
+					logs.add(existVocabularyCode);
+					logs.add(existSector);
+				}
+				
+				if(contentItem instanceof Transaction){
+					Transaction item = (Transaction)contentItem;
+					boolean ok 		 = false;
+					ok 				 = checkIATITransaction(item,logs);
+				}
+			}
+			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
+			
+				if(checkedActivity.getItem().getAmpId() !=null)
+					this.ampID = checkedActivity.getItem().getAmpId();
+			}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		return logs;
 	}
 	
 
 
-	public void importActivity(AmpActivityVersion a){
+	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a){
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		
 		ArrayList<JAXBElement<TextType>> iatiTitleList = new ArrayList<JAXBElement<TextType>>();
@@ -291,6 +332,7 @@ public class IatiActivityWorker {
 		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
 		processLocationStep(a,iatiLocationList);
 		processContactsStep(a,iatiContactList);
+		return logs;
 	}
 	
 	
@@ -798,9 +840,13 @@ public class IatiActivityWorker {
 
 	private JAXBElement<CodeType> getElementByLang(ArrayList<JAXBElement<CodeType>> iatiStatusList, String lang) {
 		// TODO Auto-generated method stub
+		boolean isUnique = false;
+		if(iatiStatusList.size() == 1)
+			isUnique = true;
 		for (Iterator it = iatiStatusList.iterator(); it.hasNext();) {
 			JAXBElement<CodeType> je = (JAXBElement<CodeType>) it.next();
-			if( lang.compareTo(je.getValue().getLang()) ==0 ) return je;
+			if(isUnique) return je;
+			if( je.getValue() !=null && je.getValue().getLang()!=null && lang.compareTo(je.getValue().getLang()) ==0 ) return je;
 		}
 		return null;
 	}

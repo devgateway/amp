@@ -20,8 +20,11 @@ function changeSource() {
 	form.submit();
 }
 
-function chechLog(logId) {
-	alert('needs implementation');
+function checkLog(sourceId) {
+	var form = document.getElementById('logForm');
+	form.action = "/dataExchange/manageSource.do?action=executeIATI&executingSourceId="+sourceId;
+	form.target="_self"
+	form.submit();
 }
 </script>
 
@@ -54,7 +57,11 @@ function chechLog(logId) {
 					    	<a href="/dataExchange/manageSource.do" class="t_sm"><b>« <digi:trn>Back to details</digi:trn></b></a>
 					    </td>
 					    <td width="33%" align=center><b><digi:trn>Log file for:</digi:trn> ${showLogsForm.selectedSourceName }</b></td>
-					    <td width="33%" align=right><a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+					    <td width="33%" align=right>
+					    <a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    <a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b>Check Source</b></a>
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    <a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
 					</tr>
 				</table>
 		
@@ -112,8 +119,7 @@ function chechLog(logId) {
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
-							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b>view</b></a> | 
-							    		<a href="javascript:chechLog('${log.id}')" class="t_sm"><b>check</b></a>
+							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b>view</b></a>							    		
 							    	</div>
 							    </td>
 							</tr>

@@ -25,6 +25,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -37,6 +38,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
+import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
@@ -44,7 +46,6 @@ import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.ExportBuilder;
-import org.digijava.module.dataExchange.util.ExportUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -93,7 +94,29 @@ public class DataExchangeUtils {
 			"&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;"};
 
 	
-	
+	public static DEMappingFields getAmpDEMappingField(Long id) {
+		DEMappingFields obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + DEMappingFields.class.getName()
+                + " o where o.id=:id)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("id", id, Hibernate.LONG);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (DEMappingFields) result.get(0);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception from getAmpDEMappingField(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
 	
 	public static Collection<DEMappingFields> getAllAmpDEMappingFields() {
 		Session session = null;
@@ -104,7 +127,7 @@ public class DataExchangeUtils {
 		try {
 			//session = PersistenceManager.getSession();
 			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select f from " + DEMappingFields.class.getName() + " f";
+			qryStr = "select f from " + DEMappingFields.class.getName() + " f order by id";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
 
@@ -481,6 +504,54 @@ public class DataExchangeUtils {
 		return ampOrg;
 	}
 	
+	
+	public static AmpActivityGroup getAmpActivityGroupById(Long id) {
+		Session session = null;
+		AmpActivityGroup aag = null;
+		try {
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
+			aag = (AmpActivityGroup) session.load(AmpActivityGroup.class, id);
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return aag;
+	}
+	
+	public static DELogPerItem getDELogPerItemById(Long id) {
+		Session session = null;
+		DELogPerItem aag = null;
+		try {
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
+			aag = (DELogPerItem) session.load(DELogPerItem.class, id);
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return aag;
+	}
 	
 	/**
 	 * @author dan
@@ -1127,7 +1198,7 @@ public class DataExchangeUtils {
 		try {
 			session = PersistenceManager.getSession();
 			
-			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg ";
+			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg order by name";
 			
 			Query qry = session.createQuery(queryString);
 			col = qry.list();

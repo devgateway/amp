@@ -74,7 +74,7 @@ function toggleGroup(group_id){
 	  <tr>
 	    <td>&nbsp;</td>
 	    <td align="right">&nbsp;</td>
-	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm"><b>Map Fields</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
 	  </tr>
 	</table>
 	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">

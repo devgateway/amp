@@ -13,6 +13,7 @@
 		<property name="iatiValues" column="iati_values" type="java.lang.String" />
 		<property name="iatiLang" column="iati_lang" type="java.lang.String" />
 		<property name="ampId" column="amp_id" type="java.lang.Long" />
+		<property name="ampValues" column="amp_values" type="java.lang.String" />
 		<property name="ampClass" column="amp_class" type="java.lang.String" />
 		<property name="sourceId" column="source_id" type="java.lang.Long" />
 		<property name="feedFileName" column="feed_file_name" type="java.lang.String" />

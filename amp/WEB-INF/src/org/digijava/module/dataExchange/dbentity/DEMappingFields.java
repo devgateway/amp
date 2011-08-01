@@ -43,20 +43,29 @@ public class DEMappingFields implements Serializable {
     private String iatiItems;
     private String iatiValues;
     private String iatiLang;
-    private Long ampId;    
-    private String ampClass;
+    private Long ampId;  
+    private String ampValues;
+    
+    public String getAmpValues() {
+		return ampValues;
+	}
+
+	public void setAmpValues(String ampValues) {
+		this.ampValues = ampValues;
+	}
+	private String ampClass;
     private Long sourceId;
     private String feedFileName;
     private String status;
     private Timestamp creationDate;
 
-    private Long selectedAmpId;
+    private String selectedAmpId;
     
-	public Long getSelectedAmpId() {
+	public String getSelectedAmpId() {
 		return selectedAmpId;
 	}
 
-	public void setSelectedAmpId(Long selectedAmpId) {
+	public void setSelectedAmpId(String selectedAmpId) {
 		this.selectedAmpId = selectedAmpId;
 	}
 

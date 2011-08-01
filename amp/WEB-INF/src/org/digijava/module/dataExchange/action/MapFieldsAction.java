@@ -53,8 +53,20 @@ public class MapFieldsAction extends MultiAction {
 	@Override
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		String htmlView	= request.getParameter("htmlView");
 		MapFieldsForm mForm = (MapFieldsForm) form;
+
+		String fieldId	= request.getParameter("id");
+		String actType	= request.getParameter("actionType");
+		String mappedId	= request.getParameter("mappedId");
+		String mappedValue	= request.getParameter("mappedValue");
+		
+		if(fieldId != null && actType != null && mappedId !=null){
+			DEMappingFields ampDEMappingField = DataExchangeUtils.getAmpDEMappingField(new Long(fieldId));
+			//TODO if ampId == -1 => create new field
+			ampDEMappingField.setAmpId(new Long(mappedId));
+			ampDEMappingField.setAmpValues(mappedValue);
+			DataExchangeUtils.addObjectoToAmp(ampDEMappingField);
+		}
 		TreeSet<String> ampClasses = new TreeSet<String>();
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();

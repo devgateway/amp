@@ -10,7 +10,7 @@ import org.digijava.module.dataExchange.util.XmlWrapper;
 public class DELogPerItem implements XmlWrappable{
 	public static final String LOG_TYPE_INFO	= "INFO";
 	public static final String LOG_TYPE_WARN	= "WARN";
-	public static final String LOG_TYPE_OK	= "OK";
+	public static final String LOG_TYPE_OK		= "OK";
 	public static final String LOG_TYPE_ERROR	= "ERROR";
 	
 	public static final String ITEM_TYPE_ACTIVITY	= "ACTIVITY";

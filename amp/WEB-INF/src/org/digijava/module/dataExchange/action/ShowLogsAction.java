@@ -3,8 +3,13 @@
  */
 package org.digijava.module.dataExchange.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,11 +21,17 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.engine.DEImportBuilder;
+import org.digijava.module.dataExchange.engine.FileSourceBuilder;
 import org.digijava.module.dataExchange.form.ShowLogsForm;
+import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.XmlCreator;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
+import org.springframework.util.FileCopyUtils;
 
 /**
  * @author Alex Gartner
@@ -69,6 +80,42 @@ public class ShowLogsAction extends MultiAction {
 			throws Exception {
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
+		
+		String actType	= request.getParameter("actionType");
+		String itemId	= request.getParameter("itemId");
+		//import one activity
+		if(actType!=null && "saveAct".compareTo(actType)==0){
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			try {
+				Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById(myForm.getSelectedSourceId()).getAttachedFile();
+				SdmItem item = null;
+				if (attachedFile!=null) {
+					for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+						item = sdmItem;
+						break;
+					}
+					ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
+					FileCopyUtils.copy(inStream, outputStream);
+				}	
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String result = outputStream.toString();
+			DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId() );
+			if(ss.getLogs() == null)
+				ss.setLogs(new ArrayList<DELogPerExecution>());
+			
+			FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
+			DEImportItem 	deItem  = new DEImportItem(fsb);
+			DEImportBuilder deib 	= new DEImportBuilder(deItem);
+			if(itemId != null)
+				{
+					deib.runIATI("import",itemId);
+				}
+			
+		}
+		
 		List<DELogPerExecution> logs		= null;
 		if ( myForm.getSelectedSourceId() == null || myForm.getSelectedSourceId() <= 0 )
 			logs	= new SessionImportLogDAO().getAllAmpLogPerExecutionObjects();

@@ -212,12 +212,6 @@ public class ManageSourceAction extends MultiAction {
 			throws Exception {
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//		try {
-//			FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		try {
 			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId()).getAttachedFile();
 			SdmItem item = null;
@@ -237,16 +231,14 @@ public class ManageSourceAction extends MultiAction {
 		}
 		String result = outputStream.toString();
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( msForm.getExecutingSourceId() );
-	//	DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( new Long(1));
 		if(ss.getLogs() == null)
 			ss.setLogs(new ArrayList<DELogPerExecution>());
 		
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
-//		deib.run(request);
 		if("iati".compareTo(type) ==0)
-			deib.runIATI(request);
+			deib.runIATI("check",null);
 		if("idml".compareTo(type) ==0)
 			deib.run(request);
 

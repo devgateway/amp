@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
@@ -88,34 +90,7 @@ public class ShowLogsAction extends MultiAction {
 		String itemId	= request.getParameter("itemId");
 		//import one activity
 		if(actType!=null && "saveAct".compareTo(actType)==0){
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			try {
-				Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById(myForm.getSelectedSourceId()).getAttachedFile();
-				SdmItem item = null;
-				if (attachedFile!=null) {
-					for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
-						item = sdmItem;
-						break;
-					}
-					ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
-					FileCopyUtils.copy(inStream, outputStream);
-				}	
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String result = outputStream.toString();
-			DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId() );
-			if(ss.getLogs() == null)
-				ss.setLogs(new ArrayList<DELogPerExecution>());
-			
-			FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
-			DEImportItem 	deItem  = new DEImportItem(fsb);
-			DEImportBuilder deib 	= new DEImportBuilder(deItem);
-			if(itemId != null)
-				{
-					deib.runIATI(request,"import",itemId);
-				}
+			importActivity(request, myForm, itemId);
 			
 		}
 		
@@ -179,6 +154,37 @@ public class ShowLogsAction extends MultiAction {
 		 * 
 		 */
 		
+	}
+
+	private void importActivity(HttpServletRequest request, ShowLogsForm myForm, String itemId) throws SQLException, DgException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById(myForm.getSelectedSourceId()).getAttachedFile();
+			SdmItem item = null;
+			if (attachedFile!=null) {
+				for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+					item = sdmItem;
+					break;
+				}
+				ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
+				FileCopyUtils.copy(inStream, outputStream);
+			}	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String result = outputStream.toString();
+		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId() );
+		if(ss.getLogs() == null)
+			ss.setLogs(new ArrayList<DELogPerExecution>());
+		
+		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
+		DEImportItem 	deItem  = new DEImportItem(fsb);
+		DEImportBuilder deib 	= new DEImportBuilder(deItem);
+		if(itemId != null)
+			{
+				deib.runIATI(request,"import",itemId);
+			}
 	}
 	
 	public ActionForward modeShowItemLogs(ActionMapping mapping, ActionForm form,

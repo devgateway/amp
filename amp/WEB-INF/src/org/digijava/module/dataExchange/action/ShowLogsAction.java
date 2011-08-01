@@ -114,7 +114,7 @@ public class ShowLogsAction extends MultiAction {
 			DEImportBuilder deib 	= new DEImportBuilder(deItem);
 			if(itemId != null)
 				{
-					deib.runIATI("import",itemId);
+					deib.runIATI(request,"import",itemId);
 				}
 			
 		}

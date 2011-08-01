@@ -6,6 +6,7 @@ package org.digijava.module.dataExchange.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -27,6 +28,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -1231,6 +1233,52 @@ public class DataExchangeUtils {
 		}
 		return col;
 	}
+
+	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity) {
+		Session session = null;
+	    Transaction tx = null;
+	    Long activityId = null;
+	    try {
+				session = PersistenceManager.getRequestDBSession();
+		    	tx = session.beginTransaction();
+
+		    	AmpActivityGroup ampActGroup;
+				if(grpId.longValue()==-1)
+				{
+					//add new activity
+					ampActGroup = new AmpActivityGroup();
+					ampActGroup.setAmpActivityLastVersion(ampActivity);
+					session.save(ampActGroup);
+				}
+				else{
+					//add a new version of an existing activity
+					ampActGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
+					ampActivity.setAmpActivityPreviousVersion(ampActGroup.getAmpActivityLastVersion());
+					ampActGroup.setAmpActivityLastVersion(ampActivity);
+					session.update(ampActGroup);
+				}
+				
+				ampActivity.setAmpActivityGroup(ampActGroup);
+				ampActivity.setCreatedDate(Calendar.getInstance().getTime());
+				ampActivity.setModifiedDate(Calendar.getInstance().getTime());
+				//ampActivity.setModifiedBy(wicketSession.getAmpCurrentMember());
+				//ampActivity.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
+				
+				session.save(ampActivity);
+		        
+				activityId = ampActivity.getAmpActivityId();
+		        String ampId=ActivityUtil.numericAmpId("iati",activityId);
+		        ampActivity.setAmpId(ampId);
+		        //session.update(activity);
+		        
+		        tx.commit();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ampActivity;
+	}
+
 	
 }
 

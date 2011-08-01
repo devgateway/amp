@@ -243,7 +243,7 @@ public class ManageSourceAction extends MultiAction {
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
 //		deib.run(request);
 		if("iati".compareTo(type) ==0)
-			deib.runIATI("check",null);
+			deib.runIATI(request,"check",null); 
 		if("idml".compareTo(type) ==0)
 			deib.run(request);
 

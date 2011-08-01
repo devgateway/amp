@@ -9,6 +9,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -2066,7 +2068,7 @@ public class DEImportBuilder {
 	//*****************************IATI import
 	//private void validateIATIActivity(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
 
-	public void runIATI(String runType, String itemId) {
+	public void runIATI(HttpServletRequest request, String runType, String itemId) {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
 		if(execLog.getLogItems() == null)
@@ -2098,13 +2100,13 @@ public class DEImportBuilder {
 		if(!ok) return;
 		//generateFieldHashMap();
 		if("check".compareTo(runType)==0)
-			processIATIFeed(execLog, iLog, "check",null);
+			processIATIFeed(request,execLog, iLog, "check",null);
 		if("import".compareTo(runType)==0)
-			processIATIFeed(execLog, iLog, "import", itemId);
+			processIATIFeed(request,execLog, iLog, "import", itemId);
 		
 	}
 
-	private void processIATIFeed(DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
+	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
@@ -2127,8 +2129,11 @@ public class DEImportBuilder {
 						{
 							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
 							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
-								AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(new Long(deLogPerItem.getItemType()));
-								activityLogs	=	iWorker.populateActivity(ampActGroup.getAmpActivityLastVersion());
+								Long grpId = new Long(deLogPerItem.getItemType());
+								AmpActivityVersion ampActivity = new AmpActivityVersion();
+								activityLogs	=	iWorker.populateActivity(ampActivity);
+								AmpActivityGroup ampActGroup = null;
+								DataExchangeUtils.saveActivity(request,grpId, ampActivity);
 							}
 							else continue;
 						}
@@ -2138,6 +2143,7 @@ public class DEImportBuilder {
 			}
 			iLog.saveObject(log.getDeSourceSetting());
 	}
+
 
 	private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs) {
 		String title;

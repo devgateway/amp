@@ -17,7 +17,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
-import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -324,6 +323,7 @@ public class IatiActivityWorker {
 				iatiDescriptionList, iatiOtherIdList, iatiActDateList,
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
 		
+		processTitle(a, iatiTitleList);
 		processIdentificationStep(a,iatiStatusList,iatiDescriptionList,iatiID);
 		processPlanningStep(a,iatiActDateList);
 		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
@@ -336,6 +336,13 @@ public class IatiActivityWorker {
 	}
 	
 	
+	private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList) {
+		// TODO Auto-generated method stub
+		if(iatiTitleList.isEmpty()) return;
+		JAXBElement<TextType> title = iatiTitleList.iterator().next();
+		a.setName(printList(title.getValue().getContent()));
+	}
+
 	private void processContactsStep(AmpActivityVersion a, ArrayList<ContactInfo> iatiContactList) {
 		if (iatiContactList.isEmpty()) return;
 		Set<AmpActivityContact> activityContacts=new HashSet<AmpActivityContact>();
@@ -398,8 +405,8 @@ public class IatiActivityWorker {
 
 				//mailing-address
 				if(i.getName().equals(new QName("mailing-address"))){
-					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
-					ampContact.setOfficeaddress(item.getValue().getContent());
+					ContactInfo.MailingAddress item = (ContactInfo.MailingAddress)i.getValue();
+					ampContact.setOfficeaddress(item.getContent());
 				}
 			}
 		}
@@ -758,20 +765,21 @@ public class IatiActivityWorker {
 
 	private void processIatiID(AmpActivityVersion a, IatiIdentifier iatiIDList) {
 		//TODO process the iati-id
-		a.setProjectCode(iatiIDList.getContent());
+		if(iatiIDList!=null )
+			a.setProjectCode(iatiIDList.getContent());
 	}
 
 	private void processDescriptions(AmpActivityVersion a, ArrayList<Description> iatiDescriptionList) {
 		for (Iterator it = iatiDescriptionList.iterator(); it.hasNext();) {
 			Description description = (Description) it.next();
-			if("general".compareTo(description.getType().toLowerCase()) ==0 ){
+			if( description.getType()==null || "general".compareTo(description.getType().toLowerCase()) ==0 ){
 				String d = setEditorDescription(description , "amp-iati-desc-");
-				if(this.getLang().compareTo(description.getLang()) == 0)
+				//if(this.getLang().compareTo(description.getLang()) == 0)
 					a.setDescription(d);
 			}
-			if("objectives".compareTo(description.getType().toLowerCase()) ==0 ){
+			if(description.getType() != null && "objectives".compareTo(description.getType().toLowerCase()) ==0 ){
 				String d = setEditorDescription(description , "amp-iati-obj-");
-				if(this.getLang().compareTo(description.getLang()) == 0)
+				//if(this.getLang().compareTo(description.getLang()) == 0)
 					a.setObjective(d);
 			}
 		}

@@ -293,7 +293,7 @@ body {
 	</c:if>
 </digi:form>
 <!-- MAIN CONTENT PART END -->
-<div id="customFormat" style="height: 372px;width: auto;">
+<div id="customFormat" style="display:none; height: 372px;width: auto;">
 	<jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 </div>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>

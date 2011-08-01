@@ -29,7 +29,8 @@ public final class FMUtil {
 	private static HashMap<String,Boolean> fmVisible=new HashMap<String,Boolean>();
 	private static HashMap<String,Boolean> fmEnabled=new HashMap<String,Boolean>();
 	private static boolean fmRootChecked = false;
-	private static final String fmRoot="/Activity Form";
+	public static final String fmRootActivityForm="/Activity Form";
+	public static final String fmRootPermissionManager="/Permission Manager";
 
 	private static final class PathException extends Exception{
 		private static final long serialVersionUID = 1L;
@@ -43,16 +44,16 @@ public final class FMUtil {
 	/**
 	 * Singleton to check if FM root exists
 	 */
-	public static synchronized final void checkFmRoot(){
-		if (!fmRootChecked){
+	public static synchronized final void checkFmRoot(String root){
+		//if (!fmRootChecked){
 			fmRootChecked = true;
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
 			if(ampTreeVisibility!=null){
-				if (!existInVisibilityTree(ampTreeVisibility, fmRoot, AmpFMTypes.MODULE)){
+				if (!existInVisibilityTree(ampTreeVisibility, root, AmpFMTypes.MODULE)){
 					logger.info("Activity Form FM Root Node doesn't exist, attempting to create!");
 					try {
-						addModuleToFM(context, ampTreeVisibility, fmRoot, null);
+						addModuleToFM(context, ampTreeVisibility, root, null);
 					} catch (Exception e) {
 						logger.error(">>>");
 						logger.error(">>> Unable to add Activity Form FM ROOT:", e);
@@ -60,7 +61,7 @@ public final class FMUtil {
 					}
 				}
 			}
-		}
+		//}
 	}
 
 	public static final boolean isFmEnabled(Component c) {

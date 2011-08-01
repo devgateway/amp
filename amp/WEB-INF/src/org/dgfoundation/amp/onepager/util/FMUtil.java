@@ -196,7 +196,7 @@ public final class FMUtil {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public static synchronized void addFeatureFM(ServletContext context, AmpTreeVisibility ampTreeVisibility, String componentPath, String componentParentPath) throws Exception{

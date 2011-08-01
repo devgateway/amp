@@ -268,6 +268,40 @@ public final class AdvancedReportUtil {
 		return coll;
 			
 	}
+	public static Collection getColumnListWithDbSession()
+	{
+		Session session = null;
+		String sqlQuery = "";
+		boolean flag =false;
+		Iterator iter = null;
+		Collection coll = new ArrayList();
+		Query query = null;
+		AmpColumns ampColumns = new AmpColumns();
+		try
+		{
+			session = PersistenceManager.getRequestDBSession();
+			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
+			query = session.createQuery(sqlQuery);
+			if (query != null) 
+			{
+				iter = query.list().iterator();
+				while (iter.hasNext()) 
+				{
+					ampColumns = (AmpColumns) iter.next();
+					coll.add(ampColumns);
+				}
+				flag = true;
+			}
+			return coll;
+		}
+		catch(Exception e)
+		{
+			logger.error(e);
+			////System.out.println(" Error in getColumnList()  :  " + e);
+		}
+		return coll;
+			
+	}
 
 	public static Collection getMeasureList()
 	{

@@ -133,7 +133,7 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		String sortByAsc=request.getParameter("sortByAsc");
 		String applySorter = request.getParameter("applySorter");
-		if(ampReportId==null) 
+		if(ampReportId==null || ampReportId.length() == 0 ) 
 			ampReportId=ar.getAmpReportId().toString();
 		Long reportId=new Long(ampReportId);
 		request.setAttribute("ampReportId",ampReportId);
@@ -207,6 +207,9 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute("progressValue", progressValue); 
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			if (ar == null) {
+				ar = (AmpReports) request.getSession().getAttribute("reportMeta");
+			}
 			validateColumnsAndHierarchies(ar);
 			//This is for public views to avoid nullPointerException due to there is no logged user.
 			if(tm != null){
@@ -353,6 +356,9 @@ public class ViewNewAdvancedReport extends Action {
 
 
 	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) {
+		/* In case the report object is not a db object do nothing */
+		if ( ar.getAmpReportId() <= 0 )
+			return;
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 		AmpReportLog reportlog = DbUtil.getAmpReportLog(ar.getAmpReportId(), ampTeamMember.getAmpTeamMemId());
 		if(reportlog!=null){

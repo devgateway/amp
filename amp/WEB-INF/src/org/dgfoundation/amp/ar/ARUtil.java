@@ -129,17 +129,20 @@ public final class ARUtil {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		String ampReportId = request.getParameter("ampReportId");
-		if (ampReportId == null)
+		AmpReports r		= null;
+		if (ampReportId == null || ampReportId.length() == 0 )
 			ampReportId = (String) request.getAttribute("ampReportId");
+		if ( ampReportId == null || ampReportId.length() == 0 || Long.parseLong(ampReportId) <= 0) {
+			r		= (AmpReports) request.getSession().getAttribute("reportMeta");
+		}
 		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
 
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
-
-		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
-				ampReportId));
-		
+		if ( r == null) {
+			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+		}
 		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);

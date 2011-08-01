@@ -37,6 +37,7 @@
 	<form-bean name="aimAddOrgTypeForm" type="org.digijava.module.aim.form.AddOrgTypeForm" />
     <form-bean name="aimOrgGroupManagerForm" type="org.digijava.module.aim.form.OrgGroupManagerForm" />
     <form-bean name="aimReportsFilterPickerForm" type="org.digijava.module.aim.form.ReportsFilterPickerForm" />
+    <form-bean name="aimReportsFilterPickerFormSearch" type="org.digijava.module.aim.form.ReportsFilterPickerForm" />
     <form-bean name="aimAddOrgGroupForm" type="org.digijava.module.aim.form.AddOrgGroupForm" />
     <form-bean name="aimViewOrgForm" type="org.digijava.module.aim.form.ViewOrgForm" />
     <form-bean name="aimSurveyForm" type="org.digijava.module.aim.form.SurveyForm" />
@@ -279,9 +280,15 @@
       <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
       <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
+      <forward name="queryView" path="/aim/viewNewAdvancedReport.do?reload=true&amp;view=reset&amp;viewFormat=foldable&amp;widget=true" />
       <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
+    
 
+	<action name="aimReportsFilterPickerForm" path="/aim/queryEngine" scope="session" type="org.digijava.module.aim.action.query.QueryEngine" validate="false">
+		<forward name="forward" path="/showLayout.do?layout=aim_queryEngine" />	
+	</action>
+	
   <action name="aimFieldPermissionsForm"
     path="/aim/assignFieldPermissions" scope="request"
     type="org.digijava.module.aim.action.AssignFieldPermissions"

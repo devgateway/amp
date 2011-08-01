@@ -31,7 +31,7 @@
 			<li style="margin-left: -20px; ">
 				<table>
 					<tr>
-						<td valign="top"><input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
+						<td valign="top"><input onclick="toggleCheckChildren(this);buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
 						<td>
 							<span style="font-family: Arial; font-size: 12px;">
 								<digi:trn>${entity.label}</digi:trn> 

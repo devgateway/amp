@@ -756,7 +756,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A3")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A4")));
 
-		if (ampReportId != null) {
+		if (ampReportId != null && ampReportId.length() > 0 ) {
 
 			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
 
@@ -1249,6 +1249,9 @@ public class ReportsFilterPicker extends MultiAction {
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
 			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);
 			return mapping.findForward("reportWizard");
+		}
+		if ( request.getParameter("queryEngine") != null && "true".equals(request.getParameter("queryEngine")) ) {
+			return mapping.findForward("queryView");
 		}
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);

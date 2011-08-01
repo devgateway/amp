@@ -373,6 +373,8 @@
 	<page page="reportWizard/dhtmlReportWizard_onepager" name="aim_dhtmlReportWizard_onepager" title=" - Report Wizard" />
 	<page page="reportWizard/dhtmlReportWizard_onepager" name="aim_dhtmlTabWizard_onepager" title=" - Tab Wizard" />
 	
+	<page page="query/queryEngine" name="aim_queryEngine" title=" - Query" />
+	
 	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
 	<page page="reportWizard/showSelectedFilters" name="aim_showSelectedFilters" />
 

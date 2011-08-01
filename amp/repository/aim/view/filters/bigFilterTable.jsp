@@ -69,9 +69,10 @@
 						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;" id="${element.htmlDivId}">
 							<bean:define id="reqEntityList" name="element" property="rootHierarchyListable.children" toScope="request" />
 							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
+							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>
 							<ul style="list-style-type: none;">
 								<li>
-									<input type="checkbox" onclick="toggleCheckChildren(this)" class="root_checkbox"/> 
+									<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span>

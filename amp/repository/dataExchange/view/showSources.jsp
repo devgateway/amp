@@ -16,7 +16,7 @@
 <script language="JavaScript">
 function viewLog(sourceId) {
 	var form = document.getElementById('manageForm');
-	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+sourceId;
+	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+sourceId+"&reset=true";
 	form.target="_self"
 	form.submit();	
 }
@@ -48,6 +48,20 @@ function toggleGroup(group_id){
 	$(strId+'_minus').toggle();
 	$(strId+'_plus').toggle();
 	$('#source_'+group_id).toggle('fast');
+}
+
+function sortByVal(sortBy){
+	var form = document.getElementById('manageForm');
+	form.action = "/dataExchange/manageSource.do?sort="+sortBy;
+	form.target="_self"
+	form.submit();
+}
+
+function page (page){
+	var form = document.getElementById('manageForm');
+	form.action = "context/module/moduleinstance/manageSource.do?page="+page;
+	form.target="_self";
+	form.submit();	
 }
 
 </script>
@@ -83,13 +97,58 @@ function toggleGroup(group_id){
 		</tr>
 		<tr>
 		    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
-		    	<b class="ins_title">Name</b>
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort!='name'}">
+					<a href="javascript:sortByVal('name')">
+						<b class="ins_title">Name</b>	                            	
+					</a>
+				</c:if> 
+				<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort=='name'}">
+					<a href="javascript:sortByVal('name_desc')">
+						<b class="ins_title">Name</b> 
+					</a>
+				</c:if> 
+				<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort=='name'}">
+					<img  src="/repository/aim/images/up.gif" border="0"/>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='name_desc'}">
+					<img src="/repository/aim/images/down.gif" />
+				</c:if>		    	
 		    </td>
 		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
-		    	<b class="ins_title">Source</b>
+		    	<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort!='source'}">
+					<a href="javascript:sortByVal('source')">
+						<b class="ins_title">Source</b>	                            	
+					</a>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='source'}">
+					<a href="javascript:sortByVal('source_desc')">
+						<b class="ins_title">Source</b>
+					</a>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='source'}">
+					<img  src="/repository/aim/images/up.gif" border="0"/>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='source_desc'}">
+					<img src="/repository/aim/images/down.gif" />
+				</c:if>		    	
 		    </td>
 		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
-		    	<b class="ins_title">Workspace Used</b>
+		    	<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort!='workspace'}">
+					<a href="javascript:sortByVal('workspace')">
+						<b class="ins_title">Workspace Used</b>	                            	
+					</a>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='workspace'}">
+					<a href="javascript:sortByVal('workspace_desc')">
+						<b class="ins_title">Workspace Used</b>
+					</a>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='workspace'}">
+					<img  src="/repository/aim/images/up.gif" border="0"/>
+				</c:if> 
+				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='workspace_desc'}">
+					<img src="/repository/aim/images/down.gif" />
+				</c:if>
 		    </td>
 		    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
 		    	<b class="ins_title">Show/Hide Details</b>

@@ -29,10 +29,10 @@ import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.XmlCreator;
+import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.springframework.util.FileCopyUtils;
-
 /**
  * @author Alex Gartner
  *
@@ -53,6 +53,9 @@ public class ShowLogsAction extends MultiAction {
 	@Override
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ShowLogsForm myForm					= (ShowLogsForm) form;
+		if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
+			resetForm(myForm);
+		}
 		// TODO Auto-generated method stub
 		String htmlView	= request.getParameter("htmlView");
 		if ("true".equals(htmlView)) {
@@ -117,12 +120,30 @@ public class ShowLogsAction extends MultiAction {
 		}
 		
 		List<DELogPerExecution> logs		= null;
+		int lastPage = 1;
 		if ( myForm.getSelectedSourceId() == null || myForm.getSelectedSourceId() <= 0 )
 			logs	= new SessionImportLogDAO().getAllAmpLogPerExecutionObjects();
 		else {
-			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId());
+			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId());
+			
+			if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
+				lastPage = allSourcesAmount%10==0 ? allSourcesAmount%10 : allSourcesAmount%10 +1;
+			}
+			
+			int startIndex = 0;
+			if (myForm.getPage() != 0) {
+				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * myForm.getPage();
+			}
+			
+			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
+		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {
+			myForm.setCurrentPage(new Integer(1));
+		}else{
+			myForm.setCurrentPage(myForm.getPage());
+		}
+		myForm.setLastPage(lastPage);
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId());
 		if (ss !=null) {
 			myForm.setSelectedSourceName(ss.getName());
@@ -207,4 +228,15 @@ public class ShowLogsAction extends MultiAction {
 		return mapping.findForward("showLogItemDetails");
 	}
 
+	private void resetForm(ShowLogsForm myForm){
+		myForm.setAvailableSourceSettings(null);
+		myForm.setCurrentPage(null);
+		myForm.setLastPage(1);
+		myForm.setLogItems(null);
+		myForm.setLogs(null);
+		myForm.setPage(1);
+		myForm.setSelectedLogPerExecId(null);
+		myForm.setSelectedLogPerItemId(null);
+		myForm.setSortBy(null);
+	}
 }

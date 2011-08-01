@@ -8,6 +8,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.utils.Constants;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -56,30 +57,46 @@ public class ImportLogDAO {
 		}
 	}
 	
-	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId, String sortBy,String sortDir) {
+	public int getAmpLogPerExectutionObjsCountBySourceSetting(Long sourceSettingId) {
+		try{
+			String queryString 	= "select count(lpe) from "	+ DELogPerExecution.class.getName() + " lpe where " +
+					"lpe.deSourceSetting=:deSourceSettingId";
+			Query query			= hbSession.createQuery(queryString);
+			query.setLong("deSourceSettingId", sourceSettingId );
+			int resultList	=  (Integer)query.uniqueResult();
+			return resultList;
+		}
+		finally {
+			this.releaseSession();
+		}
+	}
+	
+	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId, int startIndex,String sortBy) {
 		try{
 			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe where " +
 					"lpe.deSourceSetting=:deSourceSettingId";
 			//sort
-			if(sortBy!=null && sortDir!=null){
-				if (sortBy.equals("dbId") && sortDir.equals("asc")) {
+			if(sortBy!=null){
+				if (sortBy.equals("dbId")) {
 					queryString += " order by lpe.id " ;
-				} else if (sortBy.equals("dbId") && sortDir.equals("desc")) {
+				} else if (sortBy.equals("dbId_desc")) {
 					queryString += " order by lpe.id desc " ;
-				}else if(sortBy.equals("date") && sortDir.equals("asc")){
-					queryString += " order by lpe.externalTimestamp ";
-				}else if(sortBy.equals("date") && sortDir.equals("desc")){
-					queryString += " order by lpe.externalTimestamp desc ";
-				}else if(sortBy.equals("time") && sortDir.equals("asc")){
-					queryString += " order by lpe.externalTimestamp ";
-				}else if(sortBy.equals("time") && sortDir.equals("desc")){
-					queryString += " order by lpe.externalTimestamp desc ";
+				}else if(sortBy.equals("date")){
+					queryString += " order by lpe.executionTime ";
+				}else if(sortBy.equals("date_desc")){
+					queryString += " order by lpe.executionTime desc ";
+				}else if(sortBy.equals("time")){
+					queryString += " order by lpe.executionTime ";
+				}else if(sortBy.equals("time_desc") ){
+					queryString += " order by lpe.executionTime desc ";
 				}
 			}else{
 				queryString += " order by lpe.id ";
 			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setLong("deSourceSettingId", sourceSettingId );
+			query.setFirstResult(startIndex);
+			query.setMaxResults(Constants.RECORDS_AMOUNT_PER_PAGE);
 			List<DELogPerExecution> resultList	=  query.list();
 			return resultList;
 		}

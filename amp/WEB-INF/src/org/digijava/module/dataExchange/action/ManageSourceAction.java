@@ -30,6 +30,7 @@ import org.digijava.module.dataExchange.form.ManageSourceForm;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
+import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.springframework.util.FileCopyUtils;
@@ -95,22 +96,25 @@ public class ManageSourceAction extends MultiAction {
 	throws Exception {
 		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
 		int lastPage = 1;
-		if (allSourcesAmount > msForm.getTempNumResults()) {
+		if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
 			lastPage = allSourcesAmount%10==0 ? allSourcesAmount%10 : allSourcesAmount%10 +1;
 		}
 		
 		
 		int startIndex = 0;
 		if (msForm.getPage() != 0) {
-			startIndex = msForm.getTempNumResults()*msForm.getPage();
+			startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * msForm.getPage();
 		}
 		
 		//get sources
-		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort(),msForm.getSortOrder());
+		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
 		msForm.setPagedSources(sources);
-		if (msForm.getCurrentPage() == null || msForm.getCurrentPage() == 0) {
+		if (msForm.getCurrentPage() == null || msForm.getCurrentPage() == 0 && msForm.getPage() ==0) {
 			msForm.setCurrentPage(new Integer(1));
+		}else{
+			msForm.setCurrentPage(msForm.getPage());
 		}
+		
 		msForm.setLastPage(lastPage);
 		return mapping.findForward("showSources");
 		
@@ -126,7 +130,7 @@ public class ManageSourceAction extends MultiAction {
 		String results = request.getParameter("results");
 		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
 		//get sources
-		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(new Integer(startIndex).intValue(), sortBy,sortDir);
+		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(new Integer(startIndex).intValue(), sortBy);
 
         JSONObject json = null;
         try {
@@ -237,6 +241,7 @@ public class ManageSourceAction extends MultiAction {
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
+//		deib.run(request);
 		if("iati".compareTo(type) ==0)
 			deib.runIATI("check",null);
 		if("idml".compareTo(type) ==0)

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.utils.Constants;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -51,28 +52,30 @@ public class SourceSettingDAO {
 		}
 	}
 	
-	public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy,String sortDir) {
+	public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy) {
 		try{
 			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
 			//sort
-			if(sortBy!=null && sortDir!=null){
-				if (sortBy.equals("Name") && sortDir.equals("asc")) {
+			if(sortBy!=null){
+				if (sortBy.equals("name")) {
 					queryString += " order by ss.name " ;
-				} else if (sortBy.equals("Name") && sortDir.equals("desc")) {
+				} else if (sortBy.equals("name_desc")) {
 					queryString += " order by ss.name desc " ;
-				}else if(sortBy.equals("Source") && sortDir.equals("asc")){
+				}else if(sortBy.equals("source")){
 					queryString += " order by ss.source ";
-				}else if(sortBy.equals("Source") && sortDir.equals("desc")){
+				}else if(sortBy.equals("source_desc")){
 					queryString += " order by ss.source desc ";
-				}else if(sortBy.equals("Workspace") && sortDir.equals("asc")){
+				}else if(sortBy.equals("workspace")){
 					queryString += " order by ss.importWorkspace.name ";
-				}else if(sortBy.equals("Workspace") && sortDir.equals("desc")){
-					queryString += " order by ssimportWorkspace.name desc ";
+				}else if(sortBy.equals("workspace_desc")){
+					queryString += " order by ss.importWorkspace.name desc ";
 				}
+			}else{
+				queryString += " order by ss.name " ;
 			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setFirstResult(fromIndex);
-			query.setMaxResults(10);
+			query.setMaxResults(Constants.RECORDS_AMOUNT_PER_PAGE);
 //			if(resultNum!=-1){
 //				query.setMaxResults(resultNum);
 //			}

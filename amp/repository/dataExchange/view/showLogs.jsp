@@ -26,6 +26,20 @@ function checkLog(sourceId) {
 	form.target="_self"
 	form.submit();
 }
+
+function sortByVal (val,selectedSourceSetting) {
+	var form = document.getElementById('logForm');
+	var selectedSourceSetting = document.getElementById("logFor").value;
+	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+selectedSourceSetting+"&sortBy="+val;
+	form.target="_self"
+	form.submit();	
+}
+function page (page){
+	var form = document.getElementById('logForm');
+	form.action = "/dataExchange/showLogs.do?htmlView=true&page="+page;
+	form.target="_self";
+	form.submit();	
+}
 </script>
 
 <digi:instance property="showLogsForm" />
@@ -67,7 +81,7 @@ function checkLog(sourceId) {
 		
 				<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
 					<tr>
-						<td colspan="6" align=right background="images/ins_header.gif" class=inside><b class="ins_header">
+						<td colspan="6" align=right background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">
 						<digi:trn>See log file for </digi:trn> :
 						  <html:select property="selectedSourceId" styleClass="dropdwn_sm" styleId="logFor">
 						  	<html:optionsCollection property="availableSourceSettings" value="id" label="name" />					    
@@ -76,12 +90,49 @@ function checkLog(sourceId) {
 						</b></td>
 					</tr>
 					<tr>
-					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">DbID</b></td>
-					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">Date</b></td>
-					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">Time</b></td>
-					    <td background="images/ins_bg.gif" class=inside><b class="ins_title">External Timestamp</b></td>
-					    <td background="images/ins_bg.gif" class=inside align=center><b class="ins_title">Description</b></td>
-					    <td background="images/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
+						<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy!='dbId'}">
+								<a href="javascript:sortByVal('dbId','${showLogsForm.selectedSourceId }')">
+									<b class="ins_title"><digi:trn>DbID</digi:trn></b>	                            	
+								</a>
+							</c:if> 
+							<c:if test="${empty showLogsForm.sortBy || showLogsForm.sortBy=='dbId'}">
+								<a href="javascript:sortByVal('dbId_desc','${showLogsForm.selectedSourceId }')">
+									<b class="ins_title"><digi:trn>DbID</digi:trn></b> 
+								</a>
+							</c:if> 
+							<c:if test="${empty showLogsForm.sortBy || showLogsForm.sortBy=='dbId'}">
+								<img  src="/repository/aim/images/up.gif" border="0"/>
+							</c:if> 
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='dbId_desc'}">
+								<img src="/repository/aim/images/down.gif" />
+							</c:if>
+						</td>
+						<td class="inside" background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif">
+							<c:if test="${empty showLogsForm.sortBy || showLogsForm.sortBy!='date'}">
+								<a href="javascript:sortByVal('date','${showLogsForm.selectedSourceId }')">
+									<b class="ins_title"><digi:trn>Date</digi:trn></b>	                            	
+								</a>
+							</c:if>
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='date'}">
+								<a href="javascript:sortByVal('date_desc','${showLogsForm.selectedSourceId }')">
+									<b class="ins_title"><digi:trn>Date</digi:trn></b>	                            	
+								</a>
+							</c:if> 
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='date'}">
+								<img src="/repository/aim/images/up.gif" />
+							</c:if> 
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='date_desc'}">
+								<img src="/repository/aim/images/down.gif" />
+							</c:if>
+						</td>
+					
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside>
+					    	<b class="ins_title">Time</b>
+					   	</td>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside><b class="ins_title">External Timestamp</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Description</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
 					</tr>
 					<logic:empty name="showLogsForm" property="logs">
 						<tr>
@@ -126,6 +177,24 @@ function checkLog(sourceId) {
 						</logic:iterate>
 					</logic:notEmpty>		
 				</table>
+				<!-- Pagination -->
+				<div class="paging" style="font-size:11px;margin:10px;">
+					<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+					<c:forEach var="page" begin="1" end="${showLogsForm.lastPage}">
+						<bean:define id="currPage" name="showLogsForm" property="currentPage" />
+						<c:if test="${showLogsForm.currentPage == page}">
+							<b class="paging_sel">${page}</b>
+						</c:if>
+						<c:if test="${showLogsForm.currentPage != page}">
+							<c:set var="translation">
+								<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+							</c:set>
+							<a href="javascript:page(${page})" title="${translation}" class="l_sm">${page}</a>
+						</c:if>
+						|&nbsp;
+					</c:forEach>
+				</div>	
+				<!-- end of Pagination -->
 			</td>
 		</tr>
 	</table>

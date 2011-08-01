@@ -39,13 +39,10 @@ public class ManageSourceForm extends ActionForm {
 	private List <DESourceSetting> pagedSources;
 	
 	//pagination, sorting
-	private Collection pages;
 	private Integer currentPage;
 	private int page = 0;
 	private int lastPage ;
 	private String sort = null;
-	private String sortOrder = null;
-	private int tempNumResults = 10;
 
 	/**
 	 * @return the selectedSourceId
@@ -229,14 +226,6 @@ public class ManageSourceForm extends ActionForm {
 		this.uniqueIdentifier = uniqueIdentifier;
 	}
 
-	public Collection getPages() {
-		return pages;
-	}
-
-	public void setPages(Collection pages) {
-		this.pages = pages;
-	}
-
 	public int getPage() {
 		return page;
 	}
@@ -251,22 +240,6 @@ public class ManageSourceForm extends ActionForm {
 
 	public void setSort(String sort) {
 		this.sort = sort;
-	}
-
-	public String getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
-	public int getTempNumResults() {
-		return tempNumResults;
-	}
-
-	public void setTempNumResults(int tempNumResults) {
-		this.tempNumResults = tempNumResults;
 	}
 
 	public List<DESourceSetting> getPagedSources() {

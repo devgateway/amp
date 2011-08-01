@@ -3,6 +3,7 @@
  */
 package org.digijava.module.dataExchange.form;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
@@ -24,6 +25,12 @@ public class ShowLogsForm extends ActionForm {
 	private List<DELogPerItem> logItems;
 	private List <DESourceSetting> availableSourceSettings;
 	private String selectedSourceName ;
+	
+	private Integer currentPage;
+	private int page = 0;
+	private int lastPage ;
+	private String sortBy;
+	//private String sortDir;
 
 	/**
 	 * @return the selectedSourceId
@@ -112,5 +119,38 @@ public class ShowLogsForm extends ActionForm {
 
 	public void setLogItems(List<DELogPerItem> logItems) {
 		this.logItems = logItems;
-	}	
+	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(int lastPage) {
+		this.lastPage = lastPage;
+	}
+	
 }

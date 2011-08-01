@@ -922,7 +922,7 @@ public class DbUtil {
             oql += " inner join actsec.sectorId sec ";
         }
 
-        oql += " where config.id=:config  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        oql += " where config.id=:config and fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);

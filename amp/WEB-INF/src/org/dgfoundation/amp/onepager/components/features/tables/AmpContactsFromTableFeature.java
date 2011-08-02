@@ -168,6 +168,8 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 				activityContact.setContact(choice);			
 				activityContact.setActivity(am.getObject());
 				activityContact.setContactType(contactType);
+				if (setModel.getObject() == null)
+					setModel.setObject(new HashSet<AmpActivityContact>());
 				setModel.getObject().add(activityContact);
 				idsList.removeAll();
 				target.addComponent(idsList.getParent());

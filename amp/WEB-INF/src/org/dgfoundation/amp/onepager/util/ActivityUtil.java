@@ -64,6 +64,8 @@ public class ActivityUtil {
 		
 		try {
 			AmpActivityVersion a = (AmpActivityVersion) am.getObject();
+			if (a.getDraft() == null)
+				a.setDraft(false);
 			
 			boolean draftChange = draft != a.getDraft();
 			
@@ -97,8 +99,9 @@ public class ActivityUtil {
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
 			saveIndicators(a, session);
-			//?!? a.getActivityContacts().clear();
-			//saveContacts(a, session);
+			
+			a.getActivityContacts().clear();
+			saveContacts(a, session);
 			saveResources(a);
 			saveEditors(session);
 

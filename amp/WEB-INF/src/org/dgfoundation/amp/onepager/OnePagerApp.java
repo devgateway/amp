@@ -17,6 +17,8 @@ import org.apache.wicket.extensions.yui.YuiLib;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
@@ -120,6 +122,9 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getApplicationSettings().setPageExpiredErrorPage(AmpLoginRedirectPage.class);
 		 getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
 		 
+		 //wicket session timeout
+		 WebRequest request = (WebRequest) WebRequestCycle.get().getRequest();
+		 request.getHttpServletRequest().getSession().setMaxInactiveInterval(2 * 60 * 60); //2hours
 		 
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());

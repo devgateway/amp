@@ -132,7 +132,7 @@ public final class FMUtil {
 					return true;
 				}
 				else{
-					return true;// checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
 				}
 			}
 			else{
@@ -145,7 +145,6 @@ public final class FMUtil {
 		//Error case: component disabled, but should be viewable
 		return true;
 	}
-
 	private static boolean checkIsVisible(AmpTreeVisibility atv, String name, AmpFMTypes type){
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Map scope=PermissionUtil.getScope(session.getHttpSession());
@@ -196,7 +195,7 @@ public final class FMUtil {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	public static synchronized void addFeatureFM(ServletContext context, AmpTreeVisibility ampTreeVisibility, String componentPath, String componentParentPath) throws Exception{

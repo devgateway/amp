@@ -256,7 +256,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			cascadeFmToChildren.setVisible(true);
 			cascadeFmToChildrenLabel.setVisible(true);
 		}
-		String style=fmMode?"border: 2px blue solid; padding: 4px;":"";
+		String style=fmMode?"border: 1px dashed #9E334D; padding: 4px;":"";
 		fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		super.onBeforeRender();
 	}

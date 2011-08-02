@@ -21,7 +21,10 @@ import net.sf.json.JSONObject;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.engine.DEImportBuilder;
@@ -242,10 +245,17 @@ public class ManageSourceAction extends MultiAction {
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
 //		deib.run(request);
-		if("iati".compareTo(type) ==0)
-			deib.runIATI(request,"check",null); 
-		if("idml".compareTo(type) ==0)
-			deib.run(request);
+		try {
+			if("iati".compareTo(type) ==0)
+				deib.runIATI(request,"check",null); 
+			if("idml".compareTo(type) ==0)
+				deib.run(request);
+		} catch (Exception e) {
+			ActionMessages errors = new ActionMessages();
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate", TranslatorWorker.translateText("Execution file doesn't exist or is corrupted.",request)));				
+			saveErrors(request, errors);
+			// TODO: handle exception
+		}	
 
 	}
 

@@ -79,6 +79,7 @@ function page (page){
 					<span class="bread_sel"><digi:trn>Partial Data Import Manager</digi:trn></span>
 				</div>
 				<br>
+				<digi:errors/>
 			</td>
 		</tr>
 		<!-- BREADCRUMP END -->

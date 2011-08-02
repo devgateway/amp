@@ -148,6 +148,10 @@ public class DashboardUtil {
 	}
 	
 	public static Map sortByValue(Map map) {
+		return sortByValue(map, null);
+	}
+	
+	public static Map sortByValue(Map map, Long top) {
 	     List list = new LinkedList(map.entrySet());
 	     Collections.sort(list, new Comparator() {
 	          public int compare(Object o1, Object o2) {
@@ -156,10 +160,14 @@ public class DashboardUtil {
 	          }
 	     });
 
+	    Long cnt = top;
 	    Map result = new LinkedHashMap();
 	    for (Iterator it = list.iterator(); it.hasNext();) {
 	        Map.Entry entry = (Map.Entry)it.next();
 	        result.put(entry.getKey(), entry.getValue());
+	        if (top!=null && cnt--==0){
+	        	break;
+	        }
 	    }
 	    return result;
 	} 

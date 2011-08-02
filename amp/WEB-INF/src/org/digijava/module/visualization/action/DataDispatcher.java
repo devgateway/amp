@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -2211,7 +2212,25 @@ public class DataDispatcher extends DispatchAction {
         	filter.setYearToCompare(filter.getYear()-1);
         }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
+        Collection<AmpOrganisation> donorList = new ArrayList();
+        if (filter.getOrgIds()!= null && filter.getOrgIds().length > 0 && filter.getOrgIds()[0]!=-1) {
+			for (int i = 0; i < filter.getOrgIds().length; i++) {
+				donorList.add(DbUtil.getOrganisation(filter.getOrgIds()[i]));
+			}
+		} else {
+			Map<AmpOrganisation, BigDecimal> map = visualizationForm.getRanksInformation().getFullDonors();
+			List list = new LinkedList(map.entrySet());
+		    int counter = 0;
+		    for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        donorList.add((AmpOrganisation) entry.getKey());
+		        counter++;
+		        if (counter>=10) {
+					break;
+				}
+		    }
+		}
+        //donorList = DbUtil.getDonors(filter);
         Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
         
         for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
@@ -2233,7 +2252,7 @@ public class DataDispatcher extends DispatchAction {
             }
 		}
         
-        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map);
+        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,10l);
         
         StringBuffer xmlString = new StringBuffer();
         List list = new LinkedList(mapSorted.entrySet());

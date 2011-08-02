@@ -123,8 +123,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
 		 
 		 //wicket session timeout
-		 WebRequest request = (WebRequest) WebRequestCycle.get().getRequest();
-		 request.getHttpServletRequest().getSession().setMaxInactiveInterval(2 * 60 * 60); //2hours
+		 //WebRequest request = (WebRequest) WebRequestCycle.get().getRequest();
+		 //request.getHttpServletRequest().getSession().setMaxInactiveInterval(2 * 60 * 60); //2hours
 		 
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());

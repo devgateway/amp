@@ -97,14 +97,15 @@ top_nav a {color:#FFFFFF;}
 .loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
+html.chrome #show_login_pop_box{z-index:9999;}
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
 .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
 .gisbody .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
-html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:-3px;}
-html.chrome .bd_drop{margin-top:-5px;}
+html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;position:absolute;top:10px;left:0px;}
+html.chrome .bd_drop{margin-top:-15px;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}
@@ -646,7 +647,7 @@ div.adminicon{float:right;}
 
 .soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
-html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9999;margin:3px 0px 0px 0px;}
+html.chrome .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;margin:3px 0px 0px 0px;}
 
 .admin_landing_page_box {background-color:#FFFFFF; border-left:1px solid #DADAD6; border-top:1px solid #DADAD6; border-right:2px solid #DADAD6; border-bottom:2px solid #DADAD6;}
 .admin_landing_page_box_cont {padding:10px;}

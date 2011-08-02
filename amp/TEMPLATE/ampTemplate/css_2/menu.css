@@ -142,6 +142,11 @@
 	font-size: 100%;
 	z-index:9999;
 }
+html.chrome .yuiamp-skin-amp .yuiampmenubar .yuiampmenu, .yuiamp-skin-amp .yuiampmenu .yuiampmenu {
+	font-size: 100%;
+	z-index:9999;
+	margin-top:10px;
+}
 .yuiamp-skin-amp .yuiampmenu .bd {
 	
 	line-height:1.5em;!important
@@ -291,10 +296,9 @@ html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px
 #usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
 #usr_menu_logged a:hover {color:#fff; font-size:12px;text-decoration:underline;}
 /*-------menu fixes by rafy-------*/
-html.gecko li#yui-gen10, html.gecko li#yui-gen14 {margin-top:-3px;}
  html.chrome li#yui-gen14 {margin-top:-2px;}
 html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type,  html.gecko .bd_drop ul.first-of-type {border:none;margin-top:3px;}
-html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;z-index:9999;float:left;}
+html.chrome .bd_drop ul li ul.first-of-type {border:none;margin-top:15px;z-index:9999;float:left;}
 html.ie div.header {height:46px;}
 html.ie .yui-navset *{z-index:1;}
 html.ie .main_menu *{z-index:9000;}

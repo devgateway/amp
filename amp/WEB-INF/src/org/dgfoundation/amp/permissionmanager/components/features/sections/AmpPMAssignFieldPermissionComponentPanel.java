@@ -23,9 +23,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -107,9 +107,9 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		form.add(tree);
 		
 		//search text box
-		final AbstractAmpAutoCompleteTextField<AmpObjectVisibility> autoComplete = new AbstractAmpAutoCompleteTextField<AmpObjectVisibility>(AmpPMObjectVisibilitySearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpObjectVisibility> autoComplete = new AmpAutocompleteFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", AmpPMObjectVisibilitySearchModel.class) {
 			@Override
-			protected String getChoiceValue(AmpObjectVisibility choice) throws Throwable {
+			protected String getChoiceValue(AmpObjectVisibility choice) {
 				return choice.getName();
 			}
 			@Override
@@ -127,8 +127,8 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(43));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,false,true);
-		form.add(searchFields);
+		//final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,false,true);
+		form.add(autoComplete);
 		
 		
 		PermissionMap permMap =	PMUtil.createPermissionMap(AmpFieldsVisibility.class, true);

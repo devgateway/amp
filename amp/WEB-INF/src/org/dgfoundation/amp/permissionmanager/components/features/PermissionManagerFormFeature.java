@@ -48,6 +48,7 @@ public class PermissionManagerFormFeature  extends AmpFeaturePanel{
 		Set<Permission> permissonsSet = new TreeSet<Permission>();
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
 		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
+		
 		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 		ampTreeVisibility.buildAmpTreeVisibility(PMUtil.getDefaultAmpTemplateVisibility());
 		final IModel<AmpTreeVisibility> ampTreeVisibilityModel = new Model(ampTreeVisibility);

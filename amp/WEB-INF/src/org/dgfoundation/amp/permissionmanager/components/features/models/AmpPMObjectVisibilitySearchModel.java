@@ -7,16 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author dan
@@ -38,37 +45,99 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 	/* (non-Javadoc)
 	 * @see org.apache.wicket.model.LoadableDetachableModel#load()
 	 */
+//	@Override
+//	protected List<AmpObjectVisibility> load() {
+//		try {
+//			List<AmpObjectVisibility> ret = new ArrayList<AmpObjectVisibility>();
+//			session = PersistenceManager.getSession();
+//			Query query = session.createQuery("from "+ AmpModulesVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
+//			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
+//			if (maxResults != null)
+//				query.setMaxResults(maxResults);
+//			query.setString("name", "%" + input + "%");
+//			ret = query.list();
+//			
+//			query = session.createQuery("from "+ AmpFeaturesVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
+//			if (maxResults != null)
+//				query.setMaxResults(maxResults);
+//			query.setString("name", "%" + input + "%");
+//			ret.addAll(query.list());
+//			
+//			query = session.createQuery("from "+ AmpFieldsVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
+//			if (maxResults != null)
+//				query.setMaxResults(maxResults);
+//			query.setString("name", "%" + input + "%");
+//			ret.addAll(query.list());
+//			
+//			session.close();
+//			return ret;
+//		} catch (HibernateException e) {
+//			throw new RuntimeException(e);
+//		} catch (SQLException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+
 	@Override
 	protected List<AmpObjectVisibility> load() {
+		List<AmpObjectVisibility> ret = null;
 		try {
-			List<AmpObjectVisibility> ret = new ArrayList<AmpObjectVisibility>();
-			session = PersistenceManager.getSession();
-			Query query = session.createQuery("from "+ AmpModulesVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
-			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
-			if (maxResults != null)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			ret = query.list();
 			
-			query = session.createQuery("from "+ AmpFeaturesVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
-			if (maxResults != null)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			ret.addAll(query.list());
+			session = PersistenceManager.getRequestDBSession();
+			TreeSet<AmpObjectVisibility> fields = new TreeSet<AmpObjectVisibility>();
+			Criteria critFields = session.createCriteria(AmpFieldsVisibility.class);
+			critFields.setCacheable(true);
+			Criteria critFeatures = session.createCriteria(AmpFeaturesVisibility.class);
+			critFeatures.setCacheable(true);
+			Criteria critModules = session.createCriteria(AmpModulesVisibility.class);
+			critModules.setCacheable(true);
+			if(input.trim().length()>0){
+					critFields.add(Restrictions.disjunction()
+							.add(Restrictions.ilike("name", "%" + input + "%")))
+							.addOrder(Order.asc("name"));
+					critFeatures.add(Restrictions.disjunction()
+							.add(Restrictions.ilike("name", "%" + input + "%")))
+							.addOrder(Order.asc("name"));
+					critModules.add(Restrictions.disjunction()
+							.add(Restrictions.ilike("name", "%" + input + "%")))
+							.addOrder(Order.asc("name"));
+					if (params != null) {
+						Integer maxResults = (Integer) getParams().get(
+								PARAM.MAX_RESULTS);
+						if (maxResults != null && maxResults.intValue() != 0)
+							{
+								critFields.setMaxResults(maxResults);
+								critFeatures.setMaxResults(maxResults);
+								critModules.setMaxResults(maxResults);
+							}
+					}
+			}
+			fields.addAll(critFields.list());
+			fields.addAll(critFeatures.list());
+			fields.addAll(critModules.list());
+			ret = new ArrayList<AmpObjectVisibility>();
+			ret.addAll(fields);
 			
-			query = session.createQuery("from "+ AmpFieldsVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
-			if (maxResults != null)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			ret.addAll(query.list());
-			
-			session.close();
-			return ret;
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		return ret;
 	}
 
+	
+	
 }

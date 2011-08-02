@@ -58,6 +58,14 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	private TextField<String> textField;
 
+	public TextField<String> getTextField() {
+		return textField;
+	}
+
+	public void setTextField(TextField<String> textField) {
+		this.textField = textField;
+	}
+
 	/**
 	 * The container holding the list div
 	 */

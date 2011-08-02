@@ -17,6 +17,7 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVerifiedOrganizationsTableFeaturePanel;
@@ -73,13 +74,12 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		add(pager);
 		idOrgsList = searchVerifiedOrgs.getList();
 
-		
-		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {
+
+		final AmpAutocompleteFieldPanel<AmpOrganisation> autoComplete = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchVerifiedOrgs", "Search Verified Organizations",AmpOrganisationSearchModel.class) {
 
 			@Override
-			protected String getChoiceValue(AmpOrganisation choice)
-					throws Throwable {
-				return choice.getAcronymAndName();
+			protected String getChoiceValue(AmpOrganisation choice){
+				return choice.getName();
 			}
 
 			@Override
@@ -88,8 +88,8 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				set.add(choice);
 				idOrgsList.removeAll();
 				target.addComponent(idOrgsList.getParent());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 				target.addComponent(AmpPMAssignVerifiedOrgs.this);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 			}
 
 			@Override
@@ -99,9 +99,9 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(30));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchVerifiedOrgs", "Search Verified Organizations", autoComplete);
-		searchOrgs.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
-		add(searchOrgs);
+		//final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchVerifiedOrgs", "Search Verified Organizations", autoComplete);
+		autoComplete.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
+		add(autoComplete);
 
 
 		AmpPMVerifiedUsersTableFeaturePanel searchVerifiedUsers = new AmpPMVerifiedUsersTableFeaturePanel("verifiedUsers", usersModel, "Users", true);
@@ -112,11 +112,10 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 
 		AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedUsers.getList());
 		add(paginator);
-		
-		final AbstractAmpAutoCompleteTextField<User> autoCompleteUser = new AbstractAmpAutoCompleteTextField<User>(AmpPMUserSearchModel.class) {
+		final AmpAutocompleteFieldPanel<User> autoCompleteUser = new AmpAutocompleteFieldPanel<User>("searchVerifiedUsers", "Search Users", AmpPMUserSearchModel.class) {
 
 			@Override
-			protected String getChoiceValue(User choice) throws Throwable {
+			protected String getChoiceValue(User choice) {
 				return choice.getName() +" - "+ choice.getEmail();
 			}
 
@@ -137,9 +136,9 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		};
 		AttributeModifier sizeModifierUser = new AttributeModifier("size",new Model(30));
 		autoCompleteUser.add(sizeModifierUser);
-		final AmpComboboxFieldPanel<User> searchUsers=new AmpComboboxFieldPanel<User>("searchVerifiedUsers", "Search Users", autoCompleteUser);
-		searchUsers.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
-		add(searchUsers);
+		//final AmpComboboxFieldPanel<User> searchUsers=new AmpComboboxFieldPanel<User>("searchVerifiedUsers", "Search Users", autoCompleteUser);
+		autoCompleteUser.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
+		add(autoCompleteUser);
 		
 		
 		add(new Link("saveOrgsToUsersButton"){

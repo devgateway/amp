@@ -15,12 +15,14 @@ import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageUsersTableFeaturePanel;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -57,13 +59,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		add(paginator);
 		idsList = usersTable.getList();
 		
-		final AbstractAmpAutoCompleteTextField<User> autoComplete = new AbstractAmpAutoCompleteTextField<User>(AmpPMUserSearchModel.class) {
-
-			@Override
-			protected String getChoiceValue(User choice) throws Throwable {
-				return choice.getName() +" - "+ choice.getEmail();
-			}
-			
+		final AmpAutocompleteFieldPanel<User> searchUsers = new AmpAutocompleteFieldPanel<User>("searchUsers", "Search Users", AmpPMUserSearchModel.class) {
 			@Override
 			public void onSelect(AjaxRequestTarget target, User choice) {
 				Set<User> set = usersModel.getObject();
@@ -74,16 +70,20 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				target.addComponent(AmpPMManageUsersSectionFeature.this);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
-
+			
+			@Override
+			protected String getChoiceValue(User choice)  {
+				return choice.getName()+" - "+ choice.getEmail();
+			}
+			
 			@Override
 			public Integer getChoiceLevel(User choice) {
 				return null;
 			}
 		};
-		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
-		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<User> searchContacts=new AmpComboboxFieldPanel<User>("searchUsers", "Search Users", autoComplete,false,true);
-		add(searchContacts);
+		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(100));
+		searchUsers.getTextField().add(sizeModifier);
+		add(searchUsers);
 		
 		add(new AjaxLink("addOrgsToUsers"){
 
@@ -92,7 +92,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				visible = !visible;
 				usersTable.setVisible(visible);
 				paginator.setVisible(visible);
-				searchContacts.setVisible(visible);
+				searchUsers.setVisible(visible);
 				usersOrgs.setVisible(!visible);
 				target.addComponent(AmpPMManageUsersSectionFeature.this);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));

@@ -102,7 +102,6 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			}
 		};
 
-		
 		add(searchOrgs);
 		
 	}

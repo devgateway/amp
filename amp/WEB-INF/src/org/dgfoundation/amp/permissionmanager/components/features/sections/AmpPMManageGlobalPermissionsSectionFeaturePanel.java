@@ -31,19 +31,6 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		super(id, permissionsModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
-//		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
-//		      public Panel getPanel(String panelId)
-//		      {
-//		    	AmpPMManageGlobalPanel mgp = null;
-//		    	try {
-//					mgp = new AmpPMManageGlobalPanel(panelId, permissionsModel, "Global Permissions", true);
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//		        return mgp;
-//		      }
-//		});
 
 		globalPermissionsTabs.add(new AbstractTab(new Model("Add Global Permission")){
 		      public Panel getPanel(String panelId)

@@ -109,7 +109,6 @@ public class ShowLogsAction extends MultiAction {
 			if (myForm.getPage() != 0) {
 				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * myForm.getPage();
 			}
-			
 			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);

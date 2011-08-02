@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMWorkspaceSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageWorkspacesTableFeaturePanel;
@@ -61,21 +61,14 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		final AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
 		
 		add(workspacesTable);
-//		AjaxPagingNavigator pager = new AjaxPagingNavigator("workspacesNavigator", (PageableListView)workspacesTable.getList()) {
-//			@Override
-//			protected void onAjaxEvent(AjaxRequestTarget target) {
-//				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
-//				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageWorkspacesSectionFeature.this));
-//			}
-//		};
 		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("workspacesNavigator", (PageableListView)workspacesTable.getList());
 		add(pager);
 		idsList = workspacesTable.getList();
 		
-		final AbstractAmpAutoCompleteTextField<AmpTeam> autoComplete = new AbstractAmpAutoCompleteTextField<AmpTeam>(AmpPMWorkspaceSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpTeam> autoComplete = new AmpAutocompleteFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces",AmpPMWorkspaceSearchModel.class) {
 
 			@Override
-			protected String getChoiceValue(AmpTeam choice) throws Throwable {
+			protected String getChoiceValue(AmpTeam choice){
 				return choice.getName();
 			}
 			
@@ -98,8 +91,8 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,false,true);
-		add(searchContacts);		
+		//final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,false,true);
+		add(autoComplete);		
 		
 	}
 	

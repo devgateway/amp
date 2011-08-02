@@ -40,12 +40,15 @@ public class QueryEngine extends Action{
 		
 		AmpReports reportMeta	= new AmpReports();
 		
+		reportMeta.setColumns( new HashSet<AmpReportColumn>() );
+		reportMeta.setHierarchies( new HashSet<AmpReportHierarchy>() );
+		reportMeta.setMeasures( new HashSet<AmpReportMeasures>() );
+		
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnListWithDbSession();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
 		
 		AmpColumns projTitleCol					= null;
-		AmpMeasures actualCommMeas				= null;
 		
 		for ( AmpColumns tempCol: availableCols ) {
 			if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ){
@@ -62,14 +65,23 @@ public class QueryEngine extends Action{
 		
 		for ( AmpMeasures tempMeas: availableMeas ) {
 			if ( "Actual Commitments".equals(tempMeas.getMeasureName()) ){
-				actualCommMeas	= tempMeas;
-				break;
+				AmpMeasures actualCommMeas		= tempMeas;
+				AmpReportMeasures arm		= new AmpReportMeasures();
+				arm.setMeasure(actualCommMeas);
+				arm.setLevel(level1);
+				arm.setOrderId(1L);
+				reportMeta.getMeasures().add(arm);
+			}
+			if ( "Actual Disbursements".equals(tempMeas.getMeasureName()) ){
+				AmpMeasures actualDisbMeas		= tempMeas;
+				AmpReportMeasures arm		= new AmpReportMeasures();
+				arm.setMeasure(actualDisbMeas);
+				arm.setLevel(level1);
+				arm.setOrderId(2L);
+				reportMeta.getMeasures().add(arm);
 			}
 		}
-		AmpReportMeasures arm		= new AmpReportMeasures();
-		arm.setMeasure(actualCommMeas);
-		arm.setLevel(level1);
-		arm.setOrderId(1L);
+		
 		
 		
 		reportMeta.setType( new Long(ArConstants.DONOR_TYPE) );
@@ -82,12 +94,9 @@ public class QueryEngine extends Action{
 		reportMeta.setPublicReport( false );
 		reportMeta.setAllowEmptyFundingColumns( false );
 		
-		reportMeta.setColumns( new HashSet<AmpReportColumn>() );
-		reportMeta.setHierarchies( new HashSet<AmpReportHierarchy>() );
-		reportMeta.setMeasures( new HashSet<AmpReportMeasures>() );
 		
 		reportMeta.getColumns().add(arc);
-		reportMeta.getMeasures().add(arm);
+		
 		
 		reportMeta.setAmpReportId(-7L);
 		

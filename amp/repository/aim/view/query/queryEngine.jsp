@@ -50,9 +50,9 @@
 			var divObj		= document.getElementById("results");
 			divObj.innerHTML	= o.responseText;
 			var attributes = { 
-				scroll: { to: [0, YAHOO.util.Dom.getY("results")] } 
+				scroll: { to: [YAHOO.util.Dom.getDocumentScrollTop(), YAHOO.util.Dom.getY("results")] } 
 			}; 
-			 var anim = new YAHOO.util.Scroll(document.body, attributes, 2); 
+			 var anim = new YAHOO.util.Scroll(document.body, attributes, 1.5); 
 			 anim.animate(); 
 		},
 		failure: function (o) {
@@ -73,6 +73,16 @@
 		YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 		var additionalParams	= "&doreset=true&queryEngine=true";
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
+	}
+	
+	function changeStep(url) {
+		var divObj		= document.getElementById("results");
+		divObj.innerHTML	= 
+		"<div style='text-align: center'>" + "Please wait..." + 
+		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+		
+		
+		YAHOO.util.Connect.asyncRequest("GET", url, queryCbObj);
 	}
 
 	function initializeFilters() {
@@ -97,6 +107,9 @@
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend>Selected Filters</legend>
 		<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>
+		<div style="text-align: center;">
+			<button class="buttonx_sm" id="refershResultsButton" onclick="submitQuery();"><digi:trn>Refresh Results</digi:trn></button> 
+		</div>
 	</fieldset>
 	
 	

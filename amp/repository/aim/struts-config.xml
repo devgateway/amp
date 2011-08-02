@@ -280,7 +280,7 @@
       <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
       <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
-      <forward name="queryView" path="/aim/viewNewAdvancedReport.do?reload=true&amp;view=reset&amp;viewFormat=foldable&amp;widget=true" />
+      <forward name="queryView" path="/aim/viewNewAdvancedReport.do?reload=true&amp;view=reset&amp;viewFormat=foldable&amp;widget=true&amp;queryEngine=true" />
       <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
     

@@ -98,5 +98,9 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 		}		
 	}
 	
+	@Override
+	public String toString () {
+		return this.measure.getMeasureName() +  " | " + this.orderId;
+	}
 
 }

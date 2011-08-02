@@ -436,9 +436,9 @@ public class ReportWizardAction extends MultiAction {
 		if ( ampReportTitle == null || ampReportTitle.length() == 0 )
 			throw new Exception ("No reportTitle found in request");
 		
-		AmpReports ampReport			= ReportWizardAction.duplicateReportData( reportId );
+		AmpReports ampReport			= ReportWizardAction.duplicateReportData( reportId, request );
 		if ( ampReport == null )
-			throw new Exception ("There was a problem getting the original report from the database");
+			throw new Exception ("There was a problem getting access to the old report");
 		
 		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
 			ampReport.setAmpReportId( reportId );
@@ -622,11 +622,14 @@ public class ReportWizardAction extends MultiAction {
 				+ "'");
 	}
 	
-	public static AmpReports duplicateReportData (Long ampReportId) {
+	public static AmpReports duplicateReportData (Long ampReportId, HttpServletRequest request) {
 		AmpReports ampReport	= null;
 		try{
 			Session session				= PersistenceManager.getSession();
-			ampReport	= (AmpReports) session.load(AmpReports.class, ampReportId );
+			if (ampReportId > 0)
+				ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
+			else 
+				ampReport	= (AmpReports) request.getSession().getAttribute("reportMeta");
 			session.close();
 			
 			ampReport.setAmpReportId(null);
@@ -651,7 +654,9 @@ public class ReportWizardAction extends MultiAction {
 			measures.addAll( ampReport.getMeasures() );
 			
 			HashSet reportMeasures	= new HashSet();
-			reportMeasures.addAll( ampReport.getReportMeasures() );
+			
+			if ( ampReport.getReportMeasures() != null )
+				reportMeasures.addAll( ampReport.getReportMeasures() );
 			
 			ampReport.setColumns( columns );
 			ampReport.setHierarchies( hierarchies );

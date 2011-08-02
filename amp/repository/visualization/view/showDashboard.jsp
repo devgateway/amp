@@ -1414,6 +1414,10 @@ function toggleSettings(){
 	<div class="yui-content">
 	<div id="tab1">
 		<fieldset class="chartFieldset">
+			<input type="hidden" id="GlobalFontSize" value="11" />
+			<input type="hidden" id="GlobalFontFamily" value="Arial" />
+			<input type="hidden" id="GlobalFontWeight" value="bold" />
+		
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="FundingChartHeader" class="chart_header" style="float:left">
 			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
@@ -1429,11 +1433,13 @@ function toggleSettings(){
 			&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold">Bold</label><br/>
 			<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend">Show legend</label>
 			&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel" checked="checked"><label for="FundingChartShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel">Show data label</label>
 			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel">Rotate data label</label></br>
+			<input type="hidden" id="FundingChartDataAction" value="getFundingsGraphData" />
+			<input type="hidden" id="FundingChartDataField" value="fundingtype" />
 			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart')" title="Data View"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="Data View"/></div>
 			<br />
 			<br />
 			<br />
@@ -1467,7 +1473,7 @@ function toggleSettings(){
 				<span style="display:none">
 				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend">Show legend</label>
 				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label for="ODAGrowthShowDataLabel">Show data label</label>
 				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel">Rotate data label</label></br>
 				</span>
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'ODAGrowth')">
@@ -1503,11 +1509,13 @@ function toggleSettings(){
 			&nbsp;<input type="checkbox" id="AidPredictabilityBold"><label for="AidPredictabilityBold">Bold</label><br/>
 			<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label for="AidPredictabilityShowLegend">Show legend</label>
 			&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label for="AidPredictabilityDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel" checked="checked"><label for="AidPredictabilityShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel"><label for="AidPredictabilityShowDataLabel">Show data label</label>
 			&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label for="AidPredictabilityRotateDataLabel">Rotate data label</label></br>
+			<input type="hidden" id="AidPredictabilityDataAction" value="getAidPredictabilityGraphData" />
+			<input type="hidden" id="AidPredictabilityDataField" value="fundingtype" />
 			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidPredictability')">
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability')" title="Data View"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability', true)" title="Data View"/></div>
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -1537,11 +1545,13 @@ function toggleSettings(){
 			&nbsp;<input type="checkbox" id="AidTypeBold"><label for="AidTypeBold">Bold</label><br/>
 			<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label for="AidTypeShowLegend">Show legend</label>
 			&nbsp;<input type="checkbox" id="AidTypeDivide"><label for="AidTypeDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="AidTypeShowDataLabel" checked="checked"><label for="AidTypeShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="AidTypeShowDataLabel"><label for="AidTypeShowDataLabel">Show data label</label>
 			&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label for="AidTypeRotateDataLabel">Rotate data label</label></br>
+			<input type="hidden" id="AidTypeDataAction" value="getAidTypeGraphData" />
+			<input type="hidden" id="AidTypeDataField" value="aidtype" />
 			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidType')">
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidType')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidType')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidType')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidType')" title="Data View"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidType', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidType')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidType')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidType', true)" title="Data View"/></div>
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -1571,11 +1581,13 @@ function toggleSettings(){
 			&nbsp;<input type="checkbox" id="FinancingInstrumentBold"><label for="FinancingInstrumentBold">Bold</label><br/>
 			<input type="checkbox" id="FinancingInstrumentShowLegend" checked="checked"><label for="FinancingInstrumentShowLegend">Show legend</label>
 			&nbsp;<input type="checkbox" id="FinancingInstrumentDivide"><label for="FinancingInstrumentDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel" checked="checked"><label for="FinancingInstrumentShowDataLabel">Show data label</label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel"><label for="FinancingInstrumentShowDataLabel">Show data label</label>
 			&nbsp;<input type="checkbox" id="FinancingInstrumentRotateDataLabel"><label for="FinancingInstrumentRotateDataLabel">Rotate data label</label></br>
 			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FinancingInstrument')">
+			<input type="hidden" id="FinancingInstrumentDataAction" value="getAidTypeGraphData" />
+			<input type="hidden" id="FinancingInstrumentDataField" value="aidtype" />
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FinancingInstrument')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'FinancingInstrument')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FinancingInstrument')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FinancingInstrument')" title="Data View"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FinancingInstrument', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'FinancingInstrument')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FinancingInstrument')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FinancingInstrument', true)" title="Data View"/></div>
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -1606,11 +1618,13 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold">Bold</label><br/>
 				<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label for="DonorProfileShowLegend">Show legend</label>
 				&nbsp;<input type="checkbox" id="DonorProfileDivide"><label for="DonorProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel" checked="checked"><label for="DonorProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label for="DonorProfileShowDataLabel">Show data label</label>
 				&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label for="DonorProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="hidden" id="DonorProfileDataAction" value="getDonorProfileGraphData" />
+				<input type="hidden" id="DonorProfileDataField" value="donor" />
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'DonorProfile')">
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'DonorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile')" title="Data View"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'DonorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile', true)" title="Data View"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -1642,11 +1656,13 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold">Bold</label><br/>
 				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend">Show legend</label>
 				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel" checked="checked"><label for="SectorProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel">Show data label</label>
 				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
+				<input type="hidden" id="SectorProfileDataField" value="sector" />
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'SectorProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile')" title="Data View"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="Data View"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -1678,11 +1694,13 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold">Bold</label><br/>
 				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend">Show legend</label>
 				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel" checked="checked"><label for="RegionProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel">Show data label</label>
 				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
+				<input type="hidden" id="RegionProfileDataField" value="region" />
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'RegionProfile')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile')" title="Data View"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile')" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile')" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="Data View"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -1825,21 +1843,8 @@ function countSelected (selector){
 
 var callbackApplyFilterCall = {
 		  success: function(o) {
-			  try {
-				  refreshBoxes(o);
-				  refreshGraphs();
-				}
-				catch (e) {
-				    //alert("Invalid response.");
-				}
-				//Get array of graphs
-				var allGraphs = document.getElementsByName("flashContent");
-				
-				//Iterate and refresh the graph
-				for(var idx = 0; idx < allGraphs.length; idx++){
-					// Get flash object and refresh it by calling internal
-					allGraphs[idx].style.display = "";
-				}
+			  refreshBoxes(o);
+			  refreshGraphs();
 			  loadingPanel.hide();
 		  },
 		  failure: function(o) {
@@ -1848,14 +1853,6 @@ var callbackApplyFilterCall = {
 		};
 
 function callbackApplyFilter(e){
-	//Get array of graphs
-	var allGraphs = document.getElementsByName("flashContent");
-	
-	//Iterate and refresh the graph
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		// Get flash object and refresh it by calling internal
-		allGraphs[idx].style.display = "none";
-	}
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
 
@@ -1944,11 +1941,18 @@ function refreshGraphs(){
 
 	//Get array of graphs
 	var allGraphs = document.getElementsByName("flashContent");
-	
+	console.log("allgraphs:" + allGraphs.length);
 	//Iterate and refresh the graph
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
-		allGraphs[idx].children[0].refreshGraph();
+		console.log("Trying to refresh:" + allGraphs[idx].children[0].id);
+		try{
+			allGraphs[idx].children[0].refreshGraph();
+		}
+		catch(e)
+		{
+			console.log("Couldn't:" + e);
+		}
 	}
 }
 function refreshBoxes(o){
@@ -2575,23 +2579,23 @@ YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
 YAHOO.util.Event.onDOMReady(initDashboard);
 window.onload=initPanel;
-
+var initialized = false;
 function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'FundingChart', true);
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'AidPredictability');
-	changeChart(null, 'bar', 'AidType');
-	changeChart(null, 'bar', 'FinancingInstrument');
+	changeChart(null, 'bar', 'AidPredictability', true);
+	changeChart(null, 'bar', 'AidType', true);
+	changeChart(null, 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart(null, 'bar', 'DonorProfile');
+		changeChart(null, 'bar_profile', 'DonorProfile', true);
 	}
 	if (dashboardType!=3) {
-		changeChart(null, 'bar', 'SectorProfile');
+		changeChart(null, 'bar_profile', 'SectorProfile', true);
 	}
 	if (dashboardType!=2) {
-		changeChart(null, 'bar', 'RegionProfile');
+		changeChart(null, 'bar_profile', 'RegionProfile', true);
 	}
 	callbackApplyFilter();
 }
@@ -2643,13 +2647,13 @@ function updateGraph(e, chartName){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
 			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
-			allGraphs[idx].children[0].refreshGraphNoData();
+			allGraphs[idx].children[0].refreshGraph();
 			break;
 		}
 	}
 }
 
-function changeChart(e, chartType, container){
+function changeChart(e, chartType, container, useGeneric){
 	//Get the calling object to select it and remove style.
 	if(e != null){
 		var caller = e.target || e.srcElement;
@@ -2668,48 +2672,49 @@ function changeChart(e, chartType, container){
 	 
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
 	var groupSeparator = document.getElementById("groupSeparator").value;
+	var decimalsToShow = document.getElementById("decimalsToShow").value;
 	
-	var title = document.getElementById(container + "Title") == undefined ? "" : document.getElementById(container + "Title").value;
-	var fontSize = document.getElementById(container + "FontSize") == undefined ? "" : document.getElementById(container + "FontSize").value;
-	var boldTitle = document.getElementById(container + "Bold") == undefined ? "" : document.getElementById(container + "Bold").value;
-	var fontFamily = document.getElementById(container + "FontFamily") == undefined ? "" : document.getElementById(container + "FontFamily").value;
-	var showLegend = document.getElementById(container + "ShowLegend") == undefined ? "" : document.getElementById(container + "ShowLegend").value;
-	var showDataLabel = document.getElementById(container + "ShowDataLabel") == undefined ? "" : document.getElementById(container + "ShowDataLabel").value;
-	var rotateDataLabel = document.getElementById(container + "RotateDataLabel") == undefined ? "" : document.getElementById(container + "RotateDataLabel").value;
-	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide").value;
-
-	//var minSlider =  "" + (currentYear - yearsInRange + 1);
-	//var maxSlider =  "" + currentYear;
 	var flashvars = { 
 			decimalSeparator: decimalSeparator, 
-			groupSeparator: groupSeparator, 
+			groupSeparator: groupSeparator,
+			decimalsToShow: decimalsToShow,
 			palette: palette, 
-			title: title, 
-			fontSize: fontSize,
-			boldTitle: boldTitle,
-			rotateDataLabel: rotateDataLabel,
-			fontFamily: fontFamily, 
-			showLegend: showLegend, 
-			showDataLabel: showDataLabel,
-			divide: divide,
 			id: container
 		};
 	
-	var params = {};
+	var params = {
+			wmode: "transparent"
+		};
 	var attributes = {};
 	attributes.id = container;
+	//Setting for cache in development mode
+	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+//	var cache = "";
+	
 	switch(chartType){
 		case "bar":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			if(useGeneric)
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries.swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			else
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			break;
+		case "bar_profile":
+			if(useGeneric)
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_Profile.swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			else
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "donut":
-			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "line":
-			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "dataview":
-			swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries_" + container + ".swf", container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			if(useGeneric)
+				swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries.swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+			else
+				swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;
 	}
 	updateChartSettings(container, chartType);
@@ -2833,18 +2838,18 @@ function hideFullDonors(){
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'FundingChart');
-	changeChart(null, 'bar', 'AidPredictability');
-	changeChart(null, 'bar', 'AidType');
-	changeChart(null, 'bar', 'FinancingInstrument');
+	changeChart(null, 'bar', 'FundingChart', true);
+	changeChart(null, 'bar', 'AidPredictability', true);
+	changeChart(null, 'bar', 'AidType', true);
+	changeChart(null, 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart(null, 'bar', 'DonorProfile');
+		changeChart(null, 'bar_profile', 'DonorProfile', true);
 	}
 	if (dashboardType!=3) {
-		changeChart(null, 'bar', 'SectorProfile');
+		changeChart(null, 'bar_profile', 'SectorProfile', true);
 	}
 	if (dashboardType!=2) {
-		changeChart(null, 'bar', 'RegionProfile');
+		changeChart(null, 'bar_profile', 'RegionProfile', true);
 	}
 }
 

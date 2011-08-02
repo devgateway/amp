@@ -62,43 +62,45 @@ public class ShowProjectsList extends Action {
         DashboardFilter newFilter = filter.getCopyFilterForFunding();
         List<AmpActivityVersion> activities = null;
         
-        if (type.equals("region")){
+        if (type.equals("RegionProfile")){
 	    	Long[] ids = {Long.parseLong(id)};
 			newFilter.setSelLocationIds(ids);
 			activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	    }
-		if (type.equals("sector")){
+		if (type.equals("SectorProfile")){
 	    	Long[] ids = {Long.parseLong(id)};
 			newFilter.setSelSectorIds(ids);
 			activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 		}
-		if (type.equals("donor")){
+		if (type.equals("DonorProfile")){
 	    	Long[] ids = {Long.parseLong(id)};
 			newFilter.setOrgIds(ids);
 			activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 		}
-		if (type.equals("funding")){
+		if (type.equals("FundingChart")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
 		}
-		if (type.equals("aidPredictability")){
+		if (type.equals("AidPredictability")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), Integer.parseInt(id));
 		}
-		if (type.equals("aidType")){
+		if (type.equals("AidType")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), Constants.ACTUAL);
 		}
-		if (type.equals("finInstrument")){
+		if (type.equals("FinancingInstrument")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), Constants.ACTUAL);
-		}    
-        Iterator<AmpActivityVersion> it = activities.iterator();
-        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new HashMap<AmpActivityVersion, BigDecimal>();
-        while(it.hasNext()){
-        	AmpActivityVersion act = it.next();
-			newFilter.setActivityId(act.getAmpActivityId());
-        	DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-        	itemProjectsList.put(act, total);
 		}
-        visualizationForm.setItemProjectsList(itemProjectsList);
+		if(activities.size() > 0){
+	        Iterator<AmpActivityVersion> it = activities.iterator();
+	        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new HashMap<AmpActivityVersion, BigDecimal>();
+	        while(it.hasNext()){
+	        	AmpActivityVersion act = it.next();
+				newFilter.setActivityId(act.getAmpActivityId());
+	        	DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        	itemProjectsList.put(act, total);
+			}
+	        visualizationForm.setItemProjectsList(itemProjectsList);
+		}
 		return mapping.findForward("forward");
 
 	}

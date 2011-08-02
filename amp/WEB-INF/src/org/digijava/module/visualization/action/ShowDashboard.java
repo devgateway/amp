@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -224,6 +225,12 @@ public class ShowDashboard extends Action {
 		if (filter.getDivideThousandsDecimalPlaces() == null) {
 			filter.setDivideThousandsDecimalPlaces(0);
 		}
+		//Initialize formatting information
+		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){
+			filter.setDecimalSeparator(FormatHelper.getDecimalSymbol());
+			filter.setGroupSeparator(FormatHelper.getGroupSymbol());
+		}
+		
 		if (filter.getRegions() == null) {
 			try {
 				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(

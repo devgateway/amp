@@ -90,6 +90,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var fillCategories:Boolean = false;
 				try {
 					maxValue =  service.lastResult.organization.value;
+					minValue = 0;
 				} catch (errObject:Error) {
 					for(var i:Number = 0; i < service.lastResult.organization.length; i++){
 						var currentValue:Number = service.lastResult.organization[i].value;
@@ -115,11 +116,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 				else
 				{
-					dc.visible = false;
-					messagePanel.visible = true;
-					sizePanel(300, 200);
+					if (service.lastResult.organization.value==null || service.lastResult.organization.value==0){
+						dc.visible = false;
+						messagePanel.visible = true;
+						sizePanel(300, 200);
+					}
 				}
-				dc.visible = true;
 				dc.invalidateDisplayList();
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
@@ -434,7 +436,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			weight="6"
 			caps="none"/>
 	</mx:Array>
-	<mx:Panel x="{(this.width-300)/2}" y="20" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
 		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
 	</mx:Panel>
 </mx:Application>

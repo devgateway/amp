@@ -38,7 +38,7 @@
 	 	border-color: #DADAD6 #C2C1BA #C2C1BA #DADAD6;
 	    border-style: solid;
 	    border-width: 1px 2px 2px 1px;
-	    width:510px;
+	    width:500px;
 	    background-color: #FFFFFF;
     }
 	.chart_header label {

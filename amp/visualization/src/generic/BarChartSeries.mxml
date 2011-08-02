@@ -114,13 +114,31 @@
 					messagePanel.visible = false;
 					sizePanel(0, 0);
 				}
+				else if (dataField in service.lastResult.year){
+					var totalAmount:Number = 0;
+					for(i = 0; i < service.lastResult.year[dataField].length; i++)
+					{
+						totalAmount = totalAmount + Number(service.lastResult.year[dataField][i].amount);
+					}
+					if(totalAmount > 0) //If there's something to show
+					{
+						dc.visible = true;
+						messagePanel.visible = false;
+						sizePanel(0, 0);
+					}
+					else
+					{
+						dc.visible = false;
+						messagePanel.visible = true;
+						sizePanel(300, 200);
+					}
+				}
 				else
 				{
 					dc.visible = false;
 					messagePanel.visible = true;
 					sizePanel(300, 200);
 				}
-				dc.visible = true;
 				dc.invalidateDisplayList();
 
 				//Get all variables from flashvars

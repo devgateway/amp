@@ -287,9 +287,7 @@ body {
 		</table>
 	</div>
 	<c:if test="${!myForm.desktopTab}">
-		<div id="fakePreviewSectionDiv" style="display: none; height: 210px;">&nbsp;</div>
-		<div id="previewSectionDiv" style="display: none;overflow:auto; position:fixed; bottom: 0px; width: 100%; height: 200px; border-top: 1px solid black; padding-top: 5px; background-color: white;"><div class="preview_panel">aaa</div>
-		</div>
+		<jsp:include page="previewPanel.jsp" />
 	</c:if>
 </digi:form>
 <!-- MAIN CONTENT PART END -->

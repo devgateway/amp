@@ -1,5 +1,7 @@
 function createPreview () {
-	var divEl		= document.getElementById("previewSectionDiv");
+	debugger;
+	var divElWrapper	= document.getElementById("previewSectionDiv");
+	var divEl			= document.getElementById("previewBodySectionDiv");
 	if (divEl == null)
 		return;
 	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
@@ -9,13 +11,13 @@ function createPreview () {
 	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
 	
 	if ( colArray.length != 0 || hierArray.length != 0 ) {
-		divEl.style.display		= "";
+		divElWrapper.style.display		= "";
 		fakeDivEl.style.display		= "";
-		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewSectionDiv');		
+		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewBodySectionDiv');		
 	}
 	else {
 		fakeDivEl.style.display		= "none";
-		divEl.style.display		= "none";
+		divElWrapper.style.display	= "none";
 	}
 	
 	

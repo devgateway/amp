@@ -1,0 +1,5 @@
+<div id="fakePreviewSectionDiv" style="display: none; height: 210px;">&nbsp;</div>
+<div id="previewSectionDiv" style="display: none;overflow:auto; position:fixed; bottom: 0px; width: 100%; height: 200px;  background-color: white;">
+	<div id="previewHeaderSectionDiv" style="height: 15px; background-color: lightgray; width: 100%">&nbsp;</div>
+	<div id="previewBodySectionDiv" style="width: 100%;padding-bottom: 5px; padding-top: 5px;"></div>
+</div>

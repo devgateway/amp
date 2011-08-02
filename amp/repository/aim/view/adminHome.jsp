@@ -259,6 +259,32 @@
         </digi:link>
     </td>  
   </tr>
+    <!-- NO MOUDULE TO CONTROL THIS SECTION -->
+	<tr>
+		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+		<td class="admin_box_label">
+ 			<c:set var="translation">
+ 				<digi:trn>Click here to manage GIS Structure Types</digi:trn>
+ 			</c:set>  
+ 			<digi:link module="esrigis" href="/structureTypeManager.do">
+ 				<digi:trn>Structure Types Manager</digi:trn>
+ 			</digi:link>                                                                   
+    	</td>
+    </tr>
+    <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
+   	<tr>
+  		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+		<td class="admin_box_label">
+       		<c:set var="translation">
+         		<digi:trn key="aim:clickToViewSectorManager">Click here to view budget manager</digi:trn>
+       		</c:set>
+       		<digi:link href="/BudgetManager.do" title="${translation}">
+         		<digi:trn key="aim:budgetManager">Budget Manager</digi:trn>
+       		</digi:link>
+     	</td>
+   </tr>
+   </module:display>
+  
 </table>
 </div>
 </td>
@@ -443,16 +469,34 @@
     <td width=10>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Org Profile toolbox</div>
+	<div class="admin_landing_page_box_title">Developer Tools</div>
 	<table border="0" cellspacing="2" cellpadding="2">
-  <tr>
-    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td class="admin_box_label"><a href=#>Org profile widget manager</a></td>
-  </tr>
-    <tr>
-    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td class="admin_box_label"><a href=#>Widget Place Manager</a></td>
-  </tr>
+	<feature:display name="Applied Patches" module="Applied Patches">
+	<tr>
+		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+        		<c:set var="trnSystemSettings">
+            		<digi:trn>Click here to view the Patches applied</digi:trn>
+            	</c:set>
+				<a href="/xmlpatcher/xmlpatches.do?mode=listPatches" title="${trnSystemSettings}">
+                	<digi:trn>Database Patches</digi:trn>
+				</a>
+         </td>
+    </tr>
+    </feature:display>
+    <feature:display name="Admin Topics Help" module="HELP">
+	<tr>
+    	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+       		<c:set var="trn">
+            	<digi:trn key="help:viewSettings">Click here to view Help Topics Admin</digi:trn>
+            </c:set>
+            <digi:link module="help" href="/helpActions.do~actionType=viewAdmin" title="${trn}">
+            	<digi:trn key="help:helpTopicAdmin">Help Topics Admin</digi:trn>
+           </digi:link>
+       </td>
+   </tr>
+   </feature:display>
 </table>
 
 	</div></td>
@@ -461,19 +505,19 @@
 	<div class="admin_landing_page_box_cont">
 	<div class="admin_landing_page_box_title">Paris indicator Tools</div>
 	<table border="0" cellspacing="2" cellpadding="2">
-  <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS">
-  <tr>
-    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td class="admin_box_label">
-    	<c:set var="translation">
-			<digi:trn>Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
-        </c:set>
-        <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
-        	<digi:trn> Paris Indicator Table Widget</digi:trn>
-        </digi:link>
-    </td>
-  </tr>
-  </feature:display>
+  <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
+    <tr>
+	    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+			<c:set var="translation">
+	        	<digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
+	        </c:set>
+	       	<digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
+	        	<digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
+	        </digi:link>
+		</td>
+    </tr>
+    </feature:display>
 </table>
 
 	</div></td>
@@ -564,9 +608,75 @@
     </td>
   </tr>
   </feature:display>
+  <feature:display  name="Table Widgets" module="WIDGETS">
+  	<tr>
+    	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+        	<c:set var="translation">
+            	<digi:trn key="widgets:clickToViewTableWidgetAdmin">Click here to view Table Widgets Manager</digi:trn>
+       		</c:set>
+            <digi:link module="widget" href="/adminTableWidgets.do" title="${translation}">
+            	<digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
+            </digi:link>
+         </td>
+     </tr>
+    </feature:display>
+    <feature:display  name="Sector Table Widgets" module="WIDGETS">
+    <tr>
+    	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+        	<c:set var="translation">
+                <digi:trn>Click here to view Sector Table Widgets Manager</digi:trn>
+            </c:set>
+            <digi:link module="widget" href="/sectorTableManager.do" title="${translation}">
+            	<digi:trn>Sector Table Widget</digi:trn>
+            </digi:link>
+        </td>
+    </tr>
+    </feature:display>
+    <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS">
+  	<tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label">
+    	<c:set var="translation">
+			<digi:trn>Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
+        </c:set>
+        <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
+        	<digi:trn> Paris Indicator Table Widget</digi:trn>
+        </digi:link>
+    </td>
+  </tr>
+  </feature:display>
+  <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
+   <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label">
+       <c:set var="translation">
+         <digi:trn>Click here to view Result Matrix/GIS Settings page</digi:trn>
+       </c:set>
+       <digi:link href="/showGisSettings.do" module="gis" title="${translation}" >
+         <digi:trn>
+         	Result Matrix/GIS Settings
+         </digi:trn>
+       </digi:link>
+     </td>
+   </tr>
+   </module:display>
+   <feature:display  name="Widget Places" module="WIDGETS">
+    <tr>
+    	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+		<td class="admin_box_label">
+        	<c:set var="translation">
+         	 	<digi:trn key="widget:clickToViewWidgetPlaceAdmin">Click here to view Widgets Place Manager</digi:trn>
+        	</c:set>
+        	<a href="/widget/widgetplaces.do" title="${translation}">
+          		<digi:trn key="widget:widgetPlaceManager">Widget Place Manager</digi:trn>
+        	</a>
+      	</td>
+    </tr>
+    </feature:display>
 </table>
-
-	</div></td>
+</div></td>
   </tr>
 </table>			
 </fieldset>

@@ -2022,6 +2022,28 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       eaForm.getFunding().setTotalUnExpended(overallTotalUnExpended);
       eaForm.getFunding().setTotalDisbOrder(overallTotalDisburOrder);
     }
+    
+    String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+	Long ampTeamId = teamMember.getTeamId();
+	boolean teamLeadFlag    = teamMember.getTeamHead();
+	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
+	if (workingTeamFlag) {
+		eaForm.setButtonText("edit");	// In case of regular working teams
+		if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
+	 	{
+	 		//burkina
+	 		// if an user save an activity he could edit it even it is not approved by team leader
+	 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
+	 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
+	 			eaForm.setButtonText("validate");
+	 		}/*else {
+	 			formBean.setButtonText("approvalAwaited");
+	 		}*/		 		
+	 	}
+	} else {
+		eaForm.setButtonText("none");	// In case of management-workspace
+	}
+    
     String debugFM=request.getParameter("debugFM");
     if(debugFM!=null && "true".compareTo(debugFM)==0)
     	return mapping.findForward("forwardDebugFM");

@@ -26,12 +26,7 @@
 	<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="request" toScope="request"/>
 	<bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
 	<logic:equal name="columnNo" value="0">
-		<logic:present name="currentMember" scope="session">
-			<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
-		</logic:present>
-		<logic:notPresent name="currentMember" scope="session">
-			<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
-		</logic:notPresent>
+				<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 	</logic:equal>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	<logic:equal name="columnNo" value="0">
@@ -39,12 +34,7 @@
 	</logic:equal>
 <%}else{%>
 	<logic:equal name="columnNo" value="0">
-		<logic:present name="currentMember" scope="session">
-		<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>'>
-	</logic:present>
-		<logic:notPresent name="currentMember" scope="session">
-		<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank>
-	</logic:notPresent>
+		<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>'>
 		<digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
 	</a>
 	</logic:equal>

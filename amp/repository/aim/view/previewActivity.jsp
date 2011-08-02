@@ -115,6 +115,12 @@ function viewChanges()
 
 }
 
+
+function editActivity() {
+	<digi:context name="editActivity" property="/wicket/onepager/activity" />
+	document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
+}
+
 function expandAll() {
    
 	$("img[id$='_minus']").show();
@@ -324,6 +330,31 @@ function collapseAll() {
 								name="submitButton"
 							/>
 						</c:if></td>
+						<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Edit Activity" module="Previews">
+								<field:display feature="Edit Activity" name="Edit Activity Button">  
+									<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
+							<td><c:set var="trn"><digi:trn>EDIT</digi:trn></c:set>
+								<input type="button" class="buttonx" onclick="javascript:editActivity()" value="${trn}"/>
+							</td>
+									</logic:equal>
+								</field:display>
+							</feature:display>
+						</module:display>
+						
+						<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Edit Activity" module="Previews">
+								<field:display feature="Edit Activity" name="Validate Activity Button">
+									<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
+							<td><c:set var="trn"><digi:trn>VALIDATE</digi:trn></c:set>							
+							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
+								<input type="button" class="buttonx" onclick="javascript:editActivity()" value="${trn}"/>
+							</c:if>
+							</td>	
+									</logic:equal>
+								</field:display>
+							</feature:display>
+						</module:display>
 					</tr>
 				</table>
 			</logic:present></div>

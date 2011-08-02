@@ -72,6 +72,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private boolean reset;
 	private String svAction;
 	private int isPreview = 0;
+	private String buttonText;
 	
 	private String workingTeamLeadFlag;
 	private boolean teamLead;
@@ -5099,6 +5100,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public void setFileImport(FormFile fileImport) {
 		this.fileImport = fileImport;
+	}
+
+	public void setButtonText(String buttonText) {
+		this.buttonText = buttonText;
+	}
+
+	public String getButtonText() {
+		return buttonText;
 	}
 	
 }

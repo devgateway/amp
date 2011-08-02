@@ -97,12 +97,12 @@
 										<c:when test="${documentData.webLink != null}" >
 											<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
 													 onclick="window.open('${documentData.webLink}')"
-												style="cursor:pointer; color: blue; font-size: 11px">  
+												style="cursor:pointer; color: blue; font-size: 12px">  
 										</c:when>
 										<c:otherwise>
 											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
 												onClick="downloadFile('${documentData.nodeVersionUUID}');"
-												style="cursor:pointer; color: #222222; font-size: 11px">
+												style="cursor:pointer; color: #222222; font-size: 12px">
 										</c:otherwise>
 									</c:choose>
 										 <bean:write name="documentData" property="name" />

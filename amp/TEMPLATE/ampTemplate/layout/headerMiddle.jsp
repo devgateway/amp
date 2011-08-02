@@ -846,6 +846,6 @@ YAHOO.util.Event.onDOMReady(function () {
 	var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader");
 	lazyload: true;
 	oMenuBar.render();
+	
 });
-
-</script>
+ </script>

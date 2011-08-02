@@ -174,7 +174,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .show_legend {float:right; font-size:11px; padding-top:9px;} 
 .desktop_project_name {font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left:10px;}
-.desktop_project_name_op {font-size:9px; color:#FF6000;  font-family:Verdana, Arial, Helvetica, sans-serif;background-color: #FDF5F0}
+.desktop_project_name_op {font-size:11px; color:#FF6000;  font-family:Arial, Helvetica, sans-serif;background-color: #FDF5F0}
 .desktop_project_name_op_level1 {background-color: #FBE8DD}
 .desktop_project_name_op_levels {background-color: #FDF5F0}
 .desktop_project_name_sel {/*background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px;*/ font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-top:3px; padding-bottom:3px; padding-left:5px;}

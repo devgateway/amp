@@ -8,11 +8,15 @@ import java.util.Map;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.wicketstuff.jquery.JQueryBehavior;
 
@@ -57,7 +61,7 @@ public class AmpPMHeaderFooter extends WebPage {
 //				setResponsePage(OnePager.class);
 //			}
 //		});
-
+//
 //		add(new AjaxLink("changeFmMode", new Model("FM Mode")) {
 //			@Override
 //			public void onClick(AjaxRequestTarget arg0) {
@@ -66,10 +70,22 @@ public class AmpPMHeaderFooter extends WebPage {
 //					session.setFmMode(false);
 //				else
 //					session.setFmMode(true);
-//				setResponsePage(OnePager.class);
+//				setResponsePage(PermissionManager.class);
 //			}
 //		});
-//		
+		
+		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
+			    @Override
+			    public void onClick(AjaxRequestTarget arg0) {
+			     AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+			     if (session.isFmMode())
+			      session.setFmMode(false);
+			     else
+			      session.setFmMode(true);
+			     setResponsePage(PermissionManager.class);
+			    }
+			   });
+		
 	}
 
 	/**

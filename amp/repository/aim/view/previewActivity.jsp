@@ -15,6 +15,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
+
+<jsp:include page="activityHistoryUtil.jsp" flush="true" />
+
 <%@page import="java.math.BigDecimal"%><script language="JavaScript1.2"
 	type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"
@@ -330,6 +333,13 @@ function collapseAll() {
 								name="submitButton"
 							/>
 						</c:if></td>
+						
+						<td>
+							<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>							
+							<input type="button" class="buttonx" 
+							onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
+						</td>	
+						
 						<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 							<feature:display name="Edit Activity" module="Previews">
 								<field:display feature="Edit Activity" name="Edit Activity Button">  
@@ -355,6 +365,9 @@ function collapseAll() {
 								</field:display>
 							</feature:display>
 						</module:display>
+						
+						
+
 					</tr>
 				</table>
 			</logic:present></div>

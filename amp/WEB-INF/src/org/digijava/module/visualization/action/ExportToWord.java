@@ -339,7 +339,7 @@ public class ExportToWord extends Action {
 		            SimpleTable ODAGraph = new SimpleTable();
 	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
 	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-	                cel.setBorder(0);
+	                //cel.setBorder(1);
 	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		            ImageIO.write(scaleImage(vForm.getExportData().getODAGrowthGraph(),580,410), "png", ba);
 		            img = Image.getInstance(ba.toByteArray());
@@ -396,7 +396,7 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable(); //col,row 
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                cel.setBorder(0);
+                //cel.setBorder(1);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
 	            ImageIO.write(scaleImage(vForm.getExportData().getFundingGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
@@ -452,7 +452,7 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                cel.setBorder(0);
+                //cel.setBorder(1);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
 	            ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
@@ -508,7 +508,7 @@ public class ExportToWord extends Action {
 	            SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                cel.setBorder(0);
+                //cel.setBorder(1);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
 	            ImageIO.write(scaleImage(vForm.getExportData().getAidTypeGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
@@ -565,7 +565,7 @@ public class ExportToWord extends Action {
                 SimpleTable fundingGraph = new SimpleTable();
                 SimpleCell row = new SimpleCell(SimpleCell.ROW);
                 SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                cel.setBorder(0);
+                //cel.setBorder(1);
                 ByteArrayOutputStream ba = new ByteArrayOutputStream();
 	            ImageIO.write(scaleImage(vForm.getExportData().getFinancingInstGraph(),580,410), "png", ba);
 	            img = Image.getInstance(ba.toByteArray());
@@ -623,7 +623,7 @@ public class ExportToWord extends Action {
 	                SimpleTable fundingGraph = new SimpleTable();
 	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
 	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-	                cel.setBorder(0);
+	                //cel.setBorder(1);
 	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		            ImageIO.write(scaleImage(vForm.getExportData().getSectorGraph(),580,410), "png", ba);
 		            img = Image.getInstance(ba.toByteArray());
@@ -681,7 +681,7 @@ public class ExportToWord extends Action {
 		            SimpleTable fundingGraph = new SimpleTable();
 	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
 	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-	                cel.setBorder(0);
+	                //cel.setBorder(1);
 	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		            ImageIO.write(scaleImage(vForm.getExportData().getRegionGraph(),580,410), "png", ba);
 		            img = Image.getInstance(ba.toByteArray());
@@ -739,7 +739,7 @@ public class ExportToWord extends Action {
 		            SimpleTable donorGraph = new SimpleTable();
 	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
 	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-	                cel.setBorder(0);
+	                //cel.setBorder(1);
 	                ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		            ImageIO.write(scaleImage(vForm.getExportData().getDonorGraph(),580,410), "png", ba);
 		            img = Image.getInstance(ba.toByteArray());

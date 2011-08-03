@@ -1436,7 +1436,7 @@ function toggleSettings(){
 			</div> 
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-			<fieldset class="chartFieldset" style="display:none">
+			<fieldset class="chartFieldset">
 				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
 				<div id="ODAGrowthHeader" class="chart_header" style="float:left">
 				Title <input type="text" id="ODAGrowthTitle" value="" size="50">
@@ -1824,10 +1824,7 @@ function countSelected (selector){
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  refreshBoxes(o);
-			  if(initialized)
-			  	refreshGraphs();
-			  else
-				initialized = true;
+			  refreshGraphs();
 			  loadingPanel.hide();
 		  },
 		  failure: function(o) {
@@ -1846,7 +1843,7 @@ function callbackApplyFilter(e){
 
 function applyFilterPopin(e){
 	
-var allGraphs = document.getElementsByName("flashContent");
+//var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
 	document.getElementById("filterFiscalYear").innerHTML = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
@@ -2564,7 +2561,7 @@ function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'FundingChart', true);
-//	changeChart(null, 'bar', 'ODAGrowth');
+	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'AidPredictability', true);
 	changeChart(null, 'bar', 'AidType', true);
 	changeChart(null, 'bar', 'FinancingInstrument', true);
@@ -2824,7 +2821,7 @@ function hideFullDonors(){
 
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
-//	changeChart(null, 'bar', 'ODAGrowth');
+	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'FundingChart', true);
 	changeChart(null, 'bar', 'AidPredictability', true);
 	changeChart(null, 'bar', 'AidType', true);

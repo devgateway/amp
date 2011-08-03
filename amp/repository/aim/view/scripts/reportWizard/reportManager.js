@@ -1,5 +1,4 @@
 function createPreview () {
-	debugger;
 	var divElWrapper	= document.getElementById("previewSectionDiv");
 	var divEl			= document.getElementById("previewBodySectionDiv");
 	if (divEl == null)
@@ -19,9 +18,8 @@ function createPreview () {
 		fakeDivEl.style.display		= "none";
 		divElWrapper.style.display	= "none";
 	}
-	
-	
 }
+
 function populateRPS(rpSettings) {
 	var colArray		= getSelectedFieldsNames("dest_col_ul");
 	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
@@ -66,6 +64,28 @@ function populateRPS(rpSettings) {
 	
 	
 	return rpSettings;
+}
+
+function togglePreview () {
+	var divElWrapper	= document.getElementById("previewSectionDiv");
+	var divEl			= document.getElementById("previewBodySectionDiv");
+	var headerImgEl		= document.getElementById("previewHeaderSectionImg");
+	if (divEl == null)
+		return;
+	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
+	
+	if ( divEl.style.display	== "none" ) {
+		divElWrapper.style.height	= "200px";
+		fakeDivEl.style.height		= "210px";
+		divEl.style.display			= "";
+		headerImgEl.src				= "/TEMPLATE/ampTemplate/images/preview_open.gif";
+	}
+	else {
+		divElWrapper.style.height	= "45px";
+		fakeDivEl.style.height		= "50px";
+		divEl.style.display	= "none";
+		headerImgEl.src		= "/TEMPLATE/ampTemplate/images/preview_close.gif";
+	}
 }
 
 function continueInitialization( e, rmParams ){

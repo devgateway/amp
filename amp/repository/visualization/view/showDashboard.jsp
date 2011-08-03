@@ -275,19 +275,11 @@ function showPopin() {
 	myPanel.setBody(element);
 	myPanel.show();
 	changeTab(0);
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "none";
-	}
 	
 	
 }
 function hidePopin() {
 	myPanel.hide();
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "";
-	}
 }
 
 function showExport() {
@@ -297,17 +289,9 @@ function showExport() {
 	element.style.display 	= "inline";
 	myPanel.setBody(element);
 	myPanel.show();
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "none";
-	}
 }
 function hideExport() {
 	myPanel.hide();
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "";
-	}
 }
 
 function doExport(){
@@ -356,10 +340,6 @@ function getOptionChecked (elements){
 }
 
 function resetToDefaults(){
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "none";
-	}
 	loadingPanel.show();
 	var trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	
@@ -1456,7 +1436,7 @@ function toggleSettings(){
 			</div> 
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-			<fieldset class="chartFieldset">
+			<fieldset class="chartFieldset" style="display:none">
 				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
 				<div id="ODAGrowthHeader" class="chart_header" style="float:left">
 				Title <input type="text" id="ODAGrowthTitle" value="" size="50">
@@ -1844,7 +1824,10 @@ function countSelected (selector){
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  refreshBoxes(o);
-			  refreshGraphs();
+			  if(initialized)
+			  	refreshGraphs();
+			  else
+				initialized = true;
 			  loadingPanel.hide();
 		  },
 		  failure: function(o) {
@@ -1906,9 +1889,6 @@ var allGraphs = document.getElementsByName("flashContent");
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "none";
-	}
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;
@@ -2584,7 +2564,7 @@ function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'FundingChart', true);
-	changeChart(null, 'bar', 'ODAGrowth');
+//	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'AidPredictability', true);
 	changeChart(null, 'bar', 'AidType', true);
 	changeChart(null, 'bar', 'FinancingInstrument', true);
@@ -2688,8 +2668,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-//	var cache = "";
+//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+	var cache = "";
 	
 	switch(chartType){
 		case "bar":
@@ -2844,7 +2824,7 @@ function hideFullDonors(){
 
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'ODAGrowth');
+//	changeChart(null, 'bar', 'ODAGrowth');
 	changeChart(null, 'bar', 'FundingChart', true);
 	changeChart(null, 'bar', 'AidPredictability', true);
 	changeChart(null, 'bar', 'AidType', true);

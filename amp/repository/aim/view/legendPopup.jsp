@@ -13,7 +13,17 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<div id="show_legend_pop_box" style="font-size: 11px;font-family: Arial,sans-serif">
+<c:choose>
+	<c:when test="${param.queryEngine!='true' }">
+		<c:set var="divAlign"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="divAlign">right: 1px;</c:set>
+	</c:otherwise>
+</c:choose>
+
+
+<div id="show_legend_pop_box" style="font-size: 11px;font-family: Arial,sans-serif; ${divAlign}">
 	<b class="red">*<digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:newDraftText">New Draft. These are new actvities that have been saved as drafts.</digi:trn>
 	<hr/>
 	<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">

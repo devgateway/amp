@@ -43,17 +43,20 @@
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 
+<c:set var="showCurrSettings">
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+</c:set>
+<c:set var="hideCurrSettings">
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+</c:set>
+
 <script type="text/javascript">
 
 	queryCbObj		= {
 		success: function (o) {
 			var divObj		= document.getElementById("results");
 			divObj.innerHTML	= o.responseText;
-			var attributes = { 
-				scroll: { to: [YAHOO.util.Dom.getDocumentScrollTop(), YAHOO.util.Dom.getY("results")] } 
-			}; 
-			 var anim = new YAHOO.util.Scroll(document.body, attributes, 1.5); 
-			 anim.animate(); 
+			animToResult();
 		},
 		failure: function (o) {
 			var divObj		= document.getElementById("results");
@@ -62,6 +65,33 @@
 		}
 	
 	};
+	
+	function animToResult () {
+		var attributes = { 
+			scroll: { to: [YAHOO.util.Dom.getDocumentScrollTop(), YAHOO.util.Dom.getY("results")] } 
+		}; 
+		 var anim = new YAHOO.util.Scroll(document.body, attributes, 1); 
+		 anim.animate(); 
+	}
+	
+	function showlegend() {
+		var contentId = document.getElementById("show_legend_pop_box");
+  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+	}
+	
+	function toggleSettings(){
+		var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+		var displaySettingsButton = document.getElementById('displaySettingsButton');
+		if(currentDisplaySettings.style.display == "block"){
+			currentDisplaySettings.style.display = "none";
+			displaySettingsButton.innerHTML = "${showCurrSettings}";
+		}
+		else
+		{
+			currentDisplaySettings.style.display = "block";
+			displaySettingsButton.innerHTML = "${hideCurrSettings}";
+		}
+	}
 	
 	function submitQuery () {
 		var divObj		= document.getElementById("results");
@@ -73,6 +103,7 @@
 		YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 		var additionalParams	= "&doreset=true&queryEngine=true";
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
+		animToResult();
 	}
 	
 	function changeStep(url) {
@@ -112,8 +143,7 @@
 		</div>
 	</fieldset>
 	
-	
-	
+<br />
 <div id="results" >
 
 </div>

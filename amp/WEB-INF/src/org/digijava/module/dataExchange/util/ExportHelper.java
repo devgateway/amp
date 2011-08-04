@@ -57,9 +57,56 @@ public class ExportHelper {
 			for (AmpColumnEntry subNode : tag.getElements()) {
 				retValue.append(renderHiddenElements(subNode));
 			}
-		}
-
+		}		
 		
+		return retValue.toString();
+	}
+	
+	public static String renderHiddenElements(AmpColumnEntry tag,Long sourceId){
+		
+		DESourceSetting setting = null ;
+		if(sourceId != null && ! sourceId.equals(new Long(-1))){
+			try {
+				setting = new SessionSourceSettingDAO().getSourceSettingById( sourceId );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		StringBuffer retValue = new StringBuffer();		
+		retValue.append("<input type=\"hidden\" ");
+
+		Pattern pattern = Pattern.compile("[\\]\\[.]");
+		Matcher matcher = pattern.matcher(tag.getKey());
+
+		retValue.append("id=\"");
+		retValue.append("id_"+ matcher.replaceAll(""));
+		retValue.append("\" ");
+		retValue.append("name=\"");
+		retValue.append(tag.getKey());
+		retValue.append("\" ");
+		retValue.append("value=\"");
+		
+		if (setting!=null && setting.getFields().contains(tag.getPath())) {
+			retValue.append("true");
+		}else{
+			if (tag.isSelect() || tag.isMandatory()){
+				retValue.append("true");
+			} else{
+				retValue.append("false");
+			}
+		}
+		
+		retValue.append("\" ");
+		retValue.append("/>");
+		retValue.append("\n");
+		
+		if (tag.getElements() != null){
+			for (AmpColumnEntry subNode : tag.getElements()) {
+				retValue.append(renderHiddenElements(subNode,sourceId));
+			}
+		}		
 		
 		return retValue.toString();
 	}

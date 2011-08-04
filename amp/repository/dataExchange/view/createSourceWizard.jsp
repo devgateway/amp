@@ -30,18 +30,23 @@ function cancelImportManager() {
  function importActivities(sourceId){
 	 if(checkAttachment()){
 		 var form = document.getElementById('form');
-	      form.action = "/dataExchange/createSource.do?saveImport=true";
+//	      form.action = "/dataExchange/createSource.do?saveImport=true";
+//	      if(sourceId != -1){
+//	    	  form.action ="/dataExchange/editSource.do?action=saveSource&sourceId="+sourceId;
+//	      }
+		  form.action = "/dataExchange/createEditSource.do?action=saveSource";
 	      if(sourceId != -1){
-	    	  form.action ="/dataExchange/editSource.do?action=saveSource&sourceId="+sourceId;
+	    	  form.action +="&sourceId="+sourceId;
 	      }
-	      form.target="_self"
+	      form.target="_self";
 	      form.submit();
 	 }
      
 }
  function removeAttachment (attachmentOrder) {
 	 var form = document.getElementById('form');
-	 form.action = "/dataExchange/editSource.do?action=removeAttachment&attachmentOrder="+attachmentOrder;	 
+	 //form.action = "/dataExchange/editSource.do?action=removeAttachment&attachmentOrder="+attachmentOrder;
+	 form.action = "/dataExchange/createEditSource.do?action=removeAttachment&attachmentOrder="+attachmentOrder;
 	 form.target = "_self";
 	 form.submit();
  }
@@ -63,7 +68,7 @@ function cancelImportManager() {
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- MAIN CONTENT PART START -->
-<digi:form action="/createSource.do?saveImport=true" styleId="form" method="post" enctype="multipart/form-data">
+<digi:form action="/createEditSource.do?action=saveSource" styleId="form" method="post" enctype="multipart/form-data">
 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center >
 	<!-- BREADCRUMP START -->
@@ -175,7 +180,7 @@ function cancelImportManager() {
 				</table>
 				<br />
 				<center>
-					<input type="button" value="Save" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
+					<input type="submit" value="Save" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
 					<input type="button" value="Cancel" class="buttonx" onclick="cancelImportManager()"/>
 				</center>
 			</div>	

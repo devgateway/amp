@@ -144,5 +144,10 @@
    	<div id="dataExportTree"></div>
 </div>
 
-<%= ExportHelper.renderHiddenElements(tree) %>
-	
+<c:if test="${not empty sourceId && sourceId != -1}">
+	<bean:define id="srcId" name="sourceId" type="java.lang.Long"></bean:define>
+<%= ExportHelper.renderHiddenElements(tree,srcId) %>
+</c:if>
+<c:if test="${sourceId == -1}">
+	<%= ExportHelper.renderHiddenElements(tree) %>
+</c:if>	

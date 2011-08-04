@@ -38,7 +38,7 @@ function execute(sourceId){
 
 function editSource(sourceId) {
 	 var form = document.getElementById('manageForm');
-	form.action = "/dataExchange/editSource.do?action=gotoEditPage&sourceId="+sourceId;
+	form.action = "/dataExchange/createEditSource.do?action=gotoEditPage&sourceId="+sourceId;
 	form.target="_self"
 	form.submit();
 }
@@ -89,7 +89,10 @@ function page (page){
 	  <tr>
 	    <td>&nbsp;</td>
 	    <td align="right">&nbsp;</td>
-	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm">
+	    	<b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a>
+	    </td>
 	  </tr>
 	</table>
 	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">

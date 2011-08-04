@@ -75,7 +75,7 @@ function page (page){
 					    <a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					    <a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b>Check Source</b></a>
 					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					    <a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+					    <a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
 					</tr>
 				</table>
 		
@@ -84,7 +84,7 @@ function page (page){
 						<td colspan="6" align=right background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">
 						<digi:trn>See log file for </digi:trn> :
 						  <html:select property="selectedSourceId" styleClass="dropdwn_sm" styleId="logFor">
-						  	<html:optionsCollection property="availableSourceSettings" value="id" label="name" />					    
+						  	<html:optionsCollection property="availableSourceSettings" value="id" label="name" />
 						  </html:select>
 						  <input type="button" value="See" class="buttonx_sm" onclick="changeSource()"/>
 						</b></td>

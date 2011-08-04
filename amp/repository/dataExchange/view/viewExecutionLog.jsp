@@ -60,7 +60,10 @@ function importItem(id){
 				  <tr>
 				    <td width="33%"><a href="/dataExchange/showLogs.do?htmlView=true&selectedSourceId=${showLogsForm.selectedSourceId }" class="t_sm"><b>« Back to logs</b></a></td>
 				    <td width="33%" align=center><b>Execution Log</b></td>
-				    <td width="33%" align=right><a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/dataExchange/createSource.do?htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+				    <td width="33%" align=right>
+				    	<a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a>
+				    </td>
 				  </tr>
 				</table>
 				

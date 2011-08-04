@@ -43,18 +43,14 @@
 			<forward name="forward" path="/showLayout.do?layout=de_mapFields"/>
 			<forward name="mapFields" path="/showLayout.do?layout=de_mapFields" />
 		</action> 
-		<action path="/dataExchange/createSource" scope="session" type="org.digijava.module.dataExchange.action.CreateSourceAction" name="createSourceForm" 
-																								validate="false">
-			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
-			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
-		</action>
+		
 		<action path="/dataExchange/manageSource" scope="request" type="org.digijava.module.dataExchange.action.ManageSourceAction" name="manageSourceForm" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=de_showSources"/>
 			<forward name="showSources" path="/dataExchange/manageSource.do?htmlView=true"/>
 			<forward name="showSourceDetails" path="/showLayout.do?layout=de_showSourceDetails"/>
 		</action>
-		 
-		<action path="/dataExchange/editSource" scope="session" type="org.digijava.module.dataExchange.action.EditSourceAction" name="createSourceForm" validate="false" parameter="action">
+		
+		<action path="/dataExchange/createEditSource" scope="session" type="org.digijava.module.dataExchange.action.CreateEditSourceActions" name="createSourceForm" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
 			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>

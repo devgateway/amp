@@ -650,10 +650,13 @@ function toggleSettings(){
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
-									<input onkeypress="clearSearch('orgGrpDivList')" id="orgGrpDivList_search" type="text"   class="inputx" />
+							</div>
+								<div style="float: right">
+							<input onkeypress="clearSearch('orgGrpDivList')" id="orgGrpDivList_search" type="text"   class="inputx" />
 									 <input type="button" class="buttonx" onclick="findPrev('orgGrpDivList')"  value='&lt;&lt;' />
 									 <input type="button" onclick="findNext('orgGrpDivList')"  class="buttonx" value="&gt;&gt;"/>
 							</div>
+							
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
 						<ul style="list-style-type: none">
@@ -717,7 +720,10 @@ function toggleSettings(){
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
-									<input onkeypress="clearSearch('regionDivList')" id="regionDivList_search" type="text"   class="inputx" />
+									
+							</div>
+							<div class="inside" style="float: right">
+							<input onkeypress="clearSearch('regionDivList')" id="regionDivList_search" type="text"   class="inputx" />
 									 <input type="button" class="buttonx" onclick="findPrev('regionDivList')"  value='&lt;&lt;' />
 									 <input type="button" onclick="findNext('regionDivList')"  class="buttonx" value="&gt;&gt;"/>
 							</div>
@@ -785,11 +791,14 @@ function toggleSettings(){
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
 								</b>
+							</div>
+							<div class="inside" style="float: right" >
 								<input onkeypress="clearSearch('sectorDivList')" id="sectorDivList_search" type="text"   class="inputx" />
 									 <input type="button" class="buttonx" onclick="findPrev('sectorDivList')"  value='&lt;&lt;' />
 									 <input type="button" onclick="findNext('sectorDivList')"  class="buttonx" value="&gt;&gt;"/>
 								
 							</div>
+							
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
 						<ul style="list-style-type: none">
@@ -1918,17 +1927,17 @@ function refreshGraphs(){
 
 	//Get array of graphs
 	var allGraphs = document.getElementsByName("flashContent");
-	console.log("allgraphs:" + allGraphs.length);
+	//console.log("allgraphs:" + allGraphs.length);
 	//Iterate and refresh the graph
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
-		console.log("Trying to refresh:" + allGraphs[idx].children[0].id);
+		//console.log("Trying to refresh:" + allGraphs[idx].children[0].id);
 		try{
 			allGraphs[idx].children[0].refreshGraph();
 		}
 		catch(e)
 		{
-			console.log("Couldn't:" + e);
+			//console.log("Couldn't:" + e);
 		}
 	}
 }

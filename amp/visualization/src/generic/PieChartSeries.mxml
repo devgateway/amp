@@ -324,8 +324,6 @@
 
 		]]>
 	</mx:Script>
-	<mx:Style source="styles/charts.css"/>
-	
 	<!-- Data Provider -->
 	<mx:Object id="dataProvider"/>
 	

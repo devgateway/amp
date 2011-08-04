@@ -94,7 +94,7 @@ function init() {
 	}
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
-	var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
+	//var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("sourcediv"));
 	
 }
@@ -409,7 +409,8 @@ function getActivities(clear) {
 		   load: function(jsonData) {
 		        // For every item we received...
 			   totallocations=0;
-		       features = []; 
+		       features = [];
+		       activitiesarray=[];
 			   dojo.forEach(jsonData,function(activity) {
 		        	activitiesarray.push(activity);
 		        	MapFind(activity);

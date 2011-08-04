@@ -84,6 +84,13 @@
 	});
 
 	$(function(){
+  		$('#datasource').click(function(){
+     		$('#sourcediv').toggle();
+     		filldatasourcetable();
+     	});
+	});
+
+	$(function(){
   		$('#sbyd').click(function(){
   	  		var value = $('#distance').val();
   	  		if (isNumber(value)){
@@ -177,7 +184,7 @@
 				<li   id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
 				<li   id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
 				<li  id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
-				<li  id="datasource" onclick="toggleindicatormap('sourcediv');" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
+				<li  id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
 		     </ul>
 		    </div>
         	<div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
@@ -206,26 +213,23 @@
         	</table>
         </div>
         <!-- Data Source -->
-        <div id="sourcediv" class="legendContent" style="top:80px;left:100px;width: 50%;display:none;"> 
+        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;"> 
         	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
         	<div class="legendHeader">Data Source<br/><hr/></div>
-        	<table width="90%" cellspacing="0" cellpadding="0" border="0">
+        	<table id="sourcecontent" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
         		<tbody>
 					<tr>
-						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Activity Name</digi:trn>
 						</td>
-						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Activity Id</digi:trn>
 						</td>
-						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
-							<digi:trn>Currency</digi:trn>
-						</td>
-						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Commitments</digi:trn>
 						</td>
-						<td valign="top" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
-							<digi:trn>disbursements</digi:trn>
+						<td valign="top" style="font-weight: bolder;">
+							<digi:trn>Disbursements</digi:trn>
 						</td>
 					</tr>
 				</tbody>

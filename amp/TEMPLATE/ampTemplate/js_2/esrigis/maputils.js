@@ -158,3 +158,46 @@ function getCheckedValue(radioObj) {
 	}
 	return "";
 }
+
+function filldatasourcetable(){
+	deleteRow("sourcecontent");
+	var table = document.getElementById("sourcecontent");
+	var rowCount = table.rows.length;
+    var cell;
+    var element;
+    for ( var int = 0; int < activitiesarray.length; int++) {
+    	row = table.insertRow(rowCount + int);
+    	cell = row.insertCell(0);
+    	var url = '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activitiesarray[int].id+'~isPreview=1" target="_blank">'+activitiesarray[int].activityname+'</a>'
+    	cell.innerHTML= url;
+    	
+    	cell0 = row.insertCell(1);
+    	cell0.innerHTML= activitiesarray[int].ampactivityid;
+    	
+    	cell1 = row.insertCell(2);
+    	cell1.innerHTML= activitiesarray[int].commitments;
+    	
+    	cell3 = row.insertCell(3);
+    	cell3.innerHTML= activitiesarray[int].disbursements;
+    	
+    	//cell4 = row.insertCell(4);
+    	//cell4.innerHTML= activitiesarray[int].expenditures;
+    	
+	}
+}
+
+function deleteRow(tableID) {
+    try {
+    var table = document.getElementById(tableID);
+    var rowCount = table.rows.length;
+    if (rowCount >1){
+    	for(var i=1; i<rowCount; i++) {
+    		table.deleteRow(i);
+    		rowCount--;
+    		i--;
+    	}
+    }
+    }catch(e) {
+        alert(e);
+    }
+}

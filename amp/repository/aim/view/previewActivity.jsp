@@ -1223,6 +1223,15 @@ function collapseAll() {
 									/></td>
 								</tr>
 							</field:display>
+								<tr>
+							<td width="32%">
+							<digi:trn>Duration of project</digi:trn>
+							</td>
+							<td width="1">:</td>
+							<td align="left">
+							${aimEditActivityForm.planning.projectPeriod }
+							</td>
+							</tr>
 						</table>
 						</div>
 						</td>

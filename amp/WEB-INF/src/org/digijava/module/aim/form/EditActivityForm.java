@@ -6,9 +6,12 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +24,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -32,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -45,6 +50,8 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
@@ -52,13 +59,18 @@ import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.CustomFieldsUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 
@@ -1196,6 +1208,24 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String revisedCompDate;
 		private Collection activityCloseDates;
 		private Long creditTypeId;
+		
+		public BigDecimal getProjectPeriod(){
+			BigDecimal projectPeriod=null;
+			Date actualStartDate=DateConversion.getDate(this.revisedStartDate);
+			Date proposedCompletionDate=DateConversion.getDate(this.proposedCompDate);
+			try {
+				if(actualStartDate!=null&&proposedCompletionDate!=null){
+					projectPeriod=MathExpression.getMonthDifference(new BigDecimal(proposedCompletionDate.getTime()),new BigDecimal(actualStartDate.getTime()));		
+				}
+				
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return projectPeriod;
+		}
 
 		public String getRevisedCompDate() {
 			return revisedCompDate;
@@ -2475,6 +2505,86 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private String fundingCurrCode;
         private int selectedMTEFProjectionYear;
         
+		public String getConsumptionRate() {
+			String formatedConsumptionRate=null;
+			// if today = 09/2009 period should be 01/2009 to /08/2009
+			Calendar fromCalndar = GregorianCalendar.getInstance();
+			fromCalndar.add(Calendar.YEAR, -1);
+			fromCalndar.set(Calendar.DAY_OF_MONTH, 31);
+			fromCalndar.set(Calendar.MONTH, Calendar.DECEMBER);
+			fromCalndar.set(Calendar.HOUR, 11);
+			fromCalndar.set(Calendar.MINUTE, 59);
+			fromCalndar.set(Calendar.SECOND, 59);
+			fromCalndar.set(Calendar.AM_PM, Calendar.PM);
+			Date fromDate = fromCalndar.getTime();
+
+			Calendar toCalendar = GregorianCalendar.getInstance();
+			toCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			toCalendar.set(Calendar.HOUR, 0);
+			toCalendar.set(Calendar.MINUTE, 0);
+			toCalendar.set(Calendar.SECOND, 0);
+			toCalendar.set(Calendar.MILLISECOND, 0);
+			toCalendar.set(Calendar.AM_PM, Calendar.AM);
+			Date toDate = toCalendar.getTime();
+			
+			Calendar toCalendar2 = GregorianCalendar.getInstance();
+			toCalendar2.set(Calendar.DAY_OF_MONTH, 1);
+			toCalendar2.add(Calendar.YEAR, 1);
+			toCalendar2.set(Calendar.MONTH, Calendar.JANUARY);
+			toCalendar2.set(Calendar.HOUR, 0);
+			toCalendar2.set(Calendar.MINUTE, 0);
+			toCalendar2.set(Calendar.SECOND, 0);
+			toCalendar2.set(Calendar.AM_PM, Calendar.AM);
+			Date toDate2 = toCalendar2.getTime();
+
+			if (fundingDetails != null) {
+				List<AmpFundingDetail> disbursements = new ArrayList<AmpFundingDetail>();
+				for (FundingDetail detail : fundingDetails) {
+					Date transationDate = DateConversion.getDate(detail
+							.getTransactionDate());
+					Double transactionAmount = FormatHelper.parseDouble(detail
+							.getTransactionAmount());
+					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
+							.getCurrencyCode());
+					if (detail.getTransactionType() == Constants.DISBURSEMENT
+							&& transationDate.after(fromDate)) {
+						if (detail.getAdjustmentType() == Constants.ACTUAL
+								&& transationDate.before(toDate)) {
+							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
+									detail.getTransactionType(),
+									detail.getAdjustmentType(),
+									transactionAmount, transationDate,
+									currency, null);
+							disbursements.add(actualDisbFundingDet);
+						} else {
+							if (detail.getAdjustmentType() == Constants.PLANNED
+									&& transationDate.before(toDate2)) {
+								AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
+										detail.getTransactionType(),
+										detail.getAdjustmentType(),
+										transactionAmount, transationDate,
+										currency, null);
+								disbursements.add(actualDisbFundingDet);
+							}
+
+						}
+
+					}
+				}
+				FundingCalculationsHelper cal = new FundingCalculationsHelper();
+				cal.doCalculations(disbursements, currCode);
+				DecimalWraper totalActualDisb = cal.getTotActualDisb();
+				DecimalWraper totalPlannedDisb = cal.getTotPlanDisb();
+				if(totalPlannedDisb!=null&&totalPlannedDisb.doubleValue()!=0){
+					Double consumptionRate=totalActualDisb.doubleValue()/totalPlannedDisb.doubleValue();
+					NumberFormat formatter=DecimalFormat.getPercentInstance();
+					formatedConsumptionRate=formatter.format(consumptionRate);
+				}
+				
+			}
+			return formatedConsumptionRate;
+		}
+        
         public List<FundingDetail> getCommitmentsDetails() {
 			if(fundingDetails != null){
 				List<FundingDetail> commitments = new ArrayList<FundingDetail>();
@@ -2485,6 +2595,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			}
 			return fundingDetails;
 		}
+        
+     
 		
 		public List<FundingDetail> getDisbursementsDetails() {
 			if(fundingDetails != null){

@@ -364,6 +364,17 @@
                             </td>
                         </tr>
                         </feature:display>
+                       <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+                                <digi:trn
+                                key="aim:undisbursedBalance">
+                                 CONSUMPTION RATE</digi:trn></td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB">
+                                ${aimEditActivityForm.funding.consumptionRate}
+                            </td>
+                        </tr>
                         </table>
                         </td>
                         </tr>

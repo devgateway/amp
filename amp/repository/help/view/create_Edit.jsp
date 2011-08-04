@@ -146,7 +146,7 @@ function GetXmlHttpObj()	{
                           <li class="selected">
                           <a title='><digi:trn key="aim:help:editcreate"> Edit/Create</digi:trn>'>
                           <div>
-                            <digi:trn key="aim:help:editcreate"> Edit/Create</digi:trn>
+                            <digi:trn>Tools</digi:trn>
                           </div>
                           </a>
                           </li>
@@ -166,7 +166,7 @@ function GetXmlHttpObj()	{
                                 <c:set var="savetreeState">
                                   <digi:trn>Click here to Delete Help Topic</digi:trn>
                                 </c:set>
-										<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a> |
+										<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a><digi:secure group="Help Administrators"> |
 										
                                       <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
 
@@ -176,6 +176,7 @@ function GetXmlHttpObj()	{
 
 
                                         <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
+                                        </digi:secure>
 
 
                           </div>

@@ -28,6 +28,7 @@ Learn more about Flex at http://flex.org
 <style>
 body { margin: 0px; overflow:hidden }
 </style>
+<script type="text/javascript" src="swfobject.js"></script>
 <script language="JavaScript" type="text/javascript">
 <!--
 // -----------------------------------------------------------------------------
@@ -46,76 +47,83 @@ var requiredRevision = ${version_revision};
 <body scroll="no">
 <script language="JavaScript" type="text/javascript">
 <!--
-// Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
-var hasProductInstall = DetectFlashVer(6, 0, 65);
+	var palette = "0xff0000,0x7eae58,0x88bff5,0xbe0035,0x8b007e,0x99431c";
+	var params = {};
+	var attributes = {};
+	var flashvars = { 
+			decimalSeparator: ",", 
+			groupSeparator: " ",
+			decimalsToShow: "2", 
+			palette: palette, 
+			title: "Titulo", 
+			showLegend: "on", 
+			showDataLabel: "on",
+			fontFamily: "Verdana",
+			fontSize: "15",
+			id: "FundingChart"
+		};
+	attributes.id = "${application}";
+	
+	swfobject.embedSWF("${swf}.swf", "${application}", "${width}", "${height}", "10.0.0", false, flashvars, params, attributes);
 
-// Version check based upon the values defined in globals
-var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+function getValueToFlash(idContainer, field){
+	var inputObject = document.getElementById(idContainer + field);
+	var returnValue;
+	
+	if(inputObject != undefined && inputObject.type == "checkbox"){
+		returnValue = (inputObject == undefined) ? "" : inputObject.checked;
+	}
+	else
+	{
+		returnValue = (inputObject == undefined) ? "" : inputObject.value;
+	}
+	return returnValue;
+}
 
-if ( hasProductInstall && !hasRequestedVersion ) {
-	// DO NOT MODIFY THE FOLLOWING FOUR LINES
-	// Location visited after installation is complete if installation is required
-	var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
-	var MMredirectURL = window.location;
-    document.title = document.title.slice(0, 47) + " - Flash Player Installation";
-    var MMdoctitle = document.title;
 
-	AC_FL_RunContent(
-		"src", "playerProductInstall",
-		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-		"width", "${width}",
-		"height", "${height}",
-		"align", "middle",
-		"id", "${application}",
-		"quality", "high",
-		"bgcolor", "${bgcolor}",
-		"name", "${application}",
-		"allowScriptAccess","sameDomain",
-		"type", "application/x-shockwave-flash",
-		"pluginspage", "http://www.adobe.com/go/getflashplayer"
-	);
-} else if (hasRequestedVersion) {
-	// if we've detected an acceptable version
-	// embed the Flash Content SWF when all tests are passed
-	AC_FL_RunContent(
-			"src", "${swf}",
-			"width", "${width}",
-			"height", "${height}",
-			"align", "middle",
-			"id", "${application}",
-			"quality", "high",
-			"bgcolor", "${bgcolor}",
-			"name", "${application}",
-			"allowScriptAccess","sameDomain",
-			"type", "application/x-shockwave-flash",
-			"pluginspage", "http://www.adobe.com/go/getflashplayer"
-	);
-  } else {  // flash is too old or we can't detect the plugin
-    var alternateContent = 'Alternate HTML content should be placed here. '
-  	+ 'This content requires the Adobe Flash Player. '
-   	+ '<a href=http://www.adobe.com/go/getflash/>Get Flash</a>';
-    document.write(alternateContent);  // insert non-flash content
-  }
+function updateGraph(e, chartName){
+
+	//Get array of graphs
+	var allGraphs = document.getElementsByName("flashContent");
+	
+	//Iterate and refresh the graph
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		// Get flash object and refresh it by calling internal
+//		if(allGraphs[idx].children[0].id.split("_")[1].toLowerCase() == chartName.toLowerCase()){
+			allGraphs[idx].children[0].refreshGraphNoData();
+//			break;
+//		}
+	}
+}
+
 // -->
 </script>
-<noscript>
-  	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="${application}" width="${width}" height="${height}"
-			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="${swf}.swf" />
-			<param name="quality" value="high" />
-			<param name="bgcolor" value="${bgcolor}" />
-			<param name="allowScriptAccess" value="sameDomain" />
-			<embed src="${swf}.swf" quality="high" bgcolor="${bgcolor}"
-				width="${width}" height="${height}" name="${application}" align="middle"
-				play="true"
-				loop="false"
-				quality="high"
-				allowScriptAccess="sameDomain"
-				type="application/x-shockwave-flash"
-				pluginspage="http://www.adobe.com/go/getflashplayer">
-			</embed>
-	</object>
-</noscript>
+			Title <input type="text" id="FundingChartTitle" value="ODA Title BLABLABLA">
+			Size
+			<select id="FundingChartFontSize">
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+			</select>
+			<input type="checkbox" id="FundingChartDivide">Divide by thousands
+			<input type="checkbox" id="FundingChartBold">Bold<br/>
+			<input type="checkbox" id="FundingChartShowLegend" checked="checked">Show legend
+			<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
+			<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
+			<input type="hidden" id="GlobalFontSize" value="11" />
+			<input type="hidden" id="GlobalFontFamily" value="Verdana" />
+			<input type="hidden" id="GlobalFontWeight" value="bold" />
+			<input type="hidden" id="FundingChartDataField" value="fundingtype" />
+			<input type="text" id="FundingChartDataAction" value="getFundingsGraphData" />
+			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
+
+<div class="flashcontent" name="flashContent">
+<div id="${application}" name="flashChart">
+</div>
+</div>
+
+
 </body>
 </html>

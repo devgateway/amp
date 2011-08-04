@@ -11,6 +11,7 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
+import org.digijava.module.sdm.dbentity.Sdm;
 
 /**
  * @author dan
@@ -47,7 +48,10 @@ public class CreateSourceForm extends ActionForm {
 	private String dayOfWeek;
 	private String time;
 	
-	private Long sourceId;	
+	private Long sourceId;
+	
+	//holds attached files	
+	private Sdm sdmDocument;
 	
 
 	public String[] getSelectedLanguages() {
@@ -286,6 +290,14 @@ public class CreateSourceForm extends ActionForm {
 
 	public void setSourceId(Long sourceId) {
 		this.sourceId = sourceId;
+	}
+
+	public Sdm getSdmDocument() {
+		return sdmDocument;
+	}
+
+	public void setSdmDocument(Sdm sdmDocument) {
+		this.sdmDocument = sdmDocument;
 	}
 	
 }

@@ -59,7 +59,7 @@ function sortByVal(sortBy){
 
 function page (page){
 	var form = document.getElementById('manageForm');
-	form.action = "context/module/moduleinstance/manageSource.do?page="+page;
+	form.action = "/dataExchange/manageSource.do?page="+page;
 	form.target="_self";
 	form.submit();	
 }
@@ -256,9 +256,7 @@ function page (page){
 				    	</div>
 				    </td>
 				    <td bgcolor="#FFFFFF" class="inside" align="center">
-				    	<!-- 
-				    		<img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
-				    	 -->				    	 
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/execute_icon.gif" onclick="execute(${source.id});" style="cursor:pointer;" title="<digi:trn>Execute</digi:trn>"/>
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/view_log_icon.gif" onclick="viewLog(${source.id});" style="cursor:pointer;" title="<digi:trn>View Log</digi:trn>"/>
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onclick="deleteSource(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>

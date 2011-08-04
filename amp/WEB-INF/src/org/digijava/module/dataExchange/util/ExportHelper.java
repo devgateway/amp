@@ -16,8 +16,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
 public class ExportHelper {
@@ -64,17 +64,45 @@ public class ExportHelper {
 		return retValue.toString();
 	}
 	
-	public static String renderActivityTree(AmpColumnEntry node) {
+	
+	public static String renderActivityTree(AmpColumnEntry node) {	
+		
+		StringBuffer retValue = new StringBuffer();
+		
+		DESourceSetting setting = null ;
+		
+			try {
+				setting = new SessionSourceSettingDAO().getSourceSettingById( new Long(2) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting));
 
+		return retValue.toString();
+	}
+	
+	public static String renderActivityTree(AmpColumnEntry node,Long sourceId) {
+		DESourceSetting setting = null ;
+		if(sourceId != null && ! sourceId.equals(new Long(-1))){
+			try {
+				setting = new SessionSourceSettingDAO().getSourceSettingById( sourceId );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		StringBuffer retValue = new StringBuffer();
 
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()"));
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting));
 
 		return retValue.toString();
 	}
 
-	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode) {
+	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,DESourceSetting setting) {
 		
 		Pattern pattern = Pattern.compile("[\\]\\[.]");
 		Matcher matcher = pattern.matcher(node.getKey());
@@ -83,7 +111,11 @@ public class ExportHelper {
 		String nodeVarName = "atn_"+ key;
 		retValue.append("var "+ nodeVarName +" = new YAHOO.widget.TaskNode(\"" + node.getName() + "\", " + parentNode + ", ");
 		retValue.append("false , ");
-		retValue.append(Boolean.toString(node.isSelect()) + ", ");
+		if (setting!=null && setting.getFields().contains(node.getPath())) {
+			retValue.append(Boolean.toString(true) + ", ");
+		}else{
+			retValue.append(Boolean.toString(node.isSelect()) + ", ");
+		}		
 		retValue.append(Boolean.toString(node.isMandatory()) + ", ");
 		retValue.append("\""+key+"\"");
 		retValue.append("); ");
@@ -92,12 +124,13 @@ public class ExportHelper {
 		if (node.getElements() != null){
 			for (AmpColumnEntry subNode : node.getElements()) {
 				retValue.append("\n");
-				retValue.append(renderActivityTreeNode(subNode, nodeVarName));
+				retValue.append(renderActivityTreeNode(subNode, nodeVarName,setting));
 				retValue.append("\n");
 			}
 		}			
 		return retValue.toString();
-	}
+	}	
+	
 
 	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean requred) {
 		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);

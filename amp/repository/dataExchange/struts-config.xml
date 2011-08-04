@@ -53,13 +53,12 @@
 			<forward name="showSources" path="/dataExchange/manageSource.do?htmlView=true"/>
 			<forward name="showSourceDetails" path="/showLayout.do?layout=de_showSourceDetails"/>
 		</action>
-		<!-- 
+		 
 		<action path="/dataExchange/editSource" scope="session" type="org.digijava.module.dataExchange.action.EditSourceAction" name="createSourceForm" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
 			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>
 		
-		 -->
 		
 	</action-mappings>
 </struts-config>

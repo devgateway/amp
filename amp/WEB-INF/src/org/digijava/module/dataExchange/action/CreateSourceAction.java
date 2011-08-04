@@ -201,8 +201,8 @@ public class CreateSourceAction extends MultiAction {
 		myForm.setTeamId(null);
 		myForm.setSelectedLanguages(null);
 		myForm.setSelectedOptions(null);
-		myForm.setSourceId(null);
-		
+		myForm.setSourceId(new Long(-1));
+		myForm.setSdmDocument(null);
 	}
 
 //	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {

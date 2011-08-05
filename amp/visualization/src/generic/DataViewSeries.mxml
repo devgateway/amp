@@ -28,16 +28,20 @@
 
 			public function start():void
 			{
+				datagrid_id
 				var str:String = String(service.lastResult);
 				var arr:Array = str.split("\n");
 				var arrDest:Array = new Array;
 				for (var i:int=1; i<arr.length; i++) {
 					arrDest[i-1] = arr[i].split(',');
 				}
-				var arrHeader:Array = arr[0].split(',');
-				for (var i2:int=0; i2<arrHeader.length; i2++) {
-					var array = arrHeader[i2].split("#");
-					addDataGridColumn(i2.toString(), array[0]);
+				var arrHeader:Array; 
+				if(datagrid_id.columns.length == 0){
+					arrHeader = arr[0].split(',');
+					for (var i2:int=0; i2<arrHeader.length; i2++) {
+						var array = arrHeader[i2].split("#");
+						addDataGridColumn(i2.toString(), array[0]);
+					}
 				}
 				datagrid_id.dataProvider = arrDest;
 				var styleName:String = "." + datagrid_id.getStyle("headerStyleName");

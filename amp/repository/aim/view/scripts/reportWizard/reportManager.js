@@ -75,8 +75,8 @@ function togglePreview () {
 	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
 	
 	if ( divEl.style.display	== "none" ) {
-		divElWrapper.style.height	= "200px";
-		fakeDivEl.style.height		= "210px";
+		divElWrapper.style.height	= "220px";
+		fakeDivEl.style.height		= "230px";
 		divEl.style.display			= "";
 		headerImgEl.src				= "/TEMPLATE/ampTemplate/images/preview_open.gif";
 	}

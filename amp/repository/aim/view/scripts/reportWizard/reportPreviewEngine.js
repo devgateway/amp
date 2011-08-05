@@ -58,6 +58,9 @@ function ReportPreviewEngine (rpSettings) {
 	if ( this.rpSettings.columns.length == 0 ) 
 		return;
 	
+	if ( this.rpSettings.summary )
+		this.rpSettings.columns	= new Array ();
+	
 	this.rows.push( new Row1(this.rpSettings) );
 	this.rows.push( new Row2(this.rpSettings) );
 	this.rows.push( new Row3(this.rpSettings) );
@@ -166,18 +169,34 @@ GroupReportData.prototype.constructor	= GroupReportData;
 function GroupReportData( rpSettings, hierarchyIdx, firstRow ) {
 	this.parent.call(this, rpSettings);
 	this.hierarchyIdx		= hierarchyIdx;
-	this.hierarchyRow		= new HierarchyRow(this.rpSettings, hierarchyIdx);
 	this.children			= new Array();
+	//this.summmaryFirstRow	= null;
 	
 	if ( firstRow == null ) {
-		firstRow	= new ActivityRow(this.rpSettings, hierarchyIdx);
+		if ( !this.rpSettings.summary ) {
+			firstRow	= new ActivityRow(this.rpSettings, hierarchyIdx);
+		}
+		else 
+			firstRow	= new SummaryFirstHierarchyRow(this.rpSettings, hierarchyIdx);
 	}
-	
+
+	/**
+	 * For summary reports, smallest groups (hierarchies) do not have trailing cells.
+	 * (Everything is on a single line) 
+	 */
+	if ( this.rpSettings.summary && this.hierarchyIdx == this.rpSettings.hierarchies.length-1 )
+		this.hierarchyRow	= firstRow;
+	else
+		this.hierarchyRow		= new HierarchyRow(this.rpSettings, hierarchyIdx); //Trailing cells row
 	
 	var child	= null;
-	if ( this.rpSettings.hierarchies.length == hierarchyIdx+1 ) {
-		child	= new ColumnReportData(this.rpSettings, firstRow);
-		this.children.push(child);
+	if ( this.rpSettings.hierarchies.length == hierarchyIdx+1) {
+		if ( !this.rpSettings.summary ) {
+			child	= new ColumnReportData(this.rpSettings, firstRow);
+			this.children.push(child);
+		}
+		else
+			this.hierarchyRow	= firstRow;
 	}
 	else
 		for (var i=0; i<this.rpSettings.rowsPerHierarchy; i++) {
@@ -192,7 +211,8 @@ GroupReportData.prototype.getRowsArray	= function( ) {
 		var childArray	= this.children[i].getRowsArray();
 		rowsArray	= rowsArray.concat(childArray);
 	}
-	
+//	if ( this.summmaryFirstRow != null) 
+//		rowsArray.push(this.summmaryFirstRow);
 	rowsArray.push(this.hierarchyRow);
 	return rowsArray;	
 };
@@ -336,12 +356,14 @@ Row5.prototype.renderRow	= function( ) {
 		var subYearLength		= (this.rpSettings.quarters)?this.rpSettings.quartersLength:((this.rpSettings.months)?this.rpSettings.monthsLength:1);
 		var numOfAmounts		= this.rpSettings.yearsLength*subYearLength*this.rpSettings.measures.length;
 		for (var i=0; i<numOfAmounts; i++) {
-			var cell	= new ReportTotalsAmountCell(this.rpSettings, "3 000");
+			var amount	= Math.pow(this.rpSettings.numOfActivities, this.rpSettings.hierarchies.length+1)  ;
+			var cell	= new ReportTotalsAmountCell(this.rpSettings, amount + " 000");
 			this.cells.push(cell);
 		}
 	}
 	for ( var i=0; i<this.rpSettings.measures.length; i++ ) {
-		var cell 	= 	new ReportTotalCostAmountCell(this.rpSettings, "10 000");
+		var amount	= Math.pow(this.rpSettings.numOfActivities, this.rpSettings.hierarchies.length+1) *10  ;
+		var cell 	= 	new ReportTotalCostAmountCell(this.rpSettings, amount + " 000");
 		this.cells.push(cell);
 	}
 };
@@ -374,7 +396,7 @@ ActivityRow.prototype.renderRow	= function( ) {
 		}
 	}
 	for ( var i=0; i<this.rpSettings.measures.length; i++ ) {
-		var cell 	= 	new AmountCell(this.rpSettings, "2 000");
+		var cell 	= 	new AmountCell(this.rpSettings, "10 000");
 		this.cells.push(cell);
 	}
 };
@@ -390,30 +412,75 @@ HierarchyRow.prototype.renderRow	= function( ) {
 	this.parent.prototype.renderRow.call(this );
 	this.rowEl.className	= this.rpSettings.hierarchyLevelClasses[this.hierarchyIdx];
 	if ( this.hierarchyIdx >= 0)
-		for ( var i=this.hierarchyIdx+1; i<this.rpSettings.hierarchies.length; i++ ) {
-			var cell	= new EmptyCell(this.rpSettings, "" );
-			this.cells.push(cell);
+		for ( var i=this.hierarchyIdx; i<this.rpSettings.hierarchies.length; i++ ) {
+			if ( i!=this.hierarchyIdx ) {//TODO
+				var cell	= new EmptyCell(this.rpSettings, "" );
+				this.cells.push(cell);
+			}
+//			if ( this.rpSettings.summary )  { // in case of summary reports
+//				if ( true || this.hierarchyIdx == this.rpSettings.hierarchies.length-1 ) { // if this is the last/smallest hierarchy
+//					var hCell	= new HierarchyCell(this.rpSettings, this.rpSettings.hierarchies[i] + " " + this.rpSettings.hierCounter[i]++, i );
+//					this.cells.push(hCell);
+//				}
+//			}
 		}
 	for ( var i=0; i<this.rpSettings.columns.length; i++ ) {
 		var cell	= new EmptyCell(this.rpSettings, "" );
 		this.cells.push(cell);
 	}
-	if ( !this.rpSettings.totalsOnly) {
+	if ( !this.rpSettings.totalsOnly ) {
 		var subYearLength		= (this.rpSettings.quarters)?this.rpSettings.quartersLength:((this.rpSettings.months)?this.rpSettings.monthsLength:1);
 		var numOfAmounts		= this.rpSettings.yearsLength*subYearLength*this.rpSettings.measures.length;
 		for (var i=0; i<numOfAmounts; i++) {
-			var cell	= new HierarchyAmountCell(this.rpSettings, "3 000");
+			
+			var amount	= Math.pow(this.rpSettings.rowsPerHierarchy,this.rpSettings.hierarchies.length - this.hierarchyIdx -1) * this.rpSettings.numOfActivities ;
+			var cell	= new HierarchyAmountCell(this.rpSettings, amount + " 000");
 			this.cells.push(cell);
 		}
 	}
 	for ( var i=0; i<this.rpSettings.measures.length; i++ ) {
-		var cell 	= 	new HierarchyAmountCell(this.rpSettings, "5 000");
+		var amount	= Math.pow(this.rpSettings.rowsPerHierarchy,this.rpSettings.hierarchies.length - this.hierarchyIdx -1) * this.rpSettings.numOfActivities  * 10;
+		var cell 	= 	new HierarchyAmountCell(this.rpSettings, amount + " 000");
 		this.cells.push(cell);
 	}
 };
 
+SummaryFirstHierarchyRow.prototype				= new PreviewRow();
+SummaryFirstHierarchyRow.prototype.parent		= PreviewRow;
+SummaryFirstHierarchyRow.prototype.constructor	= SummaryFirstHierarchyRow;
+function SummaryFirstHierarchyRow( rpSettings, hierarchyIdx ) {
+	this.parent.call(this, rpSettings);
+	this.hierarchyIdx		= hierarchyIdx;
+};
 
-
+SummaryFirstHierarchyRow.prototype.renderRow	= function( ) {
+	this.parent.prototype.renderRow.call(this);
+	this.rowEl.className	= this.rpSettings.hierarchyLevelClasses[this.rpSettings.hierarchies.length-1];
+	if ( this.hierarchyIdx >= 0)
+		for ( var i=this.hierarchyIdx; i<this.rpSettings.hierarchies.length; i++ ) {
+			if ( true || this.hierarchyIdx == this.rpSettings.hierarchies.length-1 ) { // if this is the last/smallest hierarchy
+				var hCell	= new HierarchyCell(this.rpSettings, this.rpSettings.hierarchies[i] + " " + this.rpSettings.hierCounter[i]++, i );
+				this.cells.push(hCell);
+			}
+		}
+	
+	
+	if ( !this.rpSettings.totalsOnly ) {
+		var subYearLength		= (this.rpSettings.quarters)?this.rpSettings.quartersLength:((this.rpSettings.months)?this.rpSettings.monthsLength:1);
+		var numOfAmounts		= this.rpSettings.yearsLength*subYearLength*this.rpSettings.measures.length;
+		for (var i=0; i<numOfAmounts; i++) {
+			
+			//var amount	= Math.pow(this.rpSettings.numOfActivities,this.rpSettings.hierarchies.length - this.hierarchyIdx -1) * this.rpSettings.numOfActivities ;
+			var cell	= new HierarchyAmountCell(this.rpSettings, this.rpSettings.numOfActivities + " 000");
+			this.cells.push(cell);
+		}
+	}
+	for ( var i=0; i<this.rpSettings.measures.length; i++ ) {
+		//var amount	= Math.pow(this.rpSettings.numOfActivities,this.rpSettings.hierarchies.length - this.hierarchyIdx -1) * this.rpSettings.numOfActivities  * 10;
+		var cell 	= 	new HierarchyAmountCell(this.rpSettings, (this.rpSettings.numOfActivities*10) + " 000");
+		this.cells.push(cell);
+	}
+};
 
 
 function PreviewCell(rpSettings, cellName) {
@@ -626,7 +693,8 @@ HierarchyCell.prototype.renderCell	= function() {
 	for (var i=1; i<=numOfLevelsRemaining; i++) {
 		groupRows		+= Math.pow(this.rpSettings.rowsPerHierarchy, i);
 	}
-	this.cellEl.setAttribute("rowspan", groupRows + activityLines );
+	var rowspan		= this.rpSettings.summary? groupRows : groupRows + activityLines ;
+	this.cellEl.setAttribute("rowspan", rowspan );
 };
 
 

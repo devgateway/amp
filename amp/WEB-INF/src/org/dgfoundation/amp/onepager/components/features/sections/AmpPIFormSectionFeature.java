@@ -94,8 +94,9 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
 			AmpOrganisation auxOrg = fund.getAmpDonorOrgId();
 			
 			//check to see if funding org is Bilateral or Multilateral 
-    		if(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("BIL") || 
-    				auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("MUL")) {
+			if(auxOrg!=null && auxOrg.getOrgGrpId()!=null &&auxOrg.getOrgGrpId().getOrgType()!=null)
+    		if("BIL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) || 
+    				"MUL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) ) {
     			
     			//check to see if actual fundings exist
     			if (!fund.getFundingDetails().isEmpty()){

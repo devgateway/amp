@@ -269,8 +269,8 @@ public class IatiActivityWorker {
 				}
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
-			
-				if(checkedActivity.getItem().getAmpId() !=null)
+			logs.add(checkedActivity);
+			if(checkedActivity.getItem().getAmpId() !=null)
 					this.ampID = checkedActivity.getItem().getAmpId();
 			}
 		catch(Exception e){
@@ -588,20 +588,21 @@ public class IatiActivityWorker {
 		
 		if(a !=null ) ampFunding.setAmpActivityId(a);
 		Set<AmpFunding> ampFundings = a.getFunding();
-		for (AmpFunding af : ampFundings) {
-			if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
-				ampFunding.setFinancingId(af.getFinancingId());
-				ampFunding.setModeOfPayment(af.getModeOfPayment());
-				ampFunding.setFundingStatus(af.getFundingStatus());
-				ampFunding.setActualStartDate(af.getActualStartDate());
-				ampFunding.setActualCompletionDate(af.getActualCompletionDate());
-				ampFunding.setPlannedStartDate(af.getPlannedStartDate());
-				ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
-				ampFunding.setConditions(af.getConditions());
-				ampFunding.setDonorObjective(af.getDonorObjective());
-				break;
+		if(ampFundings!=null)
+			for (AmpFunding af : ampFundings) {
+				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
+					ampFunding.setFinancingId(af.getFinancingId());
+					ampFunding.setModeOfPayment(af.getModeOfPayment());
+					ampFunding.setFundingStatus(af.getFundingStatus());
+					ampFunding.setActualStartDate(af.getActualStartDate());
+					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+					ampFunding.setConditions(af.getConditions());
+					ampFunding.setDonorObjective(af.getDonorObjective());
+					break;
+				}
 			}
-		}
 		
 		//TODO: the language - lang attribute
 		if(isValidString(description)) ampFunding.setConditions(description);
@@ -718,7 +719,10 @@ public class IatiActivityWorker {
 			sectorId = ampSector.getAmpSectorId();
 			if (sectorId != null && (!sectorId.equals(new Long(-1))))
 				ampActSector.setSectorId(ampSector);
-			ampActSector.setSectorPercentage(new Float(sector.getPercentage().floatValue()));
+			
+			Float sectorPercentage = sector.getPercentage()==null?100:sector.getPercentage().floatValue();
+			
+			ampActSector.setSectorPercentage(sectorPercentage);
 			
 			AmpClassificationConfiguration primConf = null;
 			//trying to find the classification
@@ -730,28 +734,40 @@ public class IatiActivityWorker {
             sectors.add(ampActSector);
 
 		}
+		if (a.getSectors() == null) {
+			a.setSectors(new HashSet());
+		}
+		else a.getSectors().clear();
+		a.getSectors().addAll(sectors);
+
 	}
 
 	private void processPlanningStep(AmpActivityVersion a, ArrayList<ActivityDate> iatiActDateList) {
 		if(iatiActDateList.isEmpty()) return;
 		for (Iterator<ActivityDate> it = iatiActDateList.iterator(); it.hasNext();) {
 			ActivityDate date = (ActivityDate) it.next();
+			String stringDate = date.getValue();
+			XMLGregorianCalendar isoDate = date.getIsoDate();
+			Date dateToSet = null;
+			if(isoDate != null)
+				dateToSet = DataExchangeUtils.XMLGregorianDateToDate(date.getIsoDate());
+			else dateToSet	=	DataExchangeUtils.stringToDate(stringDate);
 			
 			//Proposed Start Date
 			if("start-planned".compareTo(date.getType()) ==0 ){
-				a.setProposedStartDate(DataExchangeUtils.XMLGregorianDateToDate(date.getIsoDate()));
+				a.setProposedStartDate(dateToSet);
 			}
 			//Date of Planned Completion
 			if("end-planned".compareTo(date.getType()) ==0 ){
-				a.setOriginalCompDate(DataExchangeUtils.XMLGregorianDateToDate(date.getIsoDate()));
+				a.setOriginalCompDate(dateToSet);
 			}
 			//Date of Effective Agreement
 			if("start-actual".compareTo(date.getType()) ==0 ){
-				a.setActualStartDate(DataExchangeUtils.XMLGregorianDateToDate(date.getIsoDate()));
+				a.setActualStartDate(dateToSet);
 			}
 			//Date of Actual Completion
 			if("end-actual".compareTo(date.getType()) ==0 ){
-				a.setActualCompletionDate(DataExchangeUtils.XMLGregorianDateToDate(date.getIsoDate()));
+				a.setActualCompletionDate(dateToSet);
 			}
 		}
 	}
@@ -1169,6 +1185,7 @@ public class IatiActivityWorker {
 	private AmpCategoryValue getAmpCategoryValue(JAXBElement<CodeReqType> item, String iatiPath, String iatiItems,
 			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status){
+		if(item == null) return null;
 		String code = getAttributeCodeReqType(item, "code");
 		String value = printCodeReqType(item);
 		DEMappingFields checkMappedField = checkMappedField(iatiPath,iatiItems,toIATIValues(value,code),iatiLang,ampId,ampClass,sourceId,feedFileName,status);

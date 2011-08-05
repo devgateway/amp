@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -89,8 +90,20 @@ public class ShowLogsAction extends MultiAction {
 		String actType	= request.getParameter("actionType");
 		String itemId	= request.getParameter("itemId");
 		//import one activity
-		if(actType!=null && "saveAct".compareTo(actType)==0){
-			importActivity(request, myForm, itemId);
+		if(actType!=null )
+			if("saveAct".compareTo(actType)==0){
+				importActivity(request, myForm, itemId);
+			}
+			else
+				if("saveAllAct".compareTo(actType)==0){
+					{
+						String[] selectedActivities = myForm.getSelectedActivities();
+						//Object o = request.getParameter("idss");
+						if(selectedActivities != null) 
+							for (int i = 0; i < selectedActivities.length; i++) {
+								importActivity(request, myForm, selectedActivities[i]);
+							}
+					}
 			
 		}
 		
@@ -109,7 +122,9 @@ public class ShowLogsAction extends MultiAction {
 			if (myForm.getPage() != 0) {
 				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * myForm.getPage();
 			}
-			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
+			//logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
+			//Dare pls review this
+			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
 		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {
@@ -193,10 +208,12 @@ public class ShowLogsAction extends MultiAction {
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
 		List<DELogPerItem> logItems		= null;
+		Long selectedLogPerExecId = null;
 		if ( myForm.getSelectedLogPerExecId() == null || myForm.getSelectedLogPerExecId() <= 0 )
 			logItems	= new SessionImportLogDAO().getAllAmpLogPerItem();
 		else {
 			logItems	= new SessionImportLogDAO().getAmpLogPerItemObjsByExec( myForm.getSelectedLogPerExecId() );
+			selectedLogPerExecId = myForm.getSelectedLogPerExecId();
 			myForm.setSelectedLogPerExecId(null);
 		}
 		myForm.setLogItems(logItems);
@@ -219,7 +236,9 @@ public class ShowLogsAction extends MultiAction {
 		ps.print(xmlCreator.createXml());
 		 */
 		
-	 	
+		//set can import
+		Boolean canImport = canImportActivities(myForm,selectedLogPerExecId);
+	 	myForm.setCanImport(canImport);
 		return mapping.findForward("viewExecutionLog");
 	}
 	public ActionForward modeShowItemLogDetails(ActionMapping mapping, ActionForm form,
@@ -231,6 +250,23 @@ public class ShowLogsAction extends MultiAction {
 		myForm.setLpi(selLPI);
 		myForm.setSelectedLogPerItemId(null);
 		return mapping.findForward("showLogItemDetails");
+	}
+
+	private Boolean canImportActivities(ShowLogsForm myForm, Long selectedLogPerExecId)
+			throws SQLException, DgException {
+		DELogPerExecution logAux = (DELogPerExecution) new SessionImportLogDAO().loadObject(DELogPerExecution.class,selectedLogPerExecId);
+		if("Import activities".compareTo(logAux.getDescription()) == 0) return false;
+		List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, "date_desc");
+		Boolean canImport = false;
+	 	for (Iterator iterator = logs.iterator(); iterator.hasNext();) {
+			DELogPerExecution deLogPerExecution = (DELogPerExecution) iterator.next();
+			if("Check feed source".compareTo(deLogPerExecution.getDescription()) ==0 ){
+				if(selectedLogPerExecId.compareTo(deLogPerExecution.getId()) == 0)
+					canImport = true;
+				break;
+			}
+		}
+		return canImport;
 	}
 
 	private void resetForm(ShowLogsForm myForm){

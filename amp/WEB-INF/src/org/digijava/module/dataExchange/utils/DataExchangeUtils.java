@@ -230,6 +230,23 @@ public class DataExchangeUtils {
 		  else return null;
 	}
 
+	public static Date stringToDate(String importedDate){
+		
+		  Boolean dateToSet=new Boolean(false);
+		  if(importedDate == null ) return null;
+		  String defaultFormat= "yyyy-MM-dd";
+		  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
+		  GregorianCalendar result=new GregorianCalendar();
+		  try {
+			   result.setTime(formater.parse(importedDate));
+			   dateToSet=true;
+			  } catch (ParseException e) {
+				  e.printStackTrace();
+			  	}
+		  if(dateToSet==true) return result.getTime();
+		  else return null;
+	}
+	
 	public static Date intDateToDate(int importedDate){
 		
 		  // importedDate= actType.getProposedApprovalDate().getDate();

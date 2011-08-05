@@ -4,8 +4,11 @@
 package org.digijava.module.dataExchange.dbentity;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -28,6 +31,19 @@ public class DEMappingFieldsDisplay {
 	 */
 	
 	private HashMap<Long,String> labels;
+	private TreeMap<Long,String> sortedLabels;
+	
+	public TreeMap<Long, String> getSortedLabels() {
+//		ValueComparator bvc =  new ValueComparator(this.labels);
+//		sortedLabels = new TreeMap<Long,String>(bvc);
+//		sortedLabels.putAll(this.labels);
+		return sortedLabels;
+	}
+
+	public void setSortedLabels(TreeMap<Long, String> sortedLabels) {
+		this.sortedLabels = sortedLabels;
+	}
+
 	private DEMappingFields ampField;
 	
 	public DEMappingFields getAmpField() {
@@ -39,9 +55,17 @@ public class DEMappingFieldsDisplay {
 	}
 
 	public HashMap<Long, String> getLabels() {
+		
+
 		return labels;
 	}
 
+	private void sortLabels(){
+		ValueComparator bvc =  new ValueComparator(this.labels);
+		sortedLabels = new TreeMap<Long,String>(bvc);
+		sortedLabels.putAll(this.labels);
+	}
+	
 	public void setLabels(HashMap<Long, String> labels) {
 		this.labels = labels;
 	}
@@ -54,7 +78,7 @@ public class DEMappingFieldsDisplay {
 		super();
 		this.ampField = f;
 		this.labels = new HashMap<Long,String> ();
-		this.labels.put(new Long(-1), "Add new");
+//		this.labels.put(new Long(-1), "Add new");
 //		public static final String IATI_ORGANIZATION_TYPE = "Organization Type";
 //		public static final String IATI_ORGANIZATION = "Organization";
 //		public static final String IATI_LOCATION = "Location";
@@ -130,7 +154,21 @@ public class DEMappingFieldsDisplay {
 				this.labels.put(item.getAmpActivityGroup().getAmpActivityGroupId(), item.getName());
 			}
 		}
+		this.sortLabels();
 	}
 	
+	class ValueComparator implements Comparator {
+
+		  Map base;
+		  public ValueComparator(Map base) {
+		      this.base = base;
+		  }
+
+		  public int compare(Object a, Object b) {
+//			if("Add new".compareTo((String)this.base.get(a)) ==0) return -1;
+//			if("Add new".compareTo((String)this.base.get(b)) ==0) return 1;
+		    return ((String)this.base.get(a)).compareTo((String)this.base.get(b));
+		}
+	}
 
 }

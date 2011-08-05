@@ -31,6 +31,28 @@ public class ShowLogsForm extends ActionForm {
 	private int lastPage ;
 	private String sortBy;
 	//private String sortDir;
+	
+	private String [] selectedActivities;
+	
+
+
+	public String[] getSelectedActivities() {
+		return selectedActivities;
+	}
+
+	public void setSelectedActivities(String[] selectedActivities) {
+		this.selectedActivities = selectedActivities;
+	}
+
+	private Boolean canImport = false;
+
+	public Boolean getCanImport() {
+		return canImport;
+	}
+
+	public void setCanImport(Boolean canImport) {
+		this.canImport = canImport;
+	}
 
 	/**
 	 * @return the selectedSourceId

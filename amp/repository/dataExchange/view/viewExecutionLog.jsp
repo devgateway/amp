@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<digi:instance property="showLogsForm" />
 <script type="text/javascript">
 function toggleGroup(group_id){
 	var strId='#'+group_id;
@@ -20,7 +21,38 @@ function toggleGroup(group_id){
 }
 
 function importAll() {
-	alert('needs implementation !');
+	 var checks = document.getElementsByName("selectedActivities");
+	 //alert(checks);
+	 var isChecked = false
+	 var params = "&actionType=saveAllAct";
+	 for(i=0;i<checks.length;i++){
+		 if(checks[i].checked) {
+			 isChecked=true;
+			 params+="&selectedActivities="+checks[i].value;
+		 }
+	 }
+	 if(isChecked != true) {
+		 alert("Please check at least one record");
+		 return true;
+     }
+	 <digi:context name="saveRecord" property="context/module/moduleinstance/showLogs.do"/>
+	 url = "<%= saveRecord %>";
+	 var postString = params;//"actionType=saveAllAct&selectedActivities=0&selectedActivities=1&selectedActivities=2";
+	 YAHOO.util.Connect.asyncRequest('POST', url, { 
+		 	            success: function() { 
+		 	            	window.location.replace(url);
+		 	            }, 
+		 	            failure: function() { 
+		 	            } 
+		 	        },postString); 
+	 return true;
+}
+
+function checkLog(sourceId) {
+	var form = document.getElementById('logForm');
+	form.action = "/dataExchange/manageSource.do?action=executeIATI&executingSourceId="+sourceId;
+	form.target="_self"
+	form.submit();
 }
 
 function importItem(id){
@@ -29,9 +61,18 @@ function importItem(id){
 	url = "<%= saveRecord %>?actionType=saveAct&itemId="+id;
 	window.location.replace(url);
 }
+
+
+function checksAll() {
+	 var checks = document.getElementsByName("selectedActivities");
+	 var check = document.getElementById("checkAll");
+	 for(i=0;i<checks.length;i++){
+		 checks[i].checked=check.checked;
+	 }
+	 return true;
+}
 </script>
 
-<digi:instance property="showLogsForm" />
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
@@ -62,6 +103,8 @@ function importItem(id){
 				    <td width="33%" align=center><b>Execution Log</b></td>
 				    <td width="33%" align=right>
 				    	<a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b>Check Source</b></a>
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a>
 				    </td>
 				  </tr>
@@ -74,7 +117,7 @@ function importItem(id){
 					</td>
 					<tr>
 					    <td width="20" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">
-					      <input name="" type="checkbox" value="" /></b>
+					      <input id="checkAll" type="checkbox" onclick="checksAll()"/></b>
 					    </td>
 					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
 					    	<b class="ins_title">Activity Name</b>
@@ -104,7 +147,7 @@ function importItem(id){
 							<tr>
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<c:if test="${item.logType=='OK'}">
-							    		<input name="checkItem" type="checkbox"/>
+							    		<html:checkbox name="showLogsForm"  property="selectedActivities"  value="${item.id}" />
 							    	</c:if>
 							    	
 							    </td>
@@ -155,18 +198,20 @@ function importItem(id){
 							    </td>							    
 							    
 							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-							    	<c:if test="${item.logType=='OK'}">
+							    	<c:if test="${item.logType=='OK' && showLogsForm.canImport == true}">
 							    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem(${item.id});"/>
 							    	</c:if>
 							    </td>
 							</tr>
 						</logic:iterate>						
-						<tr>
-						    <td colspan="5" bgcolor=#FFFFFF class=inside>&nbsp;</td>
-						    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-						    	<input type="button" class="buttonx_sm" value="Import All" onclick="importAll()"/>
-						    </td>
-						</tr>		
+						<c:if test="${showLogsForm.canImport == true}">
+							<tr>
+							    <td colspan="5" bgcolor=#FFFFFF class=inside>&nbsp;</td>
+							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
+								    	<input type="button" class="buttonx_sm" value="Import All" onclick="importAll()"/>
+							    </td>
+							</tr>		
+						</c:if>
 					</logic:notEmpty>										
 				</table>
 			</td>

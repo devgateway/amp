@@ -16,7 +16,6 @@ function saveRecord(id) {
 
 		 var el = document.getElementById(id);
 		 var txt = el.options[el.selectedIndex].innerHTML;
-		 //alert(el.options[el.selectedIndex].innerHTML);
 		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
 		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&mappedId="+el.value+"&mappedValue="+txt;
 		 mapFieldsForm.action =url;
@@ -43,13 +42,14 @@ function saveAll() {
 	 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
 	 url = "<%= saveRecord %>";
 	 var postString = "actionType=saveAll";
+	 YAHOO.util.Connect.setForm( document.getElementsByName("mapFieldsForm")[0] );
 	 YAHOO.util.Connect.asyncRequest('POST', url, { 
 		 	            success: function() { 
 		 	            	window.location.replace(url);
 		 	            }, 
 		 	            failure: function() { 
 		 	            } 
-		 	        },postString); 
+		 	        });//,postString); 
 
      
 	 return true;
@@ -108,6 +108,7 @@ function checksAll() {
 						    <td width="400" background="images/ins_bg.gif" class="inside"><b class="ins_title">Iati Items</b></td>
 						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">IATI values</b></td>
 						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Current value</b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Status</b></td>
 						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Values from AMP</b></td>
 						    <td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title">Actions</b></td>
 						</tr>
@@ -119,8 +120,19 @@ function checksAll() {
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.iatiValues}</div></td>
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.ampValues}</div></td>
 								    <td bgcolor="#FFFFFF" class="inside">
+								    	<div class="t_sm" align="center">
+								    	<c:if test="${field.ampField.ampValues== null }">
+							    			<img src="/TEMPLATE/ampTemplate/img_2/not_ok_ico.gif" />
+								    	</c:if>
+								    	<c:if test="${field.ampField.ampValues!= null }">
+							    			<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />
+								    	</c:if>
+								    	</div>
+								    </td>
+								    <td bgcolor="#FFFFFF" class="inside">
 								  		<html:select  name="field" property="ampField.selectedAmpId" styleClass="dropdwn_sm" styleId="${field.ampField.id}" indexed="true" >
-        									<logic:iterate id="cls" name="field" property="labels">
+								  			<html:option value="-1">Add new</html:option>
+        									<logic:iterate id="cls" name="field" property="sortedLabels">
 												<html:option value="${cls.key}">
 												${cls.value}
 												</html:option>
@@ -134,7 +146,7 @@ function checksAll() {
 							</logic:iterate>
 						</logic:notEmpty>
 						<tr>
-							  <td colspan="5" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
+							  <td colspan="6" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
 							  <td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="Save All" class="buttonx_sm" onclick="saveAll()"/></td>
 						</tr>
 					</table>

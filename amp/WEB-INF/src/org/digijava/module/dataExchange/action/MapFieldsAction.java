@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -71,7 +72,22 @@ public class MapFieldsAction extends MultiAction {
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();
 		
+		populateCollections(ampClasses, allAmpDEMappingFields, fieldDisplayList);
 		
+		mForm.setMappedFields(fieldDisplayList);
+		mForm.setAmpClasses(ampClasses);
+		
+		if ( "saveMappedField".equals( mForm.getAction() ) ) {
+			modeSaveField(mapping, mForm, request, response);
+		}
+		
+		return mapping.findForward("forward");
+	}
+
+	private void populateCollections(TreeSet<String> ampClasses,
+			Collection<DEMappingFields> allAmpDEMappingFields,
+			ArrayList<DEMappingFieldsDisplay> fieldDisplayList)
+			throws DgException {
 		Collection<AmpOrgType> allOrgTypes = DbUtil.getAllOrgTypes();
 		Collection<AmpActivity> allActivities = DbUtil.getAllActivities();
 		Collection<AmpOrganisation> allOrgs = DbUtil.getAllOrganisation();
@@ -120,17 +136,6 @@ public class MapFieldsAction extends MultiAction {
 				fieldDisplayList.add(new DEMappingFieldsDisplay(f,modeOfPaymentList));
 			}
 		}
-		
-		
-		
-		mForm.setMappedFields(fieldDisplayList);
-		mForm.setAmpClasses(ampClasses);
-		
-		if ( "saveMappedField".equals( mForm.getAction() ) ) {
-			modeSaveField(mapping, mForm, request, response);
-		}
-		
-		return mapping.findForward("forward");
 	}
 	
 	public void modeSaveField(ActionMapping mapping, MapFieldsForm msForm, HttpServletRequest request, HttpServletResponse response)

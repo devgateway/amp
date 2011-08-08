@@ -23,7 +23,7 @@
 	</b>
 </center>
 <hr>
-	<table  border="0" cellpadding="2" cellspacing="0" align="center"> 
+	<table width="400"  border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;"> 
 		<tr>
 			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
 				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>&nbsp;
@@ -98,7 +98,7 @@
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
 		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
-		 </td>
+	    </td>
 	  </tr>
 	<tr>
 		<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
@@ -109,7 +109,7 @@
 		  	  <aim:formatNumber value="123456789.928" />
 	          </div></td>
       </tr>
-	</table>
+  </table>
 
 <br>
 <center>
@@ -118,7 +118,7 @@
 	</b>
 </center>	
 <hr>
-	<table cellpadding="2" cellspacing="2" align="center">
+	<table width="400" align="center" cellpadding="2" cellspacing="2" style="font-size:11px;">
 		<tr>
 			<td width="40%" style="text-align: right;font-size: 11px">
 				<digi:trn>Currency</digi:trn>&nbsp;</td>
@@ -141,20 +141,9 @@
 		
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
-			<td colspan="2">&nbsp;</td>
-		</tr>
-		<tr>
 			<td width="40%" style="text-align: right">
 				<digi:trn>Year Range</digi:trn></td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<td style="text-align: right"> 
-				<digi:trn>From</digi:trn>: &nbsp;
-				
-			</td>
-			<td> 
-				<html:select  styleClass="dropdwn_sm" property="renderStartYear">
+			<td><digi:trn>From</digi:trn>: 	<html:select  styleClass="dropdwn_sm" property="renderStartYear">
 					<html:option value="-1">
 						<digi:trn key="rep:filer:All">All</digi:trn>
 					</html:option>
@@ -166,11 +155,11 @@
 						<digi:trn key="rep:filer:All">All</digi:trn>
 					</html:option>
 					<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
-				</html:select>
-			</td>
+				</html:select></td>
 		</tr>
+
 	</logic:notEqual>
-	</table>
+  </table>
 <br>
 <div>
 	<div style="margin-right: auto; margin-left: auto; text-align: center;">

@@ -16,6 +16,14 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+<link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
+<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" rel="stylesheet" type="text/css"></link>
+<link href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" rel="stylesheet" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+<link href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" rel="stylesheet" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
 <digi:instance property="aimReportsFilterPickerForm" />
 <digi:form action="/reportsFilterPicker.do">
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>

@@ -674,13 +674,6 @@ public class DataExchangeUtils {
         } catch (Exception e) {
             logger.error("Unable to add");
             e.printStackTrace(System.out);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }
         }
         return object;
     }

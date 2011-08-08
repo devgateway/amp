@@ -10,14 +10,14 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<digi:instance property="mapFieldsForm" />
+<digi:instance property="mapFieldsForm" id="mff"/>
 <script type="text/javascript">
 function saveRecord(id) {
 
-		 var el = document.getElementById(id);
+		 var el = document.getElementById("ampValues["+id+"]");
 		 var txt = el.options[el.selectedIndex].innerHTML;
 		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
-		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&mappedId="+el.value+"&mappedValue="+txt;
+		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&ampId="+el.value+"&mappedValue="+txt;
 		 mapFieldsForm.action =url;
 		 //alert(url);
 		 mapFieldsForm.submit();
@@ -28,28 +28,33 @@ function saveAll() {
 
 
 	 var checks = document.getElementsByName("selectedFields");
-	 //alert(checks);
 	 var isChecked = false
+
+	 var params = "&actionType=saveAllRecords";
 	 for(i=0;i<checks.length;i++){
 		 if(checks[i].checked) {
-			 isChecked=true;break;
+			 isChecked=true;
+			 var opts = document.getElementById("ampValues["+checks[i].value+"]");
+			 params+="&selectedAmpIds="+opts.value;
+			 params+="&selectedAmpValues="+opts.options[opts.selectedIndex].text;
 		 }
 	 }
+	 
 	 if(isChecked != true) {
 		 alert("Please check at least one record");
 		 return true;
      }
 	 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
 	 url = "<%= saveRecord %>";
-	 var postString = "actionType=saveAll";
-	 YAHOO.util.Connect.setForm( document.getElementsByName("mapFieldsForm")[0] );
+	 var postString = params;
+	 YAHOO.util.Connect.setForm( document.getElementById("logForm") );
 	 YAHOO.util.Connect.asyncRequest('POST', url, { 
 		 	            success: function() { 
 		 	            	window.location.replace(url);
 		 	            }, 
 		 	            failure: function() { 
 		 	            } 
-		 	        });//,postString); 
+		 	        },postString); 
 
      
 	 return true;
@@ -130,8 +135,8 @@ function checksAll() {
 								    	</div>
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside">
-								  		<html:select  name="field" property="ampField.selectedAmpId" styleClass="dropdwn_sm" styleId="${field.ampField.id}" indexed="true" >
-								  			<html:option value="-1">Add new</html:option>
+								  		<html:select  name="mapFieldsForm" property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
+								  			<html:option value="-1"  >Add new</html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels">
 												<html:option value="${cls.key}">
 												${cls.value}

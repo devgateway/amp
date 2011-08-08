@@ -1073,18 +1073,18 @@ public class IatiActivityWorker {
 
 	private AmpMappedField checkOrganizationType(String type) {
 		if(type==null) return null;
-		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive");
+		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organizationCodeType",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
-		logMappingField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organization_code_type",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive",checkMappedField,log);
+		logMappingField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organizationCodeType",type,this.getLang(),null,AmpOrgType.class.getName(),null,null,"inactive",checkMappedField,log);
 		return log;
 	}
 	
 	private AmpMappedField checkVocabularyCode(Sector item) {
 		DEMappingFields mf = null;
 		String name = item.getVocabulary()==null?"DAC":item.getVocabulary();
-		mf = checkMappedField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive");
+		mf = checkMappedField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sectorVocabularyCode",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(mf);
-		logMappingField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sector_vocabulary_code",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive",mf,log);
+		logMappingField(DataExchangeConstants.IATI_VOCABULARY_CODE,"sectorVocabularyCode",name,this.getLang(),null,AmpSectorScheme.class.getName(),null,null,"inactive",mf,log);
 		return log;
 	}
 	

@@ -728,10 +728,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		return ret;
 	}
 	
-	public static void addValueToCategory(String categoryKey, String value) throws Exception {
+	public static AmpCategoryValue addValueToCategory(String categoryKey, String value) throws Exception {
 		Session dbSession			= null;
 		String error				= null;
-		
+		AmpCategoryValue ampCategoryValue 	= null;
 		try {
 			dbSession			= PersistenceManager.getSession();
 			String queryString;
@@ -753,7 +753,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				if ( ampCategoryClass.getPossibleValues() == null )
 					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>() );
 				
-				AmpCategoryValue ampCategoryValue 	= new AmpCategoryValue();
+				ampCategoryValue 	= new AmpCategoryValue();
 				ampCategoryValue.setValue(value);
 				ampCategoryValue.setAmpCategoryClass(ampCategoryClass);
 				ampCategoryValue.setIndex( ampCategoryClass.getPossibleValues().size() );
@@ -768,6 +768,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				else
 					error							= "The value already exists";
 				dbSession.flush();
+				
 			}
 
 		} catch (Exception ex) {
@@ -782,8 +783,12 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			}
 		}
 		
-		if ( error != null )
+		if ( error != null)
 			throw new Exception( error );
+		if ( ampCategoryValue == null)
+            throw new Exception( "AmpCategoryValue object should not be null here" );
+		return ampCategoryValue;
+		
 	}
 	
 	/**

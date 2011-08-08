@@ -30,7 +30,34 @@ public class MapFieldsForm extends ActionForm {
 
 	Set<String> ampClasses = null;
 	private String [] selectedFields;
+	private String [] selectedAmpValues;
+	private String [] selectedAmpIds;
+	public String[] getSelectedAmpIds() {
+		return selectedAmpIds;
+	}
+
+	public void setSelectedAmpIds(String[] selectedAmpIds) {
+		this.selectedAmpIds = selectedAmpIds;
+	}
+
+	private String [] allSelectedAmpValues;
 	
+	public String[] getAllSelectedAmpValues() {
+		return allSelectedAmpValues;
+	}
+
+	public void setAllSelectedAmpValues(String[] allSelectedAmpValues) {
+		this.allSelectedAmpValues = allSelectedAmpValues;
+	}
+
+	public String[] getSelectedAmpValues() {
+		return selectedAmpValues;
+	}
+
+	public void setSelectedAmpValues(String[] selectedAmpValues) {
+		this.selectedAmpValues = selectedAmpValues;
+	}
+
 	private String selectedAmpClass;
 	
 
@@ -70,6 +97,7 @@ public class MapFieldsForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
 		selectedFields=null;
+		allSelectedAmpValues = null;
 	}
 	
 }

@@ -58,15 +58,20 @@ public class MapFieldsAction extends MultiAction {
 
 		String fieldId	= request.getParameter("id");
 		String actType	= request.getParameter("actionType");
-		String mappedId	= request.getParameter("mappedId");
+		String mappedId	= request.getParameter("ampId");
 		String mappedValue	= request.getParameter("mappedValue");
 		
-		if(fieldId != null && actType != null && mappedId !=null){
-			DEMappingFields ampDEMappingField = DataExchangeUtils.getAmpDEMappingField(new Long(fieldId));
-			//TODO if ampId == -1 => create new field
-			ampDEMappingField.setAmpId(new Long(mappedId));
-			ampDEMappingField.setAmpValues(mappedValue);
-			DataExchangeUtils.addObjectoToAmp(ampDEMappingField);
+		if(actType!=null){
+			if("saveRecord".compareTo(actType) ==0)
+				if(fieldId != null && mappedId !=null){
+					saveMappedField(request,fieldId, mappedId, mappedValue);
+				}
+			if("saveAllRecords".compareTo(actType) ==0)
+			{
+				for (int i = 0; i < mForm.getSelectedFields().length; i++) {
+					saveMappedField(request,mForm.getSelectedFields()[i], mForm.getSelectedAmpIds()[i], mForm.getSelectedAmpValues()[i]);
+				}
+			}
 		}
 		TreeSet<String> ampClasses = new TreeSet<String>();
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
@@ -82,6 +87,58 @@ public class MapFieldsAction extends MultiAction {
 		}
 		
 		return mapping.findForward("forward");
+	}
+
+	private void saveMappedField(HttpServletRequest request, String fieldId, String ampId, String mappedValue) {
+		DEMappingFields ampDEMappingField = DataExchangeUtils.getAmpDEMappingField(new Long(fieldId));
+		Long id = new Long(ampId);
+		String newMappedValue = null;
+		if("-1".compareTo(ampId)==0){
+			//create new AMP object
+			//TODO
+			//if org exist don't save and provide a message
+			if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampDEMappingField.getIatiPath())==0)
+			{
+				AmpOrganisation o = new AmpOrganisation();
+				String[] values = ampDEMappingField.getIatiValues().split("\\|\\|\\|");
+				o.setName(values[0]);
+				o.setOrgCode(values[1]);
+				DataExchangeUtils.addObjectoToAmp(o);
+				id = o.getAmpOrgId();
+				newMappedValue = o.getName();
+			}
+			if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampDEMappingField.getIatiPath())==0)
+			{
+				AmpOrgType o = new AmpOrgType();
+				//String[] values = ampDEMappingField.getIatiValues().split("\\|\\|\\|");
+				o.setOrgType(ampDEMappingField.getIatiValues());
+				o.setOrgTypeCode(ampDEMappingField.getIatiValues());
+				DataExchangeUtils.addObjectoToAmp(o);
+				id = o.getAmpOrgTypeId();
+				newMappedValue = o.getOrgType();
+			}
+			
+			if(DataExchangeConstants.IATI_ACTIVITY_STATUS.compareTo(ampDEMappingField.getIatiPath())==0)
+			{
+				AmpCategoryValue o = null;
+				try {
+					o = CategoryManagerUtil.addValueToCategory(CategoryConstants.ACTIVITY_STATUS_KEY, ampDEMappingField.getIatiValues());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(o!=null)
+				{
+					DataExchangeUtils.addObjectoToAmp(o);
+					id = o.getId();
+					newMappedValue = ampDEMappingField.getIatiValues();
+				}
+			}
+			
+		}
+		ampDEMappingField.setAmpId(id);
+		ampDEMappingField.setAmpValues(newMappedValue==null?mappedValue:newMappedValue);
+		DataExchangeUtils.addObjectoToAmp(ampDEMappingField);
 	}
 
 	private void populateCollections(TreeSet<String> ampClasses,

@@ -399,7 +399,7 @@
 	<mx:Resize id="resize" />
 	<mx:String id="profileDataField">sector</mx:String>
 	<mx:String id="fontFamily">Arial</mx:String>
-	<mx:Number id="fontSize">11</mx:Number>
+	<mx:Number id="fontSize">10</mx:Number>
 	<mx:String id="fontWeight">bold</mx:String>
 	<mx:String id="dataFontFamily">Arial</mx:String>
 	<mx:Number id="dataFontSize">11</mx:Number>
@@ -509,7 +509,7 @@
 				x="25"
 				y="0"
 				showDataTips="false"
-				height="{dc.height-30}"
+				height="{dc.height-50}"
 				width="{dc.width-25}"
 				percentGap="{percentGap}"
 				dataProvider="{dataProvider}" 
@@ -623,7 +623,7 @@
 						x="{hLayout.currentReference.x}"
 						y="{hLayout.height+5}"
 						width="{hLayout.currentReference.width}"
-						height="30"
+						height="10"
 						fontFamily="{fontFamily}"
 						fontSize="{fontSize}"
 						fontWeight="{fontWeight}"

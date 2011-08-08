@@ -8,7 +8,7 @@
 				layout="absolute"
 				creationComplete="application1_creationCompleteHandler(event);" viewSourceURL="srcview/index.html" xmlns:debug="org.axiis.debug.*" >
 	
-	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getAidTypeGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)">
 		<mx:request>
 			<format>xml</format>
 			<donut>true</donut>
@@ -16,25 +16,26 @@
 	</mx:HTTPService>
 	<mx:Script>
 		<![CDATA[
+			import com.exportUtil.*;
+			
 			import flash.external.ExternalInterface;
-			import org.axiis.events.LayoutItemEvent;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.events.MoveEvent;
 			import mx.events.SliderEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-			import com.exportUtil.*;
 			
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
-
-			import mx.core.DragSource;
-			import mx.events.DragEvent;
-			import mx.events.IndexChangedEvent;
-			import mx.events.MoveEvent;
-			import mx.managers.DragManager;
+			import org.axiis.events.LayoutItemEvent;
 			//Variables for the service URL
 			private var curUrl:String = "";
 			private var strUrl:String = "";
@@ -322,6 +323,15 @@
 				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
 			}
 
+
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+
 		]]>
 	</mx:Script>
 	<!-- Data Provider -->
@@ -413,10 +423,9 @@
 					
 				</axiis:WedgeStackGroup>
 				<axiis:VBoxLayout id="legendLayout" 
-								  x="{innerWedgeGroup.width+70}"
+								  x="{innerWedgeGroup.width+50}"
 								  y="85"
-								  height="200"
-								  width="400"	
+								  height="300"
 								  dataProvider="{dataProvider}"
 								  dataField="value" 
 								  showDataTips="false"
@@ -435,7 +444,8 @@
 							fontFamily="{fontFamily}"
 							fontWeight="{fontWeight}"
 							fontSize="{fontSize}"
-							width="300"
+							width="200"
+							wordWrap="true"
 							/> 
 					</axiis:drawingGeometries> 
 				</axiis:VBoxLayout> 

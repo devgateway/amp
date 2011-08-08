@@ -593,8 +593,8 @@
 				/>
 			<axiis:HBoxLayout id="legendLayout" 
 							  x="0"
-							  y="{myLineGroup.height+50}"
-							  width="{this.width}" 
+							  y="{myLineGroup.height+30}"
+							  width="{dc.width-25}"
 							  height="300"
 							  dataProvider="{categories}"
 							  dataField="pivotName" 
@@ -606,10 +606,14 @@
 						y="{legendLayout.currentReference.y}" 
 						x="{legendLayout.currentReference.x+12}" 
 						text="{legendLayout.currentDatum['pivotName']}" 
-						autoSizeField="true"
 						fontFamily="{fontFamily}"
 						fontWeight="{fontWeight}"
 						fontSize="{fontSize}"
+						wordWrap="true"
+						border="true"
+						borderColor="#000000"
+						width="75"
+						height="50"
 						/> 
 					<degrafa:RegularRectangle 
 						id="legendSquare" width="10" height="10" fill="{legendFill}" 

@@ -96,8 +96,11 @@ public class MapFieldsForm extends ActionForm {
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
-		selectedFields=null;
-		allSelectedAmpValues = null;
+		selectedFields		 =	null;
+		allSelectedAmpValues =	null;
+		selectedAmpClass 	 = 	null;
+		selectedAmpValues 	 =  null;
+		selectedAmpIds 		 =	null;
 	}
 	
 }

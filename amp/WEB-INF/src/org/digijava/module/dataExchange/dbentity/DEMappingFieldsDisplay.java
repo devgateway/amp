@@ -32,6 +32,7 @@ public class DEMappingFieldsDisplay {
 	
 	private HashMap<Long,String> labels;
 	private TreeMap<Long,String> sortedLabels;
+	private DEMappingFields ampField;
 	
 	public TreeMap<Long, String> getSortedLabels() {
 //		ValueComparator bvc =  new ValueComparator(this.labels);
@@ -39,13 +40,10 @@ public class DEMappingFieldsDisplay {
 //		sortedLabels.putAll(this.labels);
 		return sortedLabels;
 	}
-
+	
 	public void setSortedLabels(TreeMap<Long, String> sortedLabels) {
 		this.sortedLabels = sortedLabels;
 	}
-
-	private DEMappingFields ampField;
-	
 	public DEMappingFields getAmpField() {
 		return ampField;
 	}

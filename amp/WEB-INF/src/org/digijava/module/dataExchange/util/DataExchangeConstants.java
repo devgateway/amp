@@ -54,6 +54,7 @@ public class DataExchangeConstants {
 	public static final String IATI_LOCATION = "Location";
 	public static final String IATI_ACTIVITY_STATUS = "Activity Status";
 	public static final String IATI_VOCABULARY_CODE = "Vocabulary Code";
+	public static final String AMP_VOCABULARY_CODE = "Sector Scheme";
 	public static final String IATI_SECTOR = "Sector";
 	//type of assistance
 	public static final String IATI_FINANCE_TYPE = "Finance Type";

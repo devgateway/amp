@@ -20,7 +20,7 @@ public @interface VersionableFieldSimple {
 
 	/**
 	 * If true, then this field will not be changed in the comparison window for
-	 * another´s version value.
+	 * another's version value.
 	 */
 	boolean blockSingleChange() default false;
 

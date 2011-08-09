@@ -130,7 +130,12 @@ function checksAll() {
 							    			<img src="/TEMPLATE/ampTemplate/img_2/not_ok_ico.gif" />
 								    	</c:if>
 								    	<c:if test="${field.ampField.ampValues!= null }">
-							    			<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />
+								    		<c:if test="${field.ampField.ampValues!='Add new' }">
+							    				<img src="/TEMPLATE/ampTemplate/img_2/ico_info.gif" />
+							    			</c:if>
+							    			<c:if test="${field.ampField.ampValues=='Add new' }">
+								    			<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />
+							    			</c:if>
 								    	</c:if>
 								    	</div>
 								    </td>

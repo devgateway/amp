@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.xml.bind.JAXBElement;
@@ -428,16 +429,10 @@ public class IatiActivityWorker {
 		Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
 		for (Iterator it = iatiLocationList.iterator(); it.hasNext();) {
 			Location location = (Location) it.next();
-			String locationType	= null;
-			String locationName	= null;
-			String locationCountry = null;
-			String adm1 = null;
-			String adm2 = null;
-			String adm3 = null;
-
-			getLocationDetails(location,locationName,locationType,locationCountry,adm1,adm2,adm3);
+			TreeMap<String, String> locationDetails = new TreeMap<String, String>();
+			getLocationDetails(location,locationDetails);
 			AmpLocation ampLocation = getAmpLocation(toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-						   toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3));
+					toIATIValues(locationDetails.get("name"),locationDetails.get("location-type"),locationDetails.get("country"),locationDetails.get("adm1"),locationDetails.get("adm2"),locationDetails.get("adm3")));
 			AmpActivityLocation actLoc	=	new AmpActivityLocation();
 			actLoc.setActivity(a);
 			actLoc.setLocation(ampLocation);
@@ -1020,26 +1015,30 @@ public class IatiActivityWorker {
 	
 	private AmpMappedField checkLocation(Location l) {
 		
-		String locationType	= null;
-		String locationName	= null;
-		String locationCountry = null;
-		String adm1 = null;
-		String adm2 = null;
-		String adm3 = null;
+//		String locationType	= null;
+//		String locationName	= null;
+//		String locationCountry = null;
+//		String adm1 = null;
+//		String adm2 = null;
+//		String adm3 = null;
 
-		getLocationDetails(l,locationName,locationType,locationCountry,adm1,adm2,adm3);
+		TreeMap<String, String> locationDetails = new TreeMap<String,String>();
+		
+		getLocationDetails(l,locationDetails);
 		
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive");
+				toIATIValues(locationDetails.get("name"),
+						locationDetails.get("location-type"),locationDetails.get("country"),locationDetails.get("adm1"),locationDetails.get("adm2"),locationDetails.get("adm3")),
+						lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
 		logMappingField(DataExchangeConstants.IATI_LOCATION,toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-				toIATIValues(locationName,locationType,locationCountry,adm1,adm2,adm3),lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive", checkMappedField, log);
+				toIATIValues(locationDetails.get("name"),locationDetails.get("location-type"),locationDetails.get("country"),locationDetails.get("adm1"),locationDetails.get("adm2"),locationDetails.get("adm3")),
+				lang,null,AmpCategoryValueLocations.class.getName(),null,null,"inactive", checkMappedField, log);
 		return log;
 	}
 	
 
-	private void getLocationDetails(Location l,String locationName, String locationType,
-			String locationCountry, String adm1, String adm2, String adm3) {
+	private void getLocationDetails(Location l,TreeMap<String, String> locationDetails) {
 
 		for (Iterator<Object> it = l.getLocationTypeOrNameOrDescription().iterator(); it.hasNext();) {
 			Object contentItem = (Object) it.next();
@@ -1049,21 +1048,21 @@ public class IatiActivityWorker {
 				//location-type
 				if(i.getName().equals(new QName("location-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					locationType = item.getValue().getCode();
+					locationDetails.put("location-type",item.getValue().getCode());
 				}
 				//location name
 				if(i.getName().equals(new QName("name"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-					locationName = printList(item.getValue().getContent());
+					locationDetails.put("name", printList(item.getValue().getContent()));
 				}
 				
 				//administrative
 				if(i.getName().equals(new QName("administrative"))){
 					Location.Administrative item = (Location.Administrative)i.getValue();
-					locationCountry = item.getCountry();
-					adm1 = item.getAdm1();
-					adm2 = item.getAdm2();
-					adm3 = item.getOtherAttributes().get(new QName("adm3"));
+					locationDetails.put("country", item.getCountry());
+					locationDetails.put("adm1", item.getAdm1());
+					locationDetails.put("adm2", item.getAdm2());
+					locationDetails.put("adm3", item.getOtherAttributes().get(new QName("adm3")));
 				}
 				
 			}
@@ -1175,7 +1174,7 @@ public class IatiActivityWorker {
 	private AmpMappedField checkCodeReqType(JAXBElement<CodeReqType> item, String iatiPath, String iatiItems,
 			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
-		String code = getAttributeCodeReqType(item, "code");
+		String code = item.getValue().getCode();
 		String value = printCodeReqType(item);
 		DEMappingFields checkMappedField = checkMappedField(iatiPath,iatiItems,toIATIValues(value,code),iatiLang,ampId,ampClass,sourceId,feedFileName,status);
 		AmpMappedField log = new AmpMappedField(checkMappedField);
@@ -1186,7 +1185,7 @@ public class IatiActivityWorker {
 			String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status){
 		if(item == null) return null;
-		String code = getAttributeCodeReqType(item, "code");
+		String code = item.getValue().getCode();
 		String value = printCodeReqType(item);
 		DEMappingFields checkMappedField = checkMappedField(iatiPath,iatiItems,toIATIValues(value,code),iatiLang,ampId,ampClass,sourceId,feedFileName,status);
 		AmpCategoryValue acv = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
@@ -1232,14 +1231,14 @@ public class IatiActivityWorker {
 	
 	public String printCodeType(JAXBElement<CodeType> item){
 		String result = "";
-		result +=item.getValue().getCode()+" ";
+		//result +=item.getValue().getCode()+" ";
 		result += printList(item.getValue().getContent());
 		return result;
 	}
 	
 	public String printCodeReqType(JAXBElement<CodeReqType> item){
 		String result = "";
-		result +=item.getValue().getCode()+" ";
+		//result +=item.getValue().getCode()+" ";
 		result += printList(item.getValue().getContent());
 		return result;
 	}
@@ -1370,10 +1369,9 @@ public class IatiActivityWorker {
 	
 
 	private boolean isValidString(String s ){
-		if(s != null && !"".equals(s.trim()))
+		if(s != null && "".compareTo(s.trim())!=0 )
 			return true;
 		return false;
-		
 	}
 	
 

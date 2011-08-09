@@ -64,6 +64,6 @@ public class Constants {
 	public static final String FIELD_ACTIVITY_STATUS="activity.status";
 	public static final String FIELD_ACTIVITY_DESCRIPTION="activity.description";
 	
-	public static final int RECORDS_AMOUNT_PER_PAGE 	= 100;
+	public static final int RECORDS_AMOUNT_PER_PAGE 	= 10;
 	
 }

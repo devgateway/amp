@@ -100,7 +100,7 @@ public class ManageSourceAction extends MultiAction {
 		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
 		int lastPage = 1;
 		if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-			lastPage = allSourcesAmount%10==0 ? allSourcesAmount%10 : allSourcesAmount%10 +1;
+			lastPage = allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE +1;
 		}
 		
 		

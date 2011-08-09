@@ -115,7 +115,7 @@ public class ShowLogsAction extends MultiAction {
 			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId());
 			
 			if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-				lastPage = allSourcesAmount%10==0 ? allSourcesAmount%10 : allSourcesAmount%10 +1;
+				lastPage = allSourcesAmount%10==0 ? allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE +1;
 			}
 			
 			int startIndex = 0;
@@ -124,7 +124,7 @@ public class ShowLogsAction extends MultiAction {
 			}
 			//logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 			//Dare pls review this
-			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, myForm.getSortBy());
+			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
 		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {

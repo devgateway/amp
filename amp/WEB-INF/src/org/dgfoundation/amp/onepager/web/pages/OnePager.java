@@ -55,6 +55,7 @@ public class OnePager extends AmpHeaderFooter {
 		}
 		
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		session.reset();
 		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 

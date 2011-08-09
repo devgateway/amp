@@ -58,13 +58,19 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		else
 			ampCurrentMember = null;
 		
-		
 		WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
 	    HttpServletRequest hsRequest   = cycle.getWebRequest().getHttpServletRequest();
 		SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(hsRequest.getServerName(), null);
 		site = siteDomain.getSite();
 	}
 
+	public void reset(){
+		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+		if (currentMember != null)
+			ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		else
+			ampCurrentMember = null;
+	}
 	
 	
 	public Site getSite() {

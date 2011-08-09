@@ -72,7 +72,7 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 			@Override
 			protected List<AmpDepartments> load() {
 				Long orgId = budgetOrganizationModel.getObject();
-				if (orgId != null)
+				if (orgId == null)
 					return new ArrayList<AmpDepartments>();
 				else
 					return new ArrayList<AmpDepartments>(BudgetDbUtil.getDepartmentsbyOrg(orgId));

@@ -32,6 +32,7 @@ public class AmpCategoryValueByKeyModel implements
 	private static final long serialVersionUID = -4083598609567863027L;
 	private IModel<Set<AmpCategoryValue>> model;
 	private String categoryKey;
+	private transient Set<AmpCategoryValue> set = null;
 
 	/**
 	 * 
@@ -48,9 +49,13 @@ public class AmpCategoryValueByKeyModel implements
 
 	@Override
 	public Set<AmpCategoryValue> getObject() {
-		Set<AmpCategoryValue> s= new TreeSet<AmpCategoryValue>();
-		if(model.getObject()!=null) s.addAll(CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject()));
-		return s;
+		if (set == null)
+			set = new TreeSet<AmpCategoryValue>();
+		else
+			set.clear();
+		if(model.getObject()!=null) 
+			set.addAll(CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject()));
+		return set;
 	}
 
 	@Override

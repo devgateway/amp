@@ -13,12 +13,12 @@ import java.util.TreeSet;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactDetailFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContactOrganizationFeaturePanel;
@@ -47,6 +47,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 
     private static final long serialVersionUID = -2114204838953838609L;
     protected ListView<AmpActivityContact> idsList;
+    private AjaxCheckBox primaryContact=null;
 
     public ListView<AmpActivityContact> getIdsList() {
         return idsList;
@@ -98,7 +99,26 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     IModel<AmpContact> contactModel = PersistentObjectModel.getModel(item.getModelObject().getContact());
 
                     item.add(new Label("contactName", contactModel.getObject().getNameAndLastName()));
-                    
+                    final AjaxCheckBox primary=new AjaxCheckBox("primaryContact",new PropertyModel<Boolean>(item.getModel(),"primaryContact")){
+					private static final long serialVersionUID = 1L;
+					@Override
+						protected void onUpdate(AjaxRequestTarget target) {
+						  if (getModelObject()) { 
+							  if(primaryContact!=null){
+									  primaryContact.clearInput();
+									  primaryContact.setModelObject(Boolean.FALSE);
+									  target.addComponent(primaryContact); 
+							  }
+							  primaryContact=this;
+						  }
+						  else{
+							  primaryContact=null;
+						  }
+						 
+						}
+                    };
+                    primary.setOutputMarkupId(true);
+                    item.add(primary);
                     AmpDeleteLinkField delContact = new AmpDeleteLinkField(
                                                     "delContact", "Delete Contact") {
 
@@ -108,6 +128,10 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                             public void onClick(AjaxRequestTarget target) {
                                                     setModel.getObject().remove(item.getModelObject());
                                                     target.addComponent(listParent);
+                                                    if( primaryContact!=null&& primaryContact.equals(primary)){
+                                                    	primaryContact=null;
+                                                    }
+                                                    
                                             }
                     };
                     item.add(delContact);

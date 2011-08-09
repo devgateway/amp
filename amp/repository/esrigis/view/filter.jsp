@@ -547,7 +547,7 @@ function resetToDefaults(){
 	
 	
 //	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
-	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
+	document.getElementById("year_dropdown").selectedIndex = 4;
 	
 	document.getElementById("workspace_only").checked = false;
 	

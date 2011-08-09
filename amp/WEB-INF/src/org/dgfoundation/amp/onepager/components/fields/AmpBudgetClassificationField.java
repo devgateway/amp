@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -12,6 +13,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.models.BudgetClassificationProxyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -38,26 +41,44 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 		super(id, model, fmName);
 		this.fmType = AmpFMTypes.FEATURE;
 		
-		ArrayList<AmpBudgetSector> budgetSectors = BudgetDbUtil.getBudgetSectors();
-		ArrayList<AmpTheme> budgetPrograms = BudgetDbUtil.getBudgetPrograms();
-		final ArrayList<AmpOrganisation> budgetOrgs = new ArrayList<AmpOrganisation>();
-		final ArrayList<AmpDepartments> budgetDepartments = new ArrayList<AmpDepartments>();
-		
 		final PropertyModel<Long> budgetSectorModel = new PropertyModel<Long>(model, "budgetsector");
 		final PropertyModel<Long> budgetOrganizationModel = new PropertyModel<Long>(model, "budgetorganization");
 		final PropertyModel<Long> budgetDepartmentModel = new PropertyModel<Long>(model, "budgetdepartment");
 		final PropertyModel<Long> budgetProgramModel = new PropertyModel<Long>(model, "budgetprogram");
-		
-		if (budgetSectorModel.getObject() != null){
-			budgetOrgs.clear();
-			budgetOrgs.addAll(new ArrayList<AmpOrganisation>(BudgetDbUtil.getOrganizationsBySector(budgetSectorModel.getObject())));
-		}
-		
-		if (budgetOrganizationModel.getObject() != null){
-			budgetDepartments.clear();
-			budgetDepartments.addAll(new ArrayList<AmpDepartments>(BudgetDbUtil.getDepartmentsbyOrg(budgetOrganizationModel.getObject())));
-		}
-		
+
+		IModel<List<AmpBudgetSector>> budgetSectors = new LoadableDetachableModel<List<AmpBudgetSector>>() {
+			@Override
+			protected List<AmpBudgetSector> load() {
+				return BudgetDbUtil.getBudgetSectors();
+			}
+		};
+		IModel<List<AmpTheme>> budgetPrograms = new LoadableDetachableModel<List<AmpTheme>>() {
+			@Override
+			protected List<AmpTheme> load() {
+				return BudgetDbUtil.getBudgetPrograms();
+			}
+		};
+		IModel<List<AmpOrganisation>> budgetOrgs = new LoadableDetachableModel<List<AmpOrganisation>>() {
+			@Override
+			protected List<AmpOrganisation> load() {
+				Long bsId = budgetSectorModel.getObject();
+				if (bsId == null)
+					return new ArrayList<AmpOrganisation>();
+				else
+					return new ArrayList<AmpOrganisation>(BudgetDbUtil.getOrganizationsBySector(bsId));
+			}
+		};
+		IModel<List<AmpDepartments>> budgetDepartments = new LoadableDetachableModel<List<AmpDepartments>>() {
+			@Override
+			protected List<AmpDepartments> load() {
+				Long orgId = budgetOrganizationModel.getObject();
+				if (orgId != null)
+					return new ArrayList<AmpDepartments>();
+				else
+					return new ArrayList<AmpDepartments>(BudgetDbUtil.getDepartmentsbyOrg(orgId));
+			}
+		};
+				
 		WebMarkupContainer activityBudgetHideable = new WebMarkupContainer("activityBudgetHideable");
 		activityBudgetHideable.setOutputMarkupId(true);
 		
@@ -84,9 +105,6 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				Long orgId = budgetOrganizationModel.getObject();
 				if (orgId != null){
-					budgetDepartments.clear();
-					budgetDepartments.addAll(new ArrayList<AmpDepartments>(BudgetDbUtil.getDepartmentsbyOrg(orgId)));
-					
 					target.addComponent(budgetDepartment);
 				}
 			}
@@ -102,9 +120,6 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				Long sectorId = budgetSectorModel.getObject();
 				if (sectorId != null){
-					budgetOrgs.clear();
-					budgetOrgs.addAll(new ArrayList<AmpOrganisation>(BudgetDbUtil.getOrganizationsBySector(sectorId)));
-					
 					target.addComponent(budgetOrganization);
 				}
 			}

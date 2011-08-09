@@ -6,6 +6,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -28,8 +30,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -39,8 +42,9 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * Comment panel to be used in AjaxTabbedPanel, wrapped by a AmpCommentTab
@@ -56,7 +60,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			final IModel<AmpActivityVersion> activityModel) {
 		super(id, fmName, true);
 		super.setOutputMarkupId(true);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 
 		final String trnAddComment = TranslatorUtil
 				.getTranslatedText(" <<add new comment>>");
@@ -81,10 +85,6 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		addComment.add(new SimpleAttributeModifier("onblur",
 				" if (this.value=='') this.value='" + trnAddComment + "';"));
 
-		// Behaviour to click the hidden AjaxSubmitLink so that it submits the
-		// new comment
-		//AmpAjaxBehavior commentBehavior = new AmpAjaxBehavior();
-		//addComment.add(commentBehavior);
 		String keypress = "var kc=wicketKeyCode(event); if (kc==27) {this.blur();} else if (kc!=13) { return true; } else {this.nextSibling.onclick(); this.blur(); return false;}";
 		addComment.add(new SimpleAttributeModifier("onkeypress",
 				"if (Wicket.Browser.isSafari()) { return; };" + keypress));
@@ -92,7 +92,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				"if (!Wicket.Browser.isSafari()) { return; };" + keypress));
 
 		form.add(addComment);
-
+		
 		final AmpField field = DbUtil.getAmpFieldByName(fmName);
 		if (field == null)
 			throw new IllegalArgumentException(
@@ -103,9 +103,51 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		IModel<ArrayList<AmpComments>> comments = new LoadableDetachableModel<ArrayList<AmpComments>>() {
 			@Override
 			protected ArrayList<AmpComments> load() {
-				return DbUtil.getAllCommentsByField(
-				field.getAmpFieldId(), activityModel.getObject()
-						.getAmpActivityId());
+				HashSet<AmpComments> tmp = org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS);
+				ArrayList list = new ArrayList();
+				
+				if (tmp == null){
+					tmp = new HashSet();
+					org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_ITEMS, tmp);
+				}
+
+				Iterator<AmpComments> it = tmp.iterator();
+				while (it.hasNext()) {
+					AmpComments comm = (AmpComments) it.next();
+					if (comm.getAmpFieldId().getAmpFieldId() == field.getAmpFieldId())
+						list.add(comm);
+				}
+				
+				if (list.size() == 0){
+					
+					ArrayList<AmpComments> listTmp = new ArrayList<AmpComments>();
+					try {
+			            Session session = AmpActivityModel.getSession();
+			            String queryString = "select o from " + AmpComments.class.getName()
+			                + " o "
+			                + "where (o.ampFieldId=:fid) and (o.ampActivityId=:aid)";
+			            Query qry = session.createQuery(queryString);
+			            qry.setParameter("fid", field.getAmpFieldId(), Hibernate.LONG);
+			            qry.setParameter("aid", activityModel.getObject()
+								.getAmpActivityId(), Hibernate.LONG);
+			            Iterator itr = qry.list().iterator();
+			            while (itr.hasNext()) {
+			                AmpComments com = (AmpComments) itr.next();
+			                listTmp.add(com);
+			            }
+			        } catch (Exception e) {
+			            logger.error("Unable to get all comments");
+			            logger.debug("Exceptiion " + e);
+			        }
+			        /*
+					ArrayList listTmp = DbUtil.getAllCommentsByField(
+							field.getAmpFieldId(), activityModel.getObject()
+							.getAmpActivityId());*/
+					tmp.addAll(listTmp);
+					list = listTmp;
+				}
+				
+				return list;
 			}
 		}; 
 		
@@ -114,30 +156,30 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final ListItem<AmpComments> item) {
-				item.add(new Label("userName", item.getModelObject().getMemberName()));
+			protected void populateItem(ListItem<AmpComments> item) {
+				final IModel<AmpComments> currentItem = PersistentObjectModel.getModel(item.getModelObject());
+				item.add(new Label("userName", new PropertyModel<String>(currentItem, "memberName")));
 				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("deleteComment","Delete Comment") {
 					@Override
 					protected void onClick(AjaxRequestTarget target) {
-						Transaction tx = null;
-						try {
-							Session session = PersistenceManager.getSession();
-							tx = session.beginTransaction();
-							session.delete(item.getModelObject());
-							tx.commit();
-							session.flush();
-							session.close();
-						} catch (Exception e) {
-							logger.error("Error while deleting comment", e);
-							tx.rollback();
-						}
-						target.addComponent(this.getParent().getParent()
-								.getParent());
+						if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS) == null)
+							org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, new HashSet());
+						
+						System.out.println("TESTT");
+						System.out.println("Obj:" + currentItem.getObject().getComment());
+					
+						if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) != null)
+							org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).remove(currentItem.getObject());
+						
+						org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS).add(currentItem.getObject());
+
+						listView.removeAll();
+						target.addComponent(listView.getParent());
 					}
 				};
 				item.add(delOrgId);
 				AjaxEditableMultiLineLabel ae2 = new AjaxEditableMultiLineLabel(
-						"body", new PropertyModel(PersistentObjectModel.getModel(item.getModelObject()), "comment")) {
+						"body", new PropertyModel(currentItem, "comment")) {
 					protected org.apache.wicket.markup.html.basic.MultiLineLabel newLabel(
 							MarkupContainer parent, String componentId,
 							IModel model) {
@@ -180,29 +222,12 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						super.onSubmit(target);
-						Session session;
-						Transaction tx = null;
-						try {
-							session = PersistenceManager.getSession();
-							tx = session.beginTransaction();
-							session.update(item.getModelObject());
-							tx.commit();
-							session.flush();
-							session.close();
-						} catch (Exception e) {
-							logger.error("Comment edit error:", e);
-							tx.rollback();
-						}
+						//update comment
 					}
 
 					class LabelAjaxBehavior extends AjaxEventBehavior {
 						private static final long serialVersionUID = 1L;
 
-						/**
-						 * Construct.
-						 * 
-						 * @param event
-						 */
 						public LabelAjaxBehavior(String event) {
 							super(event);
 						}
@@ -220,9 +245,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			}
 		};
 		listView.setOutputMarkupId(true);
-		listView.setReuseItems(false);
 		add(listView);
-
 		// hidden submit link to submit the new comment
 		AjaxSubmitLink asl = new AjaxSubmitLink("addCommentButton") {
 			@Override
@@ -235,28 +258,18 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				
 				Long memberId = webSession.getCurrentMember().getMemberId();
 				AmpTeamMember user = TeamMemberUtil.getAmpTeamMember(memberId);
-				c.setMemberId(user);
 				c.setMemberName(user.getUser().getName());
 				c.setComment(trnAddCommentModel.getObject().toString());
 				String msg = savedMsg;
-				Transaction tx = null;
-				try {
-					Session session = PersistenceManager.getSession();
-					tx = session.beginTransaction();
-					session.save(c);
-					tx.commit();
-					//session.flush();
-					session.close();
-				} catch (Exception e) {
-					error(e);
-					tx.rollback();
-					e.printStackTrace();
-					msg = notSavedMsg;
-				}
-
+				
+				if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) == null)
+					org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_ITEMS, new HashSet());
+				
+				org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).add(c);
+				
 				addComment.setModelObject(msg);
 				target.addComponent(addComment);
-				target.addComponent(this.getParent().getParent());
+				target.addComponent(listView.getParent());
 			}
 		};
 		form.add(asl);

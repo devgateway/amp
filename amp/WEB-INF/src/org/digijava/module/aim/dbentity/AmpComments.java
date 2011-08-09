@@ -12,8 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.Output;
 
-public class AmpComments implements Serializable {
+public class AmpComments implements Serializable, Cloneable, Versionable {
 	
 	private Long ampCommentId;
 	private AmpActivityVersion ampActivityId;
@@ -140,5 +141,42 @@ public class AmpComments implements Serializable {
 						+ ampComment.getComment() + "' has NO attached field object");
 		}
 		
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpComments aux = (AmpComments) obj;
+		if (this.comment.compareTo(aux.getComment()) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.getOutputs().add(
+				new Output(null, new String[] { " Comment:&nbsp;" },
+						new Object[] { this.comment != null ? this.comment : "" }));
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return this.comment != null ? this.comment : "";
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpComments aux = (AmpComments) clone(); 
+		aux.ampActivityId = newActivity;
+		aux.ampCommentId = null;
+		return aux;
 	}
 }

@@ -25,15 +25,19 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
@@ -58,18 +62,58 @@ public class ActivityUtil {
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft){
 		
-		Session session = am.getSession();
+		Session session = AmpActivityModel.getSession();
 		Transaction transaction = am.getTransaction();
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		try {
+			session.clear();
 			AmpActivityVersion a = (AmpActivityVersion) am.getObject();
+			AmpActivityVersion oldA = a;
+
+			if (a.getAmpActivityId() == null){
+				AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+				a.setActivityCreator(s.getAmpCurrentMember());
+				a.setCreatedBy(s.getAmpCurrentMember());
+			}
+			
 			if (a.getDraft() == null)
 				a.setDraft(false);
-			
 			boolean draftChange = draft != a.getDraft();
 			
 			a.setDraft(draft);
+			
+			//is versioning activated?
+			if (a != null && !a.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
+				try {
+					AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
+					
+					a = ActivityVersionUtil.cloneActivity(a, wicketSession.getAmpCurrentMember());
+					
+					if (tmpGroup == null){
+						//we need to create a group for this activity
+						tmpGroup = new AmpActivityGroup();
+						tmpGroup.setAmpActivityLastVersion(a);
+						
+						session.save(tmpGroup);
+					}
+					
+					a.setAmpActivityGroup(tmpGroup);
+					a.setMember(new HashSet());
+					a.setAmpActivityId(null);
+				} catch (CloneNotSupportedException e) {
+					logger.error("Can't clone current Activity: ", e);
+				}
+			}
+			if (oldA.getAmpActivityId() != null)
+				session.evict(oldA);
+			
+			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
+				//a.setAmpActivityId(null); //hibernate will save as a new version
+				session.save(a);
+			}
+			else
+				session.saveOrUpdate(a);
 			
 			AmpActivityGroup group = null;
 			if (a.getAmpActivityId() != null){
@@ -98,25 +142,24 @@ public class ActivityUtil {
 			a.setModifiedBy(wicketSession.getAmpCurrentMember());
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
+			
 			saveIndicators(a, session);
 			
-			a.getActivityContacts().clear();
+			if (a.getActivityContacts() != null)
+				a.getActivityContacts().clear();
 			saveContacts(a, session);
 			saveResources(a);
 			saveEditors(session);
-
-			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
-				a.setAmpActivityId(null); //hibernate will save as a new version
-				session.save(a);
-			}
-			else
-				session.saveOrUpdate(a);
+			saveComments(a, session);
+			
 			session.flush();
 			transaction.commit();
 			am.setTransaction(session.beginTransaction());
 			am.resetSession();
+			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception
+			transaction.rollback();
 			if (exception instanceof SQLException) {
 			   while(exception != null) {
 			         // Get cause if present
@@ -144,7 +187,7 @@ public class ActivityUtil {
 			return new AmpActivityVersion();
 		}
 			
-		Session session = am.getSession();
+		Session session = AmpActivityModel.getSession();//am.getSession();
 		am.setTransaction(session.beginTransaction());
 		
 		AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
@@ -152,7 +195,6 @@ public class ActivityUtil {
 		AmpActivityGroup group = act.getAmpActivityGroup();
 		if (group == null){
 			//Activity created previous to the versioning system?
-			//AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
 			if (act == null) //inexistent?
 				return null;
 			
@@ -175,7 +217,7 @@ public class ActivityUtil {
 		
 		if (act.getDraft() == null)
 			act.setDraft(false);
-		
+		/*
 		//is versioning activated?
 		if (act != null && !act.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
 			AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -185,9 +227,42 @@ public class ActivityUtil {
 				logger.error("Can't clone current Activity: ", e);
 			}
 		}
+		*/
 		act.setAmpActivityGroup(group);
 		
 		return act;
+	}
+
+	private static void saveComments(AmpActivityVersion a, Session session) {
+		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+		
+		
+		HashSet<AmpComments> newComm = s.getMetaData(OnePagerConst.COMMENTS_ITEMS);
+		HashSet<AmpComments> delComm = s.getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS);
+		
+		if (delComm != null){
+			Iterator<AmpComments> di = delComm.iterator();
+			while (di.hasNext()) {
+				AmpComments tComm = (AmpComments) di.next();
+				session.delete(tComm);
+			}
+		}
+
+		if (newComm != null){
+			Iterator<AmpComments> ni = newComm.iterator();
+			while (ni.hasNext()) {
+				AmpComments tComm = (AmpComments) ni.next();
+				try {
+					tComm = (AmpComments) tComm.prepareMerge(a);
+				} catch (CloneNotSupportedException e) {
+					logger.error("can't clone: ", e);
+				}
+					
+				if (tComm.getMemberId() == null)
+					tComm.setMemberId(((AmpAuthWebSession)org.apache.wicket.Session.get()).getAmpCurrentMember());
+				session.saveOrUpdate(tComm);
+			}
+		}
 	}
 
 	private static void saveEditors(Session session) {
@@ -204,6 +279,7 @@ public class ActivityUtil {
 			
 			Editor editor = null;
 			try {
+				System.out.println("key=" + key);
 				editor = DbUtil.getEditor(wicketSession.getSite().getSiteId(), key, wicketSession.getLocale().getLanguage());
 				if (editor != null)
 					editor.setBody(editors.get(key));

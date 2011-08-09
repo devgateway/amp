@@ -48,6 +48,7 @@ import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 import com.rc.retroweaver.runtime.Arrays;
@@ -157,10 +158,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.FEATURE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				am.setObject(am.getObject());
 				saveMethod(target, am, feedbackPanel, false);
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAndSubmit.getButton().add(new AttributePrepender("onclick", new Model("for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), ""));
 		activityForm.add(saveAndSubmit);
 
 		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.FEATURE, true) {
@@ -208,7 +211,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
 
-		am.setObject(am.getObject());
 		info("Activity saved successfully");
 		//if (newActivity){
 			Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();

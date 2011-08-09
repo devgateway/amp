@@ -5,18 +5,13 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
@@ -26,9 +21,9 @@ public class BudgetClassificationProxyModel extends Model {
 
 	private IModel sourceModel;
 	private String fieldName;
-	private List optionList;
+	private IModel<List<?>> optionList;
 	
-	public BudgetClassificationProxyModel(IModel sourceModel, String fieldName, List optionList) {
+	public BudgetClassificationProxyModel(IModel sourceModel, String fieldName, IModel optionList) {
 		this.sourceModel = sourceModel;
 		this.fieldName = fieldName;
 		this.optionList = optionList;
@@ -63,12 +58,14 @@ public class BudgetClassificationProxyModel extends Model {
 		if (id == null)
 			return null;
 		Serializable result = null;
-		Iterator it = optionList.iterator();
-		while (it.hasNext()) {
-			Object opt = (Object) it.next();
-			if (id.compareTo((Long) getField(opt)) == 0){
-				result = (Serializable) opt;
-				break;
+		if (optionList != null && optionList.getObject() != null){
+			Iterator it = optionList.getObject().iterator();
+			while (it.hasNext()) {
+				Object opt = (Object) it.next();
+				if (id.compareTo((Long) getField(opt)) == 0){
+					result = (Serializable) opt;
+					break;
+				}
 			}
 		}
 		return result;

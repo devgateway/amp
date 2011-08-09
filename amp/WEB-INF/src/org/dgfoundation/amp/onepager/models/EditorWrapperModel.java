@@ -25,7 +25,7 @@ public class EditorWrapperModel extends Model<String> {
 	
 	private IModel<String> keyModel;
 
-	public EditorWrapperModel(IModel<String> m) {
+	public EditorWrapperModel(IModel<String> m, String id) {
 		super();
 		this.keyModel = m;
 
@@ -35,6 +35,7 @@ public class EditorWrapperModel extends Model<String> {
 			//no editor key
 			String eKey = KEY_PREFIX;
 			eKey = eKey + session.getCurrentMember().getMemberId() + "-";
+			eKey = eKey + id + "-";
 			eKey = eKey + System.currentTimeMillis();
 			m.setObject(eKey);
 		}

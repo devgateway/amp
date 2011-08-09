@@ -26,7 +26,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	
 	protected transient AmpActivityVersion a;
 	protected Long id;
-	protected transient Session session;
+	protected static transient Session session;
 	protected transient Transaction transaction;
 
 	private static final long serialVersionUID = 3915904820384659360L;
@@ -36,9 +36,6 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	public AmpActivityModel() {
 		resetSession();
 		a = new AmpActivityVersion();
-		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-		a.setActivityCreator(s.getAmpCurrentMember());
-		a.setCreatedBy(s.getAmpCurrentMember());
 	}	
 	
 	public AmpActivityModel(Long id) {
@@ -53,6 +50,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
 		s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
 		s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
+		s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
+		s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
 	}
 	
 	protected AmpActivityVersion load() {
@@ -65,7 +64,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
 	@Override   
 	public void setObject(AmpActivityVersion arg0) {
-		//if(a==null) a=(AmpActivityVersion) arg0;
+		a = arg0;
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		return a;
 	}
 
-	protected void initDBSession() {
+	protected static void initDBSession() {
 		try {
 			session = PersistenceManager.getSession();
 		} catch (HibernateException e) {
@@ -90,7 +89,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		}
 	}
 
-	public Session getSession() {
+	public static Session getSession() {
 		if(session==null) 
 			initDBSession();
 		return session;

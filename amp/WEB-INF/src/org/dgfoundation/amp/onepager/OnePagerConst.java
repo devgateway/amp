@@ -11,6 +11,7 @@ import org.apache.wicket.MetaDataKey;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -29,6 +30,9 @@ public final class OnePagerConst {
 	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
 
 	public static final MetaDataKey<HashMap<String, String>> EDITOR_ITEMS = new MetaDataKey<HashMap<String, String>>(){};
+
+	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
+	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 
 	/**
 	 * NOTICE: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function

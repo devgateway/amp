@@ -36,7 +36,7 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
 		super(id, fmName);
 		if (wysiwyg){
-			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model);
+			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
 		}
 		
 		textAreaContainer = new TextArea<T>("richText", model);

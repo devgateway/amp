@@ -2567,7 +2567,6 @@ YAHOO.util.Event.onDOMReady(initDashboard);
 window.onload=initPanel;
 var initialized = false;
 function initDashboard(){
-	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
 	changeChart(null, 'bar', 'FundingChart', true);
 	changeChart(null, 'bar', 'ODAGrowth');
@@ -2640,6 +2639,7 @@ function updateGraph(e, chartName){
 }
 
 function changeChart(e, chartType, container, useGeneric){
+	var startMovie = false;
 	//Get the calling object to select it and remove style.
 	if(e != null){
 		var caller = e.target || e.srcElement;
@@ -2649,6 +2649,7 @@ function changeChart(e, chartType, container, useGeneric){
 	    	linkBar[i].className = "";
 	    }
 	    caller.className = "sel_sm_b";
+	    startMovie = true; // This is set to true if it comes from clicking in the top right of the charts
 	}
 
 	var palette = "0xff6600,0x7eae58,0x88bff5,0xbe0035,0x8b007e,0x99431c";
@@ -2665,7 +2666,8 @@ function changeChart(e, chartType, container, useGeneric){
 			groupSeparator: groupSeparator,
 			decimalsToShow: decimalsToShow,
 			palette: palette, 
-			id: container
+			id: container,
+			start: startMovie
 		};
 	
 	var params = {

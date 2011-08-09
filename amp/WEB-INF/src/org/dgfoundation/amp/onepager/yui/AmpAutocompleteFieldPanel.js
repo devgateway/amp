@@ -77,8 +77,13 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.maxResultsDisplayed = 1000;
     this.autoComplete.applyLocalFilter=applyLocalFilter; // for adding custom data in resultset
     this.autoComplete.formatResult = function(pResultData, pQuery, pResultMatch) {
-    	if(pQuery=="") return ac_left_padding(pResultMatch,pResultData[1]);
-    	var formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    	var formatedResult;
+    	if(pQuery==""){
+    		var formatedResult=ac_left_padding(pResultMatch,pResultData[1]);
+    	}
+    	else{
+    		var formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    	}   	
     	if(pResultData[2]!=''){
     		return "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
     	}

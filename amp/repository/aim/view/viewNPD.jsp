@@ -199,8 +199,8 @@ background-color:#FFFFFF;
 		<div class="dashboard_tab_opt">
 		<div class="tab_opt_cont" style="background-color:#F2F2F2;"><a class="l_sm" href="#"><img
 			border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
-			class="l_sm" href="#" onclick="exportToExcel();return false;">Export
-		to Excel</a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
+			class="l_sm" href="#" onclick="exportToExcel();return false;"><digi:trn>Export
+		to Excel</digi:trn></a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
 			src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></a>
 		&nbsp;|&nbsp; <a class="l_sm" id="showGridLink"
@@ -252,7 +252,7 @@ background-color:#FFFFFF;
 					</div>
 					</div>
 					<div class="dashboard_bottom">
-					<div class="dashboard_filters">Filter:
+					<div class="dashboard_filters"><digi:trn>Filter</digi:trn>:
 					<table width="50%" border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td><c:set var="translation">
@@ -288,7 +288,7 @@ background-color:#FFFFFF;
 						</tr>
 						<tr>
 						<td colspan="2" align="center">
-						<input type="button" class="buttonx_sm btn_save" value="Apply Filter" onclick="applyFilter()"/>
+						<input type="button" class="buttonx_sm btn_save" value="<digi:trn>Apply Filter</digi:trn>" onclick="applyFilter()"/>
 						</td>
 						</tr>
 					</table>
@@ -300,10 +300,10 @@ background-color:#FFFFFF;
 					<div id="paginationPlace"></div>
 					</div>
 					</div>
-					<div class="dashboard_options">Change Options: <br />
-					<span class="normal_options">Indicators (Any and all)</span> <br />
+					<div class="dashboard_options"><digi:trn>Change Options</digi:trn>: <br />
+					<span class="normal_options"><digi:trn>Indicators (Any and all)</digi:trn></span> <br />
 					<div id="indicatorsResultsPlace"></div>
-					<span class="normal_options">Time Limit (5)</span>
+					<span class="normal_options"><digi:trn>Time Limit (5)</digi:trn></span>
 					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top"><c:forEach var="year"
@@ -323,7 +323,7 @@ background-color:#FFFFFF;
 					</table>
 					<br />
 					<input type="button" class="buttonx_sm btn_save"
-						value="Apply Changes" onclick="doChanges();"></div>
+						value="<digi:trn>Apply Changes</digi:trn>" onclick="doChanges();"></div>
 					</div>
 					</td>
 				</tr>

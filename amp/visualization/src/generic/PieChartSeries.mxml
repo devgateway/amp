@@ -97,7 +97,7 @@
 					messagePanel.visible = true;
 					sizePanel(300, 200);
 				}
-				dc.setStyle("borderStyle","solid");
+//				dc.setStyle("borderStyle","solid");
 				
 				var paletteStr:String = null;
 				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
@@ -197,6 +197,7 @@
 			{
 				//Initialize variables and get the URL for the service that will provide data
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
@@ -226,7 +227,9 @@
 						"typeofaid" : "true"
 					};
 				}
-				service.send(params);
+				if(start)
+					service.send(params);
+				
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 //					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
@@ -238,8 +241,23 @@
 			
 			public function refreshGraph():void
 			{
-				service.send();
-				start();
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				var params:Object = {
+					"format" : "xml",
+					"donut": "true"
+				};
+				
+				//Handle special parameter cases
+				if(idContainer == "AidType"){
+					params = {
+						"format" : "xml",
+						"donut": "true",
+						"typeofaid" : "true"
+					};
+				}
+				service.send(params);
+//				start();
 			}
 			
 			protected function sliderYear_changeHandler(event:SliderEvent):void

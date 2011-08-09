@@ -264,6 +264,7 @@
 			{
 				//Initialize variables and get the URL for the service that will provide data
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
@@ -292,7 +293,8 @@
 						"typeofaid" : "true"
 					};
 				}
-				service.send(params);
+				if(start)
+					service.send(params);
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 				}
@@ -316,7 +318,7 @@
 					};
 				}
 				service.send(params);
-				start();
+//				start();
 			}
 
 			public function itemClick(evt:LayoutItemEvent):void{
@@ -610,8 +612,6 @@
 						fontWeight="{fontWeight}"
 						fontSize="{fontSize}"
 						wordWrap="true"
-						border="true"
-						borderColor="#000000"
 						width="75"
 						height="50"
 						/> 

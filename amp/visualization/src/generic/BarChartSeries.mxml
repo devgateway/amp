@@ -76,14 +76,9 @@
 			private var curUrl:String = "";
 			private var strUrl:String = "";
 			private var dataAction:String = "";
-			private var serviceInitialized:Boolean = true;
 			
 			public function start():void
 			{
-				//Avoid executing start if the data is incorrect or it's not yet initialized
-				if(!serviceInitialized){
-					return;
-				}
 				// Creates array for the Legend with the data
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
 				var maxValue:Number = 0;
@@ -250,6 +245,7 @@
 			{
 				//Initialize variables and get the URL for the service that will provide data
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
@@ -278,7 +274,8 @@
 						"typeofaid" : "true"
 					};
 				}
-				service.send(params);
+				if(start)
+					service.send(params);
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 //					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
@@ -326,7 +323,7 @@
 					};
 				}
 				service.send(params);
-				start();
+//				start();
 			}
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
@@ -621,9 +618,9 @@
 
 			</axiis:HBoxLayout>
 			<axiis:HBoxLayout id="legendLayout" 
-							  x="0"
+							  x="-40"
 							  y="{hLayout.height+30}"
-							  width="{dc.width}"
+							  width="{mxc1.width}"
 							  dataProvider="{categories}"
 							  dataField="category" 
 							  showDataTips="false"
@@ -639,9 +636,7 @@
 						fontSize="{fontSize}"
 						fontWeight="{fontWeight}"
 						wordWrap="true"
-						border="false"
-						borderColor="#000000"
-						width="75"
+						width="90"
 						height="50"
 						autoSize="left"
 						

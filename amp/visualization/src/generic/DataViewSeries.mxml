@@ -65,6 +65,7 @@
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				
 				var strUrl:String ="/visualization/dataDispatcher.do?action=" + dataAction ;
@@ -80,7 +81,9 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				service.send();
+				if(start)
+					service.send();
+				
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 				}
@@ -92,7 +95,7 @@
 			public function refreshGraph():void
 			{
 				service.send();
-				start();
+//				start();
 			}
 			
 		]]>

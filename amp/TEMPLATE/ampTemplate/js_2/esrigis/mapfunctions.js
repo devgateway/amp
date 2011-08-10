@@ -686,13 +686,6 @@ function MapFindLocation(level){
     query.outFields = ["COUNT", level.mapField, "GEO_ID"];
     currentLevel = level;
     queryTask.execute(query, addResultsToMap);
-    
-    $('#hlight').bind('click', function() {
-    	getHighlights(0);
-    });
-    $('#hlightz').bind('click', function() {
-    	getHighlights(1);
-    });
 }
 
 /**
@@ -778,6 +771,12 @@ function addResultsToMap(featureSet) {
     }
 
     showLegend(rangeColors, colors, typeFunding, currencyCode);
+    $('#hlight').bind('click', function() {
+    	getHighlights(0);
+    });
+    $('#hlightz').bind('click', function() {
+    	getHighlights(1);
+    });
   }
 
 /**

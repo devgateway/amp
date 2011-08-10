@@ -653,6 +653,9 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
 function getHighlights(level) {
 	locations = new Array();
 	closeHide("highlightLegend");
+	$('#hlight').attr('onclick','').unbind('click');
+	$('#hlightz').attr('onclick','').unbind('click');
+
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
@@ -683,6 +686,13 @@ function MapFindLocation(level){
     query.outFields = ["COUNT", level.mapField, "GEO_ID"];
     currentLevel = level;
     queryTask.execute(query, addResultsToMap);
+    
+    $('#hlight').bind('click', function() {
+    	getHighlights(0);
+    });
+    $('#hlightz').bind('click', function() {
+    	getHighlights(1);
+    });
 }
 
 /**

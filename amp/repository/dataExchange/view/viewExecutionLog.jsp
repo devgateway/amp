@@ -175,10 +175,10 @@ function checksAll() {
 							    		<div class="t_sm">
 							    		   Name:	 ${item.name } |
 							    		   Database ID:	 ${item.id }	  |
-							    		   Log Level:	 ${item.logType }	  |
+							    		   Status:	 ${item.logType }	  |
 							    		   Date:	 ${item.dateAsString}	  |
 							    		   Time:	 ${item.timeAsString }	  |							    		   
-							    		   Item Type:	${item.itemType }
+							    		   Amp Object Id:	${item.itemType }
 							    		</div>
 							    	</div>
 							    </td>

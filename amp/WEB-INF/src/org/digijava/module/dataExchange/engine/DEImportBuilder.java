@@ -9,7 +9,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,7 +30,6 @@ import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -2186,14 +2185,24 @@ public class DEImportBuilder {
 	
 	public String getLogs(ArrayList<AmpMappedField> logs,String delimitator){
 		String s="";
+		TreeSet<String> errors = new TreeSet<String>();
 		for (Iterator<AmpMappedField> it = logs.iterator(); it.hasNext();) {
 			AmpMappedField log = (AmpMappedField) it.next();
 			try{
 				if(log!=null && !log.isOK()) 
-					s+=log.getErrors()+delimitator==null?"":delimitator;
+					{
+						errors.add(log.getErrors());
+						//s+=log.getErrors();
+						//s+=delimitator==null?"":delimitator;
+					}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+		}
+		for (Iterator<String> it = errors.iterator(); it.hasNext();) {
+				String st = (String) it.next();
+				s+=st;
+				s+=delimitator==null?"":delimitator;
 		}
 		return s;
 	}

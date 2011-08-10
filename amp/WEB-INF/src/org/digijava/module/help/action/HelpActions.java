@@ -98,14 +98,14 @@ public class HelpActions extends DispatchAction {
 		OutputStreamWriter os = null;
 	    PrintWriter out = null;
          String siteId = RequestUtils.getSite(request).getSiteId();
-         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
-         
+        
+         ModuleInstance module = RequestUtils.getModuleInstance(request);
          
  	    String loadStatus = request.getParameter("body");
 
         try {
 			if(loadStatus != null){
-				LuceneUtil.createHelp(request.getSession().getServletContext());
+				LuceneUtil.createHelp(request.getSession().getServletContext(),module,lang);
 				os = new OutputStreamWriter(response.getOutputStream());
 	            out = new PrintWriter(os, true);
 				String id = loadStatus.toLowerCase();

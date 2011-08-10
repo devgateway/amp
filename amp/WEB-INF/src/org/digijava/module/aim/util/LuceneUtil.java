@@ -49,6 +49,7 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -815,13 +816,14 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      */
-    public static void createHelp(ServletContext sc) throws  DgException{
-            
-		boolean createDir = LuceneUtil.checkHelpDir(sc);
+   
+    public static void createHelp(ServletContext sc, ModuleInstance modInstance , String lang) throws  DgException{
+//		boolean createDir = LuceneUtil.checkHelpDir(sc);
+		boolean createDir = LuceneUtil.checkHelpDir(sc,modInstance,lang);
 	
 		if(!createDir){
 			logger.info("Building the help");
-				  LuceneUtil.addUpdatehelp(false, sc);
+				  LuceneUtil.addUpdatehelp(false, sc,modInstance , lang);
 		}	
 	
     }
@@ -842,15 +844,17 @@ public class LuceneUtil implements Serializable {
      * 
      * @see org.digijava.module.help.helper.HelpSearchData
      */
-    public static void addUpdatehelp(boolean update, ServletContext sc) throws DgException {
+  
+    public static void addUpdatehelp(boolean update, ServletContext sc,ModuleInstance modInstance , String lang ) throws DgException {
 
     	HelpSearchData item = new HelpSearchData();
     	DateFormat formatter ; 
     	Date date ; 
 
     	try{ 
-    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
-
+    		//Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") +  HELP_INDEX_DIRECTORY); 
+    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") +  HELP_INDEX_DIRECTORY +"/" + modInstance.getInstanceName()+"_"+lang);
+    		
     		formatter  = new SimpleDateFormat();
     		String leastUpDate = formatter.format(lastLucModDay);
     		date = (Date)formatter.parse(leastUpDate);
@@ -864,18 +868,18 @@ public class LuceneUtil implements Serializable {
     			String article =  item.getBody();
     			//String title = item.getTopicKey();
     			String titTrnKey = item.getBodyKey();
-    			String lang = item.getLang();
-    			String title =HelpUtil.getTrn(item.getTopicKey(), lang,new Long(3));
+    			String language = item.getLang();
+    			String title =HelpUtil.getTrn(item.getTopicKey(), language,new Long(3));
     			// Converts html formatted help topics body to plain text format.
     			String newCode = article.replaceAll("\\<.*?\\>","");
 
     			if(update){
     					if(item.getLastModDate().after(date)){
 	    					deleteHelp("title",title, sc);
-	    					indexArticle(newCode, title,titTrnKey,lang,sc);
+	    					indexArticle(newCode, title,titTrnKey,language,sc);
 	    				}
     			}else if(!update){
-    				indexArticle(newCode, title,titTrnKey,lang,sc);	
+    				indexArticle(newCode, title,titTrnKey,language,sc);	
     			}
     		}
     	} catch (Exception ex) {
@@ -1006,8 +1010,10 @@ public class LuceneUtil implements Serializable {
      * 
      * @return true if lucene-index directory exists otherwise false
      */
-    public static boolean checkHelpDir(ServletContext sc){
-    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    
+    public static boolean checkHelpDir(ServletContext sc,ModuleInstance modInstance, String lang){
+    	//boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY+"/"+modInstance.getInstanceName()+"_"+lang);
     	return createDir;
     }
 

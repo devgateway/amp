@@ -25,19 +25,16 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
@@ -143,14 +140,15 @@ public class ActivityUtil {
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
 			
-			saveIndicators(a, session);
-			
+			saveIndicators(a, session); //versionOk
+			/*
 			if (a.getActivityContacts() != null)
 				a.getActivityContacts().clear();
-			saveContacts(a, session);
-			saveResources(a);
-			saveEditors(session);
-			saveComments(a, session);
+				*/
+			//saveContacts(a, session);
+			saveResources(a); //versionOk
+			saveEditors(session); //versionOk
+			saveComments(a, session); //versionOk
 			
 			session.flush();
 			transaction.commit();
@@ -205,7 +203,6 @@ public class ActivityUtil {
 			session.save(group);
 		}
 
-		//last version
 		
 		/**
 		 * TODO:
@@ -213,21 +210,11 @@ public class ActivityUtil {
 		 * Temporary
 		 * REMOVE COMMENT!
 		 */
+		//last version
 		//act = group.getAmpActivityLastVersion();
 		
 		if (act.getDraft() == null)
 			act.setDraft(false);
-		/*
-		//is versioning activated?
-		if (act != null && !act.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
-			AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-			try {
-				act = ActivityVersionUtil.cloneActivity(act, wicketSession.getAmpCurrentMember());
-			} catch (CloneNotSupportedException e) {
-				logger.error("Can't clone current Activity: ", e);
-			}
-		}
-		*/
 		act.setAmpActivityGroup(group);
 		
 		return act;
@@ -252,14 +239,18 @@ public class ActivityUtil {
 			Iterator<AmpComments> ni = newComm.iterator();
 			while (ni.hasNext()) {
 				AmpComments tComm = (AmpComments) ni.next();
-				try {
-					tComm = (AmpComments) tComm.prepareMerge(a);
-				} catch (CloneNotSupportedException e) {
-					logger.error("can't clone: ", e);
+				if (ActivityVersionUtil.isVersioningEnabled()){
+					try {
+						tComm = (AmpComments) tComm.prepareMerge(a);
+					} catch (CloneNotSupportedException e) {
+						logger.error("can't clone: ", e);
+					}
 				}
 					
 				if (tComm.getMemberId() == null)
 					tComm.setMemberId(((AmpAuthWebSession)org.apache.wicket.Session.get()).getAmpCurrentMember());
+				if (tComm.getAmpActivityId() == null)
+					tComm.setAmpActivityId(a);
 				session.saveOrUpdate(tComm);
 			}
 		}
@@ -281,8 +272,9 @@ public class ActivityUtil {
 			try {
 				System.out.println("key=" + key);
 				editor = DbUtil.getEditor(wicketSession.getSite().getSiteId(), key, wicketSession.getLocale().getLanguage());
-				if (editor != null)
+				if (editor != null){
 					editor.setBody(editors.get(key));
+				}
 				else{
 					editor = new Editor();
 					editor.setBody(editors.get(key));
@@ -302,8 +294,8 @@ public class ActivityUtil {
 	private static void saveResources(AmpActivityVersion a) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
-		if (a.getDocuments() == null)
-			a.setDocuments(new HashSet());
+		if (a.getActivityDocuments() == null)
+			a.setActivityDocuments(new HashSet());
 
 		HashSet<TemporaryDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
 		HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);

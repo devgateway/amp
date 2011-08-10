@@ -89,14 +89,12 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		AmpActivityContact aux = (AmpActivityContact) clone();
 		aux.activity = newActivity;
 		aux.id = null;
-		//this.contact = (AmpContact) this.contact.clone();
 		this.contact.getActivityContacts().add(aux);
 		return aux;
 	}
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
 		return super.clone();
 	}
 }

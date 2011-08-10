@@ -35,7 +35,6 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -251,7 +250,6 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				AmpComments c = new AmpComments();
-				c.setAmpActivityId(activityModel.getObject());
 				c.setAmpFieldId(field);
 				c.setCommentDate(new Date());
 				AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();

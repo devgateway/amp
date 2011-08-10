@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -33,10 +34,7 @@ public class EditorWrapperModel extends Model<String> {
 		
 		if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 || !m.getObject().startsWith(KEY_PREFIX)){
 			//no editor key
-			String eKey = KEY_PREFIX;
-			eKey = eKey + session.getCurrentMember().getMemberId() + "-";
-			eKey = eKey + id + "-";
-			eKey = eKey + System.currentTimeMillis();
+			String eKey = generateEditorKey(session, id);
 			m.setObject(eKey);
 		}
 		else{
@@ -52,11 +50,23 @@ public class EditorWrapperModel extends Model<String> {
 				this.setObject("");
 			}
 		}
+
+		if (ActivityVersionUtil.isVersioningEnabled()){
+			m.setObject(generateEditorKey(session, id));
+		}
 		
 		if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
 			Session.get().setMetaData(OnePagerConst.EDITOR_ITEMS, new HashMap());
 	}
 	
+	private String generateEditorKey(AmpAuthWebSession session, String id) {
+		String eKey = KEY_PREFIX;
+		eKey = eKey + session.getCurrentMember().getMemberId() + "-";
+		eKey = eKey + id + "-";
+		eKey = eKey + System.currentTimeMillis();
+		return eKey;
+	}
+
 	@Override
 	public void setObject(String object) {
 		super.setObject(object);

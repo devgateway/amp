@@ -28,6 +28,10 @@ import java.util.Date;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.util.Output;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -39,7 +43,7 @@ import org.digijava.kernel.user.User;
  */
 
 public class Editor
-    implements Serializable {
+    implements Serializable, Cloneable, Versionable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -178,5 +182,41 @@ public class Editor
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
+    
+    @Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		Editor aux = (Editor) obj;
+		if (this.body.compareTo(aux.getBody()) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.getOutputs().add(
+				new Output(null, new String[] { " Body:&nbsp;" },
+						new Object[] { this.body != null ? this.body : "" }));
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return this.body != null ? this.body : "";
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		Editor aux = (Editor) clone(); 
+		aux.editorKey = null;
+		return aux;
+	}
 
 }

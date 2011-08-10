@@ -73,7 +73,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list = new ListView<IndicatorActivity>("list", listModel) {
 			@Override
 			protected void populateItem(final ListItem<IndicatorActivity> item) {
-				AmpMEItemFeaturePanel indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new Model((Serializable) item.getModelObject().getValues()));
+				AmpMEItemFeaturePanel indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"));
 				item.add(indicator);
 				AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
 						"delete", "Delete ME Item", new Model<String>("Do you really want to delete this indicator?")) {

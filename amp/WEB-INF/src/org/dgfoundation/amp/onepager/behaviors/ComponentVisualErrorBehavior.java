@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 
 /**
  * Behavior that checks if a {@link FormComponent} is valid. Valid {@link FormComponent} objects get the CSS class
@@ -65,7 +66,14 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     protected void traverseFeedBackPanel(final AjaxRequestTarget ajaxRequestTarget) {
     	FormComponent<?> formComponent = getFormComponent();
 		Form<?> form=formComponent.getForm();
+		
 		Component component = form.get("feedbackPanel");
+		if (component == null){
+			//you have a inner form in the activity form
+			form = form.getParent().findParent(Form.class);
+			component = form.get("feedbackPanel");
+		}
+		
 		ajaxRequestTarget.addComponent(component);
     }
     

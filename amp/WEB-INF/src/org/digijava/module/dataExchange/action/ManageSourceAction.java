@@ -100,20 +100,21 @@ public class ManageSourceAction extends MultiAction {
 		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
 		int lastPage = 1;
 		if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-			lastPage = allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE +1;
+			lastPage = allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE +1;
 		}
 		
 		
 		int startIndex = 0;
-		if (msForm.getPage() != 0) {
-			startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * msForm.getPage();
+		if (msForm.getPage() != 0 ) {
+			startIndex = Constants.RECORDS_AMOUNT_PER_PAGE *( msForm.getPage()-1);
 		}
 		
 		//get sources
 		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
 		msForm.setPagedSources(sources);
-		if (msForm.getCurrentPage() == null || msForm.getCurrentPage() == 0 && msForm.getPage() ==0) {
-			msForm.setCurrentPage(new Integer(1));
+		
+		if(msForm.getPage() == 0){
+			msForm.setCurrentPage(1);
 		}else{
 			msForm.setCurrentPage(msForm.getPage());
 		}

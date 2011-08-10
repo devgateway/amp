@@ -115,23 +115,30 @@ public class ShowLogsAction extends MultiAction {
 			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId());
 			
 			if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-				lastPage = allSourcesAmount%10==0 ? allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE +1;
+				lastPage = allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE +1;
 			}
 			
 			int startIndex = 0;
 			if (myForm.getPage() != 0) {
-				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * myForm.getPage();
+				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * (myForm.getPage() -1 );
 			}
 			//logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 			//Dare pls review this
 			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
-		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {
-			myForm.setCurrentPage(new Integer(1));
+		
+		if(myForm.getPage() == 0){
+			myForm.setCurrentPage(1);
 		}else{
 			myForm.setCurrentPage(myForm.getPage());
 		}
+		
+//		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {
+//			myForm.setCurrentPage(new Integer(1));
+//		}else{
+//			myForm.setCurrentPage(myForm.getPage());
+//		}
 		myForm.setLastPage(lastPage);
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId());
 		if (ss !=null) {

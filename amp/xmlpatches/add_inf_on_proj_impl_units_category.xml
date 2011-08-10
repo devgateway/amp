@@ -2,7 +2,10 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
   <jira>AMP-9592</jira>
   <keyword>Project Implementing Unit</keyword>
-  <author>Dare</author>  
+  <author>Dare</author> 
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_category_class" columnname="keyName" columnvalue="project_impl_unit" />
+  </trigger> 
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

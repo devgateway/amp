@@ -68,7 +68,7 @@ function page (page){
 				<table width="980" border="0" cellspacing="0" cellpadding="0" style="margin:10px; font-size:12px;">
 					<tr>
 					    <td width="33%">
-					    	<a href="/dataExchange/manageSource.do" class="t_sm"><b>« <digi:trn>Back to details</digi:trn></b></a>
+					    	<a href="/dataExchange/manageSource.do" class="t_sm"><b>« <digi:trn>List of sources</digi:trn></b></a>
 					    </td>
 					    <td width="33%" align=center><b><digi:trn>Log file for:</digi:trn> ${showLogsForm.selectedSourceName }</b></td>
 					    <td width="33%" align=right>
@@ -90,7 +90,7 @@ function page (page){
 						</b></td>
 					</tr>
 					<tr>
-						<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+						<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">
 							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy!='dbId'}">
 								<a href="javascript:sortByVal('dbId','${showLogsForm.selectedSourceId }')">
 									<b class="ins_title"><digi:trn>DbID</digi:trn></b>	                            	
@@ -108,7 +108,7 @@ function page (page){
 								<img src="/repository/aim/images/down.gif" />
 							</c:if>
 						</td>
-						<td class="inside" background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif">
+						<td class="inside" background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" align="center">
 							<c:if test="${empty showLogsForm.sortBy || showLogsForm.sortBy!='date'}">
 								<a href="javascript:sortByVal('date','${showLogsForm.selectedSourceId }')">
 									<b class="ins_title"><digi:trn>Date</digi:trn></b>	                            	
@@ -127,10 +127,12 @@ function page (page){
 							</c:if>
 						</td>
 					
-					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align="center"> 
 					    	<b class="ins_title">Time</b>
 					   	</td>
+					   	<!-- 
 					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside><b class="ins_title">External Timestamp</b></td>
+					     -->
 					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Description</b></td>
 					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
 					</tr>
@@ -142,19 +144,21 @@ function page (page){
 					<logic:notEmpty name="showLogsForm" property="logs">
 						<logic:iterate id="log" name="showLogsForm" property="logs">
 							<tr>
-							    <td bgcolor=#FFFFFF class=inside>
+							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">${log.id}</div>
 							    </td>
-							    <td bgcolor=#FFFFFF class=inside>
+							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">${log.dateAsString}</div>
 							    </td>
-							    <td bgcolor=#FFFFFF class=inside>
+							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">${log.timeAsString }</div>
 							    </td>
+							    <!-- 
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<div class="t_sm">${log.externalTimestamp }</div>
 							    </td>
-							    <td bgcolor=#FFFFFF class=inside>
+							     -->
+							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
 							    		${log.description }
 							    			<%-- 

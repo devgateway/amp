@@ -116,24 +116,28 @@ function checksAll() {
 						<b>Execution Logs</b>
 					</td>
 					<tr>
-					    <td width="20" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">
-					      <input id="checkAll" type="checkbox" onclick="checksAll()"/></b>
-					    </td>
-					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+				    	<c:if test="${showLogsForm.canImport == true}">
+						    <td width="20" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
+						      		<b class="ins_title"><input id="checkAll" type="checkbox" onclick="checksAll()"/></b>
+						    </td>
+				      	</c:if>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
 					    	<b class="ins_title">Activity Name</b>
 					    </td>
 					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
 					    	<b class="ins_title">Status</b>
 					    </td>
-						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
 							<b class="ins_title">Details</b>
 						</td>
-						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
 							<b class="ins_title">Error Details</b>
 						</td>
-					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-					    	<b class="ins_title">Actions</b>
-					    </td>
+						<c:if test="${showLogsForm.canImport == true}">
+						    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center align=center>
+						    	<b class="ins_title">Actions</b>
+						    </td>
+					    </c:if>
 					</tr>
 					<logic:empty name="showLogsForm" property="logItems">
 						<tr>
@@ -145,12 +149,13 @@ function checksAll() {
 					<logic:notEmpty name="showLogsForm" property="logItems">
 						<logic:iterate id="item" name="showLogsForm" property="logItems">
 							<tr>
-							    <td bgcolor=#FFFFFF class=inside>
-							    	<c:if test="${item.logType=='OK'}">
-							    		<html:checkbox name="showLogsForm"  property="selectedActivities"  value="${item.id}" />
-							    	</c:if>
-							    	
-							    </td>
+								 <c:if test="${showLogsForm.canImport == true}">
+									<td bgcolor=#FFFFFF class=inside>
+									    	<c:if test="${item.logType=='OK'}">
+									    		<html:checkbox name="showLogsForm"  property="selectedActivities"  value="${item.id}" />
+									    	</c:if>
+									</td>
+								</c:if>
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<div class="t_sm">${item.name}</div>
 							    </td>
@@ -181,7 +186,7 @@ function checksAll() {
 							    <td bgcolor="#FFFFFF" class="inside" align="center" nowrap="nowrap">
 							    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${item.id}_plus" onclick="toggleGroup('${item.id}')" style="cursor: pointer;"/>
 							    	<div id="log_${item.id}" style="display: none;width:500px; overflow: auto;">				    		
-							    		<table border="0">
+							    		<table border="0" width="100%">
 								    		<tr>
 								    			<td style="border: none;vertical-align: text-top;" colspan="2" rowspan="8" class="inside">				    				
 								    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${item.id}_minus" style="display: none;cursor: pointer; " onclick="toggleGroup('${item.id}')"/>	
@@ -196,12 +201,13 @@ function checksAll() {
 							    		</table>
 							    	</div>
 							    </td>							    
-							    
-							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-							    	<c:if test="${item.logType=='OK' && showLogsForm.canImport == true}">
-							    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem(${item.id});"/>
-							    	</c:if>
-							    </td>
+							    <c:if test="${showLogsForm.canImport == true}">
+								    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
+							    		<c:if test="${item.logType=='OK' && showLogsForm.canImport == true}">
+								    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem(${item.id});"/>
+								    	</c:if>
+								    </td>
+						    	</c:if>
 							</tr>
 						</logic:iterate>						
 						<c:if test="${showLogsForm.canImport == true}">

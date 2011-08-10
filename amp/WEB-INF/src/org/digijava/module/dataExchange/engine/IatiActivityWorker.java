@@ -344,6 +344,7 @@ public class IatiActivityWorker {
 		if(iatiTitleList.isEmpty()) return;
 		JAXBElement<TextType> title = iatiTitleList.iterator().next();
 		a.setName(printList(title.getValue().getContent()));
+		this.setTitle(a.getName());
 	}
 
 	private void processContactsStep(AmpActivityVersion a, ArrayList<ContactInfo> iatiContactList) {
@@ -781,7 +782,10 @@ public class IatiActivityWorker {
 	private void processIatiID(AmpActivityVersion a, IatiIdentifier iatiIDList) {
 		//TODO process the iati-id
 		if(iatiIDList!=null )
-			a.setProjectCode(iatiIDList.getContent());
+			{
+				a.setProjectCode(iatiIDList.getContent());
+				this.iatiID = a.getProjectCode();
+			}
 	}
 
 	private void processDescriptions(AmpActivityVersion a, ArrayList<Description> iatiDescriptionList) {

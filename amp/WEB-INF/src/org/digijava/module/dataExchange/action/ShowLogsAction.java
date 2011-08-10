@@ -191,7 +191,6 @@ public class ShowLogsAction extends MultiAction {
 				FileCopyUtils.copy(inStream, outputStream);
 			}	
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String result = outputStream.toString();

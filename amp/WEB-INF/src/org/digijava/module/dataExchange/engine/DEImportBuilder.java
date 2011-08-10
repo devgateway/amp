@@ -2132,7 +2132,6 @@ public class DEImportBuilder {
 								Long grpId = new Long(deLogPerItem.getItemType());
 								AmpActivityVersion ampActivity = new AmpActivityVersion();
 								activityLogs	=	iWorker.populateActivity(ampActivity);
-								AmpActivityGroup ampActGroup = null;
 								AmpTeam team = getAssignedWorkspace();
 								ampActivity.setApprovalStatus(getApprovalStatus());
 								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
@@ -2165,12 +2164,15 @@ public class DEImportBuilder {
 		
 		item.setDeLogPerExecution(log);
 		item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-		item.setName(title+" "+iatiID);
+		item.setName(title+" - "+iatiID);
 		item.setItemType(ampID);
-		String logResult = getLogs(activityLogs);
+		
+		//compute the logs
+		String logResult = getLogs(activityLogs,"<br/>");
+		
 		if("".compareTo(logResult)!=0)
 		{
-			item.setDescription("Activity: " +title+" "+logResult);
+			item.setDescription(logResult);
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 			//iLog.saveObject(item);
 			log.getLogItems().add(item);
@@ -2178,17 +2180,17 @@ public class DEImportBuilder {
 			return;
 		} 
 		item.setLogType(DELogPerItem.LOG_TYPE_OK);
-		item.setDescription("Activity: "+title+" OK");
+		item.setDescription("OK");
 		log.getLogItems().add(item);
 	}
 	
-	public String getLogs(ArrayList<AmpMappedField> logs){
+	public String getLogs(ArrayList<AmpMappedField> logs,String delimitator){
 		String s="";
 		for (Iterator<AmpMappedField> it = logs.iterator(); it.hasNext();) {
 			AmpMappedField log = (AmpMappedField) it.next();
 			try{
 				if(log!=null && !log.isOK()) 
-					s+=log.getErrors();
+					s+=log.getErrors()+delimitator==null?"":delimitator;
 			}catch(Exception e){
 				e.printStackTrace();
 			}

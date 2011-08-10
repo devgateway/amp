@@ -146,6 +146,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 					fixedcenter: true, 
 					modal: true,
 					close:true, 
+					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					visible:false, 
 					draggable:true } );
 		this.titlePanel.render( document.body );

@@ -86,6 +86,14 @@ public final class XmlPatcherUtil {
 				//if no recorded patch is found, then there are two unrecorded patches with same name=>fail
 				//if there is a recorded patch but its path is different than the current file=>fail
 				if(patch==null || !patch.getLocation().equals(computePatchFileLocation(f,appPath))) {
+					if(patch!=null){
+						logger.info("old location: "+patch.getLocation());
+						logger.info("new location: "+computePatchFileLocation(f,appPath));
+					}
+					else{
+						logger.info("pacth is null ");
+					}
+				
 					throw new DgException("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
 							" Remove duplicates and restart the server.\n You are not allowed to use one patch name twice even if the older patch has been deleted.");
 				}

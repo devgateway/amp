@@ -389,12 +389,16 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			response.renderJavascriptReference(new JavascriptResourceReference(
 					AmpAutocompleteFieldPanel.class,
 					"AmpAutocompleteFieldPanel.js"));
-			response.renderOnDomReadyJavascript(getJsVarName()
+			/*
+			 * currently renderOnDomReadyJavascript doesn't work as expected in IE8
+			 * that is why jquery's $(document).ready has been added here
+			 */
+			response.renderOnDomReadyJavascript("$(document).ready(function() {"+getJsVarName()
 					+ " = new YAHOO.widget.WicketAutoComplete('"
 					+ textField.getMarkupId() + "', '" + getCallbackUrl()
 					+ "', '" + container.getMarkupId() + "', '"
 					+ toggleButton.getMarkupId() + "', '"
-					+ indicator.getMarkupId() + "', " +useCache+ ", "+applyLocalFilter+ ");");
+					+ indicator.getMarkupId() + "', " +useCache+ ", "+applyLocalFilter+ ");});");
 		}
 
 		@Override

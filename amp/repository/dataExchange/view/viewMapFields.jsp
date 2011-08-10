@@ -61,23 +61,21 @@ function saveAll() {
 }
 
 function checksAll() {
-	 //var checks = document.getElementsByName("selectedFields");
 	 var check = document.getElementById("checkAll");
-//	 for(i=0;i<checks.length;i++){
-//		 checks[i].checked=check.checked;
-//	 }
-	 //$('input[name=foo]').attr('checked', true);
 	 $('[id^="Check_Amp"]').attr('checked', false);
 	 var records = document.getElementById("filterAmpClass");
-	 var v = records.options[records.selectedIndex].text;
-	 $('[id^="Check_'+v+'"]').attr('checked', true);;
+	 //var v = records.options[records.selectedIndex].text;
+	 var v = records.value;
+	 if("all" == v)
+		 $('[id^="Check_Amp"]').attr('checked', check.checked);
+	 else $('[id^="Check_'+v+'"]').attr('checked', check.checked);
 	 return true;
 }
 
 function showFilter() {
 	 var records = document.getElementById("filterAmpClass");
-	 //alert(check.value + "::" +check.options[check.selectedIndex].text);
-	 var v = records.options[records.selectedIndex].text;
+	 //var v = records.options[records.selectedIndex].text;
+	 var v = records.value;
 	 if("all" == records.value)
 	 	$('[id^="Amp"]').show();
 	 else
@@ -122,10 +120,10 @@ function showFilter() {
 							<html:select property="selectedAmpClass" styleClass="dropdwn_sm" onchange="showFilter()" styleId="filterAmpClass">
 								<html:option value="all"  >View All</html:option>
         						<logic:iterate id="cls" name="mapFieldsForm" property="ampClasses">
-        							<html:option value="${cls}"><%= cls.toString().substring(cls.toString().lastIndexOf(".")+1,cls.toString().length()) %></html:option>
+        							<bean:define id="itemAmpClass"><%= cls.toString().replaceAll(" ","") %></bean:define>
+        							<html:option value="Amp${itemAmpClass}">${cls}</html:option>
 								</logic:iterate>
         					</html:select>
-						  <input type="button" value="Filter" class="buttonx_sm" />
 						</b></td>
 						</tr>
 						<tr>
@@ -139,10 +137,10 @@ function showFilter() {
 						</tr>
 						<logic:notEmpty name="mapFieldsForm" property="mappedFields">
 							<logic:iterate id="field" name="mapFieldsForm" property="mappedFields">
-								<tr id="${field.ampField.shortAmpClass}_${field.ampField.id}">
+								<tr id="Amp${field.ampField.shortAmpClass}_${field.ampField.id}">
 								    <td bgcolor="#FFFFFF" class="inside">
 								    	<html:checkbox name="mapFieldsForm"  property="selectedFields"  value="${field.ampField.id}" 
-								    		styleId="Check_${field.ampField.shortAmpClass}_${field.ampField.id}"/>
+								    		styleId="Check_Amp${field.ampField.shortAmpClass}_${field.ampField.id}"/>
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.iatiItems}</div></td>
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.iatiValues}</div></td>
@@ -154,7 +152,16 @@ function showFilter() {
 								    	</c:if>
 								    	<c:if test="${field.ampField.ampValues!= null }">
 								    		<c:if test="${field.ampField.ampValues=='Add new' }">
-							    				<img src="/TEMPLATE/ampTemplate/img_2/ico_info.gif" />
+								    			<bean:define id="itemDescr">
+								    				<c:if test="${field.ampField.iatiPath=='Activity' }">
+								    					<digi:trn key="admin:iati:activitytobeaddedasnew">Activity will be added as new activity when import will be performed</digi:trn>
+								    				</c:if>
+								    				<c:if test="${field.ampField.iatiPath=='Sector' || field.ampField.iatiPath=='Vocabulary Code' || field.ampField.iatiPath=='Location' }">
+								    					<digi:trn key="admin:iati:entitycannotbeaddedasnew">Can not be automatically added. Please go to admin and manually add it</digi:trn>
+								    				</c:if>
+								    				&nbsp;
+								    			</bean:define>
+							    				<img src="/TEMPLATE/ampTemplate/img_2/ico_info.gif" title="${itemDescr}" />
 							    			</c:if>
 							    			<c:if test="${field.ampField.ampValues!='Add new' }">
 								    			<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />

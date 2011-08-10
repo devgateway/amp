@@ -273,7 +273,7 @@ public class IatiActivityWorker {
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
 			logs.add(checkedActivity);
-			if(checkedActivity.getItem().getAmpId() !=null)
+			if(checkedActivity!=null && checkedActivity.getItem()!=null && checkedActivity.getItem().getAmpId() !=null)
 					this.ampID = checkedActivity.getItem().getAmpId();
 			}
 		catch(Exception e){

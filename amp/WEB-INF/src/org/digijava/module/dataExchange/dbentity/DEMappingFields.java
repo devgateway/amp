@@ -125,7 +125,8 @@ public class DEMappingFields implements Serializable {
 	}
 
 	public String getShortAmpClass(){
-		return this.ampClass.toString().substring(this.ampClass.toString().lastIndexOf(".")+1,this.ampClass.toString().length());
+		//return this.ampClass.toString().substring(this.ampClass.toString().lastIndexOf(".")+1,this.ampClass.toString().length());
+		return this.ampClass.replaceAll(" ","");
 	}
 
 	public Long getId() {

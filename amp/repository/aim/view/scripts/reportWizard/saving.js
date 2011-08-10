@@ -144,12 +144,11 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 					width: "400px", 
 					constraintoviewport:true, 
 					fixedcenter: true, 
-					underlay:"shadow", 
 					modal: true,
 					close:true, 
 					visible:false, 
 					draggable:true } );
-		this.titlePanel.render( );
+		this.titlePanel.render( document.body );
 	}
 	this.titlePanel.show();
 	getReportTitleEl().focus();

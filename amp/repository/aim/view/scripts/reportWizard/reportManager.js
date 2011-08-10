@@ -168,6 +168,7 @@ function continueInitialization( e, rmParams ){
 				cn[i].style.display		= "none";
 		}
 		repManager.checkSteps();
+		repManager.disableToolbarButton( document.getElementById("step3_next_button") );
 		
 	}
 

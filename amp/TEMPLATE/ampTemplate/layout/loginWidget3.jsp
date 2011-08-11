@@ -52,22 +52,22 @@
 						case 'invalidLogin':
 							$('#result')
 									.before(
-											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>');
+											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>");
 							break;
 						case 'userBanned':
 							$('#result')
 									.before(
-											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>User is banned</digi:trn>.</div>');
+											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>User is banned</digi:trn>.</div>");
 							break;
 						case 'noTeamMember':
 							$('#result')
 									.before(
-											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>');
+											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>");
 							break;
 						case 'invalidUser':
 							$('#result')
 									.before(
-											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>');
+											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>");
 							break;
 						case 'noError':
 							location.href = '/index.do';

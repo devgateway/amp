@@ -696,39 +696,37 @@ public class CurrencyUtil {
 		}
 		return ampCurrency;
 	}
-
+	
 	public static Currency getCurrency(Long id) {
 		logger.debug("in getCurrency" + id);
 		Session sess = null;
 		Query qry1 = null;
 		Query qry2 = null;
 		Currency curr = null;
+		AmpCurrency ampCurrency = null;
 
 		try {
-			sess = PersistenceManager.getSession();
-			String queryString = "select c from " + AmpCurrency.class.getName()
-					+ " c where (c.ampCurrencyId=:id)";
+			sess = PersistenceManager.getRequestDBSession();
+			String queryString = "select c from " + AmpCurrency.class.getName()	+ " c where (c.ampCurrencyId=:id)";
 			qry1 = sess.createQuery(queryString);
 			qry1.setParameter("id", id, Hibernate.LONG);
-			Iterator itr = qry1.list().iterator();
-			if (itr.hasNext()) {
-				AmpCurrency ampCurr = (AmpCurrency) itr.next();
-				String qryStr = "select cr from "
-						+ AmpCurrencyRate.class.getName()
-						+ " cr where (cr.toCurrencyCode=:currCode)";
-				qry2 = sess.createQuery(qryStr);
-				qry2.setParameter("currCode", ampCurr.getCurrencyCode(),
-						Hibernate.STRING);
-				Iterator itr1 = qry2.list().iterator();
-				if (itr1.hasNext()) {
-					AmpCurrencyRate ampCurrRate = (AmpCurrencyRate) itr1.next();
-					curr = new Currency();
-					curr.setCurrencyId(ampCurr.getAmpCurrencyId());
-					curr.setCurrencyRateId(ampCurrRate.getAmpCurrencyRateId());
-					curr.setCurrencyCode(ampCurr.getCurrencyCode());
-					curr.setCountryName(ampCurr.getCountryName());
-					curr.setExchangeRate(ampCurrRate.getExchangeRate());
-				}
+			ampCurrency = (AmpCurrency)qry1.uniqueResult();
+			
+			curr = new Currency();
+			curr.setCurrencyId(ampCurrency.getAmpCurrencyId());
+			curr.setCurrencyCode(ampCurrency.getCurrencyCode());
+			curr.setCountryName(ampCurrency.getCountryName());
+			
+			String qryStr = "select cr from "+ AmpCurrencyRate.class.getName()+ " cr where (cr.toCurrencyCode=:currCode)";
+			qry2 = sess.createQuery(qryStr);
+			qry2.setParameter("currCode", ampCurrency.getCurrencyCode());
+			Iterator itr1 = qry2.list().iterator();
+			if (itr1.hasNext()) {
+				AmpCurrencyRate ampCurrRate = (AmpCurrencyRate) itr1.next();
+				curr.setCurrencyRateId(ampCurrRate.getAmpCurrencyRateId());
+				curr.setExchangeRate(ampCurrRate.getExchangeRate());
+			}else{
+				curr.setExchangeRate(new Double(1));
 			}
 
 		} catch (Exception e) {
@@ -1079,19 +1077,31 @@ public class CurrencyUtil {
 			todate = cal.getTime();
 			cal.add(Calendar.YEAR, -1);
 			fromdate = cal.getTime();
-			if (currencyCode.equalsIgnoreCase("USD") ){
+			String baseCurrencyCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+			if (currencyCode.equalsIgnoreCase(baseCurrencyCode)){
 				return true;
 			}
+//			if (currencyCode.equalsIgnoreCase("USD") ){
+//				return true;
+//			}
 			session = PersistenceManager.getRequestDBSession();
 //			AMP-4299			
 //			String queryString = "select f.exchangeRate from "
 //					+ AmpCurrencyRate.class.getName()
 //					+ " f where (f.toCurrencyCode=:currencyCode) and f.exchangeRateDate between :fromDate and :toDate order by f.exchangeRateDate desc";
+			
+			//commented by dare for  AMP-10504 
+//			String queryString = "select f.exchangeRate from " + AmpCurrencyRate.class.getName() +
+//					" f where f.toCurrencyCode=:currencyCode " +
+//					" order by f.exchangeRateDate desc";
+			
 			String queryString = "select f.exchangeRate from " + AmpCurrencyRate.class.getName() +
-					" f where f.toCurrencyCode=:currencyCode " +
-					" order by f.exchangeRateDate desc";
+			" f where f.toCurrencyCode=:currencyCode " +" and f.fromCurrencyCode=:baseCurrencyCode"+
+			" order by f.exchangeRateDate desc";
+			
 			q = session.createQuery(queryString);
 			q.setString("currencyCode", currencyCode);
+			q.setString("baseCurrencyCode", baseCurrencyCode);
 //			AMP-4299			
 //			q.setParameter("fromDate",fromdate,Hibernate.DATE);
 //			q.setParameter("toDate",todate,Hibernate.DATE);

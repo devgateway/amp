@@ -26,6 +26,7 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -82,7 +83,7 @@ public class CompareActivityVersions extends DispatchAction {
 		vForm.setOldActivity(vForm.getActivityOne());
 
 		// Retrieve annotated for versioning fields.
-		Field[] fields = AmpActivityVersion.class.getDeclaredFields();
+		Field[] fields = AmpActivityFields.class.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
 			//logger.info(fields[i]);
 			CompareOutput output = new CompareOutput();
@@ -482,7 +483,7 @@ public class CompareActivityVersions extends DispatchAction {
 			while (iter.hasNext()) {
 				CompareOutput co = iter.next();
 				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
-						AmpActivityVersion.class, "set");
+						AmpActivityFields.class, "set");
 				// Get value as object.
 				Object auxOriginalValueObject = co.getOriginalValueOutput()[0];
 				// Check if implements Versionable and call prepareMerge.

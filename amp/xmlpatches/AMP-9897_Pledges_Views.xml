@@ -2,7 +2,10 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
   <jira>AMP-9856</jira>
   <keyword>Pledges Views</keyword>
-  <author>Diego</author>  
+  <author>Diego</author> 
+  <trigger type="all">
+      <condition  type="columnExists" tablename="amp_funding_pledges_details" columnname="funding_date"  />
+  </trigger> 
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

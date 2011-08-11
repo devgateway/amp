@@ -76,6 +76,23 @@
 		</condition>
 	</xsl:template>
 	
+	<!-- Check if column exists -->
+	<xsl:template match="condition[@type='columnExists']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="postgres">
+					SELECT count(*) FROM pg_attribute WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = '<xsl:value-of select="@tablename"/>') AND attname = '<xsl:value-of select="@columnname"/>';
+				</lang>
+			</script>
+ 			<test>count.intValue()==1</test>
+		</condition>
+	</xsl:template>
+	
 	<!-- Check if table is empty -->
 	<xsl:template match="condition[@type='tableEmpty']">
 		<condition type="custom">

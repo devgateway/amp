@@ -389,14 +389,20 @@ table.trnrow {
         )
      </td>
      <td align="right">
+     	<c:set var="trn">
+	  		<digi:trn key="translation:switchToGlobalTranslations">Switch to Global translations</digi:trn>
+	  	</c:set>
         <c:if test="${advancedTranslationForm.globalTranslationGranted}">
-     		<html:submit value="Switch to Global translations" onclick="javascript:fnOnSwitchToGlobal()" />
+     		<html:submit value="${trn}" onclick="javascript:fnOnSwitchToGlobal()" />
 	 	</c:if>
 	 	<c:if test="${advancedTranslationForm.groupTranslationGranted}">
 	        <logic:present name="advancedTranslationForm" property="rootSiteId">
 	    		<bean:define id="rootSiteId" name="advancedTranslationForm" property="rootSiteId" type="String"/>
 	        	<br>
-	        	<input type="button" value="Switch to Group translations" onclick='<%= "javascript:document.location.href(\"" %><digi:site siteId="<%= rootSiteId %>" property="url" /><%= "/translation/\");" %>' />
+	        	<c:set var="trn">
+	  				<digi:trn key="translation:switchToGroupTranslations">Switch to Group translations</digi:trn>
+	  			</c:set>
+	  			<input type="button" value="${trn}" onclick='<%= "javascript:document.location.href(\"" %><digi:site siteId="<%= rootSiteId %>" property="url" /><%= "/translation/\");" %>' />
 	       	</logic:present>
 	    </c:if>
      </td>
@@ -406,7 +412,10 @@ table.trnrow {
         <h3><digi:trn key="translation:interfaceForGlobal">Translation interface for Global translations</digi:trn></h3>
      </td>
      <td align="right">
-        <html:submit value="Switch to Site translations" onclick="javascript:fnOnSwitchToSite()" />
+        <c:set var="trn">
+			<digi:trn key="translation:switchToSiteTranslations">Switch to Site translations</digi:trn>
+		</c:set>
+		<html:submit value="${trn}" onclick="javascript:fnOnSwitchToSite()" />
      </td>
     </c:if>
   </tr>
@@ -504,7 +513,10 @@ table.trnrow {
 		<html:options collection="lid" property="code" labelProperty="name"/></html:select>
     </td>
    <td align="center">
-     <input type="button" value="Save" onClick="fnOnAddKey()">
+     <c:set var="trn">
+		<digi:trn key="translation:save">Save</digi:trn>
+	</c:set>
+	<input type="button" value="${trn}" onClick="fnOnAddKey()">
    </td>
   </tr>
   </table>
@@ -545,11 +557,17 @@ table.trnrow {
   <tr>
   <td>
   	  <c:if test="${!empty globalAdminAccount}" >
+  	  	<c:set var="trn">
+	  		<digi:trn key="translation:expireSelected">Expire selected</digi:trn>
+	  	</c:set> 
   	  	 <c:if test="${!advancedTranslationForm.showExpired}">
-	     	<html:submit value="Expire selected" property="expireSelected" onclick="return expireKeys()" />
+	     	<html:submit value="${trn}" property="expireSelected" onclick="return expireKeys()" />
 	     </c:if>
+	     <c:set var="trn">
+	  		<digi:trn key="translation:unExpireSelected">Unexpire selected</digi:trn>
+	  	</c:set> 
 	     <c:if test="${advancedTranslationForm.showExpired}">
-	     	<html:submit value="Unexpire selected" property="unExpireSelected" onclick="return expireKeys()" />
+	     	<html:submit value="${trn}" property="unExpireSelected" onclick="return expireKeys()" />
 	     </c:if>
 	  </c:if>
   </td>
@@ -615,11 +633,17 @@ table.trnrow {
    </display:column>
   <c:if test="${!empty globalAdminAccount}">
    <display:column align="center">
-   	   	<c:if test="${!advancedTranslationForm.showExpired}">
-        	<input type="submit" name="expireKey" value="Expire" onClick="return expireOneKey(<c:out value="${message_rowNum}" />)">
+   	   	<c:set var="trn">
+	  		<digi:trn key="translation:expireKey">Expire</digi:trn>
+	  	</c:set> 
+  	  	<c:if test="${!advancedTranslationForm.showExpired}">
+        	<input type="submit" name="expireKey" value="${trn}" onClick="return expireOneKey(<c:out value="${message_rowNum}" />)">
         </c:if>
-        <c:if test="${advancedTranslationForm.showExpired}">
-        	<input type="submit" name="unexpireKey" value="Unexpire" onClick="return expireOneKey(<c:out value="${message_rowNum}" />)">
+        <c:set var="trn">
+	  		<digi:trn key="translation:unexpireKey">Unexpire</digi:trn>
+	  	</c:set> 
+  	  	<c:if test="${advancedTranslationForm.showExpired}">
+        	<input type="submit" name="unexpireKey" value="${trn}" onClick="return expireOneKey(<c:out value="${message_rowNum}" />)">
         </c:if>
    </display:column>
   </c:if>
@@ -679,11 +703,17 @@ table.trnrow {
   <tr>
   <td>
       <c:if test="${!empty globalAdminAccount}" >
+  	  	 <c:set var="trn">
+	  		<digi:trn key="translation:expireSelected">Expire selected</digi:trn>
+	  	</c:set> 
   	  	 <c:if test="${!advancedTranslationForm.showExpired}">
-	     	<html:submit value="Expire selected" property="expireSelected" onclick="return expireKeys()" />
+	     	<html:submit value="${trn}" property="expireSelected" onclick="return expireKeys()" />
 	     </c:if>
+	     <c:set var="trn">
+	  		<digi:trn key="translation:unExpireSelected">Unexpire selected</digi:trn>
+	  	</c:set> 
 	     <c:if test="${advancedTranslationForm.showExpired}">
-	     	<html:submit value="Unexpire selected" property="unExpireSelected" onclick="return expireKeys()" />
+	     	<html:submit value="${trn}" property="unExpireSelected" onclick="return expireKeys()" />
 	     </c:if>
 	  </c:if>
   </td>

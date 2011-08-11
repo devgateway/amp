@@ -244,6 +244,11 @@ public class CategAmountColWorker extends ColumnWorker {
 						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
 				acc.getMetaData().add(termsAssistMeta);
 			}
+			else {
+				MetaInfo modeOfPayMeta = this.getCachedMetaInfo(
+						ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED);
+				acc.getMetaData().add(modeOfPayMeta);
+			}
 		}
 
 		if (columnsMetaData.contains("funding_status_name")) {

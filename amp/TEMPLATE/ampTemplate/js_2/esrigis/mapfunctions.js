@@ -106,8 +106,21 @@ function init() {
  */
 
 function createMapAddLayers(myService1, myService2) {
-	
-	map = new esri.Map("map", {extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
+	customLods = [			
+					{"level" : 0, "resolution" : 9783.93962049996, "scale" : 36978595.474472},
+					{"level" : 1, "resolution" : 4891.96981024998, "scale" : 18489297.737236},
+					{"level" : 2, "resolution" : 2445.98490512499, "scale" : 9244648.868618},
+					{"level" : 3, "resolution" : 1222.99245256249, "scale" : 4622324.434309},
+					{"level" : 4, "resolution" : 611.49622628138, "scale" : 2311162.217155},
+					{"level" : 5, "resolution" : 305.748113140558, "scale" : 1155581.108577},
+					{"level" : 6, "resolution" : 152.874056570411, "scale" : 577790.554289},
+					{"level" : 7, "resolution" : 76.4370282850732, "scale" : 288895.277144},
+					{"level" : 8, "resolution" : 38.2185141425366, "scale" : 144447.638572},
+					{"level" : 9, "resolution" : 19.1092570712683, "scale" : 72223.819286},
+					{"level" : 10, "resolution" : 9.55462853563415, "scale" : 36111.909643},
+					{"level" : 11, "resolution" : 4.77731426794937, "scale" : 18055.954822}
+				];
+	map = new esri.Map("map", {lods: customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
         dojo.byId('map_zoom_slider').style.top = '95px';

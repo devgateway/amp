@@ -1,8 +1,6 @@
 function createBasemapGallery() {
 	// manually create basemaps to add to basemap gallery
 	var basemaps = [];
-
-
 	var worldphysicallayer = new esri.dijit.BasemapLayer(
 			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer"});
 	

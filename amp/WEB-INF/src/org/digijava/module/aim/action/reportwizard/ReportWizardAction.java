@@ -166,9 +166,11 @@ public class ReportWizardAction extends MultiAction {
 		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
 		 */
 		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-		rfpForm.setIsnewreport(true);
-		new ReportsFilterPicker().reset(rfpForm, request, mapping);
-		rfpForm.setIsnewreport(false);
+		if (rfpForm != null ) {
+			rfpForm.setIsnewreport(true);
+			new ReportsFilterPicker().reset(rfpForm, request, mapping);
+			rfpForm.setIsnewreport(false);
+		}
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 

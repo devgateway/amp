@@ -4,6 +4,7 @@ package org.digijava.module.aim.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -288,7 +289,17 @@ public class LocationUtil {
 			
 		} catch (Exception e) {
 			logger.error("Uanble to get location :" + e);
-		} 
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return loc;
 		
 	}

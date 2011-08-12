@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION">
+	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
@@ -23,6 +23,7 @@
 		<property column="ISO" length="3" name="iso" type="java.lang.String" unique-key="iso_key" />
 		
 		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan" order-by="location_name">
+			<cache usage="read-write" />
 			<key column="parent_location"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
 		</set>

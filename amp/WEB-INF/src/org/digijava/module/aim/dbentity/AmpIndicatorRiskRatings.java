@@ -41,4 +41,22 @@ public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
 	public void setTranslatedRatingName(String translatedRatingName) {
 		this.translatedRatingName = translatedRatingName;
 	}
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 83 * hash + (this.ampIndRiskRatingsId != null ? this.ampIndRiskRatingsId.hashCode() : 0);
+            return hash;
+        }
+
+    
+        @Override
+	public boolean equals (Object o) {
+		if(!(o instanceof AmpIndicatorRiskRatings)) return false;
+		AmpIndicatorRiskRatings a = (AmpIndicatorRiskRatings) o;
+		if ( a == null )
+			return false;
+		return this.ampIndRiskRatingsId.equals( a.getAmpIndRiskRatingsId() );
+	}
+
 }

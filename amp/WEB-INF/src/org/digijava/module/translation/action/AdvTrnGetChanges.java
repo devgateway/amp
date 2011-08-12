@@ -13,6 +13,8 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.util.ListChangesBuffer;
 import org.digijava.module.translation.util.ListChangesBuffer.ChangedItem;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 
 /**
  * Returns HTML for changes list of translation.
@@ -26,25 +28,37 @@ public class AdvTrnGetChanges extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 //		NewAdvancedTrnForm trnForm = (NewAdvancedTrnForm)form;
-		String html="<span>no changes</span>"; 
+                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+    		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		String html="<span>"+TranslatorWorker.translateText("no changes",locale,siteId)+"</span>"; 
 		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
 		
 		List<ChangedItem<String, Message>> changes = buffer.listChanges();
 		if (changes !=null && changes.size()>0){
 			StringBuffer rsp = new StringBuffer("<table class=\"chgangesTable\"><tr>");
-			rsp.append("<tr class=\"changesColumnHeader\"><td>Undo</td><td>Oper</td><td>Text</td></tr>");
+			rsp.append("<tr class=\"changesColumnHeader\"><td>");
+                        rsp.append(TranslatorWorker.translateText("Undo",locale,siteId));
+                        rsp.append("</td><td>");
+                        rsp.append(TranslatorWorker.translateText("Oper",locale,siteId));
+                        rsp.append("</td><td>");
+                        rsp.append(TranslatorWorker.translateText("Text",locale,siteId));
+                        rsp.append("</td></tr>");
 			for (ChangedItem<String, Message> changedItem : changes) {
 				rsp.append("<tr class=\"changesRow\"><td><input type=\"checkbox\" class=\"changedListItem\" value=\"");
 				rsp.append(changedItem.getKey());
 				rsp.append("\"><td>");
-				rsp.append(changedItem.getOperation().toString());
+				rsp.append(TranslatorWorker.translateText(changedItem.getOperation().toString(),locale,siteId));
 				rsp.append("</td><td>");
 				rsp.append(changedItem.getElement().getMessage());
 				rsp.append("</td></tr>");
 			}
 			rsp.append("</table>");
-			rsp.append("<input id=\"btnUndoSelected\" type=\"button\" value=\"Undo selected\"/>");
-			rsp.append("<input id=\"btnSaveAllChanges\"	type=\"button\" value=\"Save All Changes\"/>");
+			rsp.append("<input id=\"btnUndoSelected\" type=\"button\" value=\"");
+                        rsp.append(TranslatorWorker.translateText("Undo selected",locale,siteId));
+                        rsp.append("\"/>");
+			rsp.append("<input id=\"btnSaveAllChanges\"	type=\"button\" value=\"");
+                        rsp.append(TranslatorWorker.translateText("Save All Changes",locale,siteId));
+                        rsp.append("\"/>");
 			
 			html = rsp.toString();
 		}

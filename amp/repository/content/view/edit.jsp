@@ -143,6 +143,40 @@ div.fakefile2 input {
             }
         });
     }
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn>Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+
 
 </script>
 <digi:instance property="contentForm" />
@@ -366,13 +400,18 @@ div.fakefile2 input {
 						<tr id="tr_path_thumbnail">
 						<td><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></td>
 						<td>
-                            <html:file property="tempContentThumbnail"/>
+							<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+								<input id="tempContentThumbnail" name="tempContentThumbnail" type="file" class="file"/>
+							</div>
+                            
 						</td>
 						</tr>
 						<tr id="tr_path_optional">
 						<td><digi:trn>Select Optional File to upload:</digi:trn><font color="red"></font></td>
 						<td>
-                            <html:file property="tempContentFile"/>
+						<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+								<input id="tempContentFile" name="tempContentFile" type="file" class="file"/>
+							</div>
 						</td>
 						</tr>
 						<tr>
@@ -521,6 +560,6 @@ function validateUpload(){
 	}
 	return true;
 }
-
+initFileUploads();
 </script>
 </digi:form>

@@ -21,6 +21,7 @@ function setCurProgData(progId,nodeId){
 			selIndicatorIDs=[];
 			setAllIndicatorsOf(prog,true);
 			setTreeIndicatorsVisibility(progId,true);
+			$(".dashboard_tab_opt").css("visibility", "visible");
 		}
 		curProgId=progId;
 		curNodeId=nodeId;

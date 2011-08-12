@@ -196,7 +196,7 @@ background-color:#FFFFFF;
 			href="/reportWizard.do" styleClass="l_sm">
 			<digi:trn>Reports</digi:trn>
 		</digi:link></div>
-		<div class="dashboard_tab_opt">
+		<div class="dashboard_tab_opt" style="visibility:hidden">
 		<div class="tab_opt_cont" style="background-color:#F2F2F2;"><a class="l_sm" href="#"><img
 			border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="exportToExcel();return false;"><digi:trn>Export

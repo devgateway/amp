@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -69,7 +70,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
 		final IModel<AmpIndicatorRiskRatings> riskModel = new PersistentObjectModel<AmpIndicatorRiskRatings>();
 
-		AbstractSingleSelectChoice<AmpIndicatorRiskRatings> risk = new DropDownChoice<AmpIndicatorRiskRatings>(
+		final AbstractSingleSelectChoice<AmpIndicatorRiskRatings> risk = new DropDownChoice<AmpIndicatorRiskRatings>(
 				"risk",
 				riskModel, new LoadableDetachableModel<List<AmpIndicatorRiskRatings>>() {
 					@Override
@@ -78,6 +79,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 					}
 				}).setNullValid(true);
 		risk.setOutputMarkupId(true);
+                risk.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    riskModel.setObject(risk.getConvertedInput());
+                }
+                });
 		add(risk);
 
 		final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);

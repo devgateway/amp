@@ -67,6 +67,7 @@ public class AmpLocationFormTableFeature extends
 			final AmpCategorySelectFieldPanel implementationLocation)
 			throws Exception {
 		super(id, am, fmName);
+		setTitleHeaderColSpan(4);
 		final IModel<Set<AmpActivityLocation>> setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
 		if (setModel.getObject() == null)

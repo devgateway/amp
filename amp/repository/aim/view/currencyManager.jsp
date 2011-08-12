@@ -131,29 +131,25 @@ function submitPages(){
 						<digi:errors/>
 					</td>
 				</tr>
-					<tr>
-						<td align="left" colspan=5>
-						<!--  please note that this page contains form and you can not nested it inside other form -->
-						<jsp:include
-							page="/repository/aim/view/exportTable.jsp" /></td>
-					</tr>
-					<digi:instance property="aimCurrencyForm" />
-
-						<digi:form action="/currencyManager.do">
-
-							<html:hidden property="page" />
-							<html:hidden property="currencyCode" />
-							<html:hidden property="currencyName" />
-							<html:hidden property="countryId" />
-							<html:hidden property="order" />
+				<tr>
+					<td align="left" colspan=5>
+					<!--  please note that this page contains form and you can not nested it inside other form -->
+					<jsp:include
+						page="/repository/aim/view/exportTable.jsp" /></td>
+				</tr>
+				<digi:instance property="aimCurrencyForm" />
+					<digi:form action="/currencyManager.do">
+						<html:hidden property="page" />
+						<html:hidden property="currencyCode" />
+						<html:hidden property="currencyName" />
+						<html:hidden property="countryId" />
+						<html:hidden property="order" />
 							<tr>
 								<td noWrap width=75% vAlign="top">
 								<table width="100%" cellspacing="2" cellPadding="2" vAlign="top"
 									align="left">
 									<tr>
 										<td><!-- Filters to be put here -->
-
-
 										<table cellpadding="1" cellspacing="1" align="left"
 											bgcolor="#dddddd" width="100%">
 											<tr>
@@ -166,8 +162,7 @@ function submitPages(){
 															key="aim:currencies">Currencies</digi:trn></td>
 														<td bgcolor="#f4f4f2" style="padding-right:10px;"><html:select
 															property="filterByCurrency" styleClass="inp-text">
-															<html:option value="">--<digi:trn
-																	key="aim:all">All</digi:trn>--</html:option>
+															<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 															<html:option value="A">
 																<digi:trn key="aim:activecurrencies">Active Currencies</digi:trn>
 															</html:option>
@@ -175,11 +170,11 @@ function submitPages(){
 																<digi:trn key="aim:inactivecurrencies">Inactive Currencies</digi:trn>
 															</html:option>
 														</html:select></td>
-														<td bgcolor="#f4f4f2"><c:set
-															var="trnGoBtn">
+														<td bgcolor="#f4f4f2"><c:set var="trnGoBtn">
 															<digi:trn key="aim:goBtn"> Go </digi:trn>
-														</c:set> <input type="button" value="${trnGoBtn}" class="buttonx"
-															onclick="applyFilter()" /></td>
+															</c:set> 
+																<input type="button" value="${trnGoBtn}" class="buttonx" onclick="applyFilter()" />
+														</td>
 													</tr>
 												</table>
 
@@ -187,45 +182,44 @@ function submitPages(){
 											</tr>
 											<tr>
 												<td bgcolor="#f4f4f2">
-												<table cellpadding="0" cellSpacing=2 align="left" border="0"
-													vAlign="center" style="font-size:12px;">
-													<tr>
-														<td bgcolor="#f4f4f2" vAlign="center" 
-															align="left" style="padding-right:10px;"><digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
-														</td>
-														<td bgcolor="#f4f4f2" vAlign="center" width="50"
-															align="left"><html:text property="numRecords"
-															size="3" styleClass="inp-text" /></td>
-														
-														<td bgcolor="#f4f4f2" vAlign="center" align="left"><c:set
-															var="trnViewBtn">
-															<digi:trn key="aim:trnViewBtn"> View </digi:trn>
-														</c:set> <input type="button" value="${trnViewBtn}"
-															class="buttonx" onclick="submitPages()" /></td>
-													</tr>
-												</table>
+													<table cellpadding="0" cellSpacing=2 align="left" border="0"
+														vAlign="center" style="font-size:12px;">
+														<tr>
+															<td bgcolor="#f4f4f2" vAlign="center" 
+																align="left" style="padding-right:10px;"><digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
+															</td>
+															<td bgcolor="#f4f4f2" vAlign="center" width="50"
+																align="left"><html:text property="numRecords"
+																size="3" styleClass="inp-text" /></td>
+															
+															<td bgcolor="#f4f4f2" vAlign="center" align="left"><c:set
+																var="trnViewBtn">
+																<digi:trn key="aim:trnViewBtn"> View </digi:trn>
+															</c:set> <input type="button" value="${trnViewBtn}" class="buttonx" onclick="submitPages()" /></td>
+														</tr>
+													</table>
 												</td>
 											</tr>
-
 										</table>
 										</td>
 									</tr>
 									<logic:equal name="aimCurrencyForm" property="cantDelete"
 										value="true">
 										<tr>
-											<td bgcolor="#ffffff" valign="top" align="left"><b><font
-												color="red"> <digi:trn
-												key="aim:cannotDeleteCurrencyMsg2">Cannot Delete the currency since it is already in use!</digi:trn>
-											</font></b></td>
+											<td bgcolor="#ffffff" valign="top" align="left">
+												<b>
+													<font color="red"> 
+														<digi:trn key="aim:cannotDeleteCurrencyMsg2">Cannot Delete the currency since it is already in use!</digi:trn>
+													</font>
+												</b>
+											</td>
 										</tr>
 									</logic:equal>
 									<tr>
-									
 										<td bgcolor="#ffffff" valign="top" align="left"  class="report">
 										<!-- Currency list table -->
 										<!--  to export table we are adding class "report" to its container -->
-										<table cellSpacing="1" cellPadding="4" vAlign="top"
-											align="left" width="100%" class="inside">
+										<table cellSpacing="1" cellPadding="4" vAlign="top" align="left" width="100%" class="inside">
 											<thead>
 											<tr bgcolor="eeeeee">
 												<td width="5%"></td>
@@ -246,7 +240,7 @@ function submitPages(){
 													key="aim:countryName">Country</digi:trn></b></td>
 											</tr>
 											</thead>
-										<!--  to export table we are adding class "yui-dt-data" to its tbody-->
+											<!--  to export table we are adding class "yui-dt-data" to its tbody-->
 											<tbody class="yui-dt-data">
 											<c:if test="${empty aimCurrencyForm.currency}">
 												<tr bgcolor="#f4f4f2">
@@ -257,51 +251,50 @@ function submitPages(){
 											<% int index = 0; %>
 											<c:if test="${!empty aimCurrencyForm.currency}">
 												<c:forEach var="curr" items="${aimCurrencyForm.currency}">
-													<%
-											if (index%2 == 0) { %>
+													<%if (index%2 == 0) { %>
 													<tr class="rowNormal">
 														<%  } else { %>
-													
 													<tr class="rowAlternate">
-														<%
-											}
-											index++;
-											%>
-														<td align="left" width="3" class="inside"><c:if
-															test="${curr.activeFlag == 1}">
+													<%}index++;%>
+														<td align="left" width="3" class="inside">
+														<c:if test="${curr.activeFlag == 1}">
 															<c:set var="translation">
 																<digi:trn key="aim:clickHereToMakeTheCurrencyInactive">
-															Click here to make the currency inactive
-														</digi:trn>
+																	Click here to make the currency inactive
+																	</digi:trn>
 															</c:set>
 															<a href="javascript:makeInactive('${curr.currencyCode}')"
 																title="${translation}"> <digi:img
 																src="module/aim/images/bullet_green.gif" border="0" /></a>
 																<span style="display:none"><digi:trn>Active currencies</digi:trn></span>
-														</c:if> <c:if test="${curr.activeFlag != 1}">
+															</c:if> 
+														<c:if test="${curr.activeFlag != 1}">
 															<c:set var="translation">
 																<digi:trn key="aim:clickHereToMakeTheCurrencyActive">
-															Click here to make the currency Active
-														</digi:trn>
+																	Click here to make the currency Active
+																</digi:trn>
 															</c:set>
 															<a href="javascript:makeActive('${curr.currencyCode}')"
 																title="${translation}"> <digi:img
 																src="module/aim/images/bullet_grey.gif" border="0" /></a>
 																<span style="display:none"><digi:trn>Inactive currencies</digi:trn></span>
-														</c:if></td>
+															</c:if>
+														</td>
 														<td align="left" class="inside"><a
 															href="javascript:editCurrency('${curr.currencyCode}')">
 														<digi:trn
 															key='aim:currency:${fn:replace(curr.currencyCode, " ", "_")}'>${curr.currencyCode}</digi:trn>
 														</a></td>
-														<td align="left" class="inside"><a
-															href="javascript:editCurrency('${curr.currencyCode}')">
-														${curr.currencyName}</a></td>
-														<td align="left" class="inside"><a
-															href="javascript:editCurrency('${curr.currencyCode}')">
-														<c:if test="${curr.countryLocation.id!=null}">
-															<digi:trn>${curr.countryLocation.name}</digi:trn>
-														</c:if> </a></td>
+														<td align="left" class="inside">
+															<a href="javascript:editCurrency('${curr.currencyCode}')"> ${curr.currencyName}</a>
+														</td>
+														<td align="left" class="inside">
+															<a href="javascript:editCurrency('${curr.currencyCode}')">
+																<c:if test="${curr.countryLocation.id!=null}">
+																	<digi:trn>${curr.countryLocation.name}</digi:trn>
+																</c:if> 
+															</a>
+														</td>
 														<!--  tds marked with class "ignore" will be ignored during export -->
 														<td align="right" class="inside ignore"><a
 															href="javascript:deleteCurrency('${curr.currencyCode}')">
@@ -396,8 +389,8 @@ function submitPages(){
 																<%=pages%>															</digi:link>
 														</c:if>
 												|&nbsp;
-											</logic:iterate> <c:if
-														test="${aimCurrencyForm.currentPage != aimCurrencyForm.pagesSize}">
+											</logic:iterate> 
+											<c:if test="${aimCurrencyForm.currentPage != aimCurrencyForm.pagesSize}">
 														<jsp:useBean id="urlParamsNext" type="java.util.Map"
 															class="java.util.HashMap" />
 														<c:set target="${urlParamsNext}" property="page"
@@ -411,8 +404,7 @@ function submitPages(){
 														</c:set>
 														<digi:link href="/currencyManager.do"
 															style="text-decoration=none" name="urlParamsNext"
-															title="${translation}">
-&gt;												</digi:link>
+															title="${translation}">&gt;</digi:link>
 														<jsp:useBean id="urlParamsLast" type="java.util.Map"
 															class="java.util.HashMap" />
 														<c:if
@@ -434,9 +426,8 @@ function submitPages(){
 														</c:set>
 														<digi:link href="/currencyManager.do"
 															style="text-decoration=none" name="urlParamsLast"
-															title="${translation}">
-&gt;&gt;												</digi:link>
-												&nbsp;&nbsp;
+															title="${translation}">&gt;&gt;												
+														</digi:link>&nbsp;&nbsp;
 											</c:if> <c:out value="${aimCurrencyForm.currentPage}"></c:out> <digi:trn
 														key="aim:of">of</digi:trn> <c:out
 														value="${aimCurrencyForm.pagesSize}"></c:out></td>

@@ -3,6 +3,7 @@
  */
 package org.digijava.module.dataExchange.utils;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -39,6 +42,9 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
@@ -1292,6 +1298,96 @@ public class DataExchangeUtils {
 		return ampActivity;
 	}
 
+	
+    public static TreeMap<Long,String> getNameGroupAllActivities() {
+        Session session = null;
+        Query qry = null;
+        TreeMap<Long,String> result = new TreeMap<Long,String>();
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
+                + " f";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+                Object[] item = (Object[])iter.next();
+                AmpActivityGroup actGroup = (AmpActivityGroup) item[1];
+                if(actGroup!=null)
+                	result.put(actGroup.getAmpActivityGroupId(),(String)item[0]);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
+        return result;
+    }
+
+
+	public static TreeMap<Long, String> getNameIdAllEntities(String queryString) {
+	        Session session = null;
+	        Query qry = null;
+	        TreeMap<Long,String> result = new TreeMap<Long,String>();
+	        try {
+	            session = PersistenceManager.getSession();
+//	            String queryString = "select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()
+//	                + " f";
+	            qry = session.createQuery(queryString);
+	            Iterator iter = qry.list().iterator();
+	            while (iter.hasNext()) {
+	                Object[] item = (Object[])iter.next();
+	                if((Long)item[1]!=null)
+	                	result.put((Long)item[1],(String)item[0]);
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                PersistenceManager.releaseSession(session);
+	            } catch (HibernateException e) {
+	                e.printStackTrace();
+	            } catch (SQLException e) {
+					e.printStackTrace();
+				}
+	        }
+	        return result;
+	}
+
+	public static TreeMap<Long, String> getNameIdAllEntitiesFromACVC(String key) {
+		TreeMap<Long,String> result = new TreeMap<Long,String>();
+		Collection<AmpCategoryValue> acvs = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(key);
+		for (Iterator iterator = acvs.iterator(); iterator.hasNext();) {
+			AmpCategoryValue acv = (AmpCategoryValue) iterator.next();
+			result.put(acv.getId(), acv.getLabel());
+		}
+		return result;
+	}
+
+	public static TreeMap<Long, String> getNameIdAllLocations() {
+		// TODO Auto-generated method stub
+		TreeMap<Long,String> result = new TreeMap<Long,String>();
+		try {
+			List<AmpCategoryValueLocations> allLocations = LocationUtil.getAllLocations(null);
+			for (Iterator<AmpCategoryValueLocations> iterator = allLocations.iterator(); iterator.hasNext();) {
+				AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iterator.next();
+				result.put(acv.getId(), acv.getLabel());
+			}
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	
 }
 

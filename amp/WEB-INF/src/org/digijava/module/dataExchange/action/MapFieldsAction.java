@@ -6,6 +6,7 @@ package org.digijava.module.dataExchange.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -190,23 +191,23 @@ public class MapFieldsAction extends MultiAction {
 			Collection<DEMappingFields> allAmpDEMappingFields,
 			ArrayList<DEMappingFieldsDisplay> fieldDisplayList)
 			throws DgException {
-		Collection<AmpOrgType> allOrgTypes = DbUtil.getAllOrgTypes();
-		Collection<AmpActivity> allActivities = DbUtil.getAllActivities();
-		Collection<AmpOrganisation> allOrgs = DbUtil.getAllOrganisation();
-		Collection<AmpCategoryValue> statusList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
-		Collection<AmpCategoryValue> typeOfAssistanceList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-		Collection<AmpCategoryValue> financingInstrumentList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-		Collection<AmpCategoryValue> modeOfPaymentList = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY);
-		Collection<AmpSectorScheme> sectorSchemeList = SectorUtil.getAllSectorSchemes();
-		Collection<AmpSector> sectorList = SectorUtil.getAllSectors();
-		Collection<AmpCategoryValueLocations> locationsList = LocationUtil.getAllLocations(null);
+		TreeMap<Long, String> allOrgTypes = DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f");
+		TreeMap<Long, String> nameGroupAllActivities = DataExchangeUtils.getNameGroupAllActivities();
+		TreeMap<Long, String> allOrgs = DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f");
+		TreeMap<Long, String> statusList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
+		TreeMap<Long, String> typeOfAssistanceList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		TreeMap<Long, String> financingInstrumentList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		TreeMap<Long, String> modeOfPaymentList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
+		TreeMap<Long, String> sectorSchemeList = DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
+		TreeMap<Long, String> sectorList = DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampSectorId from " + AmpSector.class.getName()+ " f");
+		TreeMap<Long, String> locationsList = DataExchangeUtils.getNameIdAllLocations();
 		
 		
 		for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
 			DEMappingFields f = (DEMappingFields) it.next();
 			ampClasses.add(f.getAmpClass());
 			if(DataExchangeConstants.IATI_ACTIVITY.compareTo(f.getIatiPath()) ==0 )
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allActivities));
+				fieldDisplayList.add(new DEMappingFieldsDisplay(f,nameGroupAllActivities));
 			if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(f.getIatiPath())==0){
 				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allOrgTypes));
 			}

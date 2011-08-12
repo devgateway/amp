@@ -215,14 +215,14 @@ public final class PermissionUtil {
 	    throw new RuntimeException("HibernateException Exception encountered", e);
 	} finally { 
 	    try {
-	    	PersistenceManager.releaseSession(session);
+	    	//PersistenceManager.releaseSession(session);
 	    } catch (HibernateException e) {
 		// TODO Auto-generated catch block
 		throw new RuntimeException( "HibernateException Exception encountered", e);
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    } //catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		//}
 	}
 
     }

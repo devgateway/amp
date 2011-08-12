@@ -139,6 +139,10 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //Check if One Pager FM root exists, if not try to add it
 		 FMUtil.checkFmRoot(FMUtil.fmRootActivityForm);
 		 FMUtil.checkFmRoot(FMUtil.fmRootPermissionManager);
+		 
+		 //set UTF-8 as the default encoding for all requests
+		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
+		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
 	 }
 
 

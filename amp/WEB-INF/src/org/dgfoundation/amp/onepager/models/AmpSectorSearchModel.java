@@ -17,6 +17,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -38,10 +39,9 @@ public class AmpSectorSearchModel extends
 	private static final long serialVersionUID = 8211300754918658832L;
 	private Session session;
 
-	
 	@Override
 	protected List<AmpSector> load() {
-		List<AmpSector> ret=null;
+		List<AmpSector> ret = null;
 		try {
 			ret = new ArrayList<AmpSector>();
 			session = PersistenceManager.getRequestDBSession();
@@ -51,16 +51,17 @@ public class AmpSectorSearchModel extends
 					PARAM.SECTOR_SCHEME);
 			Criteria crit = session.createCriteria(AmpSector.class);
 			crit.setCacheable(true);
-			Junction junction = Restrictions.conjunction().add(Restrictions.eq("ampSecSchemeId", scheme));			
-			if(input.trim().length()>0)		
-				junction.add(Restrictions.ilike("name", "%" + input + "%"));
+			Junction junction = Restrictions.conjunction().add(
+					Restrictions.eq("ampSecSchemeId", scheme));
+			if (input.trim().length() > 0)
+				junction.add(getTextCriterion("name", input));
 			crit.add(junction);
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
 			List<AmpSector> list = crit.list();
-			
-			ret=createTreeView(list);
-						
+
+			ret = createTreeView(list);
+
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
 		} catch (DgException e) {

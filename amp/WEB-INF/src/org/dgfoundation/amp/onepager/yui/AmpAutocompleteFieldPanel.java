@@ -253,13 +253,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 				// hide loading icon:
 				target.appendJavascript("YAHOO.util.Dom.get("
 						+ indicator.getMarkupId() + ").style.display = 'none'");
-				List<CHOICE> choices = getChoices(selectedString);
-				for (CHOICE choice : choices) {
-					if (selectedString.equals(getChoiceValue(choice))) {
-						onSelect(target, choice);
-						break;
-					}
-				}
+				CHOICE choice = getSelectedChoice(selectedString);
+				onSelect(target, choice);
 			}
 		};
 		textField.add(onSelectBehavior);
@@ -368,6 +363,38 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			throw new RuntimeException(e);
 		}
 	}
+	
+	
+
+	protected CHOICE getSelectedChoice(String input) {
+	
+		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
+		try {
+			constructor = objectListModelClass.getConstructor(String.class,
+					Map.class);
+			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
+					.newInstance(input, modelParams);
+			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
+			List<CHOICE> choices = newInstance.getObject();
+			
+			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
+			
+			return choices.get(0);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (InstantiationException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 
 	/**
 	 * Behavior that shows the YUI autocomplete picklist. Invokes

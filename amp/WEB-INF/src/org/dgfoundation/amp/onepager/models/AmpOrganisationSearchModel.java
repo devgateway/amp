@@ -36,15 +36,16 @@ public class AmpOrganisationSearchModel extends
 	protected List<AmpOrganisation> load() {
 		List<AmpOrganisation> ret = null;
 		try {
-			
+
 			session = PersistenceManager.getRequestDBSession();
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
 			crit.setCacheable(true);
-			if(input.trim().length()>0)
-			crit.add(Restrictions.disjunction()
-					.add(Restrictions.ilike("name", "%" + input + "%"))
-					.add(Restrictions.ilike("acronym", "%" + input + "%")))
-					.addOrder(Order.asc("name"));
+			if (input.trim().length() > 0)
+				crit.add(
+						Restrictions.disjunction()
+								.add(getTextCriterion("name", input))
+								.add(getTextCriterion("acronym", input)))
+						.addOrder(Order.asc("name"));
 
 			if (params != null) {
 				Integer maxResults = (Integer) getParams().get(
@@ -53,7 +54,7 @@ public class AmpOrganisationSearchModel extends
 					crit.setMaxResults(maxResults);
 			}
 			ret = crit.list();
-			
+
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
 		} catch (DgException e) {
@@ -70,7 +71,7 @@ public class AmpOrganisationSearchModel extends
 				e.printStackTrace();
 			}
 		}
-		
+
 		return ret;
 	}
 

@@ -71,24 +71,31 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.animVert=.01;
     this.autoComplete.animHoriz=.01;
     this.autoComplete.animSpeed=0.5;
-    this.autoComplete.minQueryLength=2;
+    this.autoComplete.minQueryLength=0;
     this.autoComplete.queryDelay=1;
     this.autoComplete.forceSelection=true;
     this.autoComplete.maxResultsDisplayed = 1000;
     this.autoComplete.applyLocalFilter=applyLocalFilter; // for adding custom data in resultset
-    this.autoComplete.formatResult = function(pResultData, pQuery, pResultMatch) {
+    this.autoComplete.formatEscapedResult = function(pResultData, pQuery, pResultMatch) {
     	var formatedResult;
+    	var escapedResultData=pResultData[1];
+    	
     	if(pQuery==""){
-    		formatedResult=ac_left_padding(pResultMatch,pResultData[1]);
+    		formatedResult=ac_left_padding(pResultMatch,escapedResultData);
     	}
     	else{
-    		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),pResultData[1]);
+    		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
     	}   	
     	if(pResultData[2]!=''){
     		return "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
     	}
     	return formatedResult;
     }; 
+    
+    
+    // Enable HTML-escaping of result strings
+    this.autoComplete.formatResult =  this.autoComplete.formatEscapedResult;
+    
     var autoComplete=this.autoComplete;
     //handler for selected items
     this.itemSelectHandler = function(sType, aArgs) {

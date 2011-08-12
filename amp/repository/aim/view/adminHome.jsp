@@ -19,12 +19,12 @@
           <td nowrap="nowrap" vAlign="top" align="center">
 
 <fieldset style="background-color:#F2F2F2;">
-<legend><span class="legend_label">Administrative Tools</span></legend>
+<legend><span class="legend_label"><digi:trn>Administrative Tools</digi:trn></span></legend>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Global administration and maintenance of AMP</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Global administration and maintenance of AMP</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   	<module:display name="Global Settings" parentModule="ADMINISTRATIVE SECTION">
 	  <tr>
@@ -110,7 +110,7 @@
     <td width=10>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">User management</div>
+	<div class="admin_landing_page_box_title"><digi:trn>User management</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
 	  <tr>
 	    <td>
@@ -144,7 +144,7 @@
     <td width=11>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Backbone lists of AMP</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Backbone lists of AMP</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
 	<module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
   	<tr>
@@ -294,7 +294,7 @@
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Currencies and rates</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Currencies and rates</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <module:display name="Currency Manager" parentModule="ADMINISTRATIVE SECTION">
   <tr>
@@ -328,7 +328,7 @@
     <td width=10>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Import and export of data</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Import and export of data</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION">	
   <tr>
@@ -399,7 +399,7 @@
     <td width=11>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">AMP workflow auditor</div>
+            <div class="admin_landing_page_box_title"><digi:trn>AMP workflow auditor</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <module:display name="Audit Logger Manager" parentModule="ADMINISTRATIVE SECTION">
   <tr>
@@ -436,7 +436,7 @@
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Public view toolbox</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Public view toolbox</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
    <tr>
 		 <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -469,7 +469,7 @@
     <td width=10>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Developer Tools</div>
+	<div class="admin_landing_page_box_title"><digi:trn>Developer Tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
 	<feature:display name="Applied Patches" module="Applied Patches">
 	<tr>
@@ -503,7 +503,7 @@
     <td width=11>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Paris indicator Tools</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Paris indicator Tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
     <tr>
@@ -527,7 +527,7 @@
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Message tools</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Message tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   	<feature:display name="Message Manager" module="ADMIN">
   	<tr>
@@ -548,7 +548,7 @@
     <td width=10>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Resources tools</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Resources tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION">
   <tr>
@@ -580,7 +580,7 @@
     <td width=11>&nbsp;</td>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
-	<div class="admin_landing_page_box_title">Results dashboard tools</div>
+            <div class="admin_landing_page_box_title"><digi:trn>Results dashboard tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
   <feature:display  name="Results Dashboard Data" module="WIDGETS">
   <tr>

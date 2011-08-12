@@ -136,8 +136,8 @@
 					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput"/>
 				</div>
 				<div style="float:left">
-					<div>&nbsp;</div>					
-					<html:submit styleId="btnDoSearch" value="Search"/>
+					<div>&nbsp;</div>
+                                        <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch"/>
 				</div>
 			</div>
 		</div>
@@ -147,7 +147,7 @@
 					<c:if test="${empty newAdvancedTrnForm.resultList}"><digi:trn>Nothing found</digi:trn></c:if>
 					<c:if test="${!empty newAdvancedTrnForm.resultList}">
 						<div class="searchResulToolBar">
-							<input class="expandColapse" type="button" value="Expand All">
+                                                    <input class="expandColapse" type="button" value="<digi:trn>Expand All</digi:trn>">
 							<div class="showhide" title="Show unsaved chnages">
 								&lt;&lt;
 							</div>
@@ -216,7 +216,7 @@
 				</div>
 				<div class="changesPanel">
 					<div class="changesContainer">
-						No Changes
+                                            <digi:trn>No Changes</digi:trn>
 					</div>
 				</div>
 			</div>
@@ -262,13 +262,13 @@
 					$('div.msgGroupBodyClosed').slideUp();	
 					$('div.msgGroupBodyOpened').slideDown();	
 					$('img.imgGroupToggle').attr('src',imgMinus);
-					$('.expandColapse').attr({value:'Colapse All', title:'Colapse all translations'});
+					$('.expandColapse').attr({value:'<digi:trn>Collapse All</digi:trn>', title:'Colapse all translations'});
 				},
 				function(){
 					$('div.msgGroupBodyOpened').slideUp();	
 					$('div.msgGroupBodyClosed').slideDown();	
 					$('img.imgGroupToggle').attr('src',imgPlus);
-					$('.expandColapse').attr({value:'Expand All', title:'Expand all translations'});
+					$('.expandColapse').attr({value:'<digi:trn>Expand All</digi:trn>', title:'Expand all translations'});
 				}
 		);
 		
@@ -380,7 +380,7 @@
 		$('#btnUndoSelected').click(function(){
 			var checkboxes = $('input.changedListItem:checked');
 			if (checkboxes!=null && checkboxes.length>0){
-				if (confirm('Are you sure?')){
+				if (confirm('<digi:trn>Are you sure</digi:trn>?')){
 					var changes = [];
 					checkboxes.each(function(index){
 						changes[changes.length]=$(this).val();
@@ -439,10 +439,10 @@
 		newDivHtml+=			'<input type="text" name="message" class="txtTranslation">';
 		newDivHtml+=		'</td>';
 		newDivHtml+=		'<td class="tdSave">';
-		newDivHtml+=			'<input type="button" value="Save" onclick="saveAddTranslation(this)">';
+		newDivHtml+=			'<input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAddTranslation(this)">';
 		newDivHtml+=		'</td>';
 		newDivHtml+=		'<td class="tdCancel">';
-		newDivHtml+=			'<input type="button" value="Cancel" onclick="cancelAddTranslation(this)">';
+		newDivHtml+=			'<input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancelAddTranslation(this)">';
 		newDivHtml+=		'</td>';
 		newDivHtml+=	'</tr></table>';
 		newDivHtml+='</div>';

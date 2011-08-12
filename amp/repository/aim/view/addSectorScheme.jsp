@@ -96,7 +96,7 @@
 															
 														</td>
 														<td>
-														<input  type="button" class="buttonx" name="addBtn" value="Save" onclick="saveScheme()">
+                                                                                                                    <input  type="button" class="buttonx" name="addBtn" value="<digi:trn>Save</digi:trn>" onclick="saveScheme()">
 														<td>
 													</tr>
 											</table>

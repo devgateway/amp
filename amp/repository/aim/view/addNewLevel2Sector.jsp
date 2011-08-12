@@ -142,7 +142,7 @@
 												<tr>
 													<td>&nbsp;</td>
 													<td><input class="buttonx" type="button" name="addBtn"
-														value="Save"
+														value="<digi:trn>Save</digi:trn>"
 														onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />')" />
 													<td>
 												</tr>

@@ -399,7 +399,7 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit styleClass="buttonx">Save</html:submit>
+		<html:submit styleClass="buttonx"><digi:trn>Save</digi:trn></html:submit>
 		</div>
       </td>
   </tr>

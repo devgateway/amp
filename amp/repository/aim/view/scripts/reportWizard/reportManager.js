@@ -157,7 +157,7 @@ function continueInitialization( e, rmParams ){
 		repFilters					= new Filters(rmParams.filterPanelName, rmParams.failureMessage, rmParams.filterProblemsMessage, 
 											rmParams.loadingDataMessage, rmParams.savingDataMessage, rmParams.cannotSaveFiltersMessage ) ;
 		
-		saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
+		saveReportEngine			= new SaveReportEngine(rmParams.savingRepTabMessage,rmParams.failureMessage);
 											
 		var dg			= document.getElementById("DHTMLSuite_treeNode1");
 		var cn			= dg.childNodes;

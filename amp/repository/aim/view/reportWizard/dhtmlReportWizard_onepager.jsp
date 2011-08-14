@@ -168,8 +168,8 @@
 				failureMessage: "${failureMessage}",
 				savingDataMessage: "${savingDataMessage}",
 				filterPanelName: "${filterPanelName}",
-				cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}"
-				
+				cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
+				savingRepTabMessage: "${savingMessage}"
 			};
 		
 		//YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');

@@ -72,6 +72,7 @@ public class ReportWizardAction extends MultiAction {
 	
 	public static final String SESSION_FILTER			= "reportWizardFilter";
 	public static final String EXISTING_SESSION_FILTER	= "existingReportWizardFilter";
+	public static final String REPORT_WIZARD_INIT_ON_FILTERS	= "rep_wiz_init";
 	
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 	
@@ -98,20 +99,25 @@ public class ReportWizardAction extends MultiAction {
 		else
 			myForm.setOnePager(false);
 		
+		/* This gets called for new reports/tabs */
 		if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
 			modeReset(mapping, form, request, response);
 		
 		if (request.getParameter("editReportId") != null ) {
+			modeReset(mapping, form, request, response);
 			return modeEdit(mapping, form, request, response);
 		}
-		if (request.getParameter("reportTitle") == null){
+		
+		
+		/* If there's no report title in the request then we decide to show the wizard */
+		if (request.getParameter("reportTitle") == null){ 
 			if ( "true".equals( request.getParameter("tab") ) )
 				myForm.setDesktopTab(true);
 			else
 				myForm.setDesktopTab(false);
 			return this.modeShow(mapping, form, request, response);
 		}
-		else {
+		else { // If there is a report title in the request then it means that the report should be saved
 			try{
 				if ( "true".equalsIgnoreCase( request.getParameter("dynamicSaveReport") ) ) 
 					return this.modeDynamicSave(mapping, form, request, response);
@@ -165,12 +171,18 @@ public class ReportWizardAction extends MultiAction {
 		/**
 		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
 		 */
+		ReportsFilterPicker rfp		= new ReportsFilterPicker();
 		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-		if (rfpForm != null ) {
-			rfpForm.setIsnewreport(true);
-			new ReportsFilterPicker().reset(rfpForm, request, mapping);
-			rfpForm.setIsnewreport(false);
+		if (rfpForm == null ) {
+			rfpForm		= new ReportsFilterPickerForm();
+			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+			rfp.modePrepare(mapping, rfpForm, request, response);
+			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
 		}
+		rfpForm.setIsnewreport(true);
+		rfp.reset(rfpForm, request, mapping);
+		rfpForm.setIsnewreport(false);
+		
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 

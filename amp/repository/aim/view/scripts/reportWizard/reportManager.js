@@ -255,13 +255,15 @@ NormalReportManager.prototype.enableToolbarButton	= function (btn) {
 }
 
 NormalReportManager.prototype.disableToolbarButton	= function (btn) {
-	if ( !btn.disabled ) {
-		var imgEl		= btn.getElementsByTagName("img")[0];
-		//var imgSrc		= imgEl.src.replace(".png", "_dis.png");
-		//imgEl.src		= imgSrc;
-		
-		btn.disabled	= true;
-		( new YAHOO.util.Element(btn) ).replaceClass('buttonx', 'buttonx_dis');
+	if ( btn != null ) {
+		if ( !btn.disabled ) {
+			var imgEl		= btn.getElementsByTagName("img")[0];
+			//var imgSrc		= imgEl.src.replace(".png", "_dis.png");
+			//imgEl.src		= imgSrc;
+			
+			btn.disabled	= true;
+			( new YAHOO.util.Element(btn) ).replaceClass('buttonx', 'buttonx_dis');
+		}
 	}
 }
 

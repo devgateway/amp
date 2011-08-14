@@ -27,6 +27,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.request.SiteDomain;
@@ -137,6 +138,59 @@ public class TagUtil {
     }
 
 
+    public static Object setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException {
+
+        ComponentContext context = ComponentContext.getContext(request);
+
+        /**
+         * Get Teaser(module) name from tiles context
+         */
+        String moduleInstanceName = context!=null? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
+
+        /**
+         * If Teaser(module) name not set in tiles context then throw exception
+         */
+        if (moduleInstanceName == null) {
+
+            moduleInstanceName = (String) request.getAttribute(
+                Constants.MODULE_INSTANCE);
+            if (moduleInstanceName == null) {
+                throw new JspException("TagUtil: Teaser name " +
+                                       moduleInstanceName +
+                                       " not found in tiles context");
+            }
+        }
+
+        /* Get current site information from request
+         */
+        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.
+            CURRENT_SITE);
+
+        if (siteDomain == null) {
+            throw new JspException("TagUtil: unknown site");
+        }
+
+        Object objectForm = null;
+
+       
+            /**
+             * Generate full form name from teaser and form
+             */
+        String formName = new String("site" +
+        		siteDomain.getSite().getSiteId() +
+        		moduleInstanceName + name);
+
+        logger.debug("Action form name is: " + formName);
+
+        if ( inSession ) {
+        	request.getSession().setAttribute(formName, formObj);
+        }
+        else
+        	request.setAttribute(formName, formObj);
+            
+        return objectForm;
+    }
+    
     /**
      *
      * @param request

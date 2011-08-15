@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -280,7 +283,23 @@ public class DbUtil {
         return fundingDets;
 
     }
-    
+	public static Set<AmpCategoryValueLocations> getSubRegions(Long id){
+        List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
+
+        if (id != null && id != -1) {
+            AmpCategoryValueLocations region;
+			try {
+				region = LocationUtil.getAmpCategoryValueLocationById(id);
+	            if (region.getChildLocations() != null) {
+	                return region.getChildLocations();
+	            }
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        return null;
+	}    
     
     public static List<AmpCategoryValueLocations> getRegions(DashboardFilter filter) throws DgException {
     	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();

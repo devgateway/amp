@@ -1882,6 +1882,8 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
+		String regionId = request.getParameter("itemId");
+
 		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 		Boolean lineChart = false;
 		if(request.getParameter("linechart") != null)
@@ -1927,13 +1929,24 @@ public class DataDispatcher extends DispatchAction {
 		}
         try {
 	        Map map = visualizationForm.getRanksInformation().getFullRegions();
+            if(regionId != null && !regionId.equals("-1")){
+            	Long id = Long.parseLong(regionId);
+            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, null);
+            }
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
 	        if (selectedYear!=null) {
 	        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
-	            map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, selectedYear);
-			} else {
+	            if(regionId != null && !regionId.equals("-1")){
+	            	Long id = Long.parseLong(regionId);
+	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, selectedYear);
+	            }
+	            else
+		            map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, selectedYear);
+
+	        
+	        } else {
 				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 			}

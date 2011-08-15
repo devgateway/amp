@@ -1402,6 +1402,46 @@ function toggleSettings(){
 	</ul>
 	<div class="yui-content">
 	<div id="tab1">
+		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<fieldset class="chartFieldset">
+				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
+				<div id="RegionProfileHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="RegionProfileTitle" value="" size="50">
+				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="RegionProfileFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold">Bold</label><br/>
+				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
+				<input type="hidden" id="RegionProfileDataField" value="region" />
+				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
+				</div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="Data View"/></div>
+				<br />
+				<br />
+				<div class="flashcontent" name="flashContent">
+					<div id="RegionProfile">
+						<a href="http://www.adobe.com/go/getflashplayer">
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
+						</a>
+					</div>
+				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
+			</fieldset>
+		</c:if>
+	
 			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
@@ -1729,6 +1769,7 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
 				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
 				<input type="hidden" id="RegionProfileDataField" value="region" />
+				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="Data View"/></div>
@@ -1856,6 +1897,13 @@ function callbackChildren(e) {
 			break;
 		case "region_dropdown_id":
 			objectType = "Region";
+			//try to set the SectorProfileItemId from select:
+			try {
+				document.getElementById("RegionProfileItemId").value = parentId;
+			}
+			catch(e){
+					
+			}
 			break;
 		case "org_group_dropdown_id":
 			objectType = "Organization";
@@ -2025,6 +2073,7 @@ function refreshBoxes(o){
 	var trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	var trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
+	var trnSubRegionProfile="<digi:trn jsFriendly='true'>Zone breakdown</digi:trn>";
 	var trnShowTop5="<digi:trn jsFriendly='true'>Show Top 5</digi:trn>"; 
 	var trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
 	var trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
@@ -2555,10 +2604,17 @@ function refreshBoxes(o){
 		div.innerHTML = value;
 		input.value = value;
 	}
-	if (dashboardType!=2) {
+	if (dashboardType!=2 ||  dashboardType == 2) {
 		div = document.getElementById("RegionProfileTitleLegend");
 		input = document.getElementById("RegionProfileTitle");
-		value = trnRegionProfile + " - " + fundType;
+		isSubregion = (document.getElementById("RegionProfileItemId") && document.getElementById("RegionProfileItemId").value != "-1") ? true : false;
+		if(isSubregion){
+			value = trnSubRegionProfile + " - " + fundType;
+		}
+		else
+		{
+			value = trnRegionProfile + " - " + fundType;
+		}
 		div.innerHTML = value;
 		input.value = value;
 	}
@@ -2633,12 +2689,8 @@ function initDashboard(){
 	if (dashboardType!=1) {
 		changeChart(null, 'bar_profile', 'DonorProfile', true);
 	}
-	if (dashboardType!=3 || dashboardType == 3) {
-		changeChart(null, 'bar_profile', 'SectorProfile', true);
-	}
-	if (dashboardType!=2) {
-		changeChart(null, 'bar_profile', 'RegionProfile', true);
-	}
+	changeChart(null, 'bar_profile', 'SectorProfile', true);
+	changeChart(null, 'bar_profile', 'RegionProfile', true);
 	callbackApplyFilter();
 }
 
@@ -2733,8 +2785,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-//	var cache = "";
+//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+	var cache = "";
 	
 	switch(chartType){
 		case "bar":

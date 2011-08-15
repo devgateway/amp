@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimAddContactForm" />
@@ -45,52 +46,109 @@
 			<c:if test="${not empty aimAddContactForm.contacts}"></center>
 				<hr />
 				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
-				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:10px; margin-bottom:10px;" class="inside">
+				<div>
+				<table width="100%" cellPadding="0" cellspacing="0" border="0" class="inside">
 				<tr>
-				<td class="inside_header">&nbsp;</td>
-				<td class="inside_header"><digi:trn><b>FirstName</b></digi:trn></td>
-				<td class="inside_header"><digi:trn><b>LastName</b></digi:trn></td>
-				<td class="inside_header"><digi:trn><b>Email</b></digi:trn></td>
-				<td class="inside_header"><digi:trn><b>Organization</b></digi:trn></td>
-				<td class="inside_header"><digi:trn><b>Phone</b></digi:trn></td>
+				<td class="inside_header" style="border-style: none;width:5%;text-align: left;">&nbsp;</td>
+				<td class="inside_header"  style="border-style: none;width:15%;text-align: left"><b><digi:trn>FirstName</digi:trn></b></td>
+				<td class="inside_header"  style="border-style: none;width:15%;text-align: left"><b><digi:trn>LastName</digi:trn></b></td>
+				<td class="inside_header" style="border-style: none;width:25%;text-align: left"><b><digi:trn>Email</digi:trn></b></td>
+				<td class="inside_header" style="border-style: none;width:20%;text-align: left"><b><digi:trn>Organization</digi:trn></b></td>
+				<td class="inside_header"  style="border-style: none;width:20%;text-align: left"><b><digi:trn>Phone</digi:trn></b></td>
 				</tr>
+				</table>	
+				<div style="height:300px;overflow: auto;">
+				<table width="100%" cellPadding="0" cellspacing="0" border="0"  class="inside">
 					<c:forEach var="contact" items="${aimAddContactForm.contacts}">
 						<tr>
-							<td class="inside">
+							<td class="inside"  width="5%">
 							<html:radio property="selContactIds" value="${contact.id}"></html:radio>
 							</td>
-							<td class="inside">${contact.name}</td>
-							<td class="inside">${contact.lastname}</td>
-							<td class="inside">
+							<td class="inside"  width="15%">
+							<c:choose>
+									<c:when test="${fn:length(contact.name)>15}">
+										<span title="${contact.name}">${fn:substring(contact.name,0,12)}...</span> 	
+									</c:when>
+									<c:otherwise>
+											${contact.name}
+									</c:otherwise>
+									</c:choose>
+							</td>
+							<td class="inside"  width="15%">
+									<c:choose>
+									<c:when test="${fn:length(contact.lastname)>15}">
+										<span title="${contact.lastname}">${fn:substring(contact.lastname,0,12)}...</span> 	
+									</c:when>
+									<c:otherwise>
+											${contact.lastname}
+									</c:otherwise>
+									</c:choose>
+							</td>
+							<td class="inside"  width="25%">
 							<ul>
 							<c:forEach var="email" items="${contact.properties}">
 									<c:if test="${email.name=='contact email'}">
-										<li>${email.value}</li> 	
+									<c:choose>
+									<c:when test="${fn:length(email.value)>20}">
+										<li title="${email.value}">${fn:substring(email.value,0,16)}...</li> 	
+									</c:when>
+									<c:otherwise>
+										<li>${email.value}</li>
+									</c:otherwise>
+									</c:choose>
 									</c:if>
 							</c:forEach>
 							</ul>
 							</td>
-							<td class="inside">
+							<td class="inside" width="20%">
 							<ul>
-							 <c:if
-								test="${not empty contact.organisationName}"><li>${contact.organisationName}</li></c:if>
+							 <c:if test="${not empty contact.organisationName}">
+							 <c:choose>
+									<c:when test="${fn:length(contact.organisationName)>13}">
+										<li title="${contact.organisationName}">${fn:substring(contact.organisationName,0,10)}...</li> 	
+									</c:when>
+									<c:otherwise>
+										<li>${contact.organisationName}</li>
+									</c:otherwise>
+								</c:choose>
+								
+								</c:if>
 								<c:forEach var="contOrg" items="${contact.organizationContacts}">
-										<li>${contOrg.organisation}</li> 	
+								 <c:choose>
+									<c:when test="${fn:length(contOrg.organisation.name)>13}">
+										<li title="${contOrg.organisation.name}">${fn:substring(contOrg.organisation.name,0,10)}...</li> 	
+									</c:when>
+									<c:otherwise>
+										<li>${contOrg.organisation.name}</li>
+									</c:otherwise>
+								</c:choose>
+										
 							</c:forEach>
 							</ul>
 							</td>
-							<td class="inside">
+							<td class="inside" width="20%">
 							<ul>
 							<c:forEach var="phone" items="${contact.properties}">
 									<c:if test="${phone.name=='contact phone'}">
-										<li><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp; ${phone.actualPhoneNumber}</li> 	
+									<c:choose>
+									<c:when test="${fn:length(phone.actualPhoneNumber)>13}">
+										<li title="${phone.actualPhoneNumber}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.actualPhoneNumber,0,10)}...</li> 	
+									</c:when>
+									<c:otherwise>
+										<li><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${phone.actualPhoneNumber}</li>
+									</c:otherwise>
+									</c:choose>
+										
 									</c:if>
 							</c:forEach>
 							</ul>
 							</td>
 						</tr>
 					</c:forEach>
+					</tbody>
 				</table>
+				</div>
+				</div>
 				<center>
 				<html:button styleClass="dr-menu" property="addButton"
 					onclick="addSelectedContacts()">

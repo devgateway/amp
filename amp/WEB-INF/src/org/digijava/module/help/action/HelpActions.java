@@ -430,7 +430,7 @@ public class HelpActions extends DispatchAction {
 		String page  = request.getParameter("page");
 		helpForm.setHelpErrors(null);
 		if(request.getParameter("multi")!=null && request.getParameter("multi").equals("false")){
-			if (helpForm.getTopicKey() != null) {
+			if (helpForm.getHelpTopicId() != null) {
 //				HelpTopic helpTopic = HelpUtil.getHelpTopicByBodyEditKey("help:topic:body:"+helpForm.getTopicKey(),	siteId, moduleInstance);
 				HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getHelpTopicId());
 				if(helpTopic!=null){

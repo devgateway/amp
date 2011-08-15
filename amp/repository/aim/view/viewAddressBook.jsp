@@ -188,21 +188,6 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 
-
-
-
-
-
-
-
- 
-
- 
-
-	
-  
-
-
 	
 <script language="JavaScript">
 	var msgDataError = '<digi:trn>Data error</digi:trn>';
@@ -515,23 +500,21 @@
 																	<div id="dt-pag-nav"></div>
 																	<div id="errors"></div>
                                                                     <div id="tooltipsCtx"></div>
-																</div>
-													
-												</td>
-											</tr>
-										</table>
-							</digi:form>
-						</td>
-					</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</td>
-</tr>
-					
-					</tbody>
+																</div>													
+															</td>
+														</tr>
+													</table>
+												</digi:form>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 </table>
 	
 

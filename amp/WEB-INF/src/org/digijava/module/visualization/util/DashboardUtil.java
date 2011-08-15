@@ -147,6 +147,33 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
+	public static Map<AmpSector, BigDecimal> getRankSubSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer selectedYear) throws DgException{
+		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
+		Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        if (selectedYear!=null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+		} 
+        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            divideByMillionDenominator = new BigDecimal(1000);
+        }
+		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
+			AmpSector sector = (AmpSector) iterator.next();
+			//Long[] oldIds = filter.getSectorIds();
+			Long[] ids = {sector.getAmpSectorId()};
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelSectorIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            //filter.setSectorIds(oldIds);
+	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        map.put(sector, total);
+		}
+		return sortByValue (map);
+	}
+	
 	public static Map sortByValue(Map map) {
 		return sortByValue(map, null);
 	}

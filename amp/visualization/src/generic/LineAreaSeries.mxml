@@ -269,6 +269,7 @@
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -293,6 +294,10 @@
 						"typeofaid" : "true"
 					};
 				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+
 				if(start)
 					service.send(params);
 				try {
@@ -306,19 +311,24 @@
 			public function refreshGraph():void
 			{
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				var params:Object = {};
 				params["format"] = "xml";
 				params["divide"] = divide;
+				params["linechart"] = "true";
 				if(idContainer == "AidType"){
 					params = {
 						"format" : "xml",
 						"typeofaid" : "true",
-						"divide": divide
+						"divide": divide,
+						"linechart" : "true"
 					};
 				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
 				service.send(params);
-//				start();
 			}
 
 			public function itemClick(evt:LayoutItemEvent):void{
@@ -387,6 +397,7 @@
 	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
 	<mx:String id="dataField">fundingtype</mx:String>
+	<mx:String id="itemId">-1</mx:String>
 	<mx:String id="fontFamily">Arial</mx:String>
 	<mx:Number id="fontSize">12</mx:Number>
 	<mx:String id="fontWeight">bold</mx:String>

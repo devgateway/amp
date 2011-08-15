@@ -202,6 +202,8 @@
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -227,6 +229,9 @@
 						"typeofaid" : "true"
 					};
 				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
 				if(start)
 					service.send(params);
 				
@@ -243,6 +248,7 @@
 			{
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
 					"format" : "xml",
 					"donut": "true"
@@ -255,6 +261,9 @@
 						"donut": "true",
 						"typeofaid" : "true"
 					};
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
 				}
 				service.send(params);
 //				start();
@@ -364,6 +373,7 @@
 	<mx:Number id="outerRadi1">.78</mx:Number>
 	<mx:Number id="outerRadi2">1</mx:Number>
 
+	<mx:String id="itemId">-1</mx:String>
 	<mx:String id="dataField">aidtype</mx:String>
 	<mx:String id="fontFamily">Arial</mx:String>
 	<mx:Number id="fontSize">12</mx:Number>

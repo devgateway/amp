@@ -40,10 +40,6 @@
 >
 
 	<mx:HTTPService id="service" result="service_resultHandler(event)" >
-		<mx:request>
-			<format>xml</format>
-			<typeofaid>true</typeofaid>
-		</mx:request>
 	</mx:HTTPService>
 	<!--<mx:Style source="styles/charts.css"/>-->
 	<mx:Script>
@@ -132,6 +128,20 @@
 					dc.visible = true;
 					messagePanel.visible = false;
 					sizePanel(0, 0);
+				}
+				else if (dataField in service.lastResult[profileDataField]){
+					if(service.lastResult[profileDataField][dataField] > 0) //If there's something to show
+					{
+						dc.visible = true;
+						messagePanel.visible = false;
+						sizePanel(0, 0);
+					}
+					else
+					{
+						dc.visible = false;
+						messagePanel.visible = true;
+						sizePanel(300, 200);
+					}
 				}
 				else
 				{
@@ -240,6 +250,7 @@
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				profileDataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
 
 				var strDomain:String = "";
@@ -254,8 +265,14 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				if(start)
-					service.send();
+				if(start){
+					var params:Object = {
+						"format" : "xml",
+						"typeofaid" : "true",
+						"itemId" : itemId
+					};
+					service.send(params);
+				}
 				
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
@@ -277,18 +294,30 @@
 			
 			public function refreshGraph():void
 			{
-				service.send();
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+				var params:Object = {
+					"format" : "xml",
+					"typeofaid" : "true",
+					"itemId" : itemId
+				};
+				
+				service.send(params);
 //				start();
 			}
 
 			protected function sliderYear_changeHandler(event:SliderEvent):void
 			{
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				// TODO Auto-generated method stub
 				allYears.selected = false;
 				var params:Object = {};
 				params["year"] = sliderYear.value;
 				params["format"] = "xml";
 				params["typeofaid"] = "true";
+				params["itemId"] = itemId;
+				
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 			}
@@ -390,6 +419,7 @@
 	<mx:Number id="percentGap">.02</mx:Number>
 	<mx:Resize id="resize" />
 	<mx:String id="profileDataField">sector</mx:String>
+	<mx:String id="itemId">-1</mx:String>
 	<mx:String id="fontFamily">Arial</mx:String>
 	<mx:Number id="fontSize">10</mx:Number>
 	<mx:String id="fontWeight">bold</mx:String>

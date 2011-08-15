@@ -1402,6 +1402,47 @@ function toggleSettings(){
 	</ul>
 	<div class="yui-content">
 	<div id="tab1">
+			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
+			<fieldset class="chartFieldset">
+				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
+				<div id="SectorProfileHeader" class="chart_header" style="float:left">
+				Title <input type="text" id="SectorProfileTitle" value="" size="50">
+				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
+				&nbsp;Size
+				<select id="SectorProfileFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold">Bold</label><br/>
+				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend">Show legend</label>
+				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide">Divide by thousands</label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel">Show data label</label>
+				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
+				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
+				<input type="hidden" id="SectorProfileDataField" value="sector" />
+				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
+				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
+				</div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="Data View"/></div>
+				<br />
+				<br />
+				<div class="flashcontent" name="flashContent">
+					<div id="SectorProfile">
+						<a href="http://www.adobe.com/go/getflashplayer">
+							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
+						</a>
+					</div>
+				</div>
+				<div align="right">
+					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
+				</div> 
+			</fieldset>
+		</c:if>
+	
 		<fieldset class="chartFieldset">
 			<input type="hidden" id="GlobalFontSize" value="11" />
 			<input type="hidden" id="GlobalFontFamily" value="Arial" />
@@ -1649,6 +1690,7 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
 				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
 				<input type="hidden" id="SectorProfileDataField" value="sector" />
+				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
 				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="Data View"/></div>
@@ -1804,6 +1846,13 @@ function callbackChildren(e) {
 		break;
 		case "sector_dropdown_id":
 			objectType = "Sector";
+			//try to set the SectorProfileItemId from select:
+			try {
+				document.getElementById("SectorProfileItemId").value = parentId;
+			}
+			catch(e){
+					
+			}
 			break;
 		case "region_dropdown_id":
 			objectType = "Region";
@@ -1974,6 +2023,7 @@ function refreshBoxes(o){
 	var trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
 	var trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
 	var trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
+	var trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
 	var trnShowTop5="<digi:trn jsFriendly='true'>Show Top 5</digi:trn>"; 
 	var trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
@@ -2491,10 +2541,17 @@ function refreshBoxes(o){
 		div.innerHTML = value;
 		input.value = value;
 	}
-	if (dashboardType!=3) {
+	if (dashboardType !=3 || dashboardType == 3) {
 		div = document.getElementById("SectorProfileTitleLegend");
 		input = document.getElementById("SectorProfileTitle");
-		value = trnSectorProfile + " - " + fundType;
+		isSubsector = (document.getElementById("SectorProfileItemId") && document.getElementById("SectorProfileItemId").value != "-1") ? true : false;
+		if(isSubsector){
+			value = trnSubSectorProfile + " - " + fundType;
+		}
+		else
+		{
+			value = trnSectorProfile + " - " + fundType;
+		}
 		div.innerHTML = value;
 		input.value = value;
 	}
@@ -2576,7 +2633,7 @@ function initDashboard(){
 	if (dashboardType!=1) {
 		changeChart(null, 'bar_profile', 'DonorProfile', true);
 	}
-	if (dashboardType!=3) {
+	if (dashboardType!=3 || dashboardType == 3) {
 		changeChart(null, 'bar_profile', 'SectorProfile', true);
 	}
 	if (dashboardType!=2) {
@@ -2676,8 +2733,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-	var cache = "";
+	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+//	var cache = "";
 	
 	switch(chartType){
 		case "bar":

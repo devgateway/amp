@@ -13,7 +13,7 @@
 		<property name="siteId" column="SITE_ID" type="java.lang.String" />
 		<property name="instanceId" column="INSTANCE_ID" type="java.lang.String" />
 		<property name="name" column="NAME" type="java.lang.String" />
-		<set name="items" cascade="delete" inverse="true" order-by="paragraph_order asc">
+		<set name="items" cascade="delete" inverse="true" order-by="paragraph_order asc" lazy="false">
 			<!--		<cache usage="read-write"/> -->
 			<key column="SDM_ID" />
 			<one-to-many class="org.digijava.module.sdm.dbentity.SdmItem" />

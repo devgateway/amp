@@ -24,13 +24,11 @@
 		<digi:trn><div style="font-size:12px; margin-bottom:5px;">Please search a contact before adding a new one to avoid contact duplications in databse</div></digi:trn>
 			<table style="margin-bottom:10px;">
 				<tr>
-					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong><font
-						color="red">*</font></td>
+					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong></td>
 					<td align="left" style="padding-right:10px;"><html:text property="firstName" styleClass="inputx" size="30"
 						styleId="name" /></td>
 
-					<td align="right" style="font-size:12px;"><strong><digi:trn>Lastname</digi:trn></strong><font
-						color="red">*</font></td>
+					<td align="right" style="font-size:12px;"><strong><digi:trn>Lastname</digi:trn></strong></td>
 					<td align="left" style="padding-right:10px;"><html:text property="lastname" styleClass="inputx" size="30"
 						styleId="lastname" /></td>
 					<td align="left"><html:button property="submitButton"
@@ -75,7 +73,7 @@
 							<td class="inside">
 							<ul>
 							 <c:if
-								test="${not empty contact.organisationName}">:<li>${contact.organisationName}</li></c:if>
+								test="${not empty contact.organisationName}"><li>${contact.organisationName}</li></c:if>
 								<c:forEach var="contOrg" items="${contact.organizationContacts}">
 										<li>${contOrg.organisation}</li> 	
 							</c:forEach>

@@ -228,23 +228,36 @@ public class ContactInfoUtil {
 			String lastname) throws Exception {
 		List<AmpContact> contacts = null;
 		Session session = null;
-		String queryString = null;
+		StringBuilder queryString = new StringBuilder();
 		Query query = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = "select cont from " + AmpContact.class.getName()
-					+ " cont ";
-	
-			queryString += " where lower(cont.name) like lower(:name) "
-					+ "or lower(cont.lastname) like lower(:lastname)";
-
-			queryString += " order by cont.function desc ";
-			query = session.createQuery(queryString);
-			query.setString("name", "%"+ name+"%");
-			query.setString("lastname", "%"+ lastname+"%");
+			queryString .append("select cont from ");
+			queryString .append(AmpContact.class.getName());
+			queryString .append(" cont where ");
+			boolean isNameProvided=name!=null&&!name.trim().equals("");
+			boolean isLastNameProvided=lastname!=null&&!lastname.trim().equals("");
+			if(isNameProvided){
+				queryString.append(" lower(cont.name) like lower(:name) ");
+			}
+			if(isLastNameProvided){
+				if(isNameProvided){
+					queryString.append(" or ");	
+				}
+				queryString.append(" lower(cont.lastname) like lower(:lastname)");
+			}
+			queryString.append(" order by cont.function desc ");
+			query = session.createQuery(queryString.toString());
+			if(isNameProvided){
+				query.setString("name", "%"+ name+"%");
+			}
+			if(isLastNameProvided){
+				query.setString("lastname", "%"+ lastname+"%");	
+			}
 			contacts = query.list();
 		} catch (Exception e) {
 			logger.error(e);
+			throw e;
 		}
 		return contacts;
 	}

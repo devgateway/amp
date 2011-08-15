@@ -374,8 +374,8 @@ YAHOO.namespace("YAHOO.amp");
             var flag=true;
             var name=document.getElementById('name').value;
             var lastname=document.getElementById('lastname').value;
-            if(trim(name) == ""&&trim(lastname)){
-                alert('<digi:trn jsFriendly="true">Please Enter first/last name....</digi:trn>');
+            if(trim(name) == ""&&trim(lastname)==""){
+                alert('<digi:trn jsFriendly="true">Please Enter either firstname or lastname....</digi:trn>');
                 flag=false;
             }
             return flag;

@@ -6,22 +6,21 @@
   <apply>
     <script>
       <lang delimiter=";" type="postgres">
-      	delete from amp_features_templates where 
-feature in (select id from amp_features_visibility where name like 'Content Repository' or name like 'Public Documents'); 
+      	delete from amp_features_templates where feature in 
+(
+select id from  amp_features_visibility where parent in 
+(select id from amp_modules_visibility where name like 'Document Management' or name like 'DOCUMENTS MANAGEMENT')
+);
 
-delete from  amp_features_visibility where name like 'Content Repository' or name like 'Public Documents'; 
+delete from  amp_features_visibility where parent in 
+(select id from amp_modules_visibility where name like 'Document Management' or name like 'DOCUMENTS MANAGEMENT');
 
 delete from amp_modules_templates where 
 module in (select id from amp_modules_visibility where name like 'DOCUMENTS MANAGEMENT' or name like 'Document Management'); 
 
 delete from  amp_modules_visibility where name like 'DOCUMENTS MANAGEMENT' or name like 'Document Management'; 
 
-delete from amp_features_templates where 
-feature in (select id from amp_features_visibility where name like 'My Resources' or name like 'Team Resources' 
- or name like 'Public Resources' or name like 'Shared Resources'); 
 
-delete from  amp_features_visibility where name like 'My Resources' or name like 'Team Resources' 
- or name like 'Public Resources' or name like 'Shared Resources';
  
       </lang>
     </script>

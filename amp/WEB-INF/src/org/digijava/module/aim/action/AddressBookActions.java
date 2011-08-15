@@ -147,8 +147,8 @@ public class AddressBookActions extends DispatchAction {
 				AmpContact contact = (AmpContact) it.next();
 				JSONObject jcontact = new JSONObject();
 				jcontact.put("ID", contact.getId());
-				jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
-				jcontact.put("name", contact.getName()+" "+contact.getLastname());
+				jcontact.put("title", contact.getTitle()!=null?"<ul style=\"padding:10px;\"><li>"+contact.getTitle().getValue()+"</li></ul>":"");
+				jcontact.put("name", (contact.getName() !=null && contact.getName().length()>0 || contact.getLastname() !=null && contact.getLastname().length()>0)?"<ul style=\"padding:10px;\"><li>"+contact.getName()+" "+contact.getLastname()+"</li></ul>":"");
 				String emails="";
 				String orgs="";
 				String phones="";
@@ -157,17 +157,17 @@ public class AddressBookActions extends DispatchAction {
 					for (AmpContactProperty property : contact.getProperties()) {
 						if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
 							if(emails.length()==0){
-								emails+="<ul>";
+								emails+="<ul style=\"padding:10px;\">";
 							}
 							emails+="<li>"+property.getValue() +" </li>";
 						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
 							if(phones.length()==0){
-								phones+="<ul>";
+								phones+="<ul style=\"padding:10px;\">";
 							}
 							phones+="<li>"+property.getValueAsFormatedPhoneNum() +" </li>";
 						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
 							if(faxes.length()==0){
-								faxes+="<ul>";
+								faxes+="<ul style=\"padding:10px;\">";
 							}
 							faxes+="<li>"+property.getValue() +" </li>";
 						}
@@ -185,7 +185,7 @@ public class AddressBookActions extends DispatchAction {
 				jcontact.put("email", emails);
 				
 				if((contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0) || (contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0)){
-					orgs+="<ul>";
+					orgs+="<ul style=\"padding:10px;\">";
 					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
 						orgs+="<li>"+contact.getOrganisationName()+"</li>";
 					}
@@ -195,7 +195,7 @@ public class AddressBookActions extends DispatchAction {
 					orgs+="</ul>";
 				}
 				jcontact.put("organizations", orgs);
-				jcontact.put("function", contact.getFunction());
+				jcontact.put("function",contact.getFunction()!=null && contact.getFunction().length()>0?"<ul style=\"padding:10px;\"><li>"+contact.getFunction()+"</li></ul>":"");
 				jcontact.put("phones", phones);
 				jcontact.put("faxes", faxes);
 				jsonArray.add(jcontact);

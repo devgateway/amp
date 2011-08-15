@@ -17,7 +17,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <c:set var="trnAddObservations">
 	<digi:trn>Add Observations</digi:trn>

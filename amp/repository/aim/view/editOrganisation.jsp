@@ -16,9 +16,9 @@
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
-    <jsp:include page="scripts/calendar.js.jsp" flush="true" />
+    <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
  
 
@@ -92,9 +92,9 @@ div.charcounter-progress-bar {
     
 </style>
 
-<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {
@@ -462,23 +462,6 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 return false;
             }
             
-            var fundingorgid = document.aimAddOrgForm.fundingorgid.value;
-            var mandatoryFundOrgId = document.getElementById("mandatoryFundOrgId");
-            var alertError=false;
-            if(type.value=='NGO'){
-            	if (mandatoryFundOrgId!=null && (fundingorgid == null||fundingorgid.length == 0)) {
-            		alertError=true;
-                }
-            }else{
-            	if (fundingorgid == null||fundingorgid.length == 0) {
-            		alertError=true;                    
-                }
-            }
-            if(alertError==true){
-            	alert('<digi:trn  jsFriendly="true">Please enter a funding id for this Organization.</digi:trn>');
-                document.aimAddOrgForm.fundingorgid.focus();
-                return false;
-            }
             
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
@@ -684,7 +667,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 }
                
     			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
-                document.aimAddOrgForm.action = "${delete}";
+                document.aimAddOrgForm.action = "${save}";
                 document.aimAddOrgForm.actionFlag.value = "save";
                 document.aimAddOrgForm.submit();
             }
@@ -790,6 +773,31 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 document.aimAddOrgForm.submit();
 
             }
+
+         function exportWholeNGOInfo(){
+        	 <digi:context name="wholeInfo" property="/exportOrganizationToxsl.do?actionMethod=exportNGOForm" />;
+              //user may click on the export icon before submitting,saving data, this is why we are collecting data manually.
+              var url="${wholeInfo}"+"&"+ getWholeInfoParamsForNGO();
+              document.aimAddOrgForm.action = url;
+              document.aimAddOrgForm.target = "_self";
+              document.aimAddOrgForm.submit();
+          }
+
+         function exportNGOToPDF() {
+        	 <digi:context name="wholeInfo" property="/exportNGOToPdf.do?actionMethod=exportNGOForm" />;        	 
+             //user may click on the export icon before submitting,saving data, this is why we are collecting data manually.
+             var url="${wholeInfo}"+"&"+ getWholeInfoParamsForNGO();
+             document.aimAddOrgForm.action = url;
+             document.aimAddOrgForm.target = "_self";
+             document.aimAddOrgForm.submit();
+         }
+
+         function getWholeInfoParamsForNGO(){
+			var params = getGeneralInfoParams();
+			if(document.getElementById('acronym')!=null){
+          	  params+="&acronym="+document.getElementById('acronym').value;
+            }
+         }
 
             function getGeneralInfoParams(){
                       var params="";
@@ -939,9 +947,17 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     <tr>
                         <td>
                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-
-                                <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Print"/>
+                                <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
                             </digi:link>
+                            <c:if test="${aimAddOrgForm.type=='NGO'}">
+                            	<digi:link href="#" onclick="javascript:exportWholeNGOInfo(); return false;">
+	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+	                            </digi:link>
+	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;">
+	                            	<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+	                            </digi:link>
+                            </c:if>                           
+
 
                         </td>
 
@@ -1024,14 +1040,6 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                             <tr>
                                                 <td style="text-align:left; " class="tdBoldClass" nowrap>
                                                     <digi:trn>Funding Org Id</digi:trn>
-                                                     <c:if test="${aimAddOrgForm.type=='NGO'}">
-                                                     	<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form">
-                                                     		<span id="mandatoryFundOrgId"><font size="2" color="#FF0000">*</font></span>
-                                                     	</field:display>
-                                                     </c:if>
-                                                     <c:if test="${aimAddOrgForm.type!='NGO'}">
-                                                     	<font size="2" color="#FF0000">*</font>
-                                                     </c:if>                                                    
                                                 </td>
                                                 <td>    
                                                     <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>

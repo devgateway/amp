@@ -26,6 +26,6 @@
 		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="component" column="amp_component_id"
-			class="org.digijava.module.aim.dbentity.AmpComponent" />
+			class="org.digijava.module.aim.dbentity.AmpComponent" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -9,6 +9,7 @@
   <property name="cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</property>
   <property name="cache.use_second_level_cache">true</property>
   <property name="cache.use_query_cache">true</property> 
+  <property name="cache.use_query_cache">true</property> 
   <property name="show_sql">false</property>
   <property name="jdbc.use_get_generated_keys">true</property>
   <property name="jdbc.use_streams_for_binary">false</property>

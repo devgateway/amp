@@ -127,19 +127,30 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 								<digi:trn key="aim:role">Role</digi:trn>
 							</td>
 						</tr>
-						<c:forEach var="teamMemberDetail" items="${aimUserDetailForm.teamMemberTeamHelpers}">
-							
-							<tr>
-                                                            <td class="inside">
-                                                                ${teamMemberDetail.teamName}
-                                                            </td>
-							<td class="inside">
-								<digi:trn>${teamMemberDetail.roleName}</digi:trn>
-							</td>
-                          </tr>
-								
-						
-						</c:forEach>
+									<% int i = 0; %>
+									<c:forEach var="info" items="${aimUserDetailForm.info}">
+									<tr>
+										<td bgcolor="#f4f4f2"  width="300px" class="text1">
+											<% if ((i%2) == 0) { %>
+												<digi:trn key="aim:teamName">Team Name</digi:trn>
+											<% } else { %>
+												<digi:trn key="aim:role">Role</digi:trn>
+											<% } %>
+										</td>
+										<td bgcolor="#f4f4f2" class="text1" width="500px">
+										<% if ((i%2) == 0) { %>
+											<bean:write name="info"/>
+										<% } else { %>	
+										<logic:equal value="Workspace Manager" name="info">
+											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
+										</logic:equal>
+										<logic:equal value="Workspace Member" name="info">
+											<digi:trn key="aim:workspaceMember">Workspace Member</digi:trn>
+										</logic:equal>
+										<% }  i++; %>
+										</td>
+									</tr>
+									</c:forEach>
 					</table>
 
 <br>					

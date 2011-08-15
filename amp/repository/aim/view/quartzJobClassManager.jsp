@@ -10,7 +10,7 @@
 <digi:instance property="quartzJobClassManagerForm" />
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>

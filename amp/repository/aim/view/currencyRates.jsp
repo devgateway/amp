@@ -10,10 +10,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
-<jsp:include page="addCurrencyRate.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
+<jsp:include page="addCurrencyRate.jsp"  />
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -185,7 +185,7 @@ function fnSubmit() {
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td>
 <!-- AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>

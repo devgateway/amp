@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -43,6 +44,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -644,7 +647,7 @@ public class DEImportBuilder {
 				
 				AmpActivityProgram ampActivityProgram = new AmpActivityProgram();
 				ampActivityProgram.setActivity(activity);
-				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage())).longValue());
+				ampActivityProgram.setProgramPercentage((new Float(idmlProgram.getPercentage())));
 				ampActivityProgram.setProgram(ampTheme);
 				
 				ArrayList<AmpActivityProgramSettings> allClassifConfigs = (ArrayList<AmpActivityProgramSettings>) getAllAmpActivityProgramSettings();
@@ -1131,7 +1134,7 @@ public class DEImportBuilder {
 			if(contacts != null){
 				activity.setContFirstName(contacts.getFirstName());
 				activity.setContLastName(contacts.getLastName());
-				activity.setEmail(contacts.getEmail());
+				activity.setEmail(contacts.getEmail().toString());
 			}
 		}
 	}
@@ -1143,7 +1146,7 @@ public class DEImportBuilder {
 			if(contacts != null){
 				activity.setMofedCntFirstName(contacts.getFirstName());
 				activity.setMofedCntLastName(contacts.getLastName());
-				activity.setMofedCntEmail(contacts.getEmail());
+				activity.setMofedCntEmail(contacts.getEmail().toString());
 			}
 		}
 	}
@@ -2261,6 +2264,36 @@ public class DEImportBuilder {
 	        else this.getAmpImportItem().setIatiActivities(null);
 	        return isOk;
 	        
+	}
+	
+	private void fillActivityWithContactInfo(List<ContactType> contacts,AmpActivity activity, String contactType) {
+		if (contacts!= null && contacts.size() > 0){
+			for (ContactType contact : contacts) {
+				AmpContact cont = new AmpContact(contact.getFirstName(), contact.getLastName());
+				List<String> emails = cont.getEmails();
+				if (emails != null) {
+					for (String email : emails) {
+						AmpContactProperty prop = new AmpContactProperty();
+						prop.setName(org.digijava.module.aim.helper.Constants.CONTACT_PROPERTY_NAME_EMAIL);
+						prop.setValue(email);
+						if (cont.getProperties() == null) {
+							cont.setProperties(new HashSet<AmpContactProperty>());
+						}
+						cont.getProperties().add(prop);
+					}
+				}
+				AmpActivityContact actContant = new AmpActivityContact();
+				actContant.setContactType(contactType);
+				actContant.setContact(cont);
+		//		actContant.setPrimaryContact(contact.isPrimary());
+				if (activity.getActivityContacts() == null){
+					activity.setActivityContacts(new HashSet<AmpActivityContact>()) ;
+				}
+				activity.getActivityContacts().add(actContant);
+				
+			}			
+
+		}
 	}
 	
 }

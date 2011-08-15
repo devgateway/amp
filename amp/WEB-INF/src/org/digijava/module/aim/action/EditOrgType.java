@@ -146,6 +146,7 @@ public class EditOrgType extends DispatchAction {
 		}else {
 			AmpOrgType otype = DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId());
 			if (null != otype) {
+				DbUtil.deleteUserExt(null, otype, null);
 				DbUtil.delete(otype);
 			  	ARUtil.clearOrgGroupTypeDimensions();
 			  	removeSessAttribute(request);

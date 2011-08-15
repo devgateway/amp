@@ -17,7 +17,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="amp-2.0-release"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/amp-2.0-release/build.xml}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-DserverName=local -Dexternal-lib=${external-lib} -Djdbc.db=amp_200 -Djdbc.user=amp -Djdbc.password=amp"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-DserverName=local -Dexternal-lib=${external-lib} -Djdbc.db=amp_drc -Djdbc.user=postgres -Djdbc.password=1234"/>
 <booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/amp-2.0-release}"/>
 </launchConfiguration>

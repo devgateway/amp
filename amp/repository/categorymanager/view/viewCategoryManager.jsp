@@ -12,7 +12,7 @@
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="page" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
-<%-- <jsp:include page="teamPagesHeader.jsp" flush="true" /> --%>
+<%-- <jsp:include page="teamPagesHeader.jsp"  /> --%>
 <c:set var="translation">
 				<digi:trn key="aim:categoryDeleteConfirm">Are you sure you want to delete the category?</digi:trn>
 </c:set>

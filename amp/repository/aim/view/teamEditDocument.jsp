@@ -43,7 +43,7 @@
 
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td width="100%" valign="top" align="left">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
@@ -95,7 +95,7 @@
 									<c:set var="selectedTab" value="4" scope="request"/>
                                     <c:set var="selectedSubTab" value="-1" scope="request"/>
                                 
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>

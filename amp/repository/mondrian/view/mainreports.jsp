@@ -34,7 +34,7 @@
 <input type="hidden" name="query">
 <input type="hidden" name="name">
 <input type="hidden" name="id">
-<jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="../../aim/view/teamPagesHeader.jsp"  />
 
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>

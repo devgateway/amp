@@ -8,7 +8,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 
 <script language="JavaScript">

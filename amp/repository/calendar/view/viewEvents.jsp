@@ -67,7 +67,7 @@
 			</td>
 			<td valign="top" width="100%">
 				<!-- CELLS SECTION -->
-	            <jsp:include page="viewEventsBody.jsp" flush="true"/>
+	               <jsp:include page="viewEventsBody.jsp" />
 	        </td>
     	</tr>
 	</table>
@@ -76,7 +76,7 @@
 	<table border="0" align="center" width="100%" height="500px">
 		<tr align="center">
 			<td align="center" width="800" height="500px" > 
-				<jsp:include page="viewEventsBody.jsp" flush="true"/>
+		<jsp:include page="viewEventsBody.jsp" />
 			</td>
 		</tr>
 	</table>

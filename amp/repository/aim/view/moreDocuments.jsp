@@ -12,7 +12,7 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td valign="top" align="left" width="100%">
-		<jsp:include page="teamPagesHeader.jsp" flush="true" />
+		<jsp:include page="teamPagesHeader.jsp"  />
 	<td>
 </tr>
 <tr>

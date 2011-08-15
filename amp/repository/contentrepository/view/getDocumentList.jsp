@@ -14,7 +14,7 @@
 	
 	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
 		<bean:define name="crDocumentManagerForm" property="otherDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-		<jsp:include flush="true" page="documentTable.jsp" />
+	<jsp:include  page="documentTable.jsp" />
 		</div>
 		<br />
 	</logic:notEmpty>

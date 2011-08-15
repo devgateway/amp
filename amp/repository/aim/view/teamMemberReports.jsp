@@ -77,7 +77,7 @@
 
 <html:hidden property="memberId" />
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -124,7 +124,7 @@
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 								</td>
 							</tr>
 							<tr bgcolor="#f4f4f2">

@@ -21,93 +21,63 @@ function confirmDeletion(message)
 </script>
 
 <c:set var="message">
-	<digi:trn key="gateperm:permDeleteConfirm">Do you really want to delete this Permission object?</digi:trn>
+<digi:trn key="gateperm:permDeleteConfirm">Do you really want to delete this Permission object?</digi:trn>
 </c:set>
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>
 <c:set var="msg">
-	${fn:replace(message,quote,escapedQuote)}
+${fn:replace(message,quote,escapedQuote)}
 </c:set>
-
-	<div class="breadcrump">
-		<div class="centering">
-			<div class="breadcrump_cont">
-				<span class="sec_name">Advanced Permission Manager</span>
-				<span class="breadcrump_sep">|</span>
-				<c:set var="translation"><digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn></c:set> 
-				<a href="/aim/admin.do" class="l_sm" title="${translation}"><digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-					<c:set var="translation"><digi:trn key="aim:clickToGlobalPerm">Click here to goto Global Permission Manager</digi:trn></c:set>
-				</a>
-				<span class="breadcrump_sep"><b>»</b></span>
-				<span class="breadcrump_sep"><a href="/gateperm/managePermMap.do" class="l_sm"><digi:trn key="aim:globalperms">Global Permission Manager</digi:trn></a></span>
-				<span class="breadcrump_sep"><b>»</b></span>
-				<span class="bread_sel">List Permissions</span>
-			</div>
-		</div>
-	</div>
-	
-<!-- FFerreyra: This is to contain the widget that allows a sortable table to avoid freeze on IE7 -->
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td class="main_side_1">
-	<div class="wht">
-			<digi:link href="/managePerm.do?new" title="NEW"><digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission</digi:link><br /><br />
-			<div id="permissionContainer">
-				<table id="permissionsList" class="inside" width="100%" cellpadding="0" cellspacing="0" border="1">
-					<thead>
-						<tr><td>Name</td><td>Permissibles</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
-					</thead>
-					<logic:iterate id="perm" name="allPermissions" scope="request">
-					<tr>
-						<td><bean:write name="perm" property="name"/></td>
-						<td><bean:write name="perm" property="permissibleObjects"/></td>
-						<td><bean:write name="perm" property="class.simpleName"/></td>
-						<td>
-							<logic:equal name="perm" property="class.simpleName" value="GatePermission">
-								<b>Actions:</b>
-								<bean:write name="perm" property="actions"/>
-								<br/>
-								<b>Gate Init:</b>
-								<bean:write name="perm" property="gateTypeName"/>
-								<br/>
-								<b>Gate Parameters:	</b>
-								<bean:write name="perm" property="gateParameters"/>
-							</logic:equal>
-							<logic:equal name="perm" property="class.simpleName" value="CompositePermission">
-								<b>Permissions:</b>
-								<bean:write name="perm" property="permissions"/>
-							</logic:equal>
-						</td>
-						<td><bean:write name="perm" property="compositeLinkedPermissions"/></td>
-						<td>
-							<digi:link href="/managePerm.do?edit" paramId="permissionId" paramName="perm" paramProperty="id" title="EDIT">
-								<digi:img src="module/gateperm/images/edit.gif" border="0" />
-							</digi:link>
-							<digi:link href="/managePerm.do?delete" paramId="permissionId" onclick="return confirmDeletion('${msg}')" paramName="perm" paramProperty="id" title="DELETE">
-								<digi:img src="module/gateperm/images/delete.gif" border="0" />
-							</digi:link>
-						</td>
-					</tr>
-					</logic:iterate>
-				</table>
-			</div>
-			<br />
-			<digi:link href="/managePerm.do?new" title="NEW"><digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission</digi:link>
-	</div>
-	</td>
-  </tr>
-</table>
-			
+<table id="permissionsList">
+<thead>
+<tr><td>Name</td><td>Permissibles</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
+</thead>
+<logic:iterate id="perm" name="allPermissions" scope="request">
+<tr>
+<td><bean:write name="perm" property="name"/></td>
+<td><bean:write name="perm" property="permissibleObjects"/></td>
+<td><bean:write name="perm" property="class.simpleName"/></td>
+<td>
+<logic:equal name="perm" property="class.simpleName" value="GatePermission">
+<b>Actions:</b>
+<bean:write name="perm" property="actions"/>
 <br/>
-<script type="text/javascript">
-<!--
-var tableWidgetObj = new DHTMLSuite.tableWidget();
-tableWidgetObj.setTableId('permissionsList');
-tableWidgetObj.setTableWidth('100%');
-tableWidgetObj.setTableHeight(760);
-//tableWidgetObjsetNoCssLayout();
-tableWidgetObj.setColumnSort(Array('S','S','S'));
-tableWidgetObj.init();
-tableWidgetObj.sortTableByColumn(0);	// Initially sort the table by the first column
-//-->
-</script>
+<b>Gate Init:</b>
+<bean:write name="perm" property="gateTypeName"/>
+<br/>
+<b>Gate Parameters:	</b>
+<bean:write name="perm" property="gateParameters"/>
+</logic:equal>
+<logic:equal name="perm" property="class.simpleName" value="CompositePermission">
+<b>Permissions:</b>
+<bean:write name="perm" property="permissions"/>
+</logic:equal>
+</td>
+<td>
+<bean:write name="perm" property="compositeLinkedPermissions"/>
+</td>
+
+<%--
+<td> 
+<bean:define id="listable" name="perm" scope="page" toScope="request"/>
+<jsp:include page="${listable.jspFile}"/>
+</td>
+ --%>
+<td>
+<digi:link href="/managePerm.do?edit" paramId="permissionId" paramName="perm" paramProperty="id" title="EDIT">
+<digi:img src="module/gateperm/images/edit.gif" border="0" />
+</digi:link>
+<digi:link href="/managePerm.do?delete" paramId="permissionId" onclick="return confirmDeletion('${msg}')" paramName="perm" paramProperty="id" title="DELETE">
+<digi:img src="module/gateperm/images/delete.gif" border="0" />
+</digi:link>
+</td>
+</tr>
+</logic:iterate>
+</table>
+<div align="left">&nbsp;&nbsp;
+<digi:link href="/managePerm.do?new" title="NEW">
+<digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission
+</digi:link>
+
+</div>
+<br/>

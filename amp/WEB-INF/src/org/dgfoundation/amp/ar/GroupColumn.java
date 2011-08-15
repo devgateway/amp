@@ -251,9 +251,9 @@ public class GroupColumn extends Column {
             else
                {
             	if(category.equalsIgnoreCase(ArConstants.YEAR)){
-            		cc = new AmountCellColumn(element.getValue().toString());
+            		cc = new AmountCellColumn( yearMapping.get(element.getValue().toString()) );
             	}else if(category.equalsIgnoreCase(ArConstants.MONTH)){
-            		cc = new AmountCellColumn(element.getValue().toString());
+            		cc = new AmountCellColumn( monthMapping.get(element.getValue().toString()) );
                 	}
             	else{
             	cc = new AmountCellColumn( element.getValue().toString());
@@ -618,5 +618,19 @@ public class GroupColumn extends Column {
 				allEmpty		= false;
 		}
 		return allEmpty;
+	}
+	@Override
+	public Column hasSorterColumn(String namePath) {
+		if (items != null && items.size() > 0) {
+			Iterator<Column> it	= items.iterator();
+			while (it.hasNext() ) {
+				Column result	= it.next().hasSorterColumn(namePath);
+				if ( result != null )
+					return result;
+				
+			}
+		}
+		
+		return null;
 	}
 }

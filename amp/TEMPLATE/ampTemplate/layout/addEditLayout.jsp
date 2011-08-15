@@ -56,7 +56,7 @@
   	<TR background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif">
     	<TD background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif" 
     	colSpan=2 height=66>
-			<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
+			<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
 		</TD>
 	</TR>
 	</TBODY>

@@ -16,7 +16,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 
 <script language="JavaScript">

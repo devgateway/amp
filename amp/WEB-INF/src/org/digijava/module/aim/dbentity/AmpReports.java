@@ -76,7 +76,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 
 	private String locale;
 
-	private AmpPages ampPage;
+	//private AmpPages ampPage;
 
 	private AmpCategoryValue activityLevel;
 
@@ -409,13 +409,13 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 		this.activityLevel = activityLevel;
 	}
 
-	public void setAmpPage(AmpPages ampPage) {
-		this.ampPage = ampPage;
-	}
-
-	public AmpPages getAmpPage() {
-		return ampPage;
-	}
+//	public void setAmpPage(AmpPages ampPage) {
+//		this.ampPage = ampPage;
+//	}
+//
+//	public AmpPages getAmpPage() {
+//		return ampPage;
+//	}
 	
 
 	public Set<AmpDesktopTabSelection> getDesktopTabSelections() {

@@ -51,15 +51,15 @@
         </c:set>
         
         <td background="img_2/ins_bg_1.gif" class="report_inside" align="center" style="color:#000000; border-color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-            <logic:equal name="column" property="columnDepth" value="1">          
             	<c:choose>
-            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">
+           		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.namePath}">
             			<c:set var="sortAscString">sortByAsc=${!filterBean.sortByAsc}</c:set>
             		</c:when>
             		<c:otherwise>
             			<c:set var="sortAscString">sortByAsc=true</c:set>
             		</c:otherwise>
             	</c:choose>				
+            <logic:equal name="column" property="columnDepth" value="1">          
 	            <logic:equal name="widget" scope="request" value="true">
 	              <a class="ins_title_reg" style="cursor:pointer;color:#000000; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 	              		<logic:notEmpty name="reportMeta" property="hierarchies">
@@ -78,7 +78,7 @@
 	              </a>
 	            </logic:notEqual>
             
-	            <c:if test="${subColumn.name == columnReport.sorterColumn}">
+	            <c:if test="${subColumn.namePath == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
 	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
@@ -110,10 +110,10 @@
 	            <logic:notEqual name="widget" scope="request" value="true">
 	              <html:link styleClass="ins_title_reg" style="cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-	              </html:link>
+	              	</html:link>
 	            </logic:notEqual>  
 	            
-				<c:if test="${subColumn.name == columnReport.sorterColumn}">
+				<c:if test="${subColumn.namePath == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
 	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>

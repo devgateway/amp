@@ -14,12 +14,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -62,6 +65,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
 
 /**
@@ -82,6 +87,9 @@ public class ReportWizardAction extends MultiAction {
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		myForm.setDuplicateName(false);
+		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		PermissionUtil.putInScope(request.getSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		
 		return this.modeSelect(mapping, form, request, response);
 	}
@@ -214,7 +222,7 @@ public class ReportWizardAction extends MultiAction {
 			request.getParameterMap().put("type", "5");
 		}
 		
-		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport) );
+		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
 			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("P"));
 		}else{
@@ -519,7 +527,7 @@ public class ReportWizardAction extends MultiAction {
 			}
 	}
 	
-	private HashMap buildAmpTreeColumnSimple(Collection formColumns, Integer type)
+	private HashMap buildAmpTreeColumnSimple(Collection formColumns, Integer type, HttpSession httpSession)
 	{
 			
 			ArrayList ampColumnsVisibles=new ArrayList();
@@ -532,6 +540,7 @@ public class ReportWizardAction extends MultiAction {
 			TreeSet ampThemes=new TreeSet();
 			TreeSet ampThemesOrdered=new TreeSet();
 			ArrayList ampColumnsOrder =(ArrayList) ampContext.getAttribute("ampColumnsOrder");
+			Map scope=PermissionUtil.getScope(httpSession);  
 			/*
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 			{
@@ -541,7 +550,8 @@ public class ReportWizardAction extends MultiAction {
 			}
 			allAmpColumns.clear();
 			allAmpColumns.addAll(allAmpColumnsPrefixed);
-			*/
+			*/			  
+			
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 			{
 				AmpColumns ampColumn=(AmpColumns) it.next();
@@ -550,8 +560,11 @@ public class ReportWizardAction extends MultiAction {
 					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
 					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
 					{
-						if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
-						{
+						if(ampFieldVisibility.isFieldActive(ampTreeVisibility)) {
+							
+							  //skip build columns with no rights
+							  if(ampFieldVisibility.getPermission(false)!=null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope)) continue;
+						
 							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
 							ampColumnVisibilityObj.setAmpColumn(ampColumn);
 							ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
@@ -647,7 +660,7 @@ public class ReportWizardAction extends MultiAction {
 			session.close();
 			
 			ampReport.setAmpReportId(null);
-			ampReport.setAmpPage(null);
+			//ampReport.setAmpPage(null);
 			ampReport.setFilterDataSet(null);
 			ampReport.setUpdatedDate(null);
 			ampReport.setLogs(null);

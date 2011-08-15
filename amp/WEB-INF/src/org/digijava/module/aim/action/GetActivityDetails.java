@@ -246,7 +246,7 @@ public class GetActivityDetails extends Action {
 			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 					activity.getAmpActivityId(), ampFundings, fp,false);
 			coForm.setGrandTotal(
-					FinancingBreakdownWorker.getOverallTotal(fb, 0,false));
+					FinancingBreakdownWorker.getOverallTotal(fb, 0,Constants.ACTUAL,false));
 		}
 
 		logger.info("Results Check ");

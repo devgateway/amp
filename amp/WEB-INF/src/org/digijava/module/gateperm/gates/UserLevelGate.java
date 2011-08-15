@@ -6,17 +6,14 @@ package org.digijava.module.gateperm.gates;
 import java.util.Map;
 import java.util.Queue;
 
-import org.hibernate.Session;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.core.Permissible;
+import org.hibernate.Session;
 
 /**
  * @author mihai
@@ -70,26 +67,20 @@ public class UserLevelGate extends Gate {
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		
+		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		
 		//AMP-9768 - apply permissions to teamHead for other workspaces than his own 
-		Object o = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-		AmpActivityVersion act = null; 
-		if (o instanceof AmpActivityVersion) {
-			act = (AmpActivityVersion) o;
-		}
-		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam() != null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
-		if(act==null){
-			o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-			if (o instanceof AmpActivityVersion)
-				act = (AmpActivityVersion) o;
-		}
+		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
+		
+		Permissible permissible=(Permissible) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+		if(act==null && permissible instanceof AmpActivity) act=(AmpActivity) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		boolean owner=false;
-		if (act.getActivityCreator()==null){
+		if (act!=null && act.getActivityCreator()==null){
 			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());
 			owner=false;
 		}else{
 		
-		if( tm!=null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId()) ){ 
+		if( tm!=null && act!=null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId()) ){ 
 			owner=true;
 		  }
 		}
@@ -104,8 +95,9 @@ public class UserLevelGate extends Gate {
 		//if(!owner && PARAM_GUEST.equals(param)) return true;
 		
 		Gate relatedOrgGate = Gate.instantiateGate(scope, null, RelatedOrgGate.class.getName());
+		Gate computedActivityGate= Gate.instantiateGate(scope, null, ComputedTeamActivityGate.class.getName());
 		//if i am a guest and not the owner AND not related to the current object i will have guest access
-		if(!owner && !relatedOrgGate.logic() && PARAM_GUEST.equals(param) ) return true;
+		if(!owner && !relatedOrgGate.logic() &&  PARAM_GUEST.equals(param) ) return true;
 		
 		
 		

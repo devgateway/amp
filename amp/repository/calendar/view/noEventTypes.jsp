@@ -14,7 +14,7 @@
 
 <table border="0"  width="100%" cellpadding="0" cellspacing="0">
        <tr>
-         <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
+         <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" /><td>
        </tr>
        <tr>
          <td style="height: 330pt;">

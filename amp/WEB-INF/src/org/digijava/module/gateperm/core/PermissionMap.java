@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @package org.digijava.module.gateperm.core
  * @since 29.08.2007
  */
-public class PermissionMap implements Serializable,Comparable {
+public class PermissionMap implements Serializable {
 	
 	private static final long serialVersionUID = -7294750950373378335L;
 	protected Long id;
@@ -72,10 +72,5 @@ public class PermissionMap implements Serializable,Comparable {
 	public void setPermissionId(Long permissionId) {
 	    this.permissionId = permissionId;
 	}
-	public int compareTo(Object o) {
-	    PermissionMap pm=(PermissionMap) o;
-	    if(this.getObjectLabel()!=null && pm.getObjectLabel()!=null) return this.getObjectLabel().compareTo(pm.getObjectLabel());
-	    if(this.getObjectIdentifier()!=null && pm.getObjectIdentifier()!=null) return this.getObjectIdentifier().compareTo(pm.getObjectIdentifier());
-	    return this.getPermissibleCategory().compareTo(pm.getPermissibleCategory());
-	}
+
 }

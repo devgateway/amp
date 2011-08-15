@@ -145,9 +145,9 @@ public class CategoryConstants {
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "Regional", true);
 	 
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_ON = 
-		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On", true);
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On Budget", true);
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
-		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off", true);
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off Budget", true);
 	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

@@ -312,7 +312,7 @@ function cancel()
 
 <table width="1000" cellPadding="0" cellSpacing="0" vAlign="top" align="center">
 <tr><td vAlign="top" align="left">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td vAlign="top" align="left">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 vAlign="top" align="left">

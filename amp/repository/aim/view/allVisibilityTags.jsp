@@ -455,6 +455,21 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementing/Executing Agency Contact Fax" feature="Reports Contact Information"></field:display>
 <field:display name="Implementing/Executing Agency Contact Title" feature="Reports Contact Information"></field:display>
 
+<field:display feature="Donor Contact Information" name="Add Donor Contact Button"></field:display>
+<field:display feature="Donor Contact Information" name="Make as Primary Donor Contact"></field:display>
+<field:display feature="Donor Contact Information" name="Edit Donor Contact"></field:display>
+<field:display feature="Donor Contact Information" name="Delete Donor Contact"></field:display>
+
+<field:display feature="Government Contact Information" name="Add Government Contact Button"></field:display>
+<field:display feature="Government Contact Information" name="Make as Primary Government Contact"></field:display>
+<field:display feature="Government Contact Information" name="Edit Government Contact"></field:display>
+<field:display feature="Government Contact Information" name="Delete Government Contact"></field:display>
+
+<field:display feature="Sector Ministry Contact Information" name="Add Sector Ministry Contact Button"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Make as Primary Sector Ministry Contact"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Edit Sector Ministry Contact"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Delete Sector Ministry Contact"></field:display>
+
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 
@@ -686,7 +701,17 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off/Treasure Budget" feature="Budget"></field:display>
+ <field:display name="On/Off/Treasury Budget" feature="Budget"></field:display>
+ <field:display name="Project Code" feature="Budget"></field:display>
+ <field:display name="Sub-Program" feature="Budget"></field:display> 
+<field:display name="Sub-Vote" feature="Budget"></field:display> 
+<field:display name="Code Chapitre" feature="Budget"></field:display>
+<field:display name="Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Sub-Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Project Code" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Sub-Program" feature="Budget"></field:display>
+
 <field:display name="Organizations Selector" feature="Funding Information"></field:display> 
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
@@ -716,7 +741,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Program Target Groups" feature="Admin NPD"></field:display> 
 <field:display name="Program Type" feature="Admin NPD"></field:display> 
 <field:display name="Project Category" feature="Identification"></field:display> 
-<field:display name="Project Code" feature="Budget"></field:display> 
+ 
 <field:display name="Project Coordinator Email" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Coordinator Fax Number" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Coordinator First Name" feature="Project Coordinator Contact Information"></field:display> 
@@ -818,9 +843,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub Program Level 6" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
-<field:display name="Sub-Program" feature="Budget"></field:display> 
-<field:display name="Sub-Vote" feature="Budget"></field:display> 
-<field:display name="Code Chapitre" feature="Budget"></field:display>
 <field:display name="Code Chapitre Dropdown" feature="Budget"></field:display>
 <field:display name="Budgeting Year" feature="Budget"></field:display>
 <field:display name="Budget Classification" feature="Budget"></field:display>
@@ -849,7 +871,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount" feature="Contracting"></field:display> 
 <field:display name="Total Committed" feature="Commitments"></field:display> 
-<field:display name="Total Disbursed" feature="Disbursement"></field:display> 
+<field:display name="Total Disbursed" feature="Disbursement"></field:display>
+<field:display name="Total Planned Committed" feature="Commitments"></field:display>
+<field:display name="Total Planned Disbursed" feature="Disbursement"></field:display>
 <field:display name="Total Disbursements of Contract" feature="Contracting"></field:display> 
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display> 
@@ -869,7 +893,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 
-<field:display name="Vote" feature="Budget"></field:display> 
 <field:display name="Web Resource Description" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Document Type" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Notes" feature="Web Resources"></field:display> 
@@ -993,7 +1016,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
-<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>

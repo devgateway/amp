@@ -3657,7 +3657,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 
         /* delete Component Fundings */
-        Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
+        Collection<AmpComponentFunding>  componentFundingCol = ampAct.getComponentFundings();
         if (componentFundingCol != null) {
   			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
   			while (componentFundingColIt.hasNext()) {
@@ -3690,8 +3690,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 								if (actor != null) {
 									Iterator actorItr = actor.iterator();
 									while (actorItr.hasNext()) {
-										AmpRegionalObservationActor ampActor = (AmpRegionalObservationActor) actorItr
-												.next();
+										AmpActor ampActor = (AmpActor) actorItr.next();
 										session.delete(ampActor);
 									}
 								}
@@ -3717,7 +3716,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 								if (actor != null) {
 									Iterator actorItr = actor.iterator();
 									while (actorItr.hasNext()) {
-										AmpActor ampActor = (AmpActor) actorItr.next();
+										AmpRegionalObservationActor ampActor = (AmpRegionalObservationActor) actorItr.next();
 										session.delete(ampActor);
 									}
 								}
@@ -3795,21 +3794,26 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        
         //	 delete all previous comments
         ArrayList col = org.digijava.module.aim.util.DbUtil.
-            getAllCommentsByActivityId(ampAct.getAmpActivityId());
-        logger.debug("col.size() [Inside deleting]: " + col.size());
+            getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
+        logger.info("col.size() [Inside deleting]: " + col.size());
         if (col != null) {
           Iterator itr = col.iterator();
           while (itr.hasNext()) {
             AmpComments comObj = (AmpComments) itr.next();
+            comObj.setAmpActivityId(null);
             session.delete(comObj);
           }
         }
-        logger.debug("comments deleted");
+        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        Connection con = session.connection();
+        Statement stmt = con.createStatement();
+        stmt.executeUpdate(deleteActivityComments);
+        logger.info("comments deleted");
         
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = session.connection();
-        Statement stmt = con.createStatement();
+         con = session.connection();
+         stmt = con.createStatement();
         int deletedRows = stmt.executeUpdate(deleteActivityTeam);
         
         //Delete the connection with amp_physical_performance.
@@ -3818,7 +3822,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         stmt = con.createStatement();
         deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
-        //Delete the connection with Indicator Project.
+        //Delete the connection with Indicator Project. 
         //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         //con = session.connection();
         //stmt = con.createStatement();
@@ -3838,7 +3842,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
       
     //Section moved here from ActivityManager.java because it didn't worked there.
-	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
+	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
 	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
 	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
 	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
@@ -3875,6 +3879,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           AmpComments ampComment = (AmpComments) commentItr.next();
           /*AmpComments ampComm = (AmpComments) session.load
               (AmpComments.class, ampComment.getAmpCommentId());*/
+          ampComment.setAmpActivityId(null);
           session.delete(ampComment);
         }
      }

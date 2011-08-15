@@ -695,6 +695,7 @@
                 <page>editbudgetsector</page>
                 <page>setbudgetprogram</page>
                 <page>editdepartment</page>
+                <page>contactsPrintPreview</page>
                 <page>viewActivityHistory</page>
                 <page>myLastVersions</page>
                 <page>aim_assignActivitiesJSON</page>

@@ -289,7 +289,7 @@ function closeWindow(){
 	<input type="hidden" name="event">
 
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <body >
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 border="0" align="center">
 	<tr>

@@ -379,27 +379,34 @@ public class ColumnReportData extends ReportData {
 		
 		
 		// if we have a sorter column, get all its items:
-		Iterator it = items.iterator();
+		Iterator<Column> it = items.iterator();
 		Column theColumn = null;
-		while (it.hasNext()) {
-			Column element = (Column) it.next();
-			if (element instanceof CellColumn) {
-				if (element.getColumnId().equals(this.getSorterColumn())) {
-					theColumn = element;
-					break;
-				}
-			} else if (element instanceof GroupColumn) {
-				Column t = ((GroupColumn) element).getColumn(this
-						.getSorterColumn());
-				if (t != null) {
-					theColumn = t;
-					break;
-				}
-			}
+//		while (it.hasNext()) {
+//			Column element = (Column) it.next();
+//			if (element instanceof CellColumn) {
+//				if (element.getColumnId().equals(this.getSorterColumn())) {
+//					theColumn = element;
+//					break;
+//				}
+//			} else if (element instanceof GroupColumn) {
+//				Column t = ((GroupColumn) element).getColumn(this
+//						.getSorterColumn());
+//				if (t != null) {
+//					theColumn = t;
+//					break;
+//				}
+//			}
+//		}
+		String mySorterColPath	= this.getSorterColumn();
+		while ( it.hasNext() ) {
+			Column element	= it.next();
+			theColumn		= element.hasSorterColumn(mySorterColPath);
+			if (theColumn != null)
+				break;
 		}
 		
 		if (theColumn == null) {
-			logger.warn("Tried to sort by an invalid column");
+			logger.warn("Tried to sort by an invalid column:" + mySorterColPath);
 			return allIds;
 		}
 		

@@ -100,7 +100,7 @@ function delet1(val1, val2) {
     </c:set>
 
 <!--  AMP Admin Logo -->
-	<jsp:include page="teamPagesHeader.jsp" flush="true" />
+	<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 <!--<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=636>

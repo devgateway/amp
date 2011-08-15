@@ -17,12 +17,12 @@ Cell c=cellColumn.getByOwner(ownerId);%>
 	request.setAttribute("cell",c);
 %> 
 	<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="request" toScope="request"/>
-	<jsp:include flush="true"  page="<%=viewable.getViewerPath()%>"/>	 
+	<jsp:include page="<%=viewable.getViewerPath()%>"/>	 
 <% }else{%>
     &nbsp;
     <%}
 }
 else{%>
-	<jsp:include flush="true" page="CellColumn.jsp"></jsp:include>
+	<jsp:include page="CellColumn.jsp"></jsp:include>
 <% }%>
 

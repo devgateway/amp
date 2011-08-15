@@ -11,7 +11,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>

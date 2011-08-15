@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -225,6 +226,56 @@ public class SaveActivity extends Action {
 				}
 			}
 			
+
+			if (eaForm.getIdentification().getVote() == null || eaForm.getIdentification().getVote().trim().length() == 0){
+				//is validate mandatory and activity is on budget then add a new error
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Vote", ampContext)){
+					errors.add("budgetVoteMissing",
+							new ActionMessage("error.aim.addActivity.budgetVoteMissing", TranslatorWorker.translateText("Please enter Vote under identification section",locale,siteId)));
+				}else{
+					activity.setVote(new String(" "));
+				}
+			}else{
+				activity.setVote(eaForm.getIdentification().getVote());
+			}
+			
+			if (eaForm.getIdentification().getSubVote() == null || eaForm.getIdentification().getSubVote().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Vote", ampContext)){
+					errors.add("budgetSubVoteMissing",
+							new ActionMessage("error.aim.addActivity.budgetSubVoteMissing", TranslatorWorker.translateText("Please enter Sub-Vote under identification section",locale,siteId)));
+				}else{
+					activity.setSubVote(new String(" "));
+				}
+			}else{
+				activity.setSubVote(eaForm.getIdentification().getSubVote());
+			}
+			
+			if (eaForm.getIdentification().getSubProgram() == null || eaForm.getIdentification().getSubProgram().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Program", ampContext)){
+					errors.add("budgetSubProgramMissing",
+							new ActionMessage("error.aim.addActivity.budgetSubProgramMissing", TranslatorWorker.translateText("Please enter Sub Program under identification section",locale,siteId)));
+				}else{
+					activity.setSubProgram(new String(" "));
+				}
+			}else{
+				activity.setSubProgram(eaForm.getIdentification().getSubProgram());
+			}
+			
+			if (eaForm.getIdentification().getProjectCode() == null || eaForm.getIdentification().getProjectCode().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Project Code", ampContext)){
+					errors.add("budgetProjectCodeMissing",
+							new ActionMessage("error.aim.addActivity.budgetProjectCodeMissing", TranslatorWorker.translateText("Please enter Project Code under identification section",locale,siteId)));
+				}else{
+					activity.setProjectCode(new String(" "));
+				}
+			}else{
+				activity.setProjectCode(eaForm.getIdentification().getProjectCode());
+			}
+			
 			
 			end:
 			if (errors.size() > 0){
@@ -370,30 +421,7 @@ public class SaveActivity extends Action {
 			activity.setFY(fy);
 		}
 		
-
-		if (eaForm.getIdentification().getVote() == null
-				|| eaForm.getIdentification().getVote().trim().length() == 0)
-			activity.setVote(new String(" "));
-		else
-			activity.setVote(eaForm.getIdentification().getVote());
 		
-		if (eaForm.getIdentification().getSubVote() == null
-				|| eaForm.getIdentification().getSubVote().trim().length() == 0)
-			activity.setSubVote(new String(" "));
-		else
-			activity.setSubVote(eaForm.getIdentification().getSubVote());
-		
-		if (eaForm.getIdentification().getSubProgram() == null
-				|| eaForm.getIdentification().getSubProgram().trim().length() == 0)
-			activity.setSubProgram(new String(" "));
-		else
-			activity.setSubProgram(eaForm.getIdentification().getSubProgram());
-		
-		if (eaForm.getIdentification().getProjectCode() == null
-				|| eaForm.getIdentification().getProjectCode().trim().length() == 0)
-			activity.setProjectCode(new String(" "));
-		else
-			activity.setProjectCode(eaForm.getIdentification().getProjectCode());
 		
 		activity.setGovernmentApprovalProcedures(eaForm.getIdentification().getGovernmentApprovalProcedures());
 
@@ -716,20 +744,22 @@ public class SaveActivity extends Action {
 				if (FeaturesUtil.isVisibleField("Validate Mandatory Regional Percentage", ampContext)){
 					if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
 						Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
-						Double totalPercentage = 0d;
+						//Double totalPercentage = 0d;
+						BigDecimal totalPercentage = new BigDecimal(0);
 						while (itr.hasNext()) {
 							Location loc = itr.next();
 							// Not yet implemented.
 							//Double percentage=FormatHelper.parseDouble(loc.getPercent());
 							Double percentage = new Double(loc.getPercent());							
 							if(percentage != null)
-								totalPercentage += percentage;
+								totalPercentage = totalPercentage.add(new BigDecimal(percentage));
 						}
-						
+						Double totaltocompare = totalPercentage.setScale(1,BigDecimal.ROUND_UP).doubleValue();
 						//Checks if it's 100%
-						if (totalPercentage != 100)
+						if (totaltocompare!=100){
 							errors.add("locationPercentageSumWrong",
 									new ActionMessage("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
+						}
 					}
 				}
 				
@@ -1143,6 +1173,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 								// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
 								ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
+								ampFundDet.setReportingDate(fundDet.getReportingDate());
 								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet.getTransactionDate()));
 								boolean useFixedRate = false;
 								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {

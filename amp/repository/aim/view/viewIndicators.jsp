@@ -12,7 +12,7 @@
 
 
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <style type="text/css">
 
 a.itr:hover {

@@ -12,8 +12,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -28,11 +30,14 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -75,14 +80,14 @@ public class DataExchangeUtils {
 	 */
 	
 	static String entityNames[]={
-			"&",	"'",	"\"",	"Â¢",	"Â£",	"Â¤",	"Â¥",	"Â¦",	"Â§",
-			"Â¨",	"Â©",	"Âª",	"Â«",	"Â¬",	"Â­",	"Â®",	"Â¯",	"Â°",	"Â±",	"Â²",	"Â³",	"Â´",
-			"Âµ",	"Â¶",	"Â·",	"Â¸",	"Â¹",	"Âº",	"Â»",	"Â¼",	"Â½",	"Â¾",	"Â¿",	"Ã—",	"Ã·",
-			"Ã€",	"Ã�",	"Ã‚",	"Ãƒ",	"Ã„",	"Ã…",	"Ã†",	"Ã‡",	"Ãˆ",	"Ã‰",	"ÃŠ",	"Ã‹",	"ÃŒ",
-			"Ã�",	"ÃŽ",	"Ã�",	"Ã�",	"Ã‘",	"Ã’",	"Ã“",	"Ã”",	"Ã•",	"Ã–",	"Ã˜",	"Ã™",	"Ãš",
-			"Ã›",	"Ãœ",	"Ã�",	"Ãž",	"ÃŸ",	"Ã ",	"Ã¡",	"Ã¢",	"Ã£",	"Ã¤",	"Ã¥",	"Ã¦",	"Ã§",
-			"Ã¨",	"Ã©",	"Ãª",	"Ã«",	"Ã¬",	"Ã­",	"Ã®",	"Ã¯",	"Ã°",	"Ã±",	"Ã²",	"Ã³",	"Ã´",
-			"Ãµ",	"Ã¶",	"Ã¸",	"Ã¹",	"Ãº",	"Ã»",	"Ã¼",	"Ã½",	"Ã¾",	"Ã¿", "","","","",""};
+			"&",	"'",	"\"",	"¢",	"£",	"¤",	"¥",	"¦",	"§",
+			"¨",	"©",	"ª",	"«",	"¬",	"­",	    "®",	"¯",	"°",	"±",	"²",	"³",	"´",
+			"µ",	"¶",	"·",	"¸",	"¹",	"º",	"»",	"¼",	"½",	"¾",	"¿",	"×",	"÷",
+			"À",	"Á",	"Â",	"Ã",	"Ä",	"Å",	"Æ",	"Ç",	"È",	"É",	"Ê",	"Ë",	"Ì",
+			"Í",	"Î",	"Ï",	"Ð",	"Ñ",	"Ò",	"Ó",	"Ô",	"Õ",	"Ö",	"Ø",	"Ù",	"Ú",
+			"Û",	"Ü",	"Ý",	"Þ",	"ß",	"à",	"á",	"â",	"ã",	"ä",	"å",	"æ",	"ç",
+			"è",	"é",	"ê",	"ë",	"ì",	"í",	"î",	"ï",	"ð",	"ñ",	"ò",	"ó",	"ô",
+			"õ",	"ö",	"ø",	"ù",	"ú",	"û",	"ü",	"ý",	"þ",	"ÿ", "","","","",""," ", "'", " ","'" , "-", "\"","\"", "œ" };
 		//entity names to replace entity charactersentityCharacters
 	static String entityCharacters[]={
 			"&amp;",	"&apos;",	"\"",	
@@ -99,8 +104,8 @@ public class DataExchangeUtils {
 			"&ccedil;",	"&egrave;",	"&eacute;",	"&ecirc;",	"&euml;",	"&igrave;",	"&iacute;",
 			"&icirc;",	"&iuml;",	"&eth;",	"&ntilde;",	"&ograve;",	"&oacute;",	"&ocirc;",
 			"&otilde;",	"&ouml;",	"&oslash;",	"&ugrave;",	"&uacute;",	"&ucirc;",	"&uuml;",	
-			"&yacute;",	"&thorn;",	"&yuml;",  
-			"&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;"};
+			"&yacute;",	"&thorn;",	"&yuml;", "&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;", "&nbsp;" , "&rsquo;", "&bull;", "&lsquo;" ,"&ndash;" , "&rdquo;" ,"&ldquo;",
+			"&oelig;"};
 
 	
 	public static DEMappingFields getAmpDEMappingField(Long id) {
@@ -331,12 +336,63 @@ public class DataExchangeUtils {
 	    Long activityId = null;
 	    
 	    try {
-	    	//session = PersistenceManager.getSession();
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
 	    	tx = session.beginTransaction();
 
+	    	Set <AmpActivityContact> activityContacts = activity.getActivityContacts();
+	    	//new
+	    	if (activityContacts!= null) {
+	    		for (AmpActivityContact ampActivityContact : activityContacts) {
+	    			AmpContact cont = ampActivityContact.getContact();
+	    			AmpContact dbContact = null;
+	    			boolean contactExistsInDb = false;
+	    			Set<AmpContactProperty> properties = cont.getProperties();
+	    			for (AmpContactProperty formProperty : cont.getProperties()) {
+	    				Query qry = session.createQuery("select prop.contact from " + AmpContactProperty.class.getName() + " prop where prop.value=:curEmail" +
+						" and prop.contact.name=:contName and prop.contact.lastname=:contLastname");
+						qry.setParameter("curEmail", formProperty.getValue());
+						qry.setParameter("contName", cont.getName());
+						qry.setParameter("contLastname", cont.getLastname());
+						List retVal =  qry.list();
+						if (retVal != null && retVal.size() >0) {
+							contactExistsInDb =true;
+							dbContact =(AmpContact) retVal.get(0);
+							properties = compareProperties(properties, dbContact.getProperties());
+							break;
+						}
+							
+	    			}
+	    			
+	    			if (! contactExistsInDb){
+	    				session.save(cont);
+	    			}else {
+	    				ampActivityContact.setContact(dbContact);
+	    			}
+	    			
+	    			if(properties!=null){
+	    				for (AmpContactProperty formProperty : properties) {
+		    				if (dbContact != null) {
+		    					formProperty.setContact(dbContact);
+		    				}else {
+		    					formProperty.setContact(cont);
+		    				}						
+							session.save(formProperty);
+						}
+	    			}
+	    			
+	    		}
+	    	}
+	    	
+    	
 			session.save(activity);
+			
+			if (activityContacts!= null) {
+	    		for (AmpActivityContact ampActivityContact : activityContacts) {
+	    			ampActivityContact.setActivity(activity);
+	    			session.save(ampActivityContact);
+	    		}
+			}
 	        activityId = activity.getAmpActivityId();
 	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
 	        activity.setAmpId(ampId);
@@ -363,6 +419,27 @@ public class DataExchangeUtils {
 		AuditLoggerUtil.logObject(request, activity, "add",null);
 	}
 
+	public static Set <AmpContactProperty> compareProperties (Set <AmpContactProperty> tobeImportedProperties, Set <AmpContactProperty> dbProperties) {
+		Set <AmpContactProperty> retVal = null;
+		for (AmpContactProperty toBeImported : tobeImportedProperties) {
+			boolean propertyExists = false;
+			String val = toBeImported.getValue();
+			String name = toBeImported.getName();
+			for (AmpContactProperty dbProperty : dbProperties) {
+				if (dbProperty.getName().equals(name) && dbProperty.getValue().equals(val)) {
+					propertyExists = true ;
+					break;
+				}
+			}
+			if (!propertyExists){
+				if (retVal == null) {
+					retVal =  new HashSet<AmpContactProperty>();
+				}
+				retVal.add(toBeImported);
+			}
+		}
+		return retVal;
+	}
 	/**
 	 * @author dan
 	 * @param name
@@ -980,7 +1057,9 @@ public class DataExchangeUtils {
 					else result = result.replaceAll(entityCharacters[x], entityNames[x]);
 				}
 		}
-		return result.replaceAll("\n", "");
+		//String ret	=  result.replaceAll("\n", " ").replaceAll("<[^>]*?>", " ");
+		String ret	=  result.replaceAll("\n", " ").replaceAll("\r", "").replaceAll("<!--.*-->", "").replaceAll("<[^>]*?>", " ");
+		return ret;
 	}
 	public static String convertEntityCharacters(String tempIdref){
 		System.out.println("Attempting conversion...");

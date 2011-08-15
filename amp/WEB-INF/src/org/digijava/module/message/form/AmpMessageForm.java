@@ -83,6 +83,7 @@ public class AmpMessageForm extends ActionForm {
 	private Map<String,Team> teamsMap;	
 	private List<AmpMessageState> messagesForTm;
 	private List<AmpMessageState> pagedMessagesForTm; //used for pagination
+	private String sortBy;
 	
 	
 	private String className;
@@ -619,5 +620,13 @@ public class AmpMessageForm extends ActionForm {
 		public void setRepliedMsg(MessageHelper repliedMsg) {
 			this.repliedMsg = repliedMsg;
 		}
+		
+				public String getSortBy() {
+					return sortBy;
+				}
+
+				public void setSortBy(String sortBy) {
+					this.sortBy = sortBy;
+				}
      
 	}

@@ -11,7 +11,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 
 <script language="JavaScript">
@@ -109,7 +109,7 @@
 -->
 </script>
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/saveIndicatorValues.do" method="post">
@@ -126,7 +126,7 @@
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
@@ -690,7 +690,7 @@
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 						<!-- end of activity form menu -->
 						</td></tr>
 					</table>

@@ -50,7 +50,7 @@
             <p/>
 			<html:file property="uploadedFile"/>
 			<p/>
-			<html:submit property="importPerform">Import</html:submit>
+			<html:submit property="importPerform"><digi:trn>Import</digi:trn></html:submit>
 			
 			<logic:equal name="importChaptersForm" property="importPerform" value="true">
 			<p></p>

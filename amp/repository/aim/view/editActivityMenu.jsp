@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
+<jsp:include page="previewLogframeUtil.jsp"  />
 <div id="mySave" style="display: none">
 	<div id="mySaveContent" class="content">
 		<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
@@ -447,7 +447,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 				</tr>
 				</feature:display>
-				<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+				<module:display name="Program" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">
 					<td nowrap="nowrap">

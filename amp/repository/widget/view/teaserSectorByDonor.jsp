@@ -74,9 +74,9 @@
 		</td>
 		--%>		
 		<td nowrap="nowrap" align="right">
-			<input type="checkbox" title="Show Labels" name="showLabels" onclick="rechart()" checked="checked">
+			<input type="checkbox" title="<digi:trn>Show Labels</digi:trn>" name="showLabels" onclick="rechart()" checked="checked">
 			&nbsp;
-			<input type="checkbox" title="Show Legends" name="showLegends" onclick="rechart()" checked="checked">
+			<input type="checkbox" title="<digi:trn>Show Legends</digi:trn>" name="showLegends" onclick="rechart()" checked="checked">
 		</td>
 	</tr>
 	<tr>

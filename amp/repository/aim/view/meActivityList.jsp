@@ -29,7 +29,7 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 </td></tr>
 <tr>
@@ -66,7 +66,7 @@
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 													
 													
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp"  />								
 							
 							
 							

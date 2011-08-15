@@ -108,7 +108,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			AmpXmlPatch ampPatch = iterator.next();
 			long timeStart = System.currentTimeMillis();
 			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
-			logger.info("Reading patch: "+ampPatch.getPatchId());
+			logger.debug("Reading patch: "+ampPatch.getPatchId());
 			try {
 				File f=new File(
 						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
@@ -177,7 +177,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			AmpXmlPatch ampPatch = iterator.next();
 			long timeStart = System.currentTimeMillis();
 			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
-			logger.info("Reading patch: "+ampPatch.getPatchId());
+			logger.debug("Reading patch: "+ampPatch.getPatchId());
 			try {
 				log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
 						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
@@ -200,7 +200,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 							+ ampPatch.getPatchId());
 					continue;
 				}
-			logger.info("Applying patch: "+ampPatch.getPatchId());
+			logger.debug("Applying patch: "+ampPatch.getPatchId());
 				XmlPatcherWorker<?, ?> patcherWorker = XmlPatcherWorkerFactory
 						.createWorker(patch, null, log);
 				success = patcherWorker.run();

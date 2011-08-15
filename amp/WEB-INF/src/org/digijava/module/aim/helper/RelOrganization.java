@@ -9,7 +9,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.Session;
 
-public class RelOrganization {
+public class RelOrganization implements Comparable{
 	private String orgName;
 	private String role;
 	private AmpOrgType orgTypeId;
@@ -137,5 +137,28 @@ public class RelOrganization {
 		this.additionalInformation = additionalInformation;
 	}
 	
+	
+	public int compareTo(Object obj) {
+		
+		if (!(obj instanceof RelOrganization)) 
+			throw new ClassCastException();
+		
+		RelOrganization org = (RelOrganization) obj;
+		if (this.orgName != null) {
+			if (org.orgName != null) {
+				return (this.orgName.trim().toLowerCase().
+						compareTo(org.orgName.trim().toLowerCase()));
+			} else {
+				return (this.orgName.trim().toLowerCase().
+						compareTo(""));
+			}
+		} else {
+			if (org.orgName != null) {
+				return ("".compareTo(org.orgName.trim().toLowerCase()));
+			} else {
+				return 0;
+			}			
+		}
+	}
 	
 }

@@ -4,13 +4,17 @@
  */
 package org.digijava.module.gateperm.core;
 
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+
+import com.rc.retroweaver.runtime.Collections;
 
 /**
  * GateConstants.java 
@@ -58,8 +62,23 @@ public final class GatePermConst {
 		public static final MetaInfo PERMISSIBLE=new MetaInfo("permissible","object to which the gate is associated");
 		public static final MetaInfo ACTIVITY=new MetaInfo("activity","the currently edited activity");
 		public static final MetaInfo CURRENT_MEMBER= new MetaInfo("currentMember","TeamMember object for the currently logged in user");
-		public static final MetaInfo ACTIVITY_ORG_ROLE=new MetaInfo("activityOrgRole","Complete list of AmpOrgRole objects, holing all mappings between activities and orgs through roles");
+		public static final MetaInfo CURRENT_ORG= new MetaInfo("currentOrg","Current displayed organisation");
+		public static final MetaInfo CURRENT_ORG_ROLE= new MetaInfo("currentOrgRole","Current displayed organisation role as string");
+		public static final MetaInfo FUNDING_DETAIL= new MetaInfo("currentFundingDetail","The org.digijava.module.aim.helper.FundingDetail currently " +
+				"in iteration in the funding popup");
 	}
+	
+	public static final Map<String,MetaInfo> scopeKeysMap 
+	= Collections.unmodifiableMap(new HashMap<String,MetaInfo>() {{
+        put(ScopeKeys.PERMISSIBLE.getCategory(), ScopeKeys.PERMISSIBLE);
+        put(ScopeKeys.ACTIVITY.getCategory(), ScopeKeys.ACTIVITY);
+        put(ScopeKeys.CURRENT_MEMBER.getCategory(), ScopeKeys.CURRENT_MEMBER);
+        put(ScopeKeys.CURRENT_ORG.getCategory(), ScopeKeys.CURRENT_ORG);
+        put(ScopeKeys.CURRENT_ORG_ROLE.getCategory(), ScopeKeys.CURRENT_ORG_ROLE);
+        put(ScopeKeys.FUNDING_DETAIL.getCategory(), ScopeKeys.FUNDING_DETAIL);
+    }});
+
+
 	
 	public static final String SCOPE="GATEPERM_SCOPE";
 	

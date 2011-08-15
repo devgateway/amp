@@ -57,7 +57,8 @@ public class ShowTeamReports extends Action {
 		ReportsForm rf = (ReportsForm) form;
         String action=rf.getAction();
 		
-        if (rf.isReset()||(action!=null&&action.equalsIgnoreCase("clear"))) {
+        if (rf.isReset()
+				|| (action != null && action.equalsIgnoreCase(TranslatorWorker.translateText("clear", request)))) {
             rf.setKeyword(null);
             rf.setAction(null);
             rf.setSortBy(ReportSortBy.NONE.getSortBy());
@@ -85,7 +86,7 @@ public class ShowTeamReports extends Action {
 		getAllReports(appSettingSet, rf, tm, request);
 		rf.setCurrentPage(rf.getPage());
 		rf.setPagesToShow(10);
-        if(action!=null&&action.equalsIgnoreCase("search")){
+        if (action != null && action.equalsIgnoreCase(TranslatorWorker.translateText("search", request))) {
             rf.setCurrentPage(0);
             rf.setPage(0);
         }

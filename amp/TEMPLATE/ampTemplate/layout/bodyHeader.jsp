@@ -1,1 +1,1 @@
-<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />

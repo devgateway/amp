@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>

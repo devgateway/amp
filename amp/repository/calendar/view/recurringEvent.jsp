@@ -233,6 +233,22 @@ function disableInputs(){
 	
 }
 
+function resetRecurrent(){
+	document.getElementById("Daily").checked = false;
+	document.getElementById("Weekly").checked = false;
+	document.getElementById("Monthly").checked = false;
+	document.getElementById("Yearly").checked = false;
+	var tocs = document.getElementsByName("typeofOccurrence");
+	for ( var i = 0; i < tocs.length; i++) {
+		tocs[i].value = "";
+	}
+	var rps = document.getElementsByName("recurrPeriod");
+	for ( var i = 0; i < rps.length; i++) {
+		rps[i].value = "";
+	}
+	submit();
+}
+
 </script>
 
 
@@ -534,7 +550,16 @@ function disableInputs(){
 	</tr>
 	<tr>
 		<td align="center">
-			<input type="button" onclick="eventType();" value="<digi:trn>Save And Close</digi:trn>"/>
+			<table cellpadding="5" cellspacing="5">
+				<tr>
+					<td align="center">
+						<input type="button" onclick="eventType();" value="<digi:trn>Save And Close</digi:trn>"/>
+					</td>
+					<td align="center">
+						<input type="button" onclick="resetRecurrent();" value="<digi:trn>Reset</digi:trn>"/>
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 </table>

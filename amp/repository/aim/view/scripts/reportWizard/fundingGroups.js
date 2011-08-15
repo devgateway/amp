@@ -1,5 +1,3 @@
-
-
 YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
@@ -18,7 +16,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Status', 'Region', 'Country', 'District','Zone'
 				,'Type Of Assistance'
 				,'Financing Instrument'
-				,'On/Off/Treasure Budget'
 				,'National Planning Objectives'
 				,'National Planning Objectives Level 1'
 				,'National Planning Objectives Level 2'
@@ -51,6 +48,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Credit/Donation'
 				,'Beneficiary Agency'
 				,'Implementing Agency'
+				,'Institutions'
 				,'Component Type'
 				,'Secondary Sector'
 				,'Secondary Sector Sub-Sector'
@@ -68,6 +66,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Tertiary Sector Sub-Sub-Sector'
                 ,'Government Approval Procedures'
                 ,'Joint Criteria'
+                , 'On/Off/Treasury Budget'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

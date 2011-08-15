@@ -3,9 +3,11 @@ package org.digijava.module.aim.action;
 import java.util.*;
 
 import org.apache.struts.action.*;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 
 public class RemoveSelLocations extends Action {
 
@@ -19,7 +21,7 @@ public class RemoveSelLocations extends Action {
 
 				Long selLocs[] = eaForm.getLocation().getSelLocs();
 				Collection prevSelLocs = eaForm.getLocation().getSelectedLocs(); 
-				Collection locs = new ArrayList<Location>();
+				List<Location> locs = new ArrayList<Location>();
 
 				Iterator itr = prevSelLocs.iterator();
                 //For regional funding check
@@ -68,7 +70,8 @@ public class RemoveSelLocations extends Action {
             eaForm.clearMessages();
             eaForm.addError("error.aim.addActivity.locationsUsedInRegFunding",regFundingReferencedRegions.toString());
         }
-
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+ 	Collections.sort(locs,new HelperLocationAncestorLocationNamesAsc(langCode));
         eaForm.getLocation().setSelectedLocs(locs);
         eaForm.getLocation().setSelLocs(null);
         eaForm.getLocation().setCols(null);

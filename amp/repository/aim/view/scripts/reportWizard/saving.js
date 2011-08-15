@@ -104,8 +104,9 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 			keyCode	= e.which;
 		if (e.keyCode != null)
 			keyCode	= e.keyCode;
-		if ( keyCode == 13 && getReportTitle() != "" ) {
-			saveReportEngine.saveReport();
+		if ( keyCode == 13 ) {
+			if ( getReportTitle().replace(/\s*/, "") != "" )
+				saveReportEngine.saveReport();
 			return false;
 		}
 	}

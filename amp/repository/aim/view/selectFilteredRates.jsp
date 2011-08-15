@@ -47,16 +47,17 @@
 
 
 
-<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
+<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
 <tr><td>
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -73,64 +74,99 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<!--<tr>
+				<tr>
 					<td colspan="3" height="16" vAlign="center" width="571"><span class="subtitle-blue">
 						<digi:trn>
 							Select Filtered Currency Rates
 						</digi:trn></span>
 						<digi:errors/>
 					</td>
-				</tr>-->
+				</tr>
 				<tr>
-					<td noWrap width="100%" vAlign="top">
-						<table width="100%" cellspacing="0" cellPadding="0" vAlign="top" align="left">
+					<td noWrap width=100% vAlign="top">
+						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr>
-								
-								<td valign="top" width=750>
-									<table width=100% cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;">
+								<td valign="top">
+											<logic:notEmpty name="myForm" property="existingFilteredRates">
+												<table border="0px" cellpadding="1px" >
 													<tr align="center">
-														<td bgcolor="#c7d4db" height=25 class="inside" align="center"  colspan="2" >
+														<th bgcolor="#006699" class="textalb" align="center">
 															<digi:trn>
-																<b>Add New Filtered Rate</b>															</digi:trn>														</td>
+																Selection
+															</digi:trn>
+														</th>
+														<th bgcolor="#006699" class="textalb" align="center">
+															<digi:trn>
+																To Currency
+															</digi:trn>
+														</th>
+														<th bgcolor="#006699" class="textalb" align="center">
+															<digi:trn>
+																From Currency
+															</digi:trn>
+														</th>
+													</tr>
+													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
+														<tr>
+														<td valign="top">	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
+														<td valign="top">   ${filteredRate.toCurrency.currencyName }  (${filteredRate.toCurrency.currencyCode}) &nbsp; &nbsp; </td>
+														<td valign="top">   ${filteredRate.fromCurrency.currencyName }  (${filteredRate.fromCurrency.currencyCode})</td>
+														</tr>
+													</logic:iterate>
+												</table>
+												<button type="button" onclick="return deleteSelection();" class="buton" > <digi:trn>Remove Selected Filtered Rates</digi:trn> </button>
+											</logic:notEmpty>
+								</td>
+								<td valign="top">
+									<table border="0px"  cellpadding="1px">
+													<tr align="center">
+														<th bgcolor="#006699" class="textalb" align="center"  colspan="2" >
+															<digi:trn>
+																Add New Filtered Rate
+															</digi:trn>
+														</th>
 													</tr>
 													<tr> 
-														<td class="inside" align=right><digi:trn>To Rate</digi:trn>:</td> 
+														<td><digi:trn>To Rate</digi:trn>:</td> 
 														<td>
 															<html:select property="toCurrencyCode">
 																<html:optionsCollection property="existingCurrencies" label="value" value="key" styleClass="inp-text" />
-															</html:select>														</td>
+															</html:select>
+														</td>
 													</tr>
 													<tr>
-														<td class="inside" align=right><digi:trn>From Rate</digi:trn>:</td> 
-														<td class="inside">
+														<td><digi:trn>From Rate</digi:trn>:</td> 
+														<td>
 															<html:select property="fromCurrencyCode">
 																<html:optionsCollection property="existingCurrencies" label="value" value="key"  styleClass="inp-text"/>
-															</html:select>														</td>
+															</html:select>
+														</td>
 													</tr>
-													<tr>
-													  <td class="inside" colspan="2" align=center><button type="button" onclick="return addFilteredRate();" class="buttonx" > <digi:trn>Add</digi:trn> </button></td>
-									  </tr>
-										</table>								</td>
+										</table>
+										<button type="button" onclick="return addFilteredRate();" class="buton" > <digi:trn>Add</digi:trn> </button>
+								</td>
 								<td valign="top">
-											<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
+											<table align=center cellPadding=0 cellSpacing=0 width="90%"
+												border=0>
 												<tr>
 													<td><!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
+													<table cellPadding=0 cellSpacing=0 width=100>
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">
-															<b style="padding-left:5px;">Other links</b>
+															Other links
 															</digi:trn></td>
 															<td background="module/aim/images/corner-r.gif" height="17"
 																width=17>&nbsp;</td>
 														</tr>
-													</table>													</td>
+													</table>
+													</td>
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellspacing="1" width="100%" class="inside">
+													<table cellPadding=5 cellSpacing=1 width="100%">
 														<tr>
-															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -139,7 +175,7 @@
 															</digi:link></td>
 														</tr>
 														<tr>
-															<td class="inside">
+															<td>
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
@@ -147,10 +183,11 @@
 																	</c:set> 
 																	<digi:link href="/currencyManager.do" title="${translation}">
 																			<digi:trn>Currency Manager</digi:trn>
-																	</digi:link>															</td>
+																	</digi:link>
+															</td>
 														</tr>
 														<tr>
-															<td class="inside">
+															<td>
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
@@ -158,43 +195,17 @@
 																	</c:set> 
 																	<digi:link href="/showCurrencyRates.do~clean=true~timePeriod=1" title="${translation}">
 																			<digi:trn>Currency Rate Manager</digi:trn>
-																	</digi:link>															</td>
+																	</digi:link>
+															</td>
 														</tr>
 		
 														<!-- end of other links -->
-													</table>													</td>
+													</table>
+													</td>
 												</tr>
-											</table>								</td>
+											</table>
+								</td>
 							</tr>
-							<tr>
-							  
-							  <td valign="top">	<logic:notEmpty name="myForm" property="existingFilteredRates">
-												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px; margin-top:15px;" width=100%>
-													<tr align="center">
-														<td bgcolor="#c7d4db" class="inside" align="center" height=25 width=50>
-															<digi:trn>
-																<b>Selection</b>															</digi:trn>														</td>
-														<td bgcolor="#c7d4db" class="inside" align="center">
-															<digi:trn>
-																<b>To Currency</b>															</digi:trn>														</td>
-														<td bgcolor="#c7d4db" class="inside" align="center">
-															<digi:trn>
-																<b><b>From Currency</b></b>															</digi:trn>														</td>
-													</tr>
-													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
-														<tr>
-														<td valign="top" class="inside" align=center>	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
-														<td valign="top" class="inside">   ${filteredRate.toCurrency.currencyName }  (${filteredRate.toCurrency.currencyCode}) &nbsp; &nbsp; </td>
-														<td valign="top" class="inside">   ${filteredRate.fromCurrency.currencyName }  (${filteredRate.fromCurrency.currencyCode})</td>
-														</tr>
-														<tr>
-														  <td colspan="3" valign="top" class="inside" align=center style="padding-top:7px; padding-bottom:7px;"><button type="button" onclick="return deleteSelection();" class="buttonx" > <digi:trn>Remove Selected Filtered Rates</digi:trn> </button></td>
-													  </tr>
-													</logic:iterate>
-												</table>
-											</logic:notEmpty>								</td>
-							  <td valign="top">&nbsp;</td>
-						  </tr>
 						</table>
 					</td>
 				</tr>

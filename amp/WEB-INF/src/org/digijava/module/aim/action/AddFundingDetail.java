@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -169,6 +169,7 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setAdjustmentType(Constants.ACTUAL);
         fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setIndex(fundingDetails.size());
+		fundingDetail.setReportingDate(new Date(System.currentTimeMillis()));
 		return fundingDetail;
 	}
 	

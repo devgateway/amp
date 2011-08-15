@@ -247,7 +247,7 @@ div.fakefile2 input{
 <digi:instance property="aimTranslatorManagerForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>

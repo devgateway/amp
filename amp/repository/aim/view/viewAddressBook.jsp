@@ -402,6 +402,13 @@
 		addressbookForm.submit();
 	}
 
+	function myPrint() {
+		window.open('/addressBook.do?actionType=viewPrintPreview', '_blank', '');
+		//addressbookForm.action="${contextPath}/aim/addressBook.do?actionType=viewPrintPreview";
+		//addressbookForm.target = "_self";
+		//addressbookForm.submit();
+	}
+
 
 
 	

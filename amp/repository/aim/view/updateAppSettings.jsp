@@ -124,7 +124,7 @@ function loadShareRules(){
 <table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 	<tr>
 		<td width="100%">
-			<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 		</td>
 	</tr>
 	<tr>
@@ -211,6 +211,16 @@ function loadShareRules(){
 									<html:select property="language" styleClass="inputx insidex">
 								  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
 								    <html:options collection="languages" property="code" labelProperty="name" />
+										                		 -->
+										                		<c:forEach var="element" items="${aimUpdateAppSettingsForm.languages}">
+																	<c:set var="trn">
+																		<digi:trn>${element.name}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.code}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+										                		
 									</html:select>
 								</td>
 							</tr>

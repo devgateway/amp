@@ -312,7 +312,7 @@ function removeSelLinks() {
 
 <!--  AMP Admin Logo -->
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <!-- End of Logo -->
 
@@ -583,7 +583,7 @@ function removeSelLinks() {
 
 						<!-- edit activity form menu -->
 
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 
 						<!-- end of activity form menu -->
 

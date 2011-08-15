@@ -26,7 +26,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
 	
 	
 
@@ -301,7 +301,7 @@
 	-->
 
 </script>
- <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+ <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 
 <script language="JavaScript">
 <!--
@@ -346,7 +346,7 @@ function resetAll()
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
@@ -536,11 +536,13 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																				<field:display feature="Donor Contact Information" name="Make as Primary Donor Contact">
 																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryDonorContId" value="${donorContact.contact.temporaryId}"/>
 																						<%--
 <!--																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					-->
 																						<html:radio name="aimEditActivityForm" property="contactInformation.primaryDonorContId" value="${donorContact.contact.temporaryId}"/>
 																					--%>
+																				</field:display>
 																				</td>
 																				<td>	
 																					<c:set var="ampContactId">
@@ -553,24 +555,30 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
+		                                        									 <field:display feature="Donor Contact Information" name="Edit Donor Contact">
 																					 <aim:editContactLink collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${donorContact.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					</field:display>
 						                                        					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams}" property="tempId">
 																						<bean:write name="donorContact" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams}" property="contType" value="DONOR_CONT"/>
+																					<field:display feature="Donor Contact Information" name="Delete Donor Contact">
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
+																					</field:display>
 																				</td>
 																			</tr>
 																		</c:forEach>
 																	</c:if>
+																	<field:display feature="Donor Contact Information" name="Add Donor Contact Button"> 
 																	<tr>																		
 																		<td colspan="7" bgcolor="#ffffff">
 																			<aim:addContactButton collection="donorContacts" form="${aimEditActivityForm.contactInformation}" contactType="DONOR_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>						
 																		</td>
-																	</tr>																	
+																	</tr>
+																	</field:display>																	
 																</table>												
 															</td>
 														</tr>
@@ -579,7 +587,7 @@ function resetAll()
 													<feature:display name="Government Contact Information" module="Contact Information">
 														<tr>
 															<td class="separator1" title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
-																<b><digi:trn>MOFED Contact Information</digi:trn></b>
+																<b><digi:trn>Government Contact Information</digi:trn></b>
 															</td>
 														</tr>
 														<tr>
@@ -630,11 +638,14 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																				
+																					<field:display feature="Government Contact Information" name="Make as Primary Government Contact">
 																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryMofedContId" value="${mofedContact.contact.temporaryId}"/>
 																						<%--
 <!--																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryMofedContIds" styleId="mofed_${stat.index}" value="${mofedContact.contact.temporaryId}" onchange="changePrimaryState('mofed')"/>-->
 																						<html:radio name="aimEditActivityForm" property="contactInformation.primaryMofedContId" value="${mofedContact.contact.temporaryId}"/>
 																					--%>
+																					</field:display>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">
@@ -647,24 +658,30 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
+		                                        									 <field:display feature="Government Contact Information" name="Edit Government Contact">
 																					 <aim:editContactLink collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${mofedContact.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					</field:display>
 						                                        					<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams1}" property="tempId">
 																						<bean:write name="mofedContact" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams1}" property="contType" value="MOFED_CONT"/>
+																					<field:display feature="Government Contact Information" name="Delete Government Contact">
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams1"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
+																					</field:display>
 																				</td>
 																			</tr>
 																		</c:forEach>
 																	</c:if>
+																	<field:display feature="Government Contact Information" name="Add Government Contact Button">																		
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
 																			<aim:addContactButton collection="mofedContacts" form="${aimEditActivityForm.contactInformation}" contactType="MOFED_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>
 																		</td>
 																	</tr>
+																	</field:display>
 																</table>												
 															</td>
 														</tr>
@@ -818,11 +835,13 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																				<field:display feature="Sector Ministry Contact Information" name="Make as Primary Sector Ministry Contact">
 																					<html:radio name="aimEditActivityForm" property="contactInformation.primarySecMinContId" value="${sectorMinistry.contact.temporaryId}"/>
 																						<%--
 <!--																					<html:multibox name="aimEditActivityForm" property="contactInformation.primarySecMinContIds" styleId="secMin_${stat.index}" value="${sectorMinistry.contact.temporaryId}" onchange="changePrimaryState('secMin')"/>-->
 																						<html:radio name="aimEditActivityForm" property="contactInformation.primarySecMinContId" value="${sectorMinistry.contact.temporaryId}"/>
 																					--%>
+																				</field:display>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">
@@ -835,24 +854,30 @@ function resetAll()
 		                                                									</c:otherwise>
 		                                            									</c:choose>
 		                                        									 </c:set>
-																					 <aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}" addOrgBtn="visible">
+		                                        									<field:display feature="Sector Ministry Contact Information" name="Edit Sector Ministry Contact">
+																					<aim:editContactLink collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactId="${ampContactId}" contactType="${sectorMinistry.contactType}" addOrgBtn="visible">
 						                                            					<img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
 						                                        					</aim:editContactLink>
+						                                        					</field:display>
 																					<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams3}" property="tempId">
 																						<bean:write name="sectorMinistry" property="contact.temporaryId"/>
 																					</c:set>
 																					<c:set target="${urlParams3}" property="contType" value="SECTOR_MINISTRY_CONT"/>
+																					<field:display feature="Sector Ministry Contact Information" name="Delete Sector Ministry Contact">
 																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams3"><img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" /></digi:link>
+																					</field:display>
 																				</td>
 																			</tr>
 																		</c:forEach>
 																	</c:if>
+																	<field:display feature="Sector Ministry Contact Information" name="Add Sector Ministry Contact Button">
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
 																			<aim:addContactButton collection="sectorMinistryContacts" form="${aimEditActivityForm.contactInformation}" contactType="SECTOR_MINISTRY_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>																			
 																		</td>
 																	</tr>																	
+																	</field:display>
 																</table>
 															</td>
 														</tr>
@@ -943,11 +968,13 @@ function resetAll()
 																			</tr>
 																		</c:forEach>
 																	</c:if>
+																	<field:display feature="Donor Contact Information" name="Add Contact Button">
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff">
 																			<aim:addContactButton collection="implExecutingAgencyContacts" form="${aimEditActivityForm.contactInformation}" contactType="IMPL_EXEC_AGENCY_CONT" addOrgBtn="visible"><digi:trn>Add contact</digi:trn></aim:addContactButton>			
 																		</td>
 																	</tr>
+																	</field:display>
 																</table>												
 															</td>
 														</tr>
@@ -964,7 +991,7 @@ function resetAll()
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp"  />
 						<!-- end of activity form menu -->
 						</td></tr>
 					</table>

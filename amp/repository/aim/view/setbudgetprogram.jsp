@@ -15,7 +15,14 @@
 <script language="JavaScript">
 
 function Save() {
-  	<digi:context name="back" property="context/module/moduleinstance/setbudgetprogram.do" />
+    var dropdown=document.getElementById("seletedprogramDropDown");
+    var index=dropdown.selectedIndex;
+    var selectedOption=dropdown.options[index];
+    if( selectedOption.value=='0'){
+        alert("<digi:trn jsFriendly='true'>Please Select Program</digi:trn>!");
+        return false;
+    }
+    <digi:context name="back" property="context/module/moduleinstance/setbudgetprogram.do" />
     document.SetBudgetProgramForm.action = "<%= back %>~save=true";
     document.SetBudgetProgramForm.submit();
     closePopup()
@@ -52,7 +59,7 @@ function closePopup() {
                         <digi:trn>Select Budget Program</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
-                        <html:select name="SetBudgetProgramForm" property="seletedprogram" styleClass="inp-text">
+                        <html:select name="SetBudgetProgramForm" property="seletedprogram" styleClass="inp-text" styleId="seletedprogramDropDown">
 							<html:option value="0">Select Program</html:option>
 							<html:optionsCollection property="programs" value="ampThemeId" label="name"/>
 						</html:select>

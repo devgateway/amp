@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +21,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -48,6 +44,9 @@ import org.digijava.module.gateperm.feed.schema.ObjectFactory;
 import org.digijava.module.gateperm.feed.schema.Permissions;
 import org.digijava.module.gateperm.form.ExchangePermissionForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author mihai
@@ -114,7 +113,7 @@ public class ExchangePermission extends MultiAction {
 			List gatePerm = xmlPermissions.getGatePerm();
 			Iterator i=gatePerm.iterator();
 			while (i.hasNext()) {
-			    	Session session=PersistenceManager.getSession();
+			    	Session session=PersistenceManager.getRequestDBSession();
 			    	Transaction transaction = session.beginTransaction();
 				GatePermType gp = (GatePermType) i.next();
 				GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
@@ -126,7 +125,7 @@ public class ExchangePermission extends MultiAction {
 			List compPerm = xmlPermissions.getCompositePerm();
 			i=compPerm.iterator();
 			while (i.hasNext()) {
-			    	Session session=PersistenceManager.getSession();
+			    	Session session=PersistenceManager.getRequestDBSession();
 			    	Transaction transaction = session.beginTransaction();
 			    	CompositePermType gp = (CompositePermType) i.next();
 				CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
@@ -167,7 +166,7 @@ public class ExchangePermission extends MultiAction {
 	    Permission dbp=PermissionUtil.findPermissionByName(elem.getName());
 		if(dbp!=null) {
 			if(dbp instanceof GatePermission) {
-			    Session session = PersistenceManager.getSession();			    
+			    Session session = PersistenceManager.getRequestDBSession();			    
 			    session.delete(dbp);dbp=null;
 			    PersistenceManager.releaseSession(session);
 		    }
@@ -198,7 +197,7 @@ public class ExchangePermission extends MultiAction {
 //		    transaction.commit();
 		    dbCp.getPermissions().add(xmlToDbCompositePermission);
 		}
-		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new TreeSet());
+		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new HashSet());
 		dbCp.getPermissibleObjects().clear();
 		dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
 		
@@ -212,7 +211,7 @@ public class ExchangePermission extends MultiAction {
 		if(dbp!=null) {
 		    
 			if(dbp instanceof CompositePermission) {
-			    Session session = PersistenceManager.getSession();
+			    Session session = PersistenceManager.getRequestDBSession();
 			    session.delete(dbp);dbp=null;
 			    PersistenceManager.releaseSession(session);
 			    }
@@ -227,11 +226,14 @@ public class ExchangePermission extends MultiAction {
 		dbGp.setDedicated(xmlGp.isDedicated());
 		dbGp.setDescription(xmlGp.getDescription());
 		dbGp.getGateParameters().clear();
-		dbGp.getGateParameters().addAll(xmlGp.getParam());
+		for(Object param: xmlGp.getParam()) 
+			dbGp.getGateParameters().add(PermissionUtil.removeTabs((String) param));
+		
+
 		dbGp.setGateTypeName(GatePermConst.availableGatesBySimpleNames.get(xmlGp.getGateClass()).getName());
 		
-		if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new TreeSet());
-		
+		if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new HashSet());
+		dbGp.getPermissibleObjects().clear();
 		dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId(),dbGp));
 			
 		return dbGp;
@@ -254,15 +256,19 @@ public class ExchangePermission extends MultiAction {
 		List<PermissionMap> ret=new ArrayList<PermissionMap>();
 		for (AssignedObjIdType assignedObjIdType : localIds) {
 			PermissionMap pm=new PermissionMap();
-			ret.add(pm);
 			pm.setPermissibleCategory(assignedObjIdType.getPermissibleClass());
-			String clusterId=assignedObjIdType.getValue();
+			String clusterId=PermissionUtil.removeTabsNewlines(assignedObjIdType.getValue());
 			if(clusterId!=null && !clusterId.equals("")) {
 				Identifiable ident = PermissionUtil.getIdentifiableByClusterIdentifier(clusterId, GatePermConst.availablePermissiblesBySimpleNames
 						.get(pm.getPermissibleCategory()));
+				if(ident==null) {
+					logger.info("Unknown object identifier "+clusterId);
+					continue;
+				}
 				pm.setObjectIdentifier((Long) ident.getIdentifier());
 			}
 			pm.setPermission(p);
+			ret.add(pm);
 		}
 		return ret;
 		

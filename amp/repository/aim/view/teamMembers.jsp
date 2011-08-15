@@ -62,7 +62,7 @@ function addTeamMember(id) {
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td width="100%">
-			<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 		</td>
 	</tr>
 	<tr>

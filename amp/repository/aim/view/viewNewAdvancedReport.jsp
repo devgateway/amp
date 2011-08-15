@@ -41,6 +41,7 @@
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 
+		<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
 
 
@@ -66,7 +67,6 @@ function toggleSettings(){
 }
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 </div>
@@ -182,7 +182,7 @@ session.setAttribute("progressValue", counter);
 	        
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
-            	<c:if test="${ReportsFilter.publicView}">
+            	<c:if test="${!ReportsFilter.publicView}">
 	                <a class="settingsLink" style="color:#376091;" onClick="showSorter();">
 	                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
 	                </a> | 
@@ -230,7 +230,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                    <jsp:include page="${listable.jspFile}" />
                 </logic:present>
              </td>
              </tr>
@@ -312,7 +312,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+		                    <jsp:include page="${listable.jspFile}" />
                 </logic:present>
              </td>
              </tr>
@@ -391,7 +391,7 @@ session.setAttribute("progressValue", counter);
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                    <jsp:include page="${listable.jspFile}" />
                 </logic:present>
              </td>
              </tr>
@@ -590,7 +590,7 @@ session.setAttribute("progressValue", counter);
 		<logic:notEqual name="viewFormat" value="print">
 		<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
+				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</tr>
 			</tbody>
 		</table>

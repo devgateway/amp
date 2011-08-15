@@ -62,6 +62,14 @@ public final class PermissionUtil {
 	    return scope;
 	}
 	
+	public static String removeTabs(String text) {
+		return text.replace("\t", "");
+	}
+	
+	public static String removeTabsNewlines(String text) {
+		return removeTabs(text).replace("\r\n", " ").replace("\n", " ");
+	}
+	
 	/**
 	 * flushes the gate permissions scope
 	 * @param session
@@ -158,6 +166,16 @@ public final class PermissionUtil {
 	  return  scope.get(key);	    
 	}
 	
+	/**
+	 * Removes the object associated with the given key, if any, from the permissions scope
+	 * @param session
+	 * @param key the key used to put the object in the scope with putInScope
+	 * @see PermissionUtil#putInScope(HttpSession, MetaInfo, Object)
+	 */
+	public static void removeFromScope(HttpSession session,MetaInfo key) {
+	    Map scope=getScope(session);
+	    scope.remove(key);	    
+	}
 	
 	
 	/**

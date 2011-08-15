@@ -57,6 +57,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -201,6 +202,7 @@ public class EditOrganisation extends DispatchAction {
               editForm.setOrgIsoCode(organization.getOrgIsoCode());
               editForm.setOrgCode(organization.getOrgCode());
               editForm.setBudgetOrgCode(organization.getBudgetOrgCode());
+              editForm.setDescription(organization.getDescription());
 
               // Pledges
               Collection<AmpPledge> funding = organization.getFundingDetails();
@@ -857,11 +859,21 @@ public class EditOrganisation extends DispatchAction {
           }
   	  }
   	
-  	if(request.getSession().getAttribute("locations")!=null){
-  		Collection<Location> locs = (Collection<Location>)request.getSession().getAttribute("locations");
-  		editForm.setSelectedLocs(locs);
-  		request.getSession().removeAttribute("locations");
-  	}
+  	  if (request.getSession().getAttribute("locations") != null) {
+          Collection<Location> locs = (Collection<Location>) request.getSession().getAttribute("locations");
+          if (editForm.getSelectedLocs() == null) {
+              editForm.setSelectedLocs(new ArrayList<Location>());
+          }
+          Collection<Location> selectedLocs = editForm.getSelectedLocs();
+          for (Location location : locs) {
+              if (!selectedLocs.contains(location)) {
+                  location.setPercent("0");
+                  selectedLocs.add(location);
+              }
+          }
+
+          request.getSession().removeAttribute("locations");
+      }
   	return mapping.findForward(forwardWhere);
   }
 

@@ -90,7 +90,7 @@
 
 <digi:form action="/newLocationManager.do"  method="post">
     <!--  AMP Admin Logo -->
-    <jsp:include page="teamPagesHeader.jsp" flush="true" />
+    <jsp:include page="teamPagesHeader.jsp"  />
     <!-- End of Logo -->
     <html:hidden name="aimNewAddLocationForm" property="ids" styleId="hidden_ids"/>
     <html:hidden name="aimNewAddLocationForm" property="parentLocationId" />

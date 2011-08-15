@@ -73,7 +73,7 @@
 <%--
 <table cellspacing="0" cellpadding="0" width="100%" valign="top" align="left">
 <tr><td width="100%">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td width="100%">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
@@ -124,7 +124,7 @@
 								<td vAlign="top" width="100%">
 									<div id="demo" >
 										<c:set var="selectedTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 									</div>
 									
 								</td>
@@ -132,7 +132,7 @@
 							<tr bgColor=#f4f4f2>
 								<td valign="top" width="100%">
                                 <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
-									<jsp:include page="addTeamMember.jsp" flush="true"/>									
+									<jsp:include page="addTeamMember.jsp" />									
 			                     </div>		
 								</td>
 							</tr>

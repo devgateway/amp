@@ -195,7 +195,7 @@ YAHOO.namespace("YAHOO.amp");
     }
 
     function validateInfo(){
-		if(document.getElementById('name').value==null || document.getElementById('name').value==''){
+		if(document.getElementById('firstName').value==null || document.getElementById('firstName').value==''){
 			alert('Please Enter Name');
 			return false;
 		}
@@ -401,7 +401,7 @@ YAHOO.namespace("YAHOO.amp");
         	var title = document.getElementById('contactTitle');
             var titleId=title.options[title.selectedIndex].value;
             var params="";
-            params+="&firstName="+document.getElementById('name').value+
+            params+="&firstName="+document.getElementById('firstName').value+
             	"&lastname="+document.getElementById('lastname').value +
                 "&title="+titleId+
                 "&function="+document.getElementById('function').value+

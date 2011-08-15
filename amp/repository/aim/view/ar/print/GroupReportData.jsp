@@ -19,7 +19,7 @@
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
 	
 		<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-		<jsp:include flush="true"  page="<%=viewable.getViewerPath()%>"/>
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 		
 </logic:iterate>
 
@@ -29,7 +29,7 @@
 	<td></td>
 		<td colspan="2">
 			<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
-			<jsp:include flush="true"  page="TrailCells.jsp"/>	
+			<jsp:include page="TrailCells.jsp"/>	
 		</td>
 	</tr>
 		

@@ -37,7 +37,7 @@
 
 <digi:form action="/updateSectorClassConfig.do" method="post">
     <!--  AMP Admin Logo -->
-    <jsp:include page="teamPagesHeader.jsp" flush="true" />
+    <jsp:include page="teamPagesHeader.jsp"  />
     <!-- End of Logo -->
     <html:hidden name="aimSectorClassConfigForm" property="id" styleId="id"/>
     <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>

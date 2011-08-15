@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,6 +67,8 @@ public class XLSExportAction extends Action {
 		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
 				response);
 
+		ARUtil.cleanReportOfHtmlCodes(rd);
+		
 		rd.setCurrentView(GenericViews.XLS);
 		HttpSession session = request.getSession();
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
@@ -86,8 +89,12 @@ public class XLSExportAction extends Action {
 			
 			
 		String sortBy=(String) session.getAttribute("sortBy");
-		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+		if(sortBy!=null){
+			rd.setSorterColumn(sortBy); 
+			rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+		}
 			
+		Map sorters=(Map) session.getAttribute("reportSorters");
 		//XLSExporter.resetStyles();
 	        
 		
@@ -114,6 +121,10 @@ public class XLSExportAction extends Action {
 		footer.setRight( "Page " + HSSFFooter.page() + " of " + HSSFFooter.numPages() );
 			 
 
+		if ( sorters != null && sorters.size() > 0 ) {
+			rd.importLevelSorters(sorters,r.getHierarchies().size());
+			rd.applyLevelSorter();
+		}
 		GroupReportDataXLS grdx=new GroupReportDataXLS(wb,sheet, row, rowId,
 				colId,  null, rd);
 		grdx.setMetadata(r);

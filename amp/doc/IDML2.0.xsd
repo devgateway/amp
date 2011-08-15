@@ -152,14 +152,17 @@
 			<xs:element name="donorContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="govContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
-					<xs:complexType>
+			<xs:complexType>
 						<xs:sequence>
 							<xs:element name="title" type="freeTextType"/>
 							<xs:element name="description" type="freeTextType"/>
 							<xs:element name="reportingDate" type="dateType"/>
 						</xs:sequence>
-					</xs:complexType>
+			</xs:complexType>
 			</xs:element>
+			<xs:element name="sectMinContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="projCoordinatorContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="impExecAgencyContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="additional" type="additionalFieldType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="dbKey" type="xs:string" use="required"/>
@@ -249,7 +252,8 @@
 		<xs:sequence>
 			<xs:element name="firstName" type="xs:string"/>
 			<xs:element name="lastName" type="xs:string"/>
-			<xs:element name="email" type="xs:string" minOccurs="0"/>
+			<xs:element name="email" type="xs:string" minOccurs="0" maxOccurs="3"/>
+			<xs:element name="primary" type="xs:boolean"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="additionalFieldType">

@@ -15,6 +15,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/gateperm" prefix="gateperm" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -228,7 +229,7 @@
 <tr>
 <td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td>
 </tr>
@@ -505,8 +506,9 @@
                                           </tr>
                                         </table>
                                       </feature:display>
-                                      <feature:display name="Funding Information" module="Funding">
-                                      
+                                     
+                                     
+                                    <feature:display name="Funding Information" module="Funding">
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0" >
                                         <tr>
                                           <td>
@@ -528,7 +530,9 @@
                                                 <td>
                                                   <table cellSpacing="0" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+                                                      <gateperm:putInScope key="currentOrgRole" value="DN"/>
                                                       <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+                                                        <gateperm:putInScope key="currentOrg" name="fundingOrganization">
                                                         <tr>
                                                           <td>
 	                                                          	<table>
@@ -1015,8 +1019,9 @@
 																		</field:display>
 																	</td>
 																</tr>
-
+																</gateperm:putInScope>
 																</logic:iterate>
+															
 																<tr><td>&nbsp;</td></tr>
 
 																<tr>
@@ -1112,7 +1117,7 @@
 						<td width="25%" vAlign="top" align="right">
 						  <!-- edit activity form menu -->
 
-						    <jsp:include page="editActivityMenu.jsp" flush="true" />
+						    <jsp:include page="editActivityMenu.jsp"  />
 
 						  <!-- end of activity form menu -->
 						</td></tr>

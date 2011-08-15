@@ -484,7 +484,7 @@
 		// hide loading image
 //        addLoadEvent(delBody);
 </script>
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 <!-- Individual YUI CSS files --> 
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">

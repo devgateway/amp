@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -112,7 +113,7 @@ public class ExportHelper {
 	}
 	
 	
-	public static String renderActivityTree(AmpColumnEntry node) {	
+	public static String renderActivityTree(AmpColumnEntry node, HttpServletRequest request) {
 		
 		StringBuffer retValue = new StringBuffer();
 		
@@ -126,12 +127,12 @@ public class ExportHelper {
 			}
 		
 		
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting));
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting, request));
 
 		return retValue.toString();
 	}
 	
-	public static String renderActivityTree(AmpColumnEntry node,Long sourceId) {
+	public static String renderActivityTree(AmpColumnEntry node,Long sourceId, HttpServletRequest request) {
 		DESourceSetting setting = null ;
 		if(sourceId != null && ! sourceId.equals(new Long(-1))){
 			try {
@@ -144,12 +145,21 @@ public class ExportHelper {
 		
 		StringBuffer retValue = new StringBuffer();
 
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting));
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting,request));
 
 		return retValue.toString();
 	}
 
-	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,DESourceSetting setting) {
+	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,DESourceSetting setting, HttpServletRequest request) {
+	
+		String nodeName		= null;
+		try {
+			nodeName	= (request!=null)?TranslatorWorker.translateText(node.getName(), request):node.getName();
+		} catch (WorkerException e) {
+			nodeName	= node.getName();
+			e.printStackTrace();
+		}
+	
 		
 		Pattern pattern = Pattern.compile("[\\]\\[.]");
 		Matcher matcher = pattern.matcher(node.getKey());
@@ -171,7 +181,7 @@ public class ExportHelper {
 		if (node.getElements() != null){
 			for (AmpColumnEntry subNode : node.getElements()) {
 				retValue.append("\n");
-				retValue.append(renderActivityTreeNode(subNode, nodeVarName,setting));
+				retValue.append(renderActivityTreeNode(subNode, nodeVarName,setting,request));
 				retValue.append("\n");
 			}
 		}			

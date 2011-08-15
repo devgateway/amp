@@ -133,7 +133,7 @@
           tree = new YAHOOAmp.widget.TreeView("dataExportTree");
             
           <bean:define id="tree" name="deExportForm" property="activityTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-          <%= ExportHelper.renderActivityTree(tree) %>
+          <%= ExportHelper.renderActivityTree(tree, request) %>
 
       //The tree is not created in the DOM until this method is called:
           tree.draw();
@@ -310,7 +310,7 @@
 		<span id="formChild" style="display:none;">&nbsp;</span>
 
         <span class="subtitle-blue">
-          &nbsp;Data Exporter
+          &nbsp;<digi:trn>Data Exporter</digi:trn>
         </span>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
@@ -319,11 +319,11 @@
 		<br />
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
-    			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div>Field Selection</div></a> </li>
+    			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div><digi:trn>Field Selection</digi:trn></div></a> </li>
 <%--
      			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>Additional Fields</div></a> </li>
 --%>
-    			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div>Team Selection and Filters</div></a> </li>
+    			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div><digi:trn>Team Selection and Filters</digi:trn></div></a> </li>
     		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
 				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
@@ -338,11 +338,11 @@
         							</span>
                       <div style="text-align: left; width: 87.5% ">
                         <div id="expandcontractdiv" style="margin-bottom: 0px;" >
-                          <a id="expand" href="#">Expand all</a>
-                          <a id="collapse" href="#">Collapse all</a>
+                          <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
+                          <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
                         
-                          <a id="check" href="#">Check all</a>
-                          <a id="uncheck" href="#">Uncheck all</a>
+                          <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
+                          <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
                         </div>
                       </div>
                       <div id="source_col_div" class="draglist" style="border-width: 0px;">
@@ -369,9 +369,9 @@
                     <table cellpadding="15px" width="100%" align="center" border="0" >
                       <tr>
                         <td width="46%" style="vertical-align: top;">
-	                       <span class="list_header">Donors</span>
+	                       <span class="list_header"><digi:trn>Donors</digi:trn></span>
                            <br/>
-                             <span >Donor Type</span>
+                             <span><digi:trn>Donor Type</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="donorTypeSelected" styleClass="inp-text" styleId="donorTypeId" style="width: 300px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
@@ -379,7 +379,7 @@
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span >Donor Group</span>
+                             <span ><digi:trn>Donor Group</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="donorGroupSelected" styleClass="inp-text"  styleId="donorGroupId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
@@ -387,7 +387,7 @@
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span >Donor Agency</span>
+                             <span ><digi:trn>Donor Agency</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="donorAgencySelected" styleClass="inp-text"  styleId="donorAgencyId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
@@ -397,9 +397,9 @@
                            <br/>
                         </td>
                         <td width="46%" style="vertical-align: top;">
-                         <span class="list_header">Sectors</span>
+                         <span class="list_header"><digi:trn>Sectors</digi:trn></span>
                          <br/>
-                             <span>Primary Sector</span>
+                             <span><digi:trn>Primary Sector</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="primarySectorsSelected" styleClass="inp-text"  styleId="primarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
@@ -407,7 +407,7 @@
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span >Secondary Sector</span>
+                             <span ><digi:trn>Secondary Sector</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="secondarySectorsSelected" styleClass="inp-text"  styleId="secondarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
@@ -415,10 +415,10 @@
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span class="list_header">Select Team</span>
+                             <span class="list_header"><digi:trn>Select Team</digi:trn></span>
                              <br/>
                              <html:select name="deExportForm" property="selectedTeamId" styleClass="inp-text"  styleId="teamId" style="width: 300px;" onchange="changeTeam()">
-                               <option value="-1">Please select team</option>
+                               <option value="-1"><digi:trn>Please select team</digi:trn></option>
                                <c:forEach var="fVar" items="${deExportForm.teamList}" varStatus="lStatus">
                                  <option value="${fVar.ampTeamId}">${fVar.name}</option>
                                </c:forEach>
@@ -435,7 +435,7 @@
                       </tr>
                     </table>
                     
-                    <input type="button" class="dr-menu" onclick="cancelFilter();" value="Reset" name="reset" style="font-size: larger;"/>
+                    <input type="button" class="dr-menu" onclick="cancelFilter();" value="<digi:trn>Reset</digi:trn>" name="reset" style="font-size: larger;"/>
                   
                     <br/>
                     <br/>

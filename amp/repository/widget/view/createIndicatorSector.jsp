@@ -8,7 +8,7 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="/repository/aim/view/addSectors.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addSectors.jsp"  />
 <script type="text/javascript">
     <!--
     window.onload=initSectorScript();

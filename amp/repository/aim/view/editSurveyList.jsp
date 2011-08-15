@@ -77,7 +77,7 @@
 
 <!--  AMP Admin Logo -->
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <!-- End of Logo -->
 
@@ -416,7 +416,7 @@
 
 						<td width="25%" vAlign="top" align="right">
 							 
-							  <jsp:include page="editActivityMenu.jsp" flush="true" />
+							  <jsp:include page="editActivityMenu.jsp"  />
   	
 
 						</td></tr>

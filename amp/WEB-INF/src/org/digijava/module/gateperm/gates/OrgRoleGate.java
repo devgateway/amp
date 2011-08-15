@@ -12,8 +12,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
@@ -94,42 +94,36 @@ public class OrgRoleGate extends Gate {
 	
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	//PersistenceManager.releaseSession(session);
-	//User user = atm.getUser();
-	User user = (User) session.load(User.class, atm.getUser().getId());
+	PersistenceManager.releaseSession(session);
+	User user = atm.getUser();
 
 	String paramRoleCode = parameters.poll().trim();
 
-	
+	//check if the scope has a funding organisation, if it does use that directly
+	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
+	if(org!=null && "DN".equals(paramRoleCode) ) {
+		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
+		if(roleCode.equals(paramRoleCode) && org.getAmpOrgId().equals(user.getAssignedOrgId())) return true;
+		//an org was in the scope, do not continue with the logic and deny access
+		return false;
+	}
 	
 	// iterate the assigned orgs:
 	if (ampa != null) {	    
 	    if (ampa.getOrgrole() == null)
 		return false;
-//	    Iterator i = ampa.getOrgrole().iterator();
-//	    while (i.hasNext()) {
-//		AmpOrgRole element = (AmpOrgRole) i.next();
-//		String roleCode = element.getRole().getRoleCode();
-//		if (roleCode.equals(paramRoleCode)
-//			&& element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
-//		    return true;
-//	    }
-//	    
+	    Iterator i = ampa.getOrgrole().iterator();
+	    while (i.hasNext()) {
+		AmpOrgRole element = (AmpOrgRole) i.next();
+		String roleCode = element.getRole().getRoleCode();
+		if (roleCode.equals(paramRoleCode)
+			&& element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
+		    return true;
+	    }
+	    
 
-	    for(AmpOrganisation org : user.getAssignedOrgs()) {
-                Iterator i = ampa.getOrgrole().iterator();
-                while (i.hasNext()) {
-                    AmpOrgRole element = (AmpOrgRole) i.next();
-                    String roleCode = element.getRole().getRoleCode();
-                    if (roleCode.equals(paramRoleCode)
-                            && element.getOrganisation().getAmpOrgId().equals(org))
-                        return true;
-                }
-        }
-	    
-	    
 	}
-	PersistenceManager.releaseSession(session);
 //	if (a != null) {
 //	    if (a.getRelOrgs() == null)
 //		return false;

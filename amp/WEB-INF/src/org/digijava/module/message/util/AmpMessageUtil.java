@@ -23,9 +23,11 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 public class AmpMessageUtil {
 	private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -270,12 +272,12 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(msg) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=:hidden";
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
-			//queryString+=" order by msg.creationDate desc";
+			queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
@@ -284,7 +286,7 @@ public class AmpMessageUtil {
                        /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
                         In this case we need to unhide some states which are marked as hidden in db*/
                         
-                        if(retValue<msgStoragePerMsgType&&!onlyUnread){ //temporary fix @todo change code, but not today
+                        if((!hidden&&retValue<msgStoragePerMsgType)&&!onlyUnread){ //temporary fix @todo change code, but not today
                             int limit=msgStoragePerMsgType-retValue;
                             int numUnhidden=unhideMessageStates(clazz,tmId,limit);
                             retValue+=numUnhidden;
@@ -356,7 +358,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=:hidden ";
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=:hidden order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
@@ -368,7 +370,7 @@ public class AmpMessageUtil {
 		return retValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page,int msgStoragePerMsgType) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page,int msgStoragePerMsgType,String sortBy) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -378,7 +380,12 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false order by msg.creationDate";	
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false ";
+			if (sortBy==null || sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_DATE)){
+				queryString+=" order by msg.creationDate";
+			}else if (sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_NAME)) {
+				queryString+=" order by msg.name desc";
+			}
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.
@@ -407,7 +414,7 @@ public class AmpMessageUtil {
                         // after we delete the all rows we need to move to previous page
                         if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
                             page[0]--;
-                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType);
+                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType,sortBy);
                         }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
@@ -418,7 +425,7 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,Integer[] page) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,Integer[] page, String sortBy) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -428,7 +435,12 @@ public class AmpMessageUtil {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where "+
-			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" order by msg.creationDate ";
+			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" ";
+			if (sortBy==null || sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_DATE)){
+				queryString+=" order by msg.creationDate";
+			}else if (sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_NAME)) {
+				queryString+=" order by msg.name";
+			}
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
@@ -447,7 +459,7 @@ public class AmpMessageUtil {
                          // after we delete the all rows we need to move to previous page
                         if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
                             page[0]--;
-                            returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page);
+                            returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page,sortBy);
                         }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
@@ -957,8 +969,30 @@ public class AmpMessageUtil {
 		
 		return retVal;
 	}
-
-    public static String[] searchExternalReceiversFromContacts(String searchStr) throws Exception{ //used in add message form
+	
+	public static List<AmpMessageState> getUnreadMessagesRelatedToActivity (String activityURL , Long teamMemberId) {
+		List<AmpMessageState> retVal = null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session =  PersistenceManager.getRequestDBSession();
+			Criteria criteria = session.createCriteria(AmpMessageState.class).createAlias("message","msg").createAlias("receiver", "receiver")
+			.add(Restrictions.ilike("msg.objectURL", activityURL)).add(Restrictions.eq("read", false)).add(Restrictions.eq("receiver.ampTeamMemId", teamMemberId));
+			retVal =  criteria.list();			
+//			queryString = " select state from " + AmpMessageState.class.getName() +" state where state.receiver=:teamMemberId and state.read is false and state.message.objectURL like '"+activityURL +"'";
+//			query=session.createQuery(queryString);
+//			query.setLong("teamMemberId", teamMemberId);
+//			retVal = query.list();
+		} catch (Exception e) {
+			logger.error("couldn't get messages " + e.getMessage());	
+			e.printStackTrace(); 
+		}
+		return retVal;
+	}
+	
+	
+	public static String[] searchExternalReceiversFromContacts(String searchStr) throws Exception{ //used in add message form
 		String[] retVal=null;
 		Session session=null;
 		String queryString =null;

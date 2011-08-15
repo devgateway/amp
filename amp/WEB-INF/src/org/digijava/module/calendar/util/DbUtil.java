@@ -31,18 +31,21 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
@@ -1436,27 +1439,21 @@ public class DbUtil {
 		return events;
 	}
 	
-	
 	public static int getFiscalCalendarCount(String name,Long id) throws Exception{
 		int retValue=0;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString="select count(cal.ampFiscalCalId) from " +AmpFiscalCalendar.class.getName() + " cal where cal.name='"+name+"'";
-            if(id!=null){
-            	queryString+=" and cal.ampFiscalCalId!="+id;
-            }
-			query=session.createQuery(queryString);
-//            if(id!=null){
-//            	query.setLong("id", id);
-//            }
-			retValue=(Integer)query.uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return retValue;
+	 	Session session=null;
+	 	Query query=null;
+	 	try {
+	 		session=PersistenceManager.getRequestDBSession();
+	 		Criteria criteria = session.createCriteria(AmpFiscalCalendar.class).add(Restrictions.ilike("name", name))
+	 		.add(Restrictions.or(Restrictions.idEq(null), Restrictions.ne("id", id)));
+	 		criteria.setProjection(Projections.rowCount());
+	 		criteria.list();
+	 		retValue =(Integer) criteria.uniqueResult();
+	 		} catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retValue;
 	}
 	
 }

@@ -430,7 +430,7 @@
 						</tr>
 					</table>
 
-<div id="comm_gen" style="visibility:hidden">
+<div id="comm_gen"  style="visibility:hidden">
 	<table>
 		<tr>
 			<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>
@@ -454,7 +454,7 @@
 					while (itr.hasNext())
 					{
 						AmpCurrency curr = (AmpCurrency) itr.next();
-						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) {	%>
 							<option value='<%=curr.getCurrencyCode()%>' selected='selected'><%=curr.getCurrencyName()%></option>
 						<% } else { %>
 							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
@@ -576,7 +576,21 @@ document.addCommitments=function()
 	while(newdiv.innerHTML.match('@@') != null){
 		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numComm);
 	}
-	//alert(newdiv.innerHTML);
+
+	var oldSelect = document.getElementById('comm_gen').getElementsByTagName("select")[1];
+	var selected = 0;
+	for(var j=0; j<oldSelect.options.length ; j++){
+		if(oldSelect.options[j].selected)
+			{	selected = j; break; }
+	}
+	var select = newdiv.getElementsByTagName("select")[1];
+	select.indexSelected = selected;	
+
+	for(var i=0; i<select.options.length ; i++){
+		select.options[i].selected = false;
+	}
+	select.options[selected].selected=true;
+	
 	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numComm++;
@@ -601,6 +615,22 @@ document.addDisbursement=function()
 	while(newdiv.innerHTML.match('@@') != null){
 		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numDisb);
 	}
+
+	var oldSelect = document.getElementById('disb_gen').getElementsByTagName("select")[1];
+	var selected = 0;
+	for(var j=0; j<oldSelect.options.length ; j++){
+		if(oldSelect.options[j].selected)
+			{	selected = j; break; }
+	}
+	var select = newdiv.getElementsByTagName("select")[1];
+	select.indexSelected = selected;	
+
+	for(var i=0; i<select.options.length ; i++){
+		select.options[i].selected = false;
+	}
+	select.options[selected].selected=true;
+
+	
 	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numDisb++;
@@ -625,6 +655,21 @@ document.addExpenditure=function()
 	while(newdiv.innerHTML.match('@@') != null){
 		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numExpn);
 	}
+
+	var oldSelect = document.getElementById('expn_gen').getElementsByTagName("select")[1];
+	var selected = 0;
+	for(var j=0; j<oldSelect.options.length ; j++){
+		if(oldSelect.options[j].selected)
+			{	selected = j; break; }
+	}
+	var select = newdiv.getElementsByTagName("select")[1];
+	select.indexSelected = selected;	
+
+	for(var i=0; i<select.options.length ; i++){
+		select.options[i].selected = false;
+	}
+	select.options[selected].selected=true;
+	
 	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numExpn++;

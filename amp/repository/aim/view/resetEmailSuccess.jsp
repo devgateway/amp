@@ -41,7 +41,7 @@
 	      <table align="center" border="0" cellPadding=3 cellspacing="0" width="90%">
       		 <tr>
 		          <td valign="top"><br/>
-		          	<jsp:include page="countriesLnk.jsp" flush="true" />		          
+		          	<jsp:include page="countriesLnk.jsp"  />		          
 						<BR/><BR/><BR/>						
       	     	</td>
         		</tr>

@@ -56,7 +56,7 @@
 
 <input type="hidden" name="currUrl">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 
 

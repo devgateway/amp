@@ -102,7 +102,7 @@
                                                                     <td width="5%" vAlign="center" align="left">
 
                                                                       <html:text name="nationalPlanObjectivePrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3"  onkeyup="fnChk(this, 'program')"/>
+                                                                      			 size="2" maxlength="5"  onkeyup="fnChk(this, 'program')"/>
 
                                                                     </td>
                                                                   </tr>

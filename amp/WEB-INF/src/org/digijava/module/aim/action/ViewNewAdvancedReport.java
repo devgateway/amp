@@ -235,6 +235,7 @@ public class ViewNewAdvancedReport extends Action {
 				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
 		}
 		
+		
 		if ( applySorter == null && !cached) {
 			if ( filter.getHierarchySorters() != null && filter.getHierarchySorters().size() > 0 ) {
 				for(String str : filter.getHierarchySorters() ) {
@@ -268,8 +269,11 @@ public class ViewNewAdvancedReport extends Action {
 		if (sortBy != null) {
 			httpSession.setAttribute("sortBy", sortBy);
 			rd.setSorterColumn(sortBy);
-			if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
-				rd.setSorterColumn(sortBy);
+			Boolean sortAscending		= Boolean.parseBoolean(sortByAsc);
+			rd.setSortAscending(sortAscending);
+			httpSession.setAttribute(ArConstants.SORT_ASCENDING, sortAscending);
+			//if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
+			//	rd.setSorterColumn(sortBy);
 					
 			if (applySorter == null && ar.getHierarchies() != null
 					&& !ar.getHierarchies().isEmpty()) {

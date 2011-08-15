@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<jsp:include page="addSectors.jsp" flush="true" />
+<jsp:include page="addSectors.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -27,6 +27,9 @@ alert("goNextStep");
     document.aimEditActivityForm.action = "<%= nextStepUrl %>";
     document.aimEditActivityForm.submit();
   }
+  <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
+  document.aimEditActivityForm.action = "<%= nextStepUrl %>";
+  document.aimEditActivityForm.submit();
 }
 
 function validate(field) {
@@ -161,10 +164,11 @@ function validateForm(){
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage()</feature:display> 
+    if ( false /*<feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage()</feature:display> */
      <field:display name="Regional Percentage" feature="Location">
-   	 || !validateLocationPercentage()
+   	|| !validateLocationPercentage()
      </field:display>
+   	<feature:display name="Program" module="Program">
    	<field:display name="National Planning Objectives" feature="NPD Programs"> 
     || !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms")
     </field:display>
@@ -173,7 +177,9 @@ function validateForm(){
     </field:display>
     <field:display name="Secondary Program" feature="NPD Programs">
     || !validateProgramsPercentage(spSize,"secondaryPrograms")
-    </field:display>  
+    </field:display>
+   	</feature:display>
+   	  
     ){
         //alert("false");
       return false;
@@ -199,166 +205,6 @@ function popupwin(){
   winpopup.document.write('</body>\n</html>\n');
   winpopup.document.close();
 }
-
-function validateSectorPercentage(){
-  <c:set var="errMsgAddSector">
-  <digi:trn key="aim:addSecorErrorMessage">
-  Please add sectors
-  </digi:trn>
-  </c:set>
-    <c:set var="errMsgAddPercentage">
-    <digi:trn key="aim:addSecorPercentageErrorMessage">
-    Please add sector-percentage
-    </digi:trn>
-    </c:set>
-    <c:set var="errMsgSumPercentage">
-    <digi:trn key="aim:addSecorSumPercentageErrorMessage">
-    Sum of sector percentages should be 100
-    </digi:trn>
-    </c:set>
-    <c:set var="errMsgZeroPercentage">
-    <digi:trn key="aim:addzeroPercentageErrorMessage">
-    A sector percentage cannot be equal to 0
-    </digi:trn>
-    </c:set>
-
-    <c:set var="errMsgPrimarySectors">
-    <digi:trn key="aim:addPrimarySectorsErrorMessage">
-    Please add primary sectors
-    </digi:trn>
-    </c:set>
-    
-    <c:set var="errInPrimarySector">
-    <digi:trn key="aim:errorInPrimarySector">
-    Error in Primary Sector
-    </digi:trn>
-    </c:set>
-
-    <c:set var="errInSecondarySector">
-    <digi:trn key="aim:errorInSecondarySector">
-    Error in Secondary Sector
-    </digi:trn>
-    </c:set>
-
-    <c:set var="errInBothSector">
-    <digi:trn key="aim:errorInBothSector">
-    Error in Primary and Secondary Sector
-    </digi:trn>
-    </c:set>
-    <c:set var="errorTertiarySector">
-   <digi:trn jsFriendly="true">Error in Tertiary Sector</digi:trn>
-    </c:set>
-
-       
-    var i;
-    var flag = false;
-   var primConf=document.getElementById('primaryConfig');
-    if(primConf==null){
-        return true;
-     }
-    var sum_prim_sector=false;
-    var sum_sec_sector=false;
-    var sum_tert_sector=false;
-    var empty=false;
-
-     $("div[id^='config']").each(function(index,sectorDiV){
-        var sum = 0;
-        var j;
-        var primaryDiv=sectorDiV.getElementsByTagName("div").length;
-        var inputs=sectorDiV.getElementsByTagName("input");
-        /*
-        if(inputs.length==0 && primaryDiv>0){
-           alert("${errMsgAddSector}");
-            empty=true;
-            return false;
-        }*/
-
-        for (j=0; j<inputs.length; j++){
-            if (inputs[j].type == "text") {
-                var val=inputs[j].value;
-                if (val == "" || val == null) {
-                	if(index==0){
-                    	alert("${errInPrimarySector} -  ${errMsgAddPercentage}");
-                	}
-                	else if(index==1){
-                		alert("${errInSecondarySector} -  ${errMsgAddPercentage}");
-                	}
-                    else
-                      if(index==2){
-                        alert("${errorTertiarySector} -  ${errMsgAddPercentage}");
-                    }
-                	else{
-                	    alert("assert: something goes wrong with %");
-                	}    
-                    inputs[j].focus();
-                    empty=true;
-                    break;
-                }
-                if (val == 0){
-                	if(index==0){
-                    	alert("${errInPrimarySector} -  ${errMsgZeroPercentage}");
-                	}
-                	else if(index==1){
-                		alert("${errInSecondarySector} -  ${errMsgZeroPercentage}");
-                	}
-                     else if(index==2){
-                        alert("${errorTertiarySector} -   ${errMsgZeroPercentage}");
-                    }
-                	else{
-                	    alert("assert: something goes wrong with %");
-                	}
-                    inputs[j].focus();
-                    empty=true;
-                    break;
-                            
-                }
-                sum+=parseFloat(val);
-            }
-        }
-               
-        if (sum!=100&&sum>0) {
-            if(index==0){
-               sum_prim_sector=true;    
-            }
-            else if (index==1){
-               sum_sec_sector=true;
-            }
-            else if (index==2){
-               sum_tert_sector=true;
-            }
-            else{
-               alert("assert: something goes wrong");
-            }
-        }
-    });
-    if(empty){
-return false;
-}
-    if(sum_prim_sector && sum_sec_sector){
-        alert("${errInBothSector} - ${errMsgSumPercentage}");
-        return false;
-    }
-    else if(sum_prim_sector){
-    	alert("${errInPrimarySector} - ${errMsgSumPercentage}");
-    	return false;
-    }
-    else if(sum_sec_sector){
-		alert("${errInSecondarySector} - ${errMsgSumPercentage}");
-		return false;    
-    }
-    else if(sum_tert_sector){
-        alert("${errorTertiarySector} - ${errMsgSumPercentage}");
-		return false;
-
-    }
-    return true;
-}
-            
-    
- 
- 
-
-
 
 function validateProgramsPercentage(cnt,prefix){
   <c:set var="errMsgAddPercentage">
@@ -641,7 +487,7 @@ function remProgram(programType) {
     <tr>
       <td width="100%" vAlign="top" align="left">
         <!--  AMP Admin Logo -->
-        <jsp:include page="teamPagesHeader.jsp" flush="true" />
+        <jsp:include page="teamPagesHeader.jsp"  />
         <!-- End of Logo -->
       </td>
     </tr>
@@ -939,7 +785,7 @@ function remProgram(programType) {
             </td>
              <td width="25%" vAlign="top" align="right">
 	           <!-- edit activity form menu -->
-	           <jsp:include page="editActivityMenu.jsp" flush="true" />
+	           <jsp:include page="editActivityMenu.jsp"  />
 	           <!-- end of activity form menu -->
 	       	 </td>
           </tr>

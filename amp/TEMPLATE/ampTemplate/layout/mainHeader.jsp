@@ -51,7 +51,7 @@
 								</TD>
 								<TD align="left" vAlign="center" >
 								<%--<digi:insert attribute="headerTopMiddle" />--%>
-									<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
+									<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
 								</TD>
 								<TD width="20" align="right" vAlign="center" bgColor=#195C79>
 										<digi:insert attribute="dropdownLangSwitch" />
@@ -82,7 +82,7 @@
 			</TR>
 			<%--<TR>
 				<TD width="100%" vAlign="top" align="left">
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
+					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
 				</TD>
 		  </TR>--%>
 		  <TR>

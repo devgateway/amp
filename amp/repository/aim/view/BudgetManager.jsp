@@ -15,7 +15,8 @@
 <script language="JavaScript" type="text/javascript">
 <!--
 function addBudgetsector(){
-		<digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
+        <digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
+        document.BudgetManagerForm.target = "_self";
     	document.BudgetManagerForm.action = "<%=Url%>";
     	document.BudgetManagerForm.submit();
 }
@@ -52,7 +53,7 @@ function setprogram() {
  <div style="margin:0 auto;width:1000px;">
 <digi:form action="/BudgetManager.do" method="post">
 	<!--  AMP Admin Logo -->
-	<jsp:include page="teamPagesHeader.jsp" flush="true" />
+	<jsp:include page="teamPagesHeader.jsp"  />
 	<!-- End of Logo -->
 	<html:hidden property="event" value="view" />
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>

@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
@@ -55,7 +56,6 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -113,6 +113,7 @@ import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -993,7 +994,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           Collection ampLocs = activity.getLocations();
 
           if (ampLocs != null && ampLocs.size() > 0) {
-            Collection locs = new ArrayList();
+           List<Location> locs = new ArrayList<Location>();
 
             Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
@@ -1083,7 +1084,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
                 if(actLoc.getLocationPercentage()!=null){
                 	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
-                	location.setPercent( strPercentage );
+                	//TODO Check the right why to show numbers in percentages, here it calls formatNumberNotRounded but so the format
+                	//depends on global settings which is not correct
+                	
+                	location.setPercent( strPercentage.replace(",", ".") );
                 }
                 
                 if ( setFullPercForDefaultCountry && actLoc.getLocationPercentage() == 0.0 &&
@@ -1097,7 +1101,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 locs.add(location);
               }
             }
-            eaForm.getLocation().setSelectedLocs(locs);
+              String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+              Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
+              eaForm.getLocation().setSelectedLocs(locs);
           }
 
        
@@ -1201,13 +1207,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            /* END - Get MTEF Projections */
 
 			            Collection fundDetails = ampFunding.getFundingDetails();
-			            
+
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			            //  Iterator fundDetItr = fundDetails.iterator();
 			             // long indexId = System.currentTimeMillis();
 			        
 			            calculations.doCalculations(fundDetails, toCurrCode);
-			            
+                                        
 			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
 			            if(isPreview){
                         Iterator fundingIterator = fundDetail.iterator();
@@ -1265,13 +1271,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 			            if (index > -1) {
 			              fundingOrgs.set(index, fundOrg);
-			              //	logger
-			              //		.info("Setting the fund org obj to the index :"
-			              //			+ index);
+			              //logger.info("!!!! Setting the fund org obj to the index :"	+ index);
 			            }
 			            else {
 			              fundingOrgs.add(fundOrg);
-			              //	logger.info("Adding new fund org object");
+			              //logger.info("???? Adding new fund org object");
 			            }
           }
                  
@@ -1308,6 +1312,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
                     
           //logger.info("size = " + fundingOrgs);
+          Collections.sort(fundingOrgs);
           eaForm.getFunding().setFundingOrganizations(fundingOrgs);
           //get the total depend of the 
          
@@ -1993,11 +1998,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       String overallTotalDisburOrder = "";
       
       overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.COMMITMENT,debug);
+          fb, Constants.COMMITMENT,Constants.ACTUAL,debug);
       overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT,debug);
+          fb, Constants.DISBURSEMENT,Constants.ACTUAL,debug);
       overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT_ORDER,debug);      
+          fb, Constants.DISBURSEMENT_ORDER,Constants.ACTUAL,debug);
       if(!debug){
       overallTotalUnDisbursed = FormatHelper.getDifference(
           overallTotalCommitted, overallTotalDisbursed);
@@ -2006,7 +2011,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  overallTotalUnDisbursed =overallTotalCommitted +"-" +overallTotalDisbursed; 
       }
       overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.EXPENDITURE,debug);
+          fb, Constants.EXPENDITURE,Constants.ACTUAL,debug);
       if(!debug){
       overallTotalUnExpended = FormatHelper.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);

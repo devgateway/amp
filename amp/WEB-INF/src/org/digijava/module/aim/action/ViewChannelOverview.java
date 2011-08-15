@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,15 +29,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -43,7 +49,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ChannelOverviewForm;
-import org.digijava.module.aim.form.EditActivityForm.CrossCuttingIssues;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -51,6 +56,9 @@ import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
@@ -62,6 +70,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -211,6 +220,37 @@ public class ViewChannelOverview extends TilesAction {
 	              formBean.setSelectedOrganizations(orgProjectIds);
 	            }
 	          }
+
+                    Collection<AmpActivityLocation> ampLocs = activity.getLocations();
+                    if (ampLocs != null && ampLocs.size() > 0) {
+                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        SortedSet<Location> locs = new TreeSet<Location>(new HelperLocationAncestorLocationNamesAsc(langCode));
+                        Iterator<AmpActivityLocation> locIter = ampLocs.iterator();
+                        while (locIter.hasNext()) {
+                            AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
+                            if (actLoc == null) {
+                                continue;
+                            }
+                            AmpLocation loc = actLoc.getLocation();								//AMP-2250
+                            if (loc != null) {
+                                Location location = new Location();
+                                location.setAmpCVLocation(loc.getLocation());
+                                if (loc.getLocation() != null) {
+                                    location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc.getLocation()));
+                                    location.setLocationName(loc.getLocation().getName());
+                                    location.setLocId(loc.getLocation().getId());
+                                }
+                                if (actLoc.getLocationPercentage() != null) {
+                                    String strPercentage = FormatHelper.formatNumberNotRounded((double) actLoc.getLocationPercentage());
+                                    //TODO Check the right why to show numbers in percentages, here it calls formatNumberNotRounded but so the format
+                                    //depends on global settings which is not correct
+                                    location.setPercent(strPercentage.replace(",", "."));
+                                }
+                                locs.add(location);
+                            }
+                        }
+                         formBean.setSortedLocations(locs);
+                    }
 
 	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 					.getAmpCategoryValueFromListByKey(
@@ -372,7 +412,7 @@ public class ViewChannelOverview extends TilesAction {
 						    ));
 						
 						formBean.setGovAgreementNumber(activity.getGovAgreementNumber());
-						
+				        TreeSet relOrgsAux = new TreeSet();
 				        Collection relOrgs = new ArrayList();
 				        if (activity.getOrgrole() != null) {
 				          Iterator orgItr = activity.getOrgrole().iterator();
@@ -394,9 +434,10 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                relOrg.setAdditionalInformation( orgRole.getAdditionalInfo() );
-				                if (!relOrgs.contains(relOrg)) {
-				                	relOrgs.add(relOrg);
-				                }
+//				                if (!relOrgs.contains(relOrg)) {
+//				                	relOrgs.add(relOrg);
+				                	relOrgsAux.add(relOrg);
+//				                }
 				            }
 				          }
 				          if ( formBean.getFinancingBreakdown() != null ) {
@@ -411,13 +452,17 @@ public class ViewChannelOverview extends TilesAction {
 					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
 					                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
-					                if (!relOrgs.contains(relOrg)) {
-					                	relOrgs.add(relOrg);
+//					                if (!relOrgs.contains(relOrg)) {
+//					                	relOrgs.add(relOrg);
+					                	relOrgsAux.add(relOrg);
+//					                }
 					                }
 				        	  }
 				          }
-				        }
-				        formBean.setRelOrgs(relOrgs);
+
+				        formBean.setRelOrgs(relOrgsAux);
+				        
+				        
 				        Collection col = activity.getClosingDates();
 				        List dates = new ArrayList();
 				        if (col != null && col.size() > 0) {

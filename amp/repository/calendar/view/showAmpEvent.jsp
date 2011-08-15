@@ -28,7 +28,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
@@ -220,7 +220,7 @@
 </style>
 
 <script language="JavaScript" type="text/javascript">
-  <jsp:include page="../../aim/view/scripts/calendar.js.jsp" flush="true" />
+  <jsp:include page="../../aim/view/scripts/calendar.js.jsp"  />
   
 
 function removeSelOrgs() {
@@ -244,7 +244,7 @@ function submitForm() {
 
 </script>
 
-<jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 

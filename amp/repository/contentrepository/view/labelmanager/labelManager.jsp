@@ -178,6 +178,17 @@
 	}
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.util.Event.addListener(window, "load", initTree) ;
+        function validate(){
+            var myForm= document.getElementById("addEditLabelForm");
+            var valid=false;
+            if(myForm.editLabelName.value==''){
+                alert('<digi:trn  jsFriendly="true">Please enter name for this label</digi:trn>');
+            }
+            else{
+               valid=true;
+            }
+            return valid;
+        }
 </script>
 <bean:define id="myForm" toScope="request" name="crLabelManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
@@ -255,7 +266,7 @@
 		<input type="hidden" name="editLabelType" />
 		<table width=300 align=center style="font-size:12px;">
 			<tr>
-				<td><digi:trn>Name</digi:trn></td>
+				<td><digi:trn>Name</digi:trn><font size="2" color="#FF0000">*</font></td>
 				<td><input type="text" name="editLabelName" /></td>
 			</tr>
 			<tr>
@@ -268,9 +279,12 @@
 			</tr>
 			<tr>
 				<td colspan="2" align=center>
-					<button type="submit" class="buttonx"><digi:trn>Submit</digi:trn></button>
+					<button type="submit" class="buttonx" onclick="return validate()"><digi:trn>Submit</digi:trn></button>
 				</td>
 			</tr>
+                         <tr>
+                            <td colspan="2"><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
+                        </tr>
 		</table>
 		
 	</form> 

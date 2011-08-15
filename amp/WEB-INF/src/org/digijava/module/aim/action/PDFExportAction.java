@@ -106,6 +106,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		 
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		
+		ARUtil.cleanReportOfHtmlCodes(rd);
+		
 		rd.setCurrentView(GenericViews.PDF);
 		HttpSession session = request.getSession();
 		
@@ -157,8 +159,12 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response,request));
 				//noteFromSession=AmpReports.getNote(request.getSession());                
 				String sortBy=(String) session.getAttribute("sortBy");
+				Map sorters=(Map) session.getAttribute("reportSorters");
 		
-				if(sortBy!=null) rd.setSorterColumn(sortBy); 
+				if(sortBy!=null) {
+					rd.setSorterColumn(sortBy);
+					rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+				}
 				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
 				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
@@ -170,6 +176,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				}
 				contenTable = new PdfPTable(PDFExporter.widths);
 				contenTable.setWidthPercentage(100);
+				
+				if ( sorters != null && sorters.size() > 0 ) {
+					rd.importLevelSorters(sorters,r.getHierarchies().size());
+					rd.applyLevelSorter();
+				}
                 GroupReportDataPDF grdp=new GroupReportDataPDF(contenTable,(Viewable) rd,null);
                 //it is for not to show first group it is always the report title;
                 //in a few grdp.setVisible(false);

@@ -394,7 +394,7 @@ function commentWin(val, commentId) {
 																				<table>
 																				<c:if test="${aimChannelOverviewForm.budgetCV != null && 
 																						aimChannelOverviewForm.budgetCV.value=='On'}">
-																					<field:display name="On/Off/Treasure Budget" feature="Budget">
+																					<field:display name="On/Off/Treasury Budget" feature="Budget">
 																						<tr>
 																							<td>
 																								<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
@@ -534,7 +534,7 @@ function commentWin(val, commentId) {
 																						</tr>
 																					</field:display>
 																				</table>
-																			<field:display name="On/Off/Treasure Budget" feature="Budget">
+																			<field:display name="On/Off/Treasury Budget" feature="Budget">
 																			<c:choose>
 																				<c:when test="${aimChannelOverviewForm.budgetCV!=null && aimChannelOverviewForm.budgetCV.value=='Off'}">
 																					<digi:trn>Activity is Off Budget</digi:trn>
@@ -1114,50 +1114,51 @@ function commentWin(val, commentId) {
 																							</TR>
                                                                                             </c:if>
 																						</c:forEach> --%>
-																						<c:forEach varStatus="varSt" var="actLoc" items="${activity.locations}">
-																							<bean:define id="loc" name="actLoc" property="location.location" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
-																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
-																							<tr>
-																							<bean:size id="numOfAncestors" name="ancestorMap"/>
-																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
-																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
-																									<td align="center" bgcolor="#ffffff">
-																									<c:choose>
-																										<c:when test="${ancestorMap[indexLayer] != null}">
-																												${ancestorMap[indexLayer]}
-																										</c:when>
-																										<c:otherwise>
-																											&nbsp;
-																										</c:otherwise>
-																									</c:choose>
-																									</td>
-																								</c:if>
-																							</c:forEach>
-																							<td align="center" bgcolor="#ffffff">
-																								<field:display name="Regional Percentage" feature="Location">&nbsp;
-																								<c:choose>
-                                                                                            		<c:when test='${actLoc.locationPercentage > 0}'>
-																										<fmt:formatNumber type="number" value="${actLoc.locationPercentage}" />
-                                             														</c:when>
-                                             													</c:choose>
-                                             													</field:display>
-																							</td>
-																							</tr>
-																						</c:forEach>
-																					 
-																					</c:if>
-																					<!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM 
-																					<tr>
-																						<td colspan="4">
-																							<img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
-																						</td>
-																					</tr>
-																					 -->
-																				</TABLE>
-																				</TD>
-																			</TR>
-																		</TABLE>
-																		</TD>
+                                                                                                                                                                                <c:forEach  var="loc" items="${aimChannelOverviewForm.sortedLocations}">
+                                                                                                                                                                                    <c:set var="locSize" >
+                                                                                                                                                                                        ${fn:length(loc.ancestorLocationNames)}
+                                                                                                                                                                                    </c:set>
+
+                                                                                                                                                                                    <tr>
+                                                                                                                                                                                        <c:forEach var="ancestor" items="${loc.ancestorLocationNames}">
+                                                                                                                                                                                            <td align="center" bgcolor="#ffffff">
+                                                                                                                                                                                                ${ancestor}
+                                                                                                                                                                                            </td>
+
+                                                                                                                                                                                        </c:forEach>
+
+                                                                                                                                                                                     <c:forEach begin="${locSize}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
+                                                                                                                                                                                            <td align="center" bgcolor="#ffffff">
+                                                                                                                                                                                                &nbsp;
+                                                                                                                                                                                            </td>
+
+                                                                                                                                                                                        </c:forEach>
+
+                                                                                                                                                                                        <td align="center" bgcolor="#ffffff">
+                                                                                                                                                                                            <field:display name="Regional Percentage" feature="Location">&nbsp;
+                                                                                                                                                                                                <c:if test="${loc.percent!=0}">
+                                                                                                                                                                                                     ${loc.percent}%
+                                                                                                                                                                                                </c:if>
+
+                                                                                                                                                                                                   
+                                                                                                                                                                                            </field:display>
+                                                                                                                                                                                        </td>
+                                                                                                                                                                                    </tr>
+                                                                                                                                                                                </c:forEach>
+
+                                                                                                                                                                </c:if>
+                                                                                                                                                                <!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM
+                                                                                                                                                                                                <tr>
+                                                                                                                                                                                                        <td colspan="4">
+                                                                                                                                                                                                                <img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
+                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                </tr>
+                                                                                                                                                                                                 -->
+                                                                                                                                                        </TABLE>
+                                                                                                                                        </TD>
+                                                                                                                                        </TR>
+                                                                                                                                        </TABLE>
+                                                                                                                                        </TD>
 																	</TR>
 																</TABLE>
 																</TD>

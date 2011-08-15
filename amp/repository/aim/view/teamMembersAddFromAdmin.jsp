@@ -26,7 +26,7 @@
 
 <digi:form action="/addTeamMember.do" method="post">
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
@@ -74,7 +74,7 @@
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td valign="top">
-									<jsp:include page="addTeamMember.jsp" flush="true"/>
+									<jsp:include page="addTeamMember.jsp" />
 								</td>
 							</tr>
 						</table>

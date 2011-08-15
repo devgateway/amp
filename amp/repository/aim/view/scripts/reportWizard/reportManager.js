@@ -337,7 +337,9 @@ NormalReportManager.prototype.checkColumns	= function () {
 NormalReportManager.prototype.checkReportName	= function () { 
 	var btn 	= document.getElementById("last_save_button");
 	var btnY	= new YAHOO.util.Element(btn);
-	if ( getReportTitle() == "" ) {
+	var strTitle	= getReportTitle();
+	strTitle		= strTitle.replace(/\s*/, "");
+	if ( strTitle == "" ) {
 		btn.disabled		= true;
 		btnY.setStyle("color", "lightgrey");
 		return false;

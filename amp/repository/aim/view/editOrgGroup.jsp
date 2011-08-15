@@ -70,7 +70,7 @@
 <html:hidden property="ampOrgGrpId" />
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">

@@ -6,13 +6,16 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+	<jsp:include page="scripts/calendar.js.jsp"  />
 </script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="scripts/newCalendar.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
@@ -109,9 +112,11 @@
                           <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
                           <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
+                        <field:display name="Proposed Project Date" feature="Proposed Project Cost">
                         <td align="center" valign="middle" width="120" colspan="2">
                           <b><font color="white"><digi:trn key="aim:PlannedCommitmentDate">Planned Commitment Date</digi:trn></font></b>
                         </td>
+                        </field:display>
                       </tr>
                       <tr>
                         <td valign="center" align="center">

@@ -27,7 +27,7 @@
 
 <html:hidden property="ampTeamId" />
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>

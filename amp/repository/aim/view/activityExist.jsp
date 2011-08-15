@@ -38,7 +38,7 @@ function cancel() {
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
@@ -216,7 +216,7 @@ function cancel() {
 							
 						</td></tr>
 						<tr><td align="center">
-							<input type="button" value="Return" class="dr-menu" onclick="cancel()"
+                                                        <input type="button" value="<digi:trn>Return</digi:trn>" class="dr-menu" onclick="cancel()"
 							name="submitButton">
 						</td></tr>
                         </c:if>

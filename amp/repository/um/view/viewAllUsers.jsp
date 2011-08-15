@@ -42,7 +42,7 @@ function banUser(txt) {
 
 
 <!--  AMP Admin Logo -->
-<!-- jsp:include page="/repositoryteamPagesHeader.jsp" flush="true" /-->
+<!-- jsp:include page="/repositoryteamPagesHeader.jsp"  /-->
 <!-- End of Logo -->
 
 

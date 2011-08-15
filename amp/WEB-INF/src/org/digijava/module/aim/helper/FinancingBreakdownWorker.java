@@ -84,7 +84,7 @@ public class FinancingBreakdownWorker
 		return strTotal ;
 	}
 
-	public static String getOverallTotal(Collection c,int type,boolean isDebug)
+	public static String getOverallTotal(Collection c,int type, int adjustmentType,boolean isDebug)
 	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("getOverallTotal(Collection c size=" + c.size()
@@ -99,30 +99,32 @@ public class FinancingBreakdownWorker
 		{
 			financingBreakdown = (FinancingBreakdown)iter.next() ;
 			if ( type == Constants.COMMITMENT ){
+                            String amount=(adjustmentType==Constants.ACTUAL)?financingBreakdown.getTotalCommitted():financingBreakdown.getTotalPlannedCommitted() ;
 				if (!isDebug){
-					s1 = financingBreakdown.getTotalCommitted() ;
+					s1 =amount;
 					total += FormatHelper.parseDouble(s1) ;
 				}
 				else{
 					if ("".equalsIgnoreCase(s1)){
-						s1 = financingBreakdown.getTotalCommitted();
+						s1 =amount ;
 					}
 					else{
-						s1 = s1 + "+" + financingBreakdown.getTotalCommitted();
+						s1 += "+" + amount ;
 					}
 				}
 			}
 			else if ( type == Constants.DISBURSEMENT ){
+                            String amount=(adjustmentType==Constants.ACTUAL)?financingBreakdown.getTotalDisbursed():financingBreakdown.getTotalPlannedDisbursed() ;
 				if(!isDebug){
-					s1 = financingBreakdown.getTotalDisbursed() ;
+					s1 =amount;
 					total += FormatHelper.parseDouble(s1) ;
 				}
 				else{
 					if ("".equalsIgnoreCase(s1)){
-						s1 = financingBreakdown.getTotalDisbursed();
+						s1 =amount;
 					}
 					else{
-						s1 = s1 + "+" + financingBreakdown.getTotalDisbursed();
+						s1 += "+" + amount ;
 					}
 					
 				}
@@ -213,12 +215,24 @@ public class FinancingBreakdownWorker
 
 				fp.setAmpFundingId(ampFunding.getAmpFundingId());
 				fp.setTransactionType(Constants.COMMITMENT);
+                                fp.setAdjustmentType(Constants.ACTUAL);
 				String totalDonorCommitment = getTotalDonorFund(fp,isDebug) ;
 				financingBreakdown.setTotalCommitted(totalDonorCommitment) ;
 
+				fp.setTransactionType(Constants.COMMITMENT);
+                                fp.setAdjustmentType(Constants.PLANNED);
+				String totalDonorPlannedCommitment = getTotalDonorFund(fp,isDebug) ;
+				financingBreakdown.setTotalPlannedCommitted(totalDonorPlannedCommitment) ;
+
 				fp.setTransactionType(Constants.DISBURSEMENT);
+                                fp.setAdjustmentType(Constants.ACTUAL);
 				String totalDonorDisbursement = getTotalDonorFund(fp,isDebug) ;
 				financingBreakdown.setTotalDisbursed(totalDonorDisbursement) ;
+
+                                fp.setTransactionType(Constants.DISBURSEMENT);
+                                fp.setAdjustmentType(Constants.PLANNED);
+				String totalDonorPlannedDisbursement = getTotalDonorFund(fp,isDebug) ;
+				financingBreakdown.setTotalPlannedDisbursed(totalDonorPlannedDisbursement) ;
 				String unDisbursed ="";
 				if (isDebug){
 					unDisbursed = "(" + totalDonorCommitment + ")" + "-" + "("
@@ -233,7 +247,7 @@ public class FinancingBreakdownWorker
 				String totalDonorExpenditure = getTotalDonorFund(fp,isDebug);
 				financingBreakdown.setTotalExpended(totalDonorExpenditure) ;
 
-                fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
+                                fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
 				String totalDisbOrdered = getTotalDonorFund(fp, isDebug);
 				financingBreakdown.setTotalDisbOrdered(totalDisbOrdered);
 				financingBreakdown.setTotalProjection(getTotalProjections(fp));

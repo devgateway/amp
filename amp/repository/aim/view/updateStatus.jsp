@@ -90,7 +90,7 @@ function save() {
 
 <!--  AMP Admin Logo -->
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 
 <!-- End of Logo -->
 

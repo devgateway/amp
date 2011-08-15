@@ -11,7 +11,9 @@ public class FinancingBreakdown
 	private String unDisbursed ;
 	private String totalExpended ;
 	private String unExpended ;
-    private String totalDisbOrdered;
+        private String totalDisbOrdered;
+        private String totalPlannedCommitted;
+        private String totalPlannedDisbursed;
 
 	/* Added for Tanzania */
 	private String totalProjection;
@@ -199,5 +201,20 @@ public class FinancingBreakdown
 
         public void setTotalDisbOrdered(String totalDisbOrdered) {
                 this.totalDisbOrdered = totalDisbOrdered;
+        }
+         public String getTotalPlannedCommitted() {
+            return totalPlannedCommitted;
+        }
+
+        public void setTotalPlannedCommitted(String totalPlannedCommitted) {
+            this.totalPlannedCommitted = totalPlannedCommitted;
+        }
+
+        public String getTotalPlannedDisbursed() {
+            return totalPlannedDisbursed;
+        }
+
+        public void setTotalPlannedDisbursed(String totalPlannedDisbursed) {
+            this.totalPlannedDisbursed = totalPlannedDisbursed;
         }
 }

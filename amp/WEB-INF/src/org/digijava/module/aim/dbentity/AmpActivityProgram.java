@@ -9,7 +9,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
 
         private Long ampActivityProgramId;
-        private Long programPercentage;
+        private Float programPercentage;
         private AmpTheme program;
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
@@ -17,7 +17,7 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
                 return ampActivityProgramId;
         }
 
-        public Long getProgramPercentage() {
+        public Float getProgramPercentage() {
                 return programPercentage;
         }
 
@@ -37,7 +37,7 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
                 this.ampActivityProgramId = ampActivityProgramId;
         }
 
-        public void setProgramPercentage(Long programPercentage) {
+        public void setProgramPercentage(Float programPercentage) {
                 this.programPercentage = programPercentage;
         }
 

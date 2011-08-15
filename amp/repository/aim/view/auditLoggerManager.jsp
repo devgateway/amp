@@ -136,7 +136,7 @@ function toggleSettings(){
 </script>
 <digi:instance property="aimAuditLoggerManagerForm" />
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <digi:form action="/auditLoggerManager.do" method="post">
 <center>

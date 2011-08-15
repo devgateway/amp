@@ -206,7 +206,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 										Program Name</digi:trn><font color="red">*</font>						</td>
                         <td width="2" align="left">&nbsp;</td>
                   <td width="71%" height="10" align="left">
-<html:text property="programName" size="20"/>						</td>
+<html:text property="programName" size="20" maxlength="200"/>						</td>
 				<tr bgColor=#ffffff>
 				<td width="30%" height="20" align="right" valign="middle">
 				  <digi:trn key="aim:programDescription">Description</digi:trn>				</td>
@@ -255,7 +255,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 						Program Code</digi:trn>		<font color="red"> *</font>	</td>
                 <td width="2" align="left">&nbsp;</td>
                 <td align="left">
-						<html:text property="programCode" size="20" styleClass="inp-text"/>				</td>
+						<html:text property="programCode" size="20" styleClass="inp-text" maxlength="50"/>				</td>
 				</tr>
 				<tr bgColor=#ffffff>
 				<td width="30%" height="20" align="right" valign="middle"><digi:trn key="aim:programType">

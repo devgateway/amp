@@ -82,7 +82,7 @@ function updateChild(action) {
 <table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 	<tr>
 		<td width="100%">
-			<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 		</td>
 	</tr>
 	<tr>

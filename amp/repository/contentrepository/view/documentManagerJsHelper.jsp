@@ -1362,7 +1362,7 @@ function addFromTemplate(ownType) {
 	templatesPanel	= YAHOO.amp.tempPanels[0]; 
 	if (templatesPanel == null) {
 		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true, draggable:true, close:true, modal:true,constraintoviewport: false } );
-		templatesPanel.setHeader('<digi:trn>Create Document From Template</digi:trn>');
+		templatesPanel.setHeader("<digi:trn>Create Document From Template</digi:trn>");
 		templatesPanel.setBody("");
 		templatesPanel.render(document.body);
 		YAHOO.amp.tempPanels[0]	= templatesPanel;

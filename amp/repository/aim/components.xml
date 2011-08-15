@@ -443,7 +443,7 @@
 	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
 	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
 	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
-	
+	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
 </secondary-pages>
 <module>
 

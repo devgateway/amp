@@ -8,10 +8,12 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -19,6 +21,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -37,6 +40,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -316,18 +320,91 @@ public class ExportBuilder {
 			}
 			
 		} else if (path.equalsIgnoreCase("activity.donorContacts")){
-			ContactType cont = buildContactType(ampActivity.getContFirstName(),
-					ampActivity.getContLastName(), ampActivity.getEmail());
-			if (cont != null){
-				parent.getDonorContacts().add(cont);
+			Long actId = ampActivity.getAmpActivityId();
+			try {
+				List<AmpActivityContact> actConts = ContactInfoUtil.getActivityContactsForType(actId,Constants.DONOR_CONTACT);
+				if(actConts!=null){
+					for (AmpActivityContact ampActivityContact : actConts) {
+						ContactType cont = buildContactType(ampActivityContact);
+						if (cont != null){
+							parent.getDonorContacts().add(cont);
+						}
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} else if (path.equalsIgnoreCase("activity.govContacts")){
-			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
-					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
-			if (cont != null){
-				parent.getGovContacts().add(cont);
+			
+		} else if (path.equalsIgnoreCase("activity.govContacts")){			
+				Long actId = ampActivity.getAmpActivityId();
+				try {
+					List<AmpActivityContact> actConts = ContactInfoUtil.getActivityContactsForType(actId,Constants.MOFED_CONTACT);
+					if(actConts!=null){
+						for (AmpActivityContact ampActivityContact : actConts) {
+							ContactType cont = buildContactType(ampActivityContact);
+							if (cont != null){
+								parent.getGovContacts().add(cont);
+							}
+						}
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			
+		}else if (path.equalsIgnoreCase("activity.sectMinContacts")){			
+			Long actId = ampActivity.getAmpActivityId();
+			try {
+				List<AmpActivityContact> actConts = ContactInfoUtil.getActivityContactsForType(actId,Constants.SECTOR_MINISTRY_CONTACT);
+				if(actConts!=null){
+					for (AmpActivityContact ampActivityContact : actConts) {
+						ContactType cont = buildContactType(ampActivityContact);
+						if (cont != null){
+							parent.getSectMinContacts().add(cont);
+						}
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		
+	}else if (path.equalsIgnoreCase("activity.projCoordinatorContacts")){			
+		Long actId = ampActivity.getAmpActivityId();
+		try {
+			List<AmpActivityContact> actConts = ContactInfoUtil.getActivityContactsForType(actId,Constants.PROJECT_COORDINATOR_CONTACT);
+			if(actConts!=null){
+				for (AmpActivityContact ampActivityContact : actConts) {
+					ContactType cont = buildContactType(ampActivityContact);
+					if (cont != null){
+						parent.getProjCoordinatorContacts().add(cont);
+					}
+				}
 			}
-		} else if (path.equalsIgnoreCase("activity.additional")){
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+	
+	}else if (path.equalsIgnoreCase("activity.impExecAgencyContacts")){			
+		Long actId = ampActivity.getAmpActivityId();
+		try {
+			List<AmpActivityContact> actConts = ContactInfoUtil.getActivityContactsForType(actId,Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
+			if(actConts!=null){
+				for (AmpActivityContact ampActivityContact : actConts) {
+					ContactType cont = buildContactType(ampActivityContact);
+					if (cont != null){
+						parent.getImpExecAgencyContacts().add(cont);
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+	
+	} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 			
 			//AMP-9220 - ptip number for Senegal
@@ -341,7 +418,7 @@ public class ExportBuilder {
 			if (ampActivity.getRegionalObservations()  != null){
 				for (Iterator iterator = ampActivity.getRegionalObservations().iterator(); iterator.hasNext();) {
 					AmpRegionalObservation issue = (AmpRegionalObservation) iterator.next();
-					parent.getPhysicalProgress().add(buildPhysicalProgress(issue, ampColumnEntry));
+			//		parent.getPhysicalProgress().add(buildPhysicalProgress(issue, ampColumnEntry));
 				}
 			}
 			
@@ -655,16 +732,20 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
+	private ContactType buildContactType (AmpActivityContact actContact) throws AmpExportException{
 		ContactType retValue = null;
-		if (firstName != null && firstName.trim().length() > 0 &&
-				lastName != null && lastName.trim().length() > 0 ){
+		AmpContact contact = actContact.getContact();
+		if (contact.getName()!=null && contact.getName().length()>0 && contact.getLastname()!=null && contact.getLastname().length() >0) {
 			retValue = objectFactory.createContactType();
-			retValue.setFirstName(firstName);
-			retValue.setLastName(lastName);
-			retValue.setEmail(mail);
-		}
-		
+			retValue.setFirstName(contact.getName());
+			retValue.setLastName(contact.getLastname());
+			retValue.setPrimary(actContact.getPrimaryContact());
+			if (contact.getEmails()!=null) {
+				for (String email : contact.getEmails()) {
+					retValue.getEmail().add(email);
+				}
+			}			
+		}		
 		return retValue;
 	}
 	

@@ -3,6 +3,7 @@ package org.digijava.module.aim.logic.defaultimpl;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
+import org.digijava.module.aim.helper.Constants;
 
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.YearlyInfo;
@@ -22,13 +23,26 @@ public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 		Iterator<YearlyInfo> iter = c.iterator();
 		while (iter.hasNext()) {
 			YearlyInfo yf = iter.next();
-			if (total.getValue() == null) {
-				total.setValue(new BigDecimal(yf.getActualAmount()));
-				total.setCalculations(yf.getWrapedActual());
-			} else {
-				total.setValue(new BigDecimal(yf.getActualAmount()).add(total.getValue()));
-				total.setCalculations(total.getCalculations() + " + " + yf.getWrapedActual());
-			}
+                      if (fp.getAdjustmentType() == Constants.ACTUAL) {
+                        if (total.getValue() == null) {
+                            total.setValue(new BigDecimal(yf.getActualAmount()));
+                            total.setCalculations(yf.getWrapedActual());
+                        } else {
+                            total.setValue(new BigDecimal(yf.getActualAmount()).add(total.getValue()));
+                            total.setCalculations(total.getCalculations() + " + " + yf.getWrapedActual());
+                        }
+
+                    } else {
+                            if (total.getValue() == null) {
+                            total.setValue(new BigDecimal(yf.getPlannedAmount()));
+                            total.setCalculations(yf.getWrapedPlanned());
+                        } else {
+                            total.setValue(new BigDecimal(yf.getPlannedAmount()).add(total.getValue()));
+                            total.setCalculations(total.getCalculations() + " + " + yf.getWrapedPlanned());
+                        }
+
+                    }
+			
 		}
 		return total;
 	}

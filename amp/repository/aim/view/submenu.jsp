@@ -14,7 +14,7 @@
 <digi:context name="digiContext" property="context"/>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="true">
-	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp" flush="true" />
+	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp"  />
 </logic:equal>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="false">

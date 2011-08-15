@@ -16,8 +16,9 @@
 
 function saveSector() {
 	if(validatesector()){
-		<digi:context name="back" property="context/module/moduleinstance/editbudgetsector.do" />
+            <digi:context name="back" property="context/module/moduleinstance/editbudgetsector.do" />
 	    document.EditBudgetSectorForm.action = "<%= back %>~edit=true";
+            document.EditBudgetSectorForm.target = window.opener.name;
 	    document.EditBudgetSectorForm.submit();
 	    closePopup()
 	}
@@ -25,14 +26,7 @@ function saveSector() {
 }
 
 function closePopup() {
-  <digi:context name="back" property="context/module/moduleinstance/BudgetManager.do" />
-  document.EditBudgetSectorForm.action = "<%= back %>~resetFields=true";
-  document.EditBudgetSectorForm.target = window.opener.name;
-  document.EditBudgetSectorForm.submit();
   window.close();
-  if (window.opener && !window.opener.closed) {
-	  window.opener.location.reload();
-} 
 }
 
 function validatesector(){

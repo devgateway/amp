@@ -108,7 +108,7 @@
 
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td>
 
@@ -143,7 +143,7 @@
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
 										
 										
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<jsp:include page="teamSetupMenu.jsp"  />
 									
 									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
 										<tr>
@@ -172,8 +172,8 @@
 										<logic:empty name="aimTeamActivitiesForm" property="activities">
 											<tr>
 												<td class="inside" align="center" colspan="4">
-													<digi:trn key="aim:noActivitiesPresent">
-														No activities present
+																	<digi:trn key="aim:noNonDraftActivitiesPresent">
+																		No activities present. You cannot reassign draft activities.
 													</digi:trn>
 												</td>
 											</tr>

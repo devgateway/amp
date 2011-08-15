@@ -50,10 +50,10 @@ public class GregorianBasedWorker implements ICalendarWorker {
 			// set offset from fiscal calendar
 
 			internalCalendar.add(GregorianCalendar.YEAR, fiscalCalendar.getYearOffset());
-			int toAdd = (fiscalCalendar.getStartMonthNum() - 1);
+			int toAdd = (- fiscalCalendar.getStartMonthNum() + 1 );
 			internalCalendar.add(GregorianCalendar.MONTH, toAdd);
 			toAdd = (fiscalCalendar.getStartDayNum() - 1);
-			internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
+			internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, 0-toAdd);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class GregorianBasedWorker implements ICalendarWorker {
 
 	public String getFiscalYear() throws Exception {
 		if (this.fiscalCalendar.getIsFiscal()) {
-			return "Fiscal Year " + this.getYear() + " - " + (this.getYear() + 1);
+			return "Fiscal Year " + (this.getYear()) + " - " + (this.getYear()+1);
 		}
 		return this.getYear().toString();
 	}

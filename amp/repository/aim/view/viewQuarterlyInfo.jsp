@@ -85,7 +85,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <logic:equal name="aimQuarterlyInfoForm" property="sessionExpired" value="true">
 
-	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp" flush="true" />
+	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp"  />
 
 </logic:equal>
 

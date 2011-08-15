@@ -220,19 +220,14 @@ public class DataDispatcher extends MultiAction {
 		filter.setTeamMember(tm);
 
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter
-				.getYear().intValue() - filter.getYearsInRange());
-		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear()
-				.intValue());
+		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
+		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 		String implementationLevel = "";
 		if (request.getParameter("level") != null && request.getParameter("level").equals("Region")) { 
 			implementationLevel = "Region";
 		} else {
 			implementationLevel = "Zone";
 		}
-
-		// TODO: Move this to a helper, see how to make Filters compatible and
-		// use just one class to access database with Visualization
 
 		JSONArray jsonArray = new JSONArray();
 
@@ -250,18 +245,11 @@ public class DataDispatcher extends MultiAction {
 			Long[] ids = { location.getId() };
 			MapFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(ids);
-			BigDecimal amountCommitments = DbHelper
-					.getFunding(newFilter, startDate, endDate, null, null,
-							Constants.COMMITMENT, Constants.ACTUAL).getValue()
+			BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.COMMITMENT, Constants.ACTUAL).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountDisbursements = DbHelper
-					.getFunding(newFilter, startDate, endDate, null, null,
-							Constants.DISBURSEMENT, Constants.ACTUAL)
-					.getValue()
-					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountExpenditures = DbHelper
-					.getFunding(newFilter, startDate, endDate, null, null,
-							Constants.EXPENDITURE, Constants.ACTUAL).getValue()
+			BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.DISBURSEMENT, Constants.ACTUAL)
+					.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.EXPENDITURE, Constants.ACTUAL).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			String keyName = "";
 			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
@@ -274,17 +262,14 @@ public class DataDispatcher extends MultiAction {
 				if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
 					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
 							.getValueKey();
-					if (location.getParentCategoryValue().getValue()
-							.equals(implLocation)) {
+					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 						keyName = "Regional";
 					} else {
-						AmpCategoryValueLocations parent = LocationUtil
-								.getTopAncestor(location, implLocation);
+						AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
 						keyName = parent.getName();
 					}
 				} else {
-					AmpCategoryValueLocations parent = LocationUtil
-							.getTopAncestor(location, implLocation);
+					AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
 					keyName = parent.getName();
 				}
 
@@ -482,14 +467,21 @@ public class DataDispatcher extends MultiAction {
 	}
 	
 	
-	public ActionForward modeapplyFilter(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward modeapplyFilter(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		DataDispatcherForm  datadispatcherform = (DataDispatcherForm) form;
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
+		if (request.getParameter("reset") != null){
+			
+			datadispatcherform.setFilter(QueryUtil.getNewFilter());
+			datadispatcherform.getFilter().setWorkspaceOnly(true);
+			return modeShowActivities(mapping, datadispatcherform, request, response);
+		}
+		
 		if (datadispatcherform.getFilter().getWorkspaceOnly() != null &&  datadispatcherform.getFilter().getWorkspaceOnly()) {
 			datadispatcherform.getFilter().setTeamMember(tm);
         } else {

@@ -346,6 +346,8 @@ public class QueryUtil {
 				e.printStackTrace();
 			}
         }
+        filter.setFinancingInstrumentId(0L);
+        filter.setTypeAssistanceId(0L);
         filter.setIsinitialized(true);
 		return filter;
     	

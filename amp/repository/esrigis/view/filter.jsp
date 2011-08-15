@@ -1,267 +1,382 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
-<digi:instance property="datadispatcherform"/>
+<digi:instance property="datadispatcherform" />
 <digi:form action="/mainmap.do">
-<table>
-	<tr>
-	<td>
-	<table class="inside" width="100%" height=400 cellpadding="0" cellspacing="0">
+	<table>
 		<tr>
-			<td width=40% height=25 align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header">Grouping Selector</b></td>
-			<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside" align="center"><b class="ins_header">Grouping Details</b></td>
-		</tr>
-		<tr>
-		    <td class="inside" style="background-color:#F9F9F9;" valign="top">
-		    <ul class="yui-nav" style="width: 70%; position: static;">
-				<div id="selGeneral" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(0)">General</a></div></div>
-				<div id="selOrgs" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(1)">Organizations</a></div></div>
-				<div id="selRegions" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(2)">Regions</a></div></div>
-				<div id="selSectors" class="selector_type"><div class="selector_type_cont"><a href="javascript:changeTab(3)">Sectors</a></div></div>
-			</ul>
-			</td>
-			<td class="inside" valign="top" style="background-color:#F9F9F9;">
-				<div id="divGeneralFilter">
-					<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-					<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><b><digi:trn>Show Only Data From This Workspace</digi:trn></b></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;
-<!-- 					<b><digi:trn>Decimals to show</digi:trn>: </b>
-						<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
-                            <html:option value="0">0</html:option>
-                            <html:option value="1">1</html:option>
-                            <html:option value="2">2</html:option>
-                            <html:option value="3">3</html:option>
-                            <html:option value="4">4</html:option>
-                            <html:option value="5">5</html:option>
-                        </html:select> -->
-					<hr />
-						<fieldset>
-							<b><digi:trn>Type of funding for highlighting</digi:trn></b>&nbsp;&nbsp;<br/>
-                           <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio>
-                           <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio>
-                           <html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio>
-                       </fieldset>
-					<hr />
-						<table border="0" cellspacing="0" cellpadding="0">
-							<tr>
-							  	<td><b>Currency Type:</b></td>
-							  	<td>
-							  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-           								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
-       								</html:select> 	
-								</td>
-							   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-						    <tr>
-							    <td><b>Fiscal Calendar:</b></td>
-							    <td>
-							    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:145px;">
-			                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
-			                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
-			                        </html:select>
-								</td>
-						    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-						 	</tr>
-						    <tr>
-						    	<td><b>Fiscal Year Start:</b></td>
-						    	<td>
-						    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-			                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-			                        </html:select>
-								</td>
-						    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-						  	</tr>
-			      			<tr>
-							    <td><b>Time Scale:</b></td>
-							    <td>
-									<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+			<td>
+				<table class="inside" width="100%" height=400 cellpadding="0"
+					cellspacing="0">
+					<tr>
+						<td width=40% height=25 align="center"
+							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
+							class="inside"><b class="ins_header">Grouping Selector</b>
+						</td>
+						<td width=60%
+							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
+							class="inside" align="center"><b class="ins_header">Grouping
+								Details</b>
+						</td>
+					</tr>
+					<tr>
+						<td class="inside" style="background-color: #F9F9F9;" valign="top">
+							<ul class="yui-nav" style="width: 70%; position: static;">
+								<div id="selGeneral" class="selector_type">
+									<div class="selector_type_cont">
+										<a href="javascript:changeTab(0)">General</a>
+									</div>
+								</div>
+								<div id="selOrgs" class="selector_type">
+									<div class="selector_type_cont">
+										<a href="javascript:changeTab(1)">Organizations</a>
+									</div>
+								</div>
+								<div id="selRegions" class="selector_type">
+									<div class="selector_type_cont">
+										<a href="javascript:changeTab(2)">Regions</a>
+									</div>
+								</div>
+								<div id="selSectors" class="selector_type">
+									<div class="selector_type_cont">
+										<a href="javascript:changeTab(3)">Sectors</a>
+									</div>
+								</div>
+							</ul></td>
+						<td class="inside" valign="top" style="background-color: #F9F9F9;">
+							<div id="divGeneralFilter">
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 490px;">
+									<html:checkbox property="filter.workspaceOnly"
+										styleId="workspace_only">
+										<b><digi:trn>Show Only Data From This Workspace</digi:trn>
+										</b>
+									</html:checkbox>
+									<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />&nbsp;&nbsp;
+									<!--<b><digi:trn>Decimals to show</digi:trn>: </b>
+									<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
+			                            <html:option value="0">0</html:option>
 			                            <html:option value="1">1</html:option>
 			                            <html:option value="2">2</html:option>
 			                            <html:option value="3">3</html:option>
 			                            <html:option value="4">4</html:option>
 			                            <html:option value="5">5</html:option>
-			                        </html:select>
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-			      			<tr>
-							    <td><b>Project Status:</b></td>
-							    <td>
-									<category:showoptions
-										outerstyle="width: 145px" styleClass="dropdwn_sm"
-										property="filter.projectStatusId" size="3"
-										name="datadispatcherform" multiselect="false"
-										styleId="project_status_id"
-										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-			      			<tr>
-							    <td><b>Type of Assistance:</b></td>
-							    <td>
-									<category:showoptions
-										outerstyle="width: 145px" styleClass="dropdwn_sm"
-										name="datadispatcherform"
-										property="filter.typeAssistanceId" multiselect="false"
-										styleId="type_assistance_id"
-										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-			      			<tr>
-							    <td><b>Financing Instrument:</b></td>
-							    <td>
-									<category:showoptions
-										outerstyle="width: 145px" styleClass="dropdwn_sm"
-										name="datadispatcherform"
-										property="filter.financingInstrumentId" multiselect="false"
-										styleId="financing_instrument_id"
-										keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-			      			<tr>
-							    <td><b>Structure Types:</b></td>
-							    <td>
-						    		<html:select property="filter.selStructureTypes" styleId="structureTypes_dropdown" styleClass="dropdwn_sm" style="width:145px;" multiple="true">
-			                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-			                            <html:optionsCollection property="filter.structureTypes" label="name" value="typeId" />
-			                        </html:select>
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-			      			<!-- 
-			      			<tr>
-							    <td><b>Funding Limit:</b></td>
-							    <td>
-							  		<html:text property="filter.fundingLimit" styleId="fundingLimit_value" styleClass="dropdwn_sm" style="width:145px;"/>
-									<html:checkbox  property="filter.fundingLimitAbove" styleId="fundingLimit_checkbox">Above this value</html:checkbox>
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-							-->
-			      			<tr>
-							    <td><b>Only on budget projects:</b></td>
-							    <td>
-									<html:checkbox  property="filter.onBudget" styleId="fundingLimit_checkbox"></html:checkbox>
-								</td>
-							    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div id="divOrganizationsFilter" style="width:490px;">
-					<div class="selector_content_org_prof" style="line-height:25px;width:245px;float:left;">
-					Funding<br/>
-					<b>Organization Group:</b><br />
-						<html:select multiple="true" property="filter.orgGroupIds" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:200px;">
-	        				<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	       	 				<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-	    				</html:select> 
-	    				<br>
-						<div id="divOrgDrpdwn">
-						<b>Organization:</b><br />
-						<html:select multiple="true	" property="filter.orgIds"  styleId="org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
-          						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-      						</html:select>	
-      					</div>	
-					</div>
-					<div class="selector_content_org_prof" style="line-height:25px;width:245px;float:right;" >
-					Implementing Agency <br/>
-					<b>Organization Group:</b><br />
-						<html:select multiple="true" property="filter.implOrgGroupIds" styleId="imp_org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:200px;">
-	        				<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	       	 				<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-	    				</html:select> 
-	    				<br>
-						<div id="divOrgDrpdwn2">
-						<b>Organization:</b><br />
-						<html:select multiple="true	" property="filter.implOrgIds"  styleId="imp_org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
-          						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-      						</html:select>	
-      						</div>	
-					</div>
-					<div class="selector_content_org_prof" style="line-height:25px;width:490px;clear:both;" >
-						<hr/>
-						<table border="0" cellspacing="0" cellpadding="0">
-							<tr>
-							  	<td><b>Organization Type:</b></td>
-							  	<td>
-							  		<html:select property="filter.organizationsTypeId" styleId="organization_type_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-		          						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-           								<html:optionsCollection property="filter.organizationsType" value="ampOrgTypeId" label="orgType" />
-       								</html:select> 	
-								</td>
-							   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div id="divRegionsFilter">
-					<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-						<b>Region:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-							<html:select property="filter.regionIds" multiple="true" styleId="region_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-        						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-        						<html:optionsCollection property="filter.regions" value="id" label="name" />
-    						</html:select>
-      					<hr/>
-						<div id="divZoneDrpdwn">
-						<b>Zone:</b><br />
-							<html:select property="filter.zoneIds" multiple="true" styleId="zone_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-          							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-      							</html:select>		
-						<hr />
-						</div>
-					</div>
-				</div>
-				<div id="divSectorsFilter">
-					<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-						<b>Sector:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br/>
-							<html:select property="filter.sectorIds" styleId="sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-					           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-					           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
-					    	</html:select>
-						<hr />
-						<div id="divSubSectorDrpdwn">
-						<b>Sub-Sectors:</b><br />
-							<html:select property="filter.subSectorIds" multiple="true" styleId="sub_sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
-          							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-      							</html:select>	
-						<hr />
-						</div>
-					</div>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td width=40% height=25 align="center" class="inside" style="background-color:white;">&nbsp;</td>
-			<td width=60% class="inside" align="center" style="background-color:white;">
-				<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
-				<input type="button" value="Reset" onclick="resetToDefaults()" class="buttonx" style="margin-top:10px;">
-				<input type="button" value="Close" onclick="closeFilter()" class="buttonx" style="margin-top:10px;">
-			</td>
+			                        </html:select> -->
+									<hr/>
+									<fieldset>
+										<b><digi:trn>Type of funding for highlighting</digi:trn>
+										</b>&nbsp;&nbsp;<br />
+										<html:radio property="filter.transactionType"
+											styleId="transaction_type_0" value="0">
+											<digi:trn>Commitments</digi:trn>
+										</html:radio>
+										<html:radio property="filter.transactionType"
+											styleId="transaction_type_1" value="1">
+											<digi:trn>Disbursements</digi:trn>
+										</html:radio>
+										<html:radio property="filter.transactionType"
+											styleId="transaction_type_2" value="2">
+											<digi:trn>Expenditures</digi:trn>
+										</html:radio>
+									</fieldset>
+									<hr />
+									<table border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><b>Currency Type:</b>
+											</td>
+											<td><html:select property="filter.currencyId"
+													styleId="currencies_dropdown_ids" styleClass="dropdwn_sm"
+													style="width:145px;">
+													<html:optionsCollection property="filter.currencies"
+														value="ampCurrencyId" label="currencyName" />
+												</html:select></td>
+											<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Fiscal Calendar:</b>
+											</td>
+											<td><html:select property="filter.fiscalCalendarId"
+													styleId="fiscalCalendar_dropdown_Id"
+													styleClass="dropdwn_sm" style="width:145px;">
+													<html:option value="-1">
+														<digi:trn>None</digi:trn>
+													</html:option>
+													<html:optionsCollection property="filter.fiscalCalendars"
+														label="name" value="ampFiscalCalId" />
+												</html:select></td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Fiscal Year Start:</b>
+											</td>
+											<td>
+												<html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+													<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+												</html:select>
+											</td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Time Scale:</b>
+											</td>
+											<td><html:select property="filter.yearsInRange"
+													styleId="yearsInRange_dropdown" styleClass="dropdwn_sm"
+													style="width:145px;">
+													<html:option value="1">1</html:option>
+													<html:option value="2">2</html:option>
+													<html:option value="3">3</html:option>
+													<html:option value="4">4</html:option>
+													<html:option value="5">5</html:option>
+												</html:select></td>
+											<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Project Status:</b>
+											</td>
+											<td><category:showoptions outerstyle="width: 145px"
+													styleClass="dropdwn_sm" property="filter.projectStatusId"
+													size="3" name="datadispatcherform" multiselect="false"
+													styleId="project_status_id"
+													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
+											</td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Type of Assistance:</b>
+											</td>
+											<td><category:showoptions outerstyle="width: 145px"
+													styleClass="dropdwn_sm" name="datadispatcherform"
+													property="filter.typeAssistanceId" multiselect="false"
+													styleId="type_assistance_id"
+													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
+											</td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Financing Instrument:</b>
+											</td>
+											<td><category:showoptions outerstyle="width: 145px"
+													styleClass="dropdwn_sm" name="datadispatcherform"
+													property="filter.financingInstrumentId" multiselect="false"
+													styleId="financing_instrument_id"
+													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
+											</td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Structure Types:</b>
+											</td>
+											<td><html:select property="filter.selStructureTypes"
+													styleId="structureTypes_dropdown" styleClass="dropdwn_sm"
+													style="width:145px;" multiple="true">
+													<html:option value="-1">
+														<digi:trn>All</digi:trn>
+													</html:option>
+													<html:optionsCollection property="filter.structureTypes"
+														label="name" value="typeId" />
+												</html:select></td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Only on budget projects:</b>
+											</td>
+											<td><html:checkbox property="filter.onBudget"
+													styleId="fundingLimit_checkbox"></html:checkbox></td>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div id="divOrganizationsFilter" style="width: 490px;">
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 245px; float: left;">
+									Funding<br /> <b>Organization Group:</b><br />
+									<html:select multiple="true" property="filter.orgGroupIds"
+										styleId="org_group_dropdown_ids" styleClass="dropdwn_sm"
+										style="width:200px;">
+										<html:option value="-1">
+											<digi:trn>All</digi:trn>
+										</html:option>
+										<html:optionsCollection property="filter.orgGroups"
+											value="ampOrgGrpId" label="orgGrpName" />
+									</html:select>
+									<br>
+									<div id="divOrgDrpdwn">
+										<b>Organization:</b><br />
+										<html:select multiple="true	" property="filter.orgIds"
+											styleId="org_dropdown_ids" styleClass="dropdwn_sm"
+											style="width:145px;max-height:140;">
+											<html:option value="-1">
+												<digi:trn>All</digi:trn>
+											</html:option>
+										</html:select>
+									</div>
+								</div>
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 245px; float: right;">
+									Implementing Agency <br /> <b>Organization Group:</b><br />
+									<html:select multiple="true" property="filter.implOrgGroupIds"
+										styleId="imp_org_group_dropdown_ids" styleClass="dropdwn_sm"
+										style="width:200px;">
+										<html:option value="-1">
+											<digi:trn>All</digi:trn>
+										</html:option>
+										<html:optionsCollection property="filter.orgGroups"
+											value="ampOrgGrpId" label="orgGrpName" />
+									</html:select>
+									<br>
+									<div id="divOrgDrpdwn2">
+										<b>Organization:</b><br />
+										<html:select multiple="true	" property="filter.implOrgIds"
+											styleId="imp_org_dropdown_ids" styleClass="dropdwn_sm"
+											style="width:145px;max-height:140;">
+											<html:option value="-1">
+												<digi:trn>All</digi:trn>
+											</html:option>
+										</html:select>
+									</div>
+								</div>
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 490px; clear: both;">
+									<hr />
+									<table border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<td><b>Organization Type:</b>
+											</td>
+											<td><html:select property="filter.organizationsTypeId"
+													styleId="organization_type_dropdown_ids"
+													styleClass="dropdwn_sm" style="width:145px;">
+													<html:option value="-1">
+														<digi:trn>All</digi:trn>
+													</html:option>
+													<html:optionsCollection property="filter.organizationsType"
+														value="ampOrgTypeId" label="orgType" />
+												</html:select></td>
+											<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div id="divRegionsFilter">
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 490px;">
+									<b>Region:</b> <img
+										src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+									<html:select property="filter.regionIds" multiple="true"
+										styleId="region_dropdown_ids" styleClass="dropdwn_sm"
+										style="width:145px;">
+										<html:option value="-1">
+											<digi:trn>All</digi:trn>
+										</html:option>
+										<html:optionsCollection property="filter.regions" value="id"
+											label="name" />
+									</html:select>
+									<hr />
+									<div id="divZoneDrpdwn">
+										<b>Zone:</b><br />
+										<html:select property="filter.zoneIds" multiple="true"
+											styleId="zone_dropdown_ids" styleClass="dropdwn_sm"
+											style="width:145px;">
+											<html:option value="-1">
+												<digi:trn>All</digi:trn>
+											</html:option>
+										</html:select>
+										<hr />
+									</div>
+								</div>
+							</div>
+							<div id="divSectorsFilter">
+								<div class="selector_content_org_prof"
+									style="line-height: 25px; width: 490px;">
+									<b>Sector:</b> <img
+										src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+									<html:select property="filter.sectorIds"
+										styleId="sector_dropdown_ids" styleClass="dropdwn_sm"
+										style="width:145px;">
+										<html:option value="-1">
+											<digi:trn>All</digi:trn>
+										</html:option>
+										<html:optionsCollection property="filter.sectors"
+											value="ampSectorId" label="name" />
+									</html:select>
+									<hr />
+									<div id="divSubSectorDrpdwn">
+										<b>Sub-Sectors:</b><br />
+										<html:select property="filter.subSectorIds" multiple="true"
+											styleId="sub_sector_dropdown_ids" styleClass="dropdwn_sm"
+											style="width:145px;">
+											<html:option value="-1">
+												<digi:trn>All</digi:trn>
+											</html:option>
+										</html:select>
+										<hr />
+									</div>
+								</div>
+							</div></td>
+					</tr>
+					<tr>
+						<td width=40% height=25 align="center" class="inside"
+							style="background-color: white;">&nbsp;</td>
+						<td width=60% class="inside" align="center"
+							style="background-color: white;"><input type="button"
+							value="Filter" class="buttonx" style="margin-top: 10px;"
+							id="applyButton"> <input type="button" value="Reset"
+							onclick="resetToDefaults()" class="buttonx"
+							style="margin-top: 10px;"> <input type="button"
+							value="Close" onclick="closeFilter()" class="buttonx"
+							style="margin-top: 10px;"></td>
+					</tr>
+				</table></td>
 		</tr>
 	</table>
-</td>
-</tr>
-</table>
-<html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
-<html:hidden property="filter.year" styleId="currentYear"/>
-<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
-<html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
-<html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
-<html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
-<html:hidden property="filter.expendituresVisible" styleId="expendituresVisible" />
-<html:hidden property="filter.pledgeVisible" styleId="pledgeVisible"/>
-<html:hidden property="filter.transactionType" styleId="transactionType" />
-<html:hidden property="filter.currencyId" styleId="currencyId" />
-<html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+	<html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
+	<html:hidden property="filter.year" styleId="currentYear" />
+	<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
+	<html:hidden property="filter.workspaceOnly" styleId="workspaceOnly" />
+	<html:hidden property="filter.commitmentsVisible"
+		styleId="commitmentsVisible" />
+	<html:hidden property="filter.disbursementsVisible"
+		styleId="disbursementsVisible" />
+	<html:hidden property="filter.expendituresVisible"
+		styleId="expendituresVisible" />
+	<html:hidden property="filter.pledgeVisible" styleId="pledgeVisible" />
+	<html:hidden property="filter.transactionType"
+		styleId="transactionType" />
+	<html:hidden property="filter.currencyId" styleId="currencyId" />
+	<html:hidden property="filter.fiscalCalendarId"
+		styleId="fiscalCalendarId" />
 
 </digi:form>
 <script type="text/javascript">
@@ -384,8 +499,7 @@ var callbackApplyFilterCall = {
 				  //if the highlight layer is activated, refresh it
 				  if(map.getLayer("highlightMap") !== undefined && map.getLayer("highlightMap").visible){
 					  refreshHighlight = true;
-					  
-				  }
+					}
 				  getActivities(true);
 				  getStructures(true);
 				  getSelectedFilter();
@@ -393,16 +507,8 @@ var callbackApplyFilterCall = {
 				catch (e) {
 				    alert("Invalid response.");
 				}
-				//Get array of graphs
-				//var allGraphs = document.getElementsByName("flashContent");
-				
-				//Iterate and refresh the graph
-				//for(var idx = 0; idx < allGraphs.length; idx++){
-					// Get flash object and refresh it by calling internal
-					//allGraphs[idx].style.display = "";
-				//}
-			  hideLoading();
-			  closeFilter();
+				hideLoading();
+			    closeFilter();
 		  },failure: function(o) {
 			  hideLoading();
 		  }
@@ -530,13 +636,12 @@ YAHOO.util.Event.onDOMReady(changeTab(0));
 
 
 function resetToDefaults(){
-	var allGraphs = document.getElementsByName("flashContent");
-	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx].style.display = "none";
-	}
+	
 	showLoading();
+	YAHOO.util.Connect.setForm('datadispatcherform');
+	var sUrl="/esrigis/datadispatcher.do?applyfilter=true&reset=true";
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 
-	//document.getElementById("org_type_dropdown_ids").selectedIndex = 0;
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
@@ -544,13 +649,11 @@ function resetToDefaults(){
 	removeOptions("zone_dropdown_ids");
 	removeOptions("sub_sector_dropdown_ids");
 	removeOptions("imp_org_dropdown_ids");
-	
-	
-//	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
-	document.getElementById("year_dropdown").selectedIndex = 4;
+
+	//THE VALUE HAS TO BE TAKEN FROM GLOBAL SETTINGS DEFAULT VALUES.
+	document.getElementById("year_dropdown").selectedIndex = 6;
 	
 	document.getElementById("workspace_only").checked = false;
-	
 	document.getElementById("transaction_type_0").value = true;
 	document.getElementById("transaction_type_1").value = false;
 	document.getElementById("transaction_type_2").value = false;
@@ -585,5 +688,4 @@ function filterenable(){
 	isenable = <bean:write name='datadispatcherform' property='filter.modeexport'/>;
 	return !isenable;
 }
-//-->
 </script>

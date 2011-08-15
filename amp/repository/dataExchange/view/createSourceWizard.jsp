@@ -180,7 +180,7 @@ function cancelImportManager() {
 				</table>
 				<br />
 				<center>
-					<input type="submit" value="Save" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
+					<input type="button" value="Save" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
 					<input type="button" value="Cancel" class="buttonx" onclick="cancelImportManager()"/>
 				</center>
 			</div>	

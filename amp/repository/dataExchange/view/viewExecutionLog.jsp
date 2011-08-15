@@ -141,7 +141,7 @@ function checksAll() {
 					</tr>
 					<logic:empty name="showLogsForm" property="logItems">
 						<tr>
-							<td bgcolor="#FFFFFF" class="inside" colspan="5">
+							<td bgcolor="#FFFFFF" class="inside" colspan="6">
 								<div class="t_sm"><digi:trn>No Records Found</digi:trn> </div>
 							</td>
 						</tr>				

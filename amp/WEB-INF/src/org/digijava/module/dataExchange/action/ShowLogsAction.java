@@ -122,8 +122,6 @@ public class ShowLogsAction extends MultiAction {
 			if (myForm.getPage() != 0) {
 				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * (myForm.getPage() -1 );
 			}
-			//logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
-			//Dare pls review this
 			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
@@ -134,11 +132,6 @@ public class ShowLogsAction extends MultiAction {
 			myForm.setCurrentPage(myForm.getPage());
 		}
 		
-//		if (myForm.getCurrentPage() == null || myForm.getCurrentPage() == 0 && myForm.getPage() ==0) {
-//			myForm.setCurrentPage(new Integer(1));
-//		}else{
-//			myForm.setCurrentPage(myForm.getPage());
-//		}
 		myForm.setLastPage(lastPage);
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId());
 		if (ss !=null) {
@@ -223,24 +216,6 @@ public class ShowLogsAction extends MultiAction {
 			myForm.setSelectedLogPerExecId(null);
 		}
 		myForm.setLogItems(logItems);
-		/**
-		 * old code -- to be deleted !
-		 *
-		 * 
-		 * response.setCharacterEncoding("UTF-16");
-		response.setContentType("text/xml");
-		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
-		
-		List<DELogPerItem> logItems		= null;
-		if ( myForm.getSelectedLogPerExecId() == null || myForm.getSelectedLogPerExecId() <= 0 )
-			logItems	= new SessionImportLogDAO().getAllAmpLogPerItem();
-		else {
-			logItems	= new SessionImportLogDAO().getAmpLogPerItemObjsByExec( myForm.getSelectedLogPerExecId() );
-			myForm.setSelectedLogPerExecId(null);
-		}
-		XmlCreator xmlCreator	= new XmlCreator(logItems);
-		ps.print(xmlCreator.createXml());
-		 */
 		
 		//set can import
 		Boolean canImport = canImportActivities(myForm,selectedLogPerExecId);
@@ -262,17 +237,17 @@ public class ShowLogsAction extends MultiAction {
 			throws SQLException, DgException {
 		DELogPerExecution logAux = (DELogPerExecution) new SessionImportLogDAO().loadObject(DELogPerExecution.class,selectedLogPerExecId);
 		if("Import activities".compareTo(logAux.getDescription()) == 0) return false;
-		List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, "date_desc");
-		Boolean canImport = false;
-	 	for (Iterator iterator = logs.iterator(); iterator.hasNext();) {
-			DELogPerExecution deLogPerExecution = (DELogPerExecution) iterator.next();
-			if("Check feed source".compareTo(deLogPerExecution.getDescription()) ==0 ){
-				if(selectedLogPerExecId.compareTo(deLogPerExecution.getId()) == 0)
-					canImport = true;
-				break;
+		else
+			if("Check feed source".compareTo(logAux.getDescription()) == 0) {
+				List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, "date_desc");
+				for (Iterator<DELogPerExecution> iterator = logs.iterator(); iterator.hasNext();) {
+					DELogPerExecution deLogPerExecution = (DELogPerExecution) iterator.next();
+					if(selectedLogPerExecId.compareTo(deLogPerExecution.getId()) == 0)
+						return true;
+					return false;
+				}
 			}
-		}
-		return canImport;
+		return false;
 	}
 
 	private void resetForm(ShowLogsForm myForm){

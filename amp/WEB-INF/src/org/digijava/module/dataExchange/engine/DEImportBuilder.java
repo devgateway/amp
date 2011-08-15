@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -2137,15 +2138,14 @@ public class DEImportBuilder {
 							}
 							else continue;
 						}
-				
 				//process log
-				processLog(log, iLog, iWorker, activityLogs);
+				processLog(log, iLog, iWorker, activityLogs, actionType);
 			}
 			iLog.saveObject(log.getDeSourceSetting());
 	}
 
 
-	private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs) {
+	private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType) {
 		String title;
 		String iatiID;
 		String ampID	= null;
@@ -2177,9 +2177,19 @@ public class DEImportBuilder {
 			log.getLogItems().add(item);
 			iLog.saveObject(log.getDeSourceSetting());
 			return;
-		} 
+		}
 		item.setLogType(DELogPerItem.LOG_TYPE_OK);
 		item.setDescription("OK");
+		if(iWorker.getExistingActivity()  && "check".compareTo(actionType) ==0){
+			AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(iWorker.getAmpID());
+			AmpActivityVersion actualVersion = ampActGroup.getAmpActivityLastVersion();
+			if(actualVersion.getIatiLastUpdatedDate() != null && actualVersion.getIatiLastUpdatedDate().before(iWorker.getIatiLastUpdateDate()))
+			{
+				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+				item.setDescription("The last version of IATI Activity is already imported");
+			}
+		}
+
 		log.getLogItems().add(item);
 	}
 	
@@ -2192,8 +2202,6 @@ public class DEImportBuilder {
 				if(log!=null && !log.isOK()) 
 					{
 						errors.add(log.getErrors());
-						//s+=log.getErrors();
-						//s+=delimitator==null?"":delimitator;
 					}
 			}catch(Exception e){
 				e.printStackTrace();

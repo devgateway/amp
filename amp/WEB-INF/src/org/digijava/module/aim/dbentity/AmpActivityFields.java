@@ -254,6 +254,17 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
+	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
+	protected Date iatiLastUpdatedDate;
+	
+	public Date getIatiLastUpdatedDate() {
+		return iatiLastUpdatedDate;
+	}
+
+	public void setIatiLastUpdatedDate(Date iatiLastUpdatedDate) {
+		this.iatiLastUpdatedDate = iatiLastUpdatedDate;
+	}
+
 	protected AmpTeamMember approvedBy;
 	protected Date approvalDate;
 

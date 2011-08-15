@@ -227,7 +227,7 @@ function page (page){
 				    				${source.approvalStatus}
 				    			</td>
 				    		</tr>
-				    		 <%-- 
+				    		<%--
 				    		<tr>
 				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">
 				    				<strong><digi:trn>Attached File</digi:trn>:</strong>

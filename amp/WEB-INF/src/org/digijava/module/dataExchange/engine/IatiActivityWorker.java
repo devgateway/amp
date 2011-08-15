@@ -100,6 +100,17 @@ public class IatiActivityWorker {
 	private String title ="";
 	private String iatiID="";
 	private Long ampID = null;
+	
+	private Boolean existingActivity = false;
+	
+	public Boolean getExistingActivity() {
+		return existingActivity;
+	}
+
+	public void setExistingActivity(Boolean existingActivity) {
+		this.existingActivity = existingActivity;
+	}
+
 	public Long getAmpID() {
 		return ampID;
 	}
@@ -157,7 +168,16 @@ public class IatiActivityWorker {
 	}
 
 	private String log;
+	private Date iatiLastUpdateDate;
 	
+	public Date getIatiLastUpdateDate() {
+		return iatiLastUpdateDate;
+	}
+
+	public void setIatiLastUpdateDate(Date iatiLastUpdateDate) {
+		this.iatiLastUpdateDate = iatiLastUpdateDate;
+	}
+
 	public IatiActivityWorker() {
 		// TODO Auto-generated constructor stub
 	}
@@ -181,7 +201,7 @@ public class IatiActivityWorker {
 			}
 			
 		}
-		if( s.toLowerCase().compareTo((title+" "+id).toLowerCase()) == 0 ) 
+		if( s.toLowerCase().compareTo((title+" - "+id).toLowerCase()) == 0 ) 
 			return true;
 		return false;
 	}
@@ -190,6 +210,7 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		try{
+			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
 			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
 				Object contentItem = (Object) it.next();
 				if(contentItem instanceof JAXBElement){
@@ -273,9 +294,12 @@ public class IatiActivityWorker {
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
 			logs.add(checkedActivity);
-			if(checkedActivity!=null && checkedActivity.getItem()!=null && checkedActivity.getItem().getAmpId() !=null)
-					this.ampID = checkedActivity.getItem().getAmpId();
+			if(checkedActivity!=null && checkedActivity.getItem()!=null && checkedActivity.getItem().getAmpId() !=null){
+				this.ampID = checkedActivity.getItem().getAmpId();
+				if( checkedActivity.getItem().getAmpId().longValue() != -1 )
+						this.existingActivity = true;
 			}
+		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
@@ -312,13 +336,19 @@ public class IatiActivityWorker {
 				this.lang = this.getiActivity().getLang();
 			}
 		
-		//DatatypeFactory.newInstance().newXMLGregorianCalendar();
 		
 		String iatiDefaultCurrency = "USD";
 		if(this.getiActivity().getDefaultCurrency()!=null || "".compareTo(this.getiActivity().getDefaultCurrency().trim()) == 0)
 			iatiDefaultCurrency = this.getiActivity().getDefaultCurrency();
 		
-		XMLGregorianCalendar lastUpdatedDatetime = this.getiActivity().getLastUpdatedDatetime();
+		
+		//seting the iati last update date
+		Date iatiUpdatedDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
+		if(iatiUpdatedDate==null)
+			a.setIatiLastUpdatedDate(new Timestamp(System.currentTimeMillis()));
+		else a.setIatiLastUpdatedDate(iatiUpdatedDate);
+		
+		//workspace settings + team lead owner
 		
 		//populate the lists with IATI values of the activity
 		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,
@@ -1226,7 +1256,8 @@ public class IatiActivityWorker {
 				log.add(iatiValues);
 			}
 		else{
-			if(checkMappedField.getAmpId()==null)
+			//entity is not mapped yet or it has be marked to be added as new, but was not added yet
+			if(checkMappedField.getAmpId()==null || (checkMappedField.getAmpId().longValue() == -1 && DataExchangeConstants.IATI_ACTIVITY.compareTo(iatiPath)!=0))
 			{
 				log.add(iatiItems);
 				log.add(iatiValues);

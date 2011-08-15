@@ -101,7 +101,7 @@ function page (page){
 									<b class="ins_title"><digi:trn>DbID</digi:trn></b> 
 								</a>
 							</c:if> 
-							<c:if test="${empty showLogsForm.sortBy || showLogsForm.sortBy=='dbId'}">
+							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='dbId'}">
 								<img  src="/repository/aim/images/up.gif" border="0"/>
 							</c:if> 
 							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='dbId_desc'}">
@@ -122,7 +122,7 @@ function page (page){
 							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='date'}">
 								<img src="/repository/aim/images/up.gif" />
 							</c:if> 
-							<c:if test="${not empty showLogsForm.sortBy && showLogsForm.sortBy=='date_desc'}">
+							<c:if test="${ empty showLogsForm.sortBy || showLogsForm.sortBy=='date_desc'}">
 								<img src="/repository/aim/images/down.gif" />
 							</c:if>
 						</td>

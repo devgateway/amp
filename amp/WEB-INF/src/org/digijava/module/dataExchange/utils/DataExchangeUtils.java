@@ -1265,6 +1265,9 @@ public class DataExchangeUtils {
 					//add new activity
 					ampActivity.setTeam(team);
 					ampActivity.setActivityCreator(team.getTeamLead());
+					ampActivity.setCreatedDate(Calendar.getInstance().getTime());
+					ampActivity.setModifiedBy(team.getTeamLead());
+					
 					ampActGroup = new AmpActivityGroup();
 					ampActGroup.setAmpActivityLastVersion(ampActivity);
 					session.save(ampActGroup);
@@ -1272,17 +1275,20 @@ public class DataExchangeUtils {
 				else{
 					//add a new VERSION of an EXISTING activity
 					ampActGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
-					ampActivity.setAmpActivityPreviousVersion(ampActGroup.getAmpActivityLastVersion());
+					
+					AmpActivityVersion oldVersion = ampActGroup.getAmpActivityLastVersion();
+					ampActivity.setAmpActivityPreviousVersion(oldVersion);
+					ampActivity.setTeam(oldVersion.getTeam());
+					ampActivity.setActivityCreator(oldVersion.getActivityCreator());
+					ampActivity.setCreatedDate(oldVersion.getCreatedDate());
+					ampActivity.setModifiedBy(oldVersion.getTeam().getTeamLead());
+					
 					ampActGroup.setAmpActivityLastVersion(ampActivity);
 					session.update(ampActGroup);
 				}
 				
 				ampActivity.setAmpActivityGroup(ampActGroup);
-				ampActivity.setCreatedDate(Calendar.getInstance().getTime());
 				ampActivity.setModifiedDate(Calendar.getInstance().getTime());
-				//ampActivity.setModifiedBy(wicketSession.getAmpCurrentMember());
-				//ampActivity.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
-				
 				session.save(ampActivity);
 		        
 				activityId = ampActivity.getAmpActivityId();

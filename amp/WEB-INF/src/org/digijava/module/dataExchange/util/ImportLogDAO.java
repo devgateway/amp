@@ -91,7 +91,7 @@ public class ImportLogDAO {
 					queryString += " order by lpe.executionTime desc ";
 				}
 			}else{
-				queryString += " order by lpe.id ";
+				queryString += " order by lpe.executionTime desc ";
 			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setLong("deSourceSettingId", sourceSettingId );

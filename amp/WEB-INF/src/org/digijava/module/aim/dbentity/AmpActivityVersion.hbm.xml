@@ -74,6 +74,8 @@
 
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
+		<property name="iatiLastUpdatedDate" column="iati_last_update_date" type="java.util.Date" />
+		
 		<many-to-one name="updatedBy" column="updated_by"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 

@@ -5,12 +5,17 @@
  */
 package org.digijava.module.xmlpatcher.exception;
 
+import java.sql.BatchUpdateException;
+
+import org.apache.log4j.Logger;
+import org.digijava.module.xmlpatcher.core.XmlPatcherService;
+
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
  */
 public class XmlPatcherLangWorkerException extends XmlPatcherWorkerException {
-
+	private static Logger logger = Logger.getLogger(XmlPatcherLangWorkerException.class);
 	/**
 	 * 
 	 */
@@ -29,10 +34,16 @@ public class XmlPatcherLangWorkerException extends XmlPatcherWorkerException {
 
 	/**
 	 * @param arg0
+	 * @throws XmlPatcherLangWorkerException 
+	 * @throws XmlPatcherConditionWorkerException 
 	 */
-	public XmlPatcherLangWorkerException(Throwable arg0) {
+	public XmlPatcherLangWorkerException(Throwable arg0) throws XmlPatcherLangWorkerException  {
 		super(arg0);
-		// TODO Auto-generated constructor stub
+		if(arg0 instanceof BatchUpdateException) {
+			BatchUpdateException bue=(BatchUpdateException) arg0;
+			logger.error(this.getMessage());
+			throw new XmlPatcherLangWorkerException(bue.getNextException());
+		}
 	}
 
 	/**

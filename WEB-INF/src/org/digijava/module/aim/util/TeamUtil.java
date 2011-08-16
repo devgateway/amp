@@ -955,7 +955,7 @@ public class TeamUtil {
             session.saveOrUpdate(member);
             session.saveOrUpdate(appSettings);
             
-            if(member.getAmpMemberRole().getTeamHead()) {
+            if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.saveOrUpdate(team);

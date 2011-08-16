@@ -15,12 +15,15 @@
 function changeSource() {
 	var form = document.getElementById('logForm');
 	var selectedSourceSetting = document.getElementById("logFor").value;
-	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+selectedSourceSetting;
+	var selDesc = document.getElementById("descIs").value;
+	form.action = "/dataExchange/showLogs.do?htmlView=true&selectedSourceId="+selectedSourceSetting+"&selectedDescription="+selDesc;
 	form.target="_self"
 	form.submit();
 }
 
 function checkLog(sourceId) {
+	var loadingImgDiv = document.getElementById("loadingImg");
+	loadingImgDiv.style.display="block";
 	var form = document.getElementById('logForm');
 	form.action = "/dataExchange/manageSource.do?action=executeIATI&executingSourceId="+sourceId;
 	form.target="_self"
@@ -78,15 +81,26 @@ function page (page){
 					    <a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
 					</tr>
 				</table>
-		
+				<div style="text-align: center; display: none;" id="loadingImg">
+					<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp; 
+        			<b class="ins_title"><digi:trn>Loading, please wait ...</digi:trn></b>
+				</div>
 				<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
 					<tr>
 						<td colspan="6" align=right background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">
+							
 						<digi:trn>See log file for </digi:trn> :
-						  <html:select property="selectedSourceId" styleClass="dropdwn_sm" styleId="logFor">
+						<html:select property="selectedSourceId" styleClass="dropdwn_sm" styleId="logFor">
 						  	<html:optionsCollection property="availableSourceSettings" value="id" label="name" />
-						  </html:select>
-						  <input type="button" value="See" class="buttonx_sm" onclick="changeSource()"/>
+						</html:select>
+						<digi:trn>Show only </digi:trn> :
+						<html:select property="selectedDescription" styleClass="dropdwn_sm" styleId="descIs">
+						  	<html:option value="All"><digi:trn>All</digi:trn> </html:option>
+						  	<html:option value="Check feed source"><digi:trn>Check feed source</digi:trn></html:option>
+						  	<html:option value="Import activities"><digi:trn>Import activities</digi:trn></html:option>
+						</html:select>
+						
+						<input type="button" value="See" class="buttonx_sm" onclick="changeSource()"/>
 						</b></td>
 					</tr>
 					<tr>

@@ -30,6 +30,8 @@ function deleteSource(sourceId) {
 }
 
 function execute(sourceId){
+	var loadingImgDiv = document.getElementById("loadingImg");
+	loadingImgDiv.style.display="block";
 	var form = document.getElementById('manageForm');
 	form.action = "/dataExchange/manageSource.do?action=executeIATI&executingSourceId="+sourceId;
 	form.target="_self"
@@ -95,9 +97,14 @@ function page (page){
 	    </td>
 	  </tr>
 	</table>
+	<div style="text-align: center; display: none;" id="loadingImg" class="inside">
+		<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp; 
+    	<b class="ins_title"><digi:trn>Loading, please wait ...</digi:trn></b>
+	</div>
 	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
-		<td colspan="5" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">List of sources</b></td>
+		<td colspan="5" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside>			
+			<b class="ins_header">List of sources</b></td>
 		</tr>
 		<tr>
 		    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>

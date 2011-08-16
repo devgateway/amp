@@ -30,9 +30,19 @@ public class ImportLogDAO {
 	}
 	
 	public List<DELogPerExecution> getAllAmpLogPerExecutionObjects() {
+		return getAllAmpLogPerExecutionObjects(null);
+	}
+	
+	public List<DELogPerExecution> getAllAmpLogPerExecutionObjects(String description) {
 		try{
-			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe";
+			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe ";
+			if(description !=null && !description.equals("All")){
+				queryString +=" where lpe.description=:description";
+			}
 			Query query			= hbSession.createQuery(queryString);
+			if(description !=null && !description.equals("All")){
+				query.setParameter("description", description);
+			}
 			List<DELogPerExecution> resultList	=  query.list();
 			return resultList;
 		}
@@ -40,9 +50,11 @@ public class ImportLogDAO {
 			this.releaseSession();
 		}
 	}
+	
 	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(DESourceSetting ss) {
 		return this.getAmpLogPerExectutionObjsBySourceSetting(ss.getId() );
 	}
+	
 	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId) {
 		try{
 			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe where " +
@@ -57,12 +69,18 @@ public class ImportLogDAO {
 		}
 	}
 	
-	public int getAmpLogPerExectutionObjsCountBySourceSetting(Long sourceSettingId) {
+	public int getAmpLogPerExectutionObjsCountBySourceSetting(Long sourceSettingId,String description) {
 		try{
 			String queryString 	= "select count(lpe) from "	+ DELogPerExecution.class.getName() + " lpe where " +
 					"lpe.deSourceSetting=:deSourceSettingId";
+			if(description !=null && !description.equals("All")){
+				queryString +=" and lpe.description=:description";
+			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setLong("deSourceSettingId", sourceSettingId );
+			if(description !=null && !description.equals("All")){
+				query.setParameter("description", description);
+			}
 			int resultList	=  (Integer)query.uniqueResult();
 			return resultList;
 		}
@@ -71,10 +89,13 @@ public class ImportLogDAO {
 		}
 	}
 	
-	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId, int startIndex,String sortBy) {
+	public List<DELogPerExecution> getAmpLogPerExectutionObjsBySourceSetting(Long sourceSettingId,String description, int startIndex,String sortBy) {
 		try{
 			String queryString 	= "select lpe from "	+ DELogPerExecution.class.getName() + " lpe where " +
 					"lpe.deSourceSetting=:deSourceSettingId";
+			if(description !=null && !description.equals("All")){
+				queryString +=" and lpe.description=:description";
+			}
 			//sort
 			if(sortBy!=null){
 				if (sortBy.equals("dbId")) {
@@ -95,6 +116,9 @@ public class ImportLogDAO {
 			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setLong("deSourceSettingId", sourceSettingId );
+			if(description !=null && !description.equals("All")){
+				query.setParameter("description", description);
+			}
 			query.setFirstResult(startIndex);
 			query.setMaxResults(Constants.RECORDS_AMOUNT_PER_PAGE);
 			List<DELogPerExecution> resultList	=  query.list();

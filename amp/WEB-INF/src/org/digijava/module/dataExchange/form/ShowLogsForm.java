@@ -34,7 +34,7 @@ public class ShowLogsForm extends ActionForm {
 	
 	private String [] selectedActivities;
 	
-
+	private String selectedDescription;
 
 	public String[] getSelectedActivities() {
 		return selectedActivities;
@@ -173,6 +173,14 @@ public class ShowLogsForm extends ActionForm {
 
 	public void setLastPage(int lastPage) {
 		this.lastPage = lastPage;
+	}
+
+	public String getSelectedDescription() {
+		return selectedDescription;
+	}
+
+	public void setSelectedDescription(String selectedDescription) {
+		this.selectedDescription = selectedDescription;
 	}
 	
 }

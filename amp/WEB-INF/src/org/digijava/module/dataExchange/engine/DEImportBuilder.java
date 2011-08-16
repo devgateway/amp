@@ -2095,9 +2095,9 @@ public class DEImportBuilder {
 		execLog.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 		iLog.saveObject(this.getDESourceSetting());
 		if("check".compareTo(runType)==0)
-			execLog.setDescription("Check feed source");
+			execLog.setDescription(Constants.LOG_PER_EXECUTION_DESC_CHECK);
 		if("import".compareTo(runType)==0)
-			execLog.setDescription("Import activities");
+			execLog.setDescription(Constants.LOG_PER_EXECUTION_DESC_IMPORT);
 		boolean ok 	 =	checkIATIInputString(execLog.getDescription());
 		iLog.saveObject(this.getDESourceSetting());
 		if(!ok) return;

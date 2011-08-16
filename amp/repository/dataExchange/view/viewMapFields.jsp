@@ -13,7 +13,8 @@
 <digi:instance property="mapFieldsForm" id="mff"/>
 <script type="text/javascript">
 function saveRecord(id) {
-
+	var loadingImgDiv = document.getElementById("loadingImg");
+	loadingImgDiv.style.display="block";
 		 var el = document.getElementById("ampValues["+id+"]");
 		 var txt = el.options[el.selectedIndex].innerHTML;
 		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
@@ -25,7 +26,6 @@ function saveRecord(id) {
 }
 
 function saveAll() {
-
 
 	 var checks = document.getElementsByName("selectedFields");
 	 var isChecked = false
@@ -44,6 +44,10 @@ function saveAll() {
 		 alert("Please check at least one record");
 		 return true;
      }
+	 
+	 var loadingImgDiv = document.getElementById("loadingImg");
+	 loadingImgDiv.style.display="block";
+		
 	 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
 	 url = "<%= saveRecord %>";
 	 var postString = params;
@@ -106,6 +110,10 @@ function showFilter() {
 						<span class="bread_sel"><digi:trn>Mapping Tool</digi:trn></span>
 					</div>
 					<br>
+					<div style="text-align: center; display: none;" id="loadingImg">
+						<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp; 
+		        		<b class="ins_title"><digi:trn>Loading, please wait ...</digi:trn></b>
+					</div>
 				</td>
 			</tr>
 		</table>

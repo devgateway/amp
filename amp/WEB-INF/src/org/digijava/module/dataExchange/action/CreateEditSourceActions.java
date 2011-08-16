@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
@@ -26,9 +27,12 @@ import org.digijava.module.dataExchange.util.CreateSourceUtil;
 import org.digijava.module.dataExchange.util.ExportHelper;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
+import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.util.DbUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class CreateEditSourceActions extends DispatchAction {
 
@@ -233,5 +237,23 @@ public class CreateEditSourceActions extends DispatchAction {
 		myForm.setSourceId(new Long(-1));
 		myForm.setSdmDocument(null);
 		
+	}
+	
+	private DESourceSetting getSourceSetting (Long id){
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		DESourceSetting returnValue=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select a from " + DESourceSetting.class.getName()+ " a where a.id=:id";
+			query=session.createQuery(queryString);
+			query.setParameter("id", id);
+			returnValue=(DESourceSetting)query.uniqueResult();
+		}catch(Exception ex) {
+			//logger.error("couldn't load Message" + ex.getMessage());	
+			ex.printStackTrace();
+		}
+		return returnValue;
 	}
 }

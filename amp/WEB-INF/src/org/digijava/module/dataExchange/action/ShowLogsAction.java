@@ -105,14 +105,14 @@ public class ShowLogsAction extends MultiAction {
 							}
 					}
 			
-		}
+		}		
 		
 		List<DELogPerExecution> logs		= null;
 		int lastPage = 1;
 		if ( myForm.getSelectedSourceId() == null || myForm.getSelectedSourceId() <= 0 )
-			logs	= new SessionImportLogDAO().getAllAmpLogPerExecutionObjects();
+			logs	= new SessionImportLogDAO().getAllAmpLogPerExecutionObjects(myForm.getSelectedDescription());
 		else {
-			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId());
+			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription());
 			
 			if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
 				lastPage = allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE +1;
@@ -122,7 +122,7 @@ public class ShowLogsAction extends MultiAction {
 			if (myForm.getPage() != 0) {
 				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * (myForm.getPage() -1 );
 			}
-			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),startIndex, myForm.getSortBy());
+			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription(), startIndex, myForm.getSortBy());
 		}
 		myForm.setLogs(logs);
 		
@@ -236,10 +236,10 @@ public class ShowLogsAction extends MultiAction {
 	private Boolean canImportActivities(ShowLogsForm myForm, Long selectedLogPerExecId)
 			throws SQLException, DgException {
 		DELogPerExecution logAux = (DELogPerExecution) new SessionImportLogDAO().loadObject(DELogPerExecution.class,selectedLogPerExecId);
-		if("Import activities".compareTo(logAux.getDescription()) == 0) return false;
+		if(Constants.LOG_PER_EXECUTION_DESC_IMPORT.compareTo(logAux.getDescription()) == 0) return false;
 		else
-			if("Check feed source".compareTo(logAux.getDescription()) == 0) {
-				List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),0, "date_desc");
+			if(Constants.LOG_PER_EXECUTION_DESC_CHECK.compareTo(logAux.getDescription()) == 0) {
+				List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription(), 0, "date_desc");
 				for (Iterator<DELogPerExecution> iterator = logs.iterator(); iterator.hasNext();) {
 					DELogPerExecution deLogPerExecution = (DELogPerExecution) iterator.next();
 					if(selectedLogPerExecId.compareTo(deLogPerExecution.getId()) == 0)
@@ -260,5 +260,6 @@ public class ShowLogsAction extends MultiAction {
 		myForm.setSelectedLogPerExecId(null);
 		myForm.setSelectedLogPerItemId(null);
 		myForm.setSortBy(null);
+		myForm.setSelectedDescription(null);
 	}
 }

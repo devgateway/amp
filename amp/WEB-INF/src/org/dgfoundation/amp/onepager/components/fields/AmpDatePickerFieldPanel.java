@@ -88,7 +88,6 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		};
 
 		if (otherDatePicker == null){
-			this.fmType = AmpFMTypes.FEATURE;
 			sameAsOtherDatePicker.setVisible(false);
 		}
 		add(sameAsOtherDatePicker);

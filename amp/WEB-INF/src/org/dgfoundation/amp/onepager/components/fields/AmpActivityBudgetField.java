@@ -36,7 +36,7 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 	
 	public AmpActivityBudgetField(String id, final IModel model, String fmName, final Panel budgetExtras, final AmpBudgetClassificationField budgetClassification) {
 		super(id, model, fmName);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 		
 		this.budgetExtras = budgetExtras;
 		this.budgetClassification = budgetClassification;

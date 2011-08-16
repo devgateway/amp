@@ -123,9 +123,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 		final IModel<AmpIndicator> newInd = getNewIndicatorModel();
 		
-		add(new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.FEATURE));
-		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.FEATURE));
-		add(new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.FEATURE));
+		add(new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.MODULE));
+		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.MODULE));
+		add(new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.MODULE));
 		AmpDatePickerFieldPanel datePicker = new AmpDatePickerFieldPanel("indDate", new PropertyModel<Date>(newInd, "creationDate"), "Creation Date");
 		datePicker.setEnabled(false);
 		add(datePicker);
@@ -220,7 +220,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 		add(searchSectors);
 		
-		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.FEATURE) {
+		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.MODULE) {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				try {

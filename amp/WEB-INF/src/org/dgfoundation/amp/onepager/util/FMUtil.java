@@ -83,10 +83,11 @@ public final class FMUtil {
 				}
 				
 				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
-					try {
+					try {/*
 						if (fmc.getFMType() == AmpFMTypes.FEATURE)
 							addFeatureFM(context, ampTreeVisibility, fmPathString, fmParentPathString);
 						else
+						*/
 							if (fmc.getFMType() == AmpFMTypes.MODULE)
 								addModuleToFM(context, ampTreeVisibility, fmPathString, fmParentPathString);
 						return true;
@@ -336,7 +337,7 @@ public final class FMUtil {
 		}
 		String fmPathString = getFmPathString(fmInfoPath);
 		
-		if (fmc.getFMType() != AmpFMTypes.MODULE && fmc.getFMType() != AmpFMTypes.FEATURE)
+		if (fmc.getFMType() != AmpFMTypes.MODULE && fmc.getFMType() != AmpFMTypes.MODULE)
 			throw new RuntimeException("We shouldn't have components that are not MODULES or FEATURES!");
 		
 		ServletContext context   = ((WebApplication)Application.get()).getServletContext();
@@ -434,10 +435,12 @@ public final class FMUtil {
 		if (type == AmpFMTypes.MODULE){
 			obj = getModuleByNameFromRoot(atv.getItems().values(), fmPath);
 		}
+		/*
 		else
 			if (type == AmpFMTypes.FEATURE){
 				obj = getFeatureByNameFromRoot(atv.getItems().values(), fmPath);
 			}
+			*/
 		return obj;
 	}
 	
@@ -470,12 +473,14 @@ public final class FMUtil {
 				AmpFMConfigurable fmc = (AmpFMConfigurable) visitor;
 				String typeName;
 				switch (fmc.getFMType()) {
+				/*
 				case FEATURE:
 					typeName = "feature";
 					break;
 				case FIELD:
 					typeName = "field";
 					break;
+					*/
 				case MODULE:
 					typeName = "module";
 					break;
@@ -504,7 +509,7 @@ public final class FMUtil {
 		if (mmm.size() > 1)
 			pathOk = false;
 		else{
-			if (!mmm.isEmpty() && mmm.getFirst() != AmpFMTypes.FEATURE)
+			if (!mmm.isEmpty() && mmm.getFirst() != AmpFMTypes.MODULE)
 				pathOk = false;
 		}
 
@@ -514,7 +519,7 @@ public final class FMUtil {
 		if (mmm.size() > 2)
 			pathOk = false;
 		else{
-			if (!mmm.isEmpty() && mmm.getFirst() != AmpFMTypes.FEATURE)
+			if (!mmm.isEmpty() && mmm.getFirst() != AmpFMTypes.MODULE)
 				pathOk = false;
 			else
 				if (mmm.size() == 2 && mmm.getLast() != AmpFMTypes.FIELD)

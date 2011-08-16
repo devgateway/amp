@@ -54,7 +54,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			IModel<String> m = new PropertyModel<String>(am, "name");
 			// textField - mandatory
 			AmpTextFieldPanel<String> title = new AmpTextFieldPanel<String>(
-					"title", m, "Project Title", AmpFMTypes.FEATURE);
+					"title", m, "Project Title", AmpFMTypes.MODULE);
 			title.getTextContainer().setRequired(true);
 			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
@@ -63,25 +63,25 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACTIVITY_STATUS_KEY),
-							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.FEATURE);
+							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
 			add(status);
 			
 			add(new AmpTextAreaFieldPanel<String>("statusReason",
-					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
 			
 			AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
 					"budgetCodeProjectID", new PropertyModel<String>(am,
-							"budgetCodeProjectID"), "Budget Code Project ID", AmpFMTypes.FEATURE);
+							"budgetCodeProjectID"), "Budget Code Project ID", AmpFMTypes.MODULE);
 			add(budgetCodeProjectId);
 	
 			AmpTextFieldPanel<String> donorProjectCode = new AmpTextFieldPanel<String>(
 					"donorProjectCode", new PropertyModel<String>(am,
-							"projectCode"), "Donor Project Code", AmpFMTypes.FEATURE);
+							"projectCode"), "Donor Project Code", AmpFMTypes.MODULE);
 			add(donorProjectCode);
 	
 			AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
 					"crisNumber", new PropertyModel<String>(am,
-							"crisNumber"), "Cris Number", AmpFMTypes.FEATURE);
+							"crisNumber"), "Cris Number", AmpFMTypes.MODULE);
 			add(crisNumber);
 
 			AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(
@@ -89,7 +89,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACCHAPTER_KEY), 
-							CategoryConstants.ACCHAPTER_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.ACCHAPTER_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(acChapter);
 			
 			AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
@@ -116,7 +116,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.FINANCIAL_INSTRUMENT_KEY),
-							CategoryConstants.FINANCIAL_INSTRUMENT_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.FINANCIAL_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(financialInstrument);
 
 			AmpCategorySelectFieldPanel procurementSystem = new AmpCategorySelectFieldPanel(
@@ -125,7 +125,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.PROCUREMENT_SYSTEM_KEY),
-							CategoryConstants.PROCUREMENT_SYSTEM_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.PROCUREMENT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(procurementSystem);
 			
 			AmpCategorySelectFieldPanel reportingSystem = new AmpCategorySelectFieldPanel(
@@ -134,7 +134,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.REPORTING_SYSTEM_KEY),
-							CategoryConstants.REPORTING_SYSTEM_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.REPORTING_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(reportingSystem);
 			
 			AmpCategorySelectFieldPanel auditSystem = new AmpCategorySelectFieldPanel(
@@ -143,7 +143,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.AUDIT_SYSTEM_KEY),
-							CategoryConstants.AUDIT_SYSTEM_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.AUDIT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(auditSystem);
 			
 			AmpCategorySelectFieldPanel institutions = new AmpCategorySelectFieldPanel(
@@ -152,7 +152,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.INSTITUTIONS_KEY),
-							CategoryConstants.INSTITUTIONS_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.INSTITUTIONS_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(institutions);
 			
 			AmpCategorySelectFieldPanel accessionInstrument = new AmpCategorySelectFieldPanel(
@@ -161,7 +161,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACCESSION_INSTRUMENT_KEY),
-							CategoryConstants.ACCESSION_INSTRUMENT_NAME, true, true, null, AmpFMTypes.FEATURE);
+							CategoryConstants.ACCESSION_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(accessionInstrument);
 			
 			add(new AmpBooleanChoiceField("governmentApprovalProcedures", 
@@ -176,12 +176,12 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 		
 			add(new AmpTextAreaFieldPanel<String>("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
-					"Project Comments", true, AmpFMTypes.FEATURE));
+					"Project Comments", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("description",
 					new PropertyModel<String>(am, "description"), "Description",
-					true, AmpFMTypes.FEATURE));
+					true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("objective",
-					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE));
 			
 			List<ITab> objectiveTabs = new ArrayList<ITab>();
 			objectiveTabs.add(new AmpCommentTab("OV Indicators" , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
@@ -192,7 +192,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			add(objTabs);
 			
 			add(new AmpTextAreaFieldPanel<String>("purpose",
-					new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.MODULE));
 			
 			List<ITab> tabs = new ArrayList<ITab>();
 			tabs.add(new AmpCommentTab("OV Indicators" , "Purpose Objectively Verifiable Indicators", am, AmpCommentPanel.class));
@@ -203,7 +203,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			add(purposeTabs);
 			
 			add(new AmpTextAreaFieldPanel<String>("results",
-					new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.MODULE));
 	
 			tabs = new ArrayList<ITab>();
 			tabs.add(new AmpCommentTab("OV Indicators" , "Results Objectively Verifiable Indicators", am, AmpCommentPanel.class));
@@ -213,21 +213,21 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
 			add(resultsTabs);
 			add(new AmpTextAreaFieldPanel<String>("lessonsLearned",
-					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("projectImpact",
-					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("activitySummary",
-					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("contractingArrangements",
-					new PropertyModel<String>(am, "contractingArrangements"), "Contracting Arrangements", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "contractingArrangements"), "Contracting Arrangements", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("linkedActivities",
-					new PropertyModel<String>(am, "linkedActivities"), "Linked Activities", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "linkedActivities"), "Linked Activities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("conditionalitySequencing",
-					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("conditionalities",
-					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel<String>("projectManagement",
-					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.FEATURE));
+					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
 	}
 
 }

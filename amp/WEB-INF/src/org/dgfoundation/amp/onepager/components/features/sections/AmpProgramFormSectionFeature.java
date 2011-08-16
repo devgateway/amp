@@ -36,7 +36,7 @@ public class AmpProgramFormSectionFeature extends
 		add(spTable);
 		add(new AmpTextAreaFieldPanel<String>("description",
 				new PropertyModel<String>(am, "programDescription"),
-				"Program Description", true, AmpFMTypes.FEATURE));
+				"Program Description", true, AmpFMTypes.MODULE));
 
 	}
 

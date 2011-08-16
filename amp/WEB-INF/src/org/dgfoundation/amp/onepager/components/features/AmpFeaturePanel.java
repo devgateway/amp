@@ -43,7 +43,7 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 	}
 
 	public AmpFeaturePanel(String id, IModel<T> model, String fmName, boolean hideLabel){
-		super(id, model, fmName, AmpFMTypes.FEATURE);
+		super(id, model, fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		
 		labelContainer = new TrnLabel("featureLabel", fmName);

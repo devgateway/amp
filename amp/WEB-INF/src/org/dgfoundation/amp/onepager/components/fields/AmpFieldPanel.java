@@ -110,8 +110,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 
 	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
-		super(id, model,fmName, AmpFMTypes.FIELD);
-		this.fmType = AmpFMTypes.FEATURE;
+		super(id, model,fmName, AmpFMTypes.MODULE);
+		this.fmType = AmpFMTypes.MODULE;
 		
 		setOutputMarkupId(true);
 		this.fmName = fmName;

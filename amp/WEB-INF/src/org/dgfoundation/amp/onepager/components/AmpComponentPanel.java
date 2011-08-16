@@ -42,7 +42,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	
 	public String getShorterFmName() {
 		int maxLen=26;
-		if(fmType.equals(AmpFMTypes.FEATURE)) maxLen=13; 
+		if(fmType.equals(AmpFMTypes.MODULE)) maxLen=13; 
 		if(getFMName().length()>maxLen) return getFMName().substring(0,maxLen)+".."; 
 			else return getFMName();
 	}
@@ -82,7 +82,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 * @param fmName
 	 */
 	public AmpComponentPanel(String id,String fmName) {
-		this(id,null,fmName,AmpFMTypes.FEATURE);
+		this(id,null,fmName,AmpFMTypes.MODULE);
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	}
 	
 	public AmpComponentPanel(String id, IModel<T> model,String fmName) {
-		this(id,model,fmName,AmpFMTypes.FEATURE);
+		this(id,model,fmName,AmpFMTypes.MODULE);
 	}
 
 

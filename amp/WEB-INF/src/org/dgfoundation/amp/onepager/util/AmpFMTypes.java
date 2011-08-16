@@ -10,5 +10,5 @@ import java.io.Serializable;
  *
  */
 public enum AmpFMTypes implements Serializable{
-	FIELD, FEATURE, MODULE
+	MODULE
 }

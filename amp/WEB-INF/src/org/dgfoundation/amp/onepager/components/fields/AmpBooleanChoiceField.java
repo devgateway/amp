@@ -36,7 +36,7 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 	 */
 	public AmpBooleanChoiceField(String id,	IModel<Boolean> model,  String fmName) throws Exception {
 		this(id,model,new Model<String[]>(DEFAULT_CHOICES),fmName);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 	}
 	
 	/**

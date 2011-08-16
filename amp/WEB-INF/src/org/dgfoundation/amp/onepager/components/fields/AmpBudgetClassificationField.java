@@ -39,7 +39,7 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 
 	public AmpBudgetClassificationField(String id, final IModel model, String fmName) {
 		super(id, model, fmName);
-		this.fmType = AmpFMTypes.FEATURE;
+		this.fmType = AmpFMTypes.MODULE;
 		
 		final PropertyModel<Long> budgetSectorModel = new PropertyModel<Long>(model, "budgetsector");
 		final PropertyModel<Long> budgetOrganizationModel = new PropertyModel<Long>(model, "budgetorganization");

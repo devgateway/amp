@@ -38,13 +38,13 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AttributeModifier rankModifier = new AttributeModifier("size",new Model(2));
 		
 		AmpTextFieldPanel<Integer> lineMinistryRank = new AmpTextFieldPanel<Integer>(
-				"lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank", AmpFMTypes.FEATURE);
+				"lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank", AmpFMTypes.MODULE);
 		lineMinistryRank.getTextContainer().add(rankValidator);
 		lineMinistryRank.getTextContainer().add(rankModifier);
 		add(lineMinistryRank);
 		
 		AmpTextFieldPanel<Integer> planningMinistryRank = new AmpTextFieldPanel<Integer>(
-				"planningMinistryRank", new PropertyModel<Integer>(actModel, "planMinRank"), "Ministry of Planning Rank", AmpFMTypes.FEATURE);
+				"planningMinistryRank", new PropertyModel<Integer>(actModel, "planMinRank"), "Ministry of Planning Rank", AmpFMTypes.MODULE);
 		planningMinistryRank.getTextContainer().add(rankValidator);
 		planningMinistryRank.getTextContainer().add(rankModifier);
 		add(planningMinistryRank);

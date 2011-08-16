@@ -2828,6 +2828,8 @@ public class FeaturesUtil {
 	}
 
 	public static String makeProperString(String theString) throws java.io.IOException{
+		if (theString.startsWith("/"))
+			theString = theString.substring(theString.lastIndexOf("/") + 1, theString.length());
 
 		java.io.StringReader in = new java.io.StringReader(theString.toLowerCase());
 		boolean precededBySpace = true;
@@ -2848,7 +2850,6 @@ public class FeaturesUtil {
 				precededBySpace = false;
 			}
 		}
-
 		return properCase.toString();    
 
 	}

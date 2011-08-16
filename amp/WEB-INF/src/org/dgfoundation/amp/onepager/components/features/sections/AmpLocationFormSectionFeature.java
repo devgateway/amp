@@ -50,7 +50,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 						new PropertyModel<Set<AmpCategoryValue>>(am,
 								"categories"),
 						CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
-				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.FEATURE);
+				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
 		add(implementationLevel);
 
 		final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
@@ -61,7 +61,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								"categories"),
 						CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
 				CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
-				null, implementationLevel.getChoiceModel(), AmpFMTypes.FEATURE);
+				null, implementationLevel.getChoiceModel(), AmpFMTypes.MODULE);
 		implementationLocation.setOutputMarkupId(true);
 		add(implementationLocation);
 

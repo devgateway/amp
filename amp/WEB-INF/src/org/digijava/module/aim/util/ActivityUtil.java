@@ -3834,7 +3834,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
-      String tocode,Long percent) throws Exception {
+      String tocode,Float percent) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
     double tempPlanned = 0;

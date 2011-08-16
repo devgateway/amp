@@ -9,26 +9,19 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
- 
-	
-	<!-- Individual YUI CSS files --> 
- 
+<!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script> 
-	
-
-
-
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 
 <style>
 <!--
@@ -786,27 +779,21 @@ span.extContactDropdownEmail {
     </c:choose>
 </c:set>
 <br/><br/>
-<digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">
-																				
+<digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">																				
 
-
-
+<module:display name="Messages" parentModule="Messaging System"></module:display>
 
 <div class="ins_box_left" style="border: 1px solid silver; background-color:#F5F5F5;">
 	<div class="create_message">
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 		  <tr>
-  		  <td valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
-  		  	<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
-  		  </td>
-
-  </tr>
-  <tr>
-  <td colspan=2 style="font-size:12px;">
+	  		  <td valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
+	  		  	<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
+	  		  </td>
+  			</tr>
+  			<tr>
+  				<td colspan=2 style="font-size:12px;">
 					<div class="msg_receivers">
-						
-						
-						
 							<logic:empty name="messageForm" property="teamMapValues">
 								<div class="msg_lbl">No receivers</div>
 							</logic:empty>
@@ -825,13 +812,12 @@ span.extContactDropdownEmail {
 											</div>
 										</div>
 									</logic:notEmpty>											                                                		
-								</c:forEach>
-		
+								</c:forEach>		
 							</logic:notEmpty>						
 				</div>
 			<br/>
 			<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
-	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
+			<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
@@ -841,14 +827,17 @@ span.extContactDropdownEmail {
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">
 				</div>
-</td>
-  </tr>
+			</td>
+ 		 </tr>
 <tr>
 <td colspan=2><hr class="hr_3"></td>
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width="20" valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b> <span style="font-size:11px;" id="titleCharCounter"></span>	
+	    <td width="20" valign="top" colspan=2>
+	    	<b style="font-size:12px;"><digi:trn>Title</digi:trn></b> 
+	    	<b class="mand">*</b> 
+	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
 	    	<div class="charcounter-progress-container" >
 	    		<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 	    	</div>
@@ -1124,12 +1113,8 @@ span.extContactDropdownEmail {
     			window.clipboardData.setData("Text",'');
     		}
         }
-	});
-
-	
+	});	
 </script>
-
-
 
 <script type="text/javascript">
 	initFileUploads();
@@ -1143,6 +1128,5 @@ span.extContactDropdownEmail {
 	</logic:present>
 	
 </script>
-
 
 </digi:form>

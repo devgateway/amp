@@ -58,16 +58,14 @@ public class ViewActivityHistory extends Action {
 		ViewActivityHistoryForm hForm = (ViewActivityHistoryForm) form;
 		// Load current activity, get group and retrieve past versions.
 		Session session = PersistenceManager.getRequestDBSession();
-		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm
-				.getActivityId());
+		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm.getActivityId());
 		hForm.setActivities(new ArrayList<AmpActivityVersion>());
 
 		// AMP-7706: Filter last 5 versions.
 		// List<AmpActivity> auxList = new
 		// ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
 		List<AmpActivityVersion> auxList = null;
-		Query qry = session
-				.createQuery("select ag.activities from org.digijava.module.aim.dbentity.AmpActivityGroup ag where ag.ampActivityGroupId = ?");
+		Query qry = session.createQuery("select ag.activities from org.digijava.module.aim.dbentity.AmpActivityGroup ag where ag.ampActivityGroupId = ?");
 		qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
 		auxList = qry.list();
 		Collections.sort(auxList, compareVersions);

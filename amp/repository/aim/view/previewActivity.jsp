@@ -3363,43 +3363,34 @@ function collapseAll() {
 															</table>
 														</logic:notEmpty></td>
 													</tr>
-													<field:display name="Contracting Amendments"
-														feature="Contracting"
-													>
-														<bean:define id="ct" name="contract"
-															type="org.digijava.module.aim.dbentity.IPAContract"
-														/>
+													<field:display name="Contracting Amendments" feature="Contracting">
+														<bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
 														<tr>
-															<td align="left"><b><digi:trn
-																key="aim:IPA:newPopup:donorContractFundinAmount"
-															>Part du contrat financé par le bailleur</digi:trn>:</b></td>
-															<td>&nbsp; <%=BigDecimal
-														.valueOf(
-																ct
-																		.getDonorContractFundinAmount())
-														.toPlainString()%>
+															<td align="left"><b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b></td>
+															<td>&nbsp;
+																<%if(ct.getDonorContractFundinAmount()!=null){ %> 
+																	<%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString()%>
+																<%}%>
 															&nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
 															</td>
 														</tr>
 														<tr>
 															<td align="left"><b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
 															</td>
-															<td>&nbsp; <%=BigDecimal
-														.valueOf(
-																ct
-																		.getTotAmountDonorContractFunding())
-														.toPlainString()%>
+															<td>&nbsp; 
+																<%if(ct.getDonorContractFundinAmount()!=null){ %> 
+																	<%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString()%>
+																<%}%>
 															&nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
 															</td>
 														</tr>
 														<tr>
 															<td align="left"><b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
 															</td>
-															<td>&nbsp; <%=BigDecimal
-														.valueOf(
-																ct
-																		.getTotAmountCountryContractFunding())
-														.toPlainString()%>
+															<td>&nbsp; 
+															<%if(ct.getDonorContractFundinAmount()!=null){ %> 
+																<%=BigDecimal .valueOf(ct.getTotAmountCountryContractFunding()).toPlainString()%>
+															<%}%>
 															&nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
 															</td>
 														</tr>

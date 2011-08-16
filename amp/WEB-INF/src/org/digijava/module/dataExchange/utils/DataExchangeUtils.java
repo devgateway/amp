@@ -1372,6 +1372,7 @@ public class DataExchangeUtils {
 		        
 				activityId = ampActivity.getAmpActivityId();
 		        String ampId=ActivityUtil.numericAmpId("iati",activityId);
+		        ampActivity.setDeleted(false);
 		        ampActivity.setAmpId(ampId);
 		        //session.update(activity);
 		        
@@ -1422,8 +1423,6 @@ public class DataExchangeUtils {
 	        TreeMap<Long,String> result = new TreeMap<Long,String>();
 	        try {
 	            session = PersistenceManager.getSession();
-//	            String queryString = "select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()
-//	                + " f";
 	            qry = session.createQuery(queryString);
 	            Iterator iter = qry.list().iterator();
 	            while (iter.hasNext()) {

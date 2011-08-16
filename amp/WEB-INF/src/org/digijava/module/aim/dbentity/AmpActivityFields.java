@@ -257,6 +257,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
 	
+	
 	public Date getIatiLastUpdatedDate() {
 		return iatiLastUpdatedDate;
 	}
@@ -287,9 +288,19 @@ LoggerIdentifiable, Cloneable {
 	protected Integer planMinRank;
 	protected Collection actRankColl;
 
-	@VersionableFieldSimple(fieldTitle = "Archived?")
+	@VersionableFieldSimple(fieldTitle = "Archived")
 	protected Boolean archived;
 
+	@VersionableFieldSimple(fieldTitle = "Deleted")
+	protected Boolean deleted;
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	/**
 	 * Indicator connections.

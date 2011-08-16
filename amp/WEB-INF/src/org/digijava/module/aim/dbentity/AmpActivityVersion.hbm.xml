@@ -41,6 +41,7 @@
 		<property name="minorities" column="minorities" type="java.lang.String" />
 
 		<property name="draft" column="draft" type="java.lang.Boolean" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 		<property name="createdAsDraft" column="created_as_draft" type="boolean" />
 
 		<property name="calType" column="cal_type" type="java.lang.String" />

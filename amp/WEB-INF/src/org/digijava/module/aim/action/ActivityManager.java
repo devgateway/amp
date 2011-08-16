@@ -16,7 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.admin.helper.AmpActivityAdmin;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -74,7 +74,7 @@ public class ActivityManager extends Action {
 	}
 
 	private void reset(ActivityForm actForm, HttpServletRequest request) {
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+		actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null));
 		actForm.setKeyword(null);
 		actForm.setLastKeyword(null);
 		actForm.setSortByColumn(null);
@@ -82,11 +82,11 @@ public class ActivityManager extends Action {
 	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityVersion> allActivities = actForm.getAllActivityList();
-		List<AmpActivityVersion> pageList = actForm.getActivityList();
+		List<AmpActivityAdmin> allActivities = actForm.getAllActivityList();
+		List<AmpActivityAdmin> pageList = actForm.getActivityList();
 		int pageSize = actForm.getTempNumResults();
 		if (pageList == null) {
-			pageList = new ArrayList<AmpActivityVersion>();
+			pageList = new ArrayList<AmpActivityAdmin>();
 			actForm.setActivityList(pageList);
 		}
 
@@ -107,14 +107,14 @@ public class ActivityManager extends Action {
 
 		Double totalPages = 0.0;
 		if(pageSize != -1){
-			for (Iterator<AmpActivityVersion> iterator = allActivities.listIterator(idx);
+			for (Iterator<AmpActivityAdmin> iterator = allActivities.listIterator(idx);
 					iterator.hasNext() && i < pageSize; i++) {
 				pageList.add(iterator.next());
 			}
         	totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
 		}
 		else{
-			for (Iterator<AmpActivityVersion> iterator = allActivities.listIterator(idx);
+			for (Iterator<AmpActivityAdmin> iterator = allActivities.listIterator(idx);
 				iterator.hasNext(); i++) {
 				pageList.add(iterator.next());
 	       }
@@ -125,13 +125,13 @@ public class ActivityManager extends Action {
 	}
 
 	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityVersion> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
+		List<AmpActivityAdmin> activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword());
 		actForm.setAllActivityList(activities);
 		sortActivities(actForm,request);
 	}
 
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityVersion> activities = actForm.getAllActivityList();
+		List<AmpActivityAdmin> activities = actForm.getAllActivityList();
 
 		int sortBy = 0;
 		if("activityName".equals(actForm.getSortByColumn())){
@@ -144,8 +144,8 @@ public class ActivityManager extends Action {
 
 		switch (sortBy) {
 		case 1:
-			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
-				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
+			Collections.sort(activities, new Comparator<AmpActivityAdmin>(){
+				public int compare(AmpActivityAdmin a1, AmpActivityAdmin a2) {
 					String s1	= a1.getName();
 					String s2	= a2.getName();
 					if ( s1 == null )
@@ -159,8 +159,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		case 2:
-			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
-				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) 
+			Collections.sort(activities, new Comparator<AmpActivityAdmin>(){
+				public int compare(AmpActivityAdmin a1, AmpActivityAdmin a2) 
 				{
 					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
 					String c1="";
@@ -173,8 +173,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		case 3:
-			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
-				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
+			Collections.sort(activities, new Comparator<AmpActivityAdmin>(){
+				public int compare(AmpActivityAdmin a1, AmpActivityAdmin a2) {
                                 String s1 = "";
                                 String s2 = "";
                                 if (a1.getTeam() != null) {
@@ -199,8 +199,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		default:
-			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
-				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
+			Collections.sort(activities, new Comparator<AmpActivityAdmin>(){
+				public int compare(AmpActivityAdmin a1, AmpActivityAdmin a2) {
 					return a1.getName().compareTo(a2.getName());
 				}
 			});
@@ -218,13 +218,18 @@ public class ActivityManager extends Action {
 	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws DgException {
 		HttpSession session = request.getSession();
 		String tIds=request.getParameter("tIds");
+		String advancedAdminDelete = request.getParameter("advancedAdminDelete");
 		List<Long> topicsIds=getActsIds(tIds.trim());
 		for (Long ampActId : topicsIds) {
 			AmpActivityVersion activity = ActivityUtil.loadActivity(ampActId);
 			AuditLoggerUtil.logObject(session, request, activity, "delete");
-			ActivityUtil.deleteActivity(ampActId);
+			//ActivityUtil.deleteActivity(ampActId);
+			if(advancedAdminDelete!=null && "true".compareTo(advancedAdminDelete)==0 )
+				ActivityUtil.deleteAmpActivityWithVersions(ampActId);
+			else
+				ActivityUtil.archiveAmpActivityWithVersions(ampActId);
 		}
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());		
+		actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null));		
 	}
 	private List<Long> getActsIds(String ids){
 		List<Long> actsIds=new ArrayList<Long>();

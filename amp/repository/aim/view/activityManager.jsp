@@ -258,7 +258,7 @@
 													<tbody class="yui-dt-data">
 															<logic:iterate name="aimActivityForm"
 																property="activityList" id="activities"
-																type="org.digijava.module.aim.dbentity.AmpActivityVersion">
+																type="org.digijava.module.admin.helper.AmpActivityAdmin">
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
 																		<td width="9" height="15" class="inside ignore"><img
@@ -279,9 +279,11 @@
 																	<td width="100" class="inside"><bean:write name="activities"
 																		property="ampId" /></td>
 
-																	<td align="left" width="12" class="inside ignore"><c:set var="actId">
-																		<bean:write name="activities" property="ampActivityId" />
-																	</c:set> <input type="checkbox" value="${actId}" /></td>
+																	<td align="left" width="12" class="inside ignore">
+																		<c:set var="actId">
+																			<bean:write name="activities" property="ampActivityId" />
+																		</c:set>
+																	 <input type="checkbox" value="${actId}" /></td>
 																</tr>
 															</logic:iterate>
 															</tbody>

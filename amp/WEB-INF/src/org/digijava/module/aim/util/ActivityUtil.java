@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -34,6 +36,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.admin.helper.AmpActivityAdmin;
 import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.action.ShowAddComponent;
@@ -3554,20 +3557,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
 
-      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(
-          AmpActivityVersion.class, ampActId);
+      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
 
       if (ampAct == null)
 			logger.debug("Activity is null. Hence no activity with id : " + ampActId);
 		else {
 			// Delete access info.
-			Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
-			qry.setParameter(0, ampActId);
-			qry.executeUpdate();
+			
+//			Query qry = session.createSQLQuery("DELETE FROM amp_activity_access WHERE amp_activity_id = ?");
+//			qry.setParameter(0, ampActId);
+//			qry.executeUpdate();
 
 			// Delete group info.
 			AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
-			qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
+			Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
 			qry.executeUpdate();
 			ampAct.setAmpActivityGroup(null);
 			
@@ -3597,6 +3600,40 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			// TODO: relink ampActivityPreviousVersion if needed (when
 			// deleting drafts to older non-draft versions).
           
+	      	deleteActivityContent(ampAct,session);
+		}
+      
+    ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+  	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+
+      
+	  session.delete(ampAct);
+      tx.commit();
+      session.flush();
+    }
+    catch (Exception e1) {
+      logger.error("Could not delete the activity with id : " + ampActId);
+      e1.printStackTrace(System.out);
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception e2) {
+          logger.error("Release session failed");
+        }
+      }
+    }
+    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
+  }
+    
+    public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         /* delete fundings and funding details */
         Set fundSet = ampAct.getFunding();
         if (fundSet != null) {
@@ -3839,38 +3876,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 //	    }
 //	    logger.debug("contracts deleted");
 
-      }
+      
       
     //Section moved here from ActivityManager.java because it didn't worked there.
 	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
-	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
-	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
-	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
-	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
-	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
-	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-      
-	  session.delete(ampAct);
-      tx.commit();
-      session.flush();
+    
     }
-    catch (Exception e1) {
-      logger.error("Could not delete the activity with id : " + ampActId);
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception e2) {
-          logger.error("Release session failed");
-        }
-      }
-    }
-    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
-  }
 
   public static void deleteActivityAmpComments(Collection commentId, Session session) throws Exception{
      if (commentId != null) {
@@ -4779,4 +4790,228 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			e.printStackTrace();	
 		}
 	}
+	
+	
+    public static ArrayList<AmpActivityAdmin> getAllActivitiesAdmin(String actName) {
+        Session session = null;
+        Query qry = null;
+        ArrayList<AmpActivityAdmin> result = new  ArrayList<AmpActivityAdmin>();
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "";
+            
+            if(actName!=null && "".compareTo(actName.trim())!=0) {
+            	queryString = "select f.ampActivityId, f.ampId,  f.name, f.ampActivityGroup, f.team  from " + AmpActivity.class.getName()+
+            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(ampAct.name) like upper(:name) and deleted = false";
+            	qry.setParameter("name", "%" + actName + "%", Hibernate.STRING);
+            }
+            else
+            	queryString = "select f.ampActivityId, f.ampId,  f.name, ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
+            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+                Object[] item = (Object[])iter.next();
+                Long ampActivityId = (Long) item[0];
+                String ampId = (String) item[1];
+                String name = (String) item[2];
+                AmpTeam team = (AmpTeam) item[3];
+                AmpActivityGroup ampActGroup = (AmpActivityGroup) item[4];
+                AmpActivityAdmin activity = new AmpActivityAdmin(name,team,ampId,ampActivityId,ampActGroup);
+                result.add(activity);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
+        return result;
+    }
+
+    public static void deleteAmpActivityWithVersions(Long ampActId){
+    	  Session session = null;
+		    Transaction tx = null;
+
+		    try {
+		      session = PersistenceManager.getSession();
+		      tx = session.beginTransaction();
+
+		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
+		      if(groups!=null && groups.size()>0){
+		      		for (AmpActivityGroup ampActivityGroup : groups) {
+		      			
+		      			Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityGroup = " + ampActivityGroup.getAmpActivityGroupId());
+						qry.executeUpdate();
+						
+		      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
+		      			if(activityversions!=null && activityversions.size()>0){
+		      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
+		      					AmpActivityVersion ampActivityVersion=iterator.next();
+		      					ampActivityVersion.setAmpActivityGroup(null);
+		      					session.update(ampActivityVersion);
+		      					deleteFullActivityContent(ampActivityVersion,session);
+		      					session.delete(ampActivityVersion);
+							}
+		      			}
+		      			else{
+		      				AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+		      				deleteFullActivityContent(ampAct,session);
+	      					session.delete(ampAct);
+		      			}
+		  				session.delete(ampActivityGroup);
+		  			}
+		      	}
+		      tx.commit();
+		      session.flush();
+		      
+		    }
+		    catch (Exception e1) {
+			      logger.error("Could not delete the activity with id : " + ampActId);
+			      e1.printStackTrace(System.out);
+			    }
+			    finally {
+			      if (session != null) {
+			        try {
+			          PersistenceManager.releaseSession(session);
+			        }
+			        catch (Exception e2) {
+			          logger.error("Release session failed");
+			        }
+			      }
+			    }
+    }
+    
+    public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
+    	ActivityUtil.deleteActivityContent(ampAct,session);
+    	Long ampActId = ampAct.getAmpActivityId();
+    	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+	  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+	  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+	  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+	  	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+	  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+	  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+    }
+    
+    
+	public static void deleteAmpActivity(Long ampActId) {
+			Date startDate = new Date(System.currentTimeMillis());
+		    Session session = null;
+		    Transaction tx = null;
+
+		    try {
+		      session = PersistenceManager.getSession();
+		      tx = session.beginTransaction();
+
+		      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+
+		      if (ampAct == null)
+					logger.debug("Activity is null. Hence no activity with id : " + ampActId);
+				else {
+
+					// Delete group info.
+					AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
+					Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
+					qry.executeUpdate();
+					ampAct.setAmpActivityGroup(null);
+					
+					session.update(ampAct);
+			    	auxGroup.getActivities().remove(ampAct);
+			    	session.update(auxGroup);
+			    	session.update(ampAct);
+			    	
+			    	// Delete group info.
+			      	List<AmpActivityGroup> groups=getActivityGroups(session , ampAct.getAmpActivityId());
+			      	if(groups!=null && groups.size()>0){
+			      		for (AmpActivityGroup ampActivityGroup : groups) {
+			      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
+			      			if(activityversions!=null && activityversions.size()>0){
+			      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
+			      					AmpActivityVersion ampActivityVersion=iterator.next();
+			      					ampActivityVersion.setAmpActivityGroup(null);
+			      					session.update(ampActivityVersion);
+								}
+			      			}
+			  				session.delete(ampActivityGroup);
+			  			}
+			      	}
+					
+			      	deleteActivityContent(ampAct,session);
+				}
+		      
+		    ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+		  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+		  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+		  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+		  	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+		  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+		  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+
+   		   session.delete(ampAct);
+		   tx.commit();
+		   session.flush();
+		 }
+		    catch (Exception e1) {
+		      logger.error("Could not delete the activity with id : " + ampActId);
+		      e1.printStackTrace(System.out);
+		    }
+		    finally {
+		      if (session != null) {
+		        try {
+		          PersistenceManager.releaseSession(session);
+		        }
+		        catch (Exception e2) {
+		          logger.error("Release session failed");
+		        }
+		      }
+		    }
+		    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
+		  
+		
+	}
+
+	public static void archiveAmpActivityWithVersions(Long ampActId) {
+		// TODO Auto-generated method stub
+		 Session session = null;
+		 Transaction tx = null;
+		 try{
+			 session = PersistenceManager.getSession();
+		      tx = session.beginTransaction();
+
+		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
+		      if(groups!=null && groups.size()>0){
+		      		for (AmpActivityGroup ampActivityGroup : groups) {
+		      			Set<AmpActivityVersion> a = ampActivityGroup.getActivities();
+		      			for (Iterator iterator = a.iterator(); iterator.hasNext();) {
+							AmpActivityVersion ampActivityVersion = (AmpActivityVersion) iterator.next();
+							ampActivityVersion.setDeleted(true);
+							session.update(ampActivityVersion);
+							
+						}
+		      		}
+		      }
+		      
+		    	  AmpActivityVersion ampActivityVersion = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+		    	  ampActivityVersion.setDeleted(true);
+		    	  session.update(ampActivityVersion);
+		     
+		      tx.commit();
+		      session.flush();
+		 }
+		
+		 catch (Exception e) {
+			// TODO: handle exception
+			 e.printStackTrace();
+		}
+	}
+	
+	
+	
 } // End

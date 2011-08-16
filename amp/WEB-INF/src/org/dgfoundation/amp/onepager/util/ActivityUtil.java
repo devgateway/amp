@@ -79,7 +79,7 @@ public class ActivityUtil {
 			boolean draftChange = draft != a.getDraft();
 			
 			a.setDraft(draft);
-			
+			a.setDeleted(false);
 			//is versioning activated?
 			if (a != null && !a.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
 				try {

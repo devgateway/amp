@@ -27,7 +27,7 @@ h1 {text-transform:uppercase;}
 .inputx, td input.inp-text, table#addUserContainer tr td input,   td select {border:1px solid #D0D0D0; background-color:#FFFFFF}
 table#addUserContainer tr td input {border:1px solid #D0D0D0; background-color:#FFFFFF;margin:0px 0px 0px 5px; width:150px;}
 table tr td.f-names{font-weight:bold;}
-.insidex{font-size:11px;color:#767676;padding:2px;margin:5px}
+.insidex{font-size:11px;color:#000000;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
 .dropdwn_sm_wksp {border:1px solid #CCCCCC; font-size:11px; background-color:#FFFFFF; color:#000000;}
 .dropdwn_sm_lng {border:1px solid #728896; font-size:11px; background-color:#496678; color:#FFFFFF;}

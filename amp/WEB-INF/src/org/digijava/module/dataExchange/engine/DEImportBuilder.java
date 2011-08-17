@@ -2126,7 +2126,9 @@ public class DEImportBuilder {
 				if( "check".compareTo(actionType) ==0 )
 					//CHECK content
 					{
+						System.out.println(".......Starting processing activity "+noAct);
 						activityLogs	=	iWorker.checkContent(noAct);
+						System.out.println("..................End processing activity "+noAct);
 					}
 				else
 					if( "import".compareTo(actionType) ==0 )

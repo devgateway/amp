@@ -1221,12 +1221,16 @@ public class ReportsFilterPicker extends MultiAction {
 		DecimalFormat custom = new DecimalFormat();
 		DecimalFormatSymbols ds = new DecimalFormatSymbols();
 		ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0)));
-		ds
-				.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt()
-						.charAt(0)));
+		//
+		if (filterForm.getCustomUseGrouping().booleanValue() == true) {			
+			ds
+					.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt()
+							.charAt(0)));			
+			custom.setGroupingUsed(filterForm.getCustomUseGrouping());
+			custom.setGroupingSize(filterForm.getCustomGroupSize());			
+		}
+		//
 		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
-		custom.setGroupingUsed(filterForm.getCustomUseGrouping());
-		custom.setGroupingSize(filterForm.getCustomGroupSize());
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousands());
 		arf.setCurrentFormat(custom);

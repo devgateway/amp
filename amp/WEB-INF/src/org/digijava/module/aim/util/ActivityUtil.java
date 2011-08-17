@@ -2004,6 +2004,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 			session.evict(result);
 			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+			Hibernate.initialize(result.getCosts());
+			Hibernate.initialize(result.getClosingDates());
+			Hibernate.initialize(result.getInternalIds());
+			Hibernate.initialize(result.getLocations());
+			Hibernate.initialize(result.getComponentes());
+			Hibernate.initialize(result.getSectors());
+			Hibernate.initialize(result.getFunding());
+			if(result.getFunding()!=null){
+				for(Object obj:result.getFunding()){
+					AmpFunding funding=(AmpFunding)obj;
+					Hibernate.initialize(funding.getFundingDetails());
+					Hibernate.initialize(funding.getMtefProjections());
+				}
+			}
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");
 		} catch (Exception e) {

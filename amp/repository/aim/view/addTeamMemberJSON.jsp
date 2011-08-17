@@ -113,8 +113,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250},
 	            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:true, width: 230},
 	            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false, width: 250},
-	            {key:"role", label:"<digi:trn>ROLE</digi:trn>", sortable:false, width: 150},
-	            {key:"chkBox", label:"<digi:trn>SELECT</digi:trn>", sortable:false, width: 30}
+	            {key:"role", label:"<digi:trn>ROLE</digi:trn>", sortable:false, minWidth: 150},
+	            {key:"chkBox", label:"<digi:trn>SELECT</digi:trn>", sortable:false, minWidth: 30}
 	        ];
 	  
 	        var div = document.getElementById('errors');

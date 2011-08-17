@@ -271,7 +271,7 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute(ArConstants.SORT_ASCENDING, sortAscending);
 			//if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
 			//	rd.setSorterColumn(sortBy);
-					
+			
 			if (applySorter == null && ar.getHierarchies() != null
 					&& !ar.getHierarchies().isEmpty()) {
 				List<AmountCell> trailCells = rd.getTrailCells();

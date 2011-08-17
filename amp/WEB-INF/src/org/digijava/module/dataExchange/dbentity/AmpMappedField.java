@@ -74,6 +74,11 @@ public class AmpMappedField {
 		return this.getItem().getIatiPath()+": "+this.getItem().getIatiValues();
 	}
 
+	public String getWarnings(){
+		if(this.getItem() == null ) return this.getDescription();
+		return "";
+	}
+	
 	public String getIatiPath(){
 		return this.getItem().getIatiPath();
 	}

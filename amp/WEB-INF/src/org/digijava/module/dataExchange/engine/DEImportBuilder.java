@@ -2174,11 +2174,12 @@ public class DEImportBuilder {
 		item.setItemType(ampID);
 		
 		//compute the logs
-		String logResult = getLogs(activityLogs,"<br/>");
+		TreeSet<String> warn = new TreeSet<String>();
+		String logResult = getLogs(activityLogs,"<br/>",warn);
 		
 		if("".compareTo(logResult)!=0)
 		{
-			item.setDescription(logResult);
+			item.setDescription("<br/>Errors<br/>"+logResult+"<br/>Warnings<br/>"+printArrayList(warn));
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 			//iLog.saveObject(item);
 			log.getLogItems().add(item);
@@ -2186,7 +2187,7 @@ public class DEImportBuilder {
 			return;
 		}
 		item.setLogType(DELogPerItem.LOG_TYPE_OK);
-		item.setDescription("OK");
+		item.setDescription("OK" + "<br/>Warnings<br/>"+printArrayList(warn));
 		if(iWorker.getExistingActivity()  && "check".compareTo(actionType) ==0){
 			AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(iWorker.getAmpID());
 			AmpActivityVersion actualVersion = ampActGroup.getAmpActivityLastVersion();
@@ -2200,7 +2201,7 @@ public class DEImportBuilder {
 		log.getLogItems().add(item);
 	}
 	
-	public String getLogs(ArrayList<AmpMappedField> logs,String delimitator){
+	public String getLogs(ArrayList<AmpMappedField> logs,String delimitator, TreeSet<String> warnings){
 		String s="";
 		TreeSet<String> errors = new TreeSet<String>();
 		for (Iterator<AmpMappedField> it = logs.iterator(); it.hasNext();) {
@@ -2209,6 +2210,7 @@ public class DEImportBuilder {
 				if(log!=null && !log.isOK()) 
 					{
 						errors.add(log.getErrors());
+						warnings.add(log.getWarnings());
 					}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -2220,6 +2222,16 @@ public class DEImportBuilder {
 				s+=delimitator==null?"":delimitator;
 		}
 		return s;
+	}
+	
+	public String printArrayList(TreeSet<String> l){
+		String res = "";
+		for (Iterator iterator = l.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			res+=string;
+			res+="<br/>";
+		}
+		return res;
 	}
 	
 	public boolean checkIATIInputString(String inputLog){

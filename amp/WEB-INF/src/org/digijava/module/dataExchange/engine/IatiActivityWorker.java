@@ -1253,6 +1253,7 @@ public class IatiActivityWorker {
 				{
 					checkMappedField = addMappingField(iatiPath,iatiItems,iatiValues,iatiLang,ampId,ampClass,sourceId,feedFileName,status);
 					System.out.println("Activity:"+this.getTitle()+"# ADDED Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+					log.setItem(checkMappedField);
 				}
 				else{
 					checkMappedField = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);

@@ -4,13 +4,9 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
-import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 
 /**
  * Behavior that checks if a {@link FormComponent} is valid. Valid {@link FormComponent} objects get the CSS class
@@ -98,7 +94,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
 			});
       	
             ajaxRequestTarget.addComponent(formComponent);
-            ajaxRequestTarget.addJavascript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
+            ajaxRequestTarget.appendJavascript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
         }
 
         if(updateComponent!=null){

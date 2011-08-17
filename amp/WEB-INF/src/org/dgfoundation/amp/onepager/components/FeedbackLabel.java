@@ -16,6 +16,7 @@
 
 package org.dgfoundation.amp.onepager.components;
 
+import org.apache.wicket.feedback.IFeedback;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -35,7 +36,7 @@ import org.apache.wicket.AttributeModifier;
  * @author Daan, StuQ.nl
  * @author mpostelnicu@dgateway.org
  */
-public class FeedbackLabel extends Label {
+public class FeedbackLabel extends Label implements IFeedback {
 
     /** Field component holds a reference to the {@link Component} this FeedbackLabel belongs to */
     private FormComponent component;
@@ -115,10 +116,16 @@ public class FeedbackLabel extends Label {
             } else {
                 this.setDefaultModel(new Model(component.getFeedbackMessage().getMessage()));
             }
-
+            component.getFeedbackMessage().markRendered();
             this.add(new AttributeModifier("class", true, new Model("feedbacklabel " + component.getFeedbackMessage().getLevelAsString().toLowerCase())));
         } else {
             this.setDefaultModel(null);
         }
     }
+    
+ 
+    public final boolean isValid() {
+        return component.isValid();
+    }
+
 }

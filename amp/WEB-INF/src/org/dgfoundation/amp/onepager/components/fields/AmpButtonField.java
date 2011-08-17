@@ -77,19 +77,21 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 						new Component.IVisitor<FormComponent>() {
 
 							@Override
-							public Object component(FormComponent arg0) {
-								if (!arg0.isValid()) {
-									if (arg0 instanceof HiddenField) {
-										target.focusComponent(arg0.getParent());
-										target.addComponent(arg0.getParent());
-										
+							public Object component(FormComponent component) {
+								if (!component.isValid()) {
+									if (component instanceof HiddenField) {									
+										 target.appendJavascript("$('#"+ component.getMarkupId() +"').parents().show();");
+										 target.appendJavascript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
+										 target.addComponent(component);
+										//target.addComponent(arg0);
+
 									} else {
-										target.focusComponent(arg0);
+										target.focusComponent(component);
 										String js = String.format(
 												"$('#%s').change();",
-												arg0.getMarkupId());
+												component.getMarkupId());
 										target.appendJavascript(js);
-										target.addComponent(arg0);
+										target.addComponent(component);
 									}
 								}
 								return Component.IVisitor.CONTINUE_TRAVERSAL;

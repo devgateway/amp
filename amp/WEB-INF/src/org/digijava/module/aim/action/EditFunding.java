@@ -130,9 +130,6 @@ public class EditFunding extends Action {
 								
 								if (funding.getFundingDetails() != null) {
 									//
-									formBean.getFunding().getFundingDetails().addAll(funding.getFundingDetails());
-									formBean.getOldFunding().getFundingDetails().addAll(funding.getFundingDetails());
-									//
 									Iterator<FundingDetail> itr = funding.getFundingDetails().iterator();
 									FundingDetail fd = null;
 									while (itr.hasNext()) {
@@ -148,7 +145,15 @@ public class EditFunding extends Action {
                                         else if (fd.getTransactionType() == 4) {
                                           numDisbOrder ++;
                                         }
+										//
+										if (fd.getTransactionAmount() == "") {
+											fd.setTransactionAmount("0");
+										}
 									}
+									//
+									formBean.getFunding().getFundingDetails().addAll(funding.getFundingDetails());
+									formBean.getOldFunding().getFundingDetails().addAll(funding.getFundingDetails());
+									//
 								}
 							}
 							break;

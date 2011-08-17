@@ -412,6 +412,8 @@ public class AddUserForm
         selectedOrganizationId=null;
         selectedOrgGroup=null;
         selectedOrgType=null;
+        setOrgGrp(null);
+        setOrgType(null);
  //       setWebSite(null);
 
         organizationTypeOther = null;

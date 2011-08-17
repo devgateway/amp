@@ -98,10 +98,10 @@ public class ReportsFilterPicker extends MultiAction {
 		else
 			filterForm.setSourceIsReportWizard(false);
 		
-		ServletContext ampContext = getServlet().getServletContext();
+		//ServletContext ampContext = getServlet().getServletContext();
  	 	Site site = RequestUtils.getSite(request);
- 	 	String siteId = site.getId().toString();
- 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+ 	 	//String siteId = site.getId().toString();
+ 	 	//String locale = RequestUtils.getNavigationLanguage(request).getCode();
  	 	
  	 	String ampReportId 	= request.getParameter("ampReportId");
 		if ( "".equals(ampReportId) )
@@ -181,10 +181,19 @@ public class ReportsFilterPicker extends MultiAction {
 		
 	     Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		 filterForm.setCalendars(allFisCalenders);
-			
+		
+		 if (filterForm.getCustomDecimalSymbol() == null) {
+				filterForm.setCustomDecimalSymbol(String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator())));
+				filterForm.setCustomDecimalPlaces(FormatHelper.getDecimalFormat().getMaximumFractionDigits());
+				filterForm.setCustomGroupCharacter(String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator()));
+				filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
+				filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
+			}
 	      
-		if(request.getParameter("init")!=null) return null; else 
-		return modeRefreshDropdowns(mapping, form, request, response);
+		if(request.getParameter("init")!=null   || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
+			return null; 
+		else 
+			return modeRefreshDropdowns(mapping, form, request, response);
 		}
 	
 	public ActionForward modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -751,14 +760,6 @@ public class ReportsFilterPicker extends MultiAction {
 			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
 
 			httpSession.setAttribute("filterCurrentReport", rep);
-		}
-
-		if (filterForm.getCustomDecimalSymbol() == null) {
-			filterForm.setCustomDecimalSymbol(String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator())));
-			filterForm.setCustomDecimalPlaces(FormatHelper.getDecimalFormat().getMaximumFractionDigits());
-			filterForm.setCustomGroupCharacter(String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator()));
-			filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
-			filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
 		}
 
 		

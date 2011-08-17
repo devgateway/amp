@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -34,11 +33,9 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -206,7 +203,7 @@ public class IatiActivityWorker {
 		return false;
 	}
 	
-	public ArrayList<AmpMappedField> checkContent() { 
+	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		// TODO Auto-generated method stub
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		try{
@@ -219,28 +216,28 @@ public class IatiActivityWorker {
 					//title
 					if(i.getName().equals(new QName("title"))){
 						JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-						System.out.println("activity title:" + printTextType(item)+"#");
+						System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
 						this.title += printTextType(item);
 					}
 					//status
 					if(i.getName().equals(new QName("activity-status"))){
 						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
 						AmpMappedField existStatusCode = checkStatusCode(item);
-						logs.add(existStatusCode);
+						if(existStatusCode!=null) logs.add(existStatusCode);
 					}
 	
 					//default-finance-type == type of assistance
 					if(i.getName().equals(new QName("default-finance-type"))){
 						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 						AmpMappedField existFinanceType = checkFinanceType(item);
-						logs.add(existFinanceType);
+						if(existFinanceType!=null) logs.add(existFinanceType);
 					}
 	
 					//default-aid-type == financing instrument
 					if(i.getName().equals(new QName("default-aid-type"))){
 						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 						AmpMappedField existAidType = checkAidType(item);
-						logs.add(existAidType);
+						if(existAidType!=null) logs.add(existAidType);
 					}
 					
 				}
@@ -254,36 +251,36 @@ public class IatiActivityWorker {
 					ReportingOrg item = (ReportingOrg)contentItem;
 					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-					logs.add(existOrganization);
-					logs.add(existOrganizationType);
+					if(existOrganization!=null) logs.add(existOrganization);
+					if(existOrganizationType!=null) logs.add(existOrganizationType);
 				}
 				
 				if(contentItem instanceof ParticipatingOrg){
 					ParticipatingOrg item = (ParticipatingOrg)contentItem;
 					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-					logs.add(existOrganization);
-					logs.add(existOrganizationType);
+					if(existOrganization!=null) logs.add(existOrganization);
+					if(existOrganizationType!=null) logs.add(existOrganizationType);
 				}
 				
 				if(contentItem instanceof OtherIdentifier){
 					OtherIdentifier item = (OtherIdentifier)contentItem;
 					AmpMappedField existOrganization	  = checkOrganization(item.getOwnerName(),this.getLang(), item.getOwnerRef());
-					logs.add(existOrganization);
+					if(existOrganization!=null) logs.add(existOrganization);
 				}
 				
 				if(contentItem instanceof Location){
 					Location item = (Location)contentItem;
 					AmpMappedField existLocation	  = checkLocation(item);
-					logs.add(existLocation);
+					if(existLocation!=null) logs.add(existLocation);
 				}
 				
 				if(contentItem instanceof Sector){
 					Sector item = (Sector)contentItem;
 					AmpMappedField existVocabularyCode = checkVocabularyCode(item);
 					AmpMappedField existSector			= checkSector(item);
-					logs.add(existVocabularyCode);
-					logs.add(existSector);
+					if(existVocabularyCode!=null) logs.add(existVocabularyCode);
+					if(existSector!=null) logs.add(existSector);
 				}
 				
 				if(contentItem instanceof Transaction){
@@ -1117,7 +1114,7 @@ public class IatiActivityWorker {
 	}
 
 	private AmpMappedField checkOrganizationType(String type) {
-		if(type==null) return null;
+		//if(!isValidString(type)) return null;
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION_TYPE,"organizationCodeType",type,
 				this.getLang(),null,DataExchangeConstants.IATI_ORGANIZATION_TYPE,null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
@@ -1182,7 +1179,7 @@ public class IatiActivityWorker {
 					Transaction.ReceiverOrg item = (Transaction.ReceiverOrg)(i.getValue());
 					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
 					//TODO logging
-					logs.add(existReceiverOrg);
+					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
 				}
 
 				//provider-org - usually in AMP gov is the receiver
@@ -1190,7 +1187,7 @@ public class IatiActivityWorker {
 					Transaction.ProviderOrg item = (Transaction.ProviderOrg)(i.getValue());
 					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
 					//TODO logging
-					logs.add(existReceiverOrg);
+					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
 				}
 				
 				//disbursement-channel == mode of payment
@@ -1198,7 +1195,7 @@ public class IatiActivityWorker {
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					AmpMappedField existDisbursementChannel = checkDisbursementChannel(item);
 					//TODO logging
-					logs.add(existDisbursementChannel);
+					if(existDisbursementChannel!=null) logs.add(existDisbursementChannel);
 				}
 				
 				//finance-type == type of assistance
@@ -1206,14 +1203,14 @@ public class IatiActivityWorker {
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					AmpMappedField existFinanceType = checkFinanceType(item);
 					//TODO logging
-					logs.add(existFinanceType);
+					if(existFinanceType!=null) logs.add(existFinanceType);
 				}
 				
 				//aid-type == financing instrument
 				if(i.getName().equals(new QName("aid-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					AmpMappedField existAidType = checkAidType(item);
-					logs.add(existAidType);
+					if(existAidType!=null) logs.add(existAidType);
 				}
 				
 			}
@@ -1249,9 +1246,16 @@ public class IatiActivityWorker {
 			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status,
 			DEMappingFields checkMappedField, AmpMappedField log) {
-		if(checkMappedField==null)
+		if(checkMappedField==null )
 			{
-				checkMappedField = addMappingField(iatiPath,iatiItems,iatiValues,iatiLang,ampId,ampClass,sourceId,feedFileName,status);
+				if(isIatiValueok(iatiValues))
+				{
+					checkMappedField = addMappingField(iatiPath,iatiItems,iatiValues,iatiLang,ampId,ampClass,sourceId,feedFileName,status);
+					System.out.println("Activity:"+this.getTitle()+"# ADDED Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+				}
+				else{
+					System.out.println("Activity:"+this.getTitle()+"# ERROR to add path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+				}
 				log.add(iatiItems);
 				log.add(iatiValues);
 			}
@@ -1259,6 +1263,7 @@ public class IatiActivityWorker {
 			//entity is not mapped yet or it has be marked to be added as new, but was not added yet
 			if(checkMappedField.getAmpId()==null || (checkMappedField.getAmpId().longValue() == -1 && DataExchangeConstants.IATI_ACTIVITY.compareTo(iatiPath)!=0))
 			{
+				System.out.println("Activity:"+this.getTitle()+"# Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				log.add(iatiItems);
 				log.add(iatiValues);
 			}
@@ -1330,14 +1335,23 @@ public class IatiActivityWorker {
 	private DEMappingFields checkMappedField(String iatiPath, String iatiItems,
 			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status) {
+		if(!isIatiValueok(iatiValues)) 
+			return null; 
 		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
-		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang==null?this.getLang():iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
+		DEMappingFields mf = new DEMappingFields(iatiPath.trim(), iatiItems.trim(), iatiValues.trim(), iatiLang==null?this.getLang():iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		for (Iterator ot = allAmpDEMappingFields.iterator(); ot.hasNext();) {
 			DEMappingFields deMappingFields = (DEMappingFields) ot.next();
 			if(mf.compare(deMappingFields)) 
 				return deMappingFields;
 		}
 		return null;
+	}
+
+	private boolean isIatiValueok(String iatiValues) {
+		// TODO Auto-generated method stub
+		if(isValidStringSeparator(iatiValues,"|||")) 
+			return true;
+		return false;
 	}
 
 	private DEMappingFields addMappingField(String iatiPath, String iatiItems,
@@ -1429,5 +1443,13 @@ public class IatiActivityWorker {
 		return false;
 	}
 	
+	private boolean isValidStringSeparator(String s, String sep ){
+		if(isValidString(s)){
+			if("|||".compareTo(s.trim())==0 || "|||null".compareTo(s.trim())==0 || "null|||".compareTo(s.trim())==0 || "null|||null".compareTo(s.trim())==0)
+				return false;
+			else return true;
+		}
+		return false;
+	}
 
 }

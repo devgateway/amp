@@ -96,11 +96,11 @@ public class DEMappingFields implements Serializable {
 		String lang = o.getIatiLang()==null?"en":o.getIatiLang();
 		try{
 		result	=
-			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
-			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
-			this.getIatiValues().compareTo(o.getIatiValues())==0 && 
+			this.getIatiPath().trim().compareTo(o.getIatiPath().trim()) == 0 && 
+			this.getIatiItems().trim().compareTo(o.getIatiItems().trim()) == 0 && 
+			this.getIatiValues().trim().compareTo(o.getIatiValues().trim())==0 && 
 			this.getIatiLang().compareTo(lang)==0 &&
-			this.getAmpClass().compareTo(o.getAmpClass())==0
+			this.getAmpClass().trim().compareTo(o.getAmpClass().trim())==0
 			;
 		}catch (Exception e){
 			e.printStackTrace();

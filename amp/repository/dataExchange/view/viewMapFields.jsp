@@ -72,7 +72,7 @@ function checksAll() {
 	 var v = records.value;
 	 if("all" == v)
 		 $('[id^="Check_Amp"]').attr('checked', check.checked);
-	 else $('[id^="Check_'+v+'"]').attr('checked', check.checked);
+	 else $('[id^="Check_'+v+'_"]').attr('checked', check.checked);
 	 return true;
 }
 
@@ -85,7 +85,7 @@ function showFilter() {
 	 else
 		{
 		 	$('[id^="Amp"]').hide();
-			$('[id^="'+v+'"]').show();
+			$('[id^="'+v+'_"]').show();
 		}
 	 return true;
 }

@@ -2113,7 +2113,7 @@ public class DEImportBuilder {
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
-			
+			int noAct = 0;
 			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
 				IatiActivity iAct = (IatiActivity) it.next();
 				String logAct = "";
@@ -2121,11 +2121,13 @@ public class DEImportBuilder {
 				String iatiID = "";
 				String ampID = null;
 				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
-				
+				noAct ++;
 				ArrayList<AmpMappedField> activityLogs = null;
 				if( "check".compareTo(actionType) ==0 )
 					//CHECK content
-					activityLogs	=	iWorker.checkContent();
+					{
+						activityLogs	=	iWorker.checkContent(noAct);
+					}
 				else
 					if( "import".compareTo(actionType) ==0 )
 						//import

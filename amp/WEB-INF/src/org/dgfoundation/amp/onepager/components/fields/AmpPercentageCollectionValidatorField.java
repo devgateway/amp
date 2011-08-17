@@ -15,15 +15,20 @@ import org.apache.wicket.validation.validator.RangeValidator;
  * @author mpostelnicu@dgateway.org
  * @since Feb 16, 2011
  */
-public abstract class AmpPercentageValidationHiddenField<T> extends
-		AmpValidationHiddenField<T> {
+public abstract class AmpPercentageCollectionValidatorField<T> extends
+		AmpCollectionValidatorField<T,Double> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param id
 	 * @param setModel
 	 * @param fmName
 	 */
-	public AmpPercentageValidationHiddenField(String id,
+	public AmpPercentageCollectionValidatorField(String id,
 			IModel<? extends Collection<T>> setModel, String fmName) {
 		super(id, setModel, fmName);
 		

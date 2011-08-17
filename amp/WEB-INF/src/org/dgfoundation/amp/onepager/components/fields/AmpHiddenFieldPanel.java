@@ -20,25 +20,22 @@ public class AmpHiddenFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 
 	
-	protected void createHiddenContainer(IModel<T> model) {
-		hiddenContainer = new HiddenField<T>("hiddenContainer",model);
-		hiddenContainer.setOutputMarkupId(true);
-		addFormComponent(hiddenContainer);
-	}
-	
 	/**
 	 * @param id
 	 * @param model
 	 * @param fmName
 	 */
 	public AmpHiddenFieldPanel(String id, IModel<T> model, String fmName) {	
-		super(id, fmName, true, true);
-		createHiddenContainer(model);
+		this(id,fmName);
+		hiddenContainer.setModel(model);
 	}
 
 	
 	public AmpHiddenFieldPanel(String id, String fmName) {	
 		super(id, fmName, true, true);
+		hiddenContainer = new HiddenField<T>("hiddenContainer");
+		hiddenContainer.setOutputMarkupId(true);
+		addFormComponent(hiddenContainer);
 	}
 
 

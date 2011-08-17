@@ -16,7 +16,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
  * used to capture percentages for locations, sectors, etc... This is always a
  * {@link Double} field and always {@link FormComponent#setRequired(boolean)} is
  * true When updated, this component notifies an external
- * {@link AmpPercentageValidationHiddenField} so that it re-calculates itself
+ * {@link AmpPercentageCollectionValidatorField} so that it re-calculates itself
  * with the total of all percentages
  * 
  * @author mpostelnicu@dgateway.org
@@ -31,7 +31,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 	 */
 	public AmpPercentageTextField(String id, IModel<Double> model,
 			String fmName,
-			final AmpPercentageValidationHiddenField<?> validationHiddenField) {
+			final AmpPercentageCollectionValidatorField<?> validationHiddenField) {
 		super(id, model, fmName, true);
 		textContainer.setType(Double.class);
 		textContainer.setRequired(true);

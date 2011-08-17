@@ -23,7 +23,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFun
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -76,8 +76,8 @@ public class AmpLocationFormTableFeature extends
 		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
 		.getReadOnlyListModelFromSetModel(setModel);
 	
-		final AmpPercentageValidationHiddenField<AmpActivityLocation> percentageValidationField=
-			new AmpPercentageValidationHiddenField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
+		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
+			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
 				@Override
 				public Number getPercentage(AmpActivityLocation item) {
 					return item.getLocationPercentage();

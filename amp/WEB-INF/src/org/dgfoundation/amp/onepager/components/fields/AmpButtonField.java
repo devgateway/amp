@@ -83,6 +83,9 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 										 target.appendJavascript("$('#"+ component.getMarkupId() +"').parents().show();");
 										 target.appendJavascript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
 										 target.addComponent(component);
+										 if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
+											 ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);
+										
 										//target.addComponent(arg0);
 
 									} else {

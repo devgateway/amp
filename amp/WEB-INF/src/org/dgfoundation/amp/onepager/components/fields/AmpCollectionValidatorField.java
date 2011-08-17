@@ -17,8 +17,16 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 
 import bsh.This;
 
-public abstract class AmpValidationHiddenField<T> extends
-		AmpHiddenFieldPanel<Double> implements IAjaxIndicatorAware {
+/**
+ * Etend this class to implement validation for collections of items (like validation of sum of percentages, or size of a collection)
+ * @author mihai
+ *
+ * @param <T> The collection's item type
+ * @param <H> The hidden field's data type. For example if you count stuff, u only need Integer. If you want to do percentage
+ * validation, you might want to use Float
+ */
+public abstract class AmpCollectionValidatorField<T,H> extends
+		AmpHiddenFieldPanel<H> implements IAjaxIndicatorAware {
 
 	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
@@ -41,11 +49,11 @@ public abstract class AmpValidationHiddenField<T> extends
 	 * @param setModel the {@link Set} model holding the <T> objects 
 	 * @param fmName
 	 */
-	public AmpValidationHiddenField(String id, final IModel<? extends Collection<T>> collectionModel,
+	public AmpCollectionValidatorField(String id, final IModel<? extends Collection<T>> collectionModel,
 			String fmName) {
 		super(id, fmName);
 		
-		createHiddenContainer(getHiddenContainerModel(collectionModel));
+		hiddenContainer.setModel(getHiddenContainerModel(collectionModel));
 		
 		
 		add(indicatorAppender);
@@ -58,4 +66,5 @@ public abstract class AmpValidationHiddenField<T> extends
 		return indicatorAppender.getMarkupId();
 	}
 
+	
 }

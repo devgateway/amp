@@ -18,8 +18,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -32,7 +33,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
  */
 public class AmpSectorsFormTableFeature extends
-		AmpFormTableFeaturePanel<AmpActivityVersion,AmpActivitySector> {
+		AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivitySector> {
 
 	/**
 	 * @param id
@@ -66,28 +67,35 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
-		final AmpPercentageValidationHiddenField<AmpActivitySector> percentageValidationField=
-			new AmpPercentageValidationHiddenField<AmpActivitySector>("sectorPercentageTotal",listModel,"sectorPercentageTotal") {
+		final AmpPercentageCollectionValidatorField<AmpActivitySector> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivitySector>(
+				"sectorPercentageTotal", listModel, "sectorPercentageTotal") {
 			@Override
 			public Number getPercentage(AmpActivitySector item) {
 				return item.getSectorPercentage();
 			}
-	};
-		
+		};
+
 		add(percentageValidationField);
-		
+
+		AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
+				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator");
+
+		add(minSizeCollectionValidationField);
+
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivitySector> item) {
 				final MarkupContainer listParent = this.getParent();
-				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"sectorPercentage");
-				
-				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",
-						percModel,"sectorPercentage",percentageValidationField);				
-			
+				PropertyModel<Double> percModel = new PropertyModel<Double>(
+						item.getModel(), "sectorPercentage");
+
+				AmpPercentageTextField percentageField = new AmpPercentageTextField(
+						"percentage", percModel, "sectorPercentage",
+						percentageValidationField);
+
 				item.add(percentageField);
-						
+
 				item.add(new Label("sectorLabel", item.getModelObject()
 						.getSectorId().getName()));
 
@@ -107,7 +115,8 @@ public class AmpSectorsFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpSector> searchSectors = new AmpAutocompleteFieldPanel<AmpSector>(
+				"searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
@@ -141,8 +150,11 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
-		searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
-		searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
+		searchSectors.getModelParams().put(
+				AmpSectorSearchModel.PARAM.SECTOR_SCHEME,
+				sectorClassification.getClassification());
+		searchSectors.getModelParams().put(
+				AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
 		add(searchSectors);
 	}

@@ -70,7 +70,7 @@ public class AmpMappedField {
 	}
 
 	public String getErrors(){
-		if(this.getItem() == null ) return this.getDescription();//|| this.getItem().getId()!=null) return "";
+		if(this.getItem() == null ) return "";// return this.getDescription();
 		return this.getItem().getIatiPath()+": "+this.getItem().getIatiValues();
 	}
 

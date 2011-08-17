@@ -4800,15 +4800,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             session = PersistenceManager.getSession();
             String queryString = "";
             
-            if(actName!=null && "".compareTo(actName.trim())!=0) {
-            	queryString = "select f.ampActivityId, f.ampId,  f.name, f.ampActivityGroup, f.team  from " + AmpActivity.class.getName()+
-            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(ampAct.name) like upper(:name) and deleted = false";
-            	qry.setParameter("name", "%" + actName + "%", Hibernate.STRING);
+            boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
+			if(isSearchByName) {
+            	queryString = "select f.ampActivityId, f.ampId,  f.name,  f.team, ampGroup  from " + AmpActivity.class.getName()+
+            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(f.name) like upper(:name) and deleted = false";
             }
             else
             	queryString = "select f.ampActivityId, f.ampId,  f.name, ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false";
             qry = session.createQuery(queryString);
+            if(isSearchByName) {
+            	qry.setString("name", "%" + actName + "%");
+            }
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {
                 Object[] item = (Object[])iter.next();

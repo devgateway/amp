@@ -297,6 +297,7 @@
 						}
 					}
 				}
+				generateHierarchies();
 				repManager.checkSteps();
 				return false;
 			}
@@ -332,6 +333,7 @@
 						i=i-1;
 					}
 				}
+				generateHierarchies();
 				repManager.checkSteps();
 				return false;
 			}

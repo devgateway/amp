@@ -16,9 +16,6 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 
-import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
-import com.visural.wicket.behavior.beautytips.TipPosition;
-
 /**
  * Component to be extended directly by AMP Field Types. An AMP field contains a
  * label with the field name, in bold, an immediately below the real form
@@ -47,7 +44,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		formComponent = fc;
 		feedbackLabel.setComponent(fc);
 		fc.setLabel(new Model<String>(fmName));
-		fc.add(new ComponentVisualErrorBehavior("onchange", feedbackContainer));
+		final ComponentVisualErrorBehavior cvb = new ComponentVisualErrorBehavior("onchange", feedbackContainer);
+		fc.add(cvb);
+//		fc.add(new AjaxFormComponentValidatorBehaviour() {
+//			@Override
+//			protected void onError(AjaxRequestTarget target, RuntimeException e) {
+//				cvb.onError(target, e);
+//			}
+//			
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				cvb.onUpdate(target);
+//			}
+//		});
 	}
 
 	/**

@@ -55,27 +55,13 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      * @param e of type RuntimeException
      */
     @Override
-    protected void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
+    public void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(true);
         changeCssClass(ajaxRequestTarget, false, INVALID_CLASS);
-        
-        traverseFeedBackPanel(ajaxRequestTarget);
     }
 
-    protected void traverseFeedBackPanel(final AjaxRequestTarget ajaxRequestTarget) {
-    	FormComponent<?> formComponent = getFormComponent();
-		Form<?> form=formComponent.getForm();
-		
-		Component component = form.get("feedbackPanel");
-		if (component == null){
-			//you have a inner form in the activity form
-			form = form.getParent().findParent(Form.class);
-			component = form.get("feedbackPanel");
-		}
-		
-		ajaxRequestTarget.addComponent(component);
-    }
+  
     
     /**
      * Listener invoked on the ajax request. This listener is invoked after the {@link Component}'s model has been
@@ -84,11 +70,10 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      * @param ajaxRequestTarget of type AjaxRequestTarget
      */
     @Override
-    protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
+    public void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(false);
         changeCssClass(ajaxRequestTarget, true, previousClass);
-        traverseFeedBackPanel(ajaxRequestTarget);
     }
 
     /**

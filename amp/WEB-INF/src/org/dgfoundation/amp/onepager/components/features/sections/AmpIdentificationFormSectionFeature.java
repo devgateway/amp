@@ -64,6 +64,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACTIVITY_STATUS_KEY),
 							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
+			status.getChoiceContainer().setRequired(true);
 			add(status);
 			
 			add(new AmpTextAreaFieldPanel<String>("statusReason",

@@ -14,6 +14,8 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -23,6 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
@@ -65,6 +68,23 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * @since Jun 7, 2011
  */
 public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> {
+	
+	public class FormFeedbackPanel extends FeedbackPanel
+	{
+	 public FormFeedbackPanel(String id, final Form form)
+	 {
+	  super(id, new ComponentFeedbackMessageFilter(form)
+	  {
+	   @Override
+	   public boolean accept(FeedbackMessage message)
+	   {
+	    return message.getReporter() == form
+	     || form.contains(message.getReporter(), true);
+	   }
+	  });
+	 }
+	}
+	
 	protected Form<AmpActivityVersion> activityForm;
 	private AmpIdentificationFormSectionFeature identificationFeature;
 	private AmpInternalIdsFormSectionFeature internalIdsFeature;
@@ -142,14 +162,23 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			String fmName, final boolean newActivity) throws Exception {
 		super(id, am, fmName, true);
 		
-		activityForm=new Form<AmpActivityVersion>("activityForm") ;
+		activityForm=new Form<AmpActivityVersion>("activityForm") { 
+			@Override
+			protected void onError() {
+				// TODO Auto-generated method stub
+				super.onError();
+			}
+		};
 		activityForm.setOutputMarkupId(true);
 		
 		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
+		feedbackPanel.setOutputMarkupId(true);
 		
-        //int[] filteredErrorLevels = new int[]{FeedbackMessage.ERROR};
-        //feedbackPanel.setFilter(new ErrorLevelsFeedbackMessageFilter(filteredErrorLevels));
+		
+		//do not show errors in this feedbacklabel (they will be shown for each component)
+        int[] filteredErrorLevels = new int[]{FeedbackMessage.ERROR};
+        feedbackPanel.setFilter(new ErrorLevelsFeedbackMessageFilter(filteredErrorLevels));
 
 		activityForm.add(feedbackPanel);
 		add(activityForm);
@@ -161,6 +190,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				am.setObject(am.getObject());
 				saveMethod(target, am, feedbackPanel, false);
 			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.addComponent(feedbackPanel);
+			}
+			
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		saveAndSubmit.getButton().add(new AttributePrepender("onclick", new Model("for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), ""));
@@ -170,6 +206,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				saveMethod(target, am, feedbackPanel, true);
+			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.addComponent(feedbackPanel);
 			}
 		};
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
@@ -192,6 +234,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				target.appendJavascript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.addComponent(feedbackPanel);
 			}
 		};
 		preview.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));

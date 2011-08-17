@@ -5,6 +5,7 @@
  */
 package org.dgfoundation.amp.visibility;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -139,12 +140,12 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		}
 		return EVAL_BODY_BUFFERED;
 	}
-	public int doEndTag() throws JspException 
+	public int doEndTag() throws JspException
     {
 		if (bodyContent==null) return  SKIP_BODY;
 		if(bodyContent.getString()==null) return SKIP_BODY;
        String bodyText = bodyContent.getString();
-       try {
+
     	   
     	   ServletContext ampContext=pageContext.getServletContext();
     	   HttpSession session=pageContext.getSession();
@@ -178,17 +179,19 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    	   			    }
    				}
 
-   			pageContext.getOut().print(bodyText);
+   			try {
+				pageContext.getOut().print(bodyText);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e);
+			}
    		   }
    		   else{;
    			////System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
-   		   }
-       }
-       catch (Exception e) {
-    	   e.printStackTrace();
-       	throw new JspTagException(e.getMessage());
-       }
+   		   }      
+      
        
        return EVAL_PAGE;//SKIP_BODY 
     }

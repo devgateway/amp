@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -67,14 +68,13 @@ public class AmpSectorsFormTableFeature extends
 
 		final AmpPercentageValidationHiddenField<AmpActivitySector> percentageValidationField=
 			new AmpPercentageValidationHiddenField<AmpActivitySector>("sectorPercentageTotal",listModel,"sectorPercentageTotal") {
-				@Override
-				public Number getPercentage(AmpActivitySector item) {
-					return item.getSectorPercentage();
-				}
-		};
+			@Override
+			public Number getPercentage(AmpActivitySector item) {
+				return item.getSectorPercentage();
+			}
+	};
 		
 		add(percentageValidationField);
-		
 		
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 

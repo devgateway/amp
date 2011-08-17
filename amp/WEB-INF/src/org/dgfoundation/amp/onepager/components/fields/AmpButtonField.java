@@ -1,21 +1,23 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  *
-*/
+ */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
  * Encaspulates a html button of type {@link AjaxButton}
- * @author mpostelnicu@dgateway.org
- * since Nov 5, 2010
+ * 
+ * @author mpostelnicu@dgateway.org since Nov 5, 2010
  */
 public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 
@@ -28,51 +30,82 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 
 	/**
 	 * Escalated method invoker for wrapped {@link AjaxButton#onSubmit()}
+	 * 
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * 
 	 * @param id
 	 * @param fmName
 	 */
 	public AmpButtonField(String id, String fmName) {
-		super(id, fmName,true);
-		button = new IndicatingAjaxButton("fieldButton",new Model<String>(fmName)) {
-			private static final long serialVersionUID = -5699378405978605979L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AmpButtonField.this.onSubmit(target, form);
-			}
-		};
-		addFormComponent(button);
+		this(id, fmName, false, false);
 	}
-	
-	public AmpButtonField(String id, String fmName,boolean hideLabel){
+
+	protected void onError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public AmpButtonField(String id, String fmName, boolean hideLabel) {
 		this(id, fmName, hideLabel, false);
 	}
-	
-	public AmpButtonField(String id, String fmName,boolean hideLabel, boolean hideNewLine) {
+
+	public AmpButtonField(String id, String fmName, boolean hideLabel,
+			boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
-		button = new IndicatingAjaxButton("fieldButton",new Model<String>(fmName)) {
+		button = new IndicatingAjaxButton("fieldButton", new Model<String>(
+				fmName)) {
 			private static final long serialVersionUID = -5699378405978605979L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				AmpButtonField.this.onSubmit(target, form);
 			}
+
+			@Override
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				AmpButtonField.this.onError(target, form);
+
+				// visit form children and add to the ajax request the invalid
+				// ones
+				form.visitChildren(FormComponent.class,
+						new Component.IVisitor<FormComponent>() {
+
+							@Override
+							public Object component(FormComponent arg0) {
+								if (!arg0.isValid()) {
+									if (arg0 instanceof HiddenField) {
+										target.focusComponent(arg0.getParent());
+										target.addComponent(arg0.getParent());
+										
+									} else {
+										target.focusComponent(arg0);
+										String js = String.format(
+												"$('#%s').change();",
+												arg0.getMarkupId());
+										target.appendJavascript(js);
+										target.addComponent(arg0);
+									}
+								}
+								return Component.IVisitor.CONTINUE_TRAVERSAL;
+							}
+						});
+
+			}
 		};
 		addFormComponent(button);
 	}
 
-
-	public AmpButtonField(String id, String fmName, AmpFMTypes fmType, boolean hideNewLine) {
+	public AmpButtonField(String id, String fmName, AmpFMTypes fmType,
+			boolean hideNewLine) {
 		this(id, fmName, true, hideNewLine);
 	}
-	
+
 	public AmpButtonField(String id, String fmName, AmpFMTypes fmType) {
 		this(id, fmName);
 		this.fmType = fmType;

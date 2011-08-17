@@ -128,7 +128,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 							</td>
 						</tr>
 									<% int i = 0; %>
-									<c:forEach var="info" items="${aimUserDetailForm.info}">
+									<c:forEach var="info" items="${aimUserDetailForm.teamMemberDetails}">
 									<tr>
 										<td bgcolor="#f4f4f2"  width="300px" class="text1">
 											<% if ((i%2) == 0) { %>

@@ -98,6 +98,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
 			});
       	
             ajaxRequestTarget.addComponent(formComponent);
+            ajaxRequestTarget.addJavascript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
         }
 
         if(updateComponent!=null){

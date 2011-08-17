@@ -89,7 +89,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		}
 	}
 
-	public static Session getSession() {
+	public static synchronized Session getSession() {
 		if(session==null) 
 			initDBSession();
 		return session;

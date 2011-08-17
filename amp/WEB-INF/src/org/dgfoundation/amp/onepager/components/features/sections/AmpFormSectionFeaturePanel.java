@@ -35,8 +35,7 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 			throws Exception {
 		super(id, fmName);	
 		this.am = am;
-		this.labelContainer.add(new SimpleAttributeModifier("id", id));
-		this.labelContainer.add(new SimpleAttributeModifier("name", id));
+		this.labelContainer.add(new SimpleAttributeModifier("id", fmName.replaceAll(" ", "")));
 		
 		mrk = new TransparentWebMarkupContainer("foldable");
 		add(mrk);

@@ -16,11 +16,11 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
 import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.onepager.web.pages.OnePager;
 
 /**
  * Basic class for AMP components. This component wraps a feature manager connectivity, receiving
@@ -167,8 +167,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		IndicatingAjaxLink upButton = new IndicatingAjaxLink("upButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
-				OnepagerSection tmpOs = AmpActivityFormFeature.findByPosition(os.getPosition() - 1);
+				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
+				OnepagerSection tmpOs = OnePager.findByPosition(os.getPosition() - 1);
 				if (tmpOs == null || os == null)
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() + 1);
@@ -180,8 +180,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		IndicatingAjaxLink downButton = new IndicatingAjaxLink("downButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
-				OnepagerSection tmpOs = AmpActivityFormFeature.findByPosition(os.getPosition() + 1);
+				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
+				OnepagerSection tmpOs = OnePager.findByPosition(os.getPosition() + 1);
 				if (tmpOs == null || os == null)
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() - 1);
@@ -193,7 +193,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		IndicatingAjaxLink foldButton = new IndicatingAjaxLink("foldButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				OnepagerSection os = AmpActivityFormFeature.findByName(this.getParent().getClass().getName());
+				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
 				if (os == null)
 					return;
 				os.setFolded(!os.isFolded());
@@ -203,7 +203,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		add(foldButton);
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
-			OnepagerSection tmpos = AmpActivityFormFeature.findByName(this.getClass().getName());
+			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
 			if (tmpos != null)
 				foldButton.add(new AttributeModifier("value", new Model((tmpos.isFolded()?"Unfold":"Fold"))));
 		}

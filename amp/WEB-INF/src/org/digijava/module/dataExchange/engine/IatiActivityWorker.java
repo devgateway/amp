@@ -1248,12 +1248,14 @@ public class IatiActivityWorker {
 			DEMappingFields checkMappedField, AmpMappedField log) {
 		if(checkMappedField==null )
 			{
+			//field has to be mapped
 				if(isIatiValueok(iatiValues))
 				{
 					checkMappedField = addMappingField(iatiPath,iatiItems,iatiValues,iatiLang,ampId,ampClass,sourceId,feedFileName,status);
 					System.out.println("Activity:"+this.getTitle()+"# ADDED Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				}
 				else{
+					checkMappedField = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 					System.out.println("Activity:"+this.getTitle()+"# ERROR to add path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				}
 				log.add(iatiItems);

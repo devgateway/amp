@@ -2177,7 +2177,7 @@ public class DEImportBuilder {
 		TreeSet<String> warn = new TreeSet<String>();
 		String logResult = getLogs(activityLogs,"<br/>",warn);
 		
-		if("".compareTo(logResult)!=0)
+		if("".compareTo(logResult)!=0 || "<br/>".compareTo(logResult)!=0)
 		{
 			item.setDescription("<br/>Errors<br/>"+logResult+"<br/>Warnings<br/>"+printArrayList(warn));
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);

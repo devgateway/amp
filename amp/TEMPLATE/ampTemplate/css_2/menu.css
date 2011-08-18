@@ -219,7 +219,6 @@ ul.first-of-type ul {
 	display:block;
 	
 }
-
 .yuiamp-skin-amp .yuiampmenuitem li {
 padding:3px;
 	border-bottom:1px solid #E8E8E8;
@@ -302,8 +301,8 @@ html.chrome .bd_drop ul li ul.first-of-type {border:none;margin-top:15px;z-index
 html.ie div.header {height:46px;}
 html.ie .yui-navset *{z-index:1;}
 html.ie .main_menu *{z-index:9000;}
-.bd_drop  { line-height:25px;height:25px;padding:0px 0px 0px 0px;}
-
+html.ie .bd_drop  { line-height:25px;height:25px;padding:0px 0px 0px 0px;width:900px;}
+html.ie .bd_drop .bd_drop{width:200px;}
 #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 #usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
@@ -315,4 +314,5 @@ html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7
 html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;}
 html.ie div.header {height:46px;}-------*/
 #content ul.yui-nav {z-index:1000;}
+
 

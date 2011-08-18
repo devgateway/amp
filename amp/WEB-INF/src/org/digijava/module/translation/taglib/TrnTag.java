@@ -317,11 +317,12 @@ public class TrnTag
         }
         // determine User permissions
         if (showLinks) {
-        	try{
-        	backUrl = java.net.URLEncoder.encode(RequestUtils.getRelativeSourceURL(request),"UTF-8");
+        	String relativeSourceURL = RequestUtils.getRelativeSourceURL(request).replaceFirst("/default/", "/");
+			try{
+        	backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
         	} catch (Exception ex){
         		logger.debug(ex);
-            backUrl = RequestUtils.getRelativeSourceURL(request);
+            backUrl = relativeSourceURL;
         	}
 
             Site rootSite = DgUtil.getRootSite(site);

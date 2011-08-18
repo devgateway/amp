@@ -2177,7 +2177,7 @@ public class DEImportBuilder {
 		TreeSet<String> warn = new TreeSet<String>();
 		String logResult = getLogs(activityLogs,"<br/>",warn);
 		
-		if("".compareTo(logResult)!=0 || "<br/>".compareTo(logResult)!=0)
+		if("".compareTo(logResult)!=0 && "<br/>".compareTo(logResult)!=0)
 		{
 			item.setDescription("<br/>Errors<br/>"+logResult+"<br/>Warnings<br/>"+printArrayList(warn));
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
@@ -2218,8 +2218,11 @@ public class DEImportBuilder {
 		}
 		for (Iterator<String> it = errors.iterator(); it.hasNext();) {
 				String st = (String) it.next();
-				s+=st;
-				s+=delimitator==null?"":delimitator;
+				if(isValidString(st))
+					{
+						s+=st;
+						s+=delimitator==null?"":delimitator;
+					}
 		}
 		return s;
 	}

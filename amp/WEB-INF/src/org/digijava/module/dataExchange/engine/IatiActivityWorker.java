@@ -1040,7 +1040,10 @@ public class IatiActivityWorker {
 	private AmpOrganisation getAmpOrganization(String orgName, String lang, String orgCode){
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ORGANIZATION,toIATIValues("organizationName","organizationCode"),
 				toIATIValues(orgName,orgCode),lang,null,DataExchangeConstants.IATI_ORGANIZATION,null,null,"inactive");
-		AmpOrganisation org = (AmpOrganisation) DataExchangeUtils.getOrganizationById(checkMappedField.getAmpId());
+		
+		AmpOrganisation org = null;
+		if(checkMappedField!=null) 
+			org = (AmpOrganisation) DataExchangeUtils.getOrganizationById(checkMappedField.getAmpId());
 		return org;
 	}
 	
@@ -1238,7 +1241,9 @@ public class IatiActivityWorker {
 		String code = item.getValue().getCode();
 		String value = printCodeReqType(item);
 		DEMappingFields checkMappedField = checkMappedField(iatiPath,iatiItems,toIATIValues(value,code),iatiLang,ampId,ampClass,sourceId,feedFileName,status);
-		AmpCategoryValue acv = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
+		AmpCategoryValue acv = null;
+		if(checkMappedField!=null) 
+			acv = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
 		return acv;
 	}
 
@@ -1422,20 +1427,6 @@ public class IatiActivityWorker {
 	}
 	
 	
-	private AmpCategoryValue getAmpCategoryValueByString(String element, String categoryKey ){
-		if( !isValidString(element) ) return null; 
-		AmpCategoryValue acv=null;
-		Collection<AmpCategoryValue> allCategValues;
-		
-		allCategValues = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
-		
-		
-		for (Iterator itacv = allCategValues.iterator(); itacv.hasNext();) {
-			acv = (AmpCategoryValue) itacv.next();
-			if(acv.getValue().compareTo(element) == 0) return acv;
-		}
-		return null;
-	}
 	
 	//****************************************** Other methods ******************************
 	

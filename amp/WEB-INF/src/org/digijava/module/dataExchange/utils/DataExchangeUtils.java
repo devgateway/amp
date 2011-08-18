@@ -586,6 +586,7 @@ public class DataExchangeUtils {
 	public static AmpOrganisation getOrganizationById(Long id) {
 		Session session = null;
 		AmpOrganisation ampOrg = null;
+		if(id==null) return ampOrg;
 		try {
 			//session = PersistenceManager.getSession();
 			session = PersistenceManager.getRequestDBSession();
@@ -1360,7 +1361,8 @@ public class DataExchangeUtils {
 					ampActivity.setTeam(oldVersion.getTeam());
 					ampActivity.setActivityCreator(oldVersion.getActivityCreator());
 					ampActivity.setCreatedDate(oldVersion.getCreatedDate());
-					ampActivity.setModifiedBy(oldVersion.getTeam().getTeamLead());
+					if(oldVersion.getTeam()!=null && oldVersion.getTeam().getTeamLead()!=null)
+						ampActivity.setModifiedBy(oldVersion.getTeam().getTeamLead());
 					
 					ampActGroup.setAmpActivityLastVersion(ampActivity);
 					session.update(ampActGroup);

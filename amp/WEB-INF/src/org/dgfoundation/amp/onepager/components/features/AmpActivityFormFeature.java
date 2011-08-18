@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -169,11 +170,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		if (am.getObject().getAmpActivityId() == null)
-			logframe.setEnabled(false);
+			logframe.setVisible(false);
 		else{
 			logframe.add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
-			logframe.setEnabled(true);
+			logframe.setVisible(true);
 		}
+		logframe.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		activityForm.add(logframe);
 		
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
@@ -190,7 +192,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		preview.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		if (am.getObject().getAmpActivityId() == null)
-			preview.setEnabled(false);
+			preview.setVisible(false);
 		
 		activityForm.add(preview);
 		
@@ -204,6 +206,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		list.setReuseItems(true);
 		activityForm.add(list);
+		
+		quickMenu(am, listModel);
 	}
 	
 	protected void saveMethod(AjaxRequestTarget target,
@@ -224,6 +228,25 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
 		//}
 		target.addComponent(feedbackPanel);
+	}
+
+	private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {
+		ListView<AmpComponentPanel> list = new ListView<AmpComponentPanel>("quickList", listModel) {
+			private static final long serialVersionUID = 7218457979728871528L;
+			@Override
+			protected void populateItem(final ListItem<AmpComponentPanel> item) {
+				if (item.getModelObject() != null){
+					Label label = new Label("quickName", item.getModelObject().getFMName());
+					String itemId = item.getModelObject().getFMName().replaceAll(" ", "");
+					label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200);"));
+					if (!item.getModelObject().isVisible())
+						item.setVisible(false);
+					item.add(label);
+				}
+			}
+		};
+		list.setReuseItems(true);
+		activityForm.add(list);
 	}
 
 }

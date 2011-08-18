@@ -125,7 +125,7 @@ public class OnePager extends AmpHeaderFooter {
 			initializeFormComponents(am);
 			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity, listModel);
 			add(formFeature);
-			quickMenu(am);
+
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);
@@ -165,24 +165,7 @@ public class OnePager extends AmpHeaderFooter {
 			activity.setLocations(locations);
 		}
 	}
-	private void quickMenu(IModel<AmpActivityVersion> am) {
-		ListView<AmpComponentPanel> list = new ListView<AmpComponentPanel>("quickList", listModel) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpComponentPanel> item) {
-				if (item.getModelObject() != null){
-					Label label = new Label("quickName", item.getModelObject().getFMName());
-					label.add(new SimpleAttributeModifier("href", "#" + item.getModelObject().getFMName().replaceAll(" ", "")));
-					if (!item.getModelObject().isVisible())
-						item.setVisible(false);
-					item.add(label);
-				}
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-	}
-
+	
 	public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {
 
 		Collections.sort(flist, new Comparator<OnepagerSection>() {

@@ -193,7 +193,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				item.add(delRelOrg);
 			}
 		};
-		list.setReuseItems(true);
+		//list.setReuseItems(true);
 		add(list);
 
 	}

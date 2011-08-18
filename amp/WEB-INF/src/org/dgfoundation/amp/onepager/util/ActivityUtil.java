@@ -140,15 +140,15 @@ public class ActivityUtil {
 			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
 			
 			
-			saveIndicators(a, session); //versionOk
+			saveIndicators(a, session);
 			/*
 			if (a.getActivityContacts() != null)
 				a.getActivityContacts().clear();
 				*/
 			//saveContacts(a, session);
-			saveResources(a); //versionOk
-			saveEditors(session); //versionOk
-			saveComments(a, session); //versionOk
+			saveResources(a); 
+			saveEditors(session); 
+			saveComments(a, session); 
 			
 			session.flush();
 			transaction.commit();

@@ -57,7 +57,7 @@ public class SaveTranslation
         	backUrl = formBean.getBack_url();
         }
         
-        
+        backUrl = backUrl.replace("/translation/default", "/translation");
         
         if (formBean.getSiteId()!= null && formBean.getSiteId().trim().length() != 0) {
             currentSite = SiteUtils.getSite(formBean.getSiteId());

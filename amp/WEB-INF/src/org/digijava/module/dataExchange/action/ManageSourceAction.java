@@ -253,6 +253,7 @@ public class ManageSourceAction extends MultiAction {
 				deib.run(request);
 		} catch (Exception e) {
 			ActionMessages errors = new ActionMessages();
+			e.printStackTrace();
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate", TranslatorWorker.translateText("Execution file doesn't exist or is corrupted.",request)));				
 			saveErrors(request, errors);
 			// TODO: handle exception

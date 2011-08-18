@@ -2191,7 +2191,7 @@ public class DEImportBuilder {
 		if(iWorker.getExistingActivity()  && "check".compareTo(actionType) ==0){
 			AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(iWorker.getAmpID());
 			AmpActivityVersion actualVersion = ampActGroup.getAmpActivityLastVersion();
-			if(actualVersion.getIatiLastUpdatedDate() != null && actualVersion.getIatiLastUpdatedDate().before(iWorker.getIatiLastUpdateDate()))
+			if(actualVersion.getIatiLastUpdatedDate() != null && iWorker.getIatiLastUpdateDate()!=null && actualVersion.getIatiLastUpdatedDate().before(iWorker.getIatiLastUpdateDate()))
 			{
 				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
 				item.setDescription("The last version of IATI Activity is already imported");

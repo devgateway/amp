@@ -13,7 +13,7 @@
       <lang delimiter=";" type="postgres">
 
 INSERT INTO amp_columns(columnid,columnName, cellType, extractorview)  
- values(nextval('amp_columns_order_seq'),'On/Off/Treasure Budget', 'org.dgfoundation.amp.ar.cell.TrnTextCell','v_on_off_budget') ;
+ values(nextval('amp_columns_seq'),'On/Off/Treasure Budget', 'org.dgfoundation.amp.ar.cell.TrnTextCell','v_on_off_budget') ;
 INSERT INTO amp_columns_order(id,columnName,indexOrder) SELECT nextval('amp_columns_order_seq'),'Budget', max(indexOrder) + 1 from amp_columns_order;
 		
 

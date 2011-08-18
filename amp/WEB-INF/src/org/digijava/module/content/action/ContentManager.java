@@ -311,7 +311,23 @@ public class ContentManager extends DispatchAction {
 		contentItem.setPageCode(contentForm.getPageCode());
 		contentItem.setHtmlblock_1(contentForm.getHtmlblock_1());
 		contentItem.setHtmlblock_2(contentForm.getHtmlblock_2());
-		contentItem.setContentThumbnails(contentForm.getContentThumbnails());
+		if(contentItem.getContentThumbnails()==null){
+			contentItem.setContentThumbnails(new HashSet<AmpContentItemThumbnail>());
+		}
+		for(AmpContentItemThumbnail thumbnail:contentForm.getContentThumbnails()){
+			if(thumbnail.getAmpContentItemThumbnailId()!=null){
+				for(AmpContentItemThumbnail oldThumbnail:contentItem.getContentThumbnails()){
+					if( oldThumbnail.getAmpContentItemThumbnailId()!=null&&oldThumbnail.getAmpContentItemThumbnailId().equals(thumbnail.getAmpContentItemThumbnailId())){
+						oldThumbnail.setPlaceholder(thumbnail.getPlaceholder());
+						break;
+					}
+				}
+			}
+			else{
+				thumbnail.setContentItem(contentItem);
+				contentItem.getContentThumbnails().add(thumbnail);
+			}	
+		}
 		if(contentForm.getContentThumbnailsRemoved() != null && contentForm.getContentThumbnailsRemoved().size() > 0)
 			DbUtil.removeThumbnails(contentItem, contentForm.getContentThumbnailsRemoved());
 		DbUtil.save(contentItem);

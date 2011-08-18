@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class AmpContentItem {
 
-	private long ampContentItemId;
+	private Long ampContentItemId;
 	private String pageCode;
 	private String layout;
 	private String title;
@@ -18,11 +18,11 @@ public class AmpContentItem {
 
 	private Set<AmpContentItemThumbnail> contentThumbnails;
 
-	public void setAmpContentItemId(long ampContentItemId) {
+	public void setAmpContentItemId(Long ampContentItemId) {
 		this.ampContentItemId = ampContentItemId;
 	}
 
-	public long getAmpContentItemId() {
+	public Long getAmpContentItemId() {
 		return ampContentItemId;
 	}
 

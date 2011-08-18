@@ -50,6 +50,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			ampContentItem = (AmpContentItem) session.load(
 					AmpContentItem.class, id);
+			Hibernate.initialize(ampContentItem.getContentThumbnails());
 		} catch (Exception e) {
 			logger.error("Unable to get object of class "
 					+ AmpContentItem.class.getName() + " width id=" + id
@@ -109,15 +110,15 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
-			if (contentItem.getContentThumbnails() != null) {
+			/*if (contentItem.getContentThumbnails() != null) {
 				Iterator itr = contentItem.getContentThumbnails().iterator();
 				while (itr.hasNext()) {
 					org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail) itr
 							.next();
 					thumb.setContentItem(contentItem);
 				}
-			}
-			session.save(contentItem);
+			}*/
+			session.saveOrUpdate(contentItem);
 			tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to save content", e);

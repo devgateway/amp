@@ -5,8 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 
-<digi:instance property="aimEditActivityForm" />
+
+<%@page import="org.digijava.module.aim.helper.GlobalSettings"%><digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -192,6 +195,7 @@ function cancel() {
 						<tr><td>&nbsp;
 							
 						</td></tr>
+						<c:if test="<%=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ALLOW_ACTIVITY_OVERWRITING) == true %>">
                         <c:if test="${teamMember.teamName eq existingActivity.team.name}" >
 						<tr><td align="center" class="v-name">
 							<digi:trn key="aim:overwriteTheActivity">Overwrite the activity?
@@ -207,6 +211,20 @@ function cancel() {
 							name="submitButton">
 						</td></tr>
                         </c:if>
+	                    </c:if>
+	                    <c:if test="<%=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ALLOW_ACTIVITY_OVERWRITING) == false %>">
+	                    	<tr><td align="center" class="v-name">
+								<digi:trn>Please provide another title for the project</digi:trn>
+							</td></tr>
+							<tr><td>&nbsp;
+								
+							</td></tr>
+							<tr><td align="center">
+								<input type="button" value="<digi:trn>Return</digi:trn>" class="dr-menu" onclick="cancel()"
+								name="submitButton">
+							</td></tr>
+	                    </c:if>
+	                    <c:if test="<%=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ALLOW_ACTIVITY_OVERWRITING) == true %>">
                         <c:if test="${teamMember.teamName ne existingActivity.team.name}" >
 						<tr><td align="center" class="v-name">
 							<digi:trn key="aim:cannotoverwriteTheActivity">Cannot overwrite existing activity in other workspace
@@ -220,6 +238,7 @@ function cancel() {
 							name="submitButton">
 						</td></tr>
                         </c:if>
+	                    </c:if>
 					</table>
 				</td></tr>
 				<tr><td>&nbsp;

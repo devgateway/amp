@@ -77,4 +77,6 @@ public class GlobalSettingsConstants {
     
     public static final String COMPUTED_TEAMS_DEFAULT_OFF_BUDGET = "Computed Teams Add Activity Default Off Budget";
     
+    public static final String ALLOW_ACTIVITY_OVERWRITING = "Do you want to allow Activity overwriting ?";
+    
 }

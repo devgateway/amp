@@ -189,18 +189,18 @@ function toggleSettings(){
                                  <table cellpadding="2" cellspacing="2" border="0" width="250px">
                                  <tr>
                                  	<td align="right">
-                                 	<strong>Selected Action:&nbsp;&nbsp;</strong>
+                                 	<strong><digi:trn>Selected Action:</digi:trn>&nbsp;&nbsp;</strong>
                                 	</td>
                                 	<td>
                                  	<html:select property="useraction" styleClass="inp-text" styleId="actionId" onchange="actionChanged(this.value);">
-                                 		<html:option value="delete">Delete</html:option>
-                                 		<html:option value="export">Export</html:option>
+                                 		<html:option value="delete"><digi:trn>Delete</digi:trn> </html:option>
+                                 		<html:option value="export"><digi:trn>Export</digi:trn> </html:option>
                                  	</html:select>
                                  	</td>
                                  </tr>
                                  <tr>
 									<td align="right">
-                                 	<strong id="frecuencyHeaderId">Older then:&nbsp;&nbsp; </strong>
+                                 	<strong id="frecuencyHeaderId"><digi:trn>Older then:</digi:trn>&nbsp;&nbsp; </strong>
                                  	</td>
                                  	<td align="left" height="30px">
                                  	<html:select property="frecuency" styleClass="inp-text" >

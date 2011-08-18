@@ -580,7 +580,7 @@ function validateFormat(){
 			return false;
 	}
 	
-	if (customGroupSize < 1){
+	if ((customGroupSize < 1) && (document.aimReportsFilterPickerForm3.customUseGrouping.checked == true)) {
 		  var msg='<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 			alert(msg);
 			return false;

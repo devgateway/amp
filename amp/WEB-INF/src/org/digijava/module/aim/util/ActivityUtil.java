@@ -1675,7 +1675,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
-      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(latestAct,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
+
+      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) " +
+      		"	from " + AmpActivityProgram.class.getName() + " prog ";
+
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
     
       
@@ -4101,7 +4104,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivityVersion act,
-      String tocode,Long percent) throws Exception {
+      String tocode,Float percent) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
     double tempPlanned = 0;

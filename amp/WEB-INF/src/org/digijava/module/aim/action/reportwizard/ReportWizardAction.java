@@ -75,8 +75,8 @@ import org.hibernate.Session;
  */
 public class ReportWizardAction extends MultiAction {
 	
-	public static final String SESSION_FILTER			= "reportWizardFilter";
-	public static final String EXISTING_SESSION_FILTER	= "existingReportWizardFilter";
+	public static final String SESSION_FILTER					= "reportWizardFilter";
+	public static final String EXISTING_SESSION_FILTER			= "existingReportWizardFilter";
 	public static final String REPORT_WIZARD_INIT_ON_FILTERS	= "rep_wiz_init";
 	
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);

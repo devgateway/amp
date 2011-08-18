@@ -137,8 +137,15 @@ public class TagUtil {
         return objectForm;
     }
 
-
-    public static Object setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException {
+    /**
+     * 
+     * @param request
+     * @param name
+     * @param formObj
+     * @param inSession
+     * @throws JspException
+     */
+    public static void setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException {
 
         ComponentContext context = ComponentContext.getContext(request);
 
@@ -170,7 +177,6 @@ public class TagUtil {
             throw new JspException("TagUtil: unknown site");
         }
 
-        Object objectForm = null;
 
        
             /**
@@ -188,8 +194,8 @@ public class TagUtil {
         else
         	request.setAttribute(formName, formObj);
             
-        return objectForm;
     }
+
     
     /**
      *

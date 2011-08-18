@@ -10,8 +10,8 @@
 	</smtp>	
 
 	
-     <logon-site id="dglogin" host="">http://uganda.staging.ampdev.net/login</logon-site>
-     <site-domain id="dgDomain" host="">http://uganda.staging.ampdev.net/</site-domain>
+     <logon-site id="dglogin" host="">http://uganda.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://uganda.ampdev.net/</site-domain>
       
       <server-type caseSensitiveTranslatioKeys="false"/>
     
@@ -30,7 +30,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.116.stg.uganda</ecsServerName>
+	<ecsServerName>ampdev.116.uganda</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

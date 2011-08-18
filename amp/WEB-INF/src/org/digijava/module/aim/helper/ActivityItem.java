@@ -73,7 +73,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 
 	private ActivityUtil.ActivityAmounts amounts;
     // percent of specific program assigned
-    private Long percent;
+    private Float percent;
     // used only for program percent applying
     private AmpActivityVersion act;
 
@@ -102,7 +102,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
      * @see ActivityItem#ActivityItem(AmpActivity)
 	 */
 
-    public ActivityItem(AmpActivityVersion act,Long percent) {
+    public ActivityItem(AmpActivityVersion act,Float percent) {
         this.act=act;
         this.percent=percent;
 
@@ -118,7 +118,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null, request);
 	}
 
-    public ActivityItem(AmpActivityVersion entity,String curenncyCode,Long percent, HttpServletRequest request) throws Exception{
+    public ActivityItem(AmpActivityVersion entity,String curenncyCode,Float percent, HttpServletRequest request) throws Exception{
         this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent, request);
 	}
 
@@ -128,7 +128,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivityVersion entity,DateFormat frmt,String curenncyCode,Long percent, HttpServletRequest request) throws Exception {
+	public ActivityItem(AmpActivityVersion entity,DateFormat frmt,String curenncyCode,Float percent, HttpServletRequest request) throws Exception {
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
@@ -333,11 +333,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	public void setAmounts(ActivityUtil.ActivityAmounts amounts) {
 		this.amounts = amounts;
 	}
-      public Long getPercent() {
+      public Float getPercent() {
         return percent;
     }
 
-    public void setPercent(Long percent) {
+    public void setPercent(Float percent) {
         this.percent = percent;
     }
 

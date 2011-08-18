@@ -35,7 +35,9 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -44,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
+import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -79,6 +82,17 @@ public class ViewNewAdvancedReport extends Action {
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession httpSession = request.getSession();
 
+		
+		ReportsFilterPicker rfp		= new ReportsFilterPicker();
+		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+		if (rfpForm == null || "reset".equals(request.getParameter("view")) ) {
+			// if ampReportId parameter is in the request we need to reset the settings cause a new report was opened
+			rfpForm		= new ReportsFilterPickerForm();
+			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+			rfp.modePrepare(mapping, rfpForm, request, response);
+			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
+		}	
+		
 		
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
@@ -274,7 +288,7 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute(ArConstants.SORT_ASCENDING, sortAscending);
 			//if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
 			//	rd.setSorterColumn(sortBy);
-					
+			
 			if (applySorter == null && ar.getHierarchies() != null
 					&& !ar.getHierarchies().isEmpty()) {
 				List<AmountCell> trailCells = rd.getTrailCells();
@@ -352,7 +366,6 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressTotalRows", endRow);
 		
 		httpSession.setAttribute("progressValue", progressValue);
-
 
 		
 		return mapping.findForward("forward");

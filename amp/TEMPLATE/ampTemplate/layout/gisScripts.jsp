@@ -74,7 +74,7 @@ window.onload = function(){
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
 			*/
-			var mapModeFin = document.getElementById("mapModeFin").value;
+			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
 			
 			
 			var popup = window.open("about:blank", "regReportWnd", "height=500,width=780,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");

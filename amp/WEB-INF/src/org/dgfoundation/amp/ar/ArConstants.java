@@ -63,6 +63,8 @@ public final class ArConstants {
 	public final static String MODE_OF_PAYMENT="Mode of Payment";
 	public final static String FUNDING_STATUS="Funding Status";
 	
+	public final static String MODE_OF_PAYMENT_UNALLOCATED="Mode of Payment Unallocated";
+	
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
 	

@@ -5,9 +5,12 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
+import org.dgfoundation.amp.onepager.validators.AbstractTrnValidator;
 
 /**
  * This field can be used to count percentage items and show an error message when 100% is not reached.
@@ -18,6 +21,38 @@ import org.apache.wicket.validation.validator.RangeValidator;
 public abstract class AmpPercentageCollectionValidatorField<T> extends
 		AmpCollectionValidatorField<T,Double> {
 
+	
+	/**
+	 * @author mihai
+	 * Checks if the given value is 100 (used for validating collection percentages)
+	 */
+	public class AmpPercentageCollectionValidator extends
+			AbstractTrnValidator<Double> {
+
+		/**
+		 * @param component
+		 */
+		public AmpPercentageCollectionValidator() {
+			super(AmpPercentageCollectionValidatorField.this);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
+		 */
+		@Override
+		public void validate(IValidatable<Double> validatable) {
+			Double value = validatable.getValue();
+			if(value.doubleValue()!=100)
+			{
+				ValidationError error = getTrnError("Sum of all percentages is ${input}, it needs to be 100!");
+				validatable.error(error);
+			}
+
+
+		}
+	}
+
+	
 	/**
 	 * 
 	 */
@@ -33,7 +68,7 @@ public abstract class AmpPercentageCollectionValidatorField<T> extends
 		super(id, setModel, fmName);
 		
 		hiddenContainer.setType(Double.class);
-		hiddenContainer.add(new RangeValidator<Double>(100d, 100d));
+		hiddenContainer.add(new AmpPercentageCollectionValidator());
 	
 	}
 

@@ -1,0 +1,2 @@
+delete from amp_widget_place where assigned_widget_id in (select ID from amp_widget where ind_connect_id not in (select id   from amp_indicator_connection) and widget_type="indsecchart");
+delete from amp_widget where ind_connect_id not in (select id   from amp_indicator_connection) and widget_type="indsecchart";

@@ -1,0 +1,1 @@
+INSERT INTO amp_global_settings(settingsName, settingsValue, possibleValues, description) VALUES ('Amounts in Thousands','true','t_Boolean','Specifies if the amounts entered in AMP are in thousands or not');

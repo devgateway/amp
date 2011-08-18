@@ -1,0 +1,28 @@
+.tableElement TD {
+	border:1px solid white;
+}
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+.tableHeader {
+	background-color:#222e5d;
+	color:white;
+	padding:2px;
+}		 
+.Hovered {
+	background-color:#a5bcf2;
+}
+SELECT {
+	Font-size:10px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	width:350px;
+}
+

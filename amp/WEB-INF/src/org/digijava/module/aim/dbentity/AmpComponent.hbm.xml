@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpComponent" table="AMP_COMPONENTS">
+		<cache usage="read-write" />
+
+		<id name="ampComponentId" column="amp_component_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_COMPONENTS_seq</param>
+			</generator>
+		</id>
+
+		<property column="title" name="title" type="java.lang.String" />
+		<property column="description" name="description" type="text" />
+		<property column="code" name="code" type="java.lang.String" />
+		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
+
+		<set name="activities" table="AMP_ACTIVITY_COMPONENTS" lazy="true" cascade="none">
+			<cache usage="read-write" />
+			<key column="amp_component_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
+				column="amp_activity_id" />
+		</set>
+
+		<many-to-one name="type" column="type"
+			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />
+
+
+	</class>
+</hibernate-mapping>

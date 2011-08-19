@@ -20,6 +20,12 @@
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
+<script type="text/javascript">
+ 	var fundingName		= "<digi:trn>Funding</digi:trn>";
+	var totalCostName		= "<digi:trn>Total Cost</digi:trn>";
+	var reportTotalsName	= "<digi:trn>Report Totals</digi:trn>";
+	var unselectedMeasure	= "<digi:trn>UNSELECTED MEASURE</digi:trn>";
+</script>
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 

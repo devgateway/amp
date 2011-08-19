@@ -14,9 +14,9 @@ function ReportPreviewSettings() {
 	this.measures		= ["Commitments", "Disbursements"];
 	this.hierarchies	= ["Primary Sector"];
 	
-	this.fundingName		= "Funding";
-	this.totalCostName		= "Total Cost";
-	this.reportTotalsName	= "Report Totals";
+	this.fundingName		= fundingName;
+	this.totalCostName		= totalCostName;
+	this.reportTotalsName	= reportTotalsName;
 	
 	this.monthNames		= ["January","February","March","April","May","June","July","August","September","October","November","December"];
 	this.quarterNames		= ["Q1","Q2","Q3","Q4"];

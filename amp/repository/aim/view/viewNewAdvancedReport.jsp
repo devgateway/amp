@@ -205,9 +205,9 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  	<%if (arf.isPublicView()==false){%>
            	  	|
-				<a  id="frezzlink" class="settingsLinkDisable" style="color:#376091; cursor: default;">
+				<a  id="frezzlinkreport" class="settingsLinkDisable" style="color:#376091; cursor: default;">
                		<script language="javascript">
-						document.write((scrolling)?msg2:msg1);
+						document.write(msg1);
 					</script>
                 </a>
                 <%} %>  	
@@ -365,7 +365,7 @@ session.setAttribute("progressValue", counter);
 		           		<%}%>
 		           	  <logic:notEqual name="viewFormat" value="foldable">
 		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" class="l_sm">
+		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlinkreport" class="l_sm">
 		               		<script language="	">
 						document.write((scrolling)?msg2:msg1);
 					</script>

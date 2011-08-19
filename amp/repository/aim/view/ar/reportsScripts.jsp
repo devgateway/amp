@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
@@ -299,7 +300,7 @@ saveReportEngine	= null;
 	
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
-		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm2")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 
 		filterForm.submit();
@@ -640,6 +641,10 @@ function validateFormat(){
 	//END	
 	
 	
+	function reloadpage(){
+		location.reload();
+	}
+	
 	function sendCookieAndReload (){
 		createCookie('report_scrolling',currentReportId,1);
 		submitFilters();
@@ -694,7 +699,33 @@ function validateFormat(){
 	}
 		addOnloadEvent(enableLink);
 	
-		
+	//----------------------------------------------------------------
+	var isscrolling;
+	$(function(){
+  		$('#frezzlinkreport').click(function(){
+  			if (isscrolling==false){
+  				if ( $('#frezzlinkreport').hasClass("settingsLinkDisable") )
+  				$('#frezzlinkreport').removeClass("settingsLinkDisable");
+  				$('#frezzlinkreport').addClass( "settingsLink" );
+  				$('#frezzlinkreport').bind("click", scrollCallback);
+  				$('#frezzlinkreport').css("cursor", "pointer");
+  				canMakeScroll	= false;
+  				$('#frezzlinkreport').text(msg2);
+  				isscrolling=true;
+  				showScrollReport();
+  			}else{
+  				if ($('#frezzlinkreport').hasClass("settingsLinkDisable"))
+  					$('#frezzlinkreport').removeClass("settingsLinkDisable");
+  					$('#frezzlinkreport').addClass( "settingsLink" );
+  					$('#frezzlinkreport').bind("click", submitFilters);
+  					$('#frezzlinkreport').css("cursor", "pointer");
+  					canMakeScroll	= true;
+  					$('#frezzlinkreport').text(msg1);
+  					isscrolling=false;
+  				}
+  			});
+	});
+	
 	//-----------------------
 	function showScroll(){
 		var wait = new YAHOO.widget.Panel("wait",   
@@ -731,6 +762,41 @@ function validateFormat(){
 			window.setTimeout(call,200);
 		}
 
+	//-----------------------
+	function showScrollReport(){
+		var wait = new YAHOO.widget.Panel("wait",   
+	        { width:"240px",  
+	          fixedcenter:true,  
+	          close:false,  
+	          draggable:false,  
+	          zindex:99, 
+	          modal:true, 
+	          visible:false,
+	          underlay:"shadow"
+	        }  
+	    ); 
+
+		wait.setHeader(msg0); 
+		wait.setBody("<div align='center'>"+msg3+"</div>"); 
+		wait.render(document.body);
+		wait.show();
+		var winH;
+		
+		if (navigator.appName.indexOf("Microsoft")!=-1) {
+			winH = document.body.offsetHeight;
+		}else{
+			winH=window.innerHeight;
+		}
+		var call=function(){
+			var reporTable=new scrollableTableReports("reportTable",winH -100);
+			reporTable.debug=false;
+			reporTable.maxRowDepth=2;
+			reporTable.scroll();
+			wait.hide();		
+		}
+		
+			window.setTimeout(call,200);
+		}
 
 	function cleanformat() {
 		aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";

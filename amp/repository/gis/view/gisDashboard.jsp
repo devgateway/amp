@@ -460,10 +460,7 @@
         <td colspan="3">
             <span style="font-size: 12px;">
 				<img alt="" style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;
-                <digi:trn key="gis:minmax:message_fin">
-                Regions with the lowest (MIN) values for the selected funding type are shaded darker color. 
-                Regions with the highest (MAX) value are shaded lighter color. 
-                </digi:trn>
+                <digi:trn key="gis:minmax:message_fin">Regions with the lowest (MIN) values for the selected funding type are shaded darker color. Regions with the highest (MAX) value are shaded lighter color.</digi:trn>
             </span>
             <br>
             <br>

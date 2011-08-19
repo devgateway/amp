@@ -184,7 +184,7 @@ function isInvalid(field){
 																			<font color="red">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
-																	          <html:text name="umViewEditUserForm" property="lastName"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;"/>
+																	          <html:text name="umViewEditUserForm" property="lastName" styleId="lastName" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;"/>
 																	    </td>
 																	</tr>
 																	<tr>

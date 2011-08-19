@@ -36,8 +36,8 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 			List<? extends T> choicesList, String fmName,
 			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer) {
 		super(id, fmName, hideLabel);
-		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer)
-				.setNullValid(nullValid);
+		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
+		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		add(choiceContainer);
 	}
@@ -59,10 +59,11 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 		if (isMultiSelect)
 			choiceContainer = new CheckBoxMultipleChoice<T>("choice", model,
 					choicesList,renderer);
-		else
+		else {
 			choiceContainer = new RadioChoice<T>("choice",
-					new AmpMultiValueDropDownChoiceModel<T>(model), choicesList,renderer)
-					.setNullValid(nullValid);
+					new AmpMultiValueDropDownChoiceModel<T>(model), choicesList,renderer);
+			((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
+		}
 		choiceContainer.setOutputMarkupId(true);
 		add(choiceContainer);
 	}

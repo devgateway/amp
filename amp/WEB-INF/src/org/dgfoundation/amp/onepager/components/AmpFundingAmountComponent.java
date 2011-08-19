@@ -47,6 +47,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 				(List<? extends AmpCurrency>) CurrencyUtil
 						.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE),
 				fmCurrency, true, false);
+		currency.getChoiceContainer().setRequired(true);
 		add(currency);
 		date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
 				model, propertyDate), fmDate,true);

@@ -199,13 +199,11 @@ background-color:#FFFFFF;
 		<div class="dashboard_tab_opt" style="visibility:hidden">
 		<div class="tab_opt_cont" style="background-color:#F2F2F2;"><a class="l_sm" href="#"><img
 			border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
-			class="l_sm" href="#" onclick="exportToExcel();return false;"><digi:trn>Export
-		to Excel</digi:trn></a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
+			class="l_sm" href="#" onclick="exportToExcel();return false;"><digi:trn>Export to Excel</digi:trn></a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
 			src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></a>
 		&nbsp;|&nbsp; <a class="l_sm" id="showGridLink"
-			href="javascript:showGridTable();"><digi:trn>View
-		Table</digi:trn></a><a class="l_sm" id="hideGridLink"
+			href="javascript:showGridTable();"><digi:trn>View Table</digi:trn></a><a class="l_sm" id="hideGridLink"
 			href="javascript:hideGridTable();" style="display: none"><digi:trn>Hide Table</digi:trn></a></div>
 		</div>
 		</div>

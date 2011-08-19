@@ -400,7 +400,7 @@ function treeCallBack(status, statusText, responseText, responseXML){
  */
 function initTree(){
 	var treeList=document.getElementById('tree');
-	treeList.innerHTML="<i>Loading...</i>"
+	treeList.innerHTML="<i><digi:trn>Loading...</digi:trn></i>"
 
 	var url=addActionToURL("getThemeTreeNode.do");
 	var async=new Asynchronous();

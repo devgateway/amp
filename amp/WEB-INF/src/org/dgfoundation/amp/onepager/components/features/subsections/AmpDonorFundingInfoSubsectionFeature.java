@@ -33,28 +33,28 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				new PropertyModel<AmpCategoryValue>(model,
 						"financingInstrument"),
 				CategoryConstants.FINANCING_INSTRUMENT_NAME, true, false);
-//		financingInstrument.getNewLine().setVisible(false);
+		financingInstrument.getChoiceContainer().setRequired(true);
 		add(financingInstrument);
 
 		AmpCategorySelectFieldPanel typeOfAssistance = new AmpCategorySelectFieldPanel(
 				"typeOfAssistance", CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "typeOfAssistance"),
 				CategoryConstants.TYPE_OF_ASSISTENCE_NAME, true, false);
-//		typeOfAssistance.getNewLine().setVisible(false);
+		typeOfAssistance.getChoiceContainer().setRequired(true);
 		add(typeOfAssistance);
 
 		AmpCategorySelectFieldPanel modeOfPayment = new AmpCategorySelectFieldPanel(
 				"modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
 				CategoryConstants.MODE_OF_PAYMENT_NAME, true, false);
-//		modeOfPayment.getNewLine().setVisible(false);
+		modeOfPayment.getChoiceContainer().setRequired(true);
 		add(modeOfPayment);
 
 		AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
 				"fundingStatus", CategoryConstants.FUNDING_STATUS_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "fundingStatus"),
 				CategoryConstants.FUNDING_STATUS_NAME, true, false);
-//		fundingStatus.getNewLine().setVisible(false);
+		fundingStatus.getChoiceContainer().setRequired(true);
 		add(fundingStatus);
 
 		AmpTextFieldPanel<String> financingId = new AmpTextFieldPanel<String>(

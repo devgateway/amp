@@ -44,6 +44,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionAmount(0d);
+				fd.setAdjustmentType(Constants.ACTUAL);
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.EXPENDITURE);
 				model.getObject().getFundingDetails().add(fd);

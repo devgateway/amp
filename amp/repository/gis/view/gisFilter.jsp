@@ -71,7 +71,6 @@ div.innerTabHeader h3 {
 	height: 31px;
 	line-height: 31px;
 	text-indent: 11px;
-	width: 40%;
 	float: left;
 	font-size: 11px;
 	color: #767676;
@@ -463,7 +462,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									</html:select>
 								</p>
 								<p>
-									<label>Currency type</label>
+									<label><digi:trn>Currency type</digi:trn></label>
 									<html:select property="selectedCurrency" name="gisDashboardForm" styleId="selectedCurrency">
 										<logic:notEmpty name="gisDashboardForm"
 											property="currencies">

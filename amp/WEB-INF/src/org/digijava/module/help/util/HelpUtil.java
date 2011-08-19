@@ -1318,34 +1318,7 @@ System.out.println("lang:"+lang);
     	return result;
     }
     
-    public static List<Sdm> getAttachmentsRelatedToHelpTopic (List<Editor> editors) throws Exception{
-    	List<Sdm> retVal = null;
-    	if (editors!=null && editors.size()>0){
-			for (Editor editor : editors) {
-				String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
-				Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
-				Matcher matcher = pattern.matcher(editor.getBody());
-				if (matcher.find()){				
-					String imgTag = matcher.group(0);
-					if(imgTag.contains("documentId=")){
-						String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
-						if(docId.contains("&")){
-							docId = docId .substring(0,docId.indexOf("&"));
-						}else{
-							docId = docId .substring(0,docId.indexOf("\""));
-						}
-						Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId));
-						if(retVal==null){
-							retVal = new ArrayList<Sdm>();
-						}
-						retVal.add(doc);
-					}
-				}				
-			}
-		}
-    	return retVal;
-    }
-    
+ 
     public static List<HelpContent> getHelpTopicContentObjects (List<Editor> editors) throws Exception{
     	List<HelpContent> retVal = null;
     	if (editors!=null && editors.size()>0){

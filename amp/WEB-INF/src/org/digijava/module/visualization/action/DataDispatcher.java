@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +32,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -1366,6 +1366,8 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -1420,8 +1422,8 @@ public class DataDispatcher extends DispatchAction {
 		}
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 
-		String plannedTitle = "Planned";
-        String actualTitle = "Actual";
+		String plannedTitle = TranslatorWorker.translateText("Planned", locale, siteId);
+        String actualTitle = TranslatorWorker.translateText("Actual", locale, siteId); ;
 
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
@@ -1433,10 +1435,10 @@ public class DataDispatcher extends DispatchAction {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
-				xmlString.append("<fundingtype category=\"Planned\" id=\"" + Constants.PLANNED + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
+				xmlString.append("<fundingtype category=\""+plannedTitle+"\" id=\"" + Constants.PLANNED + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
-				xmlString.append("<fundingtype category=\"Actual\" id=\"" + Constants.ACTUAL + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
+				xmlString.append("<fundingtype category=\""+actualTitle+"\" id=\"" + Constants.ACTUAL + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				xmlString.append("</year>\n");
 			}
@@ -1504,6 +1506,8 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -1556,10 +1560,10 @@ public class DataDispatcher extends DispatchAction {
 			yearsInRange = filter.getYearsInRangePie() - 1;
 		}
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		String pledgesTranslatedTitle = "Pledges";
-		String actComTranslatedTitle = "Actual commitments";
-		String actDisbTranslatedTitle = "Actual disbursements";
-		String actExpTranslatedTitle = "Actual expenditures";
+		String pledgesTranslatedTitle =TranslatorWorker.translateText("Pledges", locale, siteId) ;
+		String actComTranslatedTitle =TranslatorWorker.translateText("Actual commitments", locale, siteId) ;
+		String actDisbTranslatedTitle = TranslatorWorker.translateText("Actual disbursements", locale, siteId) ;
+		String actExpTranslatedTitle = TranslatorWorker.translateText("Actual expenditures", locale, siteId) ;;
 		// String pledgesTranslatedTitle =
 		// TranslatorWorker.translateText("Pledges", opt.getLangCode(),
 		// opt.getSiteId());
@@ -1621,7 +1625,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Disbursements\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+TranslatorWorker.translateText("Disbursements", locale, siteId)+"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
@@ -1629,7 +1633,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Commitments\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+ TranslatorWorker.translateText("Commitments", locale, siteId)+"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
@@ -1637,7 +1641,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Expenditures\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+ TranslatorWorker.translateText("Expenditures", locale, siteId)+"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
@@ -1646,7 +1650,7 @@ public class DataDispatcher extends DispatchAction {
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				xmlString.append("</year>\n");

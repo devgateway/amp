@@ -831,9 +831,9 @@ function toggleSettings(){
 </div>
 </div>
 
-<input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
-<input type="button" value="Reset to defaults" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
-<input type="button" value="Close" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
+<input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
+<input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
+<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
 
 
 </div>
@@ -1013,7 +1013,7 @@ function toggleSettings(){
     <td>
     	<table>
     		<tr>
-    			<td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export Options</a></div></div></td>
+    			<td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm"><digi:trn>Export Options</digi:trn></a></div></div></td>
     		</tr>
     		<tr>
     			<td><div id="currencyInfo"></div></td>
@@ -1248,10 +1248,10 @@ function toggleSettings(){
  </table>
 
 	<center>
-	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
-	<input type="button" value="Reset" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
+	<input type="button" value="<digi:trn>Filter</digi:trn>" class="buttonx" style="margin-top:10px;" id="applyButton">
+	<input type="button" value="<digi:trn>Reset</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 	<hr />
-	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>
+	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm"><digi:trn>Advanced Filters</digi:trn></a></div></div>
 	</center>
 </fieldset>
 
@@ -1290,7 +1290,7 @@ function toggleSettings(){
 			<hr />
 		</c:forEach>
 	
-		<a href="javascript:showFullProjects()" style="float:right;">View Full List</a>
+		<a href="javascript:showFullProjects()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 	</div>
 	<div id="divFullProjects" class="field_text" style="display: none;">
 		<c:set var="index" value="0"/>
@@ -1301,7 +1301,7 @@ function toggleSettings(){
 			<hr />
 		</c:forEach>
 	
-		<a href="javascript:hideFullProjects()" style="float:right;">View Top List</a>
+		<a href="javascript:hideFullProjects()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 	</div>
 </fieldset>
 <c:if test="${visualizationform.filter.dashboardType ne '1' }">
@@ -1316,7 +1316,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:showFullDonors()" style="float:right;">View Full List</a>
+			<a href="javascript:showFullDonors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 		</div>
 		<div id="divFullDonors" class="field_text" style="display: none;">
 			<c:set var="index" value="0"/>
@@ -1327,7 +1327,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:hideFullDonors()" style="float:right;">View Top List</a>
+			<a href="javascript:hideFullDonors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1343,7 +1343,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:showFullSectors()" style="float:right;">View Full List</a>
+			<a href="javascript:showFullSectors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 		</div>
 		<div id="divFullSectors" class="field_text" style="display: none;">
 			<c:set var="index" value="0"/>
@@ -1354,7 +1354,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:hideFullSectors()" style="float:right;">View Top List</a>
+			<a href="javascript:hideFullSectors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1370,7 +1370,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:showFullRegions()" style="float:right;">View Full List</a>
+			<a href="javascript:showFullRegions()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 		</div>
 		<div id="divFullRegions" class="field_text" style="display: none;">
 			<c:set var="index" value="0"/>
@@ -1381,7 +1381,7 @@ function toggleSettings(){
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:hideFullRegions()" style="float:right;">View Top List</a>
+			<a href="javascript:hideFullRegions()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1394,7 +1394,7 @@ function toggleSettings(){
 <td valign="top">
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
-		<li><a href="#tab1"><div>Visualization</div></a></li>
+		<li><a href="#tab1"><div><digi:trn>Visualization</digi:trn></div></a></li>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
@@ -1406,9 +1406,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
 				<div id="RegionProfileHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="RegionProfileTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="RegionProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1416,15 +1416,15 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold">Bold</label><br/>
-				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
+				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
 				<input type="hidden" id="RegionProfileDataField" value="region" />
 				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="Data View"/></div>
 				<br />
@@ -1447,9 +1447,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
 				<div id="SectorProfileHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="SectorProfileTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="SectorProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1457,15 +1457,15 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold">Bold</label><br/>
-				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
+				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
 				<input type="hidden" id="SectorProfileDataField" value="sector" />
 				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="Data View"/></div>
 				<br />
@@ -1490,9 +1490,9 @@ function toggleSettings(){
 		
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="FundingChartHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
+			<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
 			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
-			&nbsp;Size
+			&nbsp;<digi:trn>Size</digi:trn>
 			<select id="FundingChartFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
@@ -1500,14 +1500,14 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold">Bold</label><br/>
-			<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend">Show legend</label>
-			&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel">Show data label</label>
-			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel">Rotate data label</label></br>
+			&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold"><digi:trn>Bold</digi:trn></label><br/>
+			<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend"><digi:trn>Show legend</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide"><digi:trn>Divide by thousands</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 			<input type="hidden" id="FundingChartDataAction" value="getFundingsGraphData" />
 			<input type="hidden" id="FundingChartDataField" value="fundingtype" />
-			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
+			<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FundingChart')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="Data View"/></div>
 			<br />
@@ -1529,9 +1529,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
 				<div id="ODAGrowthHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="ODAGrowthTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="ODAGrowthTitle" value="" size="50">
 				<input type="hidden" id="ODAGrowthShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="ODAGrowthFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1539,14 +1539,14 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold">Bold</label><br/>
+				&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold"><digi:trn>Bold</digi:trn></label><br/>
 				<span style="display:none">
-				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label for="ODAGrowthShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel">Rotate data label</label></br>
+				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				</span>
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'ODAGrowth')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'ODAGrowth')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/></div>
 				<br />
@@ -1566,9 +1566,9 @@ function toggleSettings(){
 		<fieldset class="chartFieldset">
 			<legend><span id="AidPredictabilityTitleLegend" class=legend_label></span></legend>
 			<div id="AidPredictabilityHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="AidPredictabilityTitle" value="" size="50">
+			<digi:trn>Title</digi:trn> <input type="text" id="AidPredictabilityTitle" value="" size="50">
 			<input type="hidden" id="AidPredictabilityShowFontFamily" value="Verdana"/>
-			&nbsp;Size
+			&nbsp;<digi:trn>Size</digi:trn>
 			<select id="AidPredictabilityFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
@@ -1576,14 +1576,14 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			&nbsp;<input type="checkbox" id="AidPredictabilityBold"><label for="AidPredictabilityBold">Bold</label><br/>
-			<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label for="AidPredictabilityShowLegend">Show legend</label>
-			&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label for="AidPredictabilityDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel"><label for="AidPredictabilityShowDataLabel">Show data label</label>
-			&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label for="AidPredictabilityRotateDataLabel">Rotate data label</label></br>
+			&nbsp;<input type="checkbox" id="AidPredictabilityBold"><label for="AidPredictabilityBold"><digi:trn>Bold</digi:trn></label><br/>
+			<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label for="AidPredictabilityShowLegend"><digi:trn>Show legend</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label for="AidPredictabilityDivide"><digi:trn>Divide by thousands</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel"><label for="AidPredictabilityShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label for="AidPredictabilityRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 			<input type="hidden" id="AidPredictabilityDataAction" value="getAidPredictabilityGraphData" />
 			<input type="hidden" id="AidPredictabilityDataField" value="fundingtype" />
-			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidPredictability')">
+			<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidPredictability')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidPredictability', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidPredictability', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidPredictability', true)" title="Data View"/></div>
 			<br />
@@ -1602,9 +1602,9 @@ function toggleSettings(){
 		<fieldset class="chartFieldset">
 			<legend><span id="AidTypeTitleLegend" class=legend_label></span></legend>
 			<div id="AidTypeHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="AidTypeTitle" value="" size="50">
+			<digi:trn>Title</digi:trn> <input type="text" id="AidTypeTitle" value="" size="50">
 			<input type="hidden" id="AidTypeShowFontFamily" value="Verdana"/>
-			&nbsp;Size
+			&nbsp;<digi:trn>Size</digi:trn>
 			<select id="AidTypeFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
@@ -1612,14 +1612,14 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			&nbsp;<input type="checkbox" id="AidTypeBold"><label for="AidTypeBold">Bold</label><br/>
-			<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label for="AidTypeShowLegend">Show legend</label>
-			&nbsp;<input type="checkbox" id="AidTypeDivide"><label for="AidTypeDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="AidTypeShowDataLabel"><label for="AidTypeShowDataLabel">Show data label</label>
-			&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label for="AidTypeRotateDataLabel">Rotate data label</label></br>
+			&nbsp;<input type="checkbox" id="AidTypeBold"><label for="AidTypeBold"><digi:trn>Bold</digi:trn></label><br/>
+			<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label for="AidTypeShowLegend"><digi:trn>Show legend</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidTypeDivide"><label for="AidTypeDivide"><digi:trn>Divide by thousands</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidTypeShowDataLabel"><label for="AidTypeShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+			&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label for="AidTypeRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 			<input type="hidden" id="AidTypeDataAction" value="getAidTypeGraphData" />
 			<input type="hidden" id="AidTypeDataField" value="aidtype" />
-			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'AidType')">
+			<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidType')">
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidType', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidType', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidType', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidType', true)" title="Data View"/></div>
 			<br />
@@ -1638,9 +1638,9 @@ function toggleSettings(){
 		<fieldset class="chartFieldset">
 			<legend><span id="FinancingInstrumentTitleLegend" class=legend_label></span></legend>
 			<div id="FinancingInstrumentHeader" class="chart_header" style="float:left">
-			Title <input type="text" id="FinancingInstrumentTitle" value="" size="50">
+			<digi:trn>Title</digi:trn> <input type="text" id="FinancingInstrumentTitle" value="" size="50">
 			<input type="hidden" id="FinancingInstrumentShowFontFamily" value="Verdana"/>
-			&nbsp;Size
+			&nbsp;<digi:trn>Size</digi:trn>
 			<select id="FinancingInstrumentFontSize">
 				<option value="12">12</option>
 				<option value="13">13</option>
@@ -1648,12 +1648,12 @@ function toggleSettings(){
 				<option value="15">15</option>
 				<option value="16">16</option>
 			</select>
-			&nbsp;<input type="checkbox" id="FinancingInstrumentBold"><label for="FinancingInstrumentBold">Bold</label><br/>
-			<input type="checkbox" id="FinancingInstrumentShowLegend" checked="checked"><label for="FinancingInstrumentShowLegend">Show legend</label>
-			&nbsp;<input type="checkbox" id="FinancingInstrumentDivide"><label for="FinancingInstrumentDivide">Divide by thousands</label>
-			&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel"><label for="FinancingInstrumentShowDataLabel">Show data label</label>
-			&nbsp;<input type="checkbox" id="FinancingInstrumentRotateDataLabel"><label for="FinancingInstrumentRotateDataLabel">Rotate data label</label></br>
-			<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'FinancingInstrument')">
+			&nbsp;<input type="checkbox" id="FinancingInstrumentBold"><label for="FinancingInstrumentBold"><digi:trn>Bold</digi:trn></label><br/>
+			<input type="checkbox" id="FinancingInstrumentShowLegend" checked="checked"><label for="FinancingInstrumentShowLegend"><digi:trn>Show legend</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentDivide"><label for="FinancingInstrumentDivide"><digi:trn>Divide by thousands</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel"><label for="FinancingInstrumentShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+			&nbsp;<input type="checkbox" id="FinancingInstrumentRotateDataLabel"><label for="FinancingInstrumentRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+			<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FinancingInstrument')">
 			<input type="hidden" id="FinancingInstrumentDataAction" value="getAidTypeGraphData" />
 			<input type="hidden" id="FinancingInstrumentDataField" value="aidtype" />
 			</div>
@@ -1675,9 +1675,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="DonorProfileTitleLegend" class=legend_label></span></legend>
 				<div id="DonorProfileHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="DonorProfileTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="DonorProfileTitle" value="" size="50">
 				<input type="hidden" id="DonorProfileShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="DonorProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1685,14 +1685,14 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold">Bold</label><br/>
-				<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label for="DonorProfileShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="DonorProfileDivide"><label for="DonorProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label for="DonorProfileShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label for="DonorProfileRotateDataLabel">Rotate data label</label></br>
+				&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label for="DonorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="DonorProfileDivide"><label for="DonorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label for="DonorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label for="DonorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				<input type="hidden" id="DonorProfileDataAction" value="getDonorProfileGraphData" />
 				<input type="hidden" id="DonorProfileDataField" value="donor" />
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'DonorProfile')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'DonorProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'DonorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile', true)" title="Data View"/></div>
 				<br />
@@ -1713,9 +1713,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
 				<div id="SectorProfileHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="SectorProfileTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="SectorProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1723,15 +1723,15 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold">Bold</label><br/>
-				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel">Rotate data label</label></br>
+				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
 				<input type="hidden" id="SectorProfileDataField" value="sector" />
 				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'SectorProfile')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="Data View"/></div>
 				<br />
@@ -1752,9 +1752,9 @@ function toggleSettings(){
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
 				<div id="RegionProfileHeader" class="chart_header" style="float:left">
-				Title <input type="text" id="RegionProfileTitle" value="" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-				&nbsp;Size
+				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="RegionProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1762,15 +1762,15 @@ function toggleSettings(){
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold">Bold</label><br/>
-				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend">Show legend</label>
-				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide">Divide by thousands</label>
-				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel">Show data label</label>
-				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel">Rotate data label</label></br>
+				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
 				<input type="hidden" id="RegionProfileDataField" value="region" />
 				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
-				<input type="button" class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')">
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="Bar Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="Donut Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="Line Chart"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="Data View"/></div>
 				<br />
@@ -1822,7 +1822,7 @@ var callbackChildrenCall = {
 				    case "Organization":
 			    		var orgDropdown = document.getElementById("org_dropdown_id");
 			    		orgDropdown.options.length = 0;
-			    		orgDropdown.options[0] = new Option("All", -1);
+			    		orgDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
 			    		for(var i = 0; i < results.children.length; i++){
 			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
@@ -1830,7 +1830,7 @@ var callbackChildrenCall = {
 				    case "Sector":
 			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
 			    		subSectorDropdown.options.length = 0;
-			    		subSectorDropdown.options[0] = new Option("All", -1);
+			    		subSectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
 			    		for(var i = 1; i < results.children.length; i++){
 			    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
@@ -1838,7 +1838,7 @@ var callbackChildrenCall = {
 			    	case "Region":
 			    		var zonesDropdown = document.getElementById("zone_dropdown_id");
 			    		zonesDropdown.options.length = 0;
-			    		zonesDropdown.options[0] = new Option("All", -1);
+			    		zonesDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
 			    		for(var i = 1; i < results.children.length; i++){
 			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
@@ -1848,8 +1848,8 @@ var callbackChildrenCall = {
 				    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
 				    		subSectorDropdown.options.length = 0;
 				    		sectorDropdown.options.length = 0;
-				    		subSectorDropdown.options[0] = new Option("All", -1);
-				    		sectorDropdown.options[0] = new Option("All", -1);
+				    		subSectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
+				    		sectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
 				    		for(var i = 1; i < results.children.length; i++){
 				    			sectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 				    		}

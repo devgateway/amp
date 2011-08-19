@@ -18,7 +18,7 @@
 
 
 		<many-to-one name="assignedWidget" class="org.digijava.module.widget.dbentity.AmpWidget"
-			column="assigned_widget_id" cascade="none" />
+			column="assigned_widget_id" cascade="none" lazy="false"/>
 
 	</class>
 </hibernate-mapping>

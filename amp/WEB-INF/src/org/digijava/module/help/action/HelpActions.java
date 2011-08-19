@@ -988,7 +988,7 @@ public class HelpActions extends DispatchAction {
 			HelpUtil.deleteHelpTopic(topic, request);
 		}
 	}
-
+    
     private List<Long> getTopicsIds(String ids){
 		List<Long> topicsIds=new ArrayList<Long>();
 		while(ids.indexOf(",")!= -1){
@@ -1001,10 +1001,7 @@ public class HelpActions extends DispatchAction {
 	}
 
   
-    public void saveTreeState(ActionMapping mapping,
-                                           ActionForm form,
-                                           HttpServletRequest request,
-                                           HttpServletResponse response)
+    public void saveTreeState(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response)
                 throws Exception{
 
           String siteId=RequestUtils.getSite(request).getSiteId();
@@ -1031,10 +1028,8 @@ public class HelpActions extends DispatchAction {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-                  DocumentBuilder builder = factory.newDocumentBuilder();
-                  org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(replacedXmlString)));
-
-                  
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(replacedXmlString)));                 
                   
         org.w3c.dom.NodeList nl = document.getElementsByTagName("item");
         
@@ -1050,6 +1045,9 @@ public class HelpActions extends DispatchAction {
         	helpTopick.setKeywordsTrnKey(topic.getKeywordsTrnKey());
         	helpTopick.setTitleTrnKey(topic.getTitleTrnKey());
         	helpTopick.setHelpTopicId(topic.getHelpTopicId());
+        	
+        	List<Editor> editors =DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+        	helpTopick.setHelpContent(HelpUtil.getHelpTopicContentObjects(editors));
         	
         	org.w3c.dom.Node parentNode = node.getParentNode();
 

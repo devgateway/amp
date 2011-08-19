@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +39,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
+import org.digijava.module.help.helper.HelpContent;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
@@ -357,7 +360,7 @@ public class HelpUtil {
 					}
 				}
 			}
-			session.delete(topic);			
+			session.delete(topic);
 			tx.commit();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
 				//skip lucene work for glossary topics.
@@ -1102,16 +1105,78 @@ System.out.println("lang:"+lang);
 	    	       helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
                    helptopic.setBodyEditKey(help.getBodyEditKey()); 
 
-                      if(help.getParent() != null){
-                        HelpTopic top = storeMap.get(help.getParent().getHelpTopicId());
-                           if(top!=null){
-
-                                     helptopic.setParent(top);
-                                 }
-                            }
+                   if(help.getParent() != null){
+                	   HelpTopic top = storeMap.get(help.getParent().getHelpTopicId());
+                       if(top!=null){
+                    	   helptopic.setParent(top);
+                       }
+                   }
                    
-                     insertHelp(helptopic);
-
+                   insertHelp(helptopic);
+                   List<HelpContent> helpContents = help.getHelpContent();
+                   if(helpContents!=null && helpContents.size()>0){
+                	   for (HelpContent helpContent : helpContents) {
+						Editor editor = helpContent.getEditor();
+						Sdm oldDoc = helpContent.getDocument();
+						
+						 
+						if(editor !=null){
+							if(oldDoc !=null){
+								//save sdm back in db
+								Sdm newDoc = new Sdm();							
+								newDoc.setInstanceId(oldDoc.getInstanceId());
+								newDoc.setName(oldDoc.getName());
+								newDoc.setSiteId(oldDoc.getSiteId());
+								
+								HashSet<SdmItem> items = new HashSet<SdmItem>();
+								 for (SdmItem sdmItem : (Set<SdmItem>)oldDoc.getItems()) {
+									SdmItem newItem = new SdmItem();
+									newItem.setContentType(sdmItem.getContentType());
+									newItem.setRealType(sdmItem.getRealType());
+									newItem.setContent(sdmItem.getContent());
+									newItem.setContentText(sdmItem.getContentText());
+									newItem.setContentTitle(sdmItem.getContentTitle());
+									newItem.setParagraphOrder(sdmItem.getParagraphOrder());
+									
+									items.add(newItem);
+								}
+								 
+								 newDoc.setItems(items);
+								 newDoc=org.digijava.module.sdm.util.DbUtil.saveOrUpdateDocument(newDoc);
+								
+								//update editor
+								String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*documentId="+oldDoc.getId()+".*\"\\s?/>" ;
+								Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
+								String editorBody = editor.getBody();
+								Matcher matcher = pattern.matcher(editorBody);
+								String containsStr="documentId=";
+								while (matcher.find()){				
+									String imgTag = matcher.group(0);
+									if(imgTag.contains(containsStr)){
+										String docId = oldDoc.getId().toString();
+//										String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
+//										if(docId.contains("&")){
+//											docId = docId .substring(0,docId.indexOf("&"));
+//										}else{
+//											docId = docId .substring(0,docId.indexOf("\""));
+//										}
+										imgTag = imgTag.replace("documentId="+docId, "documentId="+newDoc.getId());
+										editorBody = matcher.replaceFirst(imgTag);
+										containsStr="documentId=" + docId;
+										matcher = pattern.matcher(editorBody);
+									}else{
+										break;
+									}
+								}
+								editor.setBody(editorBody);
+							}
+							
+							org.digijava.module.editor.util.DbUtil.saveEditor(editor);
+						}
+							
+					}
+                   }                   
+                   
                      //TODO What's that?
                     th.sleep(500);
                  
@@ -1253,6 +1318,66 @@ System.out.println("lang:"+lang);
     	return result;
     }
     
+    public static List<Sdm> getAttachmentsRelatedToHelpTopic (List<Editor> editors) throws Exception{
+    	List<Sdm> retVal = null;
+    	if (editors!=null && editors.size()>0){
+			for (Editor editor : editors) {
+				String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
+				Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
+				Matcher matcher = pattern.matcher(editor.getBody());
+				if (matcher.find()){				
+					String imgTag = matcher.group(0);
+					if(imgTag.contains("documentId=")){
+						String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
+						if(docId.contains("&")){
+							docId = docId .substring(0,docId.indexOf("&"));
+						}else{
+							docId = docId .substring(0,docId.indexOf("\""));
+						}
+						Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId));
+						if(retVal==null){
+							retVal = new ArrayList<Sdm>();
+						}
+						retVal.add(doc);
+					}
+				}				
+			}
+		}
+    	return retVal;
+    }
+    
+    public static List<HelpContent> getHelpTopicContentObjects (List<Editor> editors) throws Exception{
+    	List<HelpContent> retVal = null;
+    	if (editors!=null && editors.size()>0){
+			for (Editor editor : editors) {
+				if(retVal==null){
+					retVal = new ArrayList<HelpContent>();
+				}				
+				HelpContent helpContent = new HelpContent();
+				helpContent.setEditor(editor);
+				
+				String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
+				Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
+				Matcher matcher = pattern.matcher(editor.getBody());
+				if (matcher.find()){				
+					String imgTag = matcher.group(0);
+					if(imgTag.contains("documentId=")){
+						String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
+						if(docId.contains("&")){
+							docId = docId .substring(0,docId.indexOf("&"));
+						}else{
+							docId = docId .substring(0,docId.indexOf("\""));
+						}
+						Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId));
+						
+						helpContent.setDocument(doc);
+					}
+				}
+				retVal.add(helpContent);
+			}
+		}
+    	return retVal;
+    }
 
 	/**
 	 * Compares two {@link HelpTopicHelper} by its sort index field.

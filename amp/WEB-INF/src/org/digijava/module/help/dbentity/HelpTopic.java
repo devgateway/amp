@@ -1,6 +1,9 @@
 package org.digijava.module.help.dbentity;
 
 import java.io.Serializable;
+import java.util.List;
+
+import org.digijava.module.help.helper.HelpContent;
 
 public class HelpTopic implements Serializable{
 	
@@ -14,6 +17,9 @@ public class HelpTopic implements Serializable{
 	private String moduleInstance=null;
 	private String topicKey;
 	private Integer topicType;	
+	
+	//used for saving tree state.. not saved in DB
+	private List<HelpContent> helpContent;
 	
 	public String getBodyEditKey() {
 		return bodyEditKey;
@@ -70,7 +76,11 @@ public class HelpTopic implements Serializable{
 	public Integer getTopicType() {
 		return topicType;
 	}
-
-
-
+	public List<HelpContent> getHelpContent() {
+		return helpContent;
+	}
+	public void setHelpContent(List<HelpContent> helpContent) {
+		this.helpContent = helpContent;
+	}
+	
 }

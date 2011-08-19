@@ -451,26 +451,27 @@ public class DbUtil {
     public static Sdm saveOrUpdateDocument(Sdm document) throws SDMException {
         Transaction tx = null;
         Session session = null;
-        Sdm doc=null;
+        //Sdm doc=null;
         boolean newDoc=false;
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-            session.clear();
-            if(document.getId()==null){
-            	newDoc=true;
-            	doc=new Sdm();
-            }else{
-            	doc=getDocument(document.getId());
-            }
-            if(doc==null){
-            	newDoc=true;
-            	doc=new Sdm();
-            }
-            doc.setInstanceId(document.getInstanceId());
-            doc.setSiteId(document.getSiteId());
-            doc.setName(document.getName());
-            session.saveOrUpdate(doc);
+            session.saveOrUpdate(document);
+//            session.clear();
+//            if(document.getId()==null){
+//            	newDoc=true;
+//            	doc=new Sdm();
+//            }else{
+//            	doc=getDocument(document.getId());
+//            }
+//            if(doc==null){
+//            	newDoc=true;
+//            	doc=new Sdm();
+//            }
+//            doc.setInstanceId(document.getInstanceId());
+//            doc.setSiteId(document.getSiteId());
+//            doc.setName(document.getName());
+//            session.saveOrUpdate(doc);
             
             if(newDoc){
             	if(document.getItems()!=null){
@@ -490,14 +491,15 @@ public class DbUtil {
             			newItem.setParagraphOrder(oldItem.getParagraphOrder());
             			newItem.setRealType(oldItem.getRealType());
             			newItem.setUnderline(oldItem.getUnderline());
-            			newItem.setDocument(doc);
+            			//newItem.setDocument(doc);
+            			newItem.setDocument(document);
             			//save item
             			 session.save(newItem);
             			//add this item to doc
-                         if(doc.getItems()==null){
-                         	doc.setItems(new HashSet<SdmItem>());
-                         }
-                         doc.getItems().add(newItem);
+//                         if(doc.getItems()==null){
+//                         	doc.setItems(new HashSet<SdmItem>());
+//                         }
+//                         doc.getItems().add(newItem);
             		}
             	}
             }else{
@@ -506,15 +508,16 @@ public class DbUtil {
                     while (iter.hasNext()) {
                         SdmItem item = (SdmItem) iter.next();
                         if (item.getDocument() == null) {
-                            item.setDocument(doc);
+                            //item.setDocument(doc);
+                        	item.setDocument(document);
                             session.save(item);
                             //add this item to doc
-                            if(doc.getItems()==null){
-                            	doc.setItems(new HashSet<SdmItem>());
-                            }
-                            doc.getItems().add(item);
+//                            if(doc.getItems()==null){
+//                            	doc.setItems(new HashSet<SdmItem>());
+//                            }
+//                            doc.getItems().add(item);
                         }
-                        else {
+                        else {                        	
                             session.update(item);
                         }
                     }
@@ -535,7 +538,7 @@ public class DbUtil {
             }
             throw new SDMException("Unable to update document information into database", ex);
         }
-        return doc;
+        return document;
     }
 
     public static List getDocuments(HttpServletRequest request) throws

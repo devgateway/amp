@@ -58,11 +58,6 @@
 
 <!-- Prevent Skype Highlighter -->
 <META name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
-
-
-<!-- Enable Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
-
 <digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>

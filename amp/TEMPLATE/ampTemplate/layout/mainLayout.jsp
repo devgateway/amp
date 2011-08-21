@@ -81,18 +81,22 @@
             </tr>
         </table>
 		
-	</div></center>
-
+	</div>
+    </center>
+    
+<center>
 <div class="breadcrump_1">&nbsp;</div>	
-			
+			<div style="width:1000px;margin:0 auto;">
 	<table width="100%" id="homelayout">
 		<tr>
-			<td>
+			<td >
 				<digi:insert attribute="body"/>
 			</td>
 		</tr>
 	
 	</table>
+    </div>
     <digi:insert attribute="footer"/>
+    </center>
 </body>
 </html>

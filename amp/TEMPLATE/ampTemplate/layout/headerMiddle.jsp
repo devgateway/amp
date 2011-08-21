@@ -417,7 +417,7 @@ function adminHelp(){
 	                                        </module:display>
 	                                        
                                         <feature:display name="Change Workspace" module="My Desktop">
-	                                        <li class="yuiampmenuitem_drop" style="_width:230px;">
+	                                        <li class="yuiampmenuitem_drop">
 	                                        	<a class="yuiampmenuitemlabel" href="#">
 	                                            	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
 	                                            </a>
@@ -719,7 +719,7 @@ function adminHelp(){
                                   <div class="bd bd_drop" >                    
                                       <ul >
                                       	<feature:display name="Language Option" module="Tools">
-                                      		<li style="_width:300px">
+                                      		<li >
 		                                        <a class="yuiampmenuitemlabel" href="#">
 		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                                        </a>
@@ -840,6 +840,7 @@ function adminHelp(){
 </logic:present>
  <div style="clear:both;"></div>
 </div>
+
 <script language="javascript">
 
 YAHOO.util.Event.onDOMReady(function () {

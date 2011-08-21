@@ -302,7 +302,7 @@ html.ie div.header {height:46px;}
 html.ie .yui-navset *{z-index:1;}
 html.ie .main_menu *{z-index:9000;}
 html.ie .bd_drop  { line-height:25px;height:25px;padding:0px 0px 0px 0px;width:900px;}
-html.ie .bd_drop .bd_drop{width:200px;}
+html.ie .bd_drop .bd_drop{}
 #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 #usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}

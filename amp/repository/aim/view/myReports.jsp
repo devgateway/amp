@@ -33,6 +33,7 @@
 	</div>
 	<div class="right_menu_box">
 		<div class="right_menu_cont">
+        <ul>
 			<logic:notPresent name="currentMember" scope="session">
 				<logic:empty name="myReports" scope="session">
 						<digi:trn key="aim:noPublicReports">No public reports</digi:trn>
@@ -64,6 +65,7 @@
                 	<digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn>
                  </logic:empty>
 			</logic:present> 
+            </ul>
 		</div>
 	</div>
 </div>

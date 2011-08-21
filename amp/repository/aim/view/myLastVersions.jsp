@@ -16,6 +16,7 @@
 	</div>
 	<div class="right_menu_box">
 		<div class="right_menu_cont">
+        <ul>
 			<logic:notEmpty name="lastVersions" scope="session">
 				<logic:iterate id="iter" scope="session" name="lastVersions" type="org.digijava.module.aim.dbentity.AmpActivityVersion">
 					<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="iter" property="ampActivityId"/>'>
@@ -23,6 +24,7 @@
 			        </a>
 				</logic:iterate>
 			</logic:notEmpty>
+            </ul>
 			<logic:empty name="lastVersions" scope="session">
 				<p style="color: #376091"><digi:trn>No results</digi:trn></p>
 			</logic:empty>

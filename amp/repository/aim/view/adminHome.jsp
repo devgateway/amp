@@ -378,21 +378,7 @@
  </module:display>
   
   
-  <!-- 
-  <module:display name="Admin Translation Manager" parentModule="ADMINISTRATIVE SECTION">
-  <tr>
-    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td class="admin_box_label">
-    	<c:set var="trnTranslationManager">
-        	<digi:trn>Click here to view Translation Manager</digi:trn>
-       </c:set>
-       <digi:link module="translation" href="/importexport.do" title="${trnTranslationManager}">
-     		<digi:trn>Translation Manager</digi:trn>
-       </digi:link>	
-    </td>
-  </tr>
-  </module:display>
-   -->
+
 </table>
 
 	</div></td>
@@ -497,6 +483,22 @@
        </td>
    </tr>
    </feature:display>
+  <module:display name="Admin Translation Manager" parentModule="ADMINISTRATIVE SECTION">
+  <tr>
+    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    <td class="admin_box_label">
+    <c:set var="translation">
+        	translation
+       </c:set>
+    	<c:set var="trnTranslationManager">
+        	<digi:trn>Click here to view Translation Manager</digi:trn>
+       </c:set>
+       <digi:link module="translation" href="/importexport.do" title="${trnTranslationManager}">
+     		<digi:trn>Translation Manager</digi:trn>
+       </digi:link>	
+    </td>
+  </tr>
+  </module:display>
 </table>
 
 	</div></td>

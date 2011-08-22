@@ -22,25 +22,6 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -77,26 +58,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	}
 	
 	protected Form<AmpActivityVersion> activityForm;
-	private AmpIdentificationFormSectionFeature identificationFeature;
-	private AmpInternalIdsFormSectionFeature internalIdsFeature;
-	private AmpPlanningFormSectionFeature planningFeature;
-	private AmpRegionalFundingFormSectionFeature regionalFundingFeature;
-	private AmpLocationFormSectionFeature locationFeature;
-	private AmpProgramFormSectionFeature programFeature;
-	private AmpCrossCuttingIssuesFormSectionFeature crossCuttingIssues;
-	private AmpSectorsFormSectionFeature sectorsFeature;
-	private AmpDonorFundingFormSectionFeature donorFundingFeature;
-	private AmpRelatedOrganizationsFormSectionFeature relatedOrganizations;
-	private AmpComponentsFormSectionFeature components;
-	private AmpStructuresFormSectionFeature structures;
-	private AmpIssuesFormSectionFeature issues;
-	private AmpRegionalObservationsFormSectionFeature regionalObs;
-	private AmpContactsFormSectionFeature contacts;
-	private AmpContractingFormSectionFeature contracts;
-	private AmpMEFormSectionFeature me;
-	private AmpPIFormSectionFeature pi;
-	private AmpResourcesFormSectionFeature resources;
-	
+
 	/**
 	 * @param id
 	 * @param model

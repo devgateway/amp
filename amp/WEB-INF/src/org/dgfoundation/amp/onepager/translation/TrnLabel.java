@@ -37,7 +37,6 @@ public class TrnLabel extends Label {
 	private static final Logger logger = Logger.getLogger(TrnLabel.class);
 
 	private CharSequence key;
-	private String value;
 
 	/**
 	 * NOT MEANT FOR GENERAL USE, only translation classes may use
@@ -48,7 +47,7 @@ public class TrnLabel extends Label {
 	public TrnLabel(String id, String label) {
 		super(id, label);
 		super.setDefaultModelObject(translate(label));
-		addKeyAttribute(TranslatorWorker.generateTrnKey(value));
+		addKeyAttribute(TranslatorWorker.generateTrnKey(label));
 		trnLabel();
 	}
 
@@ -79,7 +78,6 @@ public class TrnLabel extends Label {
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
 											value, TranslatorWorker.TRNTYPE_LOCAL, null);
-			this.value = translatedValue;
 			return translatedValue;
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

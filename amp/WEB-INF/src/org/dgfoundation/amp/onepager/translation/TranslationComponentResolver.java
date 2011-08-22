@@ -42,11 +42,13 @@ public class TranslationComponentResolver implements IComponentResolver {
 			MarkupStream markupStream, ComponentTag tag) {
 
 		if (tag.getName().compareTo("trn") == 0) {
+			/*
 			String messageKey = tag.getAttributes().getString("key");
 			if ((messageKey == null) || (messageKey.trim().length() == 0)) {
 				throw new MarkupException(
 						"Wrong format of <wicket:trn key='xxx'>: attribute 'key' is missing");
 			}
+			*/
 			// generate an id for our component
 			final String id = TRANSLATION_COMPONENT_PREFIX + container.getPage().getAutoIndex();
 			// get the label's initial value, stored inside the tag

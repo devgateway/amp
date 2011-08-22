@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetField;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
@@ -29,6 +30,8 @@ import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.validators.AmpRequiredFieldValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -187,10 +190,16 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			add(new AmpTextAreaFieldPanel<String>("objective",
 					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE));
 			
+			AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+			Site site = session.getSite();
+			String cOvIndicators = TranslatorWorker.translateText("OV Indicators", session.getLocale().getLanguage(), site.getSiteId());
+			String cAssumption = TranslatorWorker.translateText("Assumption", session.getLocale().getLanguage(), site.getSiteId());
+			String cVerification = TranslatorWorker.translateText("Verification", session.getLocale().getLanguage(), site.getSiteId());
+			
 			List<ITab> objectiveTabs = new ArrayList<ITab>();
-			objectiveTabs.add(new AmpCommentTab("OV Indicators" , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			objectiveTabs.add(new AmpCommentTab("Assumption" , "Objective Assumption", am, AmpCommentPanel.class));
-			objectiveTabs.add(new AmpCommentTab("Verification" , "Objective Verification", am, AmpCommentPanel.class));
+			objectiveTabs.add(new AmpCommentTab(cOvIndicators , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+			objectiveTabs.add(new AmpCommentTab(cAssumption , "Objective Assumption", am, AmpCommentPanel.class));
+			objectiveTabs.add(new AmpCommentTab(cVerification , "Objective Verification", am, AmpCommentPanel.class));
 			
 			AmpCommentTabsFieldWrapper objTabs = new AmpCommentTabsFieldWrapper("objectiveTabs", "Objective Comments", objectiveTabs);
 			add(objTabs);
@@ -199,9 +208,9 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.MODULE));
 			
 			List<ITab> tabs = new ArrayList<ITab>();
-			tabs.add(new AmpCommentTab("OV Indicators" , "Purpose Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab("Assumption" , "Purpose Assumption", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab("Verification" , "Purpose Verification", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cOvIndicators , "Purpose Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cAssumption , "Purpose Assumption", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cVerification , "Purpose Verification", am, AmpCommentPanel.class));
 			
 			AmpCommentTabsFieldWrapper purposeTabs = new AmpCommentTabsFieldWrapper("purposeTabs", "Purpose Comments", tabs);
 			add(purposeTabs);
@@ -210,9 +219,9 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.MODULE));
 	
 			tabs = new ArrayList<ITab>();
-			tabs.add(new AmpCommentTab("OV Indicators" , "Results Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab("Assumption" , "Results Assumption", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab("Verification" , "Results Verification", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cOvIndicators , "Results Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cAssumption , "Results Assumption", am, AmpCommentPanel.class));
+			tabs.add(new AmpCommentTab(cVerification , "Results Verification", am, AmpCommentPanel.class));
 			
 			AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
 			add(resultsTabs);

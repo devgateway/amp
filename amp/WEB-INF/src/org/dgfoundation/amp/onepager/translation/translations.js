@@ -36,7 +36,6 @@ function spawnEditBox(labelId) {
 		editor.setAttribute('onkeypress', 'if (Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('onkeydown', 'if (!Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('class', 'inputx');
-		
 		editor.setAttribute('key', label.getAttribute('key'));
 		
 		//neutralize all href parent containers in order for this to work
@@ -53,7 +52,11 @@ function spawnEditBox(labelId) {
 	else
 		editor.style.display = "inline"; //show the old editor
 	
-	editor.value = label.innerHTML;
+	var labelValue = label.innerHTML;
+	if (label.tagName == "INPUT")
+		labelValue = label.value;
+
+	editor.value = labelValue;
 	//onblur is reset upon cancel or save must be set again
 	editor.setAttribute('onblur', 'saveEditBox("'+ myId +'")');
 	editor.focus();
@@ -62,7 +65,11 @@ function spawnEditBox(labelId) {
 
 function updateLabel(labelId, newValue) {
 	var label = document.getElementById(labelId);
-	label.innerHTML = newValue;
+	
+	if (label.tagName == "INPUT")
+		label.value = newValue;
+	else
+		label.innerHTML = newValue;
 }
 
 /**

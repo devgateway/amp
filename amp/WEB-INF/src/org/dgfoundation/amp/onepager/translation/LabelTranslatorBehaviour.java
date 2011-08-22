@@ -4,21 +4,20 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 
 /**
  * @author aartimon@dginternational.org
  * since Oct 4, 2010
  */
-public class LabelTranslatorBehaviour extends AttributeAppender {
+public class LabelTranslatorBehaviour extends SimpleAttributeModifier {
 
 	private static final long serialVersionUID = 1L;
 	
 	private CharSequence key;
 
 	public LabelTranslatorBehaviour() {
-		super("onclick", new Model("spawnEditBox(this.id)"), ";");
+		super("onclick", "spawnEditBox(this.id)");
 		
 	}
 	

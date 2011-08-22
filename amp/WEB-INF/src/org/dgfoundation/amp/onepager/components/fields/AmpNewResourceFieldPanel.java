@@ -19,6 +19,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -39,11 +40,11 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		FileUploadField file = new FileUploadField("file", new PropertyModel<FileUpload>(td, "file"));
 		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, true);
 		webLink.setVisible(false);
-		Model<String> resourceLabelModel = new Model<String>("File");
+		String resourceLabelModel = "File";
 		if (newResourceIsWebLink)
-			resourceLabelModel.setObject("Web Link");
+			resourceLabelModel = "Web Link";
 			
-		Label resourceLabel = new Label("resourceLabel", resourceLabelModel);
+		TrnLabel resourceLabel = new TrnLabel("resourceLabel", resourceLabelModel);
 
 		// create the form
         Form<?> form = new Form<Void>("form")

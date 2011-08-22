@@ -32,6 +32,35 @@ public class MapFieldsForm extends ActionForm {
 	private String [] selectedFields;
 	private String [] selectedAmpValues;
 	private String [] selectedAmpIds;
+	
+	private Integer currentPage;
+	private int page = 0;
+	private int lastPage ;
+	
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(int lastPage) {
+		this.lastPage = lastPage;
+	}
+
 	public String[] getSelectedAmpIds() {
 		return selectedAmpIds;
 	}
@@ -98,7 +127,7 @@ public class MapFieldsForm extends ActionForm {
 		super.reset(mapping, request);
 		selectedFields		 =	null;
 		allSelectedAmpValues =	null;
-		selectedAmpClass 	 = 	null;
+	//	selectedAmpClass 	 = 	null;
 		selectedAmpValues 	 =  null;
 		selectedAmpIds 		 =	null;
 	}

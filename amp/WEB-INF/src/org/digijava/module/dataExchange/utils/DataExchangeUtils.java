@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +55,7 @@ import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
@@ -147,7 +149,7 @@ public class DataExchangeUtils {
 
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception getAllAmpDEMappingFields: " + ex.getMessage());
 		}
 		finally {
 			if (session != null) {
@@ -160,6 +162,74 @@ public class DataExchangeUtils {
 			}
 		}
 		return col;
+	}
+
+	
+	public static Collection<DEMappingFields> getDEMappingFieldsByAmpClass(String ampClass, int startIndex) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by id";
+			qry = session.createQuery(qryStr);
+            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            if(startIndex!=-1)
+             {
+            	qry.setFirstResult(startIndex);
+            	qry.setMaxResults(Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
+             }
+			
+			col = qry.list();
+
+		}
+		catch (Exception ex) {
+			logger.error("Exception getDEMappingFieldsByAmpClass: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+
+	public static int getCountDEMappingFieldsByAmpClass(String ampClass) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+		int resultList = 0;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			qryStr = "select count(*) from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass ";
+			qry = session.createQuery(qryStr);
+            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            resultList	=  (Integer)qry.uniqueResult();
+		}
+		catch (Exception ex) {
+			logger.error("Exception getCountDEMappingFieldsByAmpClass: " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return resultList;
 	}
 	
 	
@@ -1276,7 +1346,7 @@ public class DataExchangeUtils {
 			tx.commit();
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception insertDEMappingField: " + ex.getMessage());
 		}
 		finally {
 			if (session != null) {
@@ -1471,6 +1541,35 @@ public class DataExchangeUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void getAmpClassesFromDb(TreeSet<String> ampClasses) {
+		Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select distinct f.ampClass from " + DEMappingFields.class.getName()+ " f";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+               // Object[] item = (Object[])iter.next();
+                String ampClass = (String) iter.next();
+                ampClasses.add(ampClass);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
+        return ;
+		
 	}
 	
 	

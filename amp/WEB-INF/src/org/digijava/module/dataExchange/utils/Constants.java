@@ -65,6 +65,7 @@ public class Constants {
 	public static final String FIELD_ACTIVITY_DESCRIPTION="activity.description";
 	
 	public static final int RECORDS_AMOUNT_PER_PAGE 	= 10;
+	public static final int MAPPING_RECORDS_AMOUNT_PER_PAGE 	= 25;
 	
 	public static final String LOG_PER_EXECUTION_DESC_CHECK = "Check feed source";
 	public static final String LOG_PER_EXECUTION_DESC_IMPORT = "Import activities";

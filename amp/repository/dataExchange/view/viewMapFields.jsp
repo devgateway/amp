@@ -28,7 +28,7 @@ function saveRecord(id) {
 function saveAll() {
 
 	 var checks = document.getElementsByName("selectedFields");
-	 var isChecked = false
+	 var isChecked = false;
 
 	 var params = "&actionType=saveAllRecords";
 	 for(i=0;i<checks.length;i++){
@@ -67,27 +67,29 @@ function saveAll() {
 function checksAll() {
 	 var check = document.getElementById("checkAll");
 	 $('[id^="Check_Amp"]').attr('checked', false);
-	 var records = document.getElementById("filterAmpClass");
-	 //var v = records.options[records.selectedIndex].text;
-	 var v = records.value;
-	 if("all" == v)
-		 $('[id^="Check_Amp"]').attr('checked', check.checked);
-	 else $('[id^="Check_'+v+'_"]').attr('checked', check.checked);
+	 $('[id^="Check_Amp"]').attr('checked', check.checked);
 	 return true;
+	 //var records = document.getElementById("filterAmpClass");
+	 //var v = records.options[records.selectedIndex].text;
+	 //var v = records.value;
+	 //if("all" == v)
+	 //else $('[id^="Check_'+v+'_"]').attr('checked', check.checked);
 }
 
 function showFilter() {
-	 var records = document.getElementById("filterAmpClass");
-	 //var v = records.options[records.selectedIndex].text;
-	 var v = records.value;
-	 if("all" == records.value)
-	 	$('[id^="Amp"]').show();
-	 else
-		{
-		 	$('[id^="Amp"]').hide();
-			$('[id^="'+v+'_"]').show();
-		}
-	 return true;
+	var records = document.getElementById("filterAmpClass");
+	var selectedAmpClass = records.value;
+	page(1,selectedAmpClass);	
+}
+
+function page (page, ampSelectedClass){
+	var form = document.getElementById('logForm');
+//	var records = document.getElementById("filterAmpClass");
+//	var selectedAmpClass = records.options[records.selectedIndex].text;
+	
+	form.action = "/dataExchange/mapFields.do?page="+page+"&selectedAmpClass="+ampSelectedClass;
+	form.target="_self";
+	form.submit();	
 }
 
 </script>
@@ -98,7 +100,7 @@ function showFilter() {
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/mapFields.do" styleId="logForm">
 
-		<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 			<!-- BREADCRUMP START -->
 			<tr>
 				<td height="33">
@@ -119,17 +121,16 @@ function showFilter() {
 		</table>
 		<!-- BREADCRUMP END -->
 		<!-- MAIN CONTENT PART START -->
-  		<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+  		<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 			<tr>
 			    <td class="main_side_1">
-				    <table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;" id="tableRecords">
+				    <table class="inside" width="980px" border=0 cellpadding="0" cellspacing="0" style="margin:10px;" id="tableRecords">
 						<tr>
-						<td colspan="6" align="center" background="images/ins_header.gif" class="inside"><b class="ins_header">Filter by:
+						<td colspan="8" align="center" background="images/ins_header.gif" class="inside"><b class="ins_header">Filter by:
 							<html:select property="selectedAmpClass" styleClass="dropdwn_sm" onchange="showFilter()" styleId="filterAmpClass">
-								<html:option value="all"  >View All</html:option>
         						<logic:iterate id="cls" name="mapFieldsForm" property="ampClasses">
-        							<bean:define id="itemAmpClass"><%= cls.toString().replaceAll(" ","") %></bean:define>
-        							<html:option value="Amp${itemAmpClass}">${cls}</html:option>
+        							<%-- <bean:define id="itemAmpClass"><%= cls.toString().replaceAll(" ","") %></bean:define>--%>
+        							<html:option value="${cls}" >${cls}</html:option>
 								</logic:iterate>
         					</html:select>
 						</b></td>
@@ -198,6 +199,22 @@ function showFilter() {
 							  <td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="Save All" class="buttonx_sm" onclick="saveAll()"/></td>
 						</tr>
 					</table>
+					<div class="paging" style="font-size:11px;margin:10px;">
+						<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+						<c:forEach var="page" begin="1" end="${mapFieldsForm.lastPage}">
+							<bean:define id="currPage" name="mapFieldsForm" property="currentPage" />
+							<c:if test="${mapFieldsForm.currentPage == page}">
+								<b class="paging_sel">${page}</b>
+							</c:if>
+							<c:if test="${mapFieldsForm.currentPage != page}">
+								<c:set var="translation">
+									<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+								</c:set>
+								<a href="javascript:page(${page},'${mapFieldsForm.selectedAmpClass}')" title="${translation}" class="l_sm">${page}</a>
+							</c:if>
+							|&nbsp;
+						</c:forEach>
+					</div>
 				</td>
 			</tr>
 		</table>

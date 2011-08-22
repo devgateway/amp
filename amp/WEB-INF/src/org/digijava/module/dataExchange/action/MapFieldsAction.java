@@ -33,6 +33,8 @@ import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DEMappingFieldsDisplay;
 import org.digijava.module.dataExchange.form.MapFieldsForm;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
+import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
+import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
 /**
@@ -75,14 +77,39 @@ public class MapFieldsAction extends MultiAction {
 			}
 		}
 		TreeSet<String> ampClasses = new TreeSet<String>();
-		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getAllAmpDEMappingFields();
+		
+		String ampClassTypeSelected = DataExchangeConstants.IATI_ACTIVITY;
+		if( mForm.getSelectedAmpClass()!=null && "".compareTo(mForm.getSelectedAmpClass()) != 0 && "undefined".compareTo(mForm.getSelectedAmpClass()) != 0)
+			ampClassTypeSelected = mForm.getSelectedAmpClass();
+		
+		int allDEFieldsCounter =  DataExchangeUtils.getCountDEMappingFieldsByAmpClass(ampClassTypeSelected);
+		int lastPage = 1;
+		if (allDEFieldsCounter > Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE) {
+			lastPage = allDEFieldsCounter% Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE==0 ? allDEFieldsCounter / Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE : allDEFieldsCounter / Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE +1;
+		}
+		
+		int startIndex = 0;
+		if (mForm.getPage() != 0 ) {
+			startIndex = Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE *( mForm.getPage()-1);
+		}
+		
+		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getDEMappingFieldsByAmpClass(ampClassTypeSelected,startIndex);
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();
 		
-		populateCollections(ampClasses, allAmpDEMappingFields, fieldDisplayList);
+		DataExchangeUtils.getAmpClassesFromDb(ampClasses);
+		populateCollections(allAmpDEMappingFields, fieldDisplayList, ampClassTypeSelected);
 		
 		mForm.setMappedFields(fieldDisplayList);
 		mForm.setAmpClasses(ampClasses);
 		
+		if(mForm.getPage() == 0){
+			mForm.setCurrentPage(1);
+		}else{
+			mForm.setCurrentPage(mForm.getPage());
+		}
+		
+		mForm.setLastPage(lastPage);
+		mForm.setSelectedAmpClass(ampClassTypeSelected);
 		if ( "saveMappedField".equals( mForm.getAction() ) ) {
 			modeSaveField(mapping, mForm, request, response);
 		}
@@ -187,59 +214,55 @@ public class MapFieldsAction extends MultiAction {
 	return finalValue;
 	}
 	
-	private void populateCollections(TreeSet<String> ampClasses,
-			Collection<DEMappingFields> allAmpDEMappingFields,
-			ArrayList<DEMappingFieldsDisplay> fieldDisplayList)
-			throws DgException {
-		TreeMap<Long, String> allOrgTypes = DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f");
-		TreeMap<Long, String> nameGroupAllActivities = DataExchangeUtils.getNameGroupAllActivities();
-		TreeMap<Long, String> allOrgs = DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f");
-		TreeMap<Long, String> statusList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
-		TreeMap<Long, String> typeOfAssistanceList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-		TreeMap<Long, String> financingInstrumentList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-		TreeMap<Long, String> modeOfPaymentList = DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
-		TreeMap<Long, String> sectorSchemeList = DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
-		TreeMap<Long, String> sectorList = DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampSectorId from " + AmpSector.class.getName()+ " f");
-		TreeMap<Long, String> locationsList = DataExchangeUtils.getNameIdAllLocations();
-		
+	private void populateCollections(Collection<DEMappingFields> allAmpDEMappingFields, ArrayList<DEMappingFieldsDisplay> fieldDisplayList, String ampClassTypeSelected)	throws DgException {
+		TreeMap<Long, String> allEntities 	=	getAllAmpEntitiesByClass(ampClassTypeSelected);
 		
 		for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
 			DEMappingFields f = (DEMappingFields) it.next();
-			ampClasses.add(f.getAmpClass());
-			if(DataExchangeConstants.IATI_ACTIVITY.compareTo(f.getIatiPath()) ==0 )
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,nameGroupAllActivities));
-			if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allOrgTypes));
-			}
-			if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,allOrgs));
-			}
-			if(DataExchangeConstants.IATI_LOCATION.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,locationsList));
-			}
-			if(DataExchangeConstants.IATI_ACTIVITY_STATUS.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,statusList));
-			}
-			if(DataExchangeConstants.IATI_VOCABULARY_CODE.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,sectorSchemeList));
-			}
-			if(DataExchangeConstants.IATI_SECTOR.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,sectorList));
-			}
-			//type of assistance
-			if(DataExchangeConstants.IATI_FINANCE_TYPE.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,typeOfAssistanceList));
-			}
-			//financing instrument
-			if(DataExchangeConstants.IATI_AID_TYPE.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,financingInstrumentList));
-			}
-			//mode of payment
-			if(DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL.compareTo(f.getIatiPath())==0){
-				fieldDisplayList.add(new DEMappingFieldsDisplay(f,modeOfPaymentList));
-			}
+			fieldDisplayList.add(new DEMappingFieldsDisplay(f,allEntities));
 		}
 	}
+	
+	private TreeMap<Long, String> getAllAmpEntitiesByClass(String ampClassTypeSelected) {
+		// TODO Auto-generated method stub
+		TreeMap<Long, String> allEntities 	=	null;
+		if(DataExchangeConstants.IATI_ACTIVITY.compareTo(ampClassTypeSelected) ==0 )
+			allEntities 	=	DataExchangeUtils.getNameGroupAllActivities();
+		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f");
+		}
+		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f");
+		}
+		if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllLocations();
+		}
+		if(CategoryConstants.ACTIVITY_STATUS_NAME.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
+		}
+		if(DataExchangeConstants.AMP_VOCABULARY_CODE.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
+		}
+		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampSectorId from " + AmpSector.class.getName()+ " f");
+		}
+		//type of assistance
+		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		}
+		//financing instrument
+		if(CategoryConstants.FINANCING_INSTRUMENT_NAME.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		}
+		//mode of payment
+		if(CategoryConstants.MODE_OF_PAYMENT_NAME.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
+		}
+		
+		
+		return allEntities;
+	}
+
 	private boolean isValidString(String s ){
 		if(s != null && "".compareTo(s.trim())!=0 )
 			return true;

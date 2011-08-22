@@ -12,13 +12,11 @@ import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -48,9 +46,8 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		final String levelLabel = labelName.get(levelClass);
 		String levelChildrenName = setName.get(levelClass);
 		final PropertyModel levelChildren = new PropertyModel(objModel, levelChildrenName);
-		
-		
-		final TextField name = new TextField("name", new PropertyModel(objModel.getObject(),"name"));
+	
+		final TextArea name =new TextArea("name", new PropertyModel(objModel.getObject(),"name"));
 		addFormComponent(name);
 		Label label = new Label("label", levelLabel);
 		add(label);

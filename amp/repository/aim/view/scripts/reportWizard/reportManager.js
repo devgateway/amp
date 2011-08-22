@@ -35,7 +35,7 @@ function populateRPS(rpSettings) {
 		}
 	}
 	if ( measArray == null || measArray.length == 0 ) {
-		measArray.push(unselectedMeasure);
+		measArray.push(repManagerParams.previewUnselectedMeasureTrn);
 	}
 	
 	var period			= getReportPeriod();

@@ -14,11 +14,12 @@ function ReportPreviewSettings() {
 	this.measures		= ["Commitments", "Disbursements"];
 	this.hierarchies	= ["Primary Sector"];
 	
-	this.fundingName		= fundingName;
-	this.totalCostName		= totalCostName;
-	this.reportTotalsName	= reportTotalsName;
+	this.fundingName		= repManagerParams.previewFundingTrn;
+	this.totalCostName		= repManagerParams.previewTotalCostTrn;
+	this.reportTotalsName	= repManagerParams.previewReportTotalsTrn;
 	
-	this.monthNames		= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	//this.monthNames		= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	this.monthNames			= repManagerParams.monthNames;
 	this.quarterNames		= ["Q1","Q2","Q3","Q4"];
 	
 	this.reportTableId	= "reportTable";

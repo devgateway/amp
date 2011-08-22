@@ -65,6 +65,31 @@
 <c:set var="cannotSaveFiltersMessage">
 	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
 </c:set>
+<c:set var="previewFundingTrn">
+	<digi:trn>Funding</digi:trn>
+</c:set>
+<c:set var="previewTotalCostTrn">
+	<digi:trn>Total Cost</digi:trn>
+</c:set>
+<c:set var="previewReportTotalsTrn">
+	<digi:trn>Report Totals</digi:trn>
+</c:set>
+<c:set var="previewUnselectedMeasureTrn">
+	<digi:trn>UNSELECTED MEASURE</digi:trn>
+</c:set>
+<c:set var="january">January</c:set>
+<c:set var="february">February</c:set>
+<c:set var="march">March</c:set>
+<c:set var="april">April</c:set>
+<c:set var="may">May</c:set>
+<c:set var="june">June</c:set>
+<c:set var="july">July</c:set>
+<c:set var="august">August</c:set>
+<c:set var="september">September</c:set>
+<c:set var="october">October</c:set>
+<c:set var="november">November</c:set>
+<c:set var="december">December</c:set>
+
 <c:if test="${myForm.desktopTab}">
 	<c:set var="pageTitle">
 		<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
@@ -169,7 +194,12 @@
 									savingDataMessage: "${savingDataMessage}",
 									filterPanelName: "${filterPanelName}",
 									cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
-									savingRepTabMessage: "${savingMessage}"
+									savingRepTabMessage: "${savingMessage}",
+									previewFundingTrn: "${previewFundingNameTrn}",
+									previewTotalCostTrn: "${previewTotalCostTrn}",
+									previewReportTotalsTrn: "${previewReportTotalsTrn}",
+									previewUnselectedMeasureTrn: "${previewUnselectedMeasureTrn}",
+									monthNames:["${january}","${february}","${march}","${april}","${may}","${june}","${july}","${august}","${september}","${october}","${november}","${december}"]
 								};
 		
 		YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');

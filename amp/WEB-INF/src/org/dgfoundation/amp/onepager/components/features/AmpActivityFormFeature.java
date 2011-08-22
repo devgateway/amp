@@ -43,6 +43,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsForm
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -236,7 +237,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void populateItem(final ListItem<AmpComponentPanel> item) {
 				if (item.getModelObject() != null){
-					Label label = new Label("quickName", item.getModelObject().getFMName());
+					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
 					String itemId = item.getModelObject().getFMName().replaceAll(" ", "");
 					label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200);"));
 					if (!item.getModelObject().isVisible())

@@ -552,28 +552,28 @@
         //*** Validate width
         if(parseInt(width)==(width-0)){		   	
             if(parseInt(width)<10 || parseInt(width)>1000){
-                errmsg+='\n<digi:trn>Width must be in range from 10 to 1000</digi:trn>';
+                errmsg+='\n<digi:trn jsFriendly="true">Width must be in range from 10 to 1000</digi:trn>';
             }
         }else{
-            errmsg+='\n<digi:trn>Please enter correct width</digi:trn>';
+            errmsg+='\n<digi:trn jsFriendly="true">Please enter correct width</digi:trn>';
         }		 
         //***Validate height
         if(parseInt(height)==(height-0)) {
             if(parseInt(height)<10 || parseInt(height)>1000){
-                errmsg+='\n<digi:trn>Height must be in range from 10 to 1000</digi:trn>';
+                errmsg+='\n<digi:trn jsFriendly="true">Height must be in range from 10 to 1000</digi:trn>';
             }
         }else{
-            errmsg+='\n<digi:trn>Please enter correct height</digi:trn>';
+            errmsg+='\n<digi:trn jsFriendly="true">Please enter correct height</digi:trn>';
         }		 
         //***Validate angle	
 
         if(angle!=''){
             if(parseInt(angle)==(angle-0)) {
                 if(parseInt(angle)<0 || parseInt(angle)>90){
-                    errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
+                    errmsg+='\n<digi:trn jsFriendly="true">Angle of inclination must be in range from 0 to 90</digi:trn>';
                 }
             }else{
-                errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
+                errmsg+='\n<digi:trn jsFriendly="true">Please enter correct angle</digi:trn>';
             }
         }
 
@@ -617,15 +617,15 @@
             for (i = 0, l = members.length; i < l; ++i) {
                 item = members[i];
                 html[j++] = '<tr><td width="300" class="inside">';
-                html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
+                html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'<digi:trn jsFriendly="true">Click to View Member Detais</digi:trn>\'>'+item.name+'</a>';
                 html[j++] = '</td><td align=\'center\' width="100" class="inside">';
-                html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
-                html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
+                html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn jsFriendly="true">Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
+                html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
                 html[j++] = '</td></tr>';
             }
-            document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;"><digi:trn>* Worskpace Manager</digi:trn></em>';
+            document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;"><digi:trn  jsFriendly="true">* Worskpace Manager</digi:trn></em>';
         } else {
-            html[j++] = '<tr><td colspan="2"><em><digi:trn>No Member data</digi:trn><em></td></tr>';
+            html[j++] = '<tr><td colspan="2"><em><digi:trn  jsFriendly="true">No Member data</digi:trn><em></td></tr>';
             document.getElementById('footerMessage').innerHTML='';
         }
         html[j] = "</tbody></table>";
@@ -686,12 +686,12 @@
                 html[j++] = '<tr><td width="300" class="inside">';
                 html[j++] = item.name;
                 html[j++] = '</td ><td align=\'center\' width="100" class="inside">';
-                html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn>Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
+                html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
                 html[j++] = '</td></tr>';
             }
         
         } else {
-            html[j++] = '<tr><td colspan="2"><em><digi:trn>No Activities</digi:trn></em></td></tr>';
+            html[j++] = '<tr><td colspan="2"><em><digi:trn jsFriendly="true">No Activities</digi:trn></em></td></tr>';
         }
         document.getElementById('footerMessage').innerHTML='';
         html[j] = "</tbody></table>";
@@ -745,7 +745,7 @@
                     members = YAHOO.lang.JSON.parse(res.responseText);
                     updateTableMembers(members);
                     document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
-                    document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
+                    document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()"><digi:trn jsFriendly="true">Add Workspace Member</digi:trn></a>'
                 }
                 catch(e) {
                     alert("<digi:trn>Error getting members data</digi:trn>");
@@ -777,7 +777,7 @@
                     members = YAHOO.lang.JSON.parse(res.responseText);
                     updateTableActivities(members);
                     document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
-                    document.getElementById('addNew').innerHTML='<a title="Click here to Assign Activity" style="font-size:12px; padding-left:5px;" href=\'JavaScript:addActivities('+id+')\'>Assign an activity</a>';
+                    document.getElementById('addNew').innerHTML='<a title="Click here to Assign Activity" style="font-size:12px; padding-left:5px;" href=\'JavaScript:addActivities('+id+')\'><digi:trn jsFriendly="true">Assign an activity</digi:trn></a>';
 
                 }
                 catch(e) {

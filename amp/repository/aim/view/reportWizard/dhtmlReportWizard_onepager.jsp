@@ -91,6 +91,11 @@
 <c:set var="november">November</c:set>
 <c:set var="december">December</c:set>
 
+<c:set var="reportUsesFilters">false</c:set>
+<c:if test="${myForm.useFilters!=null && myForm.useFilters}">
+	<c:set var="reportUsesFilters">true</c:set>
+</c:if> 
+
 
 <c:if test="${myForm.desktopTab}">
 	<c:set var="pageTitle">
@@ -189,6 +194,7 @@
 		repManagerParams	= { // Global scoped object
 				desktopTab: ${myForm.desktopTab},
 				onePager: ${myForm.onePager},
+				reportUsesFilters: ${reportUsesFilters},
 				loadingDataMessage: "${loadingDataMessage}",
 				filterProblemsMessage: "${filterProblemsMessage}",
 				failureMessage: "${failureMessage}",

@@ -1,5 +1,5 @@
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
-				savingDataMessage, cannotSaveFiltersMessage) {
+				savingDataMessage, cannotSaveFiltersMessage, doReset) {
 	this.connectionFailureMessage	= connectionFailureMessage;
 	this.filterProblemsMessage		= filterProblemsMessage;
 	this.loadingDataMessage			= loadingDataMessage;
@@ -7,6 +7,8 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.cannotSaveFiltersMessage	= cannotSaveFiltersMessage;
 	
 	this.resetString				= "&doreset=true";
+	if ( !doReset )
+		this.resetString	= "";
 	
 	this.filterPanel = new YAHOO.widget.Panel("new", {
 			width:"750px",

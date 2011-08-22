@@ -268,7 +268,6 @@
 	}
 		
 		var responseAddNewDataSuccess = function(o) {
-			alert('aaa');
 		 	var xml=o.responseXML;
 			var property=xml.getElementsByTagName('property')[0];
 			var dataName=property.getAttribute("type");

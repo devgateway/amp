@@ -134,7 +134,7 @@
 												</c:choose>
 											</div>
 											<span id="spanUseFilters">
-												<html:checkbox property="useFilters" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" disabled="${spanUseFiltersDisabled}"/> 
+												<html:checkbox property="useFilters" name="myForm" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" disabled="${spanUseFiltersDisabled}"/> 
 												<digi:trn key="rep:wizard:useAboveFilters">Use above filters</digi:trn>
 											</span>
 										</fieldset>

@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -165,6 +166,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void populateItem(final ListItem<AmpComponentPanel> item) {
 				if (item.getModelObject() != null)
 					item.add(item.getModelObject());
+				else{
+					Label tmp = new Label("featureItem", "ERROR: Section failed to load!");
+					tmp.add(new SimpleAttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
+					item.add(tmp);
+				}
+					
 			}
 		};
 		list.setReuseItems(true);
@@ -205,6 +212,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);
 					item.add(label);
+				}
+				else{
+					WebMarkupContainer tmp = new WebMarkupContainer("quickName");
+					tmp.setVisible(false);
+					item.add(tmp);
 				}
 			}
 		};

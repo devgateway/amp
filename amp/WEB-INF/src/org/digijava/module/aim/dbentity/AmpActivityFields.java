@@ -122,7 +122,6 @@ LoggerIdentifiable, Cloneable {
 	protected Set sectors ;
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set contracts;
-	protected Set componentes; //for bolivia;
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set locations ;
 	@VersionableCollection(fieldTitle = "Org. Role")
@@ -134,10 +133,13 @@ LoggerIdentifiable, Cloneable {
 	protected Set funding ;
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
-	@VersionableCollection(fieldTitle = "Documents")
+	
+	/**
+	 * Old, not used anymore
+	 * @deprecated
+	 */
+	@Deprecated
 	protected Set documents ;
-	@VersionableCollection(fieldTitle = "Notes")
-	protected Set notes;
 	@VersionableCollection(fieldTitle = "Issues")
 	protected Set issues;
 
@@ -165,11 +167,20 @@ LoggerIdentifiable, Cloneable {
 	protected String currencyCode;
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
-	@VersionableCollection(fieldTitle = "Reference Docs")
+
+	/**
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	protected Set referenceDocs;
 
+	/*
+	@Deprecated
 	@VersionableCollection(fieldTitle = "Activity Programs")
 	protected Set activityPrograms;
+	 */
+
 	// use contFirstName and contLastName instead.
 	// The field is defunct
 
@@ -240,8 +251,6 @@ LoggerIdentifiable, Cloneable {
 	protected Date actualCompletionDate;
 	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
 	protected Date proposedCompletionDate;
-	@VersionableCollection(fieldTitle = "Closing Dates")
-	protected Set closingDates;
 
 	protected User author; // use activityCreator instead
 
@@ -687,14 +696,6 @@ LoggerIdentifiable, Cloneable {
 	}
 
 	/**
-	 * @return
-	 */
-	public Set getNotes() {
-		return notes;
-	}
-
-
-	/**
 	 * @param string
 	 */
 	public void setProgress(Set progress) {
@@ -706,13 +707,6 @@ LoggerIdentifiable, Cloneable {
 	 */
 	public void setDocuments(Set documents) {
 		this.documents = documents;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setNotes(Set notes) {
-		this.notes = notes;
 	}
 
 	public AmpTheme getThemeId() {
@@ -933,19 +927,6 @@ contactName = string;
 	 */
 	public void setProposedStartDate(Date proposedStartDate) {
 		this.proposedStartDate = proposedStartDate;
-	}
-	/**
-	 * @return Returns the closingDates.
-	 */
-	public Set getClosingDates() {
-		return closingDates;
-	}
-	/**
-	 * @param closingDates
-	 *            The closingDates to set.
-	 */
-	public void setClosingDates(Set closingDates) {
-		this.closingDates = closingDates;
 	}
 	/**
 	 * @return Returns the author.
@@ -1208,20 +1189,12 @@ contactName = string;
 		return actRankColl;
 	}
 
-	public Set getActivityPrograms() {
-		return activityPrograms;
-	}
-
 	public Date getProposedCompletionDate() {
 		return proposedCompletionDate;
 	}
 
 	public void setActRankColl(Collection actRankColl) {
 		this.actRankColl = actRankColl;
-	}
-
-	public void setActivityPrograms(Set activityPrograms) {
-		this.activityPrograms = activityPrograms;
 	}
 
 	public void setProposedCompletionDate(Date proposedCompletionDate) {
@@ -1471,14 +1444,6 @@ contactName = string;
 
 	public void setActivityLevel(Long activityLevel) {
 		this.activityLevel = activityLevel;
-	}
-
-	public Set getComponentes() {
-		return componentes;
-	}
-
-	public void setComponentes(Set componentesSet) {
-		this.componentes = componentesSet;
 	}
 
 	public Boolean getGovernmentApprovalProcedures() {

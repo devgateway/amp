@@ -37,8 +37,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Set fundingDetails;
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 	// private AmpTermsAssist ampTermsAssistId ;
-	private Set closingDateHistory;
-
+	
 	/*
 	 * tanzania adds funding amp-1707
 	 */
@@ -321,20 +320,6 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	 */
 	public void setCalType(String string) {
 		calType = string;
-	}
-
-	/**
-	 * @return
-	 */
-	public Set getClosingDateHistory() {
-		return closingDateHistory;
-	}
-
-	/**
-	 * @param set
-	 */
-	public void setClosingDateHistory(Set set) {
-		closingDateHistory = set;
 	}
 
 	public AmpCategoryValue getFinancingInstrument() {
@@ -628,21 +613,6 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			aux.mtefProjections = auxSetMTEF;
 		} else {
 			aux.mtefProjections = null;
-		}
-		
-		if (aux.closingDateHistory != null && aux.closingDateHistory.size() > 0) {
-			Set<AmpClosingDateHistory> auxSetDH = new HashSet<AmpClosingDateHistory>();
-			Iterator<AmpClosingDateHistory> iDH = aux.closingDateHistory.iterator();
-			while (iDH.hasNext()) {
-				AmpClosingDateHistory auxDH = iDH.next();
-				AmpClosingDateHistory newDH = (AmpClosingDateHistory) auxDH.clone();
-				newDH.setAmpClosingDteHstryId(null);
-				newDH.setAmpFundingId(aux);
-				auxSetDH.add(newDH);
-			}
-			aux.closingDateHistory = auxSetDH;
-		} else {
-			aux.closingDateHistory = null;
 		}
 		
 		return aux;

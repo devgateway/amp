@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.HashSet;
+
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -39,6 +41,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 	public AmpFundingItemFeaturePanel(String id, String fmName,
 			IModel<AmpFunding> fundingModel) throws Exception {
 		super(id, fundingModel, fmName, true);
+		
+		if (fundingModel.getObject().getFundingDetails() == null)
+			fundingModel.getObject().setFundingDetails(new HashSet());
+		
+		
 		AmpLabelFieldPanel<AmpOrganisation> orgLabel = new AmpLabelFieldPanel<AmpOrganisation>(
 				"donorOrg", new PropertyModel<AmpOrganisation>(fundingModel,
 						"ampDonorOrgId"), "Donor Organisation", true);

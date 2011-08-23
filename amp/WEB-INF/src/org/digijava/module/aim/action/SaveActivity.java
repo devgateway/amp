@@ -42,7 +42,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -511,52 +510,6 @@ public class SaveActivity extends Action {
 				.getPlanning().getDisbursementsDate()));
         activity.setProposedCompletionDate(DateConversion.getDate(eaForm
         		.getPlanning().getProposedCompDate()));
-
-        
-		AmpActivityClosingDates closeDate = null;
-
-		if (activity.getClosingDates() == null) {
-			activity.setClosingDates(new HashSet());
-		}
-
-		if (!(eaForm.isEditAct())) {
-			closeDate = new AmpActivityClosingDates();
-			closeDate.setAmpActivityId(activity);
-			closeDate.setClosingDate(DateConversion.getDate(eaForm
-					.getPlanning().getProposedCompDate()));
-			closeDate.setComments(" ");
-			closeDate.setType(Constants.REVISED);
-			activity.getClosingDates().add(closeDate);
-		}
-
-		if (eaForm.getPlanning().getActivityCloseDates() != null && eaForm.getPlanning().getActivityCloseDates().size()>0) {
-			Iterator itr = eaForm.getPlanning().getActivityCloseDates().iterator();
-			while (itr.hasNext()) {
-				String date = (String) itr.next();
-				closeDate = new AmpActivityClosingDates();
-				closeDate.setAmpActivityId(activity);
-				closeDate.setClosingDate(DateConversion.getDate(date));
-				closeDate.setType(Constants.REVISED);
-				closeDate.setComments(" ");
-				activity.getClosingDates().add(closeDate);
-			}
-		}
-
-		if (eaForm.getPlanning().getCurrentCompDate() != null
-				&& eaForm.getPlanning().getCurrentCompDate().trim().length() > 0) {
-			closeDate = new AmpActivityClosingDates();
-			closeDate.setAmpActivityId(activity);
-			closeDate.setClosingDate(DateConversion.getDate(eaForm
-					.getPlanning().getCurrentCompDate()));
-			closeDate.setComments(" ");
-			closeDate.setType(Constants.CURRENT);
-
-			Collection temp = activity.getClosingDates();
-			if (!(temp.contains(closeDate))) {
-				activity.getClosingDates().add(closeDate);
-			}
-		}
-
 
 		// set activity internal ids
 		Set internalIds = new HashSet();

@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -28,7 +27,6 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
@@ -206,28 +204,6 @@ public class ExportBuilder {
 				String msg = "Sector is empty";
 				this.addToLog(ampActivity, msg);
 				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
-			}
-		} else if (path.equalsIgnoreCase("activity.programs")){
-			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
-				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
-					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
-					if (ampProgram.getProgramPercentage() != null){
-					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
-							ampProgram.getProgram().getName(),
-							ampProgram.getProgramPercentage().floatValue()));
-					} else {
-						String msg = "Programs.Precent is empty";
-						this.addToLog(ampActivity, msg);
-						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
-					}
-				}
-			}
-		} else if (path.equalsIgnoreCase("activity.notes")){
-			if (ampActivity.getNotes()  != null){
-				for (Iterator iterator = ampActivity.getNotes().iterator(); iterator.hasNext();) {
-					AmpNotes ampNotes = (AmpNotes) iterator.next();
-					parent.getNotes().add(buildFreeText(ampNotes.getLanguage(),ampNotes.getDescription()));
-				}
 			}
 		} else if (path.equalsIgnoreCase("activity.funding")){
 			for (Iterator iterator = ampActivity.getFunding().iterator(); iterator.hasNext();) {

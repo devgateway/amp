@@ -50,13 +50,6 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />
 		</set>
 
-		<set name="closingDateHistory" cascade="all" table="AMP_CLOSING_DATE_HISTORY"
-			inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_funding_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpClosingDateHistory" />
-		</set>
-
 		<many-to-one name="ampActivityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 			

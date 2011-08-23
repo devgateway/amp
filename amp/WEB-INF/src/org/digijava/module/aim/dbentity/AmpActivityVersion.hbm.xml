@@ -157,12 +157,6 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument" />
 		</set>
 
-		<set name="referenceDocs" cascade="all-delete-orphan" inverse="true">
-			<cache usage="read-write" />
-			<key column="activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityReferenceDoc" />
-		</set>
-
 		<set name="orgrole" cascade="all-delete-orphan">
 			<key column="activity" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole" />
@@ -180,16 +174,14 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />
 		</set>
 
-		<set name="componentes" cascade="all-delete-orphan">
-			<key column="amp_activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityComponente" />
-		</set>	
-
+		<!--
+		DEPRECATED
 		<set name="activityPrograms" table="AMP_ACTIVITY_THEME" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
 		</set>
+		-->
 
 		<!-- set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true">
 			<cache usage="read-write"/>
@@ -251,31 +243,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
 		</set>			
 		
-		
-		
-				
-		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.CMSContentItem" column="id" />
-		</set>
-
 		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember"
 				column="amp_member_id" />
-		</set>
-
-		<set name="notes" cascade="delete" inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpNotes" />
-		</set>
-
-		<set name="closingDates" cascade="delete" order-by="closing_date desc" inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />
 		</set>
 
 		<set name="issues" cascade="all-delete-orphan" order-by="amp_issue_id asc" inverse="true">

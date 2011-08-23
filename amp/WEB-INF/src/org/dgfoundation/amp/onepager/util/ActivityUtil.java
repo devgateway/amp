@@ -189,6 +189,7 @@ public class ActivityUtil {
 		am.setTransaction(session.beginTransaction());
 		
 		AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
+
 		//check the activity group for the last version of an activity
 		AmpActivityGroup group = act.getAmpActivityGroup();
 		if (group == null){
@@ -216,6 +217,13 @@ public class ActivityUtil {
 		if (act.getDraft() == null)
 			act.setDraft(false);
 		act.setAmpActivityGroup(group);
+		
+		if (act.getComponentFundings() != null)
+			act.getComponentFundings().size();
+		if (act.getCosts() != null)
+			act.getCosts().size();
+		if (act.getMember() != null)
+			act.getMember().size();
 		
 		return act;
 	}
@@ -270,7 +278,6 @@ public class ActivityUtil {
 			
 			Editor editor = null;
 			try {
-				System.out.println("key=" + key);
 				editor = DbUtil.getEditor(wicketSession.getSite().getSiteId(), key, wicketSession.getLocale().getLanguage());
 				if (editor != null){
 					editor.setBody(editors.get(key));

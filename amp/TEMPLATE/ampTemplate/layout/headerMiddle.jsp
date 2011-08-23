@@ -386,9 +386,10 @@ function adminHelp(){
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
                                                     <a class="yuiampmenuitemlabel" href="javascript:newAddActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
-                                                    	<digi:trn>(New) Add Activity</digi:trn>
+                                                    	<digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
+												<!-- OLD Add activity
 		                                        <li class="yuiampmenuitem_drop">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
@@ -397,6 +398,7 @@ function adminHelp(){
                                                     	<digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
+												 -->
 												</field:display>
 												</c:if>
 											</c:if>

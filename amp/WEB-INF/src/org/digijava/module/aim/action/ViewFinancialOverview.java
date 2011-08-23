@@ -141,13 +141,6 @@ public class ViewFinancialOverview extends TilesAction {
 							.ConvertDateToString(ampFunding
 									.getActualStartDate());
 					formBean.setActualStartDate(tempDateStore);
-					tempDate = DbUtil.getClosingDate(ampFundingId, new Integer(
-							2));
-					if (logger.isDebugEnabled())
-						logger.debug("current closing date : " + tempDate);
-					tempDateStore = DateConversion
-							.ConvertDateToString(tempDate);
-					formBean.setActualCompletionDate(tempDateStore);
 					tempDateStore = DateConversion
 							.ConvertDateToString(ampFunding.getReportingDate());
 					formBean.setReportingDate(tempDateStore);
@@ -171,13 +164,6 @@ public class ViewFinancialOverview extends TilesAction {
 					tempDateStore = DateConversion
 							.ConvertDateToString(ampFunding.getLastAuditDate());
 					formBean.setLastAuditDate(tempDateStore);
-					tempDate = DbUtil.getClosingDate(ampFundingId, new Integer(
-							0));
-					if (logger.isDebugEnabled())
-						logger.debug("original completion date : " + tempDate);
-					tempDateStore = DateConversion
-							.ConvertDateToString(tempDate);
-					formBean.setOriginalClosingDate(tempDateStore);
 				}
 			}
 		}

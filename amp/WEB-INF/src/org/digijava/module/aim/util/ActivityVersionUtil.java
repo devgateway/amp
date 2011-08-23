@@ -25,31 +25,14 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpRegionalObservation;
-import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -553,7 +536,7 @@ public class ActivityVersionUtil {
 			method.invoke(out, returnSet);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e);
+			logger.error("Can't init set:", e);
 		}
 	}
 

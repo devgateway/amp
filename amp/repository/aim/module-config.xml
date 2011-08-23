@@ -45,7 +45,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLevel</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPhysicalPerformance</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpNotes</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpKmDocuments</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFiscalCalendar</hibernate-class>
@@ -70,7 +69,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTermsAssist</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpClosingDateHistory</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPages</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>
@@ -83,7 +81,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponent</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentsIndicators</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityClosingDates</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgGroup</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpField</hibernate-class>
@@ -128,7 +125,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgramSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityLocation</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityComponente</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpUserExtension</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContract</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>

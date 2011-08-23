@@ -135,8 +135,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			                listTmp.add(com);
 			            }
 			        } catch (Exception e) {
-			            logger.error("Unable to get all comments");
-			            logger.debug("Exceptiion " + e);
+			            logger.error("Unable to get all comments", e);
 			        }
 			        /*
 					ArrayList listTmp = DbUtil.getAllCommentsByField(
@@ -163,9 +162,6 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					protected void onClick(AjaxRequestTarget target) {
 						if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS) == null)
 							org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, new HashSet());
-						
-						System.out.println("TESTT");
-						System.out.println("Obj:" + currentItem.getObject().getComment());
 					
 						if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) != null)
 							org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).remove(currentItem.getObject());

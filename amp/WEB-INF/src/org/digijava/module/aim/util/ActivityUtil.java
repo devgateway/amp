@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -41,8 +40,6 @@ import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -53,7 +50,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -70,7 +66,6 @@ import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
@@ -274,17 +269,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }*/
 
-        // delete all previous closing dates
-        oldActivity.getClosingDates().clear();
-        /*Set closeDates = oldActivity.getClosingDates();
-        if (closeDates != null) {
-          Iterator dtItr = closeDates.iterator();
-          while (dtItr.hasNext()) {
-            AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
-            session.delete(date);
-          }
-        }*/
-
         // delete all previous issues
         oldActivity.getIssues().clear();
 /*        Set issues = oldActivity.getIssues();
@@ -310,8 +294,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }*/
 
-        oldActivity.getComponentes().clear();
-        
         // delete all previous sectors
         oldActivity.getSectors().clear();
        /* if (oldActivity.getSectors() != null) {
@@ -358,7 +340,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         else
         	oldActivity.setFunding( new HashSet() );
         oldActivity.setCreatedAsDraft(activity.isCreatedAsDraft());
-        oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
       
         if ( oldActivity.getComponentProgress() != null ) {
@@ -389,7 +370,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        // oldActivity.getSectors().clear();
        // oldActivity.getCosts().clear();
         oldActivity.getActivityDocuments().clear();
-        oldActivity.getActivityPrograms().clear();
 
         oldActivity.setLineMinRank(activity.getLineMinRank());
         oldActivity.setPlanMinRank(activity.getPlanMinRank());
@@ -471,9 +451,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setStatusReason(activity.getStatusReason());
         oldActivity.setThemeId(activity.getThemeId());
         oldActivity.setUpdatedDate(activity.getUpdatedDate());
-        if (activity.getClosingDates() != null)
-        	oldActivity.getClosingDates().addAll(activity.getClosingDates());
-        
         
         if (activity.getComponents() != null){
         	oldActivity.getComponents().addAll(activity.getComponents());
@@ -506,10 +483,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	oldActivity.getReferenceDocs().addAll(activity.getReferenceDocs());
         if (activity.getSectors() != null)
         	oldActivity.getSectors().addAll(activity.getSectors()); 
-        if (activity.getComponentes() != null)
-        	oldActivity.getComponentes().addAll(activity.getComponentes());
-        
-       
         
         if (activity.getIssues() != null)
         	oldActivity.getIssues().addAll(activity.getIssues());
@@ -521,8 +494,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         
         if (activity.getCosts() != null)
         	oldActivity.getCosts().addAll(activity.getCosts());
-        if (activity.getActivityPrograms() != null)
-        	oldActivity.getActivityPrograms().addAll(activity.getActivityPrograms());
 
         if (activity.getCategories() != null)
         	oldActivity.getCategories().addAll( activity.getCategories() );
@@ -1549,27 +1520,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			}
 		}
 	}
-
-
-  public static Collection getAmpActivityComponente(Long actId) {
-    Session session = null;
-    Collection col = new ArrayList();
-    logger.info(" this is the other components getting called....");
-    try {
-      session = PersistenceManager.getRequestDBSession();
-      String queryString = "select aac.* from amp_activity_componente aac " +
-    	  "where (aac.amp_activity_id=:actId)";
-      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityComponente.class);
-      qry.setParameter("actId", actId, Hibernate.LONG);
-      col = qry.list();
-    }
-    catch (Exception e) {
-      logger.error("Unable to get AmpActivityComponente");
-      logger.error(e.getMessage());
-    }
-    return col;
-  }
-
   
   public static Collection getComponents(Long actId) {
     Session session = null;
@@ -1859,34 +1809,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return result;
   }
 
-  public static Collection getActivityCloseDates(Long activityId) {
-	    Session session = null;
-	    Collection col = new ArrayList();
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String queryString = "select date from " +
-	          AmpActivityClosingDates.class.getName() +
-	          " date where (date.ampActivityId=:actId) and type in (0,1) order by date.ampActivityClosingDateId";
-	      Query qry = session.createQuery(queryString);
-	      qry.setParameter("actId", activityId, Hibernate.LONG);
-	      col = qry.list();
-	    }
-	    catch (Exception e) {
-	      logger.error("Unable to get activity close dates");
-	      logger.error(e.getMessage());
-	    }
-//	    finally {
-//	      try {
-//	        PersistenceManager.releaseSession(session);
-//	      }
-//	      catch (Exception ex) {
-//	        logger.error("Release Session failed :" + ex);
-//	      }
-//	    }
-	    return col;
-	  }
-
   public static Collection getActivityPrograms(Long activityId) {
 	    Session session = null;
 	    Collection col = new ArrayList();
@@ -2008,10 +1930,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			session.evict(result);
 			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 			Hibernate.initialize(result.getCosts());
-			Hibernate.initialize(result.getClosingDates());
 			Hibernate.initialize(result.getInternalIds());
 			Hibernate.initialize(result.getLocations());
-			Hibernate.initialize(result.getComponentes());
 			Hibernate.initialize(result.getSectors());
 			Hibernate.initialize(result.getFunding());
 			if(result.getFunding()!=null){
@@ -3666,15 +3586,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 session.delete(ampFundingDetail);
               }
             }
-            Set closingDate = fund.getClosingDateHistory();
-            if (closingDate != null) {
-              Iterator closingDateItr = closingDate.iterator();
-              while (closingDateItr.hasNext()) {
-                AmpClosingDateHistory closeHistory = (AmpClosingDateHistory)
-                    closingDateItr.next();
-                session.delete(closeHistory);
-              }
-            }
+            
             session.delete(fund);
           }
         }
@@ -3824,28 +3736,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
 
-        /* delete the activity relevant notes */
-        Set notesSet = ampAct.getNotes();
-        if (notesSet != null) {
-          Iterator notesItr = notesSet.iterator();
-          while (notesItr.hasNext()) {
-            AmpNotes notesAmp = (AmpNotes) notesItr.next();
-            session.delete(notesAmp);
-          }
-        }
-
-
-        /* delete the activity closing dates */
-        Set closingDates = ampAct.getClosingDates();
-        if (closingDates != null) {
-          Iterator closingDatesItr = closingDates.iterator();
-          while (closingDatesItr.hasNext()) {
-            AmpActivityClosingDates closingDatesItem = (AmpActivityClosingDates) closingDatesItr.next();
-            session.delete(closingDatesItem);
-            
-          }
-        }
-       
         //	 delete all previous comments
         ArrayList col = org.digijava.module.aim.util.DbUtil.
             getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);

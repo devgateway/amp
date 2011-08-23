@@ -99,7 +99,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
     				"MUL".equalsIgnoreCase(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode()) ) {
     			
     			//check to see if actual fundings exist
-    			if (!fund.getFundingDetails().isEmpty()){
+    			if (fund.getFundingDetails() != null && !fund.getFundingDetails().isEmpty()){
     				
     				Iterator<AmpFundingDetail> it2 = fund.getFundingDetails().iterator();
     				while (it2.hasNext()) {

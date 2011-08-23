@@ -20,9 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -45,7 +43,6 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -3454,6 +3451,8 @@ public class DbUtil {
         return c;
     }
 
+    /*
+     * 
     public static Date getClosingDate(Long ampFundingId, Integer type) {
 
         logger.debug("getClosingDate() with ampFundingId=" + ampFundingId
@@ -3488,6 +3487,7 @@ public class DbUtil {
         logger.debug("getClosingDate() returning date:" + d);
         return d;
     }
+     */
 
     public static String getGoeId(Long ampActivityId) {
 

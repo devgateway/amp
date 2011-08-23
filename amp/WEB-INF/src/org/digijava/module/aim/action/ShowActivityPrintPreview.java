@@ -28,9 +28,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -290,22 +287,6 @@ public class ShowActivityPrintPreview
             
                 
 
-                Collection col = ActivityUtil.getActivityCloseDates(activity.getAmpActivityId());
-                List dates = new ArrayList();
-                if(col != null && col.size() > 0) {
-                    Iterator itr = col.iterator();
-                    while(itr.hasNext()) {
-                        AmpActivityClosingDates cDate = (
-                            AmpActivityClosingDates) itr
-                            .next();
-                        if(cDate.getType().intValue() == Constants.REVISED
-                           .intValue()) {
-                            dates.add(DateConversion
-                                      .ConvertDateToString(cDate
-                                .getClosingDate()));
-                        }
-                    }
-                }
                 if (tm != null && tm.getAppSettings() != null
 						&& tm.getAppSettings().getCurrencyId() != null) {
 					String currCode = "";
@@ -316,9 +297,6 @@ public class ShowActivityPrintPreview
 					}
 					eaForm.setCurrCode(currCode);
 				}
-
-                Collections.sort(dates, DateConversion.dtComp);
-                eaForm.getPlanning().setActivityCloseDates(dates);
 
                 // loading organizations and thier project ids.                
                 Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
@@ -1086,63 +1064,6 @@ public class ShowActivityPrintPreview
                                  eaForm.getPrograms().setSecondarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM));
                       }
                     
-                    Collection<AmpActivityComponente> componentes = ActivityUtil.getAmpActivityComponente(activity.getAmpActivityId());
-            		if (componentes != null && componentes.size() > 0) {
-            			Collection activitySectors = new ArrayList();
-            			Iterator<AmpActivityComponente> sectItr = componentes.iterator();
-            			while (sectItr.hasNext()) {
-            				AmpActivityComponente ampActSect =  sectItr.next();
-            				if (ampActSect != null) {
-            					AmpSector sec = ampActSect.getSector();
-            					if (sec != null) {
-            						AmpSector parent = null;
-            						AmpSector subsectorLevel1 = null;
-            						AmpSector subsectorLevel2 = null;
-            						if (sec.getParentSectorId() != null) {
-            							if (sec.getParentSectorId().getParentSectorId() != null) {
-            								subsectorLevel2 = sec;
-            								subsectorLevel1 = sec.getParentSectorId();
-            								parent = sec.getParentSectorId().getParentSectorId();
-            							} else {
-            								subsectorLevel1 = sec;
-            								parent = sec.getParentSectorId();
-            							}
-              
-            						} else {
-            							parent = sec;
-            						}
-            						ActivitySector actCompo = new ActivitySector();
-            						if (parent != null) {
-            							actCompo.setId(parent.getAmpSectorId());
-            							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
-            							if (view != null)
-            								if (view.equalsIgnoreCase("On")) {
-            									actCompo.setCount(1);
-            								} else {
-            									actCompo.setCount(2);
-            								}
-
-            							actCompo.setSectorId(parent.getAmpSectorId());
-            							actCompo.setSectorName(parent.getName());
-            							if (subsectorLevel1 != null) {
-            								actCompo.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
-            								actCompo.setSubsectorLevel1Name(subsectorLevel1.getName());
-            								if (subsectorLevel2 != null) {
-            									actCompo.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
-            									actCompo.setSubsectorLevel2Name(subsectorLevel2.getName());
-            								}
-            							}
-            							actCompo.setSectorPercentage(ampActSect.getPercentage().floatValue());
-            						}
-            						activitySectors.add(actCompo);
-            					}
-            				}
-            			}
-
-            			eaForm.getComponents().setActivityComponentes(activitySectors);
-            		}
-            		
-            		
             		//get all possible refdoc names from categories
                   	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false, request);
 

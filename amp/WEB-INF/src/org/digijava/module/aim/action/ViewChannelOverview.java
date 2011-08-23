@@ -17,12 +17,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -33,7 +31,6 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -462,21 +459,7 @@ public class ViewChannelOverview extends TilesAction {
 
 				        formBean.setRelOrgs(relOrgsAux);
 				        
-				        
-				        Collection col = activity.getClosingDates();
-				        List dates = new ArrayList();
-				        if (col != null && col.size() > 0) {
-				          Iterator itr = col.iterator();
-				          while (itr.hasNext()) {
-				            AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
-				                .next();
-				            if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
-				              dates.add(cDate.getClosingDate());
-				            }
-				          }
-				        }
 				       // Collections.sort(dates, DateConversion.dtComp);
-				        formBean.setClosingDates(dates);
 
 				        formBean.setStatus(
 			            CategoryManagerUtil.getStringValueOfAmpCategoryValue(

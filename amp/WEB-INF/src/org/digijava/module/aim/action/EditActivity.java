@@ -16,15 +16,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -39,9 +36,6 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -941,26 +935,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getPlanning().setProposedCompDate(DateConversion.ConvertDateToString(
               activity.getProposedCompletionDate()));
 
-          Collection col = activity.getClosingDates();
-          List dates = new ArrayList();
-          if (col != null && col.size() > 0) {
-            Iterator itr = col.iterator();
-            while (itr.hasNext()) {
-              AmpActivityClosingDates cDate = (
-                  AmpActivityClosingDates) itr
-                  .next();
-              if (cDate.getType().intValue() == Constants.REVISED
-                  .intValue()) {
-                dates.add(DateConversion
-                          .ConvertDateToString(cDate
-                                               .getClosingDate()));
-              }
-            }
-          }
-
-          Collections.sort(dates, DateConversion.dtComp);
-          eaForm.getPlanning().setActivityCloseDates(dates);
-
           // loading organizations and thier project ids.
           Set orgProjIdsSet = activity.getInternalIds();
           if (orgProjIdsSet != null) {
@@ -1110,8 +1084,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getDocuments().setAllReferenceDocNameIds(null);
           eaForm.getDocuments().setReferenceDocs(null);
 
-
-          eaForm=setComponentesToForm(eaForm, activity);
           eaForm=setSectorsToForm(eaForm, activity);
 
           if (activity.getThemeId() != null) {
@@ -2053,65 +2025,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if(debugFM!=null && "true".compareTo(debugFM)==0)
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");
-  }
-
-  private EditActivityForm setComponentesToForm(EditActivityForm form,AmpActivityVersion activity){
-		Collection<AmpActivityComponente> componentes = activity.getComponentes();
-
-		if (componentes != null && componentes.size() > 0) {
-			Collection activitySectors = new ArrayList();
-			Iterator<AmpActivityComponente> sectItr = componentes.iterator();
-			while (sectItr.hasNext()) {
-				AmpActivityComponente ampActSect =  sectItr.next();
-				if (ampActSect != null) {
-					AmpSector sec = ampActSect.getSector();
-					if (sec != null) {
-						AmpSector parent = null;
-						AmpSector subsectorLevel1 = null;
-						AmpSector subsectorLevel2 = null;
-						if (sec.getParentSectorId() != null) {
-							if (sec.getParentSectorId().getParentSectorId() != null) {
-								subsectorLevel2 = sec;
-								subsectorLevel1 = sec.getParentSectorId();
-								parent = sec.getParentSectorId().getParentSectorId();
-							} else {
-								subsectorLevel1 = sec;
-								parent = sec.getParentSectorId();
-  }
-						} else {
-							parent = sec;
-						}
-						ActivitySector actCompo = new ActivitySector();
-						if (parent != null) {
-							actCompo.setId(parent.getAmpSectorId());
-							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
-							if (view != null)
-								if (view.equalsIgnoreCase("On")) {
-									actCompo.setCount(1);
-								} else {
-									actCompo.setCount(2);
-								}
-
-							actCompo.setSectorId(parent.getAmpSectorId());
-							actCompo.setSectorName(parent.getName());
-							if (subsectorLevel1 != null) {
-								actCompo.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
-								actCompo.setSubsectorLevel1Name(subsectorLevel1.getName());
-								if (subsectorLevel2 != null) {
-									actCompo.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
-									actCompo.setSubsectorLevel2Name(subsectorLevel2.getName());
-								}
-							}
-							actCompo.setSectorPercentage(ampActSect.getPercentage().floatValue());
-						}
-						activitySectors.add(actCompo);
-					}
-				}
-			}
-
-			form.getComponents().setActivityComponentes(activitySectors);
-		}
-		return form;
   }
 
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {

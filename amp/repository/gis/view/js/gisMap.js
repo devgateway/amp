@@ -871,14 +871,23 @@
 		 });
 	});
 
+	/*
+	$("#testMap").bind('load', function (e) {
+		//$("#imgLoadingIndicator").css("display", "none");
+	});*/
+
+	
+
+	
 
 	//New sector selector functions
 	getSectorHierarchy = function() {
+		/*
 		var uniqueStr = (new Date()).getTime();
 		var mode = $("#mapModeFin").val();
 		
 		var requestURL = "../../gis/getFoundingDetails.do?action=getSectorTree&mode=" + mode + "&mapCode=TZA&mapLevel=2&uniqueStr=" + uniqueStr;
-		$.get(requestURL, sectorHierarchyReady, "xml");
+		$.get(requestURL, sectorHierarchyReady, "xml");*/
 		
 	}
 	
@@ -923,7 +932,7 @@
 		});
 		
 		$("#sector_selector_expander").bind('change', showFinFilters);
-		$("#mapModeFin").bind('change', mapModeFinChanged);
+		//$("#mapModeFin").bind('change', mapModeFinChanged);
 		
 		
     var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
@@ -938,7 +947,7 @@
 	}
 	
 	function mapModeFinChanged() {
-		getSectorHierarchy();
+		//getSectorHierarchy();
 		/*
 		var mapModeCombo = $("#mapModeFin");
 		if (mapModeCombo.val() ==  "fundingData") {
@@ -1194,7 +1203,8 @@
 	
 	var curMapLevel = 2;
 	function filterSet(data) {
-		document.getElementById("busyIndicator").style.visibility = "hidden";
+		//document.getElementById("busyIndicator").style.visibility = "hidden";
+		$("#imgLoadingIndicator").css("visibility", "hidden");
 		
 		var mapLevelInt = $("#mapLevel").val();
 		if (mapLevelInt != curMapLevel) {
@@ -1204,9 +1214,8 @@
 		
 		jQuery.fn.dataForSectorFin();
 		
-		
+		//$("#imgLoadingIndicator").css("display", "block");		
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
-		
 	}
 
 	
@@ -1228,7 +1237,10 @@
 	
 		$("#filterAllSectors").val(allSectors);
 		
-		document.getElementById("busyIndicator").style.visibility = "visible";
+		//document.getElementById("busyIndicator").style.visibility = "visible";
+		$("#imgLoadingIndicator").css("visibility", "visible");
+		
+		
 		var requestURL = "../../gis/getFoundingDetails.do?mapCode=TZA&action=filter";
 		
     $.post(requestURL, $("#gisFilterForm").serialize(), filterSet);

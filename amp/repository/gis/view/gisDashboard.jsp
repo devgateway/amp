@@ -12,23 +12,23 @@
 
 <style>
 	div.navHiden{
-		/*background-color : #5e8ad1;
+		background-color : #5e8ad1;
 		color : white;
 		border-left: 1px solid white;
 		border-top: 1px solid white;
 		border-right: 1px solid black;
 		border-bottom: 1px solid black;
-		cursor:pointer;*/
+		cursor:pointer;
 	}
 	
 	div.navVisible{
-		/*background-color : #C4C4C4;
+		background-color : #C4C4C4;
 		color : black;
 		border-left: 1px solid black;
 		border-top: 1px solid black;
 		border-right: 1px solid white;
 		border-bottom: 1px solid white;
-		cursor:pointer;*/
+		cursor:pointer;
 	}
 	
 	#content{
@@ -49,130 +49,6 @@
 		color:Black;;
 	}
 	
-	
-	div.sec_map_filter_outer_frame {
-		/*border: 1px solid gray;*/
-	}
-	
-	div.sec_map_filter_container {
-		/*border: 1px solid;
-		border-top-color: white;
-		border-left-color: white;
-		border-bottom-color: black;
-		border-right-color: black;
-		border-right-width: 2px;
-		border-bottom-width: 2px;
-		*/
-	}
-	
-	td.sec_map_filter_title {
-		background-color: #222e5d;
-		color:white;
-		font-weight:bold;
-	}
-		
-	td.sec_selector_tree {
-		/*height: 100%;*/
-		background-color: white;
-		background-repeat: repeat-y;
-		width: 13px;
-	}
-
-	td.sec_selector_tree_plain {
-		background-image: url(/repository/gis/view/images/tree-vertical-plain.png);
-	}
-	
-	td.sec_selector_tree_has_child {
-		background-image: url(/repository/gis/view/images/tree-vertical-with-child.png);
-	}
-	
-	td.sec_selector_tree_has_child_is_last {
-		background-image: url(/repository/gis/view/images/tree-vertical-with-child-last.png);
-	}
-	
-	td.sec_selector_tree_has_child_is_first {
-		background-image: url(/repository/gis/view/images/tree-vertical-with-child-first.png);
-	}
-	
-	div.sec_selector_item {
-		background-color: white;
-		border: 1px solid white;
-		cursor:pointer;
-		color:black;
-		
-	}	
-	
-	div.sec_selector_item:hover {
-		background-color: #d2e1e8;
-		border: 1px solid #96b8c6;
-	}
-	
-	div.sec_selector_item_selected {
-		background-color: #222e5d;
-		border: 1px solid #3c788e;
-		color: white;
-		cursor:pointer;
-	}
-	
-	div.sec_selector_item_disabled {
-		background-color: white;
-		color:gray;
-	}
-	
-	div.sec_scheme_selector_outer_frame {
-		border: 1px solid silver;
-	}
-	
-	div.sec_scheme_selector {
-		border: 1px solid;
-		border-top-color: white;
-		border-left-color: white;
-		border-bottom-color: #a8a8a8;
-		border-right-color: #a8a8a8;
-		padding: 3px;
-		cursor:pointer;
-		text-align:center;
-	}
-	
-	div.sec_scheme_selector_default {
-		background-color: #5E8AD1;
-		color:#FFFFFF;
-	}
-	
-	div.sec_scheme_selector_default:hover {
-		background-color: #3D5987;
-	}
-	
-	div.sec_scheme_selector_selected {
-		background-color: #FF6000;
-		color:white;
-		font-weight:bold;
-	}
-	
-	div.sec_scheme_selector_active {
-		background-color: #314388;
-		color:white;
-	}
-	
-	div.child_sector_container {
-	border:1px solid #CCCCCC !important; background-color:#F2F2F2 !important;	 
-	}
-	
-	div.filter_wnd_background {
-	/*
-		background-color:black;
-		position:absolute;
-		left:0px;
-		top:0px;
-		opacity:0.5;
-		filter:alpha(opacity=50);                              
-		z-index: 100;
-		width:100%;
-		
-		height:100%;
-		display:none;
-		*/
-	}
 	
 </style>
 
@@ -276,17 +152,17 @@
 
 
 <div id="ctrlContainer" style="display:none; ">
-	<div id="navMapContainer" style="width:300px; height:300px; position:absolute; border:1px solid black">
+	<div id="navMapContainer" style="width:300px; height:300px; position:absolute; border:1px solid black; z-index:3;">
 		<img id="navCursorMap" width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapLevel=2&mapCode=TZA">
 	</div>
-	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 172px; top: 165px; border: 1px solid white; cursor:pointer;">
+	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 172px; top: 165px; border: 1px solid white; cursor:pointer; z-index:3;">
 		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); opacity:0.3;"></div>
 	</div>
 	
-		<div title="Zoom 1.0X" onClick="" id="mapZoom10" class="navVisible zoomBt" style="width:30px; position: absolute; top:430px; left:180px; font-size:12px;" align="center">1.0X</div>
-		<div title="Zoom 1.5X" onClick="" id="mapZoom15" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:215px; font-size:12px;" align="center">1.5X</div>
-		<div title="Zoom 2.0X" onClick="" id="mapZoom20" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:250px; font-size:12px;" align="center">2.0X</div>
-		<div title="Zoom 3.0X" onClick="" id="mapZoom30" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:285px; font-size:12px;" align="center">3.0X</div>
+		<div title="Zoom 1.0X" onClick="" id="mapZoom10" class="navVisible zoomBt" style="z-index:3; width:30px; position: absolute; top:430px; left:180px; font-size:12px;" align="center">1.0X</div>
+		<div title="Zoom 1.5X" onClick="" id="mapZoom15" class="navHiden zoomBt" style="z-index:3; width:30px; position: absolute; top:430px; left:215px; font-size:12px;" align="center">1.5X</div>
+		<div title="Zoom 2.0X" onClick="" id="mapZoom20" class="navHiden zoomBt" style="z-index:3; width:30px; position: absolute; top:430px; left:250px; font-size:12px;" align="center">2.0X</div>
+		<div title="Zoom 3.0X" onClick="" id="mapZoom30" class="navHiden zoomBt" style="z-index:3; width:30px; position: absolute; top:430px; left:285px; font-size:12px;" align="center">3.0X</div>
 	
 	
 
@@ -311,11 +187,12 @@
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		 -->
 		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;margin-left: auto;margin-right: auto;">
+		 	<img style="position:relative; top:200px; left:200px; visibility:hidden; z-index:4;" id="imgLoadingIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-circle.gif">
 			<c:if test="${isDevInfoMode == true}">
 				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
 			</c:if>
 			<c:if test="${isDevInfoMode == false}">
-				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
+				<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
 			</c:if>
 			</div>
 		  

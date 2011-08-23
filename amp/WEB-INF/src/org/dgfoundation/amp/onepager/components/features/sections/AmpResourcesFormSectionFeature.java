@@ -66,7 +66,7 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 				ad.setAmpActivity(am.getObject());
 				ad.setUuid(choice.getUuid());
 				ad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-				am.getObject().getDocuments().add(ad);
+				am.getObject().getActivityDocuments().add(ad);
 				target.addComponent(resourcesList);
 				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
 			}

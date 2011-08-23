@@ -171,6 +171,7 @@ public class ActivityUtil {
 			         logger.error(exception);
 			   }
 			}
+			throw new RuntimeException("Can't save activity:", exception);
 		}
 	}
 

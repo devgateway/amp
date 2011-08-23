@@ -42,22 +42,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  */
 public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> {
 	
-	public class FormFeedbackPanel extends FeedbackPanel
-	{
-	 public FormFeedbackPanel(String id, final Form form)
-	 {
-	  super(id, new ComponentFeedbackMessageFilter(form)
-	  {
-	   @Override
-	   public boolean accept(FeedbackMessage message)
-	   {
-	    return message.getReporter() == form
-	     || form.contains(message.getReporter(), true);
-	   }
-	  });
-	 }
-	}
-	
+
 	protected Form<AmpActivityVersion> activityForm;
 
 	/**

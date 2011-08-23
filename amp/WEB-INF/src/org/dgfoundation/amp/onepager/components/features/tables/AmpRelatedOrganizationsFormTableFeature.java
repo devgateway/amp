@@ -79,6 +79,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						"departmentDivision",
 						new PropertyModel<String>(item.getModel(), "additionalInfo")));
 				
+				AmpOrganisation o= item.getModelObject().getOrganisation();
 				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));			
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField(

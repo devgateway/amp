@@ -714,11 +714,13 @@ public class IatiActivityWorker {
 				String orgCode = participatingOrg.getRef();
 
 				AmpOrganisation org = getAmpOrganization(orgName, lang, orgCode);
-				AmpOrgRole ampOrgRole = new AmpOrgRole();
-				ampOrgRole.setActivity(a);
-				ampOrgRole.setRole(role);
-				ampOrgRole.setOrganisation(org);
-				orgRole.add(ampOrgRole);
+				if(org!=null){
+					AmpOrgRole ampOrgRole = new AmpOrgRole();
+					ampOrgRole.setActivity(a);
+					ampOrgRole.setRole(role);
+					ampOrgRole.setOrganisation(org);
+					orgRole.add(ampOrgRole);
+				}
 			}
 			
 		}
@@ -739,6 +741,7 @@ public class IatiActivityWorker {
 			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),
 					toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,DataExchangeConstants.IATI_SECTOR,null,null,"active");
 			
+			if(checkMappedField==null || checkMappedField.getAmpId() == null) continue;
 			AmpSector ampSector = SectorUtil.getAmpSector(checkMappedField.getAmpId());
 			
 			AmpActivitySector ampActSector = new AmpActivitySector();
@@ -879,6 +882,7 @@ public class IatiActivityWorker {
 			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),
 					this.getLang(),null,DataExchangeConstants.IATI_ACTIVITY_STATUS,null,null,"active");
 			//we are sure that activity id is not null - activity is mapped
+			if(checkMappedField==null || checkMappedField.getAmpId() == null) return;
 			AmpCategoryValue acv = CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
@@ -1042,13 +1046,14 @@ public class IatiActivityWorker {
 				toIATIValues(orgName,orgCode),lang,null,DataExchangeConstants.IATI_ORGANIZATION,null,null,"inactive");
 		
 		AmpOrganisation org = null;
-		if(checkMappedField!=null) 
+		if(checkMappedField!=null && checkMappedField.getAmpId()!=null) 
 			org = (AmpOrganisation) DataExchangeUtils.getOrganizationById(checkMappedField.getAmpId());
 		return org;
 	}
 	
 	private AmpLocation getAmpLocation(String iatiItems, String iatiValues){
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_LOCATION,iatiItems,iatiValues,lang,null,DataExchangeConstants.IATI_LOCATION,null,null,"active");
+		if(checkMappedField==null || checkMappedField.getAmpId()==null) return null; 
 		AmpCategoryValueLocations ampCVLoc = DynLocationManagerUtil.getLocationByIdRequestSession(checkMappedField.getAmpId());
 		AmpLocation ampLoc = null;
 		try {
@@ -1242,7 +1247,7 @@ public class IatiActivityWorker {
 		String value = printCodeReqType(item);
 		DEMappingFields checkMappedField = checkMappedField(iatiPath,iatiItems,toIATIValues(value,code),iatiLang,ampId,ampClass,sourceId,feedFileName,status);
 		AmpCategoryValue acv = null;
-		if(checkMappedField!=null) 
+		if(checkMappedField!=null && checkMappedField.getAmpId()!=null) 
 			acv = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
 		return acv;
 	}

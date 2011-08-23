@@ -1,10 +1,10 @@
 <wicket:extend>
     <tr wicket:id="tableHeading">
-        <td colspan="3" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+        <td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
     </tr>
     <tr  wicket:id="contactsList">
         <td class="inside">
-            <a href="#" class="slider" onclick="$(this).next().slideToggle();return false;"><b><span wicket:id="contactName" /></b></a>
+            <a href="#" class="slider" onclick="$(this).siblings('.contactDetailsContainerDiv').slideToggle();return false;"><b><span wicket:id="contactName" /></b></a><span style="float: right"><input type="checkbox" wicket:id="primaryContact" /><wicket:trn key="trn:markAsPrimary">Mark as primary</wicket:trn></span>
             <div class="contactDetailsContainerDiv">
                 <table width="330" border="0" cellpadding="3" cellspacing="3">
                     <tr><td align="right"><wicket:trn key="trn:title">Title:</wicket:trn></td><td><div wicket:id="title"/></td></tr>
@@ -29,15 +29,12 @@
                 </table>
             </div>
         </td>
-         <td class="inside" align="center" valign="top" nowrap="nowrap">
-          <input type="checkbox" wicket:id="primaryContact" /><wicket:trn key="trn:markAsPrimary">Mark as primary</wicket:trn>
-        </td>
         <td class="inside" align="center" valign="top">
             <span wicket:id="delContact"/>
         </td>
     </tr>
     <tr>
-        <td coslpan="3" class="inside" align="center" width="100%">
+        <td colspan="2" class="inside" align="center" width="100%">
             <div wicket:id="searchContact"/>	
         </td>
         

@@ -495,7 +495,8 @@ OPNormalReportManager.prototype.disableTab		= function(tabIndex){
 }
 OPNormalReportManager.prototype.showHideHierarchies	= function(){
 	var availableHierchies	= document.getElementById("source_hierarchies_ul").getElementsByTagName("li");
-	if (availableHierchies.length > 0 ) {
+	var selectedHierchies	= document.getElementById("dest_hierarchies_ul").getElementsByTagName("li");
+	if (availableHierchies.length > 0 || selectedHierchies.length > 0 ) {
 		this.hFieldsetVisibility.hide();
 		this.hierarchiesVisibility.show();
 	}
@@ -522,7 +523,8 @@ OPTabReportManager.prototype.disableTab		= function(tabIndex){
 
 OPTabReportManager.prototype.showHideHierarchies	= function(){
 	var availableHierchies	= document.getElementById("source_hierarchies_ul").getElementsByTagName("li");
-	if (availableHierchies.length > 0 ) {
+	var selectedHierchies	= document.getElementById("dest_hierarchies_ul").getElementsByTagName("li");
+	if (availableHierchies.length > 0 || selectedHierchies.length > 0 ) {
 		this.hFieldsetVisibility.hide();
 		this.hierarchiesVisibility.show();
 	}

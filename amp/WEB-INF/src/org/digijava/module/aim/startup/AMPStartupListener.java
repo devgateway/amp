@@ -15,6 +15,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -23,6 +24,7 @@ import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -64,7 +66,7 @@ public class AMPStartupListener extends HttpServlet implements
 		
 		//destroy jackrabbit
 		DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
-		
+		TransientFileFactory.shutdown();
 		
 		//destroy jdbc
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -76,13 +78,6 @@ public class AMPStartupListener extends HttpServlet implements
 				logger.error("Could not deregister driver "+driver);
 				e.printStackTrace();
 			}
-		}
-
-    	try {
-			Thread.currentThread().sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		logger.info("The AMP ServletContext has been terminated.");

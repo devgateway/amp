@@ -10,12 +10,12 @@
 <strong>
 	<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn>
 </strong>
-	<logic:present name="<%=ReportWizardAction.EXISTING_SESSION_FILTER%>" scope="session">
-			<bean:define id="listable" name="<%=ReportWizardAction.EXISTING_SESSION_FILTER%>" toScope="request"/>
+	<logic:present name="<%=ReportWizardAction.SESSION_FILTER%>" scope="session">
+			<bean:define id="listable" name="<%=ReportWizardAction.SESSION_FILTER%>" toScope="request"/>
 	</logic:present>
-	<logic:notPresent name="<%=ReportWizardAction.EXISTING_SESSION_FILTER%>" scope="session">
-		<logic:present name="<%=ReportWizardAction.SESSION_FILTER%>" scope="session">
-				<bean:define id="listable" name="<%=ReportWizardAction.SESSION_FILTER%>" toScope="request"/>
+	<logic:notPresent name="<%=ReportWizardAction.SESSION_FILTER%>" scope="session">
+		<logic:present name="<%=ReportWizardAction.EXISTING_SESSION_FILTER%>" scope="session">
+				<bean:define id="listable" name="<%=ReportWizardAction.EXISTING_SESSION_FILTER%>" toScope="request"/>
 		</logic:present>
 	</logic:notPresent>
 	

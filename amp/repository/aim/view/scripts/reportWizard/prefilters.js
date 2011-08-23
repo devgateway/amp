@@ -55,7 +55,9 @@ Filters.prototype.success	= function (o) {
 		this.saveFilters	= new SaveFilters(this, false);
 		
 		initCalendar();
-		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters ) ;
+		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
+		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
+		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
 		
 	}
 	else {
@@ -96,10 +98,11 @@ function SaveFilters (filterObj, showSettings) {
 };
 
 SaveFilters.prototype.saveFilters	= function (e, obj) {
+	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
 	var formName	= "aimReportsFilterPickerForm" + (this.showSettings?"3":"");
 	YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 	var additionalParams	= this.showSettings?"&sourceIsReportWizard=true":"";
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, obj);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + avoidIECacheParam + additionalParams, obj);
 	
 	if ( this.showSettings ) {
 		var element = document.getElementById("customFormat");

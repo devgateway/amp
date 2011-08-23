@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.Marshaller;
@@ -23,12 +24,18 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.lucene.LangSupport;
+import org.digijava.kernel.lucene.LucModule;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.form.ImportExportForm;
 import org.digijava.module.translation.importexport.ImportExportOption;
 import org.digijava.module.translation.importexport.ImportType;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
+import org.digijava.module.translation.lucene.LucTranslationModule;
+import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ImportExportUtil;
 
 /**
@@ -107,6 +114,18 @@ public class ImportExportTranslations extends Action {
 			
 			//Do work - import translation
 			ImportExportUtil.importTranslations(translations, option);
+			
+			//recreating indexes for help
+			ServletContext context = getServlet().getServletContext();
+			LangSupport[] langs = LangSupport.values();
+			for (LangSupport lang : langs) {
+				TrnLuceneModule module = new TrnLuceneModule(lang);
+				for (String selectedLanguage : selectedLanguages) {
+					if (lang.getLangCode().equals(selectedLanguage)) {
+						LuceneWorker.recreateIndext(module, context);
+					}
+				}
+			}
 			
 			request.getSession().removeAttribute(SESSION_FILE);
 			request.getSession().removeAttribute(SESSION_ROOT);

@@ -217,7 +217,11 @@ public class ImportExportUtil {
 	 */
 	private static void overwrite(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
 		if (existingMessage != null){
-			session.update(message);
+			existingMessage.setCreated(message.getCreated());
+			existingMessage.setKeyWords(message.getKeyWords());
+			existingMessage.setLastAccessed(message.getLastAccessed());
+			existingMessage.setMessage(message.getMessage());
+			session.update(existingMessage);
 		}else{
 			session.save(message);
 		}

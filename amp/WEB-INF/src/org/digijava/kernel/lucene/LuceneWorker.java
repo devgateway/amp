@@ -258,7 +258,7 @@ public class LuceneWorker {
 	 * @param context
 	 * @throws DgException 
 	 */
-	private static <E> void recreateIndext(LucModule<E> module, ServletContext context) throws DgException{
+	public static <E> void recreateIndext(LucModule<E> module, ServletContext context) throws DgException{
 		try {
 			String dir = getModuleDirPath(module, context);
 			LuceneUtil.deleteDirectory(dir);

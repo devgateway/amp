@@ -160,16 +160,8 @@
     <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
     	<produces dir="${gen-src}" includes="org/digijava/module/dataExchange/jaxb/*.java"/>
    	</xjc>
-   	<!--
-    <xjc destdir="${gen-src}" schema="./doc/dataExchange/xml.xsd" package="org.digijava.module.dataExchangeIATI.xml.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/xml/jaxb/*.java"/>
-   	</xjc> 
-    <xjc destdir="${gen-src}" schema="./doc/dataExchange/iati-common.xsd" package="org.digijava.module.dataExchangeIATI.iatiCommon.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiCommon/jaxb/*.java"/>
-   	</xjc>
-   	--> 
     <xjc destdir="${gen-src}" schema="./doc/dataExchange/iati-activities-schema.xsd" package="org.digijava.module.dataExchangeIATI.iatiSchema.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/*.java"/>
+    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiSchema/jaxb/*.java"/>
    	</xjc>   	
    	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">
    		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>

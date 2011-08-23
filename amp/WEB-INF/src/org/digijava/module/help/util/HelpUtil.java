@@ -918,7 +918,7 @@ System.out.println("lang:"+lang);
  	}
 
 		
-	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId, HashMap<String, Long> helpDocIdHolder){		
+	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId, HashMap<String, Long> helpDocIdHolder,HttpServletRequest request){		
 			
 		try {
 			
@@ -952,7 +952,8 @@ System.out.println("lang:"+lang);
                 }
                 udateEditpData(xmlLangTag,help.getEditorKey(),help.getLastModDate(),helpDocIdHolder);
             }
-            insertHelp(helptopic);
+            //insertHelp(helptopic);
+            saveOrUpdateHelpTopic(helptopic, request);
 	    	HelpTopic parent = new HelpTopic();
 	    	parent.setBodyEditKey(helptopic.getBodyEditKey());
 	    	parent.setHelpTopicId(helptopic.getHelpTopicId());

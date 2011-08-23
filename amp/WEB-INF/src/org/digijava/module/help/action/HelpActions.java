@@ -905,7 +905,7 @@ public class HelpActions extends DispatchAction {
         	Iterator it = help_in.getAmpHelp().iterator();
         	while(it.hasNext()) {
 				AmpHelpType element  = (AmpHelpType) it.next();
-	            HelpUtil.updateNewEditHelpData(element,storeMap,Id,topicAttachmentHolder);
+	            HelpUtil.updateNewEditHelpData(element,storeMap,Id,topicAttachmentHolder,request);
 			}
 		}
 	    logger.info("Finished Help Import");

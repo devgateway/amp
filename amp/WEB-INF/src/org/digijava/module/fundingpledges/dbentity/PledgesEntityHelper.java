@@ -229,7 +229,8 @@ public class PledgesEntityHelper {
 		FundingPledgesLocation pl = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select l from " + FundingPledgesLocation.class.getName()
 					+ " l where (l.pledgeid=:id)";
 			qry = session.createQuery(queryString);
@@ -245,7 +246,7 @@ public class PledgesEntityHelper {
 		}finally {
         	try {
         		if (session != null) {
-        			PersistenceManager.releaseSession(session);
+        			//PersistenceManager.releaseSession(session);
         		}
         	} catch (Exception ex) {
         		logger.error("releaseSession() failed");
@@ -261,7 +262,8 @@ public class PledgesEntityHelper {
 		FundingPledgesProgram fpp = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select p from " + FundingPledgesProgram.class.getName()
 					+ " p where (p.pledgeid=:id)";
 			qry = session.createQuery(queryString);
@@ -277,7 +279,7 @@ public class PledgesEntityHelper {
 		}finally {
         	try {
         		if (session != null) {
-        			PersistenceManager.releaseSession(session);
+        			//PersistenceManager.releaseSession(session);
         		}
         	} catch (Exception ex) {
         		logger.error("releaseSession() failed");

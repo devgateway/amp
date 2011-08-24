@@ -549,10 +549,17 @@ public class ProgramUtil {
 
 		public static AmpTheme getThemeObject(Long ampThemeId) {
 			Session session = null;
-	        AmpTheme ampTheme = new AmpTheme();
+	        AmpTheme ampTheme = null;
+	        Query qry = null;
 	        try {
 	        	session = PersistenceManager.getRequestDBSession();
-	            ampTheme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
+//	            ampTheme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
+	        	String qryStr = "select t from " + AmpTheme.class.getName()
+                + " t where t.ampThemeId=:id";
+	            qry = session.createQuery(qryStr);
+	            qry.setParameter("id", ampThemeId);
+	            ArrayList a=(ArrayList) qry.list();
+	            ampTheme = (AmpTheme)a.iterator().next();
 	        }
 	        catch (Exception e) {
 	            throw new RuntimeException(e);

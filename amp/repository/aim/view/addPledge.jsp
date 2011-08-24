@@ -624,7 +624,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	                                             	<tr><td>
 													<c:forEach var="selectedProgs" items="${pledgeForm.selectedProgs}" varStatus="index">
 	                                                  <tr>
-	                                                      <c:set var="indexProg" value="${indexProg+1}"/>
+	                                                      		<c:set var="indexProg" value="${indexProg+1}"/>
 									                            <td align="center" width="3%">
 																	<input type="checkbox" id="checkProg${indexProg}"  >
 																</td>

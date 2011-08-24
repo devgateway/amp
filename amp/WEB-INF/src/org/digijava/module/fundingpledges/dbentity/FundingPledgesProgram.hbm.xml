@@ -8,7 +8,7 @@
 				<param name="sequence">AMP_FUNDING_PLEDGES_PROGRAM_seq</param>
 			</generator>
 		</id>
-		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges"></many-to-one>
+		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" lazy="false"></many-to-one>
 		<many-to-one name="program" column="amp_program_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
 		<property name="programpercentage" column="program_percentage" type="java.lang.Float" />
 	</class>

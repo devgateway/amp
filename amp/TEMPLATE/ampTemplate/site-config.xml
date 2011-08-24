@@ -68,15 +68,11 @@
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body" layout="helpBodyLayout"/>
 		</layout>
-		<layout name="helpAdminLayout" file="helpAdminLayout.jsp">
-			<put name="title">Help admin</put>
-			<put-item name="headerTop" layout="headerTopLayout"/>
-			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
-			<put-item name="footer" layout="footerLayout"/>
+		
+		<layout name="helpAdminLayout" extends="default">
 			<put-item name="body" layout="helpBodyLayout"/>
-		</layout>
+		</layout>		
+		
 		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
 			<put-item name="helpTopics" module="help" instance="default" teaser="helpTopics"/>
             <put-item name="adminHelpTopics" module="help" instance="admin" teaser="helpTopics"/>

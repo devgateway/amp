@@ -8,6 +8,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <digi:instance property="helpForm" />
 <style type="text/css">
 <!--
@@ -300,7 +302,7 @@ function IsEmpty(){
 </style>
 <center>
 <digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
-<table bgColor=#ffffff cellPadding=2 cellSpacing=2 width=772 border="0">
+<table bgColor="#ffffff" cellPadding="2" cellSpacing="2" width="772" border="0" align="left">
 	<tr>
 	<!-- Start Navigation -->
 		<td  height=33 colspan="2" ><span class=crumb>

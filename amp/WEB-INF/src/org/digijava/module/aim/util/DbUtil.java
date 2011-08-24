@@ -65,6 +65,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -861,29 +862,22 @@ public class DbUtil {
 
     public static AmpOrganisation getOrganisation(Long id) {
         Session session = null;
-        AmpOrganisation org = null;
+        AmpOrganisation organization =null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            // modified by Priyajith
-            // desc:used select query instead of session.load
-            // start
-            String queryString = "select o from "
-                + AmpOrganisation.class.getName() + " o "
-                + "where (o.ampOrgId=:id)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                org = (AmpOrganisation) itr.next();
-            }
-            // end
-
+            organization = (AmpOrganisation) session.load(AmpOrganisation.class, id);
+        	Hibernate.initialize(organization.getOrganizationBudgetInfos());
+        	if(organization.getOrganizationBudgetInfos()!=null){
+				for(AmpOrganizationBudgetInformation budgetInfo:organization.getOrganizationBudgetInfos()){
+					Hibernate.initialize( budgetInfo.getOrganizations());
+				}
+			}
         } catch (Exception ex) {
             logger.error("Unable to get organisation from database", ex);
         }
         logger.debug("Getting organisation successfully ");
-        return org;
+        return organization;
     }
 
     public static ArrayList getAmpComponent(Long ampActivityId) {

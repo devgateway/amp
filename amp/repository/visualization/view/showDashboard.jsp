@@ -2546,78 +2546,77 @@ function refreshBoxes(o){
 	}
 	try
 	{
-
-		
-	if (dashboardType==1) {
-		var currentYear = document.getElementById("currentYear").value;
-		var startYear = document.getElementById("yearToCompare").value;
-		if (startYear == "0" || startYear == "" || startYear == null || startYear >= currentYear){
-			startYear =  "" + (currentYear - 1);
+		if (dashboardType==1) {
+			var currentYear = document.getElementById("currentYear").value;
+			var startYear = document.getElementById("yearToCompare").value;
+			if (startYear == "0" || startYear == "" || startYear == null || startYear >= currentYear){
+				startYear =  "" + (currentYear - 1);
+			}
+			var endYear =  "" + currentYear;
+			div = document.getElementById("ODAGrowthTitleLegend");
+			input = document.getElementById("ODAGrowthTitle");
+			value = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+			div.innerHTML = value;
+			input.value = value;
 		}
-		var endYear =  "" + currentYear;
-		div = document.getElementById("ODAGrowthTitleLegend");
-		input = document.getElementById("ODAGrowthTitle");
-		value = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+		div = document.getElementById("AidPredictabilityTitleLegend");
+		input = document.getElementById("AidPredictabilityTitle");
+		value = trnAidPredictability + " - " + fundType;
 		div.innerHTML = value;
 		input.value = value;
-	}
-	div = document.getElementById("AidPredictabilityTitleLegend");
-	input = document.getElementById("AidPredictabilityTitle");
-	value = trnAidPredictability + " - " + fundType;
-	div.innerHTML = value;
-	input.value = value;
+	
+		div = document.getElementById("AidTypeTitleLegend");
+		input = document.getElementById("AidTypeTitle");
+		value = trnAidType + " - " + fundType;
+		div.innerHTML = value;
+		input.value = value;
+	
+		div = document.getElementById("FinancingInstrumentTitleLegend");
+		input = document.getElementById("FinancingInstrumentTitle");
+		value = trnFinancingInstrument + " - " + fundType;
+		div.innerHTML = value;
+		input.value = value;
+	
+		if (dashboardType!=1) {
+			div = document.getElementById("DonorProfileTitleLegend");
+			input = document.getElementById("DonorProfileTitle");
+			value = trnDonorProfile + " - " + fundType;
+			div.innerHTML = value;
+			input.value = value;
+		}
+		if (dashboardType !=3 || dashboardType == 3) {
+			div = document.getElementById("SectorProfileTitleLegend");
+			input = document.getElementById("SectorProfileTitle");
+			isSubsector = (document.getElementById("SectorProfileItemId") && document.getElementById("SectorProfileItemId").value != "-1") ? true : false;
+			if(isSubsector){
+				value = trnSubSectorProfile + " - " + fundType;
+			}
+			else
+			{
+				value = trnSectorProfile + " - " + fundType;
+			}
+			div.innerHTML = value;
+			input.value = value;
+		}
+		if (dashboardType!=2 ||  dashboardType == 2) {
+			div = document.getElementById("RegionProfileTitleLegend");
+			input = document.getElementById("RegionProfileTitle");
+			isSubregion = (document.getElementById("RegionProfileItemId") && document.getElementById("RegionProfileItemId").value != "-1") ? true : false;
+			if(isSubregion){
+				value = trnSubRegionProfile + " - " + fundType;
+			}
+			else
+			{
+				value = trnRegionProfile + " - " + fundType;
+			}
+			div.innerHTML = value;
+			input.value = value;
+		}
 	}
 	catch(e){
 		
 	}
 
-	div = document.getElementById("AidTypeTitleLegend");
-	input = document.getElementById("AidTypeTitle");
-	value = trnAidType + " - " + fundType;
-	div.innerHTML = value;
-	input.value = value;
-
-	div = document.getElementById("FinancingInstrumentTitleLegend");
-	input = document.getElementById("FinancingInstrumentTitle");
-	value = trnFinancingInstrument + " - " + fundType;
-	div.innerHTML = value;
-	input.value = value;
-
-	if (dashboardType!=1) {
-		div = document.getElementById("DonorProfileTitleLegend");
-		input = document.getElementById("DonorProfileTitle");
-		value = trnDonorProfile + " - " + fundType;
-		div.innerHTML = value;
-		input.value = value;
-	}
-	if (dashboardType !=3 || dashboardType == 3) {
-		div = document.getElementById("SectorProfileTitleLegend");
-		input = document.getElementById("SectorProfileTitle");
-		isSubsector = (document.getElementById("SectorProfileItemId") && document.getElementById("SectorProfileItemId").value != "-1") ? true : false;
-		if(isSubsector){
-			value = trnSubSectorProfile + " - " + fundType;
-		}
-		else
-		{
-			value = trnSectorProfile + " - " + fundType;
-		}
-		div.innerHTML = value;
-		input.value = value;
-	}
-	if (dashboardType!=2 ||  dashboardType == 2) {
-		div = document.getElementById("RegionProfileTitleLegend");
-		input = document.getElementById("RegionProfileTitle");
-		isSubregion = (document.getElementById("RegionProfileItemId") && document.getElementById("RegionProfileItemId").value != "-1") ? true : false;
-		if(isSubregion){
-			value = trnSubRegionProfile + " - " + fundType;
-		}
-		else
-		{
-			value = trnRegionProfile + " - " + fundType;
-		}
-		div.innerHTML = value;
-		input.value = value;
-	}
 	var currentYear = document.getElementById("currentYear").value;
 	var yearsInRange = document.getElementById("yearsInRange").value;
 	var startYear =  "" + (currentYear - yearsInRange + 1);

@@ -493,7 +493,8 @@ public class IatiActivityWorker {
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction t = (Transaction) it.next();
 			AmpFunding f = getFundingIATItoAMP(a,t,typeOfAssistance, financingInstrument, iatiDefaultCurrency);
-			fundings.add(f);
+			if(f!=null)
+				fundings.add(f);
 		}
 		
 		if(a.getFunding() == null) 
@@ -567,10 +568,14 @@ public class IatiActivityWorker {
 					String tCode = item.getValue().getCode().toLowerCase();
 					if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
 						transactionType ="c";
-					if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
-						transactionType ="d";
-					if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
-						transactionType ="e";
+					else 
+						if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
+							transactionType ="d";
+						else
+							if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
+								transactionType ="e";
+					//the transaction is not C or D or E then it is not imported in AMP
+							else return null;
 				}
 				
 				//transaction-date
@@ -605,7 +610,8 @@ public class IatiActivityWorker {
 			if(("e".compareTo(transactionType) ==0))
 				populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
 			else
-				populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+				if(("c".compareTo(transactionType) ==0))
+					populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
 		
 		ampFunding.setFundingDetails(ampFundDetails);
 		ampFunding.setTypeOfAssistance(typeOfAssistance);

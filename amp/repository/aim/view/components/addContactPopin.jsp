@@ -188,7 +188,7 @@
 					<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font
 						color="red">*</font></td>
 					<td align="left"><html:text property="firstName" size="30"
-						styleId="name" /></td>
+						styleId="firstName" /></td>
 				</tr>
 				<tr>
 					<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font

@@ -63,7 +63,9 @@ public class CreateEditSourceActions extends DispatchAction {
 		myform.setName(ss.getName());
 		myform.setApprovalStatus(ss.getApprovalStatus());
 		myform.setImportStrategy(ss.getImportStrategy());
-		myform.setSelectedLanguages(ss.getLanguageId().split("\\"+ss.getUniqueIdentifierSeparator()));
+		if(ss.getLanguageId() != null){
+			myform.setSelectedLanguages(ss.getLanguageId().split("\\"+ss.getUniqueIdentifierSeparator()));
+		}		
 		myform.setSource(ss.getSource());
 		myform.setUniqueIdentifier(ss.getUniqueIdentifier());
 		myform.setSdmDocument(ss.getAttachedFile());

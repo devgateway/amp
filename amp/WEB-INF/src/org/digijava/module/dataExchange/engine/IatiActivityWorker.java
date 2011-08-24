@@ -612,6 +612,8 @@ public class IatiActivityWorker {
 			else
 				if(("c".compareTo(transactionType) ==0))
 					populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+			//the transaction is not C,D,E and will not be imported.
+				else return null;
 		
 		ampFunding.setFundingDetails(ampFundDetails);
 		ampFunding.setTypeOfAssistance(typeOfAssistance);

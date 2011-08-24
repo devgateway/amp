@@ -567,6 +567,8 @@ public class WidgetUtil {
                         //if not create and add to map
                         if (activityFundngObj == null) {
                             activityFundngObj = new ActivitySectorDonorFunding();
+                            //Init name property. Quick fix.
+                            activity.getName();
                             activityFundngObj.setActivity(activity);
                             activityFundngObj.setSectors(new ArrayList<AmpSector>());
                             activityFundngObj.setDonorOrgs(new ArrayList<AmpOrganisation>());

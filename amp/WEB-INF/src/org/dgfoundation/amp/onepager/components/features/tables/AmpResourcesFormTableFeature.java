@@ -126,7 +126,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				item.add(new AmpLabelFieldPanel<Date>("date", new PropertyModel<Date>(item.getModel(), "date.time"), "Document Date", true));
 				item.add(new AmpLabelFieldPanel<String>("year", new PropertyModel<String>(item.getModel(), "year"), "Document Year", true));
 				item.add(new AmpLabelFieldPanel<Double>("size", new PropertyModel<Double>(item.getModel(), "fileSize"), "Document Size", true));
-				item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<String>(item.getModelObject().getType(), "label"), "Document Type", true));
+				item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<String>(item.getModel(), "type.label"), "Document Type", true));
 				
 				final DownloadResourceStream drs;
 				if (item.getModelObject().isExisting())

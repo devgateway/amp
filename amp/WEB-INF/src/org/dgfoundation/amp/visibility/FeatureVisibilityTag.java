@@ -154,7 +154,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-   	   			    if(ampFeatureFromTree.getPermission(false)!=null &&
+   	   			    if(ampFeatureFromTree!=null && ampFeatureFromTree.getPermission(false)!=null &&
    	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
    	   			    	!ampFeatureFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
    	   			    			actionMode:GatePermConst.Actions.VIEW,scope))

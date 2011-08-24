@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.jackrabbit.core.persistence.PersistenceManager;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -180,6 +182,8 @@ public class ActivityUtil {
 			   }
 			}
 			throw new RuntimeException("Can't save activity:", exception);
+		} finally {
+			AmpActivityModel.closeDBSession();
 		}
 	}
 
@@ -195,6 +199,8 @@ public class ActivityUtil {
 		}
 			
 		Session session = AmpActivityModel.getSession();//am.getSession();
+		
+		
 		am.setTransaction(session.beginTransaction());
 		
 		AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
@@ -233,6 +239,8 @@ public class ActivityUtil {
 			act.getCosts().size();
 		if (act.getMember() != null)
 			act.getMember().size();
+		
+		
 		
 		return act;
 	}

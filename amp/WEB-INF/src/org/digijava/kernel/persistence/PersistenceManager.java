@@ -48,6 +48,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.hibernate.EntityMode;
+import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -316,6 +317,7 @@ public class PersistenceManager {
 		synchronized (sf) {
 			session = sf.openSession();
 		}
+		session.setFlushMode(FlushMode.AUTO);
 
 		if (DigiConfigManager.getConfig().isTrackSessions()) {
 			try {

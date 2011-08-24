@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -13,6 +14,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -72,7 +74,6 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
 	@Override
 	public void detach() {
-
 	}
 
 	@Override
@@ -85,6 +86,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	protected static void initDBSession() {
 		try {
 			session = PersistenceManager.getSession();
+			session.setFlushMode(FlushMode.MANUAL);
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
 		} catch (SQLException e) {
@@ -92,6 +94,21 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		}
 	}
 
+	public static void closeDBSession() {
+		
+		try {
+			if(session.isOpen()) {
+				session.setFlushMode(FlushMode.AUTO);
+				PersistenceManager.releaseSession(session);
+			}
+		} catch (HibernateException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	}
 	public static synchronized Session getSession() {
 		if(session==null || !session.isOpen()) 
 			initDBSession();

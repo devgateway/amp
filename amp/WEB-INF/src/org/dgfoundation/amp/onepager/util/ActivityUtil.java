@@ -105,6 +105,14 @@ public class ActivityUtil {
 			if (oldA.getAmpActivityId() != null)
 				session.evict(oldA);
 			
+			if (a.getDraft() && a.getAmpActivityGroup() == null){
+				//we need to create a group for this activity
+				AmpActivityGroup tmpGroup = new AmpActivityGroup();
+				tmpGroup.setAmpActivityLastVersion(a);
+				a.setAmpActivityGroup(tmpGroup);
+				session.save(tmpGroup);
+			}
+			
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);

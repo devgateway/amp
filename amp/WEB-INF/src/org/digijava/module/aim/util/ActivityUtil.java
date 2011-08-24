@@ -1941,6 +1941,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					Hibernate.initialize(funding.getMtefProjections());
 				}
 			}
+			Hibernate.initialize(result.getActivityDocuments());
+			Hibernate.initialize(result.getComponents());
+			Hibernate.initialize(result.getOrgrole());
+			Hibernate.initialize(result.getIssues());
+			Hibernate.initialize(result.getRegionalObservations());
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");
 		} catch (Exception e) {

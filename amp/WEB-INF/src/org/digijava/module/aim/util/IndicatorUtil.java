@@ -1043,6 +1043,26 @@ public class IndicatorUtil {
 		
 		return result;
 	}
+
+	/**
+	 * Returns set of indicator helper beans for IndicatorActivity list.
+	 * @param indicators
+	 * @return
+	 * @throws DgException
+	 */
+	public static List<ActivityIndicator> createActivityIndicatorHelperBeans(Long  activityId) throws DgException{
+		List<ActivityIndicator> result = new ArrayList<ActivityIndicator>();
+		Set<IndicatorActivity> indicators=getAllIndicatorsForActivity(activityId);
+		if (indicators!=null && indicators.size()>0){
+			for (IndicatorActivity connection : indicators) {
+				ActivityIndicator helper=new ActivityIndicator();
+				helper = createIndicatorHelperBean(connection);
+				result.add(helper);
+			}
+		}
+		return result;
+	}
+
 	
 	/**
 	 * Compares {@link AmpIndicator} objects by 'name' property

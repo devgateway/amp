@@ -110,7 +110,7 @@ public class ChartGenerator {
 			 risks=(ArrayList<AmpIndicatorRiskRatings>)session.getAttribute("indsRisks");
 			 session.removeAttribute("indsRisks");
 		}else{
-			Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+			Set<IndicatorActivity> valuesActivity=IndicatorUtil.getAllIndicatorsForActivity(actId);
 			if(valuesActivity!=null && valuesActivity.size()>0){
 				Iterator<IndicatorActivity> it=valuesActivity.iterator();
 				while(it.hasNext()){
@@ -289,8 +289,7 @@ public class ChartGenerator {
 		          values.add(indConn);
 			}			
 		}else{
-			AmpActivityVersion  activity=ActivityUtil.loadActivity(actId);
-			values=activity.getIndicators();
+			values=IndicatorUtil.getAllIndicatorsForActivity(actId);
 		}
 		
 
@@ -486,6 +485,7 @@ public class ChartGenerator {
 		DefaultCategoryDataset ds = new DefaultCategoryDataset();
 		try {
 			Collection data=cp.getData();
+			if(data!=null)
 			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
 				IndicatorActivity connection = (IndicatorActivity) iterator.next();
 
@@ -615,6 +615,7 @@ public class ChartGenerator {
 			DefaultCategoryDataset ds = new DefaultCategoryDataset();
 			try {
 				Collection data=cp.getData();
+				if(data!=null)
 				for (Iterator iterator = data.iterator(); iterator.hasNext();) {
 					IndicatorActivity connection = (IndicatorActivity) iterator.next();
 

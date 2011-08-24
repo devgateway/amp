@@ -171,7 +171,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-   	   			    if(ampModulesFromTree.getPermission(false)!=null &&
+   	   			    if(ampModulesFromTree!=null && ampModulesFromTree.getPermission(false)!=null &&
    	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
    	   			    	!ampModulesFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
    	   			    			actionMode:GatePermConst.Actions.VIEW,scope)){

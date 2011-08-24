@@ -18,18 +18,23 @@
 
 
 <style>
+
 .yui-skin-sam .yui-dt thead th,.yui-skin-sam .yui-dt .yui-dt-data td {
 	border-color: #CCC;
 	border-style: none solid solid none;
 	border-width: medium 1px 1px medium;
 }
 
-.yui-skin-sam .yui-dt thead th {
+
+.yui-skin-sam .yui-dt  thead th {
 	border-color: #FFF;
-	background-color: #C7D4DB;
+	background: #C7D4DB;
 	color: #000;
 	height: 30px;
 	text-align: center;
+}
+.yui-dt-liner{
+	font-size: 11px;
 }
 
 .yui-skin-sam .yui-dt th .yui-dt-liner {
@@ -57,6 +62,12 @@
 .yui-skin-sam tr.yui-dt-highlighted td,.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc,.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc
 	{
 	background-color: #a5bcf2;
+}
+
+.yui-skin-sam .yui-dt th a.yui-dt-sortable{
+	text-decoration: underline;
+	color: #376091;
+	font-weight: bold;
 }
 
 .yui-skin-sam a.yui-pg-page {

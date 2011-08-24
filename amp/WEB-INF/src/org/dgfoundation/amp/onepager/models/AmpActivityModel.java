@@ -52,6 +52,9 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
 		s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
 		s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
+
+		Session ses = getSession();
+		ses.clear();
 	}
 	
 	protected AmpActivityVersion load() {
@@ -90,7 +93,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	}
 
 	public static synchronized Session getSession() {
-		if(session==null) 
+		if(session==null || !session.isOpen()) 
 			initDBSession();
 		return session;
 	}

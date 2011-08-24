@@ -47,14 +47,14 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
 				CategoryConstants.MODE_OF_PAYMENT_NAME, true, false);
-		modeOfPayment.getChoiceContainer().setRequired(true);
+		modeOfPayment.getChoiceContainer().setRequired(false);
 		add(modeOfPayment);
 
 		AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
 				"fundingStatus", CategoryConstants.FUNDING_STATUS_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "fundingStatus"),
 				CategoryConstants.FUNDING_STATUS_NAME, true, false);
-		fundingStatus.getChoiceContainer().setRequired(true);
+		fundingStatus.getChoiceContainer().setRequired(false);
 		add(fundingStatus);
 
 		AmpTextFieldPanel<String> financingId = new AmpTextFieldPanel<String>(

@@ -1744,7 +1744,7 @@
 	function showRegionReport(regCode, regName, regLocId) {
 		//var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
 		//alert(regRepUrl);
-		var popup = window.open("about:blank", "regReportWnd", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+		var popup = window.open("about:blank", "regReportWnd", "height=500,width=850,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		var filterForm = $("#gisFilterForm");
 		filterForm.attr("method", "post");
 		filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);

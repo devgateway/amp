@@ -460,15 +460,14 @@
     				if (messages.length != 0) {
 		    
 		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" id="select_all_msg_checkbox" type="checkbox" value="" /></td>');
-							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title"><digi:trn>Message Title</digi:trn></b></td>');
-							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title"><digi:trn>Actions</digi:trn></b></td></tr>');
+		    			messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">'+msgHeaders.msgTitle+'</b></td>');
+						messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">'+msgHeaders.msgActions+'</b></td></tr>');
 					
-							for(var i=0;i<messages.length;i++){
+						for(var i=0;i<messages.length;i++){
+							var msgId=messages[i].getAttribute('msgId');
+							myArray[i]=msgId;				
 								
-								var msgId=messages[i].getAttribute('msgId');
-								myArray[i]=msgId;				
-								
-								messageIdStateMap.push (new Array (messages[i].getAttribute('id'), msgId));
+							messageIdStateMap.push (new Array (messages[i].getAttribute('id'), msgId));
 											
 	            	
 	            	messageListMarkup.push('<tr><td class=inside valign="top"><input ');
@@ -477,7 +476,7 @@
 	            	messageListMarkup.push('" type="checkbox" value="');
 	            	messageListMarkup.push(messages[i].getAttribute('id'));
 	            	messageListMarkup.push('"/></td>');
-								messageListMarkup.push('<td id="msg_body_');
+					messageListMarkup.push('<td id="msg_body_');
 	          		messageListMarkup.push(msgId);
 	          		messageListMarkup.push('"');
 	

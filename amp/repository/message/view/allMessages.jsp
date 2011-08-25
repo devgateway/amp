@@ -40,6 +40,12 @@
     var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
     var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
     var viewDetails='<digi:trn>Click here to view details</digi:trn>';
+    
+    msgHeaders = {
+    		msgTitle : '<digi:trn>Message Title</digi:trn>',
+    		msgActions : '<digi:trn>Actions</digi:trn>'
+    }
+    
 	//used to define whether we just entered page from desktop
 	//var firstEntry=0;
 	var firstEntry=1;

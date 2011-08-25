@@ -53,7 +53,7 @@
 
 
 <c:if test="${not empty messageForm.objectURL}">
-	<b><digi:trn>object URL</digi:trn></b></td>
+	<b><digi:trn>object URL</digi:trn></b>
 	<a href="${messageForm.objectURL}" target="_blank">
 		<digi:trn>Click here to view details</digi:trn>
 	</a>

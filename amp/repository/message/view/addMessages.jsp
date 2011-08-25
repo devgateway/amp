@@ -396,24 +396,15 @@ function addActionToURL(actionName){
   var lastSlash=fullURL.lastIndexOf("/");
   var partialURL=fullURL.substring(0,lastSlash);
   return partialURL+"/"+actionName;
-}
+}	
 	
+var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
+var messageHelp='<digi:trn jsFriendly="true" >Message Help</digi:trn>';
+var relatedActs='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
+var extraReceivers='<digi:trn jsFriendly="true">Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
+var tmHelp='<digi:trn jsFriendly="true">A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
+var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
 	
-	
-	
-	
-	
-	
-	
-	
-	
-    var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
-	var messageHelp='<digi:trn>Message Help</digi:trn>';
-	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
-	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
-	var tmHelp='<digi:trn>A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
-	var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
-
 	function getElementOffset (domObject) {
 		var pos = {top: 0, left: 0}
 

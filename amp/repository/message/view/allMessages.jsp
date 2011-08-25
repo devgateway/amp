@@ -133,8 +133,8 @@
 			<tr><td></td></tr>
 		</table>
 <br />
-<input type="button" onclick="deleteMessage()" value="Delete selected messages" class="buttonx_sm" />
-<input type="button" onclick="markMessageAsRead()" value="Mark as read" class="buttonx_sm" />
+<input type="button" onclick="deleteMessage()" value="<digi:trn>Delete selected messages</digi:trn>" class="buttonx_sm" />
+<input type="button" onclick="markMessageAsRead()" value="<digi:trn>Mark as read</digi:trn>" class="buttonx_sm" />
 
 
 

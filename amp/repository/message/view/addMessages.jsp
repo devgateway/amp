@@ -23,6 +23,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <style>
 <!--
 .ui-autocomplete {
@@ -38,54 +40,6 @@
 <!-- for browse button -->
 <style type="text/css">
 <!--
-div.fileinputs {
-	position: relative;
-	height: 30px;
-	width: 300px;
-}
-input.file {
-	width: 300px;
-	margin: 0;
-}
-input.file.hidden {
-	position: relative;
-	text-align: right;
-	-moz-opacity:0 ;
-	filter:alpha(opacity: 0);
-	width: 300px;
-	opacity: 0;
-	z-index: 2;
-}
-
-div.fakefile {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 300px;
-	padding: 0;
-	margin: 0;
-	z-index: 1;
-	line-height: 90%;
-}
-div.fakefile input {
-	margin-bottom: 5px;
-	margin-left: 0;
-	width: 217px;
-}
-div.fakefile2 {
-	position: absolute;
-	top: 0px;
-	left: 217px;
-	width: 100px;
-	padding: 0;
-	margin: 0;
-	z-index: 1;
-	line-height: 90%;
-}
-div.fakefile2 input{
-	width: 83px;
-}
-
 div.charcounter-progress-container {
 	width:100%; 
 	height:3px;
@@ -106,41 +60,119 @@ div.charcounter-progress-bar {
 -->
 </style>
 
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
 <script langauage="JavaScript">	
 	
-	var W3CDOM = (document.createElement && document.getElementsByTagName);
+var W3CDOM = (document.createElement && document.getElementsByTagName);
 
-	function initFileUploads() {
-		if (!W3CDOM) return;
-		var fakeFileUpload = document.createElement('div');
-		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
+function initFileUploads() {
+	if (!W3CDOM) return;
+	var fakeFileUpload = document.createElement('div');
+	fakeFileUpload.className = 'fakefile';
+	fakeFileUpload.appendChild(document.createElement('input'));
 
-		var fakeFileUpload2 = document.createElement('div');
-		fakeFileUpload2.className = 'fakefile2';
+	var fakeFileUpload2 = document.createElement('div');
+	fakeFileUpload2.className = 'fakefile2';
 
 
-		var button = document.createElement('input');
-		button.type = 'button';
+	var button = document.createElement('input');
+	button.type = 'button';
 
-		button.value = '<digi:trn>Browse...</digi:trn>';
-		fakeFileUpload2.appendChild(button);
+	button.value = '<digi:trn>Browse...</digi:trn>';
+	fakeFileUpload2.appendChild(button);
 
-		fakeFileUpload.appendChild(fakeFileUpload2);
-		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
-			x[i].className = 'file hidden';
-			var clone = fakeFileUpload.cloneNode(true);
-			x[i].parentNode.appendChild(clone);
-			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+	fakeFileUpload.appendChild(fakeFileUpload2);
+	var x = document.getElementsByTagName('input');
+	for (var i=0;i<x.length;i++) {
+		if (x[i].type != 'file') continue;
+		if (x[i].parentNode.className != 'fileinputs') continue;
+		x[i].className = 'file hidden';
+		var clone = fakeFileUpload.cloneNode(true);
+		x[i].parentNode.appendChild(clone);
+		x[i].relatedElement = clone.getElementsByTagName('input')[0];
 
- 			x[i].onchange = x[i].onmouseout = function () {
-				this.relatedElement.value = this.value;
-			}
-		}	
+			x[i].onchange = x[i].onmouseout = function () {
+			this.relatedElement.value = this.value;
+		}
 	}
+}
+
+function initFileUploads3() {
+	if (!W3CDOM) return;
+	var fakeFileUpload = document.createElement('div');
+	fakeFileUpload.className = 'fakefile';
+	fakeFileUpload.appendChild(document.createElement('input'));
+	var image = document.createElement('img');
+	image.src='pix/button_select.gif';
+	fakeFileUpload.appendChild(image);
+	var x = document.getElementsByTagName('input');
+	for (var i=0;i<x.length;i++) {
+		if (x[i].type != 'file') continue;
+		if (x[i].parentNode.className != 'fileinputs') continue;
+		x[i].className = 'file hidden';
+		var clone = fakeFileUpload.cloneNode(true);
+		x[i].parentNode.appendChild(clone);
+		x[i].relatedElement = clone.getElementsByTagName('input')[0];
+		x[i].onchange = x[i].onmouseout = function () {
+			this.relatedElement.value = this.value;
+		}
+	}
+}
+	
     function showMessagesHelpTooltip() {
 			
            var div=document.getElementById("createMessagesHelpTooltip");
@@ -795,7 +827,7 @@ span.extContactDropdownEmail {
   				<td colspan=2 style="font-size:12px;">
 					<div class="msg_receivers">
 							<logic:empty name="messageForm" property="teamMapValues">
-								<div class="msg_lbl">No receivers</div>
+								<div class="msg_lbl"><digi:trn>No receivers</digi:trn></div>
 							</logic:empty>
 							<logic:notEmpty name="messageForm"  property="teamMapValues" >
 								<c:forEach var="team" items="${messageForm.teamMapValues}">
@@ -817,12 +849,12 @@ span.extContactDropdownEmail {
 				</div>
 			<br/>
 			<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
-			<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
+			<b><digi:trn>Additional Receivers</digi:trn>: </b><digi:trn>Type first letter of contact to view suggestions or enter e-mail to send message to</digi:trn><br />
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
-				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
+				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">
@@ -874,12 +906,14 @@ span.extContactDropdownEmail {
     <td colspan="2"><b style="font-size:12px;"><digi:trn>Priority Level</digi:trn></b></td>
   </tr>
   <tr>
-  <td colspan=2>    	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
-    		<html:option value="0"><digi:trn>none</digi:trn> </html:option>
+  <td colspan=2>
+  	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
+   		<html:option value="0"><digi:trn>none</digi:trn> </html:option>
         <html:option value="1"><digi:trn>low</digi:trn> </html:option>
         <html:option value="2"><digi:trn>Medium</digi:trn> </html:option>
         <html:option value="3"><digi:trn>Critical</digi:trn> </html:option>
-      </html:select></td>
+    </html:select>
+  </td>
   </tr>
   <tr>
     <td colspan="2"><b style="font-size:12px;"><digi:trn>Set as alert</digi:trn></b></td>
@@ -915,15 +949,17 @@ span.extContactDropdownEmail {
 			</c:if>
 			<tr>
 				<td>
-					<%--
 					<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-					--%>
-						<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
-					<%--
+						<!-- CSS content must be put in a separated file and a class must be generated -->
+						<input id="fileUploaded" name="fileUploaded" type="file" class="file">
 					</div>
-					--%>
-				</td><td align="right">
-					<input type="submit" value="<digi:trn>Upload</digi:trn>" class="buttonx" align="right" onclick="return validateFile()"/>
+					<div>
+						<input type="submit" value="<digi:trn>Upload</digi:trn>" class="buttonx" align="right" onclick="return validateFile()"/>
+					</div>
+					
+				</td>
+				<td>
+					&nbsp;
 				</td>
 			</tr>
 		</table></td>
@@ -941,7 +977,7 @@ span.extContactDropdownEmail {
 					<c:set var="trnSendtBtn">
 						<digi:trn>Send</digi:trn>
 					</c:set> 
-					<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="buttonx">
+					<input type="button" value="${trnSendtBtn}" onclick="save('send');" class="buttonx">
 				</c:if>
 			</field:display>
 			
@@ -949,7 +985,7 @@ span.extContactDropdownEmail {
 				<c:set var="trnFwdtBtn">
 					<digi:trn>Forward</digi:trn>
 				</c:set> 
-				<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="buttonx">
+				<input type="button" value="${trnFwdtBtn}" onclick="save('send');" class="buttonx">
 			</c:if>
 			
 			<field:display name="Cancel button" feature="Create Message Form">

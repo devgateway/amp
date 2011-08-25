@@ -144,7 +144,8 @@
          var chk=document.messageForm.getElementsByTagName('input');
          for(var i=0;i<chk.length;i++){
              if(chk[i].type == 'checkbox'&&chk[i].checked){
-                 alert("Please uncheck or delete selected message(s)");
+            	 var msg = '<digi:trn>Please uncheck or delete selected message(s)</digi:trn>'
+                 alert(msg);
                  return false;
              }
          }
@@ -174,7 +175,8 @@
             if(msgId==null){
                 msgId=getSelectedMessagesIds();
                 if(msgId.length==0){
-                    alert("Please select messages");
+                	 var msg = '<digi:trn>Please select messages</digi:trn>'
+                    alert(msg);
                      flag=false;  
                 }
                 else{
@@ -321,7 +323,8 @@
 		}else{
 			selMsgsIds=getSelectedMessagesIds();
 			if(selMsgsIds.length==0){
-                alert("Please select messages");
+				var msg = '<digi:trn>Please select messages</digi:trn>'
+                alert(msg);
                 return false;  
             }
 		}
@@ -457,8 +460,8 @@
     				if (messages.length != 0) {
 		    
 		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" id="select_all_msg_checkbox" type="checkbox" value="" /></td>');
-							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>');
-							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td></tr>');
+							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title"><digi:trn>Message Title</digi:trn></b></td>');
+							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title"><digi:trn>Actions</digi:trn></b></td></tr>');
 					
 							for(var i=0;i<messages.length;i++){
 								

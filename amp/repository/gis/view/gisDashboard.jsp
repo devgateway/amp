@@ -189,7 +189,7 @@
 		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;margin-left: auto;margin-right: auto;">
 		 	<img style="position:relative; top:200px; left:200px; visibility:hidden; z-index:4;" id="imgLoadingIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-circle.gif">
 			<c:if test="${isDevInfoMode == true}">
-				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
+				<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
 			</c:if>
 			<c:if test="${isDevInfoMode == false}">
 				<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
@@ -245,11 +245,13 @@
 			</span>
 		</td>
 	</tr>
+	<%--
 	<tr>
 		<td colspan="3">
 			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">
 		</td>
 	</tr>
+	--%>
 	
     
     
@@ -427,7 +429,7 @@
 			    <td nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Funding details</digi:trn></td>
 		    </tr>
 		    <tr>
-			    <td colspan="2" nowrap bgcolor="#173141" id="tooltipCurencyYearRange" style="style="font-size: 12px; color:white;">&nbsp;</td>
+			    <td colspan="2" nowrap id="tooltipCurencyYearRange" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    <tr>
 			    <td nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Total funding for this sector</digi:trn></td>
@@ -479,7 +481,7 @@
 			    <td width="50%" id="tooltipIndUnit" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px color:white;;">Source</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;">Source</td>
 			    <td id="tooltipIndSrc" style="width:100px; overflow-x: hidden; font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 	    </table>
@@ -564,9 +566,6 @@
 	var selectSubgroupTxt = "<digi:trn>Select subgroup</digi:trn>";
 	var selectYearTxt = "<digi:trn>Select year</digi:trn>";
 	
-	<c:if test="${isDevInfoMode == false}">
-		getSectorHierarchy();
-	</c:if>
 
 	YAHOO.util.Event.addListener(window, "load", initScripts) ;
 </script>

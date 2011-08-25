@@ -22,16 +22,25 @@ function KeyValue (key, value) {
 	this.key	= key;
 	this.value	= value;
 }
-function FilterWrapper() {
+function FilterWrapper( trnObj ) {
 	this.filterLabels	= new Array();
 	this.filterDocTypeIds	= new Array(); //key-value arrays
 	this.filterFileTypes	= new Array();
 	this.filterOwners		= new Array();
 	this.filterTeamIds		= new Array();
+	
+	this.trnObj				= {
+			labels: "Lables",
+			filters: "Filters"
+	};
+	if ( trnObj != null )
+		this.trnObj			= trnObj;
+	
+	
 }
 FilterWrapper.prototype.labelsToHTML	= function(text) {
 	var ret	= "";
-	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>Labels:</b><span> "; 
+	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.labels + ":</b><span> "; 
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
@@ -47,7 +56,7 @@ FilterWrapper.prototype.labelsToHTML	= function(text) {
 }
 
 FilterWrapper.prototype.fToHTML	= function() {
-	var ret	= "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>Filters:</b><span> ";
+	var ret	= "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.filters + ":</b><span> ";
 	if ( this.filterDocTypeIds.length > 0 ) {
 		var docType		= this.filterDocTypeIds[0];
 		if ( docType.key != "0" ) {
@@ -86,18 +95,20 @@ FilterWrapper.prototype.fToHTML	= function() {
 	return ret;
 }
 
-function AbstractDynamicList (containerEl, thisObjName, fDivId) {
+function AbstractDynamicList (containerEl, thisObjName, fDivId, trnObj) {
 	this.containerEl	= containerEl;
 	this.thisObjName	= thisObjName;
 	this.fDivId			= fDivId;
 	
-	this.filterWrapper	= new FilterWrapper();
+	this.filterWrapper	= new FilterWrapper(trnObj);
 	
 	this.reqString		= "";
 	
 	this.fPanel				= null;
 	
 	this.filterInfoDivId	= null;
+	
+	this.trnObj				= trnObj;
 }
 
 AbstractDynamicList.prototype.clearBody		= function () {
@@ -168,7 +179,7 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
 		var panel 		= 
 			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", visible:true, draggable:true, close:true, modal:false, 
 				context:[buttonId,"tl","bl"]} );
-		panel.setHeader('Filters');
+		panel.setHeader(this.trnObj.filters);
 		panel.setBody(divEl);
 		panel.render(document.body);
 		
@@ -204,9 +215,9 @@ DynamicList.prototype				= new AbstractDynamicList();
 DynamicList.prototype.parent		= AbstractDynamicList;
 DynamicList.prototype.constructor	= DynamicList;
 
-function DynamicList(containerEl, thisObjName,fDivId, teamId, username) {
+function DynamicList(containerEl, thisObjName,fDivId, teamId, username, trnObj) {
 	
-	this.parent.call(this, containerEl, thisObjName, fDivId);
+	this.parent.call(this, containerEl, thisObjName, fDivId, trnObj);
 	
 	this.teamId			= teamId;
 	this.username		= username;
@@ -233,8 +244,8 @@ SharedDynamicList.prototype.constructor	= SharedDynamicList;
  * @param containerEl
  * @returns {SharedDynamicList}
  */
-function SharedDynamicList(containerEl, thisObjName, fDivId) {
-	this.parent.call(this, containerEl, thisObjName, fDivId);
+function SharedDynamicList(containerEl, thisObjName, fDivId, trnObj) {
+	this.parent.call(this, containerEl, thisObjName, fDivId, trnObj);
 }
 SharedDynamicList.prototype.createReqString	= function () {
 	this.reqString	+= "&showSharedDocs=true";
@@ -252,7 +263,7 @@ PublicDynamicList.prototype.constructor	= PublicDynamicList;
  * @param containerEl
  * @returns {PublicDynamicList}
  */
-function PublicDynamicList(containerEl, thisObjName, fDivId) {
-	this.parent.call(this, containerEl, thisObjName, fDivId);
+function PublicDynamicList(containerEl, thisObjName, fDivId, trnObj) {
+	this.parent.call(this, containerEl, thisObjName, fDivId, trnObj);
 }
 

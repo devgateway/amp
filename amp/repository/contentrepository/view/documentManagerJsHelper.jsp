@@ -184,7 +184,9 @@ font-weight : bold;
 	                    				rowsPerPage: 7,
 	                    				pageCurrent: 1,
 	                    				startRecordIndex: 1,
-								        pageLinksLength: 5
+								        pageLinksLength: 5,
+								        MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
+								        MSG_LOADING: "<digi:trn>Loading</digi:trn>"
 	                			};
 		
 		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
@@ -408,7 +410,8 @@ myTable.enhanceMarkup = function(markupName) {
     var oConfigs = { 
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
-	         MSG_EMPTY: "No data" 
+	         MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
+	         MSG_LOADING: "<digi:trn>Loading</digi:trn>"
 	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];
@@ -427,7 +430,7 @@ myTable.enhanceMarkup = function(markupName) {
 	                           		     	};
     
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
-
+	
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 	dataTable.subscribe("paginateEvent",hideCategories);
@@ -1455,9 +1458,18 @@ function hidePanels(panels){
 	}
 }
 
+
+
 function getTemplateLabelsCb(formName, infoDivId) {
+	filterWrapperTrnObj		= {
+			labels: "<digi:trn>Labels</digi:trn>",
+			filters: "<digi:trn>Filters</digi:trn>",
+			apply: "<digi:trn>Apply</digi:trn>",
+			close: "<digi:trn>Close</digi:trn>"
+	};
+	
 	if ( !YAHOO.amp.templateFilterWrapper ) {
-		YAHOO.amp.templateFilterWrapper	= new FilterWrapper();
+		YAHOO.amp.templateFilterWrapper	= new FilterWrapper(filterWrapperTrnObj);
 	}
 	var cb	= {
 			click: function(e, label) {
@@ -1466,7 +1478,8 @@ function getTemplateLabelsCb(formName, infoDivId) {
 				infoDivEl.innerHTML		= YAHOO.amp.templateFilterWrapper.labelsToHTML();
 			},
 			applyClick: function(e, labelArray){
-				YAHOO.amp.templateFilterWrapper	= new FilterWrapper();
+				alert(filterWrapperTrnObj);
+				YAHOO.amp.templateFilterWrapper	= new FilterWrapper(filterWrapperTrnObj);
 				for (var i=0; i<labelArray.length; i++) {
 					YAHOO.amp.templateFilterWrapper.filterLabels.push(labelArray[i]);
 				}

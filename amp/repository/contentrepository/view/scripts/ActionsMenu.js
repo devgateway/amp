@@ -1,4 +1,4 @@
-function ActionsMenu(objectId,nameprefix,isTeamMenu){
+function ActionsMenu(objectId,nameprefix,isTeamMenu, trnObj){
 	this.objectId		= objectId;
 	this.nameprefix		= nameprefix;
 	
@@ -11,6 +11,13 @@ function ActionsMenu(objectId,nameprefix,isTeamMenu){
 		this.ownerType	= "team";
 	else
 		this.ownerType	= "private";
+	
+	this.trnObj	= {
+			addResource: "Add Resource"
+	};
+	
+	if (trnObj != null)
+		this.trnObj		= trnObj;
 }
 
 ActionsMenu.prototype.render=function (){
@@ -19,7 +26,7 @@ ActionsMenu.prototype.render=function (){
 		  width:"150px",
 		  close: false } );
 	
-	this.overlay.setHeader('<span>Add Resource</span>');
+	this.overlay.setHeader('<span>' + this.trnObj.addResource + '</span>');
 	
 	var bigDiv		= document.createElement("div");
 	var divEl	= document.createElement("div");

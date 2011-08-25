@@ -1,4 +1,4 @@
-function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix) {
+function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix, trnObj) {
 	
 	this.alignElId		= alignElId;
 	this.onClickCallbackObj	= onClickCallbackObj;
@@ -12,6 +12,15 @@ function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix) {
 	this.labelMap		= new Object();
 	
 	this.bigDiv		= document.createElement("div"); //holds all label divs inside
+	
+	this.trnObj				= {
+			labels: "Lables",
+			filters: "Filters",
+			apply: "Apply",
+			close: "Close"
+	};
+	if ( trnObj != null )
+		this.trnObj			= trnObj;
 }
 
 FilterAsYouTypePanel.globalLabelArray  = null;	
@@ -111,7 +120,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		
 		
 		var applySpanEl = document.createElement("span");
-		applySpanEl.innerHTML			= "&nbsp; Apply &nbsp;";
+		applySpanEl.innerHTML			= "&nbsp; "+ this.trnObj.apply +" &nbsp;";
 		//applySpanEl.style.padding		= "1px";		
 		applySpanEl.style.cursor		= "pointer";
 		applySpanEl.style.fontSize		= "11px";
@@ -128,7 +137,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		
 
 		var cancelSpanEl = document.createElement("span");
-		cancelSpanEl.innerHTML			= "&nbsp; Close &nbsp;";
+		cancelSpanEl.innerHTML			= "&nbsp; " + this.trnObj.close + " &nbsp;";
 		//cancelSpanEl.style.padding		= "1px";
 		cancelSpanEl.style.cursor		= "pointer";
 		cancelSpanEl.style.fontSize		= "11px";
@@ -160,10 +169,10 @@ FilterAsYouTypePanel.prototype.render	= function() {
 //		  visible:false,
 //		  width:"150px" } );
 	this.overlay 		= 
-		new YAHOO.widget.Panel("LabelPanel"+this.nameprefix, { width:"150px", visible:true, draggable:true, close:true, modal:false, 
+		new YAHOO.widget.Panel("LabelPanel"+this.nameprefix, { width:"163px", visible:true, draggable:true, close:true, modal:false, 
 			context:[this.alignElId,"tl","bl"]} );
 	
-	this.overlay.setHeader('Labels');
+	this.overlay.setHeader(this.trnObj.labels);
 	var divArray	= this.createBody();
 	var textboxEl	= document.createElement("input");
 	

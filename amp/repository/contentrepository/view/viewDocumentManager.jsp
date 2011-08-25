@@ -127,7 +127,7 @@ padding-left: 0px;
     color: #FFFFFF;
     padding: 2px;
     font-weight: bold;
-}
+} 	
 
 
 
@@ -209,22 +209,30 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 	
 	function afterPageLoad(e) {
+		trnObj		= {
+				labels: "<digi:trn>Labels</digi:trn>",
+				filters: "<digi:trn>Filters</digi:trn>",
+				apply: "<digi:trn>Apply</digi:trn>",
+				close: "<digi:trn>Close</digi:trn>"
+		};
 		//set breadcrumb text
 		var breadCrumbObj=$('div.breadcrump_cont').text(breadcrumbName);
 		
-		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
+		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId",
+				${meTeamMember.teamId}, '${meTeamMember.email}', trnObj);
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
 		//privateListObj.sendRequest();
-		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", ${meTeamMember.teamId}, null);
+		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", 
+				${meTeamMember.teamId}, null, trnObj);
 		teamListObj.filterInfoDivId	= "teamFilterInfo";
 		//teamListObj.sendRequest();
-		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId");
+		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId", trnObj);
 		sharedListObj.filterInfoDivId	= "sharedFilterInfo";
 		//sharedListObj.sendRequest();
 
 		
 		
-		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null);
+		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null, trnObj);
 		//publicListObj.sendRequest();
 		repositoryTabView				= new YAHOO.widget.TabView("demo");
 		repositoryTabView.addListener("activeTabChange", loadTab);
@@ -262,19 +270,20 @@ function setHoveredTable(tableId, hasHeaders) {
 		
 		loadTab();
 		
-		fPanel	= new FilterAsYouTypePanel("labelButtonId", getLabelFilterCallbackObj(privateListObj), "mainLabels");
-		fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
+		fPanel	= new FilterAsYouTypePanel("labelButtonId", getLabelFilterCallbackObj(privateListObj), "mainLabels", trnObj);
+		fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel", trnObj);
 		fPanel.initLabelArray(false);
 		fAddPanel.initLabelArray(false);
 		
-		teamFPanel	= new FilterAsYouTypePanel("teamLabelButtonId", getLabelFilterCallbackObj(teamListObj), "teamMainLabels");
+		teamFPanel	= new FilterAsYouTypePanel("teamLabelButtonId", getLabelFilterCallbackObj(teamListObj), "teamMainLabels", trnObj);
 		teamFPanel.initLabelArray(false);
 
-		sharedFPanel	= new FilterAsYouTypePanel("sharedLabelButtonId", getLabelFilterCallbackObj(sharedListObj), "sharedMainLabels");
+		sharedFPanel	= new FilterAsYouTypePanel("sharedLabelButtonId", getLabelFilterCallbackObj(sharedListObj), "sharedMainLabels", trnObj);
 		sharedFPanel.initLabelArray(false);
 		
 	
-		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels");
+		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", 
+				getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels", trnObj);
 		templateFPanel.initLabelArray(false);
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
@@ -380,8 +389,12 @@ function setHoveredTable(tableId, hasHeaders) {
 			dynamicList: null
 	}
 
-	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
-	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true);
+	var trnObj	= {
+			addResource: "<digi:trn>Add Resource</digi:trn>"
+	};
+	
+	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu",false,trnObj);
+	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true, trnObj);
 
 </script>
 

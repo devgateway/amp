@@ -212,6 +212,10 @@
 					myCluster.dataLabelRotateAngle = -90;
 				else
 					myCluster.dataLabelRotateAngle = 0;
+
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				dc.visible = true;
 				
 			}
 			
@@ -294,6 +298,9 @@
 			
 			public function refreshGraph():void
 			{
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
@@ -341,6 +348,10 @@
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
 				messagePanel.height = h;
+			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
 			}
 			public function itemClick(evt:LayoutItemEvent):void{
 				//Alert.show(evt.item.data.percentage);
@@ -729,6 +740,9 @@
 	</mx:Array>
 	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
 		<mx:Label id="messageEmpty" fontFamily="Arial" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
 	</mx:Panel>
 
 </mx:Application>

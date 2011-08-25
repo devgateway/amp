@@ -17,19 +17,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
@@ -65,8 +67,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpContactsWorker;
@@ -119,6 +121,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.hibernate.Session;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -197,8 +200,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     //gateperm checks are non mandatory, this means that an user still has permissions to edit an activity
     //those permissions can come from someplace else
     boolean gatePermEditAllowed = false;
+    
+    Session hsession = org.digijava.kernel.persistence.PersistenceManager.getSession();
+    
     if (activityId != null) {
-        activity = ActivityUtil.loadActivity(activityId);
+        activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {
@@ -2022,6 +2028,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 	}
     
     String debugFM=request.getParameter("debugFM");
+    
+   org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession);
+    
     if(debugFM!=null && "true".compareTo(debugFM)==0)
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");

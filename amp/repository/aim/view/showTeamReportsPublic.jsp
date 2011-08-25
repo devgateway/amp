@@ -37,6 +37,12 @@ function popup(mylink, windowname)
 	window.open(href, windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
 	return false;
 }
+
+    function submitForm(action){
+        document.aimTeamReportsForm.action.value=action;
+        document.aimTeamReportsForm.submit();
+        
+    }
 //-->
 </script>
 <style>
@@ -61,6 +67,7 @@ function popup(mylink, windowname)
 </style>
 <digi:instance property="aimTeamReportsForm" />
 <digi:form action="/viewTeamReports.do" method="post">
+<html:hidden property="action"/>
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
   <c:set var="pageTitle">
@@ -99,14 +106,11 @@ function popup(mylink, windowname)
 																<td id="reportsearchform"><digi:trn>Report Title</digi:trn>:
 																	<html:text property="keyword" />
 																</td>
-																<td id="reportsearchform1"><html:submit
-																		property="action" value="search">
-																		<digi:trn>Search</digi:trn>
-																	</html:submit></td>
-																<td id="reportsearchform2"><html:submit
-																		property="action" value="clear">
-																		<digi:trn>Clear</digi:trn>
-																	</html:submit></td>
+																<td id="reportsearchform1">
+                                                                                                                                    <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> 
+                                                                                                                                
+                                                                                                                                </td>
+																<td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/>
 															</tr>
 														</table>
 													</td>
@@ -574,7 +578,7 @@ function popup(mylink, windowname)
 												<tr>
 													<td>
 	<div class="t_sm">
-		<b>Icons Reference</b>
+            <b><digi:trn>Icons Reference</digi:trn></b>
 		<br/>
 		<img src="img_2/ico_exc.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in Excel format</digi:trn> &nbsp;&nbsp;|&nbsp;&nbsp;
 		<img src="img_2/ico_pdf.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in PDF format</digi:trn>

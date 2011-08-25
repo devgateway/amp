@@ -98,6 +98,7 @@ yuiLoadingPanel.prototype = {
                $E.on(cancelLink, 'click', function(e, o){
        	           o.self.loadingPanel.hide();
        	           o.self.cancelEvent.fire();
+       	           window.stop();
                }, {self:this});
                loadingPanel.appendToBody(document.createElement('br'));
                loadingPanel.appendToBody(cancelLink);

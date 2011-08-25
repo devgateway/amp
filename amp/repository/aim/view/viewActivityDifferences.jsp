@@ -54,7 +54,7 @@
 				</li>
 			</ul>
 		</div>
-		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;" class="contentstyle" id="ajaxcontentarea">
+		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;font-size:12px;" class="contentstyle" id="ajaxcontentarea">
 			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
 				<tr>
 					<td background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">

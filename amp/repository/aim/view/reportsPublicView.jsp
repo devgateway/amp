@@ -95,7 +95,7 @@ function toggleSettings(){
 </logic:present>
 <logic:notPresent name="firstReportName">
 <br /><br />
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;font-size:12px;">
 <digi:trn key="aim:noPublicTabs">
 	No Public Tabs
 </digi:trn>
@@ -103,7 +103,7 @@ function toggleSettings(){
 </logic:notPresent>
 
 <logic:present name="firstReportName">
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;font-size:12px;">
 </div>
 </div>	
 	<script type="text/javascript">

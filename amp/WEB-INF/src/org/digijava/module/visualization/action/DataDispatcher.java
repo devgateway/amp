@@ -1167,6 +1167,8 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
+                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -1262,7 +1264,7 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<aidtype name=\"" + value.getValue() + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
@@ -1288,7 +1290,7 @@ public class DataDispatcher extends DispatchAction {
 		                } else {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
-						xmlString.append("<aidtype category=\"" + value.getValue() + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
+						xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
 						aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 					xmlString.append("</year>\n");
@@ -1318,8 +1320,8 @@ public class DataDispatcher extends DispatchAction {
 		Iterator<AmpCategoryValue> it = categoryValues.iterator();
 		while (it.hasNext()){
 			AmpCategoryValue value = it.next();
-//            String title = TranslatorWorker.translateText(categoryValue.getValue(), opt.getLangCode(), opt.getSiteId());
-			csvString.append(value.getValue());
+            String title = TranslatorWorker.translateText(value.getValue(),locale, siteId);
+			csvString.append(title);
 			csvString.append("#");
             csvString.append(value.getId());
             if(it.hasNext()) 

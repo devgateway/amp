@@ -1,11 +1,14 @@
 package org.digijava.module.visualization.util;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.json.JSONObject;
@@ -501,9 +504,9 @@ public class DbUtil {
     	}
      }
     
-    public static List<AmpActivityVersion> getActivities(DashboardFilter filter) throws DgException {
+    public static List getActivities(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
-        List<AmpActivityVersion> activities = null;
+        List activities = null;
         Long[] orgIds= filter.getOrgIds();
         
         int transactionType = filter.getTransactionType();
@@ -523,12 +526,12 @@ public class DbUtil {
          *
          */
         try {
-            String oql = "select distinct act from ";
+            String oql = "select act.ampActivityId, act.ampId, act.name from ";
             oql += AmpFundingDetail.class.getName()
                     + " as fd inner join fd.ampFundingId f ";
-            oql += "   inner join f.ampActivityId act ";
+            oql += " inner join f.ampActivityId act ";
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            oql+=" inner join actsec.classificationConfig config ";
+            oql += " inner join actsec.classificationConfig config ";
             oql += " inner join act.ampActivityGroup actGroup ";
             if (locationCondition) {
                 oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -582,7 +585,7 @@ public class DbUtil {
             if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
                 query.setLong("transactionType", transactionType);
             }
-            
+//            query.setCacheable(true);
             activities = query.list();
         }
         catch (Exception e) {
@@ -743,17 +746,23 @@ public class DbUtil {
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
         oql += " inner join act.ampActivityGroup actGroup ";
-        oql += "  inner join act.sectors actsec ";
-        oql += "  inner join actsec.classificationConfig config  ";
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
 
         if (sectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
 
-        oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        if (sectorCondition) {
+        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        }
+        else
+        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        	
+
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -800,7 +809,9 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("config", filter.getSelSectorConfigId());
+            if (sectorCondition) {
+            	query.setLong("config", filter.getSelSectorConfigId());
+            }
             //if ((orgIds == null || orgIds.length == 0 || orgIds[0] == -1) && orgGroupId != -1) {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
@@ -855,6 +866,109 @@ public class DbUtil {
 
 
         return total;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
+            Date endDate, int transactionType,int adjustmentType) throws DgException {
+        
+    	Long startTime, endTime;
+        startTime = System.currentTimeMillis();
+    	
+		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
+    	
+    	DecimalWraper total = null;
+        String oql = "";
+
+        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f ";
+    	oql += "where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
+
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            query.setLong("transactionType", transactionType);
+            query.setLong("adjustmentType",adjustmentType);
+            fundingDets = query.list();
+            endTime = System.currentTimeMillis();
+            logger.info("Query:" + (endTime - startTime));
+            /*the objects returned by query  and   selected currency
+            are passed doCalculations  method*/
+            startTime = System.currentTimeMillis();
+            HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
+            HashMap<Long, String> hmName = new HashMap<Long, String>();
+            Iterator it = fundingDets.iterator();
+            while(it.hasNext()){
+            	Object[] item = (Object[])it.next();
+            	
+            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	Long id = (Long) item[1];
+            	String name = (String) item[2];
+            	if(hm.containsKey(id)){
+            		ArrayList<AmpFundingDetail> afda = hm.get(id);
+            		afda.add(currentFd);
+            	}
+            	else
+            	{
+            		ArrayList<AmpFundingDetail> afda = new ArrayList<AmpFundingDetail>();
+            		afda.add(currentFd);
+            		hmName.put(id, name);
+            		hm.put(id, afda);
+            	}
+            	logger.info("act:" + id);
+            }
+
+            Iterator<Long> it2 = hm.keySet().iterator();
+            while(it2.hasNext()){
+            	Long activityId = it2.next();
+            	ArrayList<AmpFundingDetail> afda = hm.get(activityId);
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(afda, currCode);
+                /*Depending on what is selected in the filter
+                we should return either actual commitments
+                or actual Disbursement or  */
+                switch (transactionType) {
+                    case Constants.EXPENDITURE:
+                        if (Constants.PLANNED == adjustmentType) {
+                            total = cal.getTotPlannedExp();
+                        } else {
+                            total = cal.getTotActualExp();
+                        }
+                        break;
+                    case Constants.DISBURSEMENT:
+                        if (Constants.ACTUAL == adjustmentType) {
+                            total = cal.getTotActualDisb();
+                        } else {
+                            total = cal.getTotPlanDisb();
+                        }
+                        break;
+                    default:
+                        if (Constants.ACTUAL == adjustmentType) {
+                            total = cal.getTotActualComm();
+                        } else {
+                            total = cal.getTotPlannedComm();
+                        }
+                }
+                AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
+                map.put(aav, total.getValue());
+            }
+            
+            endTime = System.currentTimeMillis();
+            logger.info("Calculation:" + (endTime - startTime));
+            
+
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(
+                    "Cannot load fundings from db", e);
+        }
+
+
+        return map;
     }
     public static AmpOrganisation getOrganisation(Long id) {
         Session session = null;

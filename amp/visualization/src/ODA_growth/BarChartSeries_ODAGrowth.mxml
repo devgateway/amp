@@ -39,11 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				creationComplete="application1_creationCompleteHandler(event);"
 				>
 	
-	<mx:HTTPService id="service" url="http://localhost:8080/visualization/dataDispatcher.do?action=getODAGrowthGraphData" result="service_resultHandler(event)" >
-		<mx:request>
-			<format>xml</format>
-			<typeofaid>true</typeofaid>
-		</mx:request>
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)">
 	</mx:HTTPService>
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
@@ -55,6 +51,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import mx.events.FlexEvent;
 			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.rpc.events.FaultEvent;
 			import mx.utils.ArrayUtil;
 			
 			import org.axiis.charts.groupings.BarCluster;
@@ -161,8 +158,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			
 			private function captureSnapshot():void
 			{
-				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String = "/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -174,7 +171,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, "ODAGrowth");
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
 			}
 			
 			protected function myStack_preRenderHandler(event:Event):void
@@ -190,6 +188,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=getODAGrowthGraphData";
+				var start:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -202,7 +201,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				service.send();
+				var params = {
+					"format" : "xml",
+					"typeofaid" : "true"
+				};
+				if(start == "true")
+					service.send(params);
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
@@ -245,8 +249,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 			}
 			public function refreshGraph():void
 			{
-				service.send();
-				start();
+				var params = {
+					"format" : "xml",
+					"typeofaid" : "true"
+				};
+				service.send(params);
 			}
 			public function refreshGraphNoData():void
 			{
@@ -283,6 +290,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 			private function dragDropHandler(event:DragEvent):void {
 				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
 				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
+			
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
 			}
 		]]>
 	</mx:Script>

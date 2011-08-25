@@ -2775,9 +2775,8 @@ function changeChart(e, chartType, container, useGeneric){
 			decimalsToShow: decimalsToShow,
 			palette: palette, 
 			id: container,
-			start: startMovie
+			start: (startMovie ? "true" : "false")
 		};
-	
 	var params = {
 			wmode: "transparent"
 		};

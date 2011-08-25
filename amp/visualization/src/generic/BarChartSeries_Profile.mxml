@@ -246,7 +246,7 @@
 			{
 				//Initialize variables and get the URL for the service that will provide data
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
-				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
+				var start:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				profileDataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
@@ -265,7 +265,7 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				if(start){
+				if(start == "true"){
 					var params:Object = {
 						"format" : "xml",
 						"typeofaid" : "true",

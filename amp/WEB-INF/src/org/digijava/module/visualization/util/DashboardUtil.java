@@ -80,16 +80,32 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
+        String currCode = filter.getCurrencyCode();
 		for (Iterator<AmpActivityVersion> iterator = actList.iterator(); iterator.hasNext();) {
 			AmpActivityVersion ampActivity = (AmpActivityVersion) iterator.next();
 			//Long oldActivityId = filter.getActivityId();
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setActivityId(ampActivity.getAmpActivityId());
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+//			DecimalWraper fundingCal = DbUtil.getFundingByActivityId(ampActivity.getAmpActivityId(), currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL);
+			DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
             //filter.setActivityId(oldActivityId);
             BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampActivity, total);
 		}
+		return sortByValue (map);
+	}
+
+	public static Map<AmpActivityVersion, BigDecimal> getRankActivitiesByKey(Collection<Long> actList,  DashboardFilter filter) throws DgException{
+		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
+		Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            divideByMillionDenominator = new BigDecimal(1000);
+        }
+        String currCode = filter.getCurrencyCode();
+        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL);
 		return sortByValue (map);
 	}
 	
@@ -208,7 +224,19 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-		Collection<AmpActivityVersion> activityList = DbUtil.getActivities(filter);
+        Collection activityListReduced = DbUtil.getActivities(filter);
+
+        HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
+        Iterator iter = activityListReduced.iterator();
+        while (iter.hasNext()) {
+            Object[] item = (Object[])iter.next();
+            Long ampActivityId = (Long) item[0];
+            String ampId = (String) item[1];
+            String name = (String) item[2];
+            AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
+            activityList.put(ampActivityId, activity);
+        }
+        
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
@@ -226,7 +254,8 @@ public class DashboardUtil {
 			try {
 				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null));
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null));
-				form.getRanksInformation().setFullProjects(getRankActivities(activityList, form.getFilter()));
+				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+//				form.getRanksInformation().setFullProjects(getRankActivities(activityList.values(), form.getFilter()));
 				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -257,6 +286,18 @@ public class DashboardUtil {
         }
         return oql;
     }
+
+    public static String getInStatement(Object[] ids) {
+        String oql = "";
+        for (int i = 0; i < ids.length; i++) {
+            oql += "" + ids[i];
+            if (i < ids.length - 1) {
+                oql += ",";
+            }
+        }
+        return oql;
+	}    
+
     public static Date getStartDate(Long fiscalCalendarId, int year) {
         Date startDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {

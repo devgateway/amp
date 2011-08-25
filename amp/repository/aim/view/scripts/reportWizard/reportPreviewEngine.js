@@ -56,11 +56,11 @@ function ReportPreviewEngine (rpSettings) {
 	this.parentEl	= null;
 	this.tableEl	= null;
 	
-	if ( this.rpSettings.columns.length == 0 ) 
-		return;
-	
 	if ( this.rpSettings.summary )
 		this.rpSettings.columns	= new Array ();
+	else 
+		if ( this.rpSettings.columns.length == 0 ) 
+			return;
 	
 	this.rows.push( new Row1(this.rpSettings) );
 	this.rows.push( new Row2(this.rpSettings) );

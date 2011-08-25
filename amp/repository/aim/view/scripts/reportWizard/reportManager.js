@@ -8,8 +8,9 @@ function createPreview () {
 	
 	var colArray		= getSelectedFieldsNames("dest_col_ul");
 	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
+	var summary			= getHideActivities();
 	
-	if ( colArray.length != 0 || hierArray.length != 0 ) {
+	if ( (colArray.length != 0 && !summary) || hierArray.length != 0 ) {
 		divElWrapper.style.display		= "";
 		fakeDivEl.style.display		= "";
 		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewBodySectionDiv');		

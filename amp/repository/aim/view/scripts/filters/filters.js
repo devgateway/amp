@@ -116,6 +116,8 @@ YAHOO.amptab.afterFiltersLoad   = function (){
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("programsTab");
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("financingLocTab");
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
+	 	
+
 	 }
 	 	
 YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {

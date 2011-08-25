@@ -33,11 +33,11 @@
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
-		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
-		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
-		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
-		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
-		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
+		<li><a id="relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+		<li><a id="sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
+		<li><a id="programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
+		<li><a id="financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
+		<li><a id="otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
 	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
 		<div id="donorsTab" style="height: 91%;">

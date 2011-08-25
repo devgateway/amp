@@ -83,7 +83,7 @@ public class ActivityUtil {
 			a.setDraft(draft);
 			a.setDeleted(false);
 			//is versioning activated?
-			if (a != null && !a.getDraft() && ActivityVersionUtil.isVersioningEnabled()){
+			if (a != null && (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				try {
 					AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 					
@@ -155,7 +155,7 @@ public class ActivityUtil {
 			if (a.getActivityContacts() != null)
 				a.getActivityContacts().clear();
 				*/
-			//saveContacts(a, session);
+			saveContacts(a, session);
 			saveResources(a); 
 			saveEditors(session); 
 			saveComments(a, session); 
@@ -235,10 +235,14 @@ public class ActivityUtil {
 		
 		if (act.getComponentFundings() != null)
 			act.getComponentFundings().size();
+		if (act.getComponentProgress() != null)
+			act.getComponentProgress().size();
 		if (act.getCosts() != null)
 			act.getCosts().size();
 		if (act.getMember() != null)
 			act.getMember().size();
+		if (act.getContracts() != null)
+			act.getContracts().size();
 		
 		
 		

@@ -16,9 +16,25 @@
 		
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
-	<div class="breadcrumbsplaceholder">breacrumbs should go here - replace this code </div>
+	<br><br>
 	
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<tr>
+				<td>
+					<div class="breadcrump_cont">
+						<span class="sec_name">
+							<digi:trn>Messages</digi:trn>
+						</span>
+						
+						<span class="breadcrump_sep">|</span>
+						<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm" module="aim">
+							<digi:trn>Portfolio</digi:trn>
+						</digi:link>
+						<span class="breadcrump_sep"><b>�</b></span>
+						<digi:trn>My Messages</digi:trn>
+					</div>
+				</td>
+			</tr>
 		<tr>
 			<td width=768  valign="top">
 				<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">

@@ -305,6 +305,14 @@ saveReportEngine	= null;
 
 		filterForm.submit();
 	}
+	function submitSettings() {
+		//This is needed for unfreezing the report. applyFormat parameter needs to be set so that the function
+		// ReportsFilterPickerForm.reset doesn't reset the currently applied filters
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
+		filterForm.action	= "/aim/reportsFilterPicker.do?applyFormat=true";
+
+		filterForm.submit();
+	}
 	
 	function showFilter() {
 		$("#myFilter").empty().html('<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>');
@@ -647,7 +655,7 @@ function validateFormat(){
 	
 	function sendCookieAndReload (){
 		createCookie('report_scrolling',currentReportId,1);
-		submitFilters();
+		submitSettings();
 	}
 	
 	
@@ -665,7 +673,7 @@ function validateFormat(){
 	}
 	function hiddeScroll(){
 		eraseCookie('report_scrolling');
-		submitFilters();
+		//submitSettings();
 	}
 	
 	var enableLink=function(){
@@ -717,7 +725,7 @@ function validateFormat(){
   				if ($('#frezzlinkreport').hasClass("settingsLinkDisable"))
   					$('#frezzlinkreport').removeClass("settingsLinkDisable");
   					$('#frezzlinkreport').addClass( "settingsLink" );
-  					$('#frezzlinkreport').bind("click", submitFilters);
+  					$('#frezzlinkreport').bind("click", submitSettings);
   					$('#frezzlinkreport').css("cursor", "pointer");
   					canMakeScroll	= true;
   					$('#frezzlinkreport').text(msg1);

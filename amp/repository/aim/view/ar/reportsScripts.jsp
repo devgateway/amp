@@ -300,7 +300,7 @@ saveReportEngine	= null;
 	
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
-		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm2")[0];
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 
 		filterForm.submit();

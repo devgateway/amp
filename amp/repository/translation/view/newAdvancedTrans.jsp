@@ -325,8 +325,8 @@
 
 	function openChangesList(open){
 		if (open){
-			$('div.searchResults').animate({width:'75%'},300);
-			$('div.changesPanel').animate({width: '25%'},300,function(){					
+			$('div.searchResults').animate({width:'70%'},300);
+			$('div.changesPanel').animate({width: '30%'},300,function(){					
 				$('div.changesContainer').fadeIn('slow');
 				$('div.showhide').html('&gt;&gt;');
 			});

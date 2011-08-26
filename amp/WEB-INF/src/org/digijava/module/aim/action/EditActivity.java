@@ -942,8 +942,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                     .ConvertDateToString(activity
               .getActualCompletionDate()));
 
-          eaForm.getPlanning().setProposedCompDate(DateConversion.ConvertDateToString(
-              activity.getProposedCompletionDate()));
+          /*eaForm.getPlanning().setProposedCompDate(DateConversion.ConvertDateToString(
+              activity.getProposedCompletionDate()));*/
 
           // loading organizations and thier project ids.
           Set orgProjIdsSet = activity.getInternalIds();

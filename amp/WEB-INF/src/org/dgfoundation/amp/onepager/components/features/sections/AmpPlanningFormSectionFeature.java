@@ -48,7 +48,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		planningMinistryRank.getTextContainer().add(rankValidator);
 		planningMinistryRank.getTextContainer().add(rankModifier);
 		add(planningMinistryRank);
-		
+                
 		
 		AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(
 				"dateOfActualCompletion", new PropertyModel<Date>(actModel,
@@ -66,6 +66,11 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 				"proposedStartDate", new PropertyModel<Date>(actModel,
 						"proposedStartDate"), null, "Proposed Start Date");
 		add(proposedStartDate);
+                
+                AmpDatePickerFieldPanel proposedApprovalDate = new AmpDatePickerFieldPanel(
+				"proposedApprovalDate", new PropertyModel<Date>(actModel,
+						"proposedApprovalDate"), null, "Proposed Approval Date");
+		add(proposedApprovalDate);
 
 		AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
 				"dateOfEffectiveAgreement", new PropertyModel<Date>(actModel,
@@ -93,11 +98,12 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 						"originalCompDate"), null, "Date of Planned Completion");
 		add(dateOfPlannedCompletion);
 
-		AmpDatePickerFieldPanel revisedCompletionDate = new AmpDatePickerFieldPanel(
+                // why we use same actualCompletionDate  twice?
+		/*AmpDatePickerFieldPanel revisedCompletionDate = new AmpDatePickerFieldPanel(
 				"revisedCompletionDate", new PropertyModel<Date>(actModel,
 						"actualCompletionDate"), null,
 				"Revised Completion Date");
-		add(revisedCompletionDate);
+		add(revisedCompletionDate);*/
 
 		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
 		acsw2.setOutputMarkupId(true);

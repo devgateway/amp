@@ -262,9 +262,9 @@ public class GlossaryUtil {
 		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getRequestDBSession();
-			tx = dbSession.beginTransaction();						//Start transaction
+//beginTransaction();						//Start transaction
 			deleteTopic(glossaryTopic, dbSession);					//delete topic, its editor and children
-			tx.commit();											//commit changes
+			//tx.commit();											//commit changes
 		} catch (Exception e) {
 			if (tx != null) {
 				try {

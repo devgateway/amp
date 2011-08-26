@@ -82,7 +82,7 @@ public class DynLocationManagerUtil {
 		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
-			tx = dbSession.beginTransaction();
+//beginTransaction();
 
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession
 					.load(AmpCategoryValueLocations.class, id);
@@ -95,7 +95,7 @@ public class DynLocationManagerUtil {
 			if (loc != null)
 				dbSession.delete(loc);
 			dbSession.flush();
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			if (errors != null)
@@ -122,7 +122,7 @@ public class DynLocationManagerUtil {
 		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
-			tx = dbSession.beginTransaction();
+//beginTransaction();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName() + " loc ";
 			Query qry = dbSession.createQuery(queryString);
@@ -183,7 +183,7 @@ public class DynLocationManagerUtil {
 						"Some locations seem to have the wrong Implementation Location category associated: "
 								+ errorListStr);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			if (errors != null)
@@ -277,7 +277,7 @@ public class DynLocationManagerUtil {
 		Collection<Country> countries = null;
 		try {
 			dbSession = PersistenceManager.getSession();
-			tx = dbSession.beginTransaction();
+//beginTransaction();
 			String queryString = "select c from " + Country.class.getName()
 					+ " c ";
 			Query qry = dbSession.createQuery(queryString);
@@ -377,7 +377,7 @@ public class DynLocationManagerUtil {
 					}
 				}
 			}
-			tx.commit();
+			//tx.commit();
 			logger.info("Countries synchronization done.");
 		} catch (Exception e) {
 			tx.rollback();

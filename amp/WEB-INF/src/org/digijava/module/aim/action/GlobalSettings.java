@@ -330,7 +330,7 @@ public class GlobalSettings extends Action {
 		Transaction tx		= null;
 		try{
 				session					= PersistenceManager.getSession();
-				tx						= session.beginTransaction();
+//beginTransaction();
 
 				qryStr 					= "select gs from "+ AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id " ;
 				qry 					= session.createQuery(qryStr);
@@ -341,7 +341,7 @@ public class GlobalSettings extends Action {
 
 				if (changeValue)
 						ags.setGlobalSettingsValue(value);
-				tx.commit();
+				//tx.commit();
 
 		}
 		catch (Exception ex) {

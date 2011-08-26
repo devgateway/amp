@@ -155,11 +155,11 @@ public class LuceneUtil implements Serializable {
 			List<AmpLuceneIndexStamp> stamps = query.list();
 			// Delete all fund stamps for this module name.
 			if (stamps != null && stamps.size() > 0) {
-				transaction = session.beginTransaction();
+//beginTransaction();
 				for (AmpLuceneIndexStamp stamp : stamps) {
 					session.delete(stamp);
 				}
-				transaction.commit();
+				//transaction.commit();
 				oldRecordDeleted = true;
 			}
 		} catch (HibernateException e) {
@@ -189,9 +189,9 @@ public class LuceneUtil implements Serializable {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(stamp);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			if(tx!=null){
 				try {
@@ -353,9 +353,9 @@ public class LuceneUtil implements Serializable {
 				
 				try {
 					Session session = PersistenceManager.getRequestDBSession();
-					Transaction tx = session.beginTransaction();
+//beginTransaction();
 					session.save(stamp);
-					tx.commit();
+					//tx.commit();
 					//PersistenceManager.releaseSession(session);
 				}
 				catch (Exception e) {

@@ -114,11 +114,11 @@ public class ExchangePermission extends MultiAction {
 			Iterator i=gatePerm.iterator();
 			while (i.hasNext()) {
 			    	Session session=PersistenceManager.getRequestDBSession();
-			    	Transaction transaction = session.beginTransaction();
+//beginTransaction();
 				GatePermType gp = (GatePermType) i.next();
 				GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
 				session.saveOrUpdate(xmlToDbGatePermission);			
-				transaction.commit();
+				//transaction.commit();
 				PersistenceManager.releaseSession(session);
 			}
 			
@@ -126,11 +126,11 @@ public class ExchangePermission extends MultiAction {
 			i=compPerm.iterator();
 			while (i.hasNext()) {
 			    	Session session=PersistenceManager.getRequestDBSession();
-			    	Transaction transaction = session.beginTransaction();
+//beginTransaction();
 			    	CompositePermType gp = (CompositePermType) i.next();
 				CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
 				session.saveOrUpdate(xmlToDbCompositePermission);
-				transaction.commit();
+				//transaction.commit();
 				PersistenceManager.releaseSession(session);
 			}
 		} catch (FileNotFoundException e) {
@@ -183,18 +183,18 @@ public class ExchangePermission extends MultiAction {
 		while (iterator.hasNext()) {
 		    GatePermType xmlGp = (GatePermType) iterator.next();
 		    GatePermission xmlToDbGatePermission = xmlToDbGatePermission(xmlGp, added, updated);
-		    //Transaction transaction = requestDBSession.beginTransaction();
+//beginTransaction();
 		    //requestDBSession.saveOrUpdate(xmlToDbGatePermission);
-		    //transaction.commit();
+		    ////transaction.commit();
 		    dbCp.getPermissions().add(xmlToDbGatePermission);
 		}
 		iterator = elem.getCompositePerm().iterator();
 		while (iterator.hasNext()) {
 		    CompositePermType xmlGp = (CompositePermType) iterator.next();
 		    CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(xmlGp, added, updated);
-//		    Transaction transaction = requestDBSession.beginTransaction();
+//beginTransaction();
 //		    requestDBSession.saveOrUpdate(xmlToDbCompositePermission);
-//		    transaction.commit();
+//		    //transaction.commit();
 		    dbCp.getPermissions().add(xmlToDbCompositePermission);
 		}
 		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new HashSet());

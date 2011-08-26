@@ -199,7 +199,7 @@ public class DbUtil {
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = session.createQuery(queryString);
             query.setString("email", email);
@@ -233,7 +233,7 @@ public class DbUtil {
             iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
             session.update(iterUser);
             session.delete(resetPassword);
-            tx.commit();
+            //tx.commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
@@ -284,12 +284,12 @@ public class DbUtil {
             while(iter.hasNext()) {
                 iterUser = (User) iter.next();
             }
-            tx = session.beginTransaction();
+//beginTransaction();
             iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
             iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
             session.save(iterUser);
 
-            tx.commit();
+            //tx.commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
@@ -362,9 +362,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             session.update(user);
-            tx.commit();
+            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -406,9 +406,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             session.update(user);
-            tx.commit();
+            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -450,7 +450,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             ArrayList removeArray = new ArrayList();
 
             if(user.getInterests() != null) {
@@ -489,7 +489,7 @@ public class DbUtil {
 
             session.flush();
             
-            tx.commit();
+            //tx.commit();
 
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
@@ -518,7 +518,7 @@ public class DbUtil {
         Session session = null;
         try {
             session = HibernateClassLoader.getSessionFactory().openSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             // set encrypted password
             user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
@@ -540,7 +540,7 @@ public class DbUtil {
                 session.save(user.getUserLangPreferences());
             }
 
-            tx.commit();
+            //tx.commit();
 
             // Is becoming a member of Member group of corresponding site
             if(user.getInterests() != null) {
@@ -607,9 +607,9 @@ public class DbUtil {
                 user.setActive(true);
                 user.setBanned(false);
                 user.setEmailVerified(true);
-                tx = sess.beginTransaction();
+//beginTransaction();
                 sess.update(user);
-                tx.commit();
+                //tx.commit();
                 verified =true;
                 
             } 
@@ -668,7 +668,7 @@ public class DbUtil {
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             ResetPassword resetPassword;
             boolean create = true;
@@ -688,7 +688,7 @@ public class DbUtil {
                 session.update(resetPassword);
             }
 
-            tx.commit();
+            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to put reset password record into database", ex);
             if(tx != null) {

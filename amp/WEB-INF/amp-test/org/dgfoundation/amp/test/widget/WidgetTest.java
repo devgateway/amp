@@ -99,9 +99,9 @@ public class WidgetTest extends TestCase {
 //		Transaction tx=null;
 //		try {
 //			session=PersistenceManager.getRequestDBSession();
-//			tx=session.beginTransaction();
+//beginTransaction();
 //			session.saveOrUpdate(afd);
-//			tx.commit();
+//			//tx.commit();
 //		}catch(Exception ex) {
 //			if(tx!=null) {
 //				try {
@@ -136,7 +136,7 @@ public class WidgetTest extends TestCase {
 //		Transaction trans=null;
 //		try {
 //			session=PersistenceManager.getRequestDBSession();
-//			trans=session.beginTransaction();
+//beginTransaction();
 //			AmpFundingDetail afd=getFundingDetail(id);
 //			session.delete(afd);
 //			trans.commit();

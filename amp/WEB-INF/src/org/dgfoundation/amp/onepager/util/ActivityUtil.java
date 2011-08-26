@@ -161,7 +161,7 @@ public class ActivityUtil {
 			saveComments(a, session); 
 			
 			session.flush();
-			transaction.commit();
+			//transaction.commit();
 			am.setTransaction(session.beginTransaction());
 			am.resetSession();
 			am.setObject(a);
@@ -203,7 +203,7 @@ public class ActivityUtil {
 		
 		am.setTransaction(session.beginTransaction());
 		
-		AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
+		AmpActivityVersion act = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 
 		//check the activity group for the last version of an activity
 		AmpActivityGroup group = act.getAmpActivityGroup();

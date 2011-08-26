@@ -199,7 +199,7 @@ public class DgUtil {
                     UserLangPreferences preferences;
 
                     session = PersistenceManager.getSession();
-                    tx = session.beginTransaction();
+//beginTransaction();
 
                     UserPreferencesPK key = new UserPreferencesPK(user,
                         rootSite);
@@ -219,7 +219,7 @@ public class DgUtil {
 
                         session.save(preferences);
                     }
-                    tx.commit();
+                    //tx.commit();
 
                     // put preferences back
                     user.setUserLangPreferences(preferences);

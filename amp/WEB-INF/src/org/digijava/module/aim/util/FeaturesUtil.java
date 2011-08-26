@@ -208,12 +208,12 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			feature = (AmpFeature) session.load(AmpFeature.class,
 					featureId);
 			feature.setActive(!feature.isActive());
 			session.update(feature);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -326,11 +326,11 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			FeatureTemplates ft = new FeatureTemplates();
 			ft = (FeatureTemplates) session.load(FeatureTemplates.class, id);
 			session.delete(ft);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -413,7 +413,7 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			FeatureTemplates ampTemplate = new FeatureTemplates();
 			ampTemplate.setFeatureTemplateName(template);
 			ampTemplate.setFeatures(new HashSet());
@@ -422,7 +422,7 @@ public class FeaturesUtil {
 				ampTemplate.getFeatures().add(ampFeature);
 			}
 			session.save(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -455,7 +455,7 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			FeatureTemplates ampTemplate = new FeatureTemplates();
 			ampTemplate = (FeatureTemplates) session.load(FeatureTemplates.class,
 					templateId);
@@ -475,7 +475,7 @@ public class FeaturesUtil {
 				ampTemplate.getFeatures().add(ampFeature);
 			}
 			session.saveOrUpdate(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -594,9 +594,9 @@ public class FeaturesUtil {
  	 	AmpHomeThumbnail thumbnail = getAmpHomeThumbnail(placeholder);
  	 	try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(thumbnail);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Exception : " + e.getMessage());
@@ -847,14 +847,14 @@ public class FeaturesUtil {
 				defFlag = (AmpSiteFlag) itr.next();
 			}
 			AmpSiteFlag newDefFlag = (AmpSiteFlag) session.load(AmpSiteFlag.class, id);
-			tx = session.beginTransaction();
+//beginTransaction();
 			newDefFlag.setDefaultFlag(true);
 			session.update(newDefFlag);
 			if (defFlag != null) {
 				defFlag.setDefaultFlag(false);
 				session.update(defFlag);
 			}
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -936,9 +936,11 @@ public class FeaturesUtil {
 		Query qry = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
+//beginTransaction();
 			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
 			qry = session.createQuery(qryStr);
 			coll = qry.list();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -1277,11 +1279,11 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
 			ampTemplate.setName(templateName);
 			session.save(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -1294,11 +1296,11 @@ public class FeaturesUtil {
 		Long id =null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
 			ampTemplate.setName(templateName);
 			id = (Long)session.save(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -1398,12 +1400,12 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			AmpTemplatesVisibility ampTemplate;
-			tx = session.beginTransaction();
+//beginTransaction();
 			ampTemplate = (AmpTemplatesVisibility) session.load(
 					AmpTemplatesVisibility.class, templateId);
 			ampTemplate.setItems(null);
 			session.saveOrUpdate(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception :::: " + ex.getMessage());
@@ -1422,7 +1424,7 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			AmpTemplatesVisibility ampTemplate;
-			tx = session.beginTransaction();
+//beginTransaction();
 			ampTemplate = (AmpTemplatesVisibility) session.load(
 					AmpTemplatesVisibility.class, templateId);
 			ampTemplate.setName(templateName);
@@ -1432,7 +1434,7 @@ public class FeaturesUtil {
 				ampTemplate.getItems().add(ampModule);
 			}
 			session.saveOrUpdate(ampTemplate);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ;;;; " + ex.getMessage());
@@ -1448,7 +1450,7 @@ public class FeaturesUtil {
 		Session hbsession=null;
 		try {
 			hbsession=PersistenceManager.getRequestDBSession();
-			tx=hbsession.beginTransaction();
+//beginTransaction();
 			AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
 			ft = (AmpTemplatesVisibility) hbsession.load(AmpTemplatesVisibility.class,id);
 //			ft.setItems(null);
@@ -1472,7 +1474,7 @@ public class FeaturesUtil {
 			
 			hbsession.delete(ft);
 			
-			tx.commit();
+			//tx.commit();
 			hbsession.flush();
 		}
 		catch (Exception ex) {
@@ -1507,7 +1509,7 @@ public class FeaturesUtil {
 
 		try {
 			//Session s=PersistenceManager.getSession();
-			Transaction tx = session.beginTransaction();
+//beginTransaction();
 			AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(
 					AmpFieldsVisibility.class, id);
 			AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
@@ -1518,7 +1520,7 @@ public class FeaturesUtil {
 				element.getFields().remove(field);
 			}
 			session.delete(field);
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (HibernateException e) {
@@ -1535,7 +1537,7 @@ public class FeaturesUtil {
 
 		try {
 			//Session s=PersistenceManager.getSession();
-			Transaction tx = session.beginTransaction();
+//beginTransaction();
 			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(
 					AmpFeaturesVisibility.class, id);
 			AmpObjectVisibility parent = (AmpObjectVisibility) feature.getParent();
@@ -1563,7 +1565,7 @@ public class FeaturesUtil {
 				element.getFeatures().remove(feature);
 			}
 			session.delete(feature);
-			tx.commit();
+			//tx.commit();
 
 			//s.close();
 
@@ -1581,7 +1583,7 @@ public class FeaturesUtil {
 	public static boolean deleteModuleVisibility(Long id, Session session) {
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 			
 			Iterator k = module.getItems().iterator();
@@ -1623,7 +1625,7 @@ public class FeaturesUtil {
 				parentModule.getSubmodules().remove(module);
 			}
 			session.delete(module);
-			tx.commit();
+			//tx.commit();
 		} catch (ObjectNotFoundException e) {
 		} catch (HibernateException e) {
 			if (tx != null) {
@@ -1848,7 +1850,7 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			AmpModulesVisibility ampModule;
-			tx = session.beginTransaction();
+//beginTransaction();
 			ampModule = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
 					templateId);
 			//ampModule.setItems(null);
@@ -1867,7 +1869,7 @@ public class FeaturesUtil {
 				//else fDb.setVisible("false");
 			}
 			session.saveOrUpdate(ampModule);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception :::: " + ex.getMessage());
@@ -1900,7 +1902,7 @@ public class FeaturesUtil {
 		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			ampTemplate = (AmpTemplatesVisibility) session.load(
 					AmpTemplatesVisibility.class, templateId);
 			ampTemplate.getItems().retainAll(modules);
@@ -1909,7 +1911,7 @@ public class FeaturesUtil {
 			ampTemplate.getFeatures().addAll(features);
 			//ampTemplate.getFields().retainAll(fields);
 			//ampTemplate.getFields().addAll(fields);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -1940,7 +1942,7 @@ public class FeaturesUtil {
 			Long templateId, Session session) throws HibernateException {
 		Transaction tx = null;
 		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		tx = session.beginTransaction();
+//beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
 		if (ampTemplate.getItems()!=null){
@@ -1950,7 +1952,7 @@ public class FeaturesUtil {
 			ampTemplate.setItems(new TreeSet<AmpModulesVisibility>());
 			ampTemplate.getItems().addAll(modules);
 		}
-		tx.commit();
+		//tx.commit();
 		return;
 	}
 
@@ -1966,11 +1968,11 @@ public class FeaturesUtil {
 			Long templateId, Session session) throws HibernateException {
 		Transaction tx = null;
 		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		tx = session.beginTransaction();
+//beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
 		ampTemplate.setName(templateName);
-		tx.commit();
+		//tx.commit();
 		return;
 	}
 
@@ -1986,7 +1988,7 @@ public class FeaturesUtil {
 			Long templateId, Session session) throws HibernateException, SQLException {
 		Transaction tx = null;
 		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		tx = session.beginTransaction();
+//beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
 		if (ampTemplate.getFeatures()!=null){
@@ -1997,7 +1999,7 @@ public class FeaturesUtil {
 			ampTemplate.getFeatures().addAll(features);
 		}
 		
-		tx.commit();
+		//tx.commit();
 		return;
 	}
 
@@ -2013,7 +2015,7 @@ public class FeaturesUtil {
 			Long templateId, Session session) throws HibernateException {
 		Transaction tx = null;
 		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		tx = session.beginTransaction();
+//beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
 		if (ampTemplate.getFields()!=null){
@@ -2023,7 +2025,7 @@ public class FeaturesUtil {
 			ampTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
 			ampTemplate.getFields().addAll(fields);
 		}
-		tx.commit();
+		//tx.commit();
 		return;
 	}
 
@@ -2050,7 +2052,7 @@ public class FeaturesUtil {
 				//System.out.println("field:::: dirtyyyyyyyyyyyyyyyyyyyyyyy");
 				session.flush();
 			}
-			tx = session.beginTransaction();
+//beginTransaction();
 			feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class,
 					featureId);
 			field.setParent(feature);
@@ -2059,7 +2061,7 @@ public class FeaturesUtil {
 				field.setHasLevel(false);
 			else field.setHasLevel(false);
 			session.save(field);
-			tx.commit();
+			//tx.commit();
 			
 			
 			boolean makeVisible	= false;
@@ -2074,14 +2076,14 @@ public class FeaturesUtil {
 			
        		
        		if  ( makeVisible ){
-    			tx = session.beginTransaction();
+//beginTransaction();
     			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
     			template.getFields().add(field);
-    			tx.commit();
+    			//tx.commit();
        		}
 			
 			//session.saveOrUpdate(template);
-			//tx.commit();
+			////tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -2122,7 +2124,7 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
 					moduleId);
 			feature.setParent(module);
@@ -2135,19 +2137,19 @@ public class FeaturesUtil {
 			
 			session.update(module);
 			session.save(feature);
-			tx.commit();
+			//tx.commit();
 			
        		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
        		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-				tx = session.beginTransaction();
+//beginTransaction();
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getFeatures().add(feature);
 				session.update(template);
-				tx.commit();
+				//tx.commit();
        		}
 			//session.saveOrUpdate(template);
-			//tx.commit();
+			////tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -2179,22 +2181,22 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			module.setName(moduleName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				module.setHasLevel(false);
 			else module.setHasLevel(true);
 			session.save(module);
-			tx.commit();
+			//tx.commit();
 			
 			String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
        		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-				tx = session.beginTransaction();
+//beginTransaction();
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getItems().add(module);
 				session.update(template);
-				tx.commit();
+				//tx.commit();
        		}
 		}
 		catch (Exception ex) {
@@ -2222,7 +2224,7 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpModulesVisibility parent = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, parentId);
 			
 			module.setName(moduleName);
@@ -2235,16 +2237,16 @@ public class FeaturesUtil {
 			
 			session.update(parent);
 			session.save(module);
-			tx.commit();
+			//tx.commit();
 			
 			String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
        		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-				tx = session.beginTransaction();
+//beginTransaction();
 				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 						templateId);
 				template.getItems().add(module);
 				session.update(template);
-				tx.commit();
+				//tx.commit();
        		}
 		}
 		catch (Exception ex) {
@@ -2274,12 +2276,12 @@ public class FeaturesUtil {
 		Transaction tx;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
 			moduleParent = getModuleVisibility(moduleParentName);
 			module.setParent(moduleParent);
 			session.save(module);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -2313,7 +2315,7 @@ public class FeaturesUtil {
 		Transaction tx;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class,
 					featureId);
 			qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f"
@@ -2324,7 +2326,7 @@ public class FeaturesUtil {
 			feature.getItems().add(field);
 			field.setParent(feature);
 			session.saveOrUpdate(field);
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -2358,7 +2360,7 @@ public class FeaturesUtil {
 		try {
 
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
 					moduleId);
 			qryStr = "select f from " + AmpFeaturesVisibility.class.getName() + " f"
@@ -2369,7 +2371,7 @@ public class FeaturesUtil {
 			module.getItems().add(feature);
 			feature.setParent(module);
 			session.saveOrUpdate(feature);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -2430,7 +2432,7 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			List list = session.createQuery("from " + AmpFieldsVisibility.class.getName() ). list();
 			for(Iterator it=list.iterator();it.hasNext();)
 			{
@@ -2467,7 +2469,7 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			List list = session.createQuery("from " + AmpModulesVisibility.class.getName() ). list();
 			for(Iterator it=list.iterator();it.hasNext();)
 			{
@@ -2504,7 +2506,7 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			List list = session.createQuery("from " + AmpFeaturesVisibility.class.getName() ). list();
 			for(Iterator it=list.iterator();it.hasNext();)
 			{
@@ -2542,7 +2544,7 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			for (Iterator it = allFieldsId.iterator(); it.hasNext();) {
 				Long idf = (Long) it.next();
 				AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(AmpFieldsVisibility.class, idf);
@@ -2556,7 +2558,7 @@ public class FeaturesUtil {
 				session.delete(field);
 			}
 			session.flush();
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ::: " + ex.getMessage());
@@ -2583,7 +2585,7 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 			AmpModulesVisibility parent = (AmpModulesVisibility) module.getParent();
 			Iterator i = module.getTemplates().iterator();
@@ -2599,7 +2601,7 @@ public class FeaturesUtil {
 				session.delete(module);
 				session.flush();
 			}
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ... " + ex.getMessage());
@@ -2626,11 +2628,11 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 			session.delete(module);
 			session.flush();
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ... " + ex.getMessage());
@@ -2660,7 +2662,7 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 
 			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, id);
@@ -2675,7 +2677,7 @@ public class FeaturesUtil {
 			session.delete(feature);
 
 			session.flush();
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception :: " + ex.getMessage());
@@ -2702,7 +2704,7 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(AmpFieldsVisibility.class, id);
 			AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
 			parent.getItems().remove(field);
@@ -2714,7 +2716,7 @@ public class FeaturesUtil {
 			session.delete(field);
 			//	 if(session.contains(field)) //System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());
 			session.flush();
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ::: " + ex.getMessage());
@@ -2997,11 +2999,11 @@ public class FeaturesUtil {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpObjectVisibility objectVisibility =(AmpObjectVisibility) session.load(clazz, id);
 			objectVisibility.setDescription(description);
 			session.update(objectVisibility);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception e) {
 			if (tx!=null){

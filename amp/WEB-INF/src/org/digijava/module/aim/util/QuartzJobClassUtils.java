@@ -65,9 +65,9 @@ public class QuartzJobClassUtils {
         if (jc != null) {
             try {
                 Session session = PersistenceManager.getRequestDBSession();
-                Transaction tr = session.beginTransaction();
+//beginTransaction();
                 session.delete(jc);
-                tr.commit();
+              //  tr.commit();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -77,9 +77,9 @@ public class QuartzJobClassUtils {
     public static void updateJobClasses(AmpQuartzJobClass jc) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            Transaction tr = session.beginTransaction();
+//beginTransaction();
             session.update(jc);
-            tr.commit();
+      //     tr.commit();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -88,9 +88,9 @@ public class QuartzJobClassUtils {
     public static void addJobClasses(AmpQuartzJobClass jc) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            Transaction tr = session.beginTransaction();
+//beginTransaction();
             session.save(jc);
-            tr.commit();
+         //   tr.commit();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

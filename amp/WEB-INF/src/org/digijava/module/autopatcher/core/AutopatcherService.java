@@ -117,9 +117,9 @@ public class AutopatcherService extends AbstractServiceImpl {
 						PatchFile pf = new PatchFile();
 						pf.setAbsolutePatchName(localPatchPath);
 						pf.setInvoked(new Timestamp(System.currentTimeMillis()));
-						Transaction tx = session.beginTransaction();
+//beginTransaction();
 						session.save(pf);
-						tx.commit();
+						//tx.commit();
 						appliedPatches.add(element.getAbsolutePath());
 
 					}

@@ -225,9 +225,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			public void onClick(AjaxRequestTarget target) {
 				try {
 					Session session = PersistenceManager.getSession();
-					Transaction tr = session.beginTransaction();
+//beginTransaction();
 					session.save(newInd.getObject());
-					tr.commit();
+					//tr.commit();
 					
 					IndicatorActivity ia = new IndicatorActivity();
 					ia.setActivity(am.getObject());

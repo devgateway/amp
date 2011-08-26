@@ -1153,12 +1153,12 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
             org.setOrgBackground(orgBackground);
             org.setOrgDescription(orgDescription);
             sess.update(org);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
             if (tx != null) {

@@ -44,18 +44,18 @@ public class ChapterUtil {
 	public static void saveChapter(AmpChapter chapter) throws DgException,
 			HibernateException, SQLException {
 		Session hs = PersistenceManager.getRequestDBSession();
-		Transaction t = hs.beginTransaction();
+//beginTransaction();
 		hs.saveOrUpdate(chapter);
-		t.commit();
+		//t.commit();
 		PersistenceManager.releaseSession(hs);
 	}
 
 	public static void saveImputation(AmpImputation imp) throws DgException,
 			HibernateException, SQLException {
 		Session hs = PersistenceManager.getRequestDBSession();
-		Transaction transaction = hs.beginTransaction();
+//beginTransaction();
 		hs.saveOrUpdate(imp);
-		transaction.commit();
+		//transaction.commit();
 		PersistenceManager.releaseSession(hs);
 	}
 

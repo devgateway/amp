@@ -79,7 +79,7 @@ public class TemplateDocsUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			if(tempDocHelper.getId()!=null){
 				TemplateDoc oldTemplateDoc= (TemplateDoc)session.get(TemplateDoc.class, tempDocHelper.getId());
 				session.delete(oldTemplateDoc);
@@ -106,7 +106,7 @@ public class TemplateDocsUtil {
 					}
 				}
 			}			
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {

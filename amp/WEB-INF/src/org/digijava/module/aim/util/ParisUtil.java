@@ -194,9 +194,9 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			AmpAhsurveyIndicator parisIndicator = 
 				(AmpAhsurveyIndicator) session.load(AmpAhsurveyIndicator.class,pid);
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(parisIndicator);
-			tx.commit();
+			//tx.commit();
 		} 
 		catch (Exception e) 
 		{
@@ -317,9 +317,9 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			AmpAhsurveyQuestion surveyQuestion = (AmpAhsurveyQuestion) session.load(
 												AmpAhsurveyQuestion.class,qid);
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(surveyQuestion);
-			tx.commit();
+			//tx.commit();
 		} 
 		catch (Exception e) 
 		{
@@ -363,9 +363,9 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			AmpAhsurveyResponse ahr = (AmpAhsurveyResponse) session.load(
 					AmpAhsurveyResponse.class,rId);
-			tx = session.beginTransaction();
+//beginTransaction();
 		 	session.delete(ahr);
-			tx.commit();
+			//tx.commit();
 		} 
 		catch (Exception e) 
 		{
@@ -411,7 +411,7 @@ public class ParisUtil {
 					AmpAhsurvey.class,sId);
 			AmpOrganisation org=(AmpOrganisation) session.load(AmpOrganisation.class,ahs.getAmpDonorOrgId().getAmpOrgId());
 			
-			tx = session.beginTransaction();
+//beginTransaction();
 			
 			ahs.getAmpDonorOrgId().getSurvey().remove(ahs);
 			AmpActivityVersion act=ahs.getAmpActivityId();
@@ -422,7 +422,7 @@ public class ParisUtil {
 			
 			//session.save(org);
 		 	session.delete(ahs);
-			tx.commit();
+			//tx.commit();
 
 		} 
 		catch (Exception e) 

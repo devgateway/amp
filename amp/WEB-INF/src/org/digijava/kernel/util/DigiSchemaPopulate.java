@@ -218,7 +218,7 @@ class DigiInitUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             st = session.connection().createStatement();
 
             for (int i = 0; i < commands.length; i++) {
@@ -229,7 +229,7 @@ class DigiInitUtil {
                 }
 
             }
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             if (tx != null) {
@@ -292,7 +292,7 @@ class DigiInitUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             for (int i = 0; i < instanceNames.length; i++) {
                 ModuleInstance admin = new ModuleInstance();
@@ -305,7 +305,7 @@ class DigiInitUtil {
                 session.save(admin);
             }
 
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to create common instances",ex);

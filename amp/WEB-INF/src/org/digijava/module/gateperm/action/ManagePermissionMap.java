@@ -122,18 +122,18 @@ public class ManagePermissionMap extends MultiAction {
 	    // we ignore unpersisted unselected permission maps
 	    if (element.getId() == null && element.getPermissionId() == 0)
 		continue;
-	    Transaction transaction = hs.beginTransaction();
+//beginTransaction();
 	    // we delete previously persisted but unselected permissions
 	    if (element.getId() != null && element.getPermissionId() == 0) {
 		hs.delete(element);
-		transaction.commit();
+		//transaction.commit();
 		continue;
 	    }
 	    // we save/update anything else
 	    Permission p = (Permission) hs.get(Permission.class, element.getPermissionId());
 	    element.setPermission(p);
 	    hs.saveOrUpdate(element);
-	    transaction.commit();
+	    //transaction.commit();
 	}
 	hs.flush();
 	

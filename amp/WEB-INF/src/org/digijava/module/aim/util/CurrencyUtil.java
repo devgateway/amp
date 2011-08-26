@@ -248,7 +248,7 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
@@ -271,7 +271,7 @@ public class CurrencyUtil {
 				session.save(cRate);
 			}
 
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRate");
 			e.printStackTrace(System.out);
@@ -340,9 +340,9 @@ public class CurrencyUtil {
 			if (itr.hasNext()) {
 				AmpCurrency curr = (AmpCurrency) itr.next();
 				curr.setActiveFlag(new Integer(status));
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.update(curr);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Exception from updateCurrencyStatus");
@@ -413,9 +413,9 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(curr);
-			tx.commit();
+			//tx.commit();
 
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrency");
@@ -443,9 +443,9 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.update(curr);
-			tx.commit();
+			//tx.commit();
 
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrency");
@@ -496,15 +496,15 @@ public class CurrencyUtil {
 				curr.setCurrencyCode(currency.getCurrencyCode());
 				curr.setCurrencyName(currency.getCurrencyName());
                 curr.setCountryLocation(currency.getCountryLocation());
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.update(curr);
-				tx.commit();
+				//tx.commit();
 			} else {
 				logger.debug("Creating new currency id ...");
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.save(currency);
 				session.save(cRate);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrency");
@@ -533,14 +533,14 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			for (int i = 0;i < cRates.length; i++) {
 				if (cRates[i] != null) {
 					AmpCurrencyRate cRate = (AmpCurrencyRate) session.load(AmpCurrencyRate.class,cRates[i]);
 					session.delete(cRate);
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from deleteCurrencyRates");
 			e.printStackTrace(System.out);
@@ -576,7 +576,7 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			Iterator itr = currRates.iterator();
 			logger.debug("currency rates size :" + currRates.size());
@@ -607,7 +607,7 @@ public class CurrencyUtil {
 					session.save(currencyRate);
 				}
 			}
-			tx.commit();
+			//tx.commit();
 			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");

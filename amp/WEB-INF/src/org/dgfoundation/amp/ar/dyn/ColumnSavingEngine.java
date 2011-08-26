@@ -126,12 +126,12 @@ public class ColumnSavingEngine {
 		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
-			tx = dbSession.beginTransaction();
+//beginTransaction();
 			
 			dbSession.save( this.newColumn );
 
 			dbSession.flush();
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();

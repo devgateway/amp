@@ -1355,9 +1355,9 @@ public class SectorUtil {
             config.setName(configName);
             config.setMultisector(multiSector);
             config.setClassification(classification);
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(config);
-            tx.commit();
+            //tx.commit();
 
 
 
@@ -1469,10 +1469,10 @@ public class SectorUtil {
        Transaction tx = null;
        try {
            session = PersistenceManager.getRequestDBSession();
-           tx = session.beginTransaction();
+//beginTransaction();
            config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, classificationId);
            session.delete(config);
-           tx.commit();
+           //tx.commit();
            session.flush();
        } catch (Exception e) {
     	   logger.error(e);
@@ -1491,9 +1491,9 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			AmpSectorScheme scheme = (AmpSectorScheme) session.load(
 					AmpSectorScheme.class,schemeId);
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(scheme);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception e)
 		{
@@ -1577,10 +1577,10 @@ public class SectorUtil {
                                                 session = PersistenceManager.getSession();
                                                 AmpSector sector = (AmpSector) session.load(
                                                                 AmpSector.class,sectorId);
-                                                tx = session.beginTransaction();
+//beginTransaction();
                                                 sector.setAidlist(null);
                                                 session.delete(sector);
-                                                tx.commit();
+                                                //tx.commit();
                                         }
                                         catch (Exception e)
                                         {
@@ -1626,7 +1626,7 @@ public class SectorUtil {
         	   
         	   try {
         		   session = PersistenceManager.getRequestDBSession();
-        		   tx = session.beginTransaction();
+//beginTransaction();
         		   ampThemeInd=(AmpThemeIndicators)session.load(AmpThemeIndicators.class,indid);
         		   Iterator itr=ampThemeInd.getSectors().iterator();
         		   while(itr.hasNext()){
@@ -1638,7 +1638,7 @@ public class SectorUtil {
         			   }
         		   }
         		   session.update(ampThemeInd);
-        		   tx.commit();
+        		   //tx.commit();
         		   session.flush();
         		   
 				
@@ -1694,9 +1694,9 @@ public class SectorUtil {
 				session = PersistenceManager.getSession();
 				AmpSector scheme = (AmpSector) session.load(
 						AmpSectorScheme.class,schemeId);
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.delete(scheme);
-				tx.commit();
+				//tx.commit();
 			}
 			catch (Exception e)
 			{

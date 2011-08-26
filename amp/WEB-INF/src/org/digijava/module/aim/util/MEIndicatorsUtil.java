@@ -228,9 +228,9 @@ public class MEIndicatorsUtil
 			}
 			tempMEInd.setName(allMEInd.getName());
 			tempMEInd.setCode(allMEInd.getCode());
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(tempMEInd);
-			tx.commit();
+			//tx.commit();
 		}
 		catch(Exception ex)
 		{
@@ -896,9 +896,9 @@ public class MEIndicatorsUtil
 				indRisk.setAmpIndRiskRatingsId(actInd.getRisk());
 				meIndVal.setRisk(indRisk);
 			}
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(meIndVal);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
 			e.printStackTrace(System.out);
@@ -934,13 +934,13 @@ public class MEIndicatorsUtil
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("indVal",indValId,Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-			tx = session.beginTransaction();
+//beginTransaction();
 			while (itr.hasNext()) {
 				AmpMECurrValHistory currValHist = (AmpMECurrValHistory) itr.next();
 				session.delete(currValHist);
 			}
 			session.delete(meIndVal);
-			tx.commit();
+			//tx.commit();
 
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
@@ -1298,9 +1298,9 @@ public class MEIndicatorsUtil
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(newIndicator);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace(System.out);
@@ -1322,7 +1322,7 @@ public class MEIndicatorsUtil
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(newIndicator);
 
 			AmpActivity act = null;
@@ -1343,7 +1343,7 @@ public class MEIndicatorsUtil
 				ampMEIndValnew.setComments(null);
 				session.save(ampMEIndValnew);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicator() :" + e.getMessage());
 			e.printStackTrace(System.out);

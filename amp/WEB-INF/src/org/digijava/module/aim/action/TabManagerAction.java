@@ -171,7 +171,7 @@ public class TabManagerAction extends Action {
 			
 		}
 		Session dbSession 	= PersistenceManager.getRequestDBSession();
-		Transaction tr		= dbSession.beginTransaction();
+//beginTransaction();
 		try{
 			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMember.getMemberId() );
 			if ( atm.getDesktopTabSelections() == null ) 
@@ -184,11 +184,11 @@ public class TabManagerAction extends Action {
 				atm.getDesktopTabSelections().add(dts);
 				dbSession.save( dts );
 			}
-			tr.commit();
+			//tr.commit();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			tr.rollback();
+			//tr.rollback();
 		}
 		dbSession.flush();
 		

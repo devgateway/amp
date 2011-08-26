@@ -85,10 +85,10 @@ public class DbUtil {
 		Transaction tx = null;
 		try {
 			sess = PersistenceManager.getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			sess.save(site);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			if (tx != null) {
@@ -123,7 +123,7 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.
 			getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			Iterator iter = site.getModuleInstances().iterator();
 			while (iter.hasNext()) {
@@ -152,7 +152,7 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(site);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 
@@ -243,7 +243,7 @@ public class DbUtil {
 		Transaction tx = null;
 		try {
 			sess = PersistenceManager.getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			Iterator iter = group.getPermissions().iterator();
 			while (iter.hasNext()) {
@@ -255,7 +255,7 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(group);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify Group ", ex);
@@ -391,11 +391,11 @@ public class DbUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			Group group = (Group) session.load(Group.class, groupId);
 			User user = (User) session.load(User.class, userId);
 			user.getGroups().remove(group);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to remove User from group ", ex);
@@ -428,13 +428,13 @@ public class DbUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			Group group = (Group) session.load(Group.class, groupId);
 			for (int i = 0; i < userIds.length; i++) {
 				User user = (User) session.load(User.class, userIds[i]);
 				user.getGroups().add(group);
 			}
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to add Users to group ", ex);
@@ -522,7 +522,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			site = (Site) session.load(Site.class, id);
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			Iterator iterator;
 
@@ -575,7 +575,7 @@ public class DbUtil {
 
 			session.delete(site);
 
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -760,10 +760,10 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.
 			getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			sess.update(instance);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 
@@ -800,7 +800,7 @@ public class DbUtil {
 		try {
 			sess = org.digijava.kernel.persistence.PersistenceManager.
 			getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			Iterator iter = otherInstances.iterator();
 			while (iter.hasNext()) {
@@ -822,7 +822,7 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(site);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);
@@ -911,11 +911,11 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			session.update(user);
 
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -1019,14 +1019,14 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			if (locale.getMessageLangKey() == null) {
 				locale.setMessageLangKey("ln:" + locale.getCode());
 			}
 
 			session.update(locale);
 
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -1092,7 +1092,7 @@ public class DbUtil {
 		try {
 			session = org.digijava.kernel.persistence.PersistenceManager.
 			getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			List commonInstances = getCommonInstances();
 
@@ -1143,7 +1143,7 @@ public class DbUtil {
 
 			}
 
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);

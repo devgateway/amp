@@ -56,9 +56,9 @@ public class SiteManager {
         try {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             sess.save(site);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to create site ",ex);

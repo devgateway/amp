@@ -54,19 +54,19 @@ public class CompareActivityVersions extends DispatchAction {
 
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
-			Transaction tx = session.beginTransaction();
+//beginTransaction();
 
 			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
 			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 			AmpActivityGroup group = activity.getAmpActivityGroup();
-			tx.begin();
+			//tx.begin();
 
 			// Update the modified date of the selected activity to send it last
 			// to the list
 			activity.setModifiedDate(Calendar.getInstance().getTime());
 			group.setAmpActivityLastVersion(activity);
 			session.save(group);
-			tx.commit();
+			//tx.commit();
 
 			return new ActionForward(mapping.findForward("reload").getPath() + "&ampActivityId=" + activityId);
 		}
@@ -453,7 +453,7 @@ public class CompareActivityVersions extends DispatchAction {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			session.connection().setAutoCommit(false);
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
@@ -511,7 +511,7 @@ public class CompareActivityVersions extends DispatchAction {
 
 			session.save(auxActivity);
 			session.flush();
-			tx.commit();
+			//tx.commit();
 			logger.warn("Activity Saved.");
 		} catch (Exception e) {
 			logger.error(e);

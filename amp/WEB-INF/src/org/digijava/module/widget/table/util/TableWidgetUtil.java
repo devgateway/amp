@@ -187,9 +187,9 @@ public final class TableWidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			table.saveData(session);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			if (tx!=null){
 				try {

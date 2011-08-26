@@ -59,7 +59,7 @@ public class UserRegistrationTest extends BasicActionTestCaseAdapter {
 			User usr = null;
 			try {
 				session = PersistenceManager.getSession();
-				tx = session.beginTransaction();
+//beginTransaction();
 				String queryString = "select from " + User.class.getName() + " rs where rs.id = " + Long.toString(userId);
 				Query q = session.createQuery(queryString);
 
@@ -78,7 +78,7 @@ public class UserRegistrationTest extends BasicActionTestCaseAdapter {
 					user = (User) q.iterate().next();
 					session.delete(user);
 				}
-				tx.commit();
+				//tx.commit();
 
 			} catch (Exception ex) {
 

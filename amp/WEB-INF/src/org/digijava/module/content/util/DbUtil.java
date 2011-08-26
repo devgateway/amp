@@ -109,7 +109,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			/*if (contentItem.getContentThumbnails() != null) {
 				Iterator itr = contentItem.getContentThumbnails().iterator();
 				while (itr.hasNext()) {
@@ -119,7 +119,7 @@ public class DbUtil {
 				}
 			}*/
 			session.saveOrUpdate(contentItem);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to save content", e);
 		}
@@ -132,9 +132,9 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 			sess.delete(contentItem);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (e instanceof JDBCException)
 				throw (JDBCException) e;
@@ -155,13 +155,13 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 			Iterator<AmpContentItemThumbnail> itr = contentThumbnailsRemoved
 					.iterator();
 			while (itr.hasNext()) {
 				sess.delete(itr.next());
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (e instanceof JDBCException)
 				throw (JDBCException) e;

@@ -88,9 +88,9 @@ public class IndicatorUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(indicator);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving indicator",e);
 			if (tx!=null){
@@ -167,7 +167,7 @@ public class IndicatorUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			//indicator.getSectors().clear();
 			//session.update(indicator);
 			AmpIndicator indicator = (AmpIndicator)session.load(AmpIndicator.class, id);
@@ -185,7 +185,7 @@ public class IndicatorUtil {
 			}
 
 			session.delete(indicator);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			logger.error("caannot remove Indicator!",e);
 			if (tx!=null){
@@ -352,9 +352,9 @@ public class IndicatorUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.delete(conn);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			if (tx!=null){
 				try {
@@ -418,9 +418,9 @@ public class IndicatorUtil {
 		Session sessioin=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=sessioin.beginTransaction();
+//beginTransaction();
 			sessioin.save(connection);
-			tx.commit();
+			//tx.commit();
 			sessioin.flush();
 			return connection;
 		} catch (HibernateException e) {
@@ -443,9 +443,9 @@ public class IndicatorUtil {
 		Session sessioin=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=sessioin.beginTransaction();
+//beginTransaction();
 			sessioin.save(connection);
-			tx.commit();
+			//tx.commit();
 			sessioin.flush();
 			return connection;
 		} catch (HibernateException e) {
@@ -469,9 +469,9 @@ public class IndicatorUtil {
 	public static IndicatorActivity saveConnectionToActivity(IndicatorActivity connection, Session hbSession) throws DgException{
 		Transaction tx=null;
 		try {
-			tx=hbSession.beginTransaction();
+//beginTransaction();
 			hbSession.saveOrUpdate(connection);
-			tx.commit();
+			//tx.commit();
 			return connection;
 		} catch (HibernateException e) {
 			e.printStackTrace();
@@ -497,9 +497,9 @@ public class IndicatorUtil {
 		Session sessioin=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=sessioin.beginTransaction();
+//beginTransaction();
 			sessioin.saveOrUpdate(connection);
-			tx.commit();
+			//tx.commit();
 			return connection;
 		} catch (HibernateException e) {
 			if (tx!=null){
@@ -635,7 +635,7 @@ public class IndicatorUtil {
 		AmpIndicatorValue ampIndValue;
 		try {
 			ampIndValue=loadAmpIndicatorValue(indicatorValueId,connectionId);
-			 tx = session.beginTransaction();
+//beginTransaction();
 			 //deleting AmpLocation
 			AmpLocation ampLocation=ampIndValue.getLocation();			
 			if(ampLocation!=null){
@@ -682,7 +682,7 @@ public class IndicatorUtil {
 			
         //deleting AmpIndicatorValue        
          session.delete(ampIndValue);       
-         tx.commit();
+         //tx.commit();
          session.flush();
 			
 		} catch (Exception e) {
@@ -702,7 +702,7 @@ public class IndicatorUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			Set<AmpIndicatorValue> indValues=connection.getValues();					
 			if(indValues!=null && indValues.size()>0){
 				Iterator<AmpIndicatorValue> iter=indValues.iterator();
@@ -741,7 +741,7 @@ public class IndicatorUtil {
 				}
 			}
 			session.update(connection);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			if (tx!=null){
 				try {
@@ -840,7 +840,7 @@ public class IndicatorUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             indAct = findActivityIndicatorConnection(actInd.getActivityId(), actInd.getIndicatorId());
             Set<AmpIndicatorValue> values = indAct.getValues();
             boolean hasRevisedValue = false;
@@ -928,7 +928,7 @@ public class IndicatorUtil {
             }
 
             session.saveOrUpdate(indAct);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("error", e);
             if (tx != null) {
@@ -1288,9 +1288,9 @@ public class IndicatorUtil {
 			   }
 			}
 		}
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(tempind);
-			tx.commit();
+			//tx.commit();
 
 		} catch (Exception ex) {
 			logger.error("Unable to get non-default indicators");
@@ -1481,7 +1481,7 @@ public class IndicatorUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpIndicator tempindInd = (AmpIndicator) session.load(
 					AmpIndicator.class, indId);
 
@@ -1514,7 +1514,7 @@ public class IndicatorUtil {
 //			}
 
 			session.delete(tempindInd);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to delete the indicator");
 			logger.debug("Exception : " + e);
@@ -1824,7 +1824,7 @@ public class IndicatorUtil {
  	   
  	   try {
  		   session = PersistenceManager.getRequestDBSession();
- 		   tx = session.beginTransaction();
+//beginTransaction();
  		  AmpIndicator tempindInd = (AmpIndicator) session.load(AmpIndicator.class, indid);
  		  
  		 Collection sect = tempindInd.getSectors();
@@ -1844,7 +1844,7 @@ public class IndicatorUtil {
 	 		  }
 		 }
 			session.update(tempindInd);
-	 		tx.commit();
+	 		//tx.commit();
 	 		session.flush();
 			
 		} catch (Exception e) {
@@ -1864,7 +1864,7 @@ public class IndicatorUtil {
 	   
 	   try {
 		   session = PersistenceManager.getRequestDBSession();
-		   tx = session.beginTransaction();
+//beginTransaction();
 		  AmpIndicator tempindInd = (AmpIndicator) session.load(AmpIndicator.class, indid);
 
 		  //TODO INDIC
@@ -1885,7 +1885,7 @@ public class IndicatorUtil {
 //	 		  }
 //		 }
 			session.update(tempindInd);
-	 		tx.commit();
+	 		//tx.commit();
 	 		session.flush();
 			
 		} catch (Exception e) {
@@ -1934,9 +1934,9 @@ public class IndicatorUtil {
 					ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
 					ampThIndVal.setValueType(ampPrgIndVal.getValueType());
 					ampThIndVal.setIndicatorId(ampInd);
-					tx = session.beginTransaction();
+//beginTransaction();
 					session.saveOrUpdate(ampThIndVal);
-					tx.commit();
+					//tx.commit();
 					}
 				}
 			

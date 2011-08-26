@@ -20,9 +20,9 @@ public class DBPersister {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(o);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception saving object of "+o.getClass() +" with identifier "+o.getIdentifier());
 			e.printStackTrace();

@@ -246,7 +246,7 @@ public class DataExchangeUtils {
 //		try {
 //			//session = PersistenceManager.getSession();
 //			session = PersistenceManager.getRequestDBSession();
-//			//tx = session.beginTransaction();
+//beginTransaction();
 //			DEMappingFields demf = new DEMappingFields();
 //			if(code == null && value == null) return false;
 //			if(code!=null) demf.setImportedFieldCode(code);
@@ -265,7 +265,7 @@ public class DataExchangeUtils {
 //			 else demf.setStatus(null);
 //			
 //			session.save(demf);
-//			//tx.commit();
+//			////tx.commit();
 //		}
 //		catch (Exception ex) {
 //			logger.error("Exception : " + ex.getMessage());
@@ -364,14 +364,14 @@ public class DataExchangeUtils {
 	    	//session = PersistenceManager.getSession();
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
-	    	tx = session.beginTransaction();
+//beginTransaction();
 
 			session.save(activity);
 	        activityId = activity.getAmpActivityId();
 	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
 	        activity.setAmpId(ampId);
 	        //session.update(activity);
-	        tx.commit();
+	        //tx.commit();
 	        
 //	    }catch (Exception ex) {
 //	        logger.error("Exception from saveActivity().", ex);
@@ -408,7 +408,7 @@ public class DataExchangeUtils {
 	    try {
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
-	    	tx = session.beginTransaction();
+//beginTransaction();
 
 	    	Set <AmpActivityContact> activityContacts = activity.getActivityContacts();
 	    	//new
@@ -467,7 +467,7 @@ public class DataExchangeUtils {
 	        String ampId=ActivityUtil.numericAmpId("00",activityId);//generateAmpId(member.getUser(),activityId );
 	        activity.setAmpId(ampId);
 	        //session.update(activity);
-	        tx.commit();
+	        //tx.commit();
 	        
 	    }catch (Exception ex) {
 	        logger.error("Exception from saveActivity().", ex);
@@ -822,9 +822,9 @@ public class DataExchangeUtils {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            //tx = session.beginTransaction();
+//beginTransaction();
             session.save(object);
-            //tx.commit();
+            ////tx.commit();
         } catch (Exception e) {
             logger.error("Unable to add");
             e.printStackTrace(System.out);
@@ -1177,11 +1177,11 @@ public class DataExchangeUtils {
 	    	//session = PersistenceManager.getSession();
 	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
-	    	tx = session.beginTransaction();
+//beginTransaction();
 
 			//session.saveOrUpdate(activity);
 	        session.update(activity);
-	        tx.commit();
+	        //tx.commit();
 	        
 //	    }catch (Exception ex) {
 //	        logger.error("Exception from saveActivity().", ex);
@@ -1341,9 +1341,9 @@ public class DataExchangeUtils {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(mf);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception insertDEMappingField: " + ex.getMessage());
@@ -1407,7 +1407,7 @@ public class DataExchangeUtils {
 	    Long activityId = null;
 	    try {
 				session = PersistenceManager.getRequestDBSession();
-		    	tx = session.beginTransaction();
+//beginTransaction();
 
 		    	AmpActivityGroup ampActGroup;
 				if(grpId.longValue()==-1)
@@ -1448,7 +1448,7 @@ public class DataExchangeUtils {
 		        ampActivity.setAmpId(ampId);
 		        //session.update(activity);
 		        
-		        tx.commit();
+		        //tx.commit();
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

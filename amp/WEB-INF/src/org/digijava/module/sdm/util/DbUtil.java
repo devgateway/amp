@@ -68,13 +68,13 @@ public class DbUtil {
         Sdm document = new Sdm();
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             document.setSiteId(siteId);
             document.setInstanceId(instanceId);
             document.setName(title);
 
             session.save(document);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to create new sdm document into database", ex);
@@ -257,7 +257,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             //item1 = (SdmItem) session.load(SdmItem.class, item1);
             //item2 = (SdmItem) session.load(SdmItem.class, item2);
             Iterator iter = document.getItems().iterator();
@@ -276,7 +276,7 @@ public class DbUtil {
             }
             session.update(document);
 
-            tx.commit();
+            //tx.commit();
 
             swap = true;
 
@@ -304,7 +304,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
 
             Sdm sdm = item.getDocument();
 
@@ -319,7 +319,7 @@ public class DbUtil {
             session.delete(item);
             session.update(sdm);
 
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to delete intem", ex);
@@ -363,9 +363,9 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.update(item);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to update sdm item into database", ex);
@@ -395,7 +395,7 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             // insert new
             if (document.getId() == null) {
@@ -427,7 +427,7 @@ public class DbUtil {
                 session.update(document);
             }
 
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
 
@@ -455,7 +455,7 @@ public class DbUtil {
         boolean newDoc=false;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(document);
 //            session.clear();
 //            if(document.getId()==null){
@@ -524,7 +524,7 @@ public class DbUtil {
                 }
             }            
             
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to update document information into database",ex);
@@ -568,9 +568,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             session.delete(document);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             if (tx != null) {

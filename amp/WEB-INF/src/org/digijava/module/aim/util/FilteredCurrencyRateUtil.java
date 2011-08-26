@@ -81,14 +81,14 @@ public class FilteredCurrencyRateUtil {
 		 Transaction tx	= null;
 		 try {
 			 sess = this.getHibernateSession();
-			 tx		= sess.beginTransaction();
+//beginTransaction();
 			 String queryString 	= "select f from " + AmpFilteredCurrencyRate.class.getName() +  " f where f.id=:id" ;
 			 Query query				= sess.createQuery(queryString);
 			 query.setLong("id", id);
 
 			 AmpFilteredCurrencyRate f		=	(AmpFilteredCurrencyRate)query.uniqueResult();
 			 sess.delete(f);
-			 tx.commit();
+			 //tx.commit();
 		 }
 		 catch (Exception e) {
 			 logger.error("Could not delete AmpFilteredCurrencyRate with id " + id + ": " + e.getMessage() );
@@ -115,9 +115,9 @@ public class FilteredCurrencyRateUtil {
 		 Transaction tx	= null;
 		 try {
 			 sess = this.getHibernateSession();
-			 tx		= sess.beginTransaction();
+//beginTransaction();
 			 sess.save(f);
-			 tx.commit();
+			 //tx.commit();
 		 }
 		 catch (Exception e) {
 			 logger.error("Could not add AmpFilteredCurrencyRate: " + e.getMessage() );

@@ -309,14 +309,7 @@ public class ConfigLoaderListener
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
             ServiceManager.getInstance().shutdown(0);
-            
-            try {
-    			Thread.currentThread().sleep(3000);
-    		} catch (InterruptedException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-
+         
      
         }
     }

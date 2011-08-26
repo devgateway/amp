@@ -99,10 +99,10 @@ public class SourceSettingDAO {
 	
 	public void deleteObject(Long id) {
 		try{
-			Transaction rx 	= hbSession.beginTransaction();
+//beginTransaction();
 			Object obj		= this.hbSession.load(DESourceSetting.class, id);
 			this.hbSession.delete(obj);
-			rx.commit();
+			//rx.commit();
 			hbSession.flush();
 		}
 		catch (Exception e) {
@@ -115,9 +115,9 @@ public class SourceSettingDAO {
 	
 	public void saveObject(Object object) {
 		try{
-			Transaction rx = hbSession.beginTransaction();
+//beginTransaction();
 			this.hbSession.saveOrUpdate(object);
-			rx.commit();
+			//rx.commit();
 			hbSession.flush();
 		}
 		catch (Exception e) {

@@ -322,7 +322,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             // check whether a team with the same name already exist
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -406,7 +406,7 @@ public class TeamUtil {
     				}
                 }
                 // commit the changes
-                tx.commit();
+                //tx.commit();
             }
         } catch(Exception e) {
             /*
@@ -552,7 +552,7 @@ public class TeamUtil {
         try {
 
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             // check whether a team with the same name already exist
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -621,7 +621,7 @@ public class TeamUtil {
                     }
                 }
                 // commit the changes
-                tx.commit();
+                //tx.commit();
             }
 
         } catch(Exception e) {
@@ -738,11 +738,11 @@ public class TeamUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			
-			Transaction transaction = session.beginTransaction();
+//beginTransaction();
 			AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 			team.setParentTeamId(null);
 			session.saveOrUpdate(team);
-			transaction.commit();
+			//transaction.commit();
 			PersistenceManager.releaseSession(session);
 		} catch (HibernateException e) {
 			logger.error(e);
@@ -775,7 +775,7 @@ public class TeamUtil {
         	RepairDbUtil.repairDb();
         	
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
@@ -859,7 +859,7 @@ public class TeamUtil {
             
             
             
-            tx.commit();
+            //tx.commit();
         } catch(ObjectNotFoundException objectNotFoundEx) {
             logger.error("Execption from removeTeam() :" + objectNotFoundEx.getMessage());
             return;
@@ -928,7 +928,7 @@ public class TeamUtil {
 			
 			try {
 			session = PersistenceManager.getRequestDBSession();
-			//tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(member);
 			session.saveOrUpdate(appSettings);
 			
@@ -951,7 +951,7 @@ public class TeamUtil {
        
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(member);
             session.saveOrUpdate(appSettings);
             
@@ -971,7 +971,7 @@ public class TeamUtil {
             if(itr.hasNext())
                 group = (Group) itr.next();
             user.getGroups().add(group);
-            tx.commit();
+            //tx.commit();
             logger.debug("User added to group " + group.getName());
         } catch(Exception e) {
             logger.error("Exception from addTeamMember :" + e);
@@ -1026,7 +1026,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
@@ -1047,7 +1047,7 @@ public class TeamUtil {
                 session.flush();
             }
 
-            tx.commit();
+            //tx.commit();
         } catch(Exception e) {
 
             if(tx != null) {
@@ -1074,7 +1074,7 @@ public class TeamUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             for(int i = 0; i < activities.length; i++) {
             	AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activities[i]);                
@@ -1083,7 +1083,7 @@ public class TeamUtil {
                 session.update(activity);               
             }
 
-            tx.commit();
+            //tx.commit();
         } catch(Exception e) {
             logger.error("Unable to remove activities" + e.getMessage());
             e.printStackTrace(System.out);
@@ -1188,7 +1188,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, teamId);
             AmpPages ampPage = (AmpPages) session.load(AmpPages.class, pageId);
             String qryStr = "select tpf from "
@@ -1212,7 +1212,7 @@ public class TeamUtil {
                 teamPageFilters.setTeam(ampTeam);
                 session.save(teamPageFilters);
             }
-            tx.commit();
+            //tx.commit();
         } catch(Exception e) {
             logger.error("Unable to update team page filters" + e.getMessage());
             e.printStackTrace(System.out);
@@ -1411,7 +1411,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, dnrTeamId);
             if(ampTeam.getActivityList() == null) {
@@ -1428,7 +1428,7 @@ public class TeamUtil {
             }
 
             session.update(ampTeam);
-            tx.commit();
+            //tx.commit();
 
         } catch(Exception e) {
             logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
@@ -1458,7 +1458,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, dnrTeamId);
             Set newList = new HashSet();
@@ -1482,7 +1482,7 @@ public class TeamUtil {
             ampTeam.setActivityList(newList);
 
             session.update(ampTeam);
-            tx.commit();
+            //tx.commit();
 
         } catch(Exception e) {
             logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
@@ -2025,7 +2025,7 @@ public class TeamUtil {
         	   }
         	   
                session = PersistenceManager.getRequestDBSession();
-               Transaction transaction = session.beginTransaction();
+//beginTransaction();
                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
                
                
@@ -2109,7 +2109,7 @@ public class TeamUtil {
                   col = qry.list();
 
                }
-               transaction.commit();
+               //transaction.commit();
            } catch(Exception e) {
                logger.error("Exception from getAllTeamReports()", e);
                throw new RuntimeException(e);
@@ -2128,7 +2128,7 @@ public class TeamUtil {
 
        try {
             session = PersistenceManager.getRequestDBSession();
-            Transaction transaction = session.beginTransaction();
+//beginTransaction();
             String queryString = null;
             Query qry = null;
             //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part 
@@ -2154,7 +2154,7 @@ public class TeamUtil {
              	qry.setLong("ampTeamMemId", memberId);
              	col = qry.list();
             }
-	       	transaction.commit();
+	       	//transaction.commit();
         } catch(Exception e) {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);

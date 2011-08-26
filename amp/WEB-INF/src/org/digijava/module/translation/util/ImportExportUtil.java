@@ -76,11 +76,11 @@ public class ImportExportUtil {
 				//set list of affected messages 
 				option.setAffectedMessages(new LinkedList<Message>());
 				
-				tx = session.beginTransaction();
+//beginTransaction();
 				for (Trn xmlGroup : groups) {
 					processTranslationGroup(xmlGroup, option);
 				}
-				tx.commit();
+				//tx.commit();
 				
 				//update translation cache after commit is success.
 				List<Message> messages = option.getAffectedMessages();

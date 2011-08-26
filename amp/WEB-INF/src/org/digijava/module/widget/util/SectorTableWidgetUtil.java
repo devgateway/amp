@@ -51,14 +51,14 @@ public class SectorTableWidgetUtil {
         Session session = PersistenceManager.getRequestDBSession();
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+//beginTransaction();
             if(isNew){
                   session.save(widget);
             }
             else{
                  session.merge(widget);
             }
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             if (tx != null) {
                 try {
@@ -80,9 +80,9 @@ public class SectorTableWidgetUtil {
         Session session = PersistenceManager.getRequestDBSession();
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+//beginTransaction();
             session.delete(widget);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error(e);
             if (tx != null) {

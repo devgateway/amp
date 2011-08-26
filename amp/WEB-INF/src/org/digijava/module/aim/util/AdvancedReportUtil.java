@@ -57,7 +57,7 @@ public final class AdvancedReportUtil {
 		Set pageFilters = new HashSet();
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			//session.save(ampReports);
 			session.saveOrUpdate(ampReports);
 			//ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
@@ -195,7 +195,7 @@ public final class AdvancedReportUtil {
 //				}
 //			}
 			
-			tx.commit(); 
+			//tx.commit(); 
 
 		}
 		catch (Exception ex) {
@@ -541,7 +541,7 @@ public final class AdvancedReportUtil {
 	    try {
 	        session = PersistenceManager.getRequestDBSession();
 	        session.setFlushMode(FlushMode.MANUAL);
-	        tx = session.beginTransaction();	        
+//beginTransaction();	        
 	        AmpReports ampReports = null;
 	        // loading the 3 tables from where the deletion has to be done
 	        try {
@@ -623,7 +623,7 @@ public final class AdvancedReportUtil {
 	            session.delete(ampReports);
 	            session.flush();
 	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
-	            tx.commit();
+	            //tx.commit();
 	            return true;
 	        } catch (org.hibernate.ObjectNotFoundException onfe) {
 	            logger.error("Exception from deleteQuestion() :", onfe);

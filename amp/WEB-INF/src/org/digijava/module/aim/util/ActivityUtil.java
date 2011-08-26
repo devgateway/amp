@@ -195,7 +195,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       session = PersistenceManager.getRequestDBSession();
       session.connection().setAutoCommit(false);
-      tx = session.beginTransaction();
+//beginTransaction();
       
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
@@ -1370,7 +1370,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        
        session.flush();
        if (alwaysRollback == false)
-    	  tx.commit(); // commit the transcation
+    	  //tx.commit(); // commit the transcation
 
        logger.debug("Activity saved"); 
        
@@ -1379,11 +1379,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        //are being saved ok.
        /*if (!edit) {
 	       session = PersistenceManager.getRequestDBSession();
-	       tx = session.beginTransaction();
+//beginTransaction();
 	       AmpActivityVersion savedActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activity.getAmpActivityId());
 	       savedActivity.setSurvey(activity.getSurvey());
 	       session.saveOrUpdate(savedActivity);
-	       tx.commit();
+	       //tx.commit();
        }*/
     }
     catch (Exception ex) {
@@ -1455,7 +1455,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getRequestDBSession();
-      tx = session.beginTransaction();
+//beginTransaction();
 
       oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 
@@ -1467,7 +1467,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       oldActivity.setActivityCreator(creator);
 
       session.update(oldActivity);
-      tx.commit();
+      //tx.commit();
       logger.debug("Activity saved");
     }
     catch (Exception ex) {
@@ -1492,7 +1492,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
 					activityId);
@@ -1505,7 +1505,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			oldActivity.setDocuments(documents);
 
 			session.update(oldActivity);
-			tx.commit();
+			//tx.commit();
 			logger.debug("Activity saved");
 		} catch (Exception ex) {
 			logger.error("Exception from saveActivity()  " + ex.getMessage());
@@ -2966,7 +2966,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getSession();
-      tx = session.beginTransaction();
+//beginTransaction();
 
       //logger.info("Before iterating");
       Iterator itr = fundings.iterator();
@@ -2988,7 +2988,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         session.update(fund);
         //logger.info("Updated...");
       }
-      tx.commit();
+      //tx.commit();
       //logger.info("Donor info. saved");
     }
     catch (Exception e) {
@@ -3497,7 +3497,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getSession();
-      tx = session.beginTransaction();
+//beginTransaction();
 
       AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
 
@@ -3555,7 +3555,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       
 	  session.delete(ampAct);
-      tx.commit();
+      //tx.commit();
       session.flush();
     }
     catch (Exception e1) {
@@ -4756,7 +4756,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 		    try {
 		      session = PersistenceManager.getSession();
-		      tx = session.beginTransaction();
+//beginTransaction();
 
 		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
 		      if(groups!=null && groups.size()>0){
@@ -4783,7 +4783,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  				session.delete(ampActivityGroup);
 		  			}
 		      	}
-		      tx.commit();
+		      //tx.commit();
 		      session.flush();
 		      
 		    }
@@ -4823,7 +4823,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 		    try {
 		      session = PersistenceManager.getSession();
-		      tx = session.beginTransaction();
+//beginTransaction();
 
 		      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
 
@@ -4870,7 +4870,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
 
    		   session.delete(ampAct);
-		   tx.commit();
+		   //tx.commit();
 		   session.flush();
 		 }
 		    catch (Exception e1) {
@@ -4898,7 +4898,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		 Transaction tx = null;
 		 try{
 			 session = PersistenceManager.getSession();
-		      tx = session.beginTransaction();
+//beginTransaction();
 
 		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
 		      if(groups!=null && groups.size()>0){
@@ -4917,7 +4917,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		    	  ampActivityVersion.setDeleted(true);
 		    	  session.update(ampActivityVersion);
 		     
-		      tx.commit();
+		      //tx.commit();
 		      session.flush();
 		 }
 		

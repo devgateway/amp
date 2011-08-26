@@ -226,13 +226,13 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			Message msgToDelete = getMessage(key, langCode, siteId);
 			if (msgToDelete != null) {
 				session.delete(msgToDelete);
 			}
 
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to delete message into database", ex);

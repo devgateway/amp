@@ -200,9 +200,9 @@ public class AmpDbUtil {
 		Transaction tx = null;
 		try {
 		  Session session = PersistenceManager.getRequestDBSession();
-		  tx = session.beginTransaction();  
+//beginTransaction();  
 		  session.delete(attendee);
-		  tx.commit();
+		  //tx.commit();
 		}
 		catch (Exception ex) {
 		  if (tx != null) {
@@ -223,12 +223,12 @@ public class AmpDbUtil {
     Transaction tx = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
-      tx = session.beginTransaction();
+//beginTransaction();
       AmpCalendar ampCal = getAmpCalendar(ampCalendarId);
       Calendar  cal=ampCal.getCalendarPK().getCalendar();
       session.delete(ampCal);
       session.delete(cal);
-      tx.commit();
+      //tx.commit();
     }
     catch (Exception ex) {
       if (tx != null) {
@@ -249,9 +249,9 @@ public class AmpDbUtil {
 	  Transaction tx = null;
 	  try {
 		  Session session = PersistenceManager.getRequestDBSession();
-	      tx = session.beginTransaction();
+//beginTransaction();
 	      session.update(attendee);
-	      tx.commit();
+	      //tx.commit();
 	} catch (Exception e) {
 		throw new CalendarException("Unable to update AmpCalendarAttendee object", e);
 	}
@@ -262,7 +262,7 @@ public class AmpDbUtil {
     Transaction tx = null;
     try {
         Session session = PersistenceManager.getRequestDBSession();
-        tx = session.beginTransaction();
+//beginTransaction();
         Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
         // calendar
         if (calendar.getId() == null) {
@@ -294,7 +294,7 @@ public class AmpDbUtil {
             session.update(calendar);
             session.update(ampCalendar);
         }
-        tx.commit();
+        //tx.commit();
     }
     catch (Exception e) {
       if (tx != null) {

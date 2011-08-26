@@ -44,14 +44,14 @@ public class HashKeyPatch {
 				String formatedDate = new SimpleDateFormat("MMM-dd-yyyy hh:mm:ss").format(new Date());
 				
 				//mark db patched in global settings. 
-				tx = session.beginTransaction();
+//beginTransaction();
 				AmpGlobalSettings ags = new AmpGlobalSettings();
 				ags.setGlobalSettingsDescription("Show if translation keys have been patched to hash codes");
 				ags.setGlobalSettingsName(TRN_HASH_PATCH_GLOBAL_SETTINGS_NAME);
 				ags.setGlobalSettingsPossibleValues("");
 				ags.setGlobalSettingsValue("Ran normally at "+formatedDate);
 				session.save(ags);
-				tx.commit();
+				//tx.commit();
 			}else{
 				logger.info("No translation hash code patch is necessary");
 			}

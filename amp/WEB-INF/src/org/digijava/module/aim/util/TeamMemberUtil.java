@@ -1131,7 +1131,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
-				tx = session.beginTransaction();
+//beginTransaction();
 				for (int i = 0;i < activities.length;i ++) {
 					if (activities[i] != null) {
 						AmpActivityVersion activity = (AmpActivityVersion)session.load(
@@ -1140,7 +1140,7 @@ public class TeamMemberUtil {
 					}
 				}
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to assign activities" + e.getMessage());
@@ -1172,7 +1172,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
-				tx = session.beginTransaction();
+//beginTransaction();
 				for (int i = 0;i < activities.length;i ++) {
 					if (activities[i] != null) {
 						AmpActivityVersion activity = (AmpActivityVersion)session.load(
@@ -1181,7 +1181,7 @@ public class TeamMemberUtil {
 					}
 				}
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to remove activities" + e.getMessage());
@@ -1213,10 +1213,10 @@ public class TeamMemberUtil {
             session = PersistenceManager.getRequestDBSession();
             member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
             if (member != null) {
-                tx = session.beginTransaction();
+//beginTransaction();
                 member.getActivities().clear();
                 session.update(member);
-                tx.commit();
+                //tx.commit();
             }
         } catch (Exception e) {
             logger.error("Unable to remove activities" + e.getMessage());
@@ -1385,7 +1385,7 @@ public class TeamMemberUtil {
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
 			    Collection col = new ArrayList();
-				tx = session.beginTransaction();
+//beginTransaction();
 
 				Iterator itr = member.getLinks().iterator();
 				while (itr.hasNext()) {
@@ -1404,7 +1404,7 @@ public class TeamMemberUtil {
 				}
 				member.setLinks(new HashSet(col));
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to remove members link" + e.getMessage());
@@ -1436,12 +1436,12 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
-				tx = session.beginTransaction();
+//beginTransaction();
 				if (member.getLinks() == null)
 				    member.setLinks(new HashSet());
 				member.getLinks().add(cmsItem);
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to add Links to members" + e.getMessage());
@@ -1473,7 +1473,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
-				tx = session.beginTransaction();
+//beginTransaction();
 				for (int i = 0;i < reports.length;i ++) {
 					if (reports[i] != null) {
 						AmpReports report = (AmpReports)session.load(
@@ -1482,7 +1482,7 @@ public class TeamMemberUtil {
 					}
 				}
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to assign reports" + e.getMessage());
@@ -1514,7 +1514,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			if (member != null) {
-				tx = session.beginTransaction();
+//beginTransaction();
 				for (int i = 0;i < reports.length;i ++) {
 					if (reports[i] != null) {
 						AmpReports report = (AmpReports)session.load(
@@ -1523,7 +1523,7 @@ public class TeamMemberUtil {
 					}
 				}
 				session.update(member);
-				tx.commit();
+				//tx.commit();
 			}
 		} catch (Exception e) {
 			logger.error("Unable to remove reports" + e.getMessage());
@@ -1615,7 +1615,7 @@ public class TeamMemberUtil {
 
 		try {
 				session = PersistenceManager.getSession();
-				tx = session.beginTransaction();
+//beginTransaction();
 
 				String queryString = "select app from "
 					+ AmpApplicationSettings.class.getName()
@@ -1629,7 +1629,7 @@ public class TeamMemberUtil {
 					app.setDefaultTeamReport(null);
 					session.saveOrUpdate(app);
 				}
-				tx.commit();
+				//tx.commit();
 			}
 		catch (Exception ex){
 			ex.printStackTrace();
@@ -1646,7 +1646,7 @@ public class TeamMemberUtil {
             session = PersistenceManager.getRequestDBSession();
             session.setFlushMode(FlushMode.COMMIT);
 
-            tx = session.beginTransaction();
+//beginTransaction();
             for (int i = 0; i < id.length; i++) {
                 if (id[i] != null) {
                     AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, id[i]);
@@ -1771,7 +1771,7 @@ public class TeamMemberUtil {
                    
                 }
             }
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to removeTeamMembers " + e.getMessage());
             e.printStackTrace();
@@ -1962,7 +1962,7 @@ public class TeamMemberUtil {
 		AmpDesktopTabSelection sel=null;
 		try{
 			dbSession 	= PersistenceManager.getRequestDBSession();
-			tr		= dbSession.beginTransaction();
+//beginTransaction();
 			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMemberId );
 			sel	= new AmpDesktopTabSelection();
 			sel.setIndex(position);
@@ -2002,7 +2002,7 @@ public class TeamMemberUtil {
 		AmpDesktopTabSelection sel=null;
 		try{
 			dbSession 	= PersistenceManager.getRequestDBSession();
-			tr		= dbSession.beginTransaction();
+//beginTransaction();
 			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMemberId );
 			Set<AmpDesktopTabSelection>	tabs=atm.getDesktopTabSelections();
 			AmpDesktopTabSelection tabToRemove=null;

@@ -225,7 +225,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         try {
 
             ses = PersistenceManager.getSession();
-            tx = ses.beginTransaction();
+//beginTransaction();
             Query q = ses.createQuery(queryString);
             q.setString("msgKey", processKeyCase(key.trim()));
             
@@ -241,7 +241,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
                 messageCache.put(msg, msg);
             }
 
-            tx.commit();
+            //tx.commit();
 
         }
         catch (SQLException se) {

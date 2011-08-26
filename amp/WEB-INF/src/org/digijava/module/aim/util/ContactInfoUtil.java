@@ -25,9 +25,9 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(contact);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -47,12 +47,12 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			if(contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0){
 				contact.getOrganizationContacts().clear();
 			}
 			session.delete(contact);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -313,9 +313,9 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(activityContact);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -391,9 +391,9 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(property);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -412,9 +412,9 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.delete(property);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -473,9 +473,9 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(orgContact);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -494,10 +494,10 @@ public class ContactInfoUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.delete(orgContact);
 			session.flush();
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {

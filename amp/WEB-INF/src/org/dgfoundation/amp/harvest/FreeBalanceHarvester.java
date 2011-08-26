@@ -188,7 +188,7 @@ public class FreeBalanceHarvester {
 				
 				//AmpModality am= (AmpModality) session.load(AmpModality.class,new Long(3));
 				
-				Transaction tx=session.beginTransaction();
+//beginTransaction();
 
 				//DONOR FUNDING INSERTION
 				//check if we have the donor added:
@@ -320,7 +320,7 @@ public class FreeBalanceHarvester {
 				
 				session.saveOrUpdate(a);
 
-				tx.commit();
+				//tx.commit();
 				
 				
 			} while (line != null);

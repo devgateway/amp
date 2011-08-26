@@ -91,9 +91,9 @@ public class DbUtil {
         Transaction tx = null;
         try {
             sess = PersistenceManager.getSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             sess.save(map);
-            tx.commit();
+            //tx.commit();
         } catch (Exception ex) {
             if (tx != null) {
                 try {

@@ -1132,7 +1132,7 @@ public class DbUtil {
 		try {
 
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			Iterator iter = event.getCalendarItem().iterator();
 			while (iter.hasNext()) {
@@ -1144,7 +1144,7 @@ public class DbUtil {
 			}
 
 			session.saveOrUpdate(event);
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {
@@ -1191,9 +1191,9 @@ public class DbUtil {
 		try {
 
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(setting);
-			tx.commit();
+			//tx.commit();
 
 		}
 		catch (Exception ex) {

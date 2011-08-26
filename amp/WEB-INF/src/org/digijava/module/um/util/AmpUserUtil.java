@@ -89,7 +89,7 @@ public class AmpUserUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx=session.beginTransaction();
+//beginTransaction();
             User user=(User)session.load(User.class,userId);
             AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
             if(userExt!=null){
@@ -114,7 +114,7 @@ public class AmpUserUtil {
 
             // deleting user
             session.delete(user);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             if(tx!=null){
                 try{
@@ -221,9 +221,9 @@ public class AmpUserUtil {
 		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(userExtension);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {

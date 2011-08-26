@@ -640,9 +640,9 @@ public class DbHelper {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 			sess.delete(structureType);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (e instanceof JDBCException)
 				throw (JDBCException) e;
@@ -663,7 +663,7 @@ public class DbHelper {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 //			if (structureType.getContentThumbnails() != null) {
 //				Iterator itr = contentItem.getContentThumbnails().iterator();
 //				while (itr.hasNext()) {
@@ -673,7 +673,7 @@ public class DbHelper {
 //				}
 //			}
 			session.save(structureType);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to save structure type", e);
 		}

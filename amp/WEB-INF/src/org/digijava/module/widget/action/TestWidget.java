@@ -97,11 +97,11 @@ public class TestWidget extends Action {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			for (IndicatorSector connection : connections) {
 				session.save(connection);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {

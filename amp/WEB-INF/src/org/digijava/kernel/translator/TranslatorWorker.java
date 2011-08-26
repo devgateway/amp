@@ -1204,7 +1204,7 @@ public class TranslatorWorker {
         try {
         	message.setKey(message.getKey().trim());
             ses = PersistenceManager.getSession();
-            tx = ses.beginTransaction();
+//beginTransaction();
             //TODO if we add hash codes as keys, then we do not need key case correction method on next line
             processKeyCase(message);
             processBodyChars(message);
@@ -1222,7 +1222,7 @@ public class TranslatorWorker {
             //timeStampQueue.remove(message);
             
             ses.saveOrUpdate(message);
-            tx.commit();
+            //tx.commit();
             
         } 
         catch (SQLException se) {
@@ -1244,7 +1244,7 @@ public class TranslatorWorker {
         	logger.warn("saveOrUpdate() failed for Message with siteId=" + message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale(), e);
         	try {
         		ses.save(message);
-                tx.commit();
+                //tx.commit();
         	} catch (Exception e1) {
         		logger.error("Error saving translation. siteId="
                         + message.getSiteId() + ", key = " + message.getKey() +
@@ -1307,7 +1307,7 @@ public class TranslatorWorker {
         	processBodyChars(message);
         	processOriginalMessage(message);
             ses = PersistenceManager.getSession();
-            tx = ses.beginTransaction();
+//beginTransaction();
             if (!isKeyExpired(message.getKey())) {
                 message.setCreated(new Timestamp(System.currentTimeMillis()));
             }
@@ -1316,7 +1316,7 @@ public class TranslatorWorker {
             //timeStampQueue.remove(message);
             
             ses.update(message);
-            tx.commit();
+            //tx.commit();
         }
         catch (SQLException se) {
             logger.error("Error updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +",locale=" + message.getLocale(), se);
@@ -1373,7 +1373,7 @@ public class TranslatorWorker {
         Transaction tx = null;
         try {
             ses = PersistenceManager.getSession();
-            tx = ses.beginTransaction();
+//beginTransaction();
             ses.createQuery("delete from " +Message.class.getName()+"  msg "+
             		" where  msg.key=:key" +
             		" and  msg.locale=:locale " +
@@ -1387,7 +1387,7 @@ public class TranslatorWorker {
             //timeStampQueue.remove(message);
             
            // ses.delete(message);
-            tx.commit();
+            //tx.commit();
 
         }
         catch (SQLException se) {
@@ -1463,7 +1463,7 @@ public class TranslatorWorker {
         try {
 
             ses = PersistenceManager.getSession();
-            tx = ses.beginTransaction();
+//beginTransaction();
             Query q = ses.createQuery(queryString);
             q.setString("msgKey", processKeyCase(key.trim()));
 
@@ -1481,7 +1481,7 @@ public class TranslatorWorker {
                 ses.update(msg);
             }
 
-            tx.commit();
+            //tx.commit();
 
         }
         catch (SQLException se) {

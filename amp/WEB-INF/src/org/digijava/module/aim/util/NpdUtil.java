@@ -17,9 +17,9 @@ public class NpdUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(settings);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx != null) {
 				try {

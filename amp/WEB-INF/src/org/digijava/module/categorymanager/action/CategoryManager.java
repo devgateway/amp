@@ -287,11 +287,11 @@ public class CategoryManager extends Action {
 		Transaction transaction		= null;
 		try{
 			dbSession		= PersistenceManager.getSession();
-			transaction		= dbSession.beginTransaction();
+//beginTransaction();
 			
 			dbSession.createQuery("delete from " + AmpLinkedCategoriesState.class.getName() +" s where s.mainCategory.id=:categoryId")
 			.setLong("categoryId", categoryId).executeUpdate();
-			transaction.commit();
+			//transaction.commit();
 			
 			String queryString 	= "select c from "	+ AmpCategoryClass.class.getName()+ " c where c.id=:id";
 			Query qry			= dbSession.createQuery(queryString);
@@ -340,7 +340,7 @@ public class CategoryManager extends Action {
 		boolean retValue					= true;
 		
 		
-//		Transaction transaction		= dbSession.beginTransaction();
+//beginTransaction();
 		
 		
 		try {
@@ -354,7 +354,7 @@ public class CategoryManager extends Action {
 			}
 			
 			dbSession						= PersistenceManager.getSession();
-			tx								= dbSession.beginTransaction();
+//beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
 			dbCategory.setPossibleValues( new Vector() );
 			if (myForm.getEditedCategoryId() != null) {
@@ -480,7 +480,7 @@ public class CategoryManager extends Action {
 
 					}
 					
-					tx.commit();
+					//tx.commit();
 				}
 			}
 		} catch (Exception ex) {

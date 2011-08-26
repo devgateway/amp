@@ -78,7 +78,7 @@ public class OrganizationCSVImporter extends CSVImporter {
 		
 		logger.info("importing: "+o);
 		
-		Transaction tx = session.beginTransaction();
+//beginTransaction();
 
 		//try to locate the org group
 		AmpOrgGroup ampOrgGroupByCode = getAmpOrgGroupByCode(o.get("Group code"));
@@ -119,7 +119,7 @@ public class OrganizationCSVImporter extends CSVImporter {
 		
 		session.save(ao);
 		
-		tx.commit();
+		//tx.commit();
 		
 	}
 

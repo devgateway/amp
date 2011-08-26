@@ -93,9 +93,9 @@ public class TableWidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.save(widget);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -117,9 +117,9 @@ public class TableWidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.update(widget);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -141,14 +141,14 @@ public class TableWidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			if (deletedColumns!= null && deletedColumns.size()>0){
 				for (AmpDaColumn col : deletedColumns) {
 					session.delete(col);
 				}
 			}
 			session.saveOrUpdate(widget);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -178,14 +178,14 @@ public class TableWidgetUtil {
 		Transaction tx=null;
 		try {
 			List<AmpDaValue> values = getTableData(widget.getId());
-			tx=session.beginTransaction();
+//beginTransaction();
 			if (null != values){
 				for (AmpDaValue value : values) {
 					session.delete(value);
 				}
 			}
 			session.delete(widget);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -329,7 +329,7 @@ public class TableWidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			for (AmpDaValue value : values) {
 				if (value.getId()!=null){
 					if(value.getId().longValue()<0){
@@ -345,7 +345,7 @@ public class TableWidgetUtil {
 					session.save(value);
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {

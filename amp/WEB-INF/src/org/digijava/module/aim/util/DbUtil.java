@@ -195,7 +195,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			//
 			String queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.ampTeam=:teamId)";
 			Query qry = session.createQuery(queryString);
@@ -249,7 +249,7 @@ public class DbUtil {
 					}
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from updateMemberReports");
 			logger.error(e.getMessage());
@@ -278,7 +278,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			String queryString = "select tm from "
 				+ AmpTeam.class.getName()
@@ -330,7 +330,7 @@ public class DbUtil {
 					}
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from addTeamReports()");
 			logger.error(e.getMessage());
@@ -1850,7 +1850,7 @@ public class DbUtil {
         Transaction tx		= null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx	= session.beginTransaction();
+//beginTransaction();
             String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.member.ampTeamMemId = :memberId)";
             //String queryString = "from " + AmpApplicationSettings.class.getName();
             qry = session.createQuery(queryString);
@@ -1860,7 +1860,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }*/
             ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
         	if (tx != null) {
 				try {
@@ -2881,9 +2881,9 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             sess.save(object);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to add "+object.getClass().getName());
             e.printStackTrace();
@@ -2932,9 +2932,9 @@ public class DbUtil {
     	Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(object);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -2955,7 +2955,7 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             sess.clear();
             Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts
             if (org.getAmpOrgId() != null) {
@@ -3206,7 +3206,7 @@ public class DbUtil {
        
             sess.saveOrUpdate(org);
             sess.flush();
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
             if (tx != null) {
@@ -3227,11 +3227,11 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             logger.debug("before delete");
             sess.delete(object);
             //sess.flush();
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             if (e instanceof JDBCException)
                 throw (JDBCException) e;
@@ -3264,7 +3264,7 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
+//beginTransaction();
             logger.debug("BEFORE SESS.SAVE()");
             oldStatusItem = (AmpStatus) sess.load(AmpStatus.class, id);
 
@@ -3278,7 +3278,7 @@ public class DbUtil {
 
                 logger.debug("AFTER SESS.SAVE()");
 
-                tx.commit();
+                //tx.commit();
             } else
                 logger.debug("DbUtil session is null");
         } catch (Exception ex) {
@@ -5765,7 +5765,7 @@ public class DbUtil {
                 // adding a survey per donor, having at least one funding for this activity, if there is none
                 // or if a new donor with funding is added.
                 boolean newSurvey = true;
-                tx = session.beginTransaction();
+//beginTransaction();
                 iter1 = fundingSet.iterator();
                 while (iter1.hasNext()) {
                     AmpFunding ampFund = (AmpFunding) iter1.next();
@@ -5798,7 +5798,7 @@ public class DbUtil {
                     }
                 }
                 session.update(activity);
-                tx.commit();
+                //tx.commit();
 
                 if (activity.getSurvey().isEmpty())
                     logger.debug("activity.getSurvey() is empty.");
@@ -5873,7 +5873,7 @@ public class DbUtil {
                 // adding a survey per donor, having at least one funding for this activity, if there is none
                 // or if a new donor with funding is added.
                 boolean newSurvey = true;
-                tx = session.beginTransaction();
+//beginTransaction();
                 iter1 = fundingSet.iterator();
                 while (iter1.hasNext()) {
                     AmpFunding ampFund = (AmpFunding) iter1.next();
@@ -5906,7 +5906,7 @@ public class DbUtil {
                     }
                 }
                 session.update(activity);
-                tx.commit();
+                //tx.commit();
 
                 if (activity.getSurvey().isEmpty())
                     logger.debug("activity.getSurvey() is empty.");
@@ -6099,7 +6099,7 @@ public class DbUtil {
         		return;
         	}
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             /*AmpAhsurvey oldSurvey ;
             oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
@@ -6117,7 +6117,7 @@ public class DbUtil {
             //With lazy="false" this is how it works ok.
             session.update(survey);//try saveOrUpdate() if this doesnt work.
             
-            tx.commit();
+            //tx.commit();
         } catch (Exception ex) {
             if (tx != null) {
                 try {
@@ -6204,7 +6204,7 @@ public class DbUtil {
     	}
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             AmpAhsurvey survey = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             String qry = "select count(*) from " + AmpAhsurveyResponse.class.getName()
@@ -6234,7 +6234,7 @@ public class DbUtil {
                     session.saveOrUpdate(res);
                 }
             }
-            tx.commit();
+            //tx.commit();
         } catch (Exception ex) {
             if (tx != null) {
                 try {

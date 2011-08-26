@@ -53,9 +53,9 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(message);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -96,10 +96,10 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();
+//beginTransaction();
 			AmpMessage message=getMessage(id);
 			session.delete(message);
-			trans.commit();
+			//trans.commit();
 		} catch (Exception ex) {
 			if(trans!=null) {
 				try {
@@ -162,10 +162,10 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();
+//beginTransaction();
 			AmpMessageState state=getMessageState(stateId);
 			session.delete(state);
-			trans.commit();
+			//trans.commit();
 		} catch (Exception ex) {
 			if(trans!=null) {
 				try {
@@ -184,9 +184,9 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();			
+//beginTransaction();			
 			session.delete(state);
-			trans.commit();
+			//trans.commit();
 		} catch (Exception ex) {
 			if(trans!=null) {
 				try {
@@ -205,11 +205,11 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();
+//beginTransaction();
 			for (AmpMessageState state : states) {
 				session.delete(state);
 			}			
-			trans.commit();
+			//trans.commit();
 		} catch (Exception ex) {
 			if(trans!=null) {
 				try {
@@ -229,9 +229,9 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(messageState);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
@@ -494,9 +494,9 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(setting);
-			tx.commit();
+			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {

@@ -46,22 +46,22 @@ public class ActivityEraser {
 		try {
 			session = PersistenceManager.getSession();
 			
-			Transaction tx = session.beginTransaction();
+//beginTransaction();
 			
 
 			session.createQuery("delete from AmpActivity").executeUpdate();
 	
 				
-			tx.commit();
+			//tx.commit();
 			
 			
-			tx = session.beginTransaction();
+//beginTransaction();
 			
 
 			session.createQuery("select from AmpReports").executeUpdate();
 	
 
-			tx.commit();
+			//tx.commit();
 
 			
 			PersistenceManager.releaseSession(session);

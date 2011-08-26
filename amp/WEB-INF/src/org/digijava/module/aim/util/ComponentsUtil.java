@@ -176,12 +176,12 @@ public class ComponentsUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 
 			// Now delete AmpComponent
 			AmpComponentType type = (AmpComponentType) session.load(AmpComponentType.class, compId);
 			session.delete(type);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from deleteComponentType() : " + e);
 			if (tx != null) {
@@ -204,7 +204,7 @@ public class ComponentsUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpComponent oldCompo=(AmpComponent) session.load(AmpComponent.class,ampComp.getAmpComponentId());
 
 			oldCompo.setCode(ampComp.getCode());
@@ -212,7 +212,7 @@ public class ComponentsUtil {
 			oldCompo.setTitle(ampComp.getTitle());
 			oldCompo.setType(ampComp.getType());
 			session.update(oldCompo);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from deleteComponentType() : " + e);
 			if (tx != null) {
@@ -243,7 +243,7 @@ public class ComponentsUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             // Now delete AmpComponent
             AmpComponent ampComp = (AmpComponent) session.load(
@@ -266,7 +266,7 @@ public class ComponentsUtil {
             }
 
             session.delete(ampComp);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Exception from deleteComponent() : " + e);
             if (tx != null) {
@@ -451,9 +451,9 @@ public class ComponentsUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(newIndicator);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Exception from saveComponentIndicator() :" + e.getMessage());
             e.printStackTrace(System.out);
@@ -492,9 +492,9 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             AmpComponentsIndicators ampCompInd = (AmpComponentsIndicators) session.load(
                 AmpComponentsIndicators.class, indId);
-            tx = session.beginTransaction();
+//beginTransaction();
             session.delete(ampCompInd);
-            tx.commit();
+            //tx.commit();
         } catch (Exception ex) {
             logger.error("Exception from delComponentIndicators() :" + ex.getMessage());
             ex.printStackTrace(System.out);

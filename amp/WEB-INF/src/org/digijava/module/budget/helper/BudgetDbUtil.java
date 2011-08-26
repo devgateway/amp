@@ -248,9 +248,9 @@ public class BudgetDbUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 				session.update(sector);
-			tx.commit();
+			//tx.commit();
 		} catch (DgException e) {
 			logger.error("Can not Update sector" + e.getMessage());
 		};
@@ -269,9 +269,9 @@ public class BudgetDbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			s = (AmpBudgetSector) session.load(AmpBudgetSector.class, id);
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(s);
-			tx.commit();
+			//tx.commit();
 		} catch (DgException e) {
 			logger.error("Can not delete sector" + e.getMessage());
 		};
@@ -341,9 +341,9 @@ public class BudgetDbUtil {
                 Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-                        tx = session.beginTransaction();
+//beginTransaction();
 			session.save(dep);
-			tx.commit();
+			//tx.commit();
 
 		} catch (DgException e) {
 			logger.error("Can not save department" + e.getMessage());
@@ -371,9 +371,9 @@ public class BudgetDbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			s = (AmpDepartments) session.load(AmpDepartments.class, id);
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(s);
-			tx.commit();
+			//tx.commit();
 		} catch (DgException e) {
 			logger.error("Can not Delete Department" + e.getMessage());
 		};
@@ -384,9 +384,9 @@ public class BudgetDbUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 				session.update(dep);
-			tx.commit();
+			//tx.commit();
 		} catch (DgException e) {
 			logger.error("Can not Update Department" + e.getMessage());
 		};

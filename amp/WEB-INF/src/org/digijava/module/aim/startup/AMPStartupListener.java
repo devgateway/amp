@@ -68,17 +68,6 @@ public class AMPStartupListener extends HttpServlet implements
 		DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
 		TransientFileFactory.shutdown();
 		
-		//destroy jdbc
-		Enumeration<Driver> drivers = DriverManager.getDrivers();
-		while (drivers.hasMoreElements()) {
-			Driver driver = (Driver) drivers.nextElement();
-			try {
-				DriverManager.deregisterDriver(driver);
-			} catch (SQLException e) {
-				logger.error("Could not deregister driver "+driver);
-				e.printStackTrace();
-			}
-		}
 
 		logger.info("The AMP ServletContext has been terminated.");
 	}

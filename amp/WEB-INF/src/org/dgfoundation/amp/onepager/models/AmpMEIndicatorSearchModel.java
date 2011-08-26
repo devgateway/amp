@@ -48,7 +48,7 @@ public class AmpMEIndicatorSearchModel extends
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 			List<AmpSector> list = query.list();
-			session.close();
+			//session.close();
 			return new ArrayList(list);
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);

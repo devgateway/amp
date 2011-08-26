@@ -187,9 +187,9 @@ public class WidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(place);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -212,11 +212,11 @@ public class WidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
-			tx=session.beginTransaction();
+//beginTransaction();
 			for (AmpDaWidgetPlace place : places) {
 				session.saveOrUpdate(place);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -323,12 +323,12 @@ public class WidgetUtil {
                         getRequestDBSession() don't work there*/
                         session = PersistenceManager.getSession();
                     }
-                    tx = session.beginTransaction();
+//beginTransaction();
                     for (AmpDaWidgetPlace place : places) {
                         place.setAssignedWidget(null);
                         session.update(place);
                     }
-                    tx.commit();
+                    //tx.commit();
                 } catch (Exception e) {
                     if (tx != null) {
                         try {
@@ -380,9 +380,9 @@ public class WidgetUtil {
                 getRequestDBSession() don't work there*/
                 session = PersistenceManager.getSession();
             }
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.delete(place);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {
@@ -409,7 +409,7 @@ public class WidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+//beginTransaction();
 			for (AmpDaWidgetPlace place : places) {
 				if (place.getId().longValue() < 0){
 					Long id = new Long( - (place.getId()));
@@ -422,7 +422,7 @@ public class WidgetUtil {
 					session.update(tmpPlace);
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			if (tx!=null){
 				try {

@@ -221,7 +221,7 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 	}
 
 	protected void buildReport() throws Exception {
-		Transaction tx = PersistenceManager.getSession().beginTransaction();
+//beginTransaction();
 		Connection con = PersistenceManager.getSession().connection();
 		con.setAutoCommit(false);
 
@@ -250,7 +250,7 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 
 		con.commit();
 		con.setAutoCommit(true);
-		tx.commit();
+		//tx.commit();
 
 		DecimalFormat format = FormatHelper.getDecimalFormatNotRounded();
 		format.setMaximumFractionDigits(2);

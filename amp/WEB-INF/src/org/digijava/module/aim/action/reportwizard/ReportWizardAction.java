@@ -652,12 +652,12 @@ public class ReportWizardAction extends MultiAction {
 	public static AmpReports duplicateReportData (Long ampReportId, HttpServletRequest request) {
 		AmpReports ampReport	= null;
 		try{
-			Session session				= PersistenceManager.getSession();
+			Session session				= PersistenceManager.getRequestDBSession();
 			if (ampReportId > 0)
 				ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
 			else 
 				ampReport	= (AmpReports) request.getSession().getAttribute("reportMeta");
-			session.close();
+			//session.close();
 			
 			ampReport.setAmpReportId(null);
 			//ampReport.setAmpPage(null);

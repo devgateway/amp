@@ -626,14 +626,14 @@ final class PermissionStorage implements Serializable {
             permission);
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.save(pp);
             Iterator iter = pp.getParameters().iterator();
             while (iter.hasNext()) {
                 Object item = (Object)iter.next();
                 session.save(item);
             }
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             if (tx != null) {
@@ -658,7 +658,7 @@ final class PermissionStorage implements Serializable {
         Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             PrincipalPermission pp = null;
             Iterator iter = principalPermissionIds.iterator();
             while (iter.hasNext()) {
@@ -675,7 +675,7 @@ final class PermissionStorage implements Serializable {
                     session.delete(pp);
                 }
             }
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             if (tx != null) {
@@ -700,7 +700,7 @@ final class PermissionStorage implements Serializable {
         Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
 
             Iterator iter = principals.iterator();
             while (iter.hasNext()) {
@@ -734,7 +734,7 @@ final class PermissionStorage implements Serializable {
                 }
                 logger.debug("Removed " + permissions.size() + " permission(s)");
             }
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             if (tx != null) {

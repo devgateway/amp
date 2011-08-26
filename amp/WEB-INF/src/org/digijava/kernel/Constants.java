@@ -37,6 +37,7 @@ public class Constants
   public static final String DIGI_PARAM_MAP = "digijava.param.map";
   public static final String DIGI_PARAM_PARSED = "digijava.param.parsed";
   public static final String DEFAULT_INSTANCE = "default";
+  @Deprecated
   public static final String REQUEST_DB_SESSION = "requestDBSession";
 
   /**

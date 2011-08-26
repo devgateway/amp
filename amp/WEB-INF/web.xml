@@ -7,6 +7,24 @@
 	<display-name>AMP 2.0</display-name>
 	<description>Aid Management Platform</description>
 
+	<!-- Web listener -->
+	<listener>
+		<listener-class>
+			org.digijava.kernel.startup.ConfigLoaderListener
+		</listener-class>
+	</listener>
+
+ 	<filter>
+        <filter-name>HibernateFilter</filter-name>
+        <filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>HibernateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
@@ -79,6 +97,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
     
+
 	<!-- Apache Wicket -->
     <filter>
         <filter-name>OnePagerApplication</filter-name>
@@ -124,12 +143,7 @@
      </listener>
 	
 	
-	<!-- Web listener -->
-	<listener>
-		<listener-class>
-			org.digijava.kernel.startup.ConfigLoaderListener
-		</listener-class>
-	</listener>
+
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
@@ -435,5 +449,6 @@
 		<url-pattern>/xmla</url-pattern>
 	</servlet-mapping>
 	
+   
 
 </web-app>

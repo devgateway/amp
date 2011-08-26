@@ -99,23 +99,23 @@ public final class PermissionUtil {
 		Set<CompositePermission> compositeLinkedPermissions = p.getCompositeLinkedPermissions();
 		Iterator<CompositePermission> i=compositeLinkedPermissions.iterator();
 		while (i.hasNext()) {
-		    Transaction transaction = hs.beginTransaction();
+//beginTransaction();
 		    CompositePermission element = (CompositePermission) i.next();
 		    element.getPermissions().remove(p);
 		    i.remove();
 		    hs.saveOrUpdate(element);
-		    transaction.commit();
+		    //transaction.commit();
 		 }
 		
 		
 		Set<PermissionMap> permissibleObjects = p.getPermissibleObjects();
 		Iterator<PermissionMap> ii=permissibleObjects.iterator();
 		while (ii.hasNext()) {
-		    Transaction transaction = hs.beginTransaction();
+//beginTransaction();
 			PermissionMap permissionMap = (PermissionMap) ii.next();
 			p.getPermissibleObjects().remove(permissionMap);
 			hs.saveOrUpdate(p);
-			transaction.commit();
+			//transaction.commit();
 		}
 		
 		//delete perm maps:

@@ -310,9 +310,9 @@ public class HelpUtil {
 		boolean update = topic.getHelpTopicId() != null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.saveOrUpdate(topic);
-			tx.commit();
+			//tx.commit();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
 				//skip lucene work for glossary topics.
 				saveOrUpdateFromLucene(topic, request, update);
@@ -335,7 +335,7 @@ public class HelpUtil {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
 				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
 				if (editors!=null && editors.size()>0){
@@ -361,7 +361,7 @@ public class HelpUtil {
 				}
 			}
 			session.delete(topic);
-			tx.commit();
+			//tx.commit();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
 				//skip lucene work for glossary topics.
 				removeFromLucene(topic, request);
@@ -980,7 +980,7 @@ System.out.println("lang:"+lang);
 	    
 	    	try {
 	    	session = PersistenceManager.getRequestDBSession();
-	    	Transaction tx=session.beginTransaction();
+//beginTransaction();
 			String queryString = "select editTopic from "+ Editor.class.getName() + " editTopic where (editTopic.editorKey=:key) and  (editTopic.language=:lang)";
    	        query = session.createQuery(queryString);
 		    query.setParameter("lang", help.getCode());
@@ -1014,7 +1014,7 @@ System.out.println("lang:"+lang);
 				       edit.setLanguage(help.getCode());
 	    	    	   session.saveOrUpdate(edit);
 	    	     }
-	    	     tx.commit();
+	    	     //tx.commit();
 	    	   }else if(help != null) {
 	  
 	    		   Editor edit = new  Editor();
@@ -1037,9 +1037,9 @@ System.out.println("lang:"+lang);
 			Editor editor=(Editor)o;
 			try{
 					session	= PersistenceManager.getSession();
-					Transaction tx=session.beginTransaction();
+//beginTransaction();
 					session.save(editor);
-					tx.commit();
+					//tx.commit();
 			}
 			catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
@@ -1062,9 +1062,9 @@ System.out.println("lang:"+lang);
 			HelpTopic help =(HelpTopic)o;
 			try{
 					session	= PersistenceManager.getSession();
-					Transaction tx=session.beginTransaction();
+//beginTransaction();
 					session.save(help);
-					tx.commit();
+					//tx.commit();
 
             }
 			catch (Exception ex) {

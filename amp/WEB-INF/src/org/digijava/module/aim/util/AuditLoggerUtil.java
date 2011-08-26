@@ -65,7 +65,7 @@ public class AuditLoggerUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpAuditLogger aal = new AmpAuditLogger();
 			long time = System.currentTimeMillis();
 			Timestamp ts = new Timestamp(time);
@@ -97,7 +97,7 @@ public class AuditLoggerUtil {
 			aal.setDetail(additionalDetails);
 			
 			session.save(aal);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			logger.error("Cannot save audit logger :", ex);
 			if (tx!=null){
@@ -155,7 +155,7 @@ public class AuditLoggerUtil {
 		try {
 			session = PersistenceManager.getSession();
 
-			tx = session.beginTransaction();			
+//beginTransaction();			
 			long time = System.currentTimeMillis();
 			Timestamp ts = new Timestamp(time);			
 			AmpAuditLogger existentLoggerObj = null;
@@ -193,7 +193,7 @@ public class AuditLoggerUtil {
 				session.save(aal);				
 			
 
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			logger.error("Exception : ", ex);
 		} finally {

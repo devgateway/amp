@@ -157,9 +157,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            tx = session.beginTransaction();
+//beginTransaction();
             session.delete(ed);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
 
@@ -365,9 +365,9 @@ public class DbUtil {
         try {
 
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.update(editor);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to update editor information into database", ex);
@@ -393,11 +393,11 @@ public class DbUtil {
         try {
 
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             for (Editor editor : editors) {
                 session.update(editor);
 			}
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to update editor information into database", ex);
@@ -427,9 +427,9 @@ public class DbUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.save(editor);
-            tx.commit();
+            //tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to save editor information into database",

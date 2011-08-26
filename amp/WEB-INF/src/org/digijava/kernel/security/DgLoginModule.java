@@ -423,7 +423,7 @@ public class DgLoginModule
             session = PersistenceManager.getSession();
 
             if (increaseCounter) {
-                tx = session.beginTransaction();
+//beginTransaction();
 
                 UserLoginInfo logInfo = null;
                 try {
@@ -447,7 +447,7 @@ public class DgLoginModule
                     session.update(logInfo);
                 }
 
-                tx.commit();
+                //tx.commit();
                 //session.evict(logInfo);
             }
 

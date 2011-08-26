@@ -469,7 +469,7 @@ public class UpdateAppSettings extends Action {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			Transaction tx = session.beginTransaction();
+//beginTransaction();
 			String queryString = "SELECT a FROM "
 					+ AmpApplicationSettings.class.getName() + " a WHERE  "
 					+ "a.team=:teamId";
@@ -483,7 +483,7 @@ public class UpdateAppSettings extends Action {
 				setting.setDefaultTeamReport(ampReport);
 			}
 
-			tx.commit();
+			//tx.commit();
 			session.flush();
 
 		} catch (Exception ex) {

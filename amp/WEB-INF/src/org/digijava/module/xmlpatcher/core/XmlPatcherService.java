@@ -19,6 +19,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
@@ -258,8 +259,9 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			processAllUnclosedPatches(scheduledPatches, serviceContext);
 			
 			
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			logger.error(e);
+			PersistenceManager.rollbackCurrentSessionTx();
 			throw new ServiceException(e);
 		}
 		logger.info("XML Patcher session finished");

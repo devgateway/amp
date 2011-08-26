@@ -75,7 +75,7 @@ public class DBUtil {
 		try {
 
 		Session session = PersistenceManager.getSession();
-		Transaction tx = session.beginTransaction();
+//beginTransaction();
 		
 			session.saveOrUpdate(obj);
 		PersistenceManager.releaseSession(session);

@@ -35,6 +35,7 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -200,8 +201,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     //gateperm checks are non mandatory, this means that an user still has permissions to edit an activity
     //those permissions can come from someplace else
     boolean gatePermEditAllowed = false;
+    Session hsession = null;
     
-    Session hsession = org.digijava.kernel.persistence.PersistenceManager.getSession();
+    try {
+    	
+    hsession=PersistenceManager.getSession();
     
     if (activityId != null) {
         activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
@@ -2027,10 +2031,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		eaForm.setButtonText("none");	// In case of management-workspace
 	}
     
+   
+    } finally {
+    	org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession); 	
+    }
+    
     String debugFM=request.getParameter("debugFM");
-    
-   org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession);
-    
     if(debugFM!=null && "true".compareTo(debugFM)==0)
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");

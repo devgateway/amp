@@ -183,7 +183,7 @@ public class UserUtils {
 			catch (ObjectNotFoundException ex2) {
 				logger.debug("Creating new record");
 			}
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			if (existing == null) {
 				sess.save(preferences);
@@ -194,7 +194,7 @@ public class UserUtils {
 				// Save new one
 				sess.update(preferences);
 			}
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 
@@ -297,7 +297,7 @@ public class UserUtils {
 			catch (ObjectNotFoundException ex2) {
 				logger.debug("Creating new record");
 			}
-			tx = sess.beginTransaction();
+//beginTransaction();
 
 			if (existing == null) {
 				sess.save(preferences);
@@ -308,7 +308,7 @@ public class UserUtils {
 				// Save new one
 				sess.update(preferences);
 			}
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 

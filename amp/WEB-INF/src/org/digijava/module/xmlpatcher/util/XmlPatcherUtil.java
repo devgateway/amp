@@ -207,12 +207,13 @@ public final class XmlPatcherUtil {
 	public static Set<String> getAllDiscoveredPatchNames() throws DgException,
 			HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
+//beginTransaction();
 		Query query = session.createQuery("select p.patchId from "
 				+ AmpXmlPatch.class.getName() + " p");
 		List list = query.list();
+		//tx.commit();
 		Set<String> ret = new TreeSet<String>();
 		ret.addAll(list);
-		PersistenceManager.releaseSession(session);
 		return ret;
 	}
 
@@ -296,13 +297,13 @@ public final class XmlPatcherUtil {
 
 		try {
 			sess = PersistenceManager.getSession();
-			tx = sess.beginTransaction();
+//beginTransaction();
 			AmpXmlPatch lazyPatch = (AmpXmlPatch) sess.load(AmpXmlPatch.class,
 					p.getPatchId());
 			log.setPatch(lazyPatch);
 			lazyPatch.getLogs().add(log);
 			sess.saveOrUpdate(lazyPatch);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);
@@ -417,6 +418,7 @@ public final class XmlPatcherUtil {
 	public static List<AmpXmlPatch> getAllDiscoveredPatches()
 			throws DgException, HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
+//beginTransaction();
 		Query query = session
 				.createQuery("from " + AmpXmlPatch.class.getName());
 		List<AmpXmlPatch> list = query.list();

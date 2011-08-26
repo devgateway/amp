@@ -686,9 +686,9 @@ public class ProgramUtil {
 
 //				tmpTest.add(ampThInd);
 //				ampTh.setIndicators(tmpTest);
-//				tx = session.beginTransaction();
+//beginTransaction();
 //				session.saveOrUpdate(ampThInd);
-//				tx.commit();
+//				//tx.commit();
 //			}
 //			catch(Exception ex) {
 //				logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
@@ -1226,9 +1226,9 @@ public class ProgramUtil {
 				ampThemeInd.setNpIndicator(allPrgInd.isNpIndicator());
 				Set ampThemeSet = new HashSet();
 				ampThemeSet.add(tempAmpTheme);
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.saveOrUpdate(ampThemeInd);
-				tx.commit();
+				//tx.commit();
 			}
 			catch(Exception ex)
 			{
@@ -1277,9 +1277,9 @@ public class ProgramUtil {
 					ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
 					ampThIndVal.setValueType(ampPrgIndVal.getValueType());
 					ampThIndVal.setThemeIndicatorId(ampThemeInd);
-					tx = session.beginTransaction();
+//beginTransaction();
 					session.saveOrUpdate(ampThIndVal);
-					tx.commit();
+					//tx.commit();
 				}
 			}
 			catch(Exception ex)
@@ -1353,7 +1353,7 @@ public class ProgramUtil {
 				Set ampThemeSet = new HashSet();
 				ampThemeSet.add(tempAmpTheme);
 				ampThemeInd.setThemes(ampThemeSet);
-				tx = session.beginTransaction();
+//beginTransaction();
 				Iterator itr = ampThemeInd.getThemes().iterator();
 				while(itr.hasNext()){
 				AmpTheme theme = (AmpTheme)itr.next();
@@ -1375,7 +1375,7 @@ public class ProgramUtil {
                         session.save(indValue);
                     }
                 }
-				tx.commit();
+				//tx.commit();
 			}
 			catch(Exception ex){
 				logger.error("Exception from saveThemeIndicators() : " + ex.getMessage());
@@ -1409,10 +1409,10 @@ public class ProgramUtil {
 				Transaction tx = null;
 				try {
 					sess = PersistenceManager.getRequestDBSession();
-					tx = sess.beginTransaction();
+//beginTransaction();
 					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
 					sess.delete(tempTheme);
-					tx.commit();
+					//tx.commit();
 				} catch (HibernateException e) {
 					logger.error(e);
 					throw new AimException("Cannot delete theme with id "+themeId,e);
@@ -1494,9 +1494,9 @@ public class ProgramUtil {
 				tempThemeInd.setType(allPrgInd.getType());
 				tempThemeInd.setCategory(allPrgInd.getCategory());
 				tempThemeInd.setNpIndicator(allPrgInd.isNpIndicator());
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.saveOrUpdate(tempThemeInd);
-				tx.commit();
+				//tx.commit();
 			}
 			catch(Exception ex)
 			{
@@ -1527,11 +1527,11 @@ public class ProgramUtil {
 			Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
 //			tempThemeInd.getThemes().remove(tempThemeInd);
 			session.delete(tempThemeInd);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to delete the themes");
 			logger.debug("Exception : "+e);
@@ -1553,7 +1553,7 @@ public class ProgramUtil {
 //			{
 //				//deletePrgIndicatorValue(indId);
 //				session = PersistenceManager.getRequestDBSession();
-//				tx = session.beginTransaction();
+//beginTransaction();
 //				AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
 //                Iterator itr=tempThemeInd.getThemes().iterator();
 //                while(itr.hasNext()){
@@ -1571,7 +1571,7 @@ public class ProgramUtil {
 //                    }
 //                    session.update(tempThemeInd);
 //                }
-//				tx.commit();
+//				//tx.commit();
 //				session.flush();
 //			}
 //			catch(Exception e1)
@@ -1597,14 +1597,14 @@ public class ProgramUtil {
 				qry = session.createQuery(queryString);
 				qry.setParameter("themeIndicatorId",themeIndicatorId);
 				indValues = qry.list();
-				tx = session.beginTransaction();
+//beginTransaction();
 				Iterator indValuesItr = indValues.iterator();
 				while(indValuesItr.hasNext())
 				{
 					AmpThemeIndicatorValue ampThIndValue = (AmpThemeIndicatorValue) indValuesItr.next();
 					session.delete(ampThIndValue);
 				}
-				tx.commit();
+				//tx.commit();
 				session.flush();
 			}
 			catch(Exception e1){
@@ -1628,7 +1628,7 @@ public class ProgramUtil {
                 qry = session.createQuery(queryString);
                 qry.setParameter("indicatorId",themeIndicatorId);
                 indValues = qry.list();
-                tx = session.beginTransaction();
+//beginTransaction();
                 Iterator indValuesItr = indValues.iterator();
                 while(indValuesItr.hasNext()){
                     AmpThemeIndicatorValue ampThIndValue = (AmpThemeIndicatorValue) indValuesItr.next();
@@ -1636,7 +1636,7 @@ public class ProgramUtil {
                         session.delete(ampThIndValue);
                     }
                 }
-                tx.commit();
+                //tx.commit();
                 session.flush();
             }
             catch(Exception e1){
@@ -1674,9 +1674,9 @@ public class ProgramUtil {
 				tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
                 tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
 				
-				tx = session.beginTransaction();
+//beginTransaction();
 				session.update(tempAmpTheme);
-				tx.commit();
+				//tx.commit();
 			}
 			catch(Exception ex)
 			{
@@ -1792,14 +1792,14 @@ public class ProgramUtil {
 
         try {
                 session = PersistenceManager.getRequestDBSession();
-                tx = session.beginTransaction();
+//beginTransaction();
                 AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");
                 AmpActivityProgramSettings settingPP=new AmpActivityProgramSettings("Primary Program");
                 AmpActivityProgramSettings settingSP=new AmpActivityProgramSettings("Secondary Program");
                 session.save(settingNPO);
                 session.save(settingPP);
                 session.save(settingSP);
-                tx.commit();
+                //tx.commit();
                 programSettings=new ArrayList();
                 programSettings.add(settingNPO);
                 programSettings.add(settingPP);
@@ -1835,7 +1835,7 @@ public class ProgramUtil {
         String names = "";
         try {
             session = PersistenceManager.getRequestDBSession();
-            //tx = session.beginTransaction();
+//beginTransaction();
             session.refresh(child);
     	
             AmpTheme parent = child.getParentThemeId();
@@ -1864,7 +1864,7 @@ public class ProgramUtil {
                     session = PersistenceManager.getRequestDBSession();
                     if (settings != null) {
                             Iterator settingsIter = settings.iterator();
-                            tx = session.beginTransaction();
+//beginTransaction();
                             while (settingsIter.hasNext()) {
                                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings)settingsIter.next();
                                     if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null  )
@@ -1880,7 +1880,7 @@ public class ProgramUtil {
                                     }
 
                             } 
-                            tx.commit();
+                            //tx.commit();
 
                     }
 

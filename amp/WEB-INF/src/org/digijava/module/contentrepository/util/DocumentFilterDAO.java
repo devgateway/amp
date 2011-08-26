@@ -18,9 +18,9 @@ public class DocumentFilterDAO {
 		Transaction tx=null;
 		try{
 			hbSession	= PersistenceManager.getRequestDBSession();
-			tx=hbSession.beginTransaction();
+//beginTransaction();
 			hbSession.saveOrUpdate(obj);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception e) {
 			if(tx!=null) {
@@ -65,11 +65,11 @@ public class DocumentFilterDAO {
 		Session hbSession;
 		try{
 			hbSession			= PersistenceManager.getRequestDBSession();
-			Transaction tx		= hbSession.beginTransaction();
+//beginTransaction();
 			DocumentFilter	df 	= (DocumentFilter)hbSession.load(DocumentFilter.class, id);
 			
 			hbSession.delete(df);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

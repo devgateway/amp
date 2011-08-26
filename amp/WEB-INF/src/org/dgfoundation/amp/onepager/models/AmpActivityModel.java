@@ -85,11 +85,9 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
 	protected static void initDBSession() {
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getSessionFactory().openSession();
 			session.setFlushMode(FlushMode.MANUAL);
 		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -122,7 +120,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	public Transaction getTransaction() {
 		if (transaction==null){
 			logger.error("Transaction was null!");
-			transaction = session.beginTransaction();
+//beginTransaction();
 		}
 		return transaction;
 	}

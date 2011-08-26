@@ -43,6 +43,7 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -307,39 +308,42 @@ public class PersistenceManager {
 		return cfg;
 	}
 	
-	/**
-	 * Opens a Database connection and returns a Session on that connection
-	 * @return The Hibernate Session
-	 * @throws java.sql.SQLException
-	 */
+
 	public static Session getSession() throws SQLException, HibernateException {
-		Session session = null;
-		synchronized (sf) {
-			session = sf.openSession();
-		}
-		session.setFlushMode(FlushMode.AUTO);
-
-		if (DigiConfigManager.getConfig().isTrackSessions()) {
 			try {
-				throw new Exception("Trace Exception. This is not a real exception. It identifies unclosed session's caller");
+				return getRequestDBSession();
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			catch (Exception ex) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.flush();
-				pw.close();
-
-				// Session does not implement Comparable interface
-				// so, its equals() and hashCode() methods operate using address
-				// in the JVM. This is what we want to identify right session object
-				String stackTrace = sw.getBuffer().toString();
-				sessionInstMap.put(session, stackTrace);
-
-				registerSession(session, stackTrace);
-			}
-		}
-		return session;
+		return null;
+//		Session session = null;
+//		synchronized (sf) {
+//			session = sf.openSession();
+//		}
+//		session.setFlushMode(FlushMode.AUTO);
+//
+//		if (DigiConfigManager.getConfig().isTrackSessions()) {
+//			try {
+//				throw new Exception("Trace Exception. This is not a real exception. It identifies unclosed session's caller");
+//			}
+//			catch (Exception ex) {
+//				StringWriter sw = new StringWriter();
+//				PrintWriter pw = new PrintWriter(sw);
+//				ex.printStackTrace(pw);
+//				pw.flush();
+//				pw.close();
+//
+//				// Session does not implement Comparable interface
+//				// so, its equals() and hashCode() methods operate using address
+//				// in the JVM. This is what we want to identify right session object
+//				String stackTrace = sw.getBuffer().toString();
+//				sessionInstMap.put(session, stackTrace);
+//
+//				registerSession(session, stackTrace);
+//			}
+//		}
+//		return session;
 	}
 
 	/**
@@ -347,28 +351,29 @@ public class PersistenceManager {
 	 * connection.
 	 * @throws cirrus.hibernate.HibernateException
 	 * @throws java.sql.SQLException
+	 * @deprecated
 	 */
 	public static void releaseSession(Session session) throws SQLException,
 	HibernateException {
 
-		if(session.isOpen())
-		session.beginTransaction().commit();
-		
-		if (DigiConfigManager.getConfig().isTrackSessions()) {
-			String stack = (String)sessionInstMap.get(session);
-			logger.debug("Releasing session: " + stack);
-			sessionInstMap.remove(session);
-		} else {
-			logger.debug("Releasing session");
-		}
-
-		try {
-			if(session.isOpen()) session.close();
-		}
-		catch (HibernateException ex) {
-			logger.error("Failed to close session", ex);
-			throw ex;
-		}
+//		if(session.isOpen())
+//		session.beginTransaction().commit();
+//		
+//		if (DigiConfigManager.getConfig().isTrackSessions()) {
+//			String stack = (String)sessionInstMap.get(session);
+//			logger.debug("Releasing session: " + stack);
+//			sessionInstMap.remove(session);
+//		} else {
+//			logger.debug("Releasing session");
+//		}
+//
+//		try {
+//			if(session.isOpen()) session.close();
+//		}
+//		catch (HibernateException ex) {
+//			logger.error("Failed to close session", ex);
+//			throw ex;
+//		}
 	}
 
 	private PersistenceManager() {
@@ -412,9 +417,9 @@ public class PersistenceManager {
 
 		try {
 			session = getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.update(object);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			if (tx != null) {
@@ -451,9 +456,9 @@ public class PersistenceManager {
 
 		try {
 			session = getSession();
-			tx = session.beginTransaction();
+//beginTransaction();
 			session.save(object);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			if (tx != null) {
@@ -516,8 +521,9 @@ public class PersistenceManager {
 	
 	
 	/**
-	 * Returns hibernate Session related with current request if it exists,
-	 * or creates new one.
+	 * Managed by hibernate. Please do not use session.close nor transaction.commit over this session. 
+	 * This is transparently managed by Hibernate on each request thread
+	 * @see HibernateSessionRequestFilter
 	 * @return Session object
 	 * @throws DgException
 	 */
@@ -602,32 +608,52 @@ public class PersistenceManager {
 		}
 	}
 
-	public static Session getRequestDBSession(boolean createNew) throws
-	DgException {
-		Map resMap = (Map) requestSession.get();
-		if (resMap == null) {
-			resMap = new HashMap();
-			requestSession.set(resMap);
-		}
-		Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
-
-		if (sess == null || !sess.isOpen()) {
-			logger.debug("RequestDBSession was not found or is closed in the current thread");
-			if (createNew) {
-				logger.debug("Creating new RequestDBSession");
-				try {
-					sess = getSession();
-				}
-				catch (Exception ex) {
-					throw new DgException("Ecxeption getting DB session", ex);
-				}
-				resMap.put(Constants.REQUEST_DB_SESSION, sess);
+	public static void rollbackCurrentSessionTx() {
+		try {
+			if (sf.getCurrentSession().getTransaction().isActive()) {
+				logger.info("Trying to rollback database transaction after exception");
+				sf.getCurrentSession().getTransaction().rollback();
 			}
-		}
-		else {
-			logger.debug("Reusing old RequestDBSession");
-		}
 
+		} catch (Throwable rbEx) {
+			logger.error("Could not rollback transaction after exception!",
+					rbEx);
+		}
+	}
+	
+	/**
+	 * @see #getRequestDBSession()
+	 * @param createNew
+	 * @return
+	 */
+	public static Session getRequestDBSession(boolean createNew) {
+//		Map resMap = (Map) requestSession.get();
+//		if (resMap == null) {
+//			resMap = new HashMap();
+//			requestSession.set(resMap);
+//		}
+//		Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
+//
+//		if (sess == null || !sess.isOpen()) {
+//			logger.debug("RequestDBSession was not found or is closed in the current thread");
+//			if (createNew) {
+//				logger.debug("Creating new RequestDBSession");
+//				try {
+//					sess = getSession();
+//				}
+//				catch (Exception ex) {
+//					throw new DgException("Ecxeption getting DB session", ex);
+//				}
+//				resMap.put(Constants.REQUEST_DB_SESSION, sess);
+//			}
+//		}
+//		else {
+//			logger.debug("Reusing old RequestDBSession");
+//		}
+
+		org.hibernate.classic.Session sess = PersistenceManager.getSessionFactory().getCurrentSession();
+		if(sess.getTransaction()==null || !sess.getTransaction().isActive()) sess.beginTransaction();
+		
 		return sess;
 	}
 
@@ -635,24 +661,25 @@ public class PersistenceManager {
 	 * Closes hibernate session if it exists and removes it from
 	 * ThreadLocal resource map
 	 * @throws DgException
+	 * @deprecated
 	 */
 	public static void closeRequestDBSessionIfNeeded() throws DgException {
-		logger.debug("closeRequestDBSessionIfNeeded() called");
-		Map resMap = (Map) requestSession.get();
-
-		if (resMap != null) {
-			Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
-			if (sess != null) {
-				try {
-					logger.debug("releasing RequestDBSession");
-					releaseSession(sess);
-				}
-				catch (Exception ex) {
-					throw new DgException("Exception closing session", ex);
-				}
-			}
-			resMap.remove(Constants.REQUEST_DB_SESSION);
-		}
+//		logger.debug("closeRequestDBSessionIfNeeded() called");
+//		Map resMap = (Map) requestSession.get();
+//
+//		if (resMap != null) {
+//			Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
+//			if (sess != null) {
+//				try {
+//					logger.debug("releasing RequestDBSession");
+//					releaseSession(sess);
+//				}
+//				catch (Exception ex) {
+//					throw new DgException("Exception closing session", ex);
+//				}
+//			}
+//			resMap.remove(Constants.REQUEST_DB_SESSION);
+//		}
 	}
 
 	public static Map getUnclosedSessions() {

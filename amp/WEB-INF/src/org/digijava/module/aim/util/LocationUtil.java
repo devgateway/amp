@@ -902,9 +902,9 @@ public class LocationUtil {
         try {
 
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(loc);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
 
             if (tx != null) {
@@ -1034,9 +1034,9 @@ public class LocationUtil {
         try {
 
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             session.saveOrUpdate(loc);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
 
             if (tx != null) {

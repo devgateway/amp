@@ -760,7 +760,7 @@ public class TrnUtil {
 		@Override
 		public void start() throws WorkerException {
 			try {
-				tx = session.beginTransaction();
+//beginTransaction();
 			} catch (HibernateException e) {
 				throw new WorkerException("Cannot start trasaction to fix translation changes.");
 			}
@@ -770,7 +770,7 @@ public class TrnUtil {
 		public void end() throws WorkerException {
 			if (tx!=null){
 				try {
-					tx.commit();
+					//tx.commit();
 				} catch (HibernateException e) {
 					throw new WorkerException("Cannot fix buffered changes.",e);
 				}

@@ -110,9 +110,9 @@ public class DbUtil {
           spool.setDateLastSend(new Date());
 
           session = PersistenceManager.getSession();
-          tx = session.beginTransaction();
+//beginTransaction();
           session.saveOrUpdate(spool);
-          tx.commit();
+          //tx.commit();
 
       }
       catch (Exception ex) {
@@ -159,9 +159,9 @@ public class DbUtil {
       Transaction tx = null;
       try {
           session = PersistenceManager.getSession();
-          tx = session.beginTransaction();
+//beginTransaction();
           session.saveOrUpdate(mail);
-          tx.commit();
+          //tx.commit();
 
       }
       catch (Exception ex) {
@@ -214,12 +214,12 @@ public class DbUtil {
             " rs where rs.dateSend <= :dateSend";
 
             session = PersistenceManager.getSession();
-            tx = session.beginTransaction();
+//beginTransaction();
             date.add(Calendar.DATE,(days.intValue()* -1));
             Query query = session.createQuery(querryString);
             query.setCalendar("dateSend", date);
             query.executeUpdate();
-            tx.commit();
+            //tx.commit();
 
         }
         catch (Exception ex) {

@@ -324,7 +324,7 @@ public class PledgesEntityHelper {
 		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.save(pledge);
 			
 			for (Iterator iterator = sectors.iterator(); iterator.hasNext();) {
@@ -357,7 +357,7 @@ public class PledgesEntityHelper {
 				}
 			}
 			
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);
 			if (tx!=null){
@@ -378,7 +378,7 @@ public class PledgesEntityHelper {
 		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
 			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
 			Collection<FundingPledgesProgram> fppl = PledgesEntityHelper.getPledgesPrograms(pledge.getId());
@@ -406,7 +406,7 @@ public class PledgesEntityHelper {
 				session.update(fundingRelated);
 			}
 			session.delete(pledge);
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error deleting pledge",e);
 			if (tx!=null){
@@ -428,7 +428,7 @@ public class PledgesEntityHelper {
 		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.update(pledge);
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
 			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
@@ -549,7 +549,7 @@ public class PledgesEntityHelper {
 					}
 				}
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);
 			if (tx!=null){
@@ -641,9 +641,9 @@ public class PledgesEntityHelper {
 		Transaction tx=null;
 		try {
 			session = PersistenceManager.getSession();
-			tx=session.beginTransaction();
+//beginTransaction();
 			session.update(fpd);
-			tx.commit();
+			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Error saving pledge detail",e);
 			if (tx!=null){

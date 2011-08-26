@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -35,7 +36,7 @@ public class AmpStructuresFormSectionFeature extends
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet());
+			setModel.setObject(new TreeSet());
 		final ListView<AmpStructure> list;
 
 		

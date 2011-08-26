@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -19,7 +18,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -38,7 +36,7 @@ public class AmpComponentsFormSectionFeature extends
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpComponent>> setModel=new PropertyModel<Set<AmpComponent>>(am,"components");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet());
+			setModel.setObject(new TreeSet());
 		final ListView<AmpComponent> list;
 
 		

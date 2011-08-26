@@ -329,54 +329,28 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
 
-            /*
-            if (sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME) {
-                AmpSectorScheme scheme = SectorUtil.getAmpSectorScheme(secId);
-                if (scheme != null) {
-                    sectorName = scheme.getSecSchemeName();
-                }
-            } else {
-                AmpSector sec = SectorUtil.getAmpSector(secId);
-                if (sec != null) {
-                    sectorName = sec.getName();
-                }
-            }
-
-
-
-			String fromYear = request.getParameter("selectedFromYear");
-			Calendar fStartDate = null;
-			if (fromYear != null) {
-				fStartDate = Calendar.getInstance();
-				fStartDate.set(Integer.parseInt(fromYear), 0, 1, 0, 0, 0);
-
-			}
-
-			String toYear = request.getParameter("selectedToYear");
-			Calendar fEndDate = null;
-			if (toYear != null) {
-				fEndDate = Calendar.getInstance();
-				fEndDate.set(Integer.parseInt(toYear), 11, 31, 23, 59, 59);
-
-			}
-
-            Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
-              */
-
             GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
             Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm);
 
-            if (mapCode != null && mapCode.trim().length() > 0) {
-
-                //outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+            if (filterForm.isFilterAllSectors()) {
+                sectorName = "All";
             } else {
-                //outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                Long[] selSecIds = filterForm.getSelectedSectors();
+                if (selSecIds.length == 1) {
+                    sectorName = org.digijava.module.gis.util.DbUtil.getSectorName(selSecIds[0]);
+                } else if (selSecIds.length > 1) {
+                    StringBuilder multySecStr = new StringBuilder(org.digijava.module.gis.util.DbUtil.getSectorName(selSecIds[0]));
+                    multySecStr.append(" and ");
+                    multySecStr.append(selSecIds.length - 1);
+                    multySecStr.append(" more");
+                    sectorName = multySecStr.toString();
                 }
 
+            }
 
             outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", mapLevel);
 
-
+        }
 		// Get the Map Image
 		// GIS, this
 		// should
@@ -517,7 +491,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				Font.HELVETICA, 24, Font.BOLD));
 
 		String generatedOnTranslation = TranslatorWorker.translateText(
-				"gis:generatedon", locale, siteId);
+				"Generated on: ", locale, siteId);
 		if (generatedOnTranslation == null || generatedOnTranslation.equals(""))
 			generatedOnTranslation = "Generated on: ";
 
@@ -537,7 +511,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		baos.writeTo(out);
 		out.flush();
 		
-		}
+
 		return null;
 	}
 
@@ -1022,14 +996,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		// gis:minmax:message
 		// TODO TRN: no record for this key.
 		String selectedSectorTranslation = TranslatorWorker.translateText(
-				"gis:selectedSector", locale, siteId);
+				"Selected sector", locale, siteId);
 
 		if (selectedSectorTranslation == null
 				|| selectedSectorTranslation.equals(""))
 			selectedSectorTranslation = "Selected sector";
 		// TODO TRN: no record for this key
 		String selectedIndicatorTranslation = TranslatorWorker.translateText(
-				"gis:selectedIndicator", locale, siteId);
+				"Selected Indicator", locale, siteId);
 		if (selectedIndicatorTranslation == null
 				|| selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
@@ -1038,6 +1012,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				+ "Regions with the highest (MAX) value are shaded light green. "
 				+ "For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
 
+        if (renderMode == null || renderMode.equalsIgnoreCase("devinfo")) {
 		textCell.addElement(new Paragraph(TranslatorWorker.translateText(
 				defaultMinMaxMessage, locale, siteId)
 				+ "\n"
@@ -1051,6 +1026,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				+ "\n\n"
 				+ TranslatorWorker.translateText("Data Source: Dev Info",
 						locale, siteId), new Font(Font.HELVETICA, 6)));
+        } else if (renderMode.equalsIgnoreCase("fininfo")) {
+            textCell.addElement(new Paragraph(TranslatorWorker.translateText(
+				defaultMinMaxMessage, locale, siteId)
+				+ "\n"
+				+ selectedSectorTranslation
+				+ ": "
+				+ sectorName
+				+ "\n\n"
+				+ TranslatorWorker.translateText("Data Source: AMP Database",
+						locale, siteId), new Font(Font.HELVETICA, 6)));
+
+        }
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);

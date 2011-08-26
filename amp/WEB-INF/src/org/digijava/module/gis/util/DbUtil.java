@@ -2497,4 +2497,20 @@ public class DbUtil {
         }
         return retVal;
     }
+
+    public static String getSectorName (Long sectorId) {
+        String retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("select s.name from ");
+            qs.append(AmpSector.class.getName());
+            qs.append(" as s where s.ampSectorId = :SEC_ID");
+            Query q = sess.createQuery(qs.toString());
+            q.setLong("SEC_ID", sectorId);
+            retVal = (String) q.uniqueResult();
+        } catch (Exception ex) {
+          logger.error("Error getting sector name from database " + ex);
+        }
+        return retVal;
+    }
 }

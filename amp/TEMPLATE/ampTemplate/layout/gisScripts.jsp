@@ -93,6 +93,8 @@ window.onload = function(){
 				allSectors = true;
 			}
 			
+			$("#filterAllSectors").val(allSectors);
+			
 			filterForm[0].submit();
 			
 	    if (allSectors) {

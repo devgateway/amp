@@ -28,7 +28,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.validators.AmpRequiredFieldValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;

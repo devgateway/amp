@@ -19,8 +19,10 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -86,6 +88,13 @@ public class AmpDonorFundingFormSectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
+		
+		AmpMinSizeCollectionValidationField<AmpFunding> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpFunding>(
+				"minSizeDonorFundingValidator", listModel, "minSizeDonorFundingValidator");
+
+		add(minSizeCollectionValidationField);
+
+		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchFundingOrgs","Search Funding Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {

@@ -17,6 +17,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 /**
  * @author mihai
  * Access AMP validation translation messages
+ * @deprecated use i18n from wicket !!
  */
 public abstract class AbstractTrnValidator<T> implements IValidator<T> {
 

@@ -1,4 +1,4 @@
-
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <div id="myHistory" style="display: none">
 	<div id="myHistoryContent" class="content">
 		===== ERROR =====
@@ -40,7 +40,7 @@
 	     );
 	
 	function initScriptsHistory() {
-		var msgP6='\n<digi:trn key="aim:previewHistory">Version History</digi:trn>';
+		var msgP6='\n<digi:trn>Version History</digi:trn>';
 		myPanelHistory.setHeader(msgP6);
 		myPanelHistory.setBody("");
 		myPanelHistory.render(document.body);

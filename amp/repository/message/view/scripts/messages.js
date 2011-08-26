@@ -144,8 +144,7 @@
          var chk=document.messageForm.getElementsByTagName('input');
          for(var i=0;i<chk.length;i++){
              if(chk[i].type == 'checkbox'&&chk[i].checked){
-            	 var msg = '<digi:trn>Please uncheck or delete selected message(s)</digi:trn>'
-                 alert(msg);
+            	 alert(alertForEmptySelection.selectAlert);
                  return false;
              }
          }
@@ -175,8 +174,7 @@
             if(msgId==null){
                 msgId=getSelectedMessagesIds();
                 if(msgId.length==0){
-                	 var msg = '<digi:trn>Please select messages</digi:trn>'
-                    alert(msg);
+                	alert(alertForEmptySelection.selectAlert);
                      flag=false;  
                 }
                 else{
@@ -323,8 +321,7 @@
 		}else{
 			selMsgsIds=getSelectedMessagesIds();
 			if(selMsgsIds.length==0){
-				var msg = '<digi:trn>Please select messages</digi:trn>'
-                alert(msg);
+				alert(alertForEmptySelection.selectAlert);
                 return false;  
             }
 		}
@@ -695,10 +692,10 @@ function toggleAllRecipientVisibility() {
 	var recipientContainerDiv = toggleLink.parent().children(".msg_all");
 	if (recipientContainerDiv.css("display") == "none") {
 		recipientContainerDiv.show("slow");
-		toggleLink.text("hide all");
+		toggleLink.text(viewOrHideAllLabel.hAll);
 	} else {
 		recipientContainerDiv.hide("slow");
-		toggleLink.text("view all");
+		toggleLink.text(viewOrHideAllLabel.vAll);
 	}
 	
 	return false;

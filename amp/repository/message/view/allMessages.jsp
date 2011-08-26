@@ -46,6 +46,15 @@
     		msgActions : '<digi:trn>Actions</digi:trn>'
     }
     
+    viewOrHideAllLabel = {
+    		vAll : '<digi:trn jsFriendly="true">View All</digi:trn>' ,
+    		hAll : '<digi:trn jsFriendly="true">Hide All</digi:trn>'
+    }
+    
+    alertForEmptySelection = {
+    		selectAlert :'<digi:trn>Please Select Messages</digi:trn>'
+    }
+    
 	//used to define whether we just entered page from desktop
 	//var firstEntry=0;
 	var firstEntry=1;

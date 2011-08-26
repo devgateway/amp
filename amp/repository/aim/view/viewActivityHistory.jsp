@@ -18,9 +18,9 @@
 	<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
 		<tr bgcolor="#999999" height="20">
 			<td bgcolor="#999999">&nbsp;</td>
-			<td bgcolor="#999999"><strong>Last modified by</strong></td>
-			<td bgcolor="#999999"><strong>Date</strong></td>
-			<td bgcolor="#999999"><strong>Action</strong></td>
+			<td bgcolor="#999999"><strong><digi:trn>Last modified by</digi:trn></strong></td>
+			<td bgcolor="#999999"><strong><digi:trn>Date</digi:trn></strong></td>
+			<td bgcolor="#999999"><strong><digi:trn>Action</digi:trn></strong></td>
 		</tr>
 		<c:forEach items="${aimViewActivityHistoryForm.activities}" var="item"
 			varStatus="status">
@@ -32,14 +32,14 @@
 				<td>
 					${item.activityCreator.user.firstNames} ${item.activityCreator.user.lastName}
 					<c:if test="${empty item.activityCreator.user.firstNames}">
-					Empty
+					<digi:trn>Empty</digi:trn>
 					</c:if>
 				</td>
 				<td>
 					<fmt:formatDate type="both" value="${item.createdDate}"
 					dateStyle="short" timeStyle="short" /> 
 					<c:if test="${empty item.createdDate}">
-					Empty
+					<digi:trn>Empty</digi:trn>
 					</c:if>
 				</td>
 				<td>
@@ -60,14 +60,14 @@
 				<td>
 					${item.modifiedBy.user.firstNames} 
 					<c:if test="${empty item.modifiedBy.user.firstNames}">
-					Empty
+					<digi:trn>Empty</digi:trn>
 					</c:if>
 				</td>
 				<td>
 					<fmt:formatDate type="both" value="${item.modifiedDate}"
 					dateStyle="short" timeStyle="short" /> 
 					<c:if test="${empty item.modifiedDate}">
-					Empty
+					<digi:trn>Empty</digi:trn>
 					</c:if>
 				</td>
 				<td>
@@ -92,5 +92,5 @@
 <input type="hidden" name="showMergeColumn" id="showMergeColumn" />
 <input type="hidden" name="method" id="method" />
 <input type="hidden" name="ampActivityId" id="ampActivityId" />
-<input type="button" id="SubmitButton" value="Compare versions" onclick="submitCompare()"/>
+<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
 </digi:form>

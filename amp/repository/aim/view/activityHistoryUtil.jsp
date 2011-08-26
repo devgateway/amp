@@ -40,7 +40,7 @@
 	     );
 	
 	function initScriptsHistory() {
-		var msgP6='\n<digi:trn key="aim:previewHistory">History</digi:trn>';
+		var msgP6='\n<digi:trn key="aim:previewHistory">Version History</digi:trn>';
 		myPanelHistory.setHeader(msgP6);
 		myPanelHistory.setBody("");
 		myPanelHistory.render(document.body);

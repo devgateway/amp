@@ -126,7 +126,7 @@ function page (page, ampSelectedClass){
 			    <td class="main_side_1">
 				    <table class="inside" width="980px" border=0 cellpadding="0" cellspacing="0" style="margin:10px;" id="tableRecords">
 						<tr>
-						<td colspan="8" align="center" background="images/ins_header.gif" class="inside"><b class="ins_header">Filter by:
+						<td colspan="8" align="center" background="images/ins_header.gif" class="inside"><b class="ins_header"><digi:trn>Filter by</digi:trn>:
 							<html:select property="selectedAmpClass" styleClass="dropdwn_sm" onchange="showFilter()" styleId="filterAmpClass">
         						<logic:iterate id="cls" name="mapFieldsForm" property="ampClasses">
         							<%-- <bean:define id="itemAmpClass"><%= cls.toString().replaceAll(" ","") %></bean:define>--%>
@@ -137,12 +137,12 @@ function page (page, ampSelectedClass){
 						</tr>
 						<tr>
 						    <td width="20" background="images/ins_bg.gif" class="inside"><b class="ins_title"><input id="checkAll" type="checkbox" onclick="checksAll()" /></b></td>
-						    <td width="400" background="images/ins_bg.gif" class="inside"><b class="ins_title">Iati Items</b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">IATI values</b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Current value</b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Status</b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">Values from AMP</b></td>
-						    <td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title">Actions</b></td>
+						    <td width="400" background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Iati Items</digi:trn></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>IATI values</digi:trn></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Current value</digi:trn></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Status</digi:trn></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Values from AMP</digi:trn></b></td>
+						    <td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
 						</tr>
 						<logic:notEmpty name="mapFieldsForm" property="mappedFields">
 							<logic:iterate id="field" name="mapFieldsForm" property="mappedFields">
@@ -163,10 +163,10 @@ function page (page, ampSelectedClass){
 								    		<c:if test="${field.ampField.ampValues=='Add new' }">
 								    			<bean:define id="itemDescr">
 								    				<c:if test="${field.ampField.iatiPath=='Activity' }">
-								    					<digi:trn key="admin:iati:activitytobeaddedasnew">Activity will be added as new activity when import will be performed</digi:trn>
+								    					<digi:trn>Activity will be added as new activity when import will be performed</digi:trn>
 								    				</c:if>
 								    				<c:if test="${field.ampField.iatiPath=='Sector' || field.ampField.iatiPath=='Vocabulary Code' || field.ampField.iatiPath=='Location' }">
-								    					<digi:trn key="admin:iati:entitycannotbeaddedasnew">Can not be automatically added. Please go to admin and manually add it</digi:trn>
+								    					<digi:trn>Can not be automatically added. Please go to admin and manually add it</digi:trn>
 								    				</c:if>
 								    				&nbsp;
 								    			</bean:define>
@@ -180,7 +180,7 @@ function page (page, ampSelectedClass){
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside">
 								  		<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
-								  			<html:option value="-1"  >Add new</html:option>
+								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels">
 												<html:option value="${cls.key}">
 												${cls.value}
@@ -189,14 +189,14 @@ function page (page, ampSelectedClass){
         								</html:select>
 								  	</td>
 								    <td bgcolor="#FFFFFF" class="inside" align="center">
-								    		<input type="button" value="Save" class="buttonx_sm" onclick="saveRecord(${field.ampField.id})" />
+								    		<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx_sm" onclick="saveRecord(${field.ampField.id})" />
 								    </td>
 								</tr>
 							</logic:iterate>
 						</logic:notEmpty>
 						<tr>
 							  <td colspan="6" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
-							  <td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="Save All" class="buttonx_sm" onclick="saveAll()"/></td>
+							  <td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="<digi:trn>Save All</digi:trn>" class="buttonx_sm" onclick="saveAll()"/></td>
 						</tr>
 					</table>
 					<div class="paging" style="font-size:11px;margin:10px;">
@@ -208,7 +208,7 @@ function page (page, ampSelectedClass){
 							</c:if>
 							<c:if test="${mapFieldsForm.currentPage != page}">
 								<c:set var="translation">
-									<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+									<digi:trn>Click here to goto Next Page</digi:trn>
 								</c:set>
 								<a href="javascript:page(${page},'${mapFieldsForm.selectedAmpClass}')" title="${translation}" class="l_sm">${page}</a>
 							</c:if>

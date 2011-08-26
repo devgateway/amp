@@ -75,10 +75,10 @@ function page (page){
 					    </td>
 					    <td width="33%" align=center><b><digi:trn>Log file for:</digi:trn> ${showLogsForm.selectedSourceName }</b></td>
 					    <td width="33%" align=right>
-					    <a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					    <a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b>Check Source</b></a>
+					    <a href="/dataExchange/mapFields.do" class="t_sm"><b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    <a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b><digi:trn>Check Source</digi:trn></b></a>
 					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					    <a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a></td>
+					    <a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+]<digi:trn> Create New Source</digi:trn></b></a></td>
 					</tr>
 				</table>
 				<div style="text-align: center; display: none;" id="loadingImg">
@@ -100,7 +100,7 @@ function page (page){
 						  	<html:option value="Import activities"><digi:trn>Import activities</digi:trn></html:option>
 						</html:select>
 						
-						<input type="button" value="See" class="buttonx_sm" onclick="changeSource()"/>
+						<input type="button" value="<digi:trn>See</digi:trn>" class="buttonx_sm" onclick="changeSource()"/>
 						</b></td>
 					</tr>
 					<tr>
@@ -142,13 +142,13 @@ function page (page){
 						</td>
 					
 					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align="center"> 
-					    	<b class="ins_title">Time</b>
+					    	<b class="ins_title"><digi:trn>Time</digi:trn></b>
 					   	</td>
 					   	<!-- 
 					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside><b class="ins_title">External Timestamp</b></td>
 					     -->
-					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Description</b></td>
-					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title"><digi:trn>Description</digi:trn></b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2//ins_bg.gif" class=inside align=center><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
 					</tr>
 					<logic:empty name="showLogsForm" property="logs">
 						<tr>
@@ -188,7 +188,7 @@ function page (page){
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
-							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b>view</b></a>							    		
+							    		<a href="/dataExchange/showLogs.do?selectedLogPerExecId=${log.id}" class="t_sm"><b><digi:trn>view</digi:trn></b></a>							    		
 							    	</div>
 							    </td>
 							</tr>
@@ -205,7 +205,7 @@ function page (page){
 						</c:if>
 						<c:if test="${showLogsForm.currentPage != page}">
 							<c:set var="translation">
-								<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+								<digi:trn>Click here to goto Next Page</digi:trn>
 							</c:set>
 							<a href="javascript:page(${page})" title="${translation}" class="l_sm">${page}</a>
 						</c:if>

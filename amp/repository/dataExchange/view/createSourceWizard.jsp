@@ -20,6 +20,102 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>"></script>
 
 <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
+
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+<script langauage="JavaScript">	
+	
+var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+function initFileUploads() {
+	if (!W3CDOM) return;
+	var fakeFileUpload = document.createElement('div');
+	fakeFileUpload.className = 'fakefile';
+	fakeFileUpload.appendChild(document.createElement('input'));
+
+	var fakeFileUpload2 = document.createElement('div');
+	fakeFileUpload2.className = 'fakefile2';
+
+
+	var button = document.createElement('input');
+	button.type = 'button';
+
+	button.value = '<digi:trn>Browse...</digi:trn>';
+	fakeFileUpload2.appendChild(button);
+
+	fakeFileUpload.appendChild(fakeFileUpload2);
+	var x = document.getElementsByTagName('input');
+	for (var i=0;i<x.length;i++) {
+		if (x[i].type != 'file') continue;
+		if (x[i].parentNode.className != 'fileinputs') continue;
+		x[i].className = 'file hidden';
+		var clone = fakeFileUpload.cloneNode(true);
+		x[i].parentNode.appendChild(clone);
+		x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+			x[i].onchange = x[i].onmouseout = function () {
+			this.relatedElement.value = this.value;
+		}
+	}
+}
+
+</script>
+
 <script type="text/javascript">
 
 function cancelImportManager() {
@@ -93,7 +189,7 @@ function cancelImportManager() {
 					    <td width=49% valign="top" class="inside" style="border: none;">
 					    	<fieldset>
 								<legend><span class=legend_label><digi:trn>General Details</digi:trn></span></legend>								
-								<b>Name:</b> 
+								<b><digi:trn>Name</digi:trn>:</b> 
 								<html:text property="name" styleClass="inputx"/>
 								<br /><br />
 								
@@ -115,7 +211,7 @@ function cancelImportManager() {
         						</logic:iterate>				
 								<br><br>
 								
-								<b>Please choose the workspace that will be used:</b><br />
+								<b><digi:trn>Please choose the workspace that will be used</digi:trn>:</b><br />
 								<html:select property="teamId" styleClass="inputx" style="margin-top:5px;">
         								<html:optionsCollection property="teamValues" label="name" value="ampTeamId"/>
         							</html:select>
@@ -130,10 +226,10 @@ function cancelImportManager() {
 							</fieldset>
 							<br />
 							<fieldset>
-								<legend><span class=legend_label>Filter and Identifier</span></legend>
+								<legend><span class=legend_label><digi:trn>Filter and Identifier</digi:trn></span></legend>
 								<b><digi:trn>Type unique identifier (title,id,ampid,ptip) separatd by '|'</digi:trn> </b>:
 								<html:text property="uniqueIdentifier" styleClass="inputx" style="width:95%; margin-top:5px;"/><br /><br />
-								<b>Select the approval status that the new activities will have:</b><br />
+								<b><digi:trn>Select the approval status that the new activities will have</digi:trn>:</b><br />
 								
 								<logic:iterate id="appStatus" name="createSourceForm" property="approvalStatusValues">
 		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
@@ -141,7 +237,7 @@ function cancelImportManager() {
 							</fieldset>
 							<br />							
 							<fieldset>
-								<legend><span class=legend_label>Upload a file</span></legend>
+								<legend><span class=legend_label><digi:trn>Upload a file</digi:trn></span></legend>
 								<c:if test="${not empty createSourceForm.sdmDocument}">
 									<c:forEach var="attachedDoc" items="${createSourceForm.sdmDocument.items}">
 										<div id="attachmentDiv">
@@ -158,7 +254,14 @@ function cancelImportManager() {
 										</div>
 									</c:forEach>
 								</c:if>
+								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+									<!-- CSS content must be put in a separated file and a class must be generated -->
+									<input id="fileUploaded" name="uploadedFile" type="file" class="inputx"  style="margin-top:7px;">
+								</div>
+								<%--
 								<input name="uploadedFile" type="file" style="margin-top:7px;" class="inputx" id="uploadedFile">
+								 --%>
+								
 							</fieldset>														
 						</td>
 						<td width=2%>&nbsp;</td>
@@ -180,8 +283,8 @@ function cancelImportManager() {
 				</table>
 				<br />
 				<center>
-					<input type="button" value="Save" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
-					<input type="button" value="Cancel" class="buttonx" onclick="cancelImportManager()"/>
+					<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
+					<input type="button" value="<digi:trn>Cancel</digi:trn>" class="buttonx" onclick="cancelImportManager()"/>
 				</center>
 			</div>	
 		</td>
@@ -189,3 +292,7 @@ function cancelImportManager() {
 </table>
 </digi:form>
 </body>
+
+<script type="text/javascript">
+	initFileUploads();		
+</script>

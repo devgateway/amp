@@ -99,13 +99,13 @@ function checksAll() {
 		    <td class="main_side_1">
 				<table width="980" border="0" cellspacing="0" cellpadding="0" style="margin:10px; font-size:12px;">
 				  <tr>
-				    <td width="33%"><a href="/dataExchange/showLogs.do?htmlView=true&selectedSourceId=${showLogsForm.selectedSourceId }" class="t_sm"><b>« Back to logs</b></a></td>
-				    <td width="33%" align=center><b>Execution Log</b></td>
+				    <td width="33%"><a href="/dataExchange/showLogs.do?htmlView=true&selectedSourceId=${showLogsForm.selectedSourceId }" class="t_sm"><b>« <digi:trn>Back to logs</digi:trn></b></a></td>
+				    <td width="33%" align=center><b><digi:trn>Execution Log</digi:trn></b></td>
 				    <td width="33%" align=right>
-				    	<a href="/dataExchange/mapFields.do" class="t_sm"><b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				    	<a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b>Check Source</b></a>
+				    	<a href="/dataExchange/mapFields.do" class="t_sm"><b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<a href="javascript:checkLog('${showLogsForm.selectedSourceId}')" class="t_sm"><b><digi:trn>Check Source</digi:trn></b></a>
 					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a>
+				    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+]<digi:trn>Create New Source</digi:trn></b></a>
 				    </td>
 				  </tr>
 				</table>
@@ -113,7 +113,7 @@ function checksAll() {
 				<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
 					<tr>
 						<td colspan="6" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside>
-						<b>Execution Logs</b>
+						<b><digi:trn>Execution Logs</digi:trn></b>
 					</td>
 					<tr>
 				    	<c:if test="${showLogsForm.canImport == true}">
@@ -122,20 +122,20 @@ function checksAll() {
 						    </td>
 				      	</c:if>
 					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-					    	<b class="ins_title">Activity Name</b>
+					    	<b class="ins_title"><digi:trn>Activity Name</digi:trn></b>
 					    </td>
 					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-					    	<b class="ins_title">Status</b>
+					    	<b class="ins_title"><digi:trn>Status</digi:trn></b>
 					    </td>
 						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-							<b class="ins_title">Details</b>
+							<b class="ins_title"><digi:trn>Details</digi:trn></b>
 						</td>
 						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-							<b class="ins_title">Error Details</b>
+							<b class="ins_title"><digi:trn>Error Details</digi:trn></b>
 						</td>
 						<c:if test="${showLogsForm.canImport == true}">
 						    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center align=center>
-						    	<b class="ins_title">Actions</b>
+						    	<b class="ins_title"><digi:trn>Actions</digi:trn></b>
 						    </td>
 					    </c:if>
 					</tr>
@@ -173,12 +173,12 @@ function checksAll() {
 							    <td bgcolor=#FFFFFF class=inside>
 							    	<div class="t_sm">
 							    		<div class="t_sm">
-							    		   Name:	 ${item.name } |
-							    		   Database ID:	 ${item.id }	  |
-							    		   Status:	 ${item.logType }	  |
-							    		   Date:	 ${item.dateAsString}	  |
-							    		   Time:	 ${item.timeAsString }	  |							    		   
-							    		   Amp Object Id:	${item.itemType }
+							    		   <digi:trn>Name</digi:trn>:	 ${item.name } |
+							    		   <digi:trn>Database ID</digi:trn>:	 ${item.id }	  |
+							    		   <digi:trn>Status</digi:trn>:	 ${item.logType }	  |
+							    		   <digi:trn>Date</digi:trn>:	 ${item.dateAsString}	  |
+							    		   <digi:trn>Time</digi:trn>:	 ${item.timeAsString }	  |							    		   
+							    		   <digi:trn>Amp Object Id</digi:trn>:	${item.itemType }
 							    		</div>
 							    	</div>
 							    </td>
@@ -204,7 +204,7 @@ function checksAll() {
 							    <c:if test="${showLogsForm.canImport == true}">
 								    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
 							    		<c:if test="${item.logType=='OK' && showLogsForm.canImport == true}">
-								    		<input type="button" class="buttonx_sm" value="Import" onclick="importItem(${item.id});"/>
+								    		<input type="button" class="buttonx_sm" value="<digi:trn>Import</digi:trn>" onclick="importItem(${item.id});"/>
 								    	</c:if>
 								    </td>
 						    	</c:if>
@@ -214,7 +214,7 @@ function checksAll() {
 							<tr>
 							    <td colspan="5" bgcolor=#FFFFFF class=inside>&nbsp;</td>
 							    <td width="20" align="center" bgcolor=#FFFFFF class=inside>
-								    	<input type="button" class="buttonx_sm" value="Import All" onclick="importAll()"/>
+								    	<input type="button" class="buttonx_sm" value="<digi:trn>Import All</digi:trn>" onclick="importAll()"/>
 							    </td>
 							</tr>		
 						</c:if>

@@ -92,8 +92,8 @@ function page (page){
 	    <td>&nbsp;</td>
 	    <td align="right">&nbsp;</td>
 	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm">
-	    	<b>Mapping Tool</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] Create New Source</b></a>
+	    	<b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] <digi:trn>Create New Source</digi:trn></b></a>
 	    </td>
 	  </tr>
 	</table>
@@ -104,18 +104,18 @@ function page (page){
 	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
 		<td colspan="5" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside>			
-			<b class="ins_header">List of sources</b></td>
+			<b class="ins_header"><digi:trn>List of sources</digi:trn></b></td>
 		</tr>
 		<tr>
 		    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
 				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort!='name'}">
 					<a href="javascript:sortByVal('name')">
-						<b class="ins_title">Name</b>	                            	
+						<b class="ins_title"><digi:trn>Name</digi:trn></b>	                            	
 					</a>
 				</c:if> 
 				<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort=='name'}">
 					<a href="javascript:sortByVal('name_desc')">
-						<b class="ins_title">Name</b> 
+						<b class="ins_title"><digi:trn>Name</digi:trn></b> 
 					</a>
 				</c:if> 
 				<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort=='name'}">
@@ -128,12 +128,12 @@ function page (page){
 		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
 		    	<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort!='source'}">
 					<a href="javascript:sortByVal('source')">
-						<b class="ins_title">Source</b>	                            	
+						<b class="ins_title"><digi:trn>Source</digi:trn></b>	                            	
 					</a>
 				</c:if> 
 				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='source'}">
 					<a href="javascript:sortByVal('source_desc')">
-						<b class="ins_title">Source</b>
+						<b class="ins_title"><digi:trn>Source</digi:trn></b>
 					</a>
 				</c:if> 
 				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='source'}">
@@ -146,12 +146,12 @@ function page (page){
 		    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
 		    	<c:if test="${empty manageSourceForm.sort || manageSourceForm.sort!='workspace'}">
 					<a href="javascript:sortByVal('workspace')">
-						<b class="ins_title">Workspace Used</b>	                            	
+						<b class="ins_title"><digi:trn>Workspace Used</digi:trn></b>	                            	
 					</a>
 				</c:if> 
 				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='workspace'}">
 					<a href="javascript:sortByVal('workspace_desc')">
-						<b class="ins_title">Workspace Used</b>
+						<b class="ins_title"><digi:trn>Workspace Used</digi:trn></b>
 					</a>
 				</c:if> 
 				<c:if test="${not empty manageSourceForm.sort && manageSourceForm.sort=='workspace'}">
@@ -162,10 +162,10 @@ function page (page){
 				</c:if>
 		    </td>
 		    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
-		    	<b class="ins_title">Show/Hide Details</b>
+		    	<b class="ins_title"><digi:trn>Show/Hide Details</digi:trn></b>
 		    </td>
 		    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center>
-		    	<b class="ins_title">Actions</b>
+		    	<b class="ins_title"><digi:trn>Actions</digi:trn></b>
 		    </td>
 		</tr>
 		<logic:empty name="manageSourceForm" property="pagedSources">
@@ -289,7 +289,7 @@ function page (page){
 				</c:if>
 				<c:if test="${manageSourceForm.currentPage != page}">
 					<c:set var="translation">
-						<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+						<digi:trn>Click here to goto Next Page</digi:trn>
 					</c:set>
 					<a href="javascript:page(${page})" title="${translation}" class="l_sm">${page}</a>
 				</c:if>

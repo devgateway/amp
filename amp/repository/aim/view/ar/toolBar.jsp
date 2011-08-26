@@ -175,7 +175,7 @@ addLoadEvent(addpanel);
 	}
 </script>
 <div class="toolbar" align="center">
-<table border="0" align="center" class="toolbartable">
+<table border="0" align="center">
 	<tr>
 		<!-- 
 			<td noWrap align=left valign="center">	
@@ -202,7 +202,7 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
+				<digi:img style="margin-bottom:5px" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		

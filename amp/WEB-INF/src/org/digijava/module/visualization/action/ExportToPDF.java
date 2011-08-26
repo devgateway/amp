@@ -221,10 +221,13 @@ public class ExportToPDF extends Action {
 	            sumamaryTitleCell.setColspan(6);
 	            summaryTbl.addCell(sumamaryTitleCell);
 	            cell = new PdfPCell(new Paragraph(totalCommsTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(totalDisbsTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(numberPrjTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new PdfPCell(new Paragraph(numberDonTrn, HEADERFONT));
@@ -232,34 +235,44 @@ public class ExportToPDF extends Action {
 				}
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 		            cell = new PdfPCell(new Paragraph(numberRegTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            }
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 		            cell = new PdfPCell(new Paragraph(numberSecTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            }
 	            cell = new PdfPCell(new Paragraph(avgPrjZSizeTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getTotalCommitments().toString(), HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getTotalDisbursements().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfProjects().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfDonors().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 				}
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfRegions().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 	            }
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfSectors().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 	            }
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getAverageProjectSize().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 summaryTbl.addCell(cell);
                 doc.add(summaryTbl);
 	            doc.add(new Paragraph(" "));
@@ -278,8 +291,10 @@ public class ExportToPDF extends Action {
             //topPrjTitleCell.setColspan(2);
             //topPrjTbl.addCell(topPrjTitleCell);
             cell = new PdfPCell(new Paragraph(projectTrn, HEADERFONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             topPrjTbl.addCell(cell);
             cell = new PdfPCell(new Paragraph(fundTypeTrn, HEADERFONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             topPrjTbl.addCell(cell);
             Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
             if (topProjects!=null){
@@ -289,6 +304,7 @@ public class ExportToPDF extends Action {
 			        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
 			        topPrjTbl.addCell(cell);
 	            	cell = new PdfPCell(new Paragraph(entry.getValue().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            	topPrjTbl.addCell(cell);
 			    }
 			    doc.add(topPrjTbl);
@@ -335,16 +351,19 @@ public class ExportToPDF extends Action {
 	            //fundingTitleCell.setColspan(colspan);
 	            //fundingTbl.addCell(fundingTitleCell);
 	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            fundingTbl.addCell(cell);
 	            singleRow = fundingRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	fundingTbl.addCell(cell);
 				}
 	            for (int i = 1; i < fundingRows.length; i++) {
 	            	singleRow = fundingRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
 	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	fundingTbl.addCell(cell);
 	    			}
 				}
@@ -383,15 +402,19 @@ public class ExportToPDF extends Action {
 	            //aidPredTitleCell.setColspan(colspan);
 	            //aidPredTbl.addCell(aidPredTitleCell);
 	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(plannedTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(actualTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
 	            for (int i = 1; i < aidPredRows.length; i++) {
 	            	singleRow = aidPredRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
 	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidPredTbl.addCell(cell);
 	    			}
 				}
@@ -430,16 +453,19 @@ public class ExportToPDF extends Action {
 	            //aidTypeTitleCell.setColspan(colspan);
 	            //aidTypeTbl.addCell(aidTypeTitleCell);
 	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidTypeTbl.addCell(cell);
 	            singleRow = aidTypeRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	aidTypeTbl.addCell(cell);
 				}
 	            for (int i = 1; i < aidTypeRows.length; i++) {
 	            	singleRow = aidTypeRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
 	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidTypeTbl.addCell(cell);
 	    			}
 				}
@@ -479,16 +505,19 @@ public class ExportToPDF extends Action {
 	            //finInstTitleCell.setColspan(colspan);
 	            //finInstTbl.addCell(finInstTitleCell);
 	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            finInstTbl.addCell(cell);
 	            singleRow = finInstRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	finInstTbl.addCell(cell);
 				}
 	            for (int i = 1; i < finInstRows.length; i++) {
 	            	singleRow = finInstRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
 	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	finInstTbl.addCell(cell);
 	    			}
 				}
@@ -529,16 +558,19 @@ public class ExportToPDF extends Action {
 		            //sectorProfTitleCell.setColspan(colspan);
 		            //sectorProfTbl.addCell(sectorProfTitleCell);
 		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            sectorProfTbl.addCell(cell);
 		            singleRow = sectorProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		                sectorProfTbl.addCell(cell);
 					}
 		            for (int i = 2; i < sectorProfRows.length; i++) {
 		            	singleRow = sectorProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
 		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	sectorProfTbl.addCell(cell);
 		    			}
 					}
@@ -579,16 +611,19 @@ public class ExportToPDF extends Action {
 		            //regionProfTitleCell.setColspan(colspan);
 		            //regionProfTbl.addCell(regionProfTitleCell);
 		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            regionProfTbl.addCell(cell);
 		            singleRow = regionProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	regionProfTbl.addCell(cell);
 					}
 		            for (int i = 2; i < regionProfRows.length; i++) {
 		            	singleRow = regionProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
 		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	regionProfTbl.addCell(cell);
 		    			}
 					}
@@ -629,16 +664,19 @@ public class ExportToPDF extends Action {
 		            //donorProfTitleCell.setColspan(colspan);
 		            //donorProfTbl.addCell(donorProfTitleCell);
 		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            donorProfTbl.addCell(cell);
 		            singleRow = donorProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	donorProfTbl.addCell(cell);
 					}
 		            for (int i = 2; i < donorProfRows.length; i++) {
 		            	singleRow = donorProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
 		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	donorProfTbl.addCell(cell);
 		    			}
 					}

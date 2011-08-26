@@ -136,6 +136,7 @@ public class ExportToExcel extends Action {
 	        cellStyle.setFont(fontCell);
 	        cellStyle.setWrapText(true);
 	        cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+	        cellStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
 	        
 	        HSSFCellStyle lastCellStyle = wb.createCellStyle();
 	        lastCellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
@@ -144,7 +145,7 @@ public class ExportToExcel extends Action {
 	        lastCellStyle.setFont(fontCell);
 	        lastCellStyle.setWrapText(true);
 	        lastCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-
+	        lastCellStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
 
 	     // title cells
 	        HSSFCellStyle titleCS = wb.createCellStyle();
@@ -187,7 +188,21 @@ public class ExportToExcel extends Action {
 	        subHeaderCS.setBorderRight(HSSFCellStyle.BORDER_THIN);
 	        subHeaderCS.setBorderTop(HSSFCellStyle.BORDER_THIN);
 	        subHeaderCS.setFont(fontHeader);
-
+	        
+	     // subHeader cells
+	        HSSFCellStyle subHeaderNumericCS = wb.createCellStyle();
+	        subHeaderCS.setWrapText(true);
+	        HSSFFont fontSubHeaderNumeric = wb.createFont();
+	        fontSubHeaderNumeric.setFontName(HSSFFont.FONT_ARIAL);
+	        fontSubHeaderNumeric.setFontHeightInPoints((short) 10);
+	        fontSubHeaderNumeric.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+	        subHeaderNumericCS.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+	        subHeaderNumericCS.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+	        subHeaderNumericCS.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+	        subHeaderNumericCS.setBorderRight(HSSFCellStyle.BORDER_THIN);
+	        subHeaderNumericCS.setBorderTop(HSSFCellStyle.BORDER_THIN);
+	        subHeaderNumericCS.setFont(fontHeader);
+	        
 	        String name =  dashboardTypeTrn + " " + dashboardTrn;
 	        //String sheetName = "Dashboard";
 	
@@ -301,6 +316,7 @@ public class ExportToExcel extends Action {
 	            headerText = new HSSFRichTextString(summaryTrn + " (" + currName + ")");
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
+	            
 	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
 	            
 	            cellNum = 0;

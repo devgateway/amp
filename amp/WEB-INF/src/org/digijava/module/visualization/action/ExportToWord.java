@@ -240,52 +240,66 @@ public class ExportToWord extends Action {
 	            sumamaryTitleCell.setColspan(6);
 	            summaryTbl.addCell(sumamaryTitleCell);
 	            cell = new RtfCell(new Paragraph(totalCommsTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            summaryTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(totalDisbsTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            summaryTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(numberPrjTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            summaryTbl.addCell(cell);
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new RtfCell(new Paragraph(numberDonTrn, HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	cell.setBackgroundColor(TITLECOLOR);
 		            summaryTbl.addCell(cell);
 				}
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 		            cell = new RtfCell(new Paragraph(numberRegTrn, HEADERFONTWHITE));
 		            cell.setBackgroundColor(TITLECOLOR);
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            }
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 		            cell = new RtfCell(new Paragraph(numberSecTrn, HEADERFONTWHITE));
 		            cell.setBackgroundColor(TITLECOLOR);
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            }
 	            cell = new RtfCell(new Paragraph(avgPrjZSizeTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            
 	            cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getTotalCommitments().toString(), HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getTotalDisbursements().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfProjects().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfDonors().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 				}
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfRegions().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 	            }
 	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfSectors().toString()));
+	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 	            }
 	            cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getAverageProjectSize().toString()));
+	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 summaryTbl.addCell(cell);
                 doc.add(summaryTbl);
 	            doc.add(new Paragraph(" "));
@@ -318,10 +332,12 @@ public class ExportToWord extends Action {
 			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
 			        if (count % 2 == 0)
 			        	cell.setBackgroundColor(CELLCOLOR);
+			        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				    topPrjTbl.addCell(cell);
 				    cell = new RtfCell(new Paragraph(entry.getValue().toString()));
 				    if (count % 2 == 0)
 			        	cell.setBackgroundColor(CELLCOLOR);
+				    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				    topPrjTbl.addCell(cell);
 				    count++;
 			    }
@@ -376,6 +392,7 @@ public class ExportToWord extends Action {
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
 	            	cell.setBackgroundColor(TITLECOLOR);
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            fundingTbl.addCell(cell);
 				}
 	            count = 0;
@@ -385,6 +402,7 @@ public class ExportToWord extends Action {
 	            		cell = new RtfCell(new Paragraph(singleRow[j]));
 	            		if (count % 2 == 0)
 	    		        	cell.setBackgroundColor(CELLCOLOR);
+	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    			    fundingTbl.addCell(cell);
 	    			}
 	            	count++;
@@ -426,12 +444,15 @@ public class ExportToWord extends Action {
 	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
 	            //aidPredTbl.addCell(aidPredTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidPredTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidPredTbl.addCell(cell);
 	            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidPredTbl.addCell(cell);
 	            count = 0;
@@ -441,6 +462,7 @@ public class ExportToWord extends Action {
 	            		cell = new RtfCell(new Paragraph(singleRow[j]));
 	            		if (count % 2 == 0)
 	    		        	cell.setBackgroundColor(CELLCOLOR);
+	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    			    aidPredTbl.addCell(cell);
 	    			}
 	            	count++;
@@ -482,11 +504,13 @@ public class ExportToWord extends Action {
 	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
 	            //aidTypeTbl.addCell(aidTypeTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            aidTypeTbl.addCell(cell);
 	            singleRow = aidTypeRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	cell.setBackgroundColor(TITLECOLOR);
 		            aidTypeTbl.addCell(cell);
 				}
@@ -497,6 +521,7 @@ public class ExportToWord extends Action {
 	                	cell = new RtfCell(new Paragraph(singleRow[j]));
 	                	if (count % 2 == 0)
 	    		        	cell.setBackgroundColor(CELLCOLOR);
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    			    aidTypeTbl.addCell(cell);
 	    			}
 	            	count++;
@@ -539,11 +564,13 @@ public class ExportToWord extends Action {
 	            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
 	            //finInstTbl.addCell(finInstTitleCell);
 	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            finInstTbl.addCell(cell);
 	            singleRow = finInstRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	cell.setBackgroundColor(TITLECOLOR);
 		            finInstTbl.addCell(cell);
 				}
@@ -554,6 +581,7 @@ public class ExportToWord extends Action {
 	                	cell = new RtfCell(new Paragraph(singleRow[j]));
 	                	if (count % 2 == 0)
 	    		        	cell.setBackgroundColor(CELLCOLOR);
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    			    finInstTbl.addCell(cell);
 	    			}
 	            	count++;
@@ -597,11 +625,13 @@ public class ExportToWord extends Action {
 		            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //sectorProfTbl.addCell(sectorProfTitleCell);
 		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            sectorProfTbl.addCell(cell);
 		            singleRow = sectorProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	cell.setBackgroundColor(TITLECOLOR);
 			            sectorProfTbl.addCell(cell);
 					}
@@ -612,6 +642,7 @@ public class ExportToWord extends Action {
 		                	cell = new RtfCell(new Paragraph(singleRow[j]));
 		                	if (count % 2 == 0)
 		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		    			    sectorProfTbl.addCell(cell);
 		    			}
 		            	count++;
@@ -655,11 +686,13 @@ public class ExportToWord extends Action {
 		            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //regionProfTbl.addCell(regionProfTitleCell);
 		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            regionProfTbl.addCell(cell);
 		            singleRow = regionProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	cell.setBackgroundColor(TITLECOLOR);
 			            regionProfTbl.addCell(cell);
 					}
@@ -670,6 +703,7 @@ public class ExportToWord extends Action {
 		                	cell = new RtfCell(new Paragraph(singleRow[j]));
 		                	if (count % 2 == 0)
 		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		    			    regionProfTbl.addCell(cell);
 		    			}
 		            	count++;
@@ -713,11 +747,13 @@ public class ExportToWord extends Action {
 		            //donorProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //donorProfTbl.addCell(donorProfTitleCell);
 		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            donorProfTbl.addCell(cell);
 		            singleRow = donorProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	cell.setBackgroundColor(TITLECOLOR);
 		            	donorProfTbl.addCell(cell);
 					}
@@ -728,6 +764,7 @@ public class ExportToWord extends Action {
 		                	cell = new RtfCell(new Paragraph(singleRow[j]));
 		                	if (count % 2 == 0)
 		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	donorProfTbl.addCell(cell);
 		    			}
 		            	count++;

@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -17,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class AddProgram
@@ -118,9 +120,9 @@ public class AddProgram
         activityProgram.setProgramSetting(parent);
 
         if (settingsId == ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY) {
-          if(npoPrograms.size()==0) {
-            activityProgram.setProgramPercentage(100f);
-          }
+          //if(npoPrograms.size()==0) {
+          //  activityProgram.setProgramPercentage(100f);
+          //}
           // changed by mouhamad for burkina the 22/02/08
           // for AMP-2666
           AmpActivityProgram program = null;
@@ -135,15 +137,16 @@ public class AddProgram
           }
           if (!exist) {
         	  npoPrograms.add(activityProgram);
+        	  checkPercentPrograms(npoPrograms);
           }
           // end 
           eaform.getPrograms().setNationalPlanObjectivePrograms(npoPrograms);         
         }
         else {
           if (settingsId ==ProgramUtil.PRIMARY_PROGRAM_KEY) {
-            if( ppPrograms.size()==0){
-               activityProgram.setProgramPercentage(100f);
-            }
+            //if( ppPrograms.size()==0){
+            //   activityProgram.setProgramPercentage(100f);
+            //}
             // changed by mouhamad for burkina the 26/02/08
             // for AMP-2666
             AmpActivityProgram program = null;
@@ -158,15 +161,16 @@ public class AddProgram
             }
             if (!exist) {
             	 ppPrograms.add(activityProgram);
+            	 checkPercentPrograms(ppPrograms);
             }
             // end            
             eaform.getPrograms().setPrimaryPrograms(ppPrograms);
 
           }
           else {
-            if( spPrograms.size()==0){
-            	activityProgram.setProgramPercentage(100f);
-            }
+            //if( spPrograms.size()==0){
+            //	activityProgram.setProgramPercentage(100f);
+            //}
             // changed by mouhamad for burkina the 26/02/08
             // for AMP-2666
             AmpActivityProgram program = null;
@@ -181,6 +185,7 @@ public class AddProgram
             }
             if (!exist) {
             	spPrograms.add(activityProgram);
+            	checkPercentPrograms(spPrograms);
             }
             // end            
             eaform.getPrograms().setSecondaryPrograms(spPrograms);
@@ -283,4 +288,19 @@ public class AddProgram
     }
     return false;
   }
+  
+  private void checkPercentPrograms (List<AmpActivityProgram> progs){
+		for (Iterator iterator = progs.iterator(); iterator.hasNext();) {
+			AmpActivityProgram program = (AmpActivityProgram) iterator.next();
+			if (progs.size()==1){
+				program.setProgramPercentage(100f);
+				return;
+			} else {
+				if (program.getProgramPercentage()==100f){
+					program.setProgramPercentage(0f);
+					return;
+				} 
+			}
+		}
+	}
 }

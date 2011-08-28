@@ -67,6 +67,7 @@ font-size : 11 px;
 font-weight : bold;
 }
 
+#show_legend_pop_box_private, #show_legend_pop_box_team  {display:none; margin-top:13px; position:absolute; width:300px; padding:8px; border:1px solid #CCCCCC; background-color:#FDFFE3;}
 </style>
 
 <!-- this is style for labels -->
@@ -1495,5 +1496,8 @@ YAHOO.amp.panelCounter	= 3;
 
 YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
-
+function showlegend(divIdSuffix) {
+	var contentId = document.getElementById("show_legend_pop_box_"+divIdSuffix);
+	contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+}
 </script>

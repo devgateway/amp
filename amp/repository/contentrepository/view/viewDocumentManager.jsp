@@ -560,6 +560,7 @@ function setHoveredTable(tableId, hasHeaders) {
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
 														<td style="font-size: 11px;font-family: Arial,sans-serif">
+															<bean:define id="legendDivId" value="private" toScope="request" />	
 									          				<jsp:include page="legendForResources.jsp"/>
 									          			</td>
 									          		</tr>
@@ -611,6 +612,7 @@ function setHoveredTable(tableId, hasHeaders) {
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
 														<td style="font-size: 11px;font-family: Arial,sans-serif">
+															<bean:define id="legendDivId" value="team" toScope="request" />															
 									          				<jsp:include page="legendForResources.jsp"/>
 									          			</td>
 									          		</tr>

@@ -410,7 +410,7 @@ function fnSubmit() {
 											</a>
 										</td>
 										<td align="right" nowrap="nowrap">
-											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
+												<aim:formatNumber minIntegerDigits="1" maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
 									</c:forEach>

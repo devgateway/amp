@@ -4,7 +4,9 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -105,10 +107,11 @@ public class DynLocationSelected extends Action {
                                     eaForm.getLocation().setSelectedLocs(locs);
 				}
 				if ( !eaForm.getLocation().getSelectedLocs().contains(location) ){
-					if (eaForm.getLocation().getSelectedLocs().size()==0 && !setFullPercForDefaultCountry ) {
-						location.setPercent("100");
-					}
+					//if (eaForm.getLocation().getSelectedLocs().size()==0 && !setFullPercForDefaultCountry ) {
+					//	location.setPercent("100");
+					//}
 					eaForm.getLocation().getSelectedLocs().add(location);
+					checkPercentLocations(eaForm.getLocation().getSelectedLocs());
 				}
 				AmpCategoryValueLocations ampRegion			= DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, 
 																CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
@@ -132,6 +135,21 @@ public class DynLocationSelected extends Action {
 			return mapping.findForward("forwardForOrg");
 		}else{
 			return mapping.findForward("forward");
+		}
+	}
+	
+	private void checkPercentLocations (Collection<Location> locs){
+		for (Iterator iterator = locs.iterator(); iterator.hasNext();) {
+			Location location = (Location) iterator.next();
+			if (locs.size()==1){
+				location.setPercent("100");
+				return;
+			} else {
+				if (location.getPercent().equals("100")){
+					location.setPercent("0");
+					return;
+				} 
+			}
 		}
 	}
 }

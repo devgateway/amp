@@ -535,7 +535,7 @@ public class ColumnReportData extends ReportData {
 	}
 
 	public String getAbsoluteReportName() {
-		return parent.getAbsoluteReportName()+"--"+ this.name;		
+		return parent.getAbsoluteReportName()+"--"+ this.getName();		
 	}
 
 	public int getLevelDepth() {

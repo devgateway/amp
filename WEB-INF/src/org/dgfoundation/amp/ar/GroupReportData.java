@@ -330,7 +330,7 @@ public class GroupReportData extends ReportData {
 	}
 
 	public String getAbsoluteReportName() {
-		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.name;
+		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.getName();
 		else return this.name;
 	}
 

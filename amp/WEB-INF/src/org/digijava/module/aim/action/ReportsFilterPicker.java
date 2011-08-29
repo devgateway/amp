@@ -167,8 +167,16 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
 		}
 		
+		AmpApplicationSettings tempSettings = getAppSetting(request);
+		if (tempSettings != null) {
+			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
+			String name = "- " + tempSettings.getCurrency().getCurrencyName();
+			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+		}
+		
 		Collection currency = CurrencyUtil.getAmpCurrency();
-	     //Only currencies havening exchanges rates AMP-2620
+	     //Only currencies having exchanges rates AMP-2620
 	      Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	      filterForm.setCurrencies(validcurrencies);
 	      for (Iterator iter = currency.iterator(); iter.hasNext();) {

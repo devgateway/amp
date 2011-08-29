@@ -161,7 +161,7 @@ public class ActivityUtil {
 			saveComments(a, session); 
 			
 //session.flush();
-			transaction.commit();
+//			transaction.commit();
 		
 			am.setObject(a);
 		} catch (Exception exception) {

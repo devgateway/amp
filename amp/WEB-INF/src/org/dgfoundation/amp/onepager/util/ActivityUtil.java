@@ -113,6 +113,7 @@ public class ActivityUtil {
 				session.save(tmpGroup);
 			}
 			
+			saveContacts(a, session);
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
@@ -153,7 +154,7 @@ public class ActivityUtil {
 			if (a.getActivityContacts() != null)
 				a.getActivityContacts().clear();
 				*/
-			saveContacts(a, session);
+		
 			saveResources(a); 
 			saveEditors(session); 
 			saveComments(a, session); 
@@ -470,8 +471,6 @@ public class ActivityUtil {
 		Set<AmpActivityContact> activityContacts=a.getActivityContacts();
 	      // if activity contains contact,which is not in contact list, we should remove it
 		Long oldActivityId = a.getAmpActivityId();
-		Set<AmpActivityContact> newActivityContacts=new HashSet<AmpActivityContact>();
-
 		if(oldActivityId != null&&!ActivityVersionUtil.isVersioningEnabled()){
 			 List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
 		      if(activityDbContacts!=null && activityDbContacts.size()>0){
@@ -515,17 +514,13 @@ public class ActivityUtil {
 	    			ampContact.setShared(true);
 	    			ampContact.setOfficeaddress(contact.getOfficeaddress());
 	    			ampContact.setFunction(contact.getFunction());
-
-
-	    			
-	    			//remove old properties
-	    			Set<AmpContactProperty> dbProperties=ampContact.getProperties();
-	    			if(dbProperties!=null){
-	    				for (AmpContactProperty dbProperty : dbProperties) {
-	    					session.delete(dbProperty);
-	    				}
+	    			if(ampContact.getProperties()!=null){
+	    				ampContact.getProperties().clear();
 	    			}
-	    			ampContact.setProperties(null);    			
+	    			if(ampContact.getOrganizationContacts()!=null){
+	    				ampContact.getOrganizationContacts().clear();
+	    			}
+	    			 			
 	    			//remove old organization contacts
 	    			Set<AmpOrganisationContact> dbOrgConts=ampContact.getOrganizationContacts();
 	    			if(dbOrgConts!=null){
@@ -533,11 +528,8 @@ public class ActivityUtil {
 	    					AmpOrganisation organization = orgCont.getOrganisation();
 							organization.getOrganizationContacts().remove(orgCont);
 							session.update(organization);
-							session.delete(orgCont);
 						}
 	    			}
-
-	    			ampContact.setOrganizationContacts(null);	    			
 	    			session.update(ampContact);    			    			
 	    		}else{
 	    			session.save(contact);
@@ -580,31 +572,15 @@ public class ActivityUtil {
 						newOrgCont.setContact(orgCont.getContact());
 						newOrgCont.setPrimaryContact(orgCont.getPrimaryContact());
 						organization.getOrganizationContacts().add(newOrgCont);
-						session.save(organization);
-						session.save(newOrgCont);
+						session.update(organization);
 					}
 	    		}
-	    		//is versioning activated?
-    			if (ActivityVersionUtil.isVersioningEnabled()){
-    				AmpActivityContact newActivityContact=new AmpActivityContact();
-    				newActivityContact.setActivity(a);
-    				newActivityContact.setContact(activityContact.getContact());
-    				newActivityContact.setContactType(activityContact.getContactType());
-    				newActivityContact.setPrimaryContact(activityContact.getPrimaryContact());
-    				newActivityContacts.add(newActivityContact);
-    			}
-    			else{
-    				session.saveOrUpdate(activityContact);
-    			}
+	    		
+    			session.saveOrUpdate(activityContact);
+    			
 	    	  }
 	      }
 	
-	      //add or edit activity contact and amp contact
-	      if(newActivityContacts!=null && newActivityContacts.size()>0){
-	    	  for (AmpActivityContact activityContact : newActivityContacts) {
-	    		  session.save(activityContact);
-	    	  }
-	      }
 	}
 
 }

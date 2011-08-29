@@ -332,7 +332,7 @@ body {
 							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
 					</div>
 					<div class="ft" align="right">
-						<button id="last_save_button" type="button" class="buton repbuton" style="color: lightgray" onclick="saveReportEngine.saveReport();" disabled="disabled">
+						<button id="last_save_button" type="button" class="buttonx_dis" onclick="saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
 						</button>
 						&nbsp;&nbsp;&nbsp;

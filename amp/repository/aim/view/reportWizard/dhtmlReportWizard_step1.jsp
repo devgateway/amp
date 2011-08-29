@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
@@ -12,8 +13,8 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
-
-						<div class="main_side_cont yui-tab-content" id="type_step_div" style="${topBottomPadding}">
+	<nested:root name="myForm">
+				<div class="main_side_cont yui-tab-content" id="type_step_div" style="${topBottomPadding}">
 							<c:set var="stepNum" value="0" scope="request" />
 							<div id="toolbarMarkerDiv"></div>
 							<jsp:include page="toolbar.jsp" />
@@ -37,27 +38,27 @@
 										<c:choose>
 										<c:when test="${param.type==null || param.type!=pledges_type_const}">								
 													<feature:display name="Donor Report" module="Report Types">                                      	
-				                                    	<html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
+				                                    	<nested:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
 				                                           	${donorFunding}
-														</html:radio>
+														</nested:radio>
 														<br />
 													</feature:display>
 				                                    <feature:display name="Regional Report" module="Report Types">										
-				                                    	<html:radio property="reportType" disabled="${disableFundingType}" value="regional"  onclick="repManager.checkSteps()">
+				                                    	<nested:radio property="reportType" disabled="${disableFundingType}" value="regional"  onclick="repManager.checkSteps()">
 				                                        	${regionalFunding}
-				                                      	</html:radio>
+				                                      	</nested:radio>
 				                                        <br />
 													</feature:display>
 				                                    <feature:display name="Component Report" module="Report Types">
-				                                       	<html:radio property="reportType" disabled="${disableFundingType}" value="component"  onclick="repManager.checkSteps()">
+				                                       	<nested:radio property="reportType" disabled="${disableFundingType}" value="component"  onclick="repManager.checkSteps()">
 					                                		${componentFunding}
-				                                        </html:radio>
+				                                        </nested:radio>
 				                                        <br />
 				                                   	</feature:display>
 				                                    <feature:display name="Contribution Report" module="Report Types">
-														<html:radio property="reportType" disabled="${disableFundingType}" value="contribution"  onclick="repManager.checkSteps()">
+														<nested:radio property="reportType" disabled="${disableFundingType}" value="contribution"  onclick="repManager.checkSteps()">
 				                                        	${activityContributions}
-				                                      	</html:radio>
+				                                      	</nested:radio>
 				                                        <br />   	
 				                                   	</feature:display>
 												</c:when>
@@ -65,9 +66,9 @@
                                               <c:set var="disablePledgeType">true</c:set>
                                               	<tr>
                                               		<td>
-                                                		<html:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
+                                                		<nested:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
                                                    			${PledgesFunding}
-                                                     	</html:radio>
+                                                     	</nested:radio>
                                                    </td>
                                                 </tr>
                                            </c:otherwise>
@@ -78,7 +79,7 @@
 									<td width="16">&nbsp;</td>
 									<td width="365" valign="top">
 										<fieldset class="main_side_cont">
-											<html:hidden property="reportDescription" />
+											<nested:hidden property="reportDescription" />
 											<legend><span class="legend_label">${descriptionName}</span></legend>
 											<textarea name="reportDescriptionClone"  rows="5" class="inputx" style="width:340px; height:90px;"></textarea>
 										</fieldset>
@@ -90,27 +91,28 @@
 									    	<fieldset class="main_side_cont">
 												<legend><span class="legend_label"><digi:trn>Totals Grouping</digi:trn></span></legend>
 												<div id="totalsGroupingDiv" class="inputx">
-													<html:checkbox property="hideActivities" value="true" onchange="createPreview();">
+													
+													<nested:checkbox property="hideActivities" value="true" onchange="createPreview();">
 														${summary}
-													</html:checkbox>
+													</nested:checkbox>
 													<br />
-													<html:radio property="reportPeriod" value="A" onchange="createPreview();">
+													<nested:radio property="reportPeriod" value="A" onchange="createPreview();">
 														<digi:trn key="aim:AnnualReport">Annual Report</digi:trn>
-													</html:radio>
+													</nested:radio>
 													<br />
 													<c:if test="${param.type==null || param.type!=pledges_type_const}">
-													<html:radio property="reportPeriod" value="Q" onchange="createPreview();">
+													<nested:radio property="reportPeriod" value="Q" onchange="createPreview();">
 														<digi:trn key="aim:QuarterlyReport">Quarterly Report</digi:trn>
-													</html:radio>
+													</nested:radio>
 													<br />
-													<html:radio property="reportPeriod" value="M" onchange="createPreview();">
+													<nested:radio property="reportPeriod" value="M" onchange="createPreview();">
 														<digi:trn key="aim:MonthlyReport">Monthly Report</digi:trn>
-													</html:radio>
+													</nested:radio>
 													</c:if>
 													<br />
-													<html:radio property="reportPeriod" value="N" onchange="createPreview();">
+													<nested:radio property="reportPeriod" value="N" onchange="createPreview();">
 														<digi:trn>Totals Only</digi:trn>
-													</html:radio>
+													</nested:radio>
 												</div>											
 											</fieldset>									
 										</td>
@@ -134,7 +136,7 @@
 												</c:choose>
 											</div>
 											<span id="spanUseFilters">
-												<html:checkbox property="useFilters" name="myForm" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" disabled="${spanUseFiltersDisabled}"/> 
+												<nested:checkbox property="useFilters" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" disabled="${spanUseFiltersDisabled}"/> 
 												<digi:trn key="rep:wizard:useAboveFilters">Use above filters</digi:trn>
 											</span>
 										</fieldset>
@@ -148,12 +150,12 @@
 												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">
 														<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-															<html:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn>
+															<nested:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn>
 															<br />
 				                                    	</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">
-			                                    		<html:checkbox property="allowEmptyFundingColumns"/>
+			                                    		<nested:checkbox property="allowEmptyFundingColumns"/>
 					                                    <digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
 			                                    		<br />
 			                                    	</c:if>
@@ -168,3 +170,4 @@
 						</c:if>
 							<br />
 						</div>
+	</nested:root>

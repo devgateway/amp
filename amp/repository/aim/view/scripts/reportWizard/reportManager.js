@@ -342,12 +342,16 @@ NormalReportManager.prototype.checkReportName	= function () {
 	strTitle		= strTitle.replace(/\s*/, "");
 	if ( strTitle == "" ) {
 		btn.disabled		= true;
-		btnY.setStyle("color", "lightgrey");
+		//btnY.setStyle("color", "lightgrey");
+		btnY.removeClass("buttonx");
+		btnY.addClass("buttonx_dis");
 		return false;
 	}
 	else {
 		btn.disabled		= false;
-		btnY.setStyle("color", "black");
+		//btnY.setStyle("color", "");
+		btnY.removeClass("buttonx_dis");
+		btnY.addClass("buttonx");
 		return true;
 	}
 }

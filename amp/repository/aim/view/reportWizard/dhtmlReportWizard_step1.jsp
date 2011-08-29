@@ -22,9 +22,9 @@
 						<c:if test="${myForm.onePager }">
 							<c:set var="tableVisibility">display: none;</c:set>
 							<fieldset style="background-color: #F6F6F6;">
-								<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>More Settings</digi:trn></legend>
+								<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>Select Report Type and Add Description</digi:trn></legend>
 								<div id="moreSettingsInfoDiv" onclick="toggleMoreSettings()" style="cursor: pointer;">
-									<digi:trn>Click 'More Settings' to expand</digi:trn>....
+									<digi:trn>Click 'Select Report Type and Add Description' to expand</digi:trn>....
 								</div>	
 						</c:if>
 							<table style="${tableVisibility}" width="100%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">

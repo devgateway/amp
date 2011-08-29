@@ -49,49 +49,49 @@
     <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;" border="1" bordercolor="#CCCCCC">
 			<tr>
-				<td width="120" style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap width="170" style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Country</digi:trn>
 				</td>
 				<td>&nbsp;<%=countryName%></td>
 			</tr>
 			<tr>
-				<td width="120" style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Region</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="regName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Sector</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="selSectorName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Year Range</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="startYear"/> - <bean:write name="gisRegReportForm" property="endYear"/></td>
 			</tr>
 			<tr>
-				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Commitments</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Disbursements</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
 					<digi:trn>Actual Expenditures</digi:trn>
 				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center">
+				<td nowrap colspan="2" align="center">
 					<font color="red">
 						<digi:trn>Note: all numbers are in</digi:trn> ${gisRegReportForm.selectedCurrency}
 					</font>

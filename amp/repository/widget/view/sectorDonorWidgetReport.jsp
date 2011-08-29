@@ -33,41 +33,40 @@
       </div>
 
 
-		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;background:#FFFFFF" border="1" bordercolor="#000000">
+		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;" border="1" bordercolor="#CCCCCC">
 			<tr>
-				<td width="120" class="tableHeader"><digi:trn>Sector</digi:trn></td>
+				<td nowrap width="170" style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Sector</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="sectorName"/></td>
 			</tr>
-			
-                        <tr>
-				<td class="tableHeader"><digi:trn>Donor</digi:trn></td>
+			<tr>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Donor</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="donorName"/></td>
 			</tr>
 			<tr>
-				<td class="tableHeader"><digi:trn>Year Range</digi:trn></td>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Year Range</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="startYear"/> - <bean:write name="sectorDonorWidgetReportForm" property="endYear"/></td>
 			</tr>
             <feature:display module="Funding" name="Commitments">
 			<tr>
-				<td class="tableHeader"><digi:trn>Actual Commitments</digi:trn></td>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Actual Commitments</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
             </feature:display>
             <feature:display module="Funding" name="Disbursement">
 			<tr>
-				<td class="tableHeader"><digi:trn>Actual Disbursements</digi:trn></td>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Actual Disbursements</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
             </feature:display>
             <feature:display module="Funding" name="Expenditures">
 			<tr>
-				<td class="tableHeader"><digi:trn>Actual Expenditures</digi:trn></td>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader"><digi:trn>Actual Expenditures</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
             </feature:display>
 			<tr>
                             <td colspan="2" align="center">
-                            	<font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in</digi:trn> ${sectorDonorWidgetReportForm.selectedCurrency}</font>
+                            	<font color="red"><digi:trn>Note: all numbers are in</digi:trn> ${sectorDonorWidgetReportForm.selectedCurrency}</font>
                             </td>
 			</tr>
 		</table>
@@ -89,14 +88,14 @@
 								<td colspan="3" class="gisContentTableMainHeader" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											<digi:trn>Overall information</digi:trn>
+											<b><digi:trn>Overall information</digi:trn></b>
 										</div>
 									</div>
 								</td>
 								<td colspan="3" class="gisContentTableMainHeader">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											<digi:trn>For selected sector/donor</digi:trn>
+											<b><digi:trn>For selected sector/donor</digi:trn></b>
 										</div>
 									</div>
 								</td>
@@ -163,9 +162,11 @@
 								<td width="30%" valign="top" style="overflow-x:hidden;">
                                     <div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<logic:present name="activitySectorDonorFunding" property="activity.name">
 											<a title="<bean:write name="activitySectorDonorFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activitySectorDonorFunding" property="activity.ampActivityId"/>);">
 												<bean:write name="activitySectorDonorFunding" property="activity.name"/>
 											</a>
+										</logic:present>
 										</div>
 									</div>
 								</td>

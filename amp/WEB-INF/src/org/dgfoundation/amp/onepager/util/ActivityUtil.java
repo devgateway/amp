@@ -160,7 +160,7 @@ public class ActivityUtil {
 			saveComments(a, session); 
 			
 			session.flush();
-			//transaction.commit();
+			transaction.commit();
 			am.setTransaction(session.beginTransaction());
 			am.resetSession();
 			am.setObject(a);

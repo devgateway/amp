@@ -51,12 +51,14 @@ public class EditorWrapperModel extends Model<String> {
 			}
 		}
 
-		if (ActivityVersionUtil.isVersioningEnabled()){
-			m.setObject(generateEditorKey(session, id));
-		}
-		
 		if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
 			Session.get().setMetaData(OnePagerConst.EDITOR_ITEMS, new HashMap());
+
+		if (ActivityVersionUtil.isVersioningEnabled()){
+			m.setObject(generateEditorKey(session, id));
+			setObject(getObject()); //seems pointless, but EDITOR_ITEMS have to be updated with the 
+									//value for the new editor key so that versioning works
+		}
 	}
 	
 	private String generateEditorKey(AmpAuthWebSession session, String id) {

@@ -120,7 +120,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	public Transaction getTransaction() {
 		if (transaction==null){
 			logger.error("Transaction was null!");
-//beginTransaction();
+			transaction = getSession().beginTransaction();
 		}
 		return transaction;
 	}

@@ -157,7 +157,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument" />
 		</set>
 
-		<set name="orgrole" cascade="all-delete-orphan">
+		<set name="orgrole" cascade="all-delete-orphan" inverse="true">
 			<key column="activity" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole" />
 		</set>

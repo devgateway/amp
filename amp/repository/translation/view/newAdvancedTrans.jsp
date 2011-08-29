@@ -62,15 +62,12 @@
 		width: 100%;
 	}
 	.searchResults{
-		width: 99%;
+		width: 70%;
 		float:left;
 	}
 	.changesPanel{
 		float:right;
-		width: 1%;
-	}
-	.changesContainer{
-		display: none;
+		width: 30%;
 	}
 	
 	.chgangesTable{
@@ -149,7 +146,7 @@
 						<div class="searchResulToolBar">
                                                     <input class="expandColapse" type="button" value="<digi:trn>Expand All</digi:trn>">
 							<div class="showhide" title="Show unsaved chnages">
-								&lt;&lt;
+								&gt;&gt;
 							</div>
 						</div>
 						<div class="searchResultsSeparator">
@@ -214,11 +211,13 @@
 						</c:forEach>
 					</c:if>
 				</div>
+				<c:if test="${!empty newAdvancedTrnForm.resultList}">
 				<div class="changesPanel">
 					<div class="changesContainer">
                                             <digi:trn>No Changes</digi:trn>
 					</div>
 				</div>
+				</c:if>
 			</div>
 		</div>
 		<div class="pagination">Pages:
@@ -286,10 +285,10 @@
 		);
 		$('.showhide').toggle( 
 				function(){
-					openChangesList(true);
+					openChangesList(false);
 				},
 				function(){
-					openChangesList(false);
+					openChangesList(true);
 				}
 		);
 

@@ -50,6 +50,7 @@ SaveReportEngine.prototype.showPanel		= function () {
 					underlay:"shadow", 
 					modal: true,
 					close:true, 
+					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					visible:false, 
 					draggable:true } );
 		this.panel.render(document.body);

@@ -12,6 +12,7 @@
 					modal: true,
 					close:true, 
 					visible:false, 
+					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					draggable:true} );
 					
 			YAHOO.amp.panels[counter].setHeader("Action Panel");

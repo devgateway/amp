@@ -24,6 +24,7 @@ ActionsMenu.prototype.render=function (){
 	this.overlay 	= new YAHOO.widget.Panel(this.nameprefix, { context:[this.objectId,"tl","bl"],
 		  visible:false,
 		  width:"150px",
+		  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		  close: false } );
 	
 	this.overlay.setHeader('<span>' + this.trnObj.addResource + '</span>');

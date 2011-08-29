@@ -169,7 +169,10 @@ FilterAsYouTypePanel.prototype.render	= function() {
 //		  visible:false,
 //		  width:"150px" } );
 	this.overlay 		= 
-		new YAHOO.widget.Panel("LabelPanel"+this.nameprefix, { width:"163px", visible:true, draggable:true, close:true, modal:false, 
+		new YAHOO.widget.Panel("LabelPanel"+this.nameprefix, { width:"163px", 
+			visible:true, draggable:true, close:true, 
+			modal:false,
+			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			context:[this.alignElId,"tl","bl"]} );
 	
 	this.overlay.setHeader(this.trnObj.labels);

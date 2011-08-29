@@ -177,7 +177,10 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
 		var divEl		= document.getElementById(divId);
 		
 		var panel 		= 
-			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", visible:true, draggable:true, close:true, modal:false, 
+			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", visible:true, 
+				draggable:true, close:true, 
+				modal:false,
+				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 				context:[buttonId,"tl","bl"]} );
 		panel.setHeader(this.trnObj.filters);
 		panel.setBody(divEl);

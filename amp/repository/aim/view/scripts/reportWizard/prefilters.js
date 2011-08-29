@@ -18,6 +18,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 		    close:true,
 		    visible:false,
 		    modal:true,
+		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
 	this.filterPanel.setHeader(filterPanelName);
 	this.filterPanel.setBody("");
@@ -31,6 +32,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	    close:true,
 	    visible:false,
 	    modal:true,
+	    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 	    draggable:true} );
 	
 	this.settingsPanel.setHeader(filterPanelName);

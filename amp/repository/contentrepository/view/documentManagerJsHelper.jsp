@@ -1318,7 +1318,10 @@ function showOrgsPanel(uuid) {
 	}
 	organisationPanel	= YAHOO.amp.orgPanels[uuid]; 
 	if (organisationPanel == null) {
-		organisationPanel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, draggable:true, close:true, modal:true } );
+		organisationPanel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, 
+			draggable:true, close:true,
+			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
+			modal:true } );
 		organisationPanel.setHeader('<digi:trn>Participating Organizations</digi:trn>');
 		organisationPanel.setBody("");
 		//panel.setFooter("End of Panel #2");
@@ -1365,7 +1368,11 @@ function addFromTemplate(ownType) {
 	}
 	templatesPanel	= YAHOO.amp.tempPanels[0]; 
 	if (templatesPanel == null) {
-		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true, draggable:true, close:true, modal:true,constraintoviewport: false } );
+		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true, 
+			draggable:true, close:true, 
+			modal:true,
+			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
+			constraintoviewport: false } );
 		templatesPanel.setHeader("<digi:trn>Create Document From Template</digi:trn>");
 		templatesPanel.setBody("");
 		templatesPanel.render(document.body);
@@ -1432,6 +1439,7 @@ function showActions(linkId, divId, category,timestamp){
 	if (actionPanel == null) {
 		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
 			  visible:false,
+			  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			  width:"150px" } );
 		var actionDivEl	= document.getElementById(divId);
 		actionDivEl.style.display	= "";

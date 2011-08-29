@@ -28,6 +28,8 @@
 <digi:form action="/reportsFilterPicker.do">
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
+<% System.out.println ( "FILTER TIMES 3: " + System.currentTimeMillis()); %>
+
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
@@ -179,3 +181,5 @@
 				</html:button> </div>
 
 </digi:form>
+
+<% System.out.println ( "FILTER TIMES 4: " + System.currentTimeMillis()); %>

@@ -223,6 +223,7 @@ saveReportEngine	= null;
 		    close:true,
 		    visible:false,
 		    modal:true,
+		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
 		
 		var myPanel2 = new YAHOO.widget.Panel("new2", {
@@ -232,6 +233,7 @@ saveReportEngine	= null;
 		    close:true,
 		    visible:false,
 		    modal:true,
+		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
 
 		var myPanel3 = new YAHOO.widget.Panel("new3", {
@@ -242,6 +244,7 @@ saveReportEngine	= null;
 		    close:true,
 		    visible:false,
 		    modal:true,
+		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
 		    
 		    var myPanel4 = new YAHOO.widget.Panel("new4", {
@@ -252,6 +255,7 @@ saveReportEngine	= null;
 		    close:true,
 		    visible:false,
 		    modal:true,
+		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
 
 		    var myPanel5 = new YAHOO.widget.Panel("new5", {
@@ -262,6 +266,7 @@ saveReportEngine	= null;
 			    close:true,
 			    visible:false,
 			    modal:true,
+			    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			    draggable:true} );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);

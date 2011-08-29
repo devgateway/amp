@@ -22,7 +22,7 @@
     	 
     	var offsetByServerSide = 44;
     	var xmlhttp; 
-
+	
     	if(window.ActiveXObject)
     		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
     	else
@@ -130,7 +130,10 @@ var myTabsObject;
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
 		var xPos = region.left;
 		var yPos = region.bottom;
-		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
+		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], 
+					width:"320px", height:"225px", visible:false,
+					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
+					constraintoviewport:true }  );
 		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);

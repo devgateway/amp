@@ -94,7 +94,7 @@ public class DynLocationManagerUtil {
 
 			if (loc != null)
 				dbSession.delete(loc);
-			dbSession.flush();
+//session.flush();
 			//tx.commit();
 		} catch (Exception e) {
 			tx.rollback();

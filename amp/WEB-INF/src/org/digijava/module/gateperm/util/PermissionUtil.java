@@ -33,7 +33,6 @@ import org.digijava.module.gateperm.core.PermissionMap;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * PermissionUtil.java TODO description here
@@ -127,7 +126,7 @@ public final class PermissionUtil {
 
 	    //delete the permission itself
 		hs.delete(p);
-		hs.beginTransaction().commit();
+		//hs.beginTransaction().commit();
 		
 		PersistenceManager.releaseSession(hs);
 		

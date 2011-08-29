@@ -72,7 +72,7 @@ public class SetAttributes extends Action {
 			if (shouldSaveObject) {
 				hbSession.save( docAttributes );
 			}
-			hbSession.flush();
+//session.flush();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class SetAttributes extends Action {
 			CrDocumentNodeAttributes docNodeAtt			= (CrDocumentNodeAttributes)query.uniqueResult();
 			if (docNodeAtt != null )
 				hbSession.delete(docNodeAtt);
-			hbSession.flush();
+//session.flush();
 						
 		} catch (Exception e) {
 			e.printStackTrace();

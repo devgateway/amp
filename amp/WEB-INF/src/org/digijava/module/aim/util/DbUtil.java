@@ -2904,7 +2904,7 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getRequestDBSession();
             sess.update(object);
-            sess.flush();
+//session.flush();
         } catch (Exception e) {
         	logger.error(e);
         } finally { 
@@ -3205,7 +3205,7 @@ public class DbUtil {
              }
        
             sess.saveOrUpdate(org);
-            sess.flush();
+//session.flush();
             //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
@@ -3230,7 +3230,7 @@ public class DbUtil {
 //beginTransaction();
             logger.debug("before delete");
             sess.delete(object);
-            //sess.flush();
+//session.flush();
             //tx.commit();
         } catch (Exception e) {
             if (e instanceof JDBCException)

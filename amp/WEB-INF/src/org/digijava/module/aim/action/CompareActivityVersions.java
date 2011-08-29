@@ -510,7 +510,7 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 
 			session.save(auxActivity);
-			session.flush();
+//session.flush();
 			//tx.commit();
 			logger.warn("Activity Saved.");
 		} catch (Exception e) {

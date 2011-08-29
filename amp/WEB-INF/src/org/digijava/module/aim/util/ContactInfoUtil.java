@@ -496,7 +496,7 @@ public class ContactInfoUtil {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
 			session.delete(orgContact);
-			session.flush();
+//session.flush();
 			//tx.commit();
 		}catch(Exception ex) {
 			if(tx!=null) {

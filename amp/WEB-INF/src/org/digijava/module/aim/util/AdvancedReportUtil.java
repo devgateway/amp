@@ -621,7 +621,7 @@ public final class AdvancedReportUtil {
 	            
 	            
 	            session.delete(ampReports);
-	            session.flush();
+//session.flush();
 	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
 	            //tx.commit();
 	            return true;

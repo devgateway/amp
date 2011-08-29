@@ -34,7 +34,7 @@ public class EntityHelper {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			session.save(report);
-			session.flush();
+//session.flush();
 		} catch (DgException e) {
 			logger.error(e);
 		}
@@ -50,7 +50,7 @@ public class EntityHelper {
 		try {
 			session = PersistenceManager.getSession();
 			session.update(report);
-			session.flush();
+//session.flush();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -88,7 +88,7 @@ public class EntityHelper {
 		try {
 			session = PersistenceManager.getSession();
 			session.delete(report);
-			session.flush();
+//session.flush();
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -121,7 +121,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					
 					ArrayList<AmpComments> listTmp = new ArrayList<AmpComments>();
 					try {
-			            Session session = AmpActivityModel.getSession();
+			            Session session = AmpActivityModel.getHibernateSession();
 			            String queryString = "select o from " + AmpComments.class.getName()
 			                + " o "
 			                + "where (o.ampFieldId=:fid) and (o.ampActivityId=:aid)";

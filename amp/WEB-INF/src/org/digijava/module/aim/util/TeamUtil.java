@@ -914,7 +914,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            //session.flush();
+//session.flush();
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
@@ -1044,7 +1044,7 @@ public class TeamUtil {
                     }
                 }
                 session.update(team);
-                session.flush();
+//session.flush();
             }
 
             //tx.commit();

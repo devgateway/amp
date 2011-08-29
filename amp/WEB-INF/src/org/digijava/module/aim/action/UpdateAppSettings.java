@@ -484,7 +484,7 @@ public class UpdateAppSettings extends Action {
 			}
 
 			//tx.commit();
-			session.flush();
+//session.flush();
 
 		} catch (Exception ex) {
 			logger.error("Unable to get fundingDetails :" + ex);

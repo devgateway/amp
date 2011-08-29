@@ -580,7 +580,7 @@ public class SectorUtil {
 			logger.error("Unable to get amp_sector info");
 			logger.debug("Exceptiion " + ex);
 		}
-		session.flush();
+//session.flush();
 		return ampSector;
 
 	}
@@ -1120,7 +1120,7 @@ public class SectorUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
 			col = qry.list();
-			session.flush();
+//session.flush();
 		}
 		catch(Exception ex)
 		{
@@ -1180,7 +1180,7 @@ public class SectorUtil {
 				qry = session.createQuery(queryString);
 				qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
 				col = qry.list();
-				session.flush();
+//session.flush();
 			}
 			catch(Exception ex)
 			{
@@ -1473,7 +1473,7 @@ public class SectorUtil {
            config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, classificationId);
            session.delete(config);
            //tx.commit();
-           session.flush();
+//session.flush();
        } catch (Exception e) {
     	   logger.error(e);
        }
@@ -1639,7 +1639,7 @@ public class SectorUtil {
         		   }
         		   session.update(ampThemeInd);
         		   //tx.commit();
-        		   session.flush();
+//session.flush();
         		   
 				
 			} catch (Exception e) {

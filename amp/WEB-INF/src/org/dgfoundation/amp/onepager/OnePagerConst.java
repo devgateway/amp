@@ -6,13 +6,18 @@ package org.dgfoundation.amp.onepager;
 
 import java.util.HashMap;
 import java.util.HashSet;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
+import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.helper.Constants;
+import org.hibernate.Session;
 
 /**
  * One Pager Constants
@@ -33,6 +38,19 @@ public final class OnePagerConst {
 
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
+	
+	
+	/**
+	 * {@linkplain http://community.jboss.org/wiki/OpenSessionInView}
+	 * manual session-per-conversation model
+	 * We do not use Wicket MetaDatKeyS because we want to store this in the big {@link HttpSession} 
+	 * Thus we can use a session listener to catch any {@link HttpSession#invalidate()} and close the Hibernate session too
+	 * @see AmpSessionListener
+	 */
+	public static final String ONE_PAGER_HIBERNATE_SESSION_KEY =  "onePagerHibernateSessionKey";
+
+	
+
 
 	/**
 	 * NOTICE: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function

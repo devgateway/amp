@@ -50,7 +50,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 		
 		Session session;
 		try {
-			session = AmpActivityModel.getSession();//PersistenceManager.getRequestDBSession();
+			session = AmpActivityModel.getHibernateSession();//PersistenceManager.getRequestDBSession();
 			String idProperty = session.getSessionFactory().getClassMetadata(clazz)
 						.getIdentifierPropertyName();
 			
@@ -81,7 +81,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 		
 		Session session;
 		try {
-			session = AmpActivityModel.getSession();//PersistenceManager.getRequestDBSession();
+			session = AmpActivityModel.getHibernateSession();//PersistenceManager.getRequestDBSession();
 			String idProperty = session.getSessionFactory()
 			.getClassMetadata(_clazz)
 			.getIdentifierPropertyName();
@@ -114,7 +114,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 			return null;
 		
 		try {
-			return (T) AmpActivityModel.getSession().load(_clazz, _id);//_myDao.getRequestDBSession().load(_clazz, _id);
+			return (T) AmpActivityModel.getHibernateSession().load(_clazz, _id);//_myDao.getRequestDBSession().load(_clazz, _id);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

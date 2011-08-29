@@ -1082,7 +1082,7 @@ public class DeprecatedAdvancedReport extends Action {
 							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
 //								logger.info ("Updating report.." );
 								pmsession.update( ampReports );
-								pmsession.flush();
+//session.flush();
 //								log the update action for a reportSaveReport
 								AuditLoggerUtil.logObject(httpSession,request,ampReports,"update");
 								

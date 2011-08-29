@@ -133,10 +133,10 @@ public class ShowMasterLayout
             catch (DgException ex) {
                 logger.warn("Error closing hibernate session", ex);
             }
-            String sessions = PersistenceManager.getFormattedThreadSessionData();
-            if (sessions != null) {
-                logger.warn("UNCLOSED SESSIONS for the request\n"+ sessions);
-            }
+            //String sessions = PersistenceManager.getFormattedThreadSessionData();
+//            if (sessions != null) {
+//                logger.warn("UNCLOSED SESSIONS for the request\n"+ sessions);
+//            }
         }
     }
 }

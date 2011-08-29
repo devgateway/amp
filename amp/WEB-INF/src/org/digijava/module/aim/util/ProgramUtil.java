@@ -1191,7 +1191,7 @@ public class ProgramUtil {
 				AmpTheme tempAmpTheme = null;
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
 				AmpThemeIndicators ampThemeInd = saveEditPrgInd(allPrgInd, tempAmpTheme);
-				session.flush();
+//session.flush();
 				saveEditPrgIndValues(allPrgInd.getThemeIndValues(),ampThemeInd);
 			}
 			catch(Exception ex)
@@ -1441,7 +1441,7 @@ public class ProgramUtil {
 				tempPrgInd.setNpIndicator(tempInd.isNpIndicator());
                 tempPrgInd.setThemes(tempInd.getThemes());
                 tempPrgInd.setSector(getSectorIndicator(indId)); 
-                session.flush();
+//session.flush();
 			}
 			catch(Exception e){
 				logger.error("Unable to get the specified Indicator");
@@ -1458,7 +1458,7 @@ public class ProgramUtil {
             try{
                 session = PersistenceManager.getRequestDBSession();
                 tempInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
-                session.flush();
+//session.flush();
             }
             catch(Exception e){
                 logger.error("Unable to get the specified Indicator");
@@ -1572,7 +1572,7 @@ public class ProgramUtil {
 //                    session.update(tempThemeInd);
 //                }
 //				//tx.commit();
-//				session.flush();
+//session.flush();
 //			}
 //			catch(Exception e1)
 //			{
@@ -1605,7 +1605,7 @@ public class ProgramUtil {
 					session.delete(ampThIndValue);
 				}
 				//tx.commit();
-				session.flush();
+//session.flush();
 			}
 			catch(Exception e1){
 				logger.error("The theme indicator values were not deleted");
@@ -1637,7 +1637,7 @@ public class ProgramUtil {
                     }
                 }
                 //tx.commit();
-                session.flush();
+//session.flush();
             }
             catch(Exception e1){
                 logger.error("The theme indicator values were not deleted");

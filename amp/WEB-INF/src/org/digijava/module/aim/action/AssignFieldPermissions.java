@@ -89,7 +89,7 @@ public class AssignFieldPermissions extends Action {
 //			    Object object = session.load(Permission.class, cp.getId());
 //			session.delete(object);
 //		    }
-//		    session.flush();
+//session.flush();
 		    }
 		}
 	
@@ -234,7 +234,7 @@ public class AssignFieldPermissions extends Action {
 		
 	    }
 	}
-	session.flush();
+//session.flush();
 
 	PersistenceManager.releaseSession(session);
 	

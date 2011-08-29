@@ -487,7 +487,7 @@ public class DbUtil {
 
             session.update(user);
 
-            session.flush();
+//session.flush();
             
             //tx.commit();
 
@@ -517,7 +517,7 @@ public class DbUtil {
         Transaction tx = null;
         Session session = null;
         try {
-            session = HibernateClassLoader.getSessionFactory().openSession();
+            session = PersistenceManager.getSession();
 //beginTransaction();
 
             // set encrypted password
@@ -540,7 +540,7 @@ public class DbUtil {
                 session.save(user.getUserLangPreferences());
             }
 
-            //tx.commit();
+            session.getTransaction().commit();
 
             // Is becoming a member of Member group of corresponding site
             if(user.getInterests() != null) {

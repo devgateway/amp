@@ -147,6 +147,7 @@ public class ConfigLoaderListener
             // patches translations to hash code keys if this is not already done. 
             HashKeyPatch.patchTranslationsIfNecessary();
             
+            PersistenceManager.getSession().getTransaction().commit();
         
         }
         catch (Exception ex) {
@@ -310,6 +311,7 @@ public class ConfigLoaderListener
             DigiCacheManager.shutdown();
             ServiceManager.getInstance().shutdown(0);
          
+            
      
         }
     }

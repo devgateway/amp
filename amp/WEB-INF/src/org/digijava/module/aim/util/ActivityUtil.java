@@ -1368,7 +1368,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	   }
        }
        
-       session.flush();
+//session.flush();
        if (alwaysRollback == false)
     	  //tx.commit(); // commit the transcation
 
@@ -1925,7 +1925,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		AmpActivityVersion result = null;
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
-			session.flush();
+//session.flush();
 			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 			session.evict(result);
 			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
@@ -3556,7 +3556,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       
 	  session.delete(ampAct);
       //tx.commit();
-      session.flush();
+//session.flush();
     }
     catch (Exception e1) {
       logger.error("Could not delete the activity with id : " + ampActId);
@@ -4784,7 +4784,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  			}
 		      	}
 		      //tx.commit();
-		      session.flush();
+//session.flush();
 		      
 		    }
 		    catch (Exception e1) {
@@ -4871,7 +4871,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
    		   session.delete(ampAct);
 		   //tx.commit();
-		   session.flush();
+//session.flush();
 		 }
 		    catch (Exception e1) {
 		      logger.error("Could not delete the activity with id : " + ampActId);
@@ -4918,7 +4918,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		    	  session.update(ampActivityVersion);
 		     
 		      //tx.commit();
-		      session.flush();
+//session.flush();
 		 }
 		
 		 catch (Exception e) {

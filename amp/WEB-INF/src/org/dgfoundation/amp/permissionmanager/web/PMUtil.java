@@ -131,7 +131,7 @@ public final class PMUtil {
 		
 		session.save(permissionMap);
 		
-		session.flush();
+//session.flush();
 		
 	}
 	public static void initializeAndSaveGatePermission(Session session, CompositePermission cp, AmpPMReadEditWrapper ampPMGateWrapper) throws HibernateException {
@@ -171,7 +171,7 @@ public final class PMUtil {
 		Object object = session.load(Permission.class, cp.getId());
 		session.delete(object);
 	    }
-	    session.flush();
+//session.flush();
 	}
 
 
@@ -179,7 +179,7 @@ public final class PMUtil {
 
 	public static void deleteCompositePermission(CompositePermission cp, Session session, boolean delCompositePermission) {
 		// TODO Auto-generated method stub
-		session.flush();	
+//session.flush();	
 		Iterator<Permission> i = cp.getPermissions().iterator();
 		while (i.hasNext()) {
 		    Permission element = (Permission) i.next();
@@ -189,7 +189,7 @@ public final class PMUtil {
 		if(delCompositePermission){
 			Object object = session.load(Permission.class, cp.getId());
 			session.delete(object);
-			session.flush();		
+//session.flush();		
 		}
 	}
 
@@ -234,10 +234,10 @@ public final class PMUtil {
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
 			}
 			session.save(cp);
-			//session.flush();
+//session.flush();
 			pm.setPermission(cp);	
 			session.save(pm);
-			//session.flush();
+//session.flush();
 		}
 	}
 	
@@ -259,7 +259,7 @@ public final class PMUtil {
 			for (AmpPMReadEditWrapper ampPMGateWrapper : workspacesSet)
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
 
-		session.flush(); 
+//session.flush(); 
 		return cp;
 	}
 	

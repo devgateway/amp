@@ -190,7 +190,7 @@ public class TabManagerAction extends Action {
 			e.printStackTrace();
 			//tr.rollback();
 		}
-		dbSession.flush();
+//session.flush();
 		
 		Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
 		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());

@@ -13,12 +13,17 @@
 			org.digijava.kernel.startup.ConfigLoaderListener
 		</listener-class>
 	</listener>
-
+	
+	
  	<filter>
         <filter-name>HibernateFilter</filter-name>
         <filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
     </filter>
-
+	
+	<listener>
+    	<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
+	</listener>
+ 	
     <filter-mapping>
         <filter-name>HibernateFilter</filter-name>
         <url-pattern>/*</url-pattern>

@@ -1988,7 +1988,7 @@ public class TeamMemberUtil {
 			report.getDesktopTabSelections().add(sel);
 			dbSession.save(sel);
 			tr.commit();
-			dbSession.flush();
+//session.flush();
 			
 		}
 		catch (Exception e) {
@@ -2017,7 +2017,7 @@ public class TeamMemberUtil {
 				}
 			}
 			tr.commit();
-			dbSession.flush();
+//session.flush();
 		}
 		catch (Exception e) {
 			logger.error("unable to save tab", e);

@@ -1090,7 +1090,6 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			session.beginTransaction().commit();
 			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
 			" f order by f.name asc";
 			qry = session.createQuery(qryStr);
@@ -1475,7 +1474,7 @@ public class FeaturesUtil {
 			hbsession.delete(ft);
 			
 			//tx.commit();
-			hbsession.flush();
+//session.flush();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ; " + ex.getMessage());
@@ -2050,7 +2049,7 @@ public class FeaturesUtil {
 			session = PersistenceManager.getSession();
 			if(session.isDirty()) {
 				//System.out.println("field:::: dirtyyyyyyyyyyyyyyyyyyyyyyy");
-				session.flush();
+//session.flush();
 			}
 //beginTransaction();
 			feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class,
@@ -2557,7 +2556,7 @@ public class FeaturesUtil {
 				}
 				session.delete(field);
 			}
-			session.flush();
+//session.flush();
 			//tx.commit();
 		}
 		catch (Exception ex) {
@@ -2599,7 +2598,7 @@ public class FeaturesUtil {
 			{
 				parent.getSubmodules().remove(module);
 				session.delete(module);
-				session.flush();
+//session.flush();
 			}
 			//tx.commit();
 		}
@@ -2631,7 +2630,7 @@ public class FeaturesUtil {
 //beginTransaction();
 			AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 			session.delete(module);
-			session.flush();
+//session.flush();
 			//tx.commit();
 		}
 		catch (Exception ex) {
@@ -2676,7 +2675,7 @@ public class FeaturesUtil {
 			}
 			session.delete(feature);
 
-			session.flush();
+//session.flush();
 			//tx.commit();
 		}
 		catch (Exception ex) {
@@ -2715,7 +2714,7 @@ public class FeaturesUtil {
 			}
 			session.delete(field);
 			//	 if(session.contains(field)) //System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());
-			session.flush();
+//session.flush();
 			//tx.commit();
 		}
 		catch (Exception ex) {

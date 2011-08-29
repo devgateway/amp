@@ -203,6 +203,8 @@ public class AMPStartupListener extends HttpServlet implements
 			logger.info("Checking if any MTEF columns need to be created...");
 			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 			
+			PersistenceManager.getSession().getTransaction().commit();
+			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);

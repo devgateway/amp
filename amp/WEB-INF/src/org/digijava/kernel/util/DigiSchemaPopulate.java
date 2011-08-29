@@ -252,7 +252,7 @@ class DigiInitUtil {
                 }
             }
             try {
-                session.flush();
+//session.flush();
                 PersistenceManager.releaseSession(session);
             }
             catch (Exception ex2) {

@@ -17,7 +17,7 @@ public class DocToOrgDAO {
 		try{
 			hbSession	= PersistenceManager.getRequestDBSession();
 			hbSession.saveOrUpdate(obj);
-			hbSession.flush();
+//session.flush();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

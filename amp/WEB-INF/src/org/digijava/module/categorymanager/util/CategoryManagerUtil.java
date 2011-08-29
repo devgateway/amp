@@ -767,7 +767,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				}
 				else
 					error							= "The value already exists";
-				dbSession.flush();
+//session.flush();
 				
 			}
 

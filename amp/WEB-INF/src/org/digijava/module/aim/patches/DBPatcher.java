@@ -124,7 +124,7 @@ public class DBPatcher {
 					 newTa.setTermsAssistCode("4");
 					 newTa.setTermsAssistName(newTypeOfAssistance);
 					 session.save(newTa);
-					 session.flush();
+//session.flush();
 				 }
 			 }*/
 			 
@@ -177,7 +177,7 @@ public class DBPatcher {
 					 }
 					 
 				 }
-				 session.flush();				 
+//session.flush();				 
 			 }
 			 			 
 			 qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
@@ -205,7 +205,7 @@ public class DBPatcher {
 					rr.setRatingName(RATING_VLOW_VALUE);
 				}
 				 session.update(rr);
-				 session.flush();
+//session.flush();
 				 
 			 }
 		} catch (Exception e) {

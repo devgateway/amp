@@ -530,7 +530,7 @@ public class DocumentManagerUtil {
 						obj.remove(session);
 					} 
 				}
-				session.flush();
+//session.flush();
 				
 		}
 	

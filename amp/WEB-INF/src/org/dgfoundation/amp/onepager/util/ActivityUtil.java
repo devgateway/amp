@@ -40,6 +40,8 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -59,8 +61,7 @@ public class ActivityUtil {
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft){
 		
-		Session session = AmpActivityModel.getSession();
-		Transaction transaction = am.getTransaction();
+		Session session = AmpActivityModel.getHibernateSession();	
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		try {
@@ -159,30 +160,16 @@ public class ActivityUtil {
 			saveEditors(session); 
 			saveComments(a, session); 
 			
-			session.flush();
+//session.flush();
 			transaction.commit();
-			am.setTransaction(session.beginTransaction());
-			am.resetSession();
+		
 			am.setObject(a);
 		} catch (Exception exception) {
-			logger.error("Error saving activity:", exception); // Log the exception
-			transaction.rollback();
-			if (exception instanceof SQLException) {
-			   while(exception != null) {
-			         // Get cause if present
-			         Throwable t = exception.getCause();
-			         while(t != null) {
-			               logger.info("Cause:" + t);
-			               t = t.getCause();
-			         }
-			         // procees to the next exception
-			         exception = ((SQLException) exception).getNextException();
-			         logger.error(exception);
-			   }
-			}
+			logger.error("Error saving activity:", exception); // Log the exception			
 			throw new RuntimeException("Can't save activity:", exception);
+
 		} finally {
-			AmpActivityModel.closeDBSession();
+			AmpActivityModel.endConversation();
 		}
 	}
 
@@ -197,11 +184,14 @@ public class ActivityUtil {
 			return new AmpActivityVersion();
 		}
 			
-		Session session = AmpActivityModel.getSession();//am.getSession();
+		Session session = am.getHibernateSession();//am.getSession();
 		
 		
-		am.setTransaction(session.beginTransaction());
+		//am.setTransaction(session.beginTransaction());
 		
+		/**
+		 * try to use optimistic locking
+		 */
 		AmpActivityVersion act = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 
 		//check the activity group for the last version of an activity

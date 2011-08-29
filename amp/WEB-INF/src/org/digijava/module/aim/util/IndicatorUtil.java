@@ -421,7 +421,7 @@ public class IndicatorUtil {
 //beginTransaction();
 			sessioin.save(connection);
 			//tx.commit();
-			sessioin.flush();
+//session.flush();
 			return connection;
 		} catch (HibernateException e) {
 			if (tx!=null){
@@ -446,7 +446,7 @@ public class IndicatorUtil {
 //beginTransaction();
 			sessioin.save(connection);
 			//tx.commit();
-			sessioin.flush();
+//session.flush();
 			return connection;
 		} catch (HibernateException e) {
 			if (tx!=null){
@@ -683,7 +683,7 @@ public class IndicatorUtil {
         //deleting AmpIndicatorValue        
          session.delete(ampIndValue);       
          //tx.commit();
-         session.flush();
+//session.flush();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1366,7 +1366,7 @@ public class IndicatorUtil {
 				tempPrgInd.setType("global");
 			}
 			
-			session.flush();
+//session.flush();
 		} catch (Exception e) {
 			logger.error("Unable to get the specified Indicator");
 			logger.debug("Exception : " + e);
@@ -1845,7 +1845,7 @@ public class IndicatorUtil {
 		 }
 			session.update(tempindInd);
 	 		//tx.commit();
-	 		session.flush();
+//session.flush();
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1886,7 +1886,7 @@ public class IndicatorUtil {
 //		 }
 			session.update(tempindInd);
 	 		//tx.commit();
-	 		session.flush();
+//session.flush();
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1903,7 +1903,7 @@ public class IndicatorUtil {
          try{
              session = PersistenceManager.getRequestDBSession();
              tempInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
-             session.flush();
+//session.flush();
          }
          catch(Exception e){
              logger.error("Unable to get the specified Indicator");

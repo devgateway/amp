@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.onepager;
 
 import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
@@ -17,9 +18,6 @@ import org.apache.wicket.extensions.yui.YuiLib;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
@@ -29,7 +27,6 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
-import org.hibernate.SessionFactory;
 import org.springframework.security.AuthenticationManager;
 import org.wicketstuff.jquery.JQueryBehavior;
 import org.wicketstuff.mergedresources.ResourceMount;
@@ -42,7 +39,6 @@ import org.wicketstuff.mergedresources.ResourceSpec;
 public class OnePagerApp extends AuthenticatedWebApplication {
 
 	private static Logger logger = Logger.getLogger(OnePagerApp.class);
-	public static SessionFactory sessionFactory;
 	
 	// To be injected by Spring
     private AuthenticationManager authenticationManager;
@@ -169,5 +165,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 public void setAuthenticationManager(AuthenticationManager authenticationManager) {
 		 this.authenticationManager = authenticationManager;
 	 }
+	 
+
+	
 
 }

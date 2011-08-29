@@ -31,7 +31,7 @@ public class StandaloneAMPStartup {
 		AmpActivity result = null;
 
 		try {
-			session.flush();
+//session.flush();
 			result = (AmpActivity) session.get(AmpActivity.class, id);
 			session.evict(result);
 			result = (AmpActivity) session.get(AmpActivity.class, id);

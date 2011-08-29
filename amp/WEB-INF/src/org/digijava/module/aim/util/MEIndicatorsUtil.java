@@ -1721,7 +1721,7 @@ public class MEIndicatorsUtil
 			tempMEInd.setCode(tempInd.getCode());
 			tempMEInd.setDefaultInd(tempInd.isDefaultInd());
 			tempMEInd.setAscendingInd(tempInd.isAscendingInd());
-			session.flush();
+//session.flush();
 		}
 		catch(Exception e)
 		{

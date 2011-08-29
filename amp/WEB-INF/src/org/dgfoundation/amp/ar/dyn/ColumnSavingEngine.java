@@ -130,7 +130,7 @@ public class ColumnSavingEngine {
 			
 			dbSession.save( this.newColumn );
 
-			dbSession.flush();
+//session.flush();
 			//tx.commit();
 		} catch (Exception e) {
 			tx.rollback();

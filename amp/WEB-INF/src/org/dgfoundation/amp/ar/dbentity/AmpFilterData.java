@@ -221,7 +221,7 @@ public class AmpFilterData implements Serializable {
 				}
 			}
 			
-			sess.flush();
+//session.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

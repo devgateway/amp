@@ -295,7 +295,7 @@
 	>
 ]>
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version">
+	<class name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version" optimistic-lock="all" dynamic-update="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
 			<generator class="native">

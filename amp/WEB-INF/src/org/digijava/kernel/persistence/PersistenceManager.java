@@ -22,11 +22,8 @@
 
 package org.digijava.kernel.persistence;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +33,6 @@ import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
@@ -49,7 +45,6 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.hibernate.EntityMode;
-import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -66,15 +61,16 @@ public class PersistenceManager {
 	private static Logger logger = I18NHelper.getKernelLogger(
 			PersistenceManager.class);
 
+
+	
 	public static String PRECACHE_REGION =
 		"org.digijava.kernel.persistence.PersistenceManager.precache_region";
 
-	private static ThreadLocal requestSession;
+
 	private static Map sessionInstMap;
 
-	static {
-		requestSession = new ThreadLocal();
-	}
+
+	
 
 	/**
 	 * initialize PersistenceManager
@@ -531,82 +527,82 @@ public class PersistenceManager {
 		return getRequestDBSession(true);
 	}
 
-	private static void registerSession(Session session, String sessionData) {
-		Map resMap = (Map) requestSession.get();
-		if (resMap == null) {
-			resMap = new HashMap();
-			requestSession.set(resMap);
-		}
+//	private static void registerSession(Session session, String sessionData) {
+//		Map resMap = (Map) requestSession.get();
+//		if (resMap == null) {
+//			resMap = new HashMap();
+//			requestSession.set(resMap);
+//		}
+//
+//		ArrayList regSessions =  (ArrayList)resMap.get("ThreadRegisteredSessions");
+//		if (regSessions == null) {
+//			regSessions = new ArrayList();
+//		}
+//
+//		HashMap oneSessionData = new HashMap();
+//		oneSessionData.put("session", session);
+//		oneSessionData.put("stackTrace", sessionData);
+//
+//		regSessions.add(oneSessionData);
+//
+//		resMap.put("ThreadRegisteredSessions", regSessions);
+//	}
 
-		ArrayList regSessions =  (ArrayList)resMap.get("ThreadRegisteredSessions");
-		if (regSessions == null) {
-			regSessions = new ArrayList();
-		}
+//	public static List getThreadSessionData() {
+//		Map resMap = (Map) requestSession.get();
+//
+//		if (resMap == null) {
+//			return null;
+//		}
+//		;
+//
+//		ArrayList regSessions = (ArrayList) resMap.get(
+//				"ThreadRegisteredSessions");
+//		if (regSessions == null) {
+//			return null;
+//		}
+//		else {
+//			return regSessions.size() == 0 ? null :
+//				new ArrayList(regSessions);
+//		}
+//	}
 
-		HashMap oneSessionData = new HashMap();
-		oneSessionData.put("session", session);
-		oneSessionData.put("stackTrace", sessionData);
-
-		regSessions.add(oneSessionData);
-
-		resMap.put("ThreadRegisteredSessions", regSessions);
-	}
-
-	public static List getThreadSessionData() {
-		Map resMap = (Map) requestSession.get();
-
-		if (resMap == null) {
-			return null;
-		}
-		;
-
-		ArrayList regSessions = (ArrayList) resMap.get(
-				"ThreadRegisteredSessions");
-		if (regSessions == null) {
-			return null;
-		}
-		else {
-			return regSessions.size() == 0 ? null :
-				new ArrayList(regSessions);
-		}
-	}
-
-	public static String getFormattedThreadSessionData() {
-		List sessionData = getThreadSessionData();
-		if (sessionData == null) {
-			return null;
-		}
-
-		StringBuffer sb = new StringBuffer(512);
-		boolean one = false;
-		sb.append("<thread-session-data>").append('\n');
-		Iterator iter = sessionData.iterator();
-		while (iter.hasNext()) {
-			HashMap item = (HashMap) iter.next();
-			Session session = (Session)item.get("session");
-			String stackTrace = (String)item.get("stackTrace");
-			//boolean isConnected = session.isConnected();
-			if (session.isOpen() || session.isConnected()) {
-				one = true;
-				sb.append("    ")
-				.append("<session isOpen=\"")
-				.append(session.isOpen())
-				.append("\" isConnected=\"")
-				.append(session.isConnected())
-				.append("\">")
-				.append('\n');
-				sb.append(stackTrace).append('\n');
-				sb.append("</session>").append('\n');
-			}
-		}
-
-		sb.append("</thread-session-data>");
-		if (one) {
-			return sb.toString();
-		} else {
-			return null;
-		}
-	}
+//	public static String getFormattedThreadSessionData() {
+//		List sessionData = getThreadSessionData();
+//		if (sessionData == null) {
+//			return null;
+//		}
+//
+//		StringBuffer sb = new StringBuffer(512);
+//		boolean one = false;
+//		sb.append("<thread-session-data>").append('\n');
+//		Iterator iter = sessionData.iterator();
+//		while (iter.hasNext()) {
+//			HashMap item = (HashMap) iter.next();
+//			Session session = (Session)item.get("session");
+//			String stackTrace = (String)item.get("stackTrace");
+//			//boolean isConnected = session.isConnected();
+//			if (session.isOpen() || session.isConnected()) {
+//				one = true;
+//				sb.append("    ")
+//				.append("<session isOpen=\"")
+//				.append(session.isOpen())
+//				.append("\" isConnected=\"")
+//				.append(session.isConnected())
+//				.append("\">")
+//				.append('\n');
+//				sb.append(stackTrace).append('\n');
+//				sb.append("</session>").append('\n');
+//			}
+//		}
+//
+//		sb.append("</thread-session-data>");
+//		if (one) {
+//			return sb.toString();
+//		} else {
+//			return null;
+//		}
+//	}
 
 	public static void rollbackCurrentSessionTx() {
 		try {

@@ -103,7 +103,7 @@ public class SourceSettingDAO {
 			Object obj		= this.hbSession.load(DESourceSetting.class, id);
 			this.hbSession.delete(obj);
 			//rx.commit();
-			hbSession.flush();
+//session.flush();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -118,7 +118,7 @@ public class SourceSettingDAO {
 //beginTransaction();
 			this.hbSession.saveOrUpdate(object);
 			//rx.commit();
-			hbSession.flush();
+//session.flush();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

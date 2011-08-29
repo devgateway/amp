@@ -421,7 +421,7 @@ public class CategoryManager extends Action {
 						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
 							iterCV.remove();
 							try{
-								dbSession.flush();
+//session.flush();
 								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
 																		ampCategoryValue.getValue()) )
 										throw new Exception("This value is in CategoryConstants.java and used by the system");
@@ -465,7 +465,7 @@ public class CategoryManager extends Action {
 						dbSession.saveOrUpdate( dbCategory );
 					}
 					else{
-						dbSession.flush();
+//session.flush();
 						//label category states updates
 						String queryString	= "delete from " + AmpLinkedCategoriesState.class.getName() + " s where s.mainCategory=:dbCategory";
 						dbSession.createQuery(queryString).setEntity("dbCategory", dbCategory).executeUpdate();

@@ -30,6 +30,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>useKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>keyWords</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

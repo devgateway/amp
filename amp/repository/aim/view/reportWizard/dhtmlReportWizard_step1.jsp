@@ -28,9 +28,9 @@
 									<digi:trn>Click 'Select Report Type and Add Description' to expand</digi:trn>....
 								</div>	
 						</c:if>
-							<table style="${tableVisibility}" width="100%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">
+							<table style="${tableVisibility}" width="99%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">
 								<tr>
-									<td width="365" valign="top">
+									<td width="48%" valign="top">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
 											<div id="reportGroupDiv" class="inputx">
@@ -76,8 +76,8 @@
                                          </div>
 										</fieldset>
 									</td>
-									<td width="16">&nbsp;</td>
-									<td width="365" valign="top">
+									<td width="2%">&nbsp;</td>
+									<td width="48%" valign="top">
 										<fieldset class="main_side_cont">
 											<nested:hidden property="reportDescription" />
 											<legend><span class="legend_label">${descriptionName}</span></legend>

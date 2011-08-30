@@ -33,14 +33,14 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				new PropertyModel<AmpCategoryValue>(model,
 						"financingInstrument"),
 				CategoryConstants.FINANCING_INSTRUMENT_NAME, true, false);
-		financingInstrument.getChoiceContainer().setRequired(true);
+		//financingInstrument.getChoiceContainer().setRequired(true);
 		add(financingInstrument);
 
 		AmpCategorySelectFieldPanel typeOfAssistance = new AmpCategorySelectFieldPanel(
 				"typeOfAssistance", CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "typeOfAssistance"),
 				CategoryConstants.TYPE_OF_ASSISTENCE_NAME, true, false);
-		typeOfAssistance.getChoiceContainer().setRequired(true);
+		//typeOfAssistance.getChoiceContainer().setRequired(true);
 		add(typeOfAssistance);
 
 		AmpCategorySelectFieldPanel modeOfPayment = new AmpCategorySelectFieldPanel(

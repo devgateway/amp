@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -18,6 +19,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -82,6 +85,24 @@ public class AmpDonorFundingFormSectionFeature extends
 					}
 				};
 				item.add(deleteLinkField);
+				AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
+					@Override
+					protected void onClick(AjaxRequestTarget target) {
+						AmpFunding funding = new AmpFunding();
+						funding.setAmpDonorOrgId(item.getModelObject().getAmpDonorOrgId());
+						funding.setAmpActivityId(am.getObject());
+
+						funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
+						funding.setFundingDetails(new HashSet<AmpFundingDetail>());
+
+						setModel.getObject().add(funding);
+						list.removeAll();
+						target.addComponent(AmpDonorFundingFormSectionFeature.this);
+						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+						
+					}
+				};
+				item.add(addNewFunding);
 			}
 		};
 

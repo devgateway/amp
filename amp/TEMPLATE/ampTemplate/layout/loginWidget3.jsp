@@ -215,7 +215,9 @@
 							</c:if>
 							<c:if test="${param['loginError'] == 'noTeamMember'}">
 								<c:set var="errorDisplayed">true</c:set>
-								<digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login into AMP because you are not assigned to a workspace</digi:trn>
+								<font color="red">
+									<digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login. Not assigned to any workspace</digi:trn>
+								</font>	
 							</c:if>
 							<c:if test="${param['loginError'] == 'invalidUser'}">
 								<c:set var="errorDisplayed">true</c:set>

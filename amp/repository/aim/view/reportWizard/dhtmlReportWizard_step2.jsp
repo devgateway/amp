@@ -19,7 +19,7 @@
 								<jsp:include page="toolbar.jsp" />
 							</c:if>
 							<br />
-							<table style="width: 100%;">
+							<table cellpadding="0" cellspacing="0" style="width: 980px;" border=0>
 								<tr>
 									<td width="48%" align="center">
 										<fieldset class="main_side_cont">

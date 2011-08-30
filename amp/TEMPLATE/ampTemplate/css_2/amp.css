@@ -662,7 +662,7 @@ html.ie ul.first-of-type {z-index:9999;border:1px solid blue;}
 html.ie ul.yui-nav{z-index:10;}
 html.ie div.header{z-index:9999;}
 .right_menu_cont ul{margin:0px;padding:0px;}
-.contentstyle {heihgt:637px;}
+.contentstyle {height:637px;}
 
 #previewHeaderSectionDiv {background-color:#F5F5F5; text-align:center; padding-top:5px; padding-bottom:5px; border-top:1px solid #E9E9E9; border-bottom:1px solid #E9E9E9; font-size:11px; font-weight:bold; color:#5C5C5C;}
 #previewHeaderSectionDiv span {font-size:11px; font-weight:bold; color:#5C5C5C; cursor: pointer;}

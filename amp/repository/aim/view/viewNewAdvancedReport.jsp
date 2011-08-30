@@ -22,6 +22,8 @@
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 
 <!-- Individual YUI JS files --> 
+
+
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
@@ -40,6 +42,26 @@
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
+<script type="text/javascript">
+var msgwait0="<digi:trn> Please wait...</digi:trn>";
+var msgwait1="<digi:trn> Loading Report </digi:trn>";
+var loadingreport = new YAHOO.widget.Panel("wait",   
+        { width:"240px",  
+          fixedcenter:true,  
+          close:false,  
+          draggable:false,  
+          zindex:99, 
+          modal:true, 
+          visible:false,
+          underlay:"shadow"
+        }  
+    ); 
+
+	loadingreport.setHeader(msgwait0); 
+	loadingreport.setBody("<div align='center'>"+msgwait1+"<br>"+ '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>"); 
+	loadingreport.render(document.body);
+	loadingreport.show();
+</script>
 
 		<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
@@ -65,6 +87,7 @@ function toggleSettings(){
 		displaySettingsButton.innerHTML = "${hideCurrSettings}";
 	}
 }
+
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
@@ -205,7 +228,7 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  	<%if (arf.isPublicView()==false){%>
            	  	|
-				<a  id="frezzlinkreport" class="settingsLinkDisable" style="color:#376091; cursor: default;">
+				<a  id="frezzlinkreport" class="settingsLinkDisable" style="color:#376091; cursor: default;" onclick="javascript:frezzreport()">
                		<script language="javascript">
 						document.write(msg1);
 					</script>
@@ -365,7 +388,7 @@ session.setAttribute("progressValue", counter);
 		           		<%}%>
 		           	  <logic:notEqual name="viewFormat" value="foldable">
 		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlinkreport" class="l_sm">
+		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" class="l_sm">
 		               		<script language="	">
 						document.write((scrolling)?msg2:msg1);
 					</script>
@@ -700,7 +723,9 @@ session.setAttribute("progressValue", counter);
 	</td>
 </tr>
 </table>
-
+<script language="JavaScript">
+	loadingreport.hide();
+</script>
 <%
 	session.setAttribute(" ", null);
 	session.setAttribute("progressValue", -1);

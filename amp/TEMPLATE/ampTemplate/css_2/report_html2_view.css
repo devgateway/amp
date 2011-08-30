@@ -76,3 +76,31 @@ table.html2ReportTable {
 	font-size:11px;
 }
 
+a.settingsLink:link, a.settingsLink, A.settingsLink:active, A.settingsLink:visited{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+}
+a.settingsLink:hover{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+}
+
+	
+a.settingsLinkDisable{
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;		  
+	font-weight:normal;
+	text-decoration:none;
+	color: #EEEEEE ;
+}
+
+a.nohoverlink{
+	text-decoration:none;
+}
+a.nohoverlink:hover{
+	background-color:transparent;
+}

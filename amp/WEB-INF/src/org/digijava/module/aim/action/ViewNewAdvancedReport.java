@@ -239,7 +239,7 @@ public class ViewNewAdvancedReport extends Action {
 			if ( filter.getSortBy() != null ) {
 				sortBy	= filter.getSortBy();
 				if ( filter.getSortByAsc() !=null  ){
-					sortByAsc		= filter.getSortByAsc().toString();
+					sortByAsc = filter.getSortByAsc().toString();
 				}
 			}
 		}

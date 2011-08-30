@@ -315,7 +315,6 @@ saveReportEngine	= null;
 		// ReportsFilterPickerForm.reset doesn't reset the currently applied filters
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?applyFormat=true";
-
 		filterForm.submit();
 	}
 	
@@ -711,72 +710,73 @@ function validateFormat(){
 	}
 	}
 		addOnloadEvent(enableLink);
-	
+		//-----------------------
+		function showScroll(){
+			var wait = new YAHOO.widget.Panel("wait",   
+		        { width:"240px",  
+		          fixedcenter:true,  
+		          close:false,  
+		          draggable:false,  
+		          zindex:99, 
+		          modal:true, 
+		          visible:false,
+		          underlay:"shadow"
+		        }  
+		    ); 
+
+			wait.setHeader(msg0); 
+			wait.setBody("<div align='center'>"+msg3+"</div>"); 
+			wait.render(document.body);
+			wait.show();
+			var winH;
+			
+			if (navigator.appName.indexOf("Microsoft")!=-1) {
+				winH = document.body.offsetHeight;
+			}else{
+				winH=window.innerHeight;
+			}
+			var call=function(){
+				var reporTable=new scrollableTable("reportTable",winH -320);
+				reporTable.debug=false;
+				reporTable.maxRowDepth=2;
+				reporTable.scroll();
+				wait.hide();		
+			}
+			
+				window.setTimeout(call,200);
+			}
+		
 	//----------------------------------------------------------------
-	var isscrolling;
-	$(function(){
-  		$('#frezzlinkreport').click(function(){
-  			if (isscrolling==false){
+	var isscrolling=false;
+	  	function frezzreport(){ 
+  	  		if (isscrolling==false){
   				if ( $('#frezzlinkreport').hasClass("settingsLinkDisable") )
   				$('#frezzlinkreport').removeClass("settingsLinkDisable");
   				$('#frezzlinkreport').addClass( "settingsLink" );
-  				$('#frezzlinkreport').bind("click", scrollCallback);
+  				//$('#frezzlinkreport').bind("click", showScrollReport);
   				$('#frezzlinkreport').css("cursor", "pointer");
   				canMakeScroll	= false;
-  				$('#frezzlinkreport').text(msg2);
+  				$('#frezzlinkreport').text('<digi:trn>Unfreeze Report Heading</digi:trn>');
   				isscrolling=true;
   				showScrollReport();
   			}else{
   				if ($('#frezzlinkreport').hasClass("settingsLinkDisable"))
   					$('#frezzlinkreport').removeClass("settingsLinkDisable");
-  					$('#frezzlinkreport').addClass( "settingsLink" );
-  					$('#frezzlinkreport').bind("click", submitSettings);
+  					//$('#frezzlinkreport').bind("click", submitSettings);
+					$('#frezzlinkreport').addClass( "settingsLink" );
   					$('#frezzlinkreport').css("cursor", "pointer");
-  					canMakeScroll	= true;
-  					$('#frezzlinkreport').text(msg1);
+  					canMakeScroll= true;
+  					$('#frezzlinkreport').text('<digi:trn>Freeze Report Heading</digi:trn>');
   					isscrolling=false;
+  					loadingreport.show();
+  					submitSettings();
+  					
   				}
-  			});
-	});
-	
-	//-----------------------
-	function showScroll(){
-		var wait = new YAHOO.widget.Panel("wait",   
-	        { width:"240px",  
-	          fixedcenter:true,  
-	          close:false,  
-	          draggable:false,  
-	          zindex:99, 
-	          modal:true, 
-	          visible:false,
-	          underlay:"shadow"
-	        }  
-	    ); 
-
-		wait.setHeader(msg0); 
-		wait.setBody("<div align='center'>"+msg3+"</div>"); 
-		wait.render(document.body);
-		wait.show();
-		var winH;
-		
-		if (navigator.appName.indexOf("Microsoft")!=-1) {
-			winH = document.body.offsetHeight;
-		}else{
-			winH=window.innerHeight;
-		}
-		var call=function(){
-			var reporTable=new scrollableTable("reportTable",winH -320);
-			reporTable.debug=false;
-			reporTable.maxRowDepth=2;
-			reporTable.scroll();
-			wait.hide();		
-		}
-		
-			window.setTimeout(call,200);
-		}
+  	  	}
 
 	//-----------------------
 	function showScrollReport(){
+
 		var wait = new YAHOO.widget.Panel("wait",   
 	        { width:"240px",  
 	          fixedcenter:true,  
@@ -790,7 +790,7 @@ function validateFormat(){
 	    ); 
 
 		wait.setHeader(msg0); 
-		wait.setBody("<div align='center'>"+msg3+"</div>"); 
+		wait.setBody("<div align='center'>"+msg3+"<br>"+'<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>"); 
 		wait.render(document.body);
 		wait.show();
 		var winH;
@@ -810,6 +810,8 @@ function validateFormat(){
 		
 			window.setTimeout(call,200);
 		}
+	
+	
 
 	function cleanformat() {
 		aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";

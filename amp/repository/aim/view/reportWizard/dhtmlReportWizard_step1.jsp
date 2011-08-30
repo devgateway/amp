@@ -22,6 +22,7 @@
 						<c:set var="tableVisibility"></c:set>
 						<c:if test="${myForm.onePager }">
 							<c:set var="tableVisibility">display: none;</c:set>
+							<div style="clear:both;">&nbsp;</div>
 							<fieldset style="background-color: #F6F6F6;">
 								<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>Select Report Type and Add Description</digi:trn></legend>
 								<div id="moreSettingsInfoDiv" onclick="toggleMoreSettings()" style="cursor: pointer;">

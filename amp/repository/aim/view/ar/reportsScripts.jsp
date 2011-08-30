@@ -756,7 +756,7 @@ function validateFormat(){
   				//$('#frezzlinkreport').bind("click", showScrollReport);
   				$('#frezzlinkreport').css("cursor", "pointer");
   				canMakeScroll	= false;
-  				$('#frezzlinkreport').text('<digi:trn>Unfreeze Report Heading</digi:trn>');
+  				$('#frezzlinkreport').text(msg2);
   				isscrolling=true;
   				showScrollReport();
   			}else{
@@ -766,7 +766,7 @@ function validateFormat(){
 					$('#frezzlinkreport').addClass( "settingsLink" );
   					$('#frezzlinkreport').css("cursor", "pointer");
   					canMakeScroll= true;
-  					$('#frezzlinkreport').text('<digi:trn>Freeze Report Heading</digi:trn>');
+  					$('#frezzlinkreport').text(msg1);
   					isscrolling=false;
   					loadingreport.show();
   					submitSettings();

@@ -20,7 +20,7 @@ import org.hibernate.StaleObjectStateException;
 
 /**
  * @author mihai
- * http://community.jboss.org/wiki/OpenSessionInView
+ * {@link http://community.jboss.org/wiki/OpenSessionInView}
  */
 public class HibernateSessionRequestFilter implements Filter {
 	private static Logger log = Logger.getLogger(AmpActivityModel.class);
@@ -46,17 +46,18 @@ public class HibernateSessionRequestFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-			SessionFactory sf = PersistenceManager.getSessionFactory();
 		try {
             log.debug("Starting a database transaction");
-            sf.getCurrentSession().beginTransaction();
+            PersistenceManager.getCurrentSession().beginTransaction();
  
             // Call the next filter (continue request processing)
             chain.doFilter(request, response);
  
             // Commit and cleanup
             log.debug("Committing the database transaction");
-            sf.getCurrentSession().getTransaction().commit();
+            PersistenceManager.getCurrentSession().getTransaction().commit();
+            
+            PersistenceManager.removeClosedSessionsFromTraceMap();
  
         } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");

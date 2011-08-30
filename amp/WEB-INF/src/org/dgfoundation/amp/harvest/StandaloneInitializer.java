@@ -27,21 +27,22 @@ import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 public class StandaloneInitializer {
 
 public static SessionFactory initialize() {
-	
-
-	ResourceStreamHandlerFactory.installIfNeeded();
-	try {
-		DigiConfigManager
-				.initialize("/home/dan/workspace/amp/repository");
-		PersistenceManager.initialize(false);
-	} catch (DgException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-		SessionFactory sessionFactory = PersistenceManager.getSessionFactory();
-		return sessionFactory;		
-			
+	return null;
+//	
+//
+//	ResourceStreamHandlerFactory.installIfNeeded();
+//	try {
+//		DigiConfigManager
+//				.initialize("/home/dan/workspace/amp/repository");
+//		PersistenceManager.initialize(false);
+//	} catch (DgException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//
+//		SessionFactory sessionFactory = PersistenceManager.getSessionFactory();
+//		return sessionFactory;		
+//			
 
 }	
 }

@@ -23,9 +23,9 @@
 package org.digijava.kernel.persistence;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -52,6 +52,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
 
 public class PersistenceManager {
@@ -67,9 +68,95 @@ public class PersistenceManager {
 		"org.digijava.kernel.persistence.PersistenceManager.precache_region";
 
 
-	private static Map sessionInstMap;
+	public static HashMap<Session,StackTraceElement[]> sessionStackTraceMap= new HashMap<Session,StackTraceElement[]>();
 
-
+	/**
+	 * Invoked at the end of each request. Iterates and removes Hibernate closed sessions from the trace map.
+	 * The {@link HashMap} is synchronized to prevent concurrency issues between HTTP threads 
+	 */
+	public static  void removeClosedSessionsFromTraceMap() {
+		  //remove closed sessions
+		synchronized (sessionStackTraceMap) {
+        Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+        while (iterator.hasNext()) {
+			Session session = (Session) iterator.next();
+			if(!session.isOpen()) iterator.remove();
+		}
+        }
+	}
+	
+	
+	/**
+	 * Opens a new Hibernate session. Use this with caucion. 
+	 * For servlets you will not require to use this, use {@link #getSession()} instead!
+	 * This method returns you an unmanaged Hibernate session, that you need to close yourself! 
+	 * @return
+	 */
+	public static Session openNewSession() {
+		 org.hibernate.classic.Session openSession = sf.openSession();
+		 addSessionToStackTraceMap(openSession);
+		 return openSession;
+	}
+	
+	/**
+	 * Gets the current thread session
+	 * @return
+	 */
+	public static Session getCurrentSession() {
+		return sf.getCurrentSession();
+	}
+	
+	/**
+	 * Returns the metadata for the given class from session factory
+	 * @param clazz
+	 * @return
+	 */
+	public static ClassMetadata getClassMetadata(Class<?> clazz) {
+		return sf.getClassMetadata(clazz);
+	}
+	
+	
+	/**
+	 * Gets a RAW jdbc connection to the database. Use with caution ! Close it yourself manually when done!
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Connection getJdbcConnection() throws SQLException {
+		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+		return sfi.getConnectionProvider().getConnection();
+	}
+	
+	/**
+	 * Shows the open remaining hibernate sessions upon AMP server shutdown. It displays the
+	 *  {@link Thread#currentThread#getStackTrace()} for the unclosed sessions.
+	 *  It will attempt to force {@link Session#clear()} and {@link Session#close()} on them
+	 *  This needs to be invoked (as Hibernate's APIs suggests) before {@link SessionFactory#close()} is invoked at the very end of AMP lifecycle
+	 */
+	public static void closeUnclosedSessionsFromTraceMap() {
+		// print open sessions
+		boolean found=false;		
+		Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+		while (iterator.hasNext()) {
+			Session session = (Session) iterator.next();
+			if(session.isOpen()) {
+				found=true;
+				StackTraceElement[] stackTraceElements = sessionStackTraceMap.get(session);
+				for (int i = 3; i < stackTraceElements.length && i < 8; i++) 
+					logger.error(stackTraceElements[i].toString());					
+				logger.info("Forcing Hibernate session close...");
+				try  {
+					session.clear();
+					session.close();
+					logger.info("Hibernate Session Close succeeded");
+				} catch (Throwable t) {
+					logger.info("Error while forcing Hibernate session close:");
+					logger.error(t);
+				}
+				logger.error("----------------------------------");
+			}
+		}	
+		if(found) logger.info("Check the code around the above stack traces, commit transactions only if not using HTTP threads:");
+	}
 	
 
 	/**
@@ -91,7 +178,6 @@ public class PersistenceManager {
 
 	public static synchronized void initialize(boolean precache, String target) {
 		
-		sessionInstMap = Collections.synchronizedMap(new HashMap());
 		DigiConfig config = null;
 		HashMap modulesConfig = null;
 		try {
@@ -137,6 +223,7 @@ public class PersistenceManager {
 			//String errKey = "PersistenceManager.intialize.error";
 			//logger.l7dlog(Level.FATAL, errKey, null, ex);
 			logger.fatal("Unable to initialize PersistenceManager", ex);
+			
 		}
 
 	}
@@ -390,15 +477,7 @@ public class PersistenceManager {
 			}
 		}
 
-		if (DigiConfigManager.getConfig().isTrackSessions()) {
-			Iterator iter = sessionInstMap.values().iterator();
-			while (iter.hasNext()) {
-				String item = (String) iter.next();
-				logger.warn("Unclosed connection's call stack\n" + item);
-				logger.warn(
-				"======================================================");
-			}
-		}
+
 	}
 
 	/**
@@ -647,10 +726,19 @@ public class PersistenceManager {
 //			logger.debug("Reusing old RequestDBSession");
 //		}
 
-		org.hibernate.classic.Session sess = PersistenceManager.getSessionFactory().getCurrentSession();
+		org.hibernate.classic.Session sess = PersistenceManager.sf.getCurrentSession();
 		if(sess.getTransaction()==null || !sess.getTransaction().isActive()) sess.beginTransaction();
+		addSessionToStackTraceMap(sess);
 		
 		return sess;
+	}
+	
+	/**
+	 * Adds this session to the stack trace map, so its closing can be tracked later
+	 * @param sess
+	 */
+	public static void addSessionToStackTraceMap(Session sess) {
+		if(sessionStackTraceMap.get(sess)==null) sessionStackTraceMap.put(sess,Thread.currentThread().getStackTrace());
 	}
 
 	/**
@@ -676,10 +764,6 @@ public class PersistenceManager {
 //			}
 //			resMap.remove(Constants.REQUEST_DB_SESSION);
 //		}
-	}
-
-	public static Map getUnclosedSessions() {
-		return new HashMap(sessionInstMap);
 	}
 
 	/**
@@ -716,10 +800,4 @@ public class PersistenceManager {
 
 	}
 
-	/**
-	 * @return Returns the SessionFactory
-	 */
-	public static synchronized final SessionFactory getSessionFactory() {
-		return sf;
-	}
 }

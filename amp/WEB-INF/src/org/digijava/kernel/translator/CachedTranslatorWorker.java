@@ -152,7 +152,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 				Message realMsg = (Message) ses.get(Message.class, message);
 				if(realMsg!=null) {
 					obj=realMsg;
-					Serializable identifier=PersistenceManager.getSessionFactory().getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
+					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
 					messageCache.put(identifier, realMsg);
 				}
 			} catch (HibernateException e) {

@@ -83,7 +83,7 @@ public class FreeBalanceHarvester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SessionFactory sf = StandaloneInitializer.initialize();
+		//SessionFactory sf = StandaloneInitializer.initialize();
 
 		Map regMap = DBUtil.getExternalMapping(AmpExternalMapping.SOURCE_FB,
 				AmpExternalMapping.REGION_ID, true);

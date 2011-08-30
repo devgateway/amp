@@ -153,10 +153,9 @@ public final class XmlPatcherUtil {
 	 * @return the connection object
 	 */
 	public static Connection getConnection() {
-		SessionFactoryImplementor sfi = (SessionFactoryImplementor) PersistenceManager
-				.getSessionFactory();
+	
 		try {
-			return sfi.getConnectionProvider().getConnection();
+			return PersistenceManager.getJdbcConnection();
 		} catch (SQLException e) {
 			logger.error(e);
 			throw new RuntimeException(e);

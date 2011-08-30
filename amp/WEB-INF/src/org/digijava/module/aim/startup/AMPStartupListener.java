@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -59,16 +60,24 @@ public class AMPStartupListener extends HttpServlet implements
 		SchedulerFactory factory = (SchedulerFactory) ampContext.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
 		try {
 			factory.getScheduler().shutdown();
-		} catch (SchedulerException e1) {
-			// TODO Auto-generated catch block
+		} catch (Throwable e1) {
 			e1.printStackTrace();
 		}
 		
 		//destroy jackrabbit
-		DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
-		TransientFileFactory.shutdown();
+		try {
+			DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
+			TransientFileFactory.shutdown();
+		} catch(Throwable t) {
+			t.printStackTrace();
+		}
 		
-
+		try {
+			PersistenceManager.closeUnclosedSessionsFromTraceMap();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		
 		logger.info("The AMP ServletContext has been terminated.");
 	}
 

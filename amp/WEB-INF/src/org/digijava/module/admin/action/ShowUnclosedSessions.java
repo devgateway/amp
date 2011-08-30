@@ -36,7 +36,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.UnclosedSessionsForm;
 import org.hibernate.Session;
-
+/**
+ * 
+ * @deprecated
+ *
+ */
 public class ShowUnclosedSessions
       extends Action {
 
@@ -60,7 +64,7 @@ public class ShowUnclosedSessions
 	    formBean.setShowAll(false);
 	}
 
-	Map unclosedSeesionsMap = PersistenceManager.getUnclosedSessions();
+	Map unclosedSeesionsMap = null; // PersistenceManager.getUnclosedSessions();
 	long totalCount = 0;
 	long totalClosed = 0;
 

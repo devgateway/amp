@@ -204,8 +204,7 @@ public class ConfigLoaderListener
      * @throws IncompatibleEnvironmentException
      */
 	private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
-    	SessionFactoryImplementor sfi=(SessionFactoryImplementor) PersistenceManager.getSessionFactory();
-		Connection connection = sfi.getConnectionProvider().getConnection();
+		Connection connection = PersistenceManager.getJdbcConnection();
 		DatabaseMetaData metaData = connection.getMetaData();
 		Properties compat=new Properties();
 		File compatFile=new File(propertiesFileName);

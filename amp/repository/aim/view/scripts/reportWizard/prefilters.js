@@ -11,7 +11,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 		this.resetString	= "";
 	
 	this.filterPanel = new YAHOO.widget.Panel("new", {
-			width:"750px",
+			width:"900px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

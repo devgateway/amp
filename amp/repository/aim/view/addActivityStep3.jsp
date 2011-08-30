@@ -523,7 +523,7 @@
                                                         <gateperm:putInScope key="currentOrg" name="fundingOrganization">
                                                         <tr>
                                                           <td>
-	                                                          	<table>
+	                                                          	<table width="100%">
 	                                                        	  <tr>
 		                                                          		<td>
 		                                                          			<field:display name="Organizations Selector" feature="Funding Information">
@@ -531,7 +531,7 @@
 					                                                          		<bean:write name="fundingOrganization" property="ampOrgId"/>
 					                                                        	</html:multibox>
 					                                                        </field:display>
-			                                                            	<bean:write name="fundingOrganization" property="orgName"/>
+			                                                            	<b><bean:write name="fundingOrganization" property="orgName"/></b>
 			                                                            	<br/>
 				                                                            <field:display name="Organizations Selector" feature="Funding Information">
 																				<aim:addOrganizationButton callBackFunction="doNothing();" aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations"  form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu"> <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
@@ -549,7 +549,7 @@
 		                                                            </field:display>
 		                                                            
 		                                                            <field:display name="Delegated Cooperation" feature="Funding Information">
-			                                                            <td valign="top">
+			                                                            <td valign="top" align="right">
 				                          									<digi:trn key="aim:DelegatedCooperation">Delegated Cooperation</digi:trn><html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
 										   									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
 			                                                            </td>
@@ -1016,14 +1016,14 @@
 																				<td>
 																					<field:display name="Add Donor Organization" feature="Funding Information">
 																				   		
-																					<aim:addOrganizationButton  callBackFunction="doNothing();" delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																					<aim:addOrganizationButton  callBackFunction="doNothing();" delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu-special"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													
 																					
 																					</field:display>
 																				</td>
 																				<td>
 																					<field:display name="Remove Donor Organization" feature="Funding Information">
-																					   <html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrganisations()">
+																					   <html:button  styleClass="dr-menu-special" property="submitButton" onclick="return removeSelOrganisations()">
 																							<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>
 																					   </html:button>
 																					</field:display>

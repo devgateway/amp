@@ -43,7 +43,8 @@
         visible:false,
         modal:true,
         draggable:true,
-        context: ["showbtn", "tl", "bl"]
+        context: ["showbtn", "tl", "bl"],
+        effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5}
     });
     var panelStart=0;
     var checkAndClose=false;

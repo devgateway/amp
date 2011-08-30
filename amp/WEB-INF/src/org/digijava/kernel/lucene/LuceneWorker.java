@@ -24,6 +24,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
@@ -519,7 +520,8 @@ public class LuceneWorker {
 			Analyzer analyzer = module.getAnalyzer();
 			IndexSearcher searcher = new IndexSearcher(dir);
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(searchFieldNames, analyzer);
-			Query query = queryParser.parse(searchText);
+			String escapedSearchText = QueryParser.escape(searchText);
+			Query query = queryParser.parse(escapedSearchText);
 			hits = searcher.search(query);
 		} catch (IOException e1) {
 			throw new DgException("Cannot search index",e1);

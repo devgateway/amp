@@ -10,7 +10,7 @@
 </c:if>
 	
 <div>
-	<div style="float:left;">
+	<div style="float:left; margin-top:10px;">
 		<c:if test="${!myForm.onePager}">
 			<button type="button" class="${className}" ${disabledString} onclick="repManager.previousStep(${stepNum + 1});" id="step${stepNum}_prev_button"/>
 				<digi:trn key='btn:previous'>Previous</digi:trn>
@@ -20,24 +20,24 @@
 			</button>
 		</c:if>
 	</div>
-	<div style="float:right; z-index: 3000;" id="toolbarDivStep${stepNum}">
+	<div style="float:right; z-index: 3000; margin-top:10px; margin-right:10px;" id="toolbarDivStep${stepNum}">
 		<feature:display  name="Filter Button" module="Report and Tab Options">
-			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" onclick="repFilters.showFilters()"/>
+			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" style="margin-right:8px;" onclick="repFilters.showFilters()"/>
 				<digi:trn key="btn:repFilters">Filters</digi:trn>
 			</button>
 		</feature:display>
 		<feature:display  name="Report Settings Button" module="Report and Tab Options">
-			<button type="button" value="Settings" class="buttonx" id="step${stepNum}_add_settings_button" onclick="repFilters.showSettings()"/>
+			<button style="margin-right:8px;" type="button" value="Settings" class="buttonx" id="step${stepNum}_add_settings_button" onclick="repFilters.showSettings()"/>
 				<digi:trn key="btn:repFilters">Settings</digi:trn>
 			</button>
 		</feature:display>
-		<button type="button" name="save" disabled="disabled" onclick="saveReportEngine.decideToShowTitlePanel()" class="buttonx_dis"/>
+		<button style="margin-right:8px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.decideToShowTitlePanel()" class="buttonx_dis"/>
 			<digi:trn key="rep:wizard:Save">Save</digi:trn>
 		</button>
-		<button type="button" name="save" disabled="disabled" onclick="saveReportEngine.showTitlePanel()" class="buttonx_dis"/>
+		<button style="margin-right:8px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.showTitlePanel()" class="buttonx_dis"/>
 			<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
 		</button>
-		<button type="button" value="Cancel" class="buttonx" id="step${stepNum}_cancel" onclick="repManager.cancelWizard();"/>
+		<button style="margin-right:8px;" type="button" value="Cancel" class="buttonx" id="step${stepNum}_cancel" onclick="repManager.cancelWizard();"/>
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
 	</div>

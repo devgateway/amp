@@ -68,6 +68,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
+import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -206,6 +207,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 	
 	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
+		StopWatch.next("Filters", true);
 		String ampReportId 	= request.getParameter("ampReportId");
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//ServletContext ampContext = getServlet().getServletContext();
@@ -400,7 +402,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		filterForm.setFinancingLocationElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
-		
+		StopWatch.next("Filters", true, "BEFORE CATEGORY VALUES");
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> finInstrValues	=
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, true, request);	
@@ -452,6 +454,33 @@ public class ReportsFilterPicker extends MultiAction {
 							rootProjCategory, "selectedProjectCategory");
 			filterForm.getFinancingLocationElements().add(projCategoryElement);
 		}
+		
+		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
+		if (true) { //Here needs to be a check to see if the field/feature is enabled
+			Collection<AmpCategoryValue> activityStatusValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true, request);	
+			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
+			rootActivityStatus.setLabel("All");
+			rootActivityStatus.setUniqueId("0");
+			rootActivityStatus.setChildren( activityStatusValues );
+			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
+					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
+							rootActivityStatus, "selectedStatuses");
+			filterForm.getOtherCriteriaElements().add(activityStatusElement);
+		}
+		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
+			Collection<AmpCategoryValue> projectImplementingUnits	=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true, request);
+			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
+			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
+			rootProjectImplementingUnit.setUniqueId("0");
+			rootProjectImplementingUnit.setChildren(projectImplementingUnits);
+			GroupingElement<HierarchyListableImplementation> projectImplUnitElement	=new GroupingElement<HierarchyListableImplementation>("Project Implementing Unit", "filter_project_impl_unit_div", 
+					rootProjectImplementingUnit, "selectedProjectImplUnit");
+			filterForm.getOtherCriteriaElements().add(projectImplUnitElement);
+			
+		}
+		StopWatch.next("Filters", true, "AFTER CATEGORY VALUES");
+		
 		if (FeaturesUtil.isVisibleFeature("Disbursement Orders", ampContext)) { 
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
@@ -514,20 +543,6 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		
-		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
-		
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> activityStatusValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true, request);	
-			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
-			rootActivityStatus.setLabel("All");
-			rootActivityStatus.setUniqueId("0");
-			rootActivityStatus.setChildren( activityStatusValues );
-			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
-					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
-							rootActivityStatus, "selectedStatuses");
-			filterForm.getOtherCriteriaElements().add(activityStatusElement);
-		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			if(teamMember!=null){
 				Collection<HierarchyListableImplementation> children	= 
@@ -621,17 +636,7 @@ public class ReportsFilterPicker extends MultiAction {
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
-		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
-			Collection<AmpCategoryValue> projectImplementingUnits	=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true, request);
-			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
-			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
-			rootProjectImplementingUnit.setUniqueId("0");
-			rootProjectImplementingUnit.setChildren(projectImplementingUnits);
-			GroupingElement<HierarchyListableImplementation> projectImplUnitElement	=new GroupingElement<HierarchyListableImplementation>("Project Implementing Unit", "filter_project_impl_unit_div", 
-					rootProjectImplementingUnit, "selectedProjectImplUnit");
-			filterForm.getOtherCriteriaElements().add(projectImplUnitElement);
-			
-		}
+		
 
 		/**
 		 * This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
@@ -778,8 +783,8 @@ public class ReportsFilterPicker extends MultiAction {
 
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
-
 		
+		StopWatch.next("Filters", true);
 	}
 	
 

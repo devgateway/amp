@@ -535,21 +535,17 @@ public final class AdvancedReportUtil {
 	 */
 	public static boolean deleteReportsCompletely(Long qid) {
 	    Session session = null;
-	    Transaction tx = null;
 	    String queryString = null;
 	    Query qry = null;
 	    try {
 	        session = PersistenceManager.getRequestDBSession();
-	        session.setFlushMode(FlushMode.MANUAL);
-//beginTransaction();	        
 	        AmpReports ampReports = null;
 	        // loading the 3 tables from where the deletion has to be done
 	        try {
 	            logger.info(" this is the utils's qid " + qid);
 	            ampReports = (AmpReports) session.load(AmpReports.class, qid);
 	            AmpTeamReports ampTeamReports = null;
-	            queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
-	                "where tr.report=:qid ";
+	            queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " + "where tr.report=:qid ";
 	            qry = session.createQuery(queryString);
 	            qry.setParameter("qid", qid, Hibernate.LONG);
 	            List lst	= qry.list();
@@ -560,25 +556,8 @@ public final class AdvancedReportUtil {
 	                ampTeamReports.setReport(null);
 	                session.delete(ampTeamReports);
 	            }
-	            // Remove reference from AmpTeamPageFilters
-//	            if(ampReports.getAmpPage()!=null){
-//		            queryString = "select tpf from " + AmpTeamPageFilters.class.getName()
-//		                + " tpf" + " where (tpf.page=:pageId)";
-//		            qry = session.createQuery(queryString);
-//		            qry.setLong("pageId", ampReports.getAmpPage().getAmpPageId());
-//		            itr = qry.list().iterator();
-//		            while(itr.hasNext()) {
-//		                AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
-//		                session.delete(tpf);
-//		            }
-//	            }
-//	
-//	            if(ampReports.getAmpPage()!=null){
-//	            	AmpPages ampPage = ampReports.getAmpPage();
-//	            	session.delete(ampPage);
-//	            }
 	            
-	            /**
+	           /**
 	             * Removing link between reports and AmpTeamMember entity
 	             */
 	            if ( ampReports.getMembers() != null ) {
@@ -603,47 +582,15 @@ public final class AdvancedReportUtil {
 	            	adts.setReport(null);
 				}
 	            ampReports.getDesktopTabSelections().clear();
-	            
-	            //queryString = "select adt from " + AmpDesktopTabSelection.class.getName() + " adt " +
-                //"where adt.report=:qid ";
-	            //qry = session.createQuery(queryString);
-	            //qry.setParameter("qid", qid, Hibernate.LONG);
-	            //List list	= qry.list();
-	            //Iterator iter = list.iterator();
-	            //AmpDesktopTabSelection adts = null;
-	            //while (iter.hasNext()) {
-	            //	adts = (AmpDesktopTabSelection) iter.next();
-	            //	adts.setReport(null);
-	            //	adts.setOwner(null);
-	            //    session.delete(adts);
-	            //};
-	                       
-	            
-	            
 	            session.delete(ampReports);
-//session.flush();
-	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
-	            //tx.commit();
+
+	            //logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
 	            return true;
 	        } catch (org.hibernate.ObjectNotFoundException onfe) {
 	            logger.error("Exception from deleteQuestion() :", onfe);
-	            if (tx != null) {
-	                try {
-	                    tx.rollback();
-	                } catch (Exception trbf) {
-	                    logger.error("Transaction roll back failed ", trbf);
-	                }
-	            }
 	        }
 	    } catch (Exception e) {
 	        logger.error("Exception from deleteQuestion() :", e);
-	        if (tx != null) {
-	            try {
-	                tx.rollback();
-	            } catch (Exception trbf) {
-	                logger.error("Transaction roll back failed ", e);
-	            }
-	        }
 	    }
 	    return false;
 	}

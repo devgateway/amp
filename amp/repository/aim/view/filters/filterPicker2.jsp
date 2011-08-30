@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.util.time.StopWatch"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -28,7 +29,9 @@
 <digi:form action="/reportsFilterPicker.do">
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
-<% System.out.println ( "FILTER TIMES 3: " + System.currentTimeMillis()); %>
+<% 
+StopWatch.next("Filters", true);
+%>
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
@@ -182,4 +185,6 @@
 
 </digi:form>
 
-<% System.out.println ( "FILTER TIMES 4: " + System.currentTimeMillis()); %>
+<% 
+StopWatch.next("Filters", true);
+%>

@@ -388,8 +388,14 @@ public class AddressBookActions extends DispatchAction {
             Long[] ids = myForm.getSelOrgs();
             if (ids != null) {
                 for (Long id : ids) {
-                    AmpOrganisation organization = DbUtil.getOrganisation(id);
-                    myForm.getOrganizations().remove(organization);                	
+                	for (Iterator<AmpOrganisation> it =  myForm.getOrganizations().iterator(); it.hasNext();) {
+                		AmpOrganisation organization = (AmpOrganisation) it.next();
+                		if(organization.getAmpOrgId().equals(id)){
+                			it.remove();
+                		}
+                	}
+//                    AmpOrganisation organization = DbUtil.getOrganisation(id);
+//                    myForm.getOrganizations().remove(organization);                	
                 }
             }
            return null;
@@ -494,7 +500,7 @@ public class AddressBookActions extends DispatchAction {
         			}
         			org.getOrganizationContacts().remove(ampOrganisationContact);
         			DbUtil.update(org);
-					ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+					//ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
 					
 					cont.getOrganizationContacts().remove(ampOrganisationContact);
 				}

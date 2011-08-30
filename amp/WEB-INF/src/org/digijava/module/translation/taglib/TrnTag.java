@@ -79,6 +79,8 @@ public class TrnTag
     private String siteId = null;
     private String locale = null;
     private String keyWords = null;
+    private boolean useKey = false;
+
 
     private String[] args;
 
@@ -95,6 +97,14 @@ public class TrnTag
         args = new String[NUMBER_OF_PARAMETERS];
         linkAlwaysVisible = new Boolean(false);
         max = 0;
+    }
+
+    public boolean isUseKey() {
+        return useKey;
+    }
+
+    public void setUseKey(boolean useKey) {
+        this.useKey = useKey;
     }
 
     /**
@@ -350,7 +360,15 @@ public class TrnTag
 
     private void translate(String key, Site site, String langCode, int trnType, String keyWords) throws WorkerException {
         HashSet<String> checked = new HashSet<String>();
-        String genKey = getGeneratedKey();
+        String genKey = null;
+
+        if (isUseKey()) {
+            genKey = getKey();
+        } else {
+            genKey = getGeneratedKey();
+        }
+
+
         String value = TranslatorWorker.getInstance(genKey).
             translateFromTree(genKey, site.getId().longValue(),langCode, null, trnType,keyWords);
         if (value != null) {
@@ -592,10 +610,22 @@ public class TrnTag
         if (siteId != null) {
             siteParam = "&siteId=" + siteId;
         }
-        return "<a href=\"" + getHref() +
+
+        String retVal = null;
+
+        if(isUseKey()) {
+            retVal = "<a href=\"" + getHref() +
+            "/translation/showTranslate.do?key=" + getKey() + siteParam +
+            "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
+            suffix + "&gt;</a>";
+        } else {
+            retVal = "<a href=\"" + getHref() +
             "/translation/showTranslate.do?key=" + getGeneratedKey() + siteParam +
             "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
             suffix + "&gt;</a>";
+        }
+
+        return retVal;
 
     }
 

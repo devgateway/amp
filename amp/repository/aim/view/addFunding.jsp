@@ -733,7 +733,7 @@
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Commitment" feature="Commitments">
 								<td align="center" valign="middle">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn></font></b>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount Commitment" feature="Commitments">
@@ -754,7 +754,7 @@
 								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" >
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
 								<field:display name="Related Pledge" feature="Commitments">
@@ -778,13 +778,13 @@
 													<c:set var="index" value="${index+1}"/>
 													<c:if test="${aimEditActivityForm.identification.statusId==1}">
 														<html:select name="fundingDetail" indexed="true" property="adjustmentType"  disabled="${contentDisabled}" styleClass="inp-text">
-															<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+															<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 														</html:select>
 	                                                </c:if>	
 												<c:if test="${aimEditActivityForm.identification.statusId!=1}">
 													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
 														<html:option value="<%=new Integer(Constants.ACTUAL).toString()%>"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 														<field:display name="Pipeline" feature="Commitments">
 															<html:option value="<%=new Integer(Constants.ADJUSTMENT_TYPE_PIPELINE).toString()%>"><digi:trn>Pipeline</digi:trn></html:option>
 														</field:display>
@@ -952,7 +952,7 @@
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
 								<td align="center" valign="middle" >
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
@@ -1163,7 +1163,7 @@
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 								<td align="center" valign="middle" style="width: 9%;">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
                                 </field:display>
 								<field:display name="Amount Disbursement" feature="Disbursement">
@@ -1188,7 +1188,7 @@
 								<td align="center" valign="middle" >
 								<a title="<digi:trn key="aim:DateofDisbursement">Date of actual international transfer of financial resources</digi:trn>">
 								<b><font color="white">
-                                  <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
+                                  <digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
                                 </field:display>
                                   <feature:display module="Funding" name="Disbursement Orders">
@@ -1232,7 +1232,7 @@
 											<c:if test="${aimEditActivityForm.identification.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+													<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
@@ -1407,7 +1407,7 @@
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" >
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount Expenditure" feature="Expenditures">
@@ -1434,7 +1434,7 @@
 								<field:display name="Date Expenditure" feature="Expenditures">
 								<td align="center" valign="middle">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
+									<b><font color="white"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
 								<field:display name="Remove Expenditure Link" feature="Expenditures">
@@ -1461,7 +1461,7 @@
 											<c:if test="${aimEditActivityForm.identification.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+													<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 											</c:if>
 											<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>

@@ -19,8 +19,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -28,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.AmpComboboxDisplayable;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -77,10 +80,31 @@ public class AmpSectorsFormTableFeature extends
 
 		add(percentageValidationField);
 
-		AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
+		final AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
 				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator");
 
 		add(minSizeCollectionValidationField);
+		
+
+		final AmpUniqueCollectionValidatorField<AmpActivitySector> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivitySector>(
+				"uniqueSectorsValidator", listModel, "uniqueSectorsValidator") {
+			@Override
+		 	public Object getIdentifier(AmpActivitySector t) {
+				return t.getSectorId().getName();
+		 	}	
+		};
+
+		add(uniqueCollectionValidationField);
+		
+		final AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
+				"treeSectorsValidator", listModel, "treeSectorsValidator") {
+					@Override
+					public AmpComboboxDisplayable getItem(AmpActivitySector t) {
+						return t.getSectorId();
+					}			
+		};
+
+		add(treeCollectionValidationField);
 
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 
@@ -106,6 +130,10 @@ public class AmpSectorsFormTableFeature extends
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(listParent);
 						list.removeAll();
+						percentageValidationField.reloadValidationField(target);
+						uniqueCollectionValidationField.reloadValidationField(target);
+						minSizeCollectionValidationField.reloadValidationField(target);		
+						treeCollectionValidationField.reloadValidationField(target);
 					}
 				};
 				item.add(delSector);
@@ -134,7 +162,10 @@ public class AmpSectorsFormTableFeature extends
 				setModel.getObject().add(activitySector);
 				list.removeAll();
 				target.addComponent(list.getParent());
-				target.addComponent(percentageValidationField);
+				percentageValidationField.reloadValidationField(target);
+				uniqueCollectionValidationField.reloadValidationField(target);
+				minSizeCollectionValidationField.reloadValidationField(target);
+				treeCollectionValidationField.reloadValidationField(target);
 			}
 
 			@Override

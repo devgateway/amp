@@ -753,7 +753,7 @@ function removeGuest(obj) {
 										    
 			                    			<html:text name="calendarEventForm" styleId="titleMax" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
 			                    			<br /><br />
-			                    			<digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b>Calendar type</b></div></digi:trn>
+			                    			<digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b><digi:trn>Calendar type</digi:trn></b></div></digi:trn>
 			                    			<html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
@@ -1007,7 +1007,7 @@ function removeGuest(obj) {
 			                    		<td width="2%">&nbsp;</td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
 			                    			<td colspan="4" valign="top" width=48%>
-			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>	
+                                                                <digi:trn key="cal:organizations"><b><digi:trn>Organizations</digi:trn></b></digi:trn>	
 											<br />
 											<div style="margin-top:7px;"><html:select multiple="multiple" property="selOrganizations" size="4" style="width: 300px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
@@ -1106,7 +1106,7 @@ function removeGuest(obj) {
 	</div>
 	<br />
 				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
-	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
+	<b><digi:trn>Additional Receivers</digi:trn>: </b><digi:trn>Type first letter of contact to view suggestions or enter e-mail to send message to</digi:trn><br />
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">

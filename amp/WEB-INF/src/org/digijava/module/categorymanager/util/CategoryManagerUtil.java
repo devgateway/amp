@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
@@ -687,6 +688,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
 				Query query			= dbSession.createQuery(queryString);
 				query.setParameter("key", key, Hibernate.STRING);
+				query.setCacheable(true);
 				 col		= query.list();
 
 		} catch (Exception ex) {
@@ -929,10 +931,18 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			if ( request == null )
 				return catValue1.getValue().compareTo( catValue2.getValue() );
 			
-			String transValue1		= catValue1!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue1, request):"";
-			String transValue2		= catValue2!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue2, request):"";
+//			String transValue1		= catValue1!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue1, request):"";
+//			String transValue2		= catValue2!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue2, request):"";
+			try{
+				String transValue1		= catValue1!=null?TranslatorWorker.translateText(catValue1.getValue(), request):"";
+				String transValue2		= catValue2!=null?TranslatorWorker.translateText(catValue2.getValue(), request):"";
+				return transValue1.compareTo( transValue2 );
+			}
+			catch ( WorkerException we) {
+				we.printStackTrace();
+				return 0;
+			}
 			
-			return transValue1.compareTo( transValue2 );
 
 		}
 		public boolean equals(AmpCategoryValue value1, AmpCategoryValue value2) {

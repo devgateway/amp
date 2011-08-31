@@ -30,6 +30,8 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
     private Set indicators;
     private Set<AmpSector> sectors;
     
+    private boolean translateable	= true;
+    
     public Set<AmpSector> getSectors() {
 		return sectors;
 	}
@@ -271,6 +273,16 @@ public void setAmpOrgId(AmpOrganisation org) {
 			transientChildren	= new TreeSet( new HierarchyListableComparator() );
 		return transientChildren;
 	}
+	@Override
+	public boolean getTranslateable() {
+		return this.translateable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable	= translateable;
+		
+	}	
 
 	@Override
 	public AmpComboboxDisplayable getParent() {
@@ -291,5 +303,6 @@ public void setAmpOrgId(AmpOrganisation org) {
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
-	}	
+	}
+
 }

@@ -58,6 +58,8 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 
     private Boolean showInRMFilters;
 
+    private boolean translateable	= true;
+    
     public Boolean getShowInRMFilters() {
         return showInRMFilters;
     }
@@ -412,6 +414,17 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		@Override
 		public String getUniqueId() {
 			return this.ampThemeId + "";
+		}
+		
+
+		@Override
+		public boolean getTranslateable() {
+			return translateable;
+		}
+
+		@Override
+		public void setTranslateable(boolean translateable) {
+			this.translateable = translateable;
 		}
 
 		@Override

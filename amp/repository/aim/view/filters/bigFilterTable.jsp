@@ -76,7 +76,7 @@
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span>
-									<jsp:include page="hierarchyLister.jsp" />
+									<%@include file="hierarchyLister.jsp" %>
 								</li>
 							</ul>
 						</div>

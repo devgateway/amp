@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,6 +63,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -207,6 +209,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 	
 	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
+		StopWatch.reset("Filters");
 		StopWatch.next("Filters", true);
 		String ampReportId 	= request.getParameter("ampReportId");
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
@@ -220,7 +223,6 @@ public class ReportsFilterPicker extends MultiAction {
 		// create filter dropdowns
 		
 	      
-		
 		/**
  	 	* For filterPicker ver2
  	 	*/
@@ -228,8 +230,11 @@ public class ReportsFilterPicker extends MultiAction {
 		
  	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
         List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
- 	 	
- 	 	
+ 	 	HierarchyListableUtil.changeTranslateable(ampSectors, false);
+ 	 	HierarchyListableUtil.changeTranslateable(secondaryAmpSectors, false);
+ 	 	HierarchyListableUtil.changeTranslateable(tertiaryAmpSectors, false);
+        
+        
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
@@ -261,12 +266,17 @@ public class ReportsFilterPicker extends MultiAction {
  	 	}
  	 		
  	 	
- 	 	
+        StopWatch.next("Filters", true, "before programs");
+        Collection<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
+        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
+        
 		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
 		List<AmpTheme> primaryPrograms;		
 		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
-			primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+			//primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+			primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
+			HierarchyListableUtil.changeTranslateable(primaryProg, false);
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 			filterForm.getProgramElements().add(primaryProgElement);
 		} /*else {
@@ -287,7 +297,9 @@ public class ReportsFilterPicker extends MultiAction {
  	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
  	 	List<AmpTheme> secondaryPrograms;		
 		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
-			secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+			//secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+			secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
+			HierarchyListableUtil.changeTranslateable(secondaryProg, false);
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 			filterForm.getProgramElements().add(secondaryProgElement);
 		}/* else {
@@ -314,7 +326,9 @@ public class ReportsFilterPicker extends MultiAction {
  	 	
 		List<AmpTheme> nationalPlanningObjectives;
  	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
- 	 		AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy()); 	 	 	
+ 	 		//AmpTheme nationalPlanningProg	= ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+ 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
+ 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
  	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
  	 	 	filterForm.getProgramElements().add(natPlanProgElement);
 		}/* else {
@@ -324,9 +338,13 @@ public class ReportsFilterPicker extends MultiAction {
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
 			}
 		}*/
- 	 	
+ 	 	StopWatch.next("Filters", true, "After Programs");
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
+ 	 	
+ 	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
+ 	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);
+ 	 	
  	 	filterForm.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
  	 	HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation();
@@ -344,6 +362,7 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.getDonorElements().add(donorGroupElement);
  	 	
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);
+ 	 	HierarchyListableUtil.changeTranslateable(donors, false);
  	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
  	 	rootDonors.setLabel("All Donors");
  	 	rootDonors.setUniqueId("0");
@@ -355,6 +374,7 @@ public class ReportsFilterPicker extends MultiAction {
  	 	
  	 	if (FeaturesUtil.isVisibleFeature("Executing Agency", ampContext) ) {
  	 		Collection<AmpOrganisation> execAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_EXECUTING_AGENCY));
+ 	 		HierarchyListableUtil.changeTranslateable(execAgencies, false);
  	 		HierarchyListableImplementation rootExecAgencies = new HierarchyListableImplementation();
  	 		rootExecAgencies.setLabel("All Executing Agencies");
  	 		rootExecAgencies.setUniqueId("0");
@@ -365,6 +385,7 @@ public class ReportsFilterPicker extends MultiAction {
 
  	 	if (FeaturesUtil.isVisibleFeature("Implementing Agency", ampContext) ) {
 			Collection<AmpOrganisation> implemAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+			HierarchyListableUtil.changeTranslateable(implemAgencies, false);
 			HierarchyListableImplementation rootImplemAgencies	= new HierarchyListableImplementation();
 			rootImplemAgencies.setLabel("All Implementing Agencies");
 			rootImplemAgencies.setUniqueId("0");
@@ -377,6 +398,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		if (FeaturesUtil.isVisibleFeature("Responsible Organization", ampContext) ) {
 			Collection<AmpOrganisation> respAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_RESPONSIBLE_ORG));
+			HierarchyListableUtil.changeTranslateable(respAgencies, false);
 			HierarchyListableImplementation rootRespAgencies	= new HierarchyListableImplementation();
 			rootRespAgencies.setLabel("All Responsible Agencies");
 			rootRespAgencies.setUniqueId("0");
@@ -389,6 +411,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		if (FeaturesUtil.isVisibleFeature("Beneficiary Agency", ampContext) ) {
 			Collection<AmpOrganisation> benAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
+			HierarchyListableUtil.changeTranslateable(benAgencies, false);
 			HierarchyListableImplementation rootBenAgencies	= new HierarchyListableImplementation();
 			rootBenAgencies.setLabel("All Beneficiary Agencies");
 			rootBenAgencies.setUniqueId("0");
@@ -523,6 +546,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		if (true) { 
 			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+			HierarchyListableUtil.changeTranslateable(regions, false);
 			
 			Iterator<AmpCategoryValueLocations> it = regions.iterator();
 			while (it.hasNext()) {

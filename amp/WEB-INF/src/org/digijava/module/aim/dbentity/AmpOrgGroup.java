@@ -20,6 +20,10 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	
 	private AmpOrgType orgType;	// a mandatory field, added for donor-access
 	
+	
+	private boolean translateable	= true;
+	
+	
 	/**
 	 * @return Returns the ampOrgGrpId.
 	 */
@@ -112,4 +116,13 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	public String getUniqueId() {
 		return this.ampOrgGrpId+"";
 	}
+	@Override
+	public boolean getTranslateable() {
+		return translateable;
+	}
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable = translateable;
+	}
+	
 }

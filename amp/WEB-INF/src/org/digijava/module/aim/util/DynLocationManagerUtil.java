@@ -2,6 +2,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +13,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.ecs.vxml.Catch;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
@@ -26,8 +26,8 @@ import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -36,6 +36,9 @@ import org.hibernate.Transaction;
 public class DynLocationManagerUtil {
 	private static Logger logger = Logger
 			.getLogger(DynLocationManagerUtil.class);
+	
+	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = Collections.synchronizedList(
+	 			new ArrayList<AmpCategoryValueLocations>()   ); 
 
 	public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(
 			AmpCategoryClass implLoc, DynLocationManagerForm myForm,
@@ -587,6 +590,7 @@ public class DynLocationManagerUtil {
 				queryString += " AND (loc.parentCategoryValue=:cvId) ";
 			}
 			Query qry = dbSession.createQuery(queryString);
+			qry.setCacheable(true);
 			if (cvLocationLayer != null) {
 				qry.setLong("cvId", cvLocationLayer.getId());
 			}
@@ -755,10 +759,23 @@ public class DynLocationManagerUtil {
 	}
 	
 	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws Exception  {
- 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
- 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
- 	 	country = getLocationOpenedSession( country.getId() );
- 	 	return country.getChildLocations();
+		
+		List<AmpCategoryValueLocations> ret	= null;
+		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
+			if ( DynLocationManagerUtil.regionsOfDefaultCountry.size() == 0 ) {
+		 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
+		 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+		 	 	country = getLocationOpenedSession( country.getId() );
+		 	 	
+		 	 	Set<AmpCategoryValueLocations> children				= country.getChildLocations();
+		 	 	
+		 	 	DynLocationManagerUtil.regionsOfDefaultCountry.addAll(children);
+			}
+	 	 	
+ 	 		ret	= new ArrayList<AmpCategoryValueLocations>( DynLocationManagerUtil.regionsOfDefaultCountry.size() );
+ 	 		ret.addAll(DynLocationManagerUtil.regionsOfDefaultCountry);
+		}
+ 	 	return ret;
  	 }
 	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()

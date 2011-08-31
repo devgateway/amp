@@ -96,6 +96,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private Set<AmpDepartments> departments;
     private Set<AmpBudgetSector> budgetsectors;
     private String  lineMinRegNumber;
+    
+    private boolean translateable	= true;
 
     public String getLineMinRegNumber() {
         return lineMinRegNumber;
@@ -684,6 +686,18 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	@Override
 	public String getUniqueId() {
 		return this.ampOrgId + "";
+	}
+
+	@Override
+	public boolean getTranslateable() {
+		
+		return this.translateable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable	= translateable;
+		
 	}
 	
 	

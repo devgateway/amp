@@ -50,7 +50,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="donorsTab_search" />
-				<jsp:include page="bigFilterTable.jsp"/>
+				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
 		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
@@ -58,7 +58,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
-				<jsp:include page="bigFilterTable.jsp"/>
+				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
 		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
@@ -66,7 +66,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="sectorsTab_search" />
-				<jsp:include page="bigFilterTable.jsp"/>
+				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
 		<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
@@ -74,7 +74,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
-				<jsp:include page="bigFilterTable.jsp"/>
+				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
 		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
@@ -84,7 +84,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="80px" />
 				<div style="width: 76%; height: 100%; padding: 0px; float: left;">
-					<jsp:include page="bigFilterTable.jsp"/>
+					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<div style="width:24%; margin-left: 76% ;font-size: 11px; height: 100%; ">
 					<field:display name="Joint Criteria" feature="Budget">
@@ -108,7 +108,7 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="otherCriteriaTab_search" />
 				<div class="otherCriteriaBigTable">
-					<jsp:include page="bigFilterTable.jsp"/>
+					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
 				<div style="width: 15%; height: 30%; padding: 10px; float: left; ">

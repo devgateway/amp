@@ -28,6 +28,8 @@ public class AmpCategoryValueLocations implements Identifiable,
 	private String geoCode;
 	private String code;
 	private String iso3;
+	
+	private boolean translateable	= true;
 
 	public String getCode() {
 		return code;
@@ -169,6 +171,16 @@ public class AmpCategoryValueLocations implements Identifiable,
 	@Override
 	public String getUniqueId() {
 		return this.id + "";
+	}
+	
+	@Override
+	public boolean getTranslateable() {
+		return translateable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable = translateable;
 	}
 
 	@Override

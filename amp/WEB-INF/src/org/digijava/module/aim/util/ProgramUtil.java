@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -2100,6 +2101,20 @@ public class ProgramUtil {
         	 return null;
 		}
 	}
+    
+    public static HashMap<Long, AmpTheme> prepareStructure(Collection<AmpTheme> col) {
+    	HashMap<Long, AmpTheme> ret		= new HashMap<Long, AmpTheme>();
+    	if ( col != null && col.size() > 0 ) {
+    		for (AmpTheme prog : col) {
+				AmpTheme parent	= prog.getParentThemeId();
+				if ( parent != null)
+					parent.getChildren().add(prog);
+				ret.put(prog.getAmpThemeId(), prog);
+			}
+    	}
+    	
+    	return ret;
+    }
     
     /**
      * 

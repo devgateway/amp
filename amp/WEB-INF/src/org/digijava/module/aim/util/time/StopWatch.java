@@ -25,7 +25,8 @@ public class StopWatch {
 			watch.next();
 		
 		if ( logDifference ) {
-			String info	= "Stopwatch " + watchName + " at iteration " + watch.getIteration() + " has time: " + watch.difference();
+			String info	= "Stopwatch " + watchName + " at iteration " + watch.getIteration() + " with total time " + watch.totalDifference() 
+						+ " has time: " + watch.difference();
 			if ( marker != null && marker.length() != 0) {
 				info += "( " + marker + " )";
 			}
@@ -60,6 +61,9 @@ public class StopWatch {
 	
 	public long difference () {
 		return this.lastTime - this.prevTime;
+	}
+	public long totalDifference () {
+		return this.lastTime - this.startTime;
 	}
 
 	private int getIteration() {

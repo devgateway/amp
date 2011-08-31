@@ -11,6 +11,8 @@ import java.util.Collection;
 public interface HierarchyListable {
 	public String getLabel();
 	public String getUniqueId();
+	public boolean getTranslateable();
+	public void setTranslateable(boolean translateable);
 	public Collection<? extends HierarchyListable> getChildren();
 	/**
 	 * 

@@ -34,7 +34,12 @@
 						<td valign="top"><input onclick="toggleCheckChildren(this);buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
 						<td>
 							<span style="font-family: Arial; font-size: 12px;">
-								<digi:trn>${entity.label}</digi:trn> 
+								<c:if test="${entity.translateable}">
+									<digi:trn>${entity.label}</digi:trn> 
+								</c:if>
+								<c:if test="${!entity.translateable}">
+									${entity.label} 
+								</c:if>
 							</span>
 						</td>
 					</tr>

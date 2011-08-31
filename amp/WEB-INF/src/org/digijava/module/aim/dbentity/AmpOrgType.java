@@ -20,6 +20,8 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	
 	// NGO, Governmental etc.
     private String classification;
+    
+    private boolean translateable	= true;
 
     public String getClassification() {
         return classification;
@@ -110,4 +112,15 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	public String getUniqueId() {
 		return this.ampOrgTypeId + "";
 	}
+
+	@Override
+	public boolean getTranslateable() {
+		return translateable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable = translateable;
+	}
+	
 }

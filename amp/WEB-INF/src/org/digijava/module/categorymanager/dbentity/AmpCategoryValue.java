@@ -31,6 +31,9 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 
 	/*use for only category with category key "implementation_location" 
          to show which field is used for country  */
+	
+	
+	private boolean translateable	= true;
 
 	//Created because of an error with some strings with french simbols as ID.
 	public String getEncodedValue(){
@@ -135,6 +138,16 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		return id+"";
 	}
 	
+	@Override
+	public boolean getTranslateable() {
+		return translateable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable = translateable;
+	}
+
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpCategoryValue aux = (AmpCategoryValue) obj;

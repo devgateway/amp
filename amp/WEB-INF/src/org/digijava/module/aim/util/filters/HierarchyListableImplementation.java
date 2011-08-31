@@ -13,6 +13,8 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	private String label;
 	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
+	
+	private boolean translateable	= true;
 
 
 	/* (non-Javadoc)
@@ -74,6 +76,18 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	 */
 	public void setChildren(Collection<? extends HierarchyListable> children) {
 		this.children = children;
+	}
+
+
+	@Override
+	public boolean getTranslateable() {
+		return translateable;
+	}
+
+
+	@Override
+	public void setTranslateable(boolean translateable) {
+		this.translateable = translateable;
 	}
 
 	

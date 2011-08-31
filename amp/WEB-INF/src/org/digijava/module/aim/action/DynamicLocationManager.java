@@ -229,6 +229,10 @@ public class DynamicLocationManager extends MultiAction {
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
 		ActionMessages errors				= (ActionMessages) request.getAttribute("myErrors");
 		
+		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
+			DynLocationManagerUtil.regionsOfDefaultCountry.clear();
+		}
+		
 		if ( myForm.getTreeStructure() != null && myForm.getTreeStructure().length() > 0)
 			DynLocationManagerUtil.saveStructure(myForm.getTreeStructure(), myForm.getUnorgLocations(), myForm.getImplementationLocation(), errors);
 		else if ( myForm.getDeleteLocationId() != null  && myForm.getDeleteLocationId() > 0)

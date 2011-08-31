@@ -110,7 +110,7 @@
 					<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 					</c:set>
-					<digi:link href="/showRegisterUser.do" module="aim" title="${trn3}">
+					<digi:link href="/showRegisterUser.do?init=true" module="aim" title="${trn3}">
 			    		<digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
 			  		</digi:link>	
 				 	&nbsp;|&nbsp; 

@@ -54,8 +54,12 @@ public class ShowUserRegister extends Action {
 			String actionFlag = request.getParameter("actionFlag");
 			logger.debug("actionFlag: " + actionFlag);
 
-			if ("".equals(actionFlag) || actionFlag == null) {
+            if (request.getParameter("init") != null) {
+                //Remove old errors.
+                registerForm.setErrors(null);
+            }
 
+			if ("".equals(actionFlag) || actionFlag == null) {
 					// set country resident data
 
 					HashMap countriesMap = new HashMap();

@@ -668,3 +668,4 @@ html.ie div.header{z-index:9999;}
 #previewHeaderSectionDiv span {font-size:11px; font-weight:bold; color:#5C5C5C; cursor: pointer;}
 #components_dots table tr td {font-size:11px;}
 table tr td {font-size:11px;}
+div.breadcrump_cont{display:none;}

@@ -87,11 +87,11 @@ ${fn:replace(message,quote,escapedQuote)}
             
             <module:display name="Public Reports" parentModule="PUBLIC VIEW">
 			<li class="yuiampmenuitem" style="float:left;">
-				<a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;;">
+				<a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;">
                     <digi:trn>Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a  style="margin-left:-1px;position:absolute;text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;">
+                	<a  style="margin-left:-1px;position:relative;text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:right;">
                 		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">

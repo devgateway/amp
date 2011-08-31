@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -142,12 +143,14 @@ public class ActivityUtil {
 				group.setAmpActivityLastVersion(a);
 				session.save(group);
 			}
-			
+                        AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+                        a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
+                        session.saveOrUpdate(a);
 			a.setAmpActivityGroup(group);
 			a.setCreatedDate(Calendar.getInstance().getTime());
 			a.setModifiedDate(Calendar.getInstance().getTime());
-			a.setModifiedBy(wicketSession.getAmpCurrentMember());
-			a.setTeam(wicketSession.getAmpCurrentMember().getAmpTeam());
+			a.setModifiedBy(ampCurrentMember);
+			a.setTeam(ampCurrentMember.getAmpTeam());
 			
 			
 			saveIndicators(a, session);

@@ -9,7 +9,7 @@
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/templateScripts.js"/>"></script>
 <script langauage="JavaScript">
   function MyremoveUserOrTeam(){
   	var orphands=new Array();

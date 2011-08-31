@@ -42,6 +42,16 @@ public class AmpDonorFundingFormSectionFeature extends
 		AmpFormSectionFeaturePanel {
 
 	protected ListView<AmpFunding> list;
+	private IModel<Set<AmpFunding>> setModel;
+	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
+
+	public ListView<AmpFunding> getList() {
+		return list;
+	}
+
+	public IModel<Set<AmpFunding>> getSetModel() {
+		return setModel;
+	}
 
 	/**
 	 * @param id
@@ -52,13 +62,13 @@ public class AmpDonorFundingFormSectionFeature extends
 	public AmpDonorFundingFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
-		final IModel<Set<AmpFunding>> setModel = new PropertyModel<Set<AmpFunding>>(
+		setModel = new PropertyModel<Set<AmpFunding>>(
 				am, "funding");
 		
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpFunding>());
 		
-		AbstractReadOnlyModel<List<AmpFunding>> listModel = OnePagerUtil
+		listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 
 		list = new ListView<AmpFunding>("listFunding", listModel) {
@@ -68,7 +78,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				try {
 					fundingItemFeature = new AmpFundingItemFeaturePanel(
 							"fundingItem", "Funding Item",
-							item.getModel());
+							item.getModel(),am,AmpDonorFundingFormSectionFeature.this);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -85,24 +95,7 @@ public class AmpDonorFundingFormSectionFeature extends
 					}
 				};
 				item.add(deleteLinkField);
-				AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						AmpFunding funding = new AmpFunding();
-						funding.setAmpDonorOrgId(item.getModelObject().getAmpDonorOrgId());
-						funding.setAmpActivityId(am.getObject());
 
-						funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-						funding.setFundingDetails(new HashSet<AmpFundingDetail>());
-
-						setModel.getObject().add(funding);
-						list.removeAll();
-						target.addComponent(AmpDonorFundingFormSectionFeature.this);
-						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-						
-					}
-				};
-				item.add(addNewFunding);
 			}
 		};
 

@@ -168,7 +168,9 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
 				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
-					PDFExporter.widths[k]=0.120f;
+					if (k<rd.getTotalDepth()){
+						PDFExporter.widths[k]=0.120f;
+					}
 				}
 			
 				for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {

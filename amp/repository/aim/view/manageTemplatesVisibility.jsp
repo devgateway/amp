@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -181,7 +183,28 @@ div.fakefile2 input{
 	</logic:iterate>
 	<tr>
 		<td colspan=2 class="inside">	
-			<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+			<div style="width: 600px;">
+				<div class="fileinputs" style="float: left;">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+					<!-- CSS content must be put in a separated file and a class must be generated -->
+					<input id="uploadFile" name="uploadFile" type="file" class="inputx"  style="margin-top:7px;">
+				</div>
+				<div id="importButton" style="float: left;padding-left: 10px;">
+					<c:set var="translation">
+						<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
+					</c:set>
+					<html:submit style="dr-menu" value="${translation}" styleClass="buttonx" property="importTreeVisibility" />
+				</div>
+			</div>
+			<div>
+				<br><br><br>
+				<c:set var="translation">
+					<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
+				</c:set>
+				<html:submit value="${translation}" styleClass="buttonx" property="exportTreeVisibility" />
+			</div>	
+				
+				
+			<%--
 				<div class="fileinputs">
 				<table>
 				<tr>
@@ -201,8 +224,10 @@ div.fakefile2 input{
 					
 						
 				</div>
-			</a>
-		
+			 --%>
+				
+			
+			
 		</td>
 	</tr>
 	</digi:form>

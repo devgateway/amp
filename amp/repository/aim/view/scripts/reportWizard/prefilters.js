@@ -45,7 +45,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 
 Filters.prototype.success	= function (o) {
 	if ( o.responseText.length > 2 ) {
-		this.filterPanel.hide();
+		//this.filterPanel.hide();
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
@@ -65,10 +65,10 @@ Filters.prototype.success	= function (o) {
 	else {
 		this.filterPanel.setBody ( "<font color='red'>" + this.filterProblemsMessage + "</font>");
 	}
-}
+};
 Filters.prototype.failure	= function (o) {
 	this.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
-}
+};
 
 Filters.prototype.showFilters	= function() {
 	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 

@@ -896,7 +896,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
           Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(),langCode);
-          eaForm.getIdentification().setStatusReason(reason.getBody());
+          if(reason!=null){
+            eaForm.getIdentification().setStatusReason(reason.getBody());
+          }
 
           if (null != activity.getLineMinRank())
             eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().

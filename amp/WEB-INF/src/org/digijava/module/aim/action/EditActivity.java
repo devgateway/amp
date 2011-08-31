@@ -121,8 +121,10 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Session;
+
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -152,6 +154,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if(tm != null)
     	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
     boolean isPreview=mapping.getPath().trim().endsWith("viewActivityPreview");
+    String langCode = RequestUtils.getNavigationLanguage(request).getCode();
     
     
 
@@ -892,7 +895,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-          eaForm.getIdentification().setStatusReason(activity.getStatusReason());
+          Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(),langCode);
+          eaForm.getIdentification().setStatusReason(reason.getBody());
 
           if (null != activity.getLineMinRank())
             eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().
@@ -1085,7 +1089,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 locs.add(location);
               }
             }
-              String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+        
               Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
               eaForm.getLocation().setSelectedLocs(locs);
           }

@@ -84,7 +84,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		super(id, model, fmName, hideLabel);
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet<AmpContactProperty>());
+			setModel.setObject(new TreeSet<AmpContactProperty>());
 		
 		//final IModel<AmpContact> ampContact = new Model(model);
 		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {

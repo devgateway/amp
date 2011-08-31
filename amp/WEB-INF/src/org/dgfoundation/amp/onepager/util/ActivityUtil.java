@@ -562,6 +562,7 @@ public class ActivityUtil {
 						newOrgCont.setContact(orgCont.getContact());
 						newOrgCont.setPrimaryContact(orgCont.getPrimaryContact());
 						organization.getOrganizationContacts().add(newOrgCont);
+                                                session.save(newOrgCont);
 						session.update(organization);
 					}
 	    		}

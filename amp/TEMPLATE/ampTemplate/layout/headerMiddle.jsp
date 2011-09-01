@@ -55,7 +55,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	cursor:pointer;
 }
 </style>
-<div>
+<div class="menucontainer">
 <div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   

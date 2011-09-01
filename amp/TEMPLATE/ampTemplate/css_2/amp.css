@@ -647,6 +647,16 @@ div.adminicon{float:right;}
 /**-----IE FIXES-----**/
 html.chrome body{background-position:0px -34px;}
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
+html.chrome .menucontainer{position:relative;height:30px;}
+html.chrome .main_menu ul{position:absolute;top:5px;}
+html.chrome .login_nav{padding:0px;margin:0px;}
+html.chrome .login_here{background-image: url(/TEMPLATE/ampTemplate/img_2/login_bg.png);
+width: 90px;
+height: 26px;
+text-align: center;
+float: left;
+margin-left: 70px;
+margin-top:10px;}
 html.ie #show_login_pop_box{ border:1px solid #cccccc;position:absolute;left:0px; top:15px;z-index:9999;}
 html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;position:absolute;top:15px; left:10px;}
 html.ie .login_nav {font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:absolute;right:0px;}

@@ -38,7 +38,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 		
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside" style="margin-bottom:15px;">
   <tr bgcolor=#C7D4DB>
-    <td class="inside"><b>N</b></td>
+    <td class="inside" align=center><b>N</b></td>
     <td class="inside"><b>Title</b></td>
     <td class="inside" align=center><b>Amount</b></td>
   </tr>
@@ -46,8 +46,8 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 			<c:forEach items="${visualizationform.itemProjectsList}" var="projectItem">
 			<c:set var="index" value="${index+1}"/>
 			<tr>
-			<td class="inside"><c:out value="${index}"/>.</td>
-			<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1">${projectItem.key}</a></td>
+			<td class="inside" align=center><c:out value="${index}"/>.</td>
+			<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1" style="color:#376091;">${projectItem.key}</a></td>
 			<td class="inside" align=center><b>($<c:out value="${projectItem.value}"/>)</b></td>
 			</tr>
 			</c:forEach>

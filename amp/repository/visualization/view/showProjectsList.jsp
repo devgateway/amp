@@ -27,13 +27,23 @@
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr>	
 		<td vAlign="top">
+		
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside">
+  <tr>
+    <td class="inside">N</td>
+    <td class="inside">Title</td>
+    <td class="inside">Amount</td>
+  </tr>
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.itemProjectsList}" var="projectItem">
 			<c:set var="index" value="${index+1}"/>
-		
-		 	<c:out value="${index}"/>. <a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
-			<hr />
+			<tr>
+			<td><c:out value="${index}"/>.</td>
+			<td><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1">${projectItem.key}</a></td>
+			<td><b>($<c:out value="${projectItem.value}"/>)</b></td>
+			</tr>
 			</c:forEach>
+			</table>
 		<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
 	</td>
 	</tr>

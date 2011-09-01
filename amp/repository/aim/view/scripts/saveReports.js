@@ -110,7 +110,7 @@ SaveReportEngine.prototype.saveReport		= function () {
 						"&reportTitle="+this.getReportName() + 
 						"&reportId="+this.getReportId();
 	//alert (postString);
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 }
 
 SaveReportEngine.enterPressed		= function (e) {
@@ -133,14 +133,14 @@ function ExtendedButton( buttonId ) {
 }
 ExtendedButton.prototype.enable				= function () {
 	var btn 	= document.getElementById( this.buttonId );
-	var btnY	= new YAHOOAmp.util.Element(btn);
+	var btnY	= new YAHOO.util.Element(btn);
 	
 	btn.disabled		= false;
 	btnY.setStyle("color", "black");
 }
 ExtendedButton.prototype.disable			= function () {
 	var btn 	= document.getElementById( this.buttonId );
-	var btnY	= new YAHOOAmp.util.Element(btn);
+	var btnY	= new YAHOO.util.Element(btn);
 	btn.disabled		= true;
 	btnY.setStyle("color", "lightgrey");
 }

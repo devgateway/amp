@@ -273,7 +273,7 @@ function toggleSettings(){
 		</logic:empty>
 	</logic:empty>
 	<logic:notEmpty name="filterCurrentReport" scope="session">
-		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
+		tabName	= "Tab-<bean:write name='filterCurrentReport' scope='session' property='name'/>";
 	</logic:notEmpty>	
 </script>
 	

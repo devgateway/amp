@@ -289,6 +289,19 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	protected  String getAdditionalDetails(CHOICE choice){
 		return "";
 	}
+	
+	/**
+	 * returns the  class of the text
+	 * should be overriden 
+	 * when we what special style for the element (e.g. bold)
+	 * 
+	 *
+	 * @param choice
+	 *            the <CHOICE> object selected
+	 */
+	protected  String getStyleClass(CHOICE choice){
+		return null;
+	}
 
 	// @Override
 	// public void updateModel() {
@@ -321,8 +334,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Integer choiceLevel = getChoiceLevel(choice);
 			// choiceValues.add(getChoiceValue(choice));
 			String details=getAdditionalDetails(choice);
+			String styleClass=getStyleClass(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
-					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "" });
+					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "", styleClass!=null? styleClass:"" });
 		}
 
 		return choiceValues.toArray(new String[0][0]);

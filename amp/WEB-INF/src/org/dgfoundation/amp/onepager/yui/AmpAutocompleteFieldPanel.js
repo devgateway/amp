@@ -85,9 +85,13 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     	}
     	else{
     		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
-    	}   	
+    	}
+    	
     	if(pResultData[2]!=''){
-    		return "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
+    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
+    	}
+    	if(pResultData[3]!=''){
+    		formatedResult="<span class='"+pResultData[3]+"'>" +formatedResult+"</span>";
     	}
     	return formatedResult;
     }; 

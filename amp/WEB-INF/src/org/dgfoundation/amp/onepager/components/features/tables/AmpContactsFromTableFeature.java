@@ -183,7 +183,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 if(choice.getId()==null){
                     return "add new contact";
                 }
-                return choice.getNameAndLastName()+ "("+choice.getId()+")";
+                return choice.getFullname();
             }
 
             @Override
@@ -201,6 +201,13 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 
             @Override
             public Integer getChoiceLevel(AmpContact choice) {
+                return null;
+            }
+            @Override
+            public String getStyleClass(AmpContact choice) {
+            	if(choice.getId()==null){
+                     return "l_mid_b";
+                 }
                 return null;
             }
             @Override

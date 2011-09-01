@@ -9,7 +9,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
    <!-- ================================= -->
-   <!-- Preserve messages in a local file -->
+   <!-- Preserve messages in a local file six speed g-->
    <!-- ================================= -->
 
 
@@ -19,7 +19,7 @@
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
       <param name="Target" value="System.out"/>
-      <param name="Threshold" value="INFO"/>
+      <param name="Threshold" value="INFO"/> <!-- set it to TRACE to see hibernate query parameters, INFO is default -->
 
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
@@ -40,12 +40,12 @@
       <priority value="INFO"/>
    </category>
 
-   <category name="org.digijava">
-      <priority value="INFO"/>
+   <category name="org.digijava"> <!-- DEBUG default -->
+      <priority value="DEBUG"/>
    </category>
 
-   <category name="org.dgfoundation">
-      <priority value="INFO"/>
+   <category name="org.dgfoundation"> <!-- DEBUG default -->
+      <priority value="DEBUG"/>
    </category>
 
    <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
@@ -53,6 +53,15 @@
       <priority value="INFO" />
    </category>
  
+   <category name="org.hibernate.SQL">
+       <priority value="INFO"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
+   </category>
+
+   <category name="org.hibernate.type">
+       <priority value="INFO"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
+   </category>
+
+    
    <!-- ======================= -->
    <!-- Setup the Root category -->
    <!-- ======================= -->

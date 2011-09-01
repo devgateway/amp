@@ -645,6 +645,7 @@ div.adminicon{float:right;}
 	font-size:12px;
 }
 /**-----IE FIXES-----**/
+html.chrome body{background-position:0px -34px;}
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
 html.chrome .menucontainer{position:relative;height:30px;}
 html.chrome .login_nav{padding:0px;margin:0px;}

@@ -12,6 +12,14 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<style>
+table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:11px;}
+table.inside1, td.inside1 {border: 0; font-size:12px;}
+table.inside, td.inside_zebra {}
+table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
+td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
+
+</style>
 
 <script language="JavaScript">
 	
@@ -28,23 +36,23 @@
 	<tr>	
 		<td vAlign="top">
 		
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside">
-  <tr>
-    <td class="inside">N</td>
-    <td class="inside">Title</td>
-    <td class="inside">Amount</td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside" style="margin-bottom:15px;">
+  <tr bgcolor=#C7D4DB>
+    <td class="inside"><b>N</b></td>
+    <td class="inside"><b>Title</b></td>
+    <td class="inside" align=center><b>Amount</b></td>
   </tr>
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.itemProjectsList}" var="projectItem">
 			<c:set var="index" value="${index+1}"/>
 			<tr>
-			<td><c:out value="${index}"/>.</td>
-			<td><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1">${projectItem.key}</a></td>
-			<td><b>($<c:out value="${projectItem.value}"/>)</b></td>
+			<td class="inside"><c:out value="${index}"/>.</td>
+			<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1">${projectItem.key}</a></td>
+			<td class="inside" align=center><b>($<c:out value="${projectItem.value}"/>)</b></td>
 			</tr>
 			</c:forEach>
 			</table>
-		<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
+		<center><input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"></center>
 	</td>
 	</tr>
 </table>

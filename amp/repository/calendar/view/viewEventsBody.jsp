@@ -106,6 +106,9 @@
 		.dhx_cal_container {
 		font-size: 10pt;
 		}
+		.dhx_cal_container input {
+		display: none; /* hide buttons in print preview */ 
+		}
 		.dhx_cal_event_line {
 		 height: auto;
 		}
@@ -385,7 +388,7 @@ window.onload=init;
 					</tr>
 				</table>
 			</div>
-		</div>
+		</div>		
 		<feature:display name="Filter" module="Calendar">
 			<div style="padding-top:30px;width:250px;height:28px;white-space: nowrap;">
 				<field:display name="Run Filter Button" feature="Filter">
@@ -400,6 +403,6 @@ window.onload=init;
 		      	&nbsp;
 		      	<input type="button" class="buttonx" value="<digi:trn>Add New Event</digi:trn>"  onclick="addEvent();" />
 			</div>
-		</feature:display>		
+		</feature:display>
 	</div>
 </body>

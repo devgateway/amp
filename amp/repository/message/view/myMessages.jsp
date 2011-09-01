@@ -79,8 +79,8 @@
     		titleTD.innerHTML=inboxFull; 
     		textTD.innerHTML=deleteData; 
     	}else{    	 
-    		titleTD.innerHTML='New Message'; 
-    		textTD.innerHTML='You have a new Message'; 
+    		titleTD.innerHTML='<digi:trn>New Message</digi:trn>'; 
+    		textTD.innerHTML='<digi:trn>You have a new Message</digi:trn>'; 
     	}
       $('#msgDiv').show("slow");
       window.setTimeout("hideMessage()",4000,"JavaScript");
@@ -199,7 +199,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     <feature:display name="My Messages" module="Messages">
     <div class="right_menu">
 		<div class="right_menu_header">
-			<div class="right_menu_header_cont"><digi:trn key="message:myMessages">My Messages</digi:trn></div>
+			<div class="right_menu_header_cont"><digi:trn>My Messages</digi:trn></div>
 		</div>
 		<div class="right_menu_box">
 			<div id="msgLinks" class="right_menu_cont">

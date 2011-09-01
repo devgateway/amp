@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -1291,45 +1292,13 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-            Iterator itr = team.getActivityList().iterator();
-            while(itr.hasNext()) {
-                AmpActivity activity = (AmpActivity) itr.next();
-                Collection temp1 = activity.getOrgrole();
-                Collection temp2 = new ArrayList();
-                Iterator temp1Itr = temp1.iterator();
-                while(temp1Itr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
-                    if(!temp2.contains(orgRole))
-                        temp2.add(orgRole);
-                }
-
-                Iterator orgItr = temp2.iterator();
-
-                String donors = "";
-
-                while(orgItr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                    AmpRole role = orgRole.getRole();
-                    if(role != null){
-                      String roleCode = role.getRoleCode();
-                      if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY)) {
-                        if (donors.trim().length() > 0) {
-                          donors += ", ";
-                        }
-                        donors += orgRole.getOrganisation().getName();
-                      }
-                    }
-                }
-
-                activity.setDonors(donors);
-                col.add(activity);
-            }
+            return team.getActivityList();
+          
 
         } catch(Exception e) {
             logger.error("Unable to getDonorTeamActivities" + e.getMessage());
             throw new RuntimeException(e);
         }
-        return col;
     }
 
     public static Collection getDonorUnassignedActivities(Long dnrTeamId,
@@ -1350,57 +1319,14 @@ public class TeamUtil {
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             qry.setParameter("status", Constants.APPROVED_STATUS,
                              Hibernate.STRING);
-            Iterator itr = qry.list().iterator();
-            while(itr.hasNext()) {
-                AmpActivity activity = (AmpActivity) itr.next();
-
-                if(temp.contains(activity) == false) {
-                    Collection temp1 = activity.getOrgrole();
-                    Collection temp2 = new ArrayList();
-                    Iterator temp1Itr = temp1.iterator();
-                    while(temp1Itr.hasNext()) {
-                        AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
-                        if(!temp2.contains(orgRole))
-                            temp2.add(orgRole);
-                    }
-
-                    Iterator orgItr = temp2.iterator();
-
-
-                    String donors = "";
-
-                    while(orgItr.hasNext()) {
-                        AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                        AmpRole role = orgRole.getRole();
-                        if(role != null){
-                          String roleCode = role.getRoleCode();
-                          if (roleCode!=null&&roleCode.equals(
-                              Constants.FUNDING_AGENCY)) {
-                            if (donors.trim().length() > 0) {
-                              donors += ", ";
-                            }
-                            donors += orgRole.getOrganisation().getName();
-                          }
-                        }
-                    }
-
-                    activity.setDonors(donors);
-                    col.add(activity);
-                }
-            }
+            col = qry.list();
+            
+             
 
         } catch(Exception e) {
             logger.error("Unable to getDonorTeamActivities" + e.getMessage());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
+        } 
         return col;
     }
 
@@ -1642,9 +1568,9 @@ public class TeamUtil {
         return flag;
     }
 
-    public static Collection getManagementTeamActivities(Long teamId, String keyword) {
+    public static Collection<AmpActivityVersion> getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpActivityVersion> activities=null;
         String queryString = "";
         Query qry = null;
 
@@ -1652,77 +1578,28 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
-            if(childIds != null && childIds.size() > 0) {
-                Iterator itr = childIds.iterator();
-                String params = "";
-                while(itr.hasNext()) {
-                    Long id = (Long) itr.next();
-                    if(params.length() > 0) {
-                        params += ",";
-                    }
-                    params += id;
-                }
-                queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+") and (a.draft is null or a.draft=false)";
+            if(childIds != null && childIds.size() > 0) { 
+               
+                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivityVersion.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false)";
                 if(keyword!=null){
                 	queryString += " and lower(a.name) like lower(:name)" ;
                 }
                 qry = session.createQuery(queryString);
                 if(keyword!=null){
-                	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
-                }                
-
-                itr = qry.list().iterator();
-                while(itr.hasNext()) {
-
-                    AmpActivity activity = (AmpActivity) itr.next();
-                    Collection temp1 = activity.getOrgrole();
-                    Collection temp2 = new ArrayList();
-                    Iterator temp1Itr = temp1.iterator();
-                    while(temp1Itr.hasNext()) {
-                        AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
-                        if(!temp2.contains(orgRole))
-                            temp2.add(orgRole);
-                    }
-
-                    Iterator orgItr = temp2.iterator();
-
-                    String donors = "";
-
-                    while(orgItr.hasNext()) {
-                        AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                        if(orgRole.getRole().getRoleCode().equals(
-                            Constants.FUNDING_AGENCY)) {
-                            if(donors.trim().length() > 0) {
-                                donors += ", ";
-                            }
-                            donors += orgRole.getOrganisation().getName();
-                        }
-                    }
-
-                    activity.setDonors(donors);
-                    col.add(activity);
-
-                }
-
+                	qry.setString("name", "%" + keyword + "%");
+                } 
+                qry.setParameterList("params", childIds);
+                activities = qry.list();
             }
         } catch(Exception e) {
             logger.debug("Exception from getAllManagementTeamActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
-        }
-        return col;
+        } 
+        return activities;
     }
 
- 
+
     
     public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, String keyword) {
     	Session session = null;
@@ -1733,7 +1610,7 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			queryString = "select act.ampActivityId, act.name, act.ampId from "+ AmpActivity.class.getName()	+ " act  ";
+			queryString = "select new AmpActivityVersion(act.ampActivityId, act.name, act.ampId) from "+ AmpActivity.class.getName()	+ " act  ";
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{
@@ -1748,56 +1625,7 @@ public class TeamUtil {
             	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
             } 
 			
-			qry.setFetchSize(100);
-			ArrayList al=(ArrayList) qry.list();
-			Iterator itr = al.iterator();
-
-			HashMap<Long, AmpActivityVersion> holder = new HashMap<Long, AmpActivityVersion>();
-			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
-			while (itr.hasNext()) {
-				Object[] act = (Object[]) itr.next();
-				//AmpActivity act = (AmpActivity) itr.next();
-				AmpActivityVersion activity = new AmpActivityVersion((Long) act[0], (String) act[1], (String) act[2] );
-				//AmpActivity activity = (AmpActivity)itr.next();
-				AmpActivityVersion tmp = holder.get(activity.getAmpActivityId());
-				if (tmp==null){
-					holder.put(activity.getAmpActivityId().longValue(), activity);
-				}
-				String roleCode="";//(String)activity.geto;
-				String name="";//(String) act[6];
-				
-				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
-				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
-				if(activity.getOrgrole()!=null){
-					for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
-						AmpOrgRole aor = (AmpOrgRole) it.next();
-						name=aor.getOrganisation().getName();
-						if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)){
-							donnorList.add(name);
-						}
-					}
-				}
-				
-				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
-			}
-
-			for (AmpActivityVersion activity : holder.values()) {
-
-				String donors = "";
-
-				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
-				
-				for (String string : donnorList) {
-					if (donors.trim().length() > 0) {
-						donors += ", ";
-					}
-					donors += string;
-				}
-				
-				activity.setDonors(donors);
-				col.add(activity);
-
-			}
+			col=(ArrayList) qry.list();
 
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamActivities()");

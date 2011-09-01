@@ -614,27 +614,7 @@ public class TeamMemberUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, memberId);
-
-			Iterator<AmpActivityVersion> itr = ampMember.getActivities().iterator();
-			col = new ArrayList<AmpActivityVersion>();
-			while (itr.hasNext()) {
-				AmpActivityVersion activity = itr.next();
-				Iterator<AmpOrgRole> orgItr = activity.getOrgrole().iterator();
-				String donors = "";
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = orgItr.next();
-					if(orgRole.getRole()!=null){
-						if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
-							if (donors.trim().length() > 0)
-								donors += ", ";
-							donors += orgRole.getOrganisation().getName();
-						}
-					}
-
-				}
-				activity.setDonors(donors);
-				col.add(activity);
-			}
+			col=ampMember.getActivities();	
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -1245,43 +1225,17 @@ public class TeamMemberUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",teamId,Hibernate.LONG);
 			qry.setParameter("status","started",Hibernate.STRING);
-			col = qry.list();
+			col1 = qry.list();
 
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 
-			col.removeAll(member.getActivities());
-			logger.debug("Collection size after remove all:" + col.size());
-			col1 = new ArrayList();
-			Iterator itr = col.iterator();
-			while (itr.hasNext()) {
-				AmpActivityVersion activity = (AmpActivityVersion) itr.next();
-				Iterator orgItr = activity.getOrgrole().iterator();
-				String donors = "";
-
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
-						if (donors.trim().length() > 0)
-							donors += ", ";
-						donors += orgRole.getOrganisation().getName();
-					}
-				}
-				activity.setDonors(donors);
-				col1.add(activity);
-			}
+			col1.removeAll(member.getActivities());
+			
 
 		} catch (Exception e) {
 			logger.error("Unable to remove activities" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col1;
 	}
 

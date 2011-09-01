@@ -3070,6 +3070,32 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //logger.info("Canview =" + canView);
     return canView;
   }
+     public static StringBuilder getDonorsForActivity(Long activityId) {
+        try {
+            StringBuilder donors = new StringBuilder();
+            if (activityId != null) {
+                Session session = PersistenceManager.getRequestDBSession();
+                String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
+                queryString += " and act.ampActivityId=:activityId";
+                Query qry = session.createQuery(queryString);
+                qry.setLong("activityId", activityId);
+
+                List<AmpOrganisation> organizations = qry.list();
+                for (AmpOrganisation donor : organizations) {
+                    donors.append(donor.getName());
+                    donors.append(",");
+                }
+
+            }
+            return donors;
+
+        } catch (DgException ex) {
+            logger.debug("unable to get donors for activity");
+            logger.debug(ex);
+            throw new RuntimeException(ex);
+
+        }
+    }
 
   public static Collection getDonors(Long actId) {
     Collection col = new ArrayList();

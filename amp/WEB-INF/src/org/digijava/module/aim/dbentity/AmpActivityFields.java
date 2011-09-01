@@ -8,6 +8,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -363,8 +364,6 @@ LoggerIdentifiable, Cloneable {
 	protected Set actPrograms;
 
 	protected boolean createdAsDraft;
-	@VersionableFieldSimple(fieldTitle = "Donors")
-	protected String donors;
 
 	protected String customField1;
 	protected String customField2;   
@@ -1722,12 +1721,9 @@ contactName = string;
 
 
 	public String getDonors() {
-		return donors;
+		return ActivityUtil.getDonorsForActivity(ampActivityId).toString();
 	}
 
-	public void setDonors(String donors) {
-		this.donors = donors;
-	}
 
 	public void setCustomField1(String customField1) {
 		this.customField1 = customField1;

@@ -447,10 +447,15 @@ function getActivities(){
 	            selActDonors="";
 	            var stat = document.getElementsByName('selectedStatuses')[0];
 	            var donors = document.getElementsByName('selectedDonors')[0];
-	            var from = document.getElementsByName('yearFrom')[0];
+	            var from = document.getElementById('yearFrom');
 	            selActYearFrom = from.value;
-	            var to= document.getElementsByName('yearTo')[0];
+	            var to= document.getElementById('yearTo');
 	            selActYearTo = to.value;
+	            if( selActYearTo!=-1 && selActYearFrom > selActYearTo){
+	            	var msg='<digi:trn>Please choose correct year range</digi:trn>';
+	            	alert(msg);
+	            	return false;
+	            }
 	            for (var i=0; i<stat.length; i++) {
 	                       if(stat.options[i].selected ){
 	                           if(stat.options[i].value=='0'){
@@ -472,8 +477,7 @@ function getActivities(){
 	              if(selActDonors.length>1){
 	                 selActDonors=selActDonors.substring(0,selActDonors.length-1)
 	             }
-	             getActivities();
-	             
+	            getActivities();             
 	            
 	        }
 	        </script>

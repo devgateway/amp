@@ -269,20 +269,18 @@ background-color:#FFFFFF;
 							</html:select></td>
 						</tr>
 						<tr>
-							<td><html:select property="yearFrom"
-								styleClass="inputx insidex">
-								<option value="-1"><digi:trn
-									key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
-								<html:optionsCollection name="aimNPDForm" property="years"
-									value="value" label="label" />
-							</html:select></td>
-							<td><html:select property="yearTo"
-								styleClass="inputx insidex">
-								<option value="-1"><digi:trn
-									key="aim:npd:dropDownToYear">To Year</digi:trn></option>
-								<html:optionsCollection name="aimNPDForm" property="years"
-									value="value" label="label" />
-							</html:select></td>
+							<td>
+								<html:select property="yearFrom" styleClass="inputx insidex" styleId="yearFrom">
+									<option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
+									<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
+								</html:select>
+							</td>
+							<td>
+								<html:select property="yearTo"	styleClass="inputx insidex" styleId="yearTo">
+								<option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
+								<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
+								</html:select>
+							</td>
 						</tr>
 						<tr>
 						<td colspan="2" align="center">

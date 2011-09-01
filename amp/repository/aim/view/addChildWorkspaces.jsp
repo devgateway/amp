@@ -24,12 +24,10 @@
 	}
 
 	function updateCheckboxes() {
-		//alert("Starting!");
 		var value = document.getElementById("selectAllOrgs").checked;
 		var a = document.getElementsByName("selChildOrgs");
 		for (i=0;i<a.length;i++)
 			a[i].checked=value;
-		//alert("Done!");
 	}
 	
 	function resetForm() {
@@ -278,14 +276,14 @@ function childOrgsAdded() {
 			<tr>
 				<td align=left valign="top">
 					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
+						<tr bgcolor="#4A687A">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:searchOrganization">
 								Search Organizations</digi:trn>
 							</td></tr>
 						<tr>
-							<td align="center" bgcolor=#ECF3FD>
-								<table cellSpacing=2 cellPadding=2>
+							<td align="center" bgcolor="#F8F8F8">
+								<table cellSpacing=2 cellPadding=2 border="0">
 									<tr>
 										<td>
 											<digi:trn key="aim:selectOrganizationType">
@@ -330,15 +328,15 @@ function childOrgsAdded() {
 									
 									<tr>
 										<td align="center" colspan=2>
-											<html:submit  styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
+											<html:submit  styleClass="buttonx" property="submitButton" onclick="return searchOrganization()">
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:submit>
 											&nbsp;
-											<html:button  styleClass="dr-menu" property="resetButton" onclick="resetForm()">
+											<html:button  styleClass="buttonx" property="resetButton" onclick="resetForm()">
 												<digi:trn key="btn:clear">Clear</digi:trn> 
 											</html:button>
 											&nbsp;
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+											<html:button  styleClass="buttonx" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 
 											</html:button>
 										</td>
@@ -352,30 +350,16 @@ function childOrgsAdded() {
 			</tr>
 			<tr>
 					<td align=left valign="top">
-					<table width="100%" cellPadding=2 cellspacing="1" valign="top"
-						align="left" bgcolor="#006699">
-						<tr>
-							<td align="center" class="textalb" height="20">
-							<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
-									align="center" border="0">
-								<tr>
-									<td width="3">
-										<input type="checkbox" id="selectAllOrgs" onchange="updateCheckboxes()"/>
+						<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
+							<tr bgcolor="#4A687A">
+								<td width="3">
+										<input type="checkbox" id="selectAllOrgs" onclick="updateCheckboxes()"/>
 									</td>
-									<td align="center">
-										<digi:trn key="aim:listOfOrganizations">
-											List of organizations
-										</digi:trn>
-									</td>
-								</tr>
-							</table>
-							</td>
-						</tr>
-						<tr>
-							<td bgcolor="#ECF3FD">
-								<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
-									align="left" border="0">
-									<c:forEach var="org" items="${aimUpdateWorkspaceForm.allOrganizations}">
+								<td vAlign="center" width="100%" align="center" class="textalb"	height="20">
+									<digi:trn>List of Organizations</digi:trn>
+								</td>
+							</tr>
+								<c:forEach var="org" items="${aimUpdateWorkspaceForm.allOrganizations}">
 											<tr>
 												<td width="3" align="left">
 												<html:multibox property="selChildOrgs">
@@ -384,9 +368,12 @@ function childOrgsAdded() {
 												</td>
 												<td width="98%"><c:out value="${org.name}" /></td>
 											</tr>
-									</c:forEach>									
+									</c:forEach>
+								</table>
+								</td>
+								</tr>									
 									<tr>
-										<td colspan="2" align="center">
+										<td align="center">
 										<table cellPadding=5>
 											<tr>
 												<td>
@@ -395,7 +382,7 @@ function childOrgsAdded() {
 																	Add
 															</digi:trn>
 													</c:set>
-													<input type="button" value="${translation}" class="dr-menu"
+													<input type="button" value="${translation}" class="buttonx"
 													onclick="return childOrgsAdded()">
 												</td>
 												<td>
@@ -404,7 +391,7 @@ function childOrgsAdded() {
 																	Clear
 															</digi:trn>
 													</c:set>
-													<input type="reset" value="${translation}" class="dr-menu" onclick="return clearFormCheckBoxes();">
+													<input type="reset" value="${translation}" class="buttonx" onclick="return clearFormCheckBoxes();">
 												</td>
 												<td>
 													<c:set var="translation">
@@ -412,7 +399,7 @@ function childOrgsAdded() {
 																	Close
 															</digi:trn>
 													</c:set>
-													<input type="button" value="${translation}" class="dr-menu"
+													<input type="button" value="${translation}" class="buttonx"
 													onclick="return closeWindow();">
 												</td>
 											</tr>
@@ -423,12 +410,6 @@ function childOrgsAdded() {
 							</td>
 						</tr>
 					</table>
-					</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-		</table>
 
 	</c:if>
 </digi:form>

@@ -144,22 +144,24 @@ public class AmpTreeVisibility implements Serializable{
 					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
 					AmpTreeVisibility moduleNode = new AmpTreeVisibility();
 					moduleNode.setRoot(module);
-					for (Iterator jt = module.getItems().iterator(); jt.hasNext();) {
-						AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt.next();
-						AmpTreeVisibility featureNode = new AmpTreeVisibility();
-						featureNode.setRoot(feature);
-						for (Iterator kt = feature.getItems().iterator(); kt.hasNext();) {
-							AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
-							AmpTreeVisibility fieldNode = new AmpTreeVisibility();
-							if(field.getDescription()==null || "".equals(field.getDescription()))
-								field.setDescription(field.getName());
-							fieldNode.setRoot(field);
-							fieldNode.setItems(null);
-							featureNode.getItems().put(field.getName(),
-									fieldNode);
+					if (module.getItems() != null){
+						for (Iterator jt = module.getItems().iterator(); jt.hasNext();) {
+							AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt.next();
+							AmpTreeVisibility featureNode = new AmpTreeVisibility();
+							featureNode.setRoot(feature);
+							for (Iterator kt = feature.getItems().iterator(); kt.hasNext();) {
+								AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+								AmpTreeVisibility fieldNode = new AmpTreeVisibility();
+								if(field.getDescription()==null || "".equals(field.getDescription()))
+									field.setDescription(field.getName());
+								fieldNode.setRoot(field);
+								fieldNode.setItems(null);
+								featureNode.getItems().put(field.getName(),
+										fieldNode);
+							}
+							moduleNode.getItems().put(feature.getName(),
+									featureNode);
 						}
-						moduleNode.getItems().put(feature.getName(),
-								featureNode);
 					}
 					this.getItems().put(module.getName(), moduleNode);
 				}

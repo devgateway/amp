@@ -263,12 +263,12 @@ function toggleSettings(){
 	var tabName	= "Tab-By Project";
 	<logic:empty name="filterCurrentReport" scope="session">
 		<logic:notEmpty name="defaultTeamReport" scope="session">
-				tabName	= 'Tab-${defaultTeamReport.name}';
+				tabName	= "Tab-${defaultTeamReport.name}";
 		</logic:notEmpty>
 
 		<logic:empty name="defaultTeamReport" scope="session">
 			<logic:notEmpty name="myTabs" scope="session">
-					tabName	= 'Tab-${myTabs[0].name}';
+					tabName	= "Tab-${myTabs[0].name}";
 			</logic:notEmpty>
 		</logic:empty>
 	</logic:empty>

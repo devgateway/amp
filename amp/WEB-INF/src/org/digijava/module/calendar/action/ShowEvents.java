@@ -61,7 +61,7 @@ public class ShowEvents extends Action {
 	        ses.removeAttribute("year");
 	        ses.removeAttribute("month");
 	        ses.removeAttribute("day");
-	        ses.removeAttribute("mode");
+	        ses.removeAttribute("calendarMode");
 	        ses.removeAttribute("type");
 	        ses.removeAttribute("print");
 	            

@@ -246,7 +246,7 @@ public class ShowCalendarView extends Action {
         }
 
          //fill session
-         ses.setAttribute("mode",calendarViewForm.getView().length());
+         ses.setAttribute("calendarMode",calendarViewForm.getView().length());
          ses.setAttribute("view",calendarViewForm.getPrintMode());
          ses.setAttribute("print",calendarViewForm.getPrint());
          ses.setAttribute("date",printDate);

@@ -3074,9 +3074,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         try {
             StringBuilder donors = new StringBuilder();
             if (activityId != null) {
-                Session session = PersistenceManager.getRequestDBSession();
+                Session session = PersistenceManager.getSession();
                 String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
-                queryString += " and act.ampActivityId=:activityId";
+                queryString += " where act.ampActivityId=:activityId";
                 Query qry = session.createQuery(queryString);
                 qry.setLong("activityId", activityId);
 
@@ -3089,7 +3089,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             }
             return donors;
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("unable to get donors for activity");
             logger.debug(ex);
             throw new RuntimeException(ex);

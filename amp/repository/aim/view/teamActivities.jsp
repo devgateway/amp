@@ -48,12 +48,8 @@
 	function confirmDelete() {
 		var valid = validate();
 		if (valid == true) {
-                    <c:set var="message">
-                  <digi:trn key="aim:teamWorkspaceSetup:removeSelectedActivities">
-                  Are you sure you want to remove the selected activities
-                  </digi:trn>
-                  </c:set>
-			var flag = confirm("${message}");
+			var msg ='<digi:trn>Are you sure you want to remove the selected activities</digi:trn>';
+			var flag = confirm("${msg}");
 			if(flag == false)
 
 			  return false;

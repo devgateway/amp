@@ -181,6 +181,11 @@ public class AmpLocationFormTableFeature extends
 					DbUtil.add(ampLoc);
 				}
 				activityLocation.setLocation(ampLoc);
+				if(list.size()>0)
+					activityLocation.setLocationPercentage(0f);
+				else 
+					activityLocation.setLocationPercentage(100f); 
+
 				activityLocation.setActivity(am.getObject());
 				Set<AmpActivityLocation> set = setModel.getObject();
 				set.add(activityLocation);

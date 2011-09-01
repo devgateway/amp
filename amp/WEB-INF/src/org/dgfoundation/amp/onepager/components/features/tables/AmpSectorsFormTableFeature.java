@@ -85,7 +85,7 @@ public class AmpSectorsFormTableFeature extends
 
 		add(minSizeCollectionValidationField);
 		
-		/*
+		
 		final AmpUniqueCollectionValidatorField<AmpActivitySector> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivitySector>(
 				"uniqueSectorsValidator", listModel, "uniqueSectorsValidator") {
 			@Override
@@ -104,7 +104,7 @@ public class AmpSectorsFormTableFeature extends
 		};
 
 		add(treeCollectionValidationField);
-		 */
+		 
 
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 
@@ -131,9 +131,9 @@ public class AmpSectorsFormTableFeature extends
 						target.addComponent(listParent);
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
-						//uniqueCollectionValidationField.reloadValidationField(target);
+						uniqueCollectionValidationField.reloadValidationField(target);
 						minSizeCollectionValidationField.reloadValidationField(target);		
-						//treeCollectionValidationField.reloadValidationField(target);
+						treeCollectionValidationField.reloadValidationField(target);
 					}
 				};
 				item.add(delSector);
@@ -157,15 +157,18 @@ public class AmpSectorsFormTableFeature extends
 				AmpActivitySector activitySector = new AmpActivitySector();
 				activitySector.setSectorId(choice);
 				activitySector.setActivityId(am.getObject());
-				activitySector.setSectorPercentage(0f);
+				if(list.size()>0)
+					activitySector.setSectorPercentage(0f);
+				else 
+					activitySector.setSectorPercentage(100f); 
 				activitySector.setClassificationConfig(sectorClassification);
 				setModel.getObject().add(activitySector);
 				list.removeAll();
 				target.addComponent(list.getParent());
 				percentageValidationField.reloadValidationField(target);
-				//uniqueCollectionValidationField.reloadValidationField(target);
+				uniqueCollectionValidationField.reloadValidationField(target);
 				minSizeCollectionValidationField.reloadValidationField(target);
-				//treeCollectionValidationField.reloadValidationField(target);
+				treeCollectionValidationField.reloadValidationField(target);
 			}
 
 			@Override

@@ -50,7 +50,7 @@ public abstract class AmpUniqueCollectionValidatorField<T> extends
 				}
 				if(res.size()>0) 
 						return res.toString();
-				return null;
+				return "";
 			}
 		};
 		return model;

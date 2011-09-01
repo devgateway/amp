@@ -54,7 +54,7 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 						
 				if(ret.size()>0) 
 						return ret.toString();
-				return null;
+				return "";
 			}
 		};
 		return model;

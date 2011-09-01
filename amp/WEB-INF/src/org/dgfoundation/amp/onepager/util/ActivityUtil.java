@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,10 +40,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * Util class used to manipulate an activity
@@ -61,7 +57,6 @@ public class ActivityUtil {
 	 * @param am
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft){
-		
 		Session session = AmpActivityModel.getHibernateSession();	
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
@@ -116,6 +111,7 @@ public class ActivityUtil {
 			}
 			
 			saveContacts(a, session);
+
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
@@ -143,35 +139,28 @@ public class ActivityUtil {
 				group.setAmpActivityLastVersion(a);
 				session.save(group);
 			}
-                        AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-                        a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
-                        session.saveOrUpdate(a);
+            AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+            a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);
 			a.setCreatedDate(Calendar.getInstance().getTime());
 			a.setModifiedDate(Calendar.getInstance().getTime());
 			a.setModifiedBy(ampCurrentMember);
 			a.setTeam(ampCurrentMember.getAmpTeam());
 			
-			
 			saveIndicators(a, session);
-			/*
-			if (a.getActivityContacts() != null)
-				a.getActivityContacts().clear();
-				*/
-		
 			saveResources(a); 
 			saveEditors(session); 
 			saveComments(a, session); 
 			
-//session.flush();
-//			transaction.commit();
-		
+			session.update(a); //should have saved by now
+			
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
 			throw new RuntimeException("Can't save activity:", exception);
 
 		} finally {
+			ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
 			AmpActivityModel.endConversation();
 		}
 	}

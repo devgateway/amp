@@ -19,12 +19,14 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -168,7 +170,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected void saveMethod(AjaxRequestTarget target,
 			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
 			boolean draft) {
+		AmpActivityModel a = (AmpActivityModel) am;
 		Long oldId = am.getObject().getAmpActivityId();
+
+		//Before starting to save check lock
+		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
+			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
+			getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()))));
+			return;
+		}
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
 

@@ -28,6 +28,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	
 	protected transient AmpActivityVersion a;
 	protected Long id;
+	protected String editingKey;
 
 	private static final long serialVersionUID = 3915904820384659360L;
 
@@ -38,11 +39,12 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		a = new AmpActivityVersion();
 	}	
 	
-	public AmpActivityModel(Long id) {
+	public AmpActivityModel(Long id, String editingKey) {
 		beginConversation();
 		
 		this.id = id;
 		this.a = null;
+		this.editingKey = editingKey;
 	}
 	
 	/**
@@ -139,5 +141,12 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 			hibernateSession.close(); 
 		}
 	}
-	
+
+	public String getEditingKey() {
+		return editingKey;
+	}
+
+	public Long getId() {
+		return id;
+	}
 }

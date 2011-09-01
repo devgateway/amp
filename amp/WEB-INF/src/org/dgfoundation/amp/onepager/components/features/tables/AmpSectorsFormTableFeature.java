@@ -85,7 +85,7 @@ public class AmpSectorsFormTableFeature extends
 
 		add(minSizeCollectionValidationField);
 		
-
+		/*
 		final AmpUniqueCollectionValidatorField<AmpActivitySector> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivitySector>(
 				"uniqueSectorsValidator", listModel, "uniqueSectorsValidator") {
 			@Override
@@ -95,7 +95,6 @@ public class AmpSectorsFormTableFeature extends
 		};
 
 		add(uniqueCollectionValidationField);
-		
 		final AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
 				"treeSectorsValidator", listModel, "treeSectorsValidator") {
 					@Override
@@ -105,6 +104,7 @@ public class AmpSectorsFormTableFeature extends
 		};
 
 		add(treeCollectionValidationField);
+		 */
 
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 
@@ -131,9 +131,9 @@ public class AmpSectorsFormTableFeature extends
 						target.addComponent(listParent);
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
-						uniqueCollectionValidationField.reloadValidationField(target);
+						//uniqueCollectionValidationField.reloadValidationField(target);
 						minSizeCollectionValidationField.reloadValidationField(target);		
-						treeCollectionValidationField.reloadValidationField(target);
+						//treeCollectionValidationField.reloadValidationField(target);
 					}
 				};
 				item.add(delSector);
@@ -163,9 +163,9 @@ public class AmpSectorsFormTableFeature extends
 				list.removeAll();
 				target.addComponent(list.getParent());
 				percentageValidationField.reloadValidationField(target);
-				uniqueCollectionValidationField.reloadValidationField(target);
+				//uniqueCollectionValidationField.reloadValidationField(target);
 				minSizeCollectionValidationField.reloadValidationField(target);
-				treeCollectionValidationField.reloadValidationField(target);
+				//treeCollectionValidationField.reloadValidationField(target);
 			}
 
 			@Override

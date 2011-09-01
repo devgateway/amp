@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+* Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  *
  */
 package org.dgfoundation.amp.onepager.web.pages;
@@ -14,19 +14,22 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
 import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -45,8 +48,9 @@ public class OnePager extends AmpHeaderFooter {
 	
 	private static Logger logger = Logger.getLogger(OnePager.class);
 	//for test purposes, it will be removed !!
+	private final static boolean DEBUG_ACTIVITY_LOCK = false;
 	 
-	protected IModel<AmpActivityVersion> am;
+	protected AmpActivityModel am;
 //	protected AmpActivityModel activityModelForSave;
 
 	static OnepagerSection[] test = {
@@ -113,7 +117,15 @@ public class OnePager extends AmpHeaderFooter {
 			}
 		}
 		else{
-			am = new AmpActivityModel(Long.valueOf(activityId));
+			//try to aquire lock for activity editing
+			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
+			if (key == null){ //lock not aquired
+				//redirect page
+				getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(activityId)));
+				return;
+			}
+			
+			am = new AmpActivityModel(Long.valueOf(activityId), key);
 		}
 		
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -131,8 +143,32 @@ public class OnePager extends AmpHeaderFooter {
 			throw new RuntimeException(e);
 		}
 		
-		
-		
+		final Component editLockRefresher;
+		if (DEBUG_ACTIVITY_LOCK)
+			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
+		else
+			editLockRefresher = new WebMarkupContainer("editLockRefresher");
+		if (!newActivity){
+			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					boolean ok = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey());
+					if (!ok)
+						getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
+					if (DEBUG_ACTIVITY_LOCK){
+						if (!ok)
+							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
+						else
+							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
+						target.addComponent(editLockRefresher);
+					}
+				}
+			});
+		}
+		else
+			if (DEBUG_ACTIVITY_LOCK)
+				editLockRefresher.setDefaultModelObject("");
+		add(editLockRefresher);
 	}
 
 	/**

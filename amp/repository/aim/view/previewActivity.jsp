@@ -1,7 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="org.digijava.module.aim.helper.*"%>
 <%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
+<%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
 <%@ page import="java.io.PrintWriter,java.util.*"%>
+<%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -292,6 +294,20 @@ function collapseAll() {
 	<table width="1000" border="0" cellspacing="0" cellpadding="0"
 		align=center
 	>
+		<logic:present scope="request" parameter="editError">
+			<tr>
+				<td align="center">
+					<font color="red" size="3">
+						<digi:trn key="aim:activityIsBeeingEdited">Current activity is beeing edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+					</font>
+				</td>
+			</tr>		
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</logic:present>
 		<tr>
 			<td width=1000>
 			<div class="step_head_lng">

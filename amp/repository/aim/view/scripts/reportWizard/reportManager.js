@@ -129,13 +129,13 @@ function continueInitialization( e, rmParams ){
 			repManager.addStyleToButton("step"+ i +"_cancel");
 		}
 		
-		columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
+		columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div','dest_col_ul');
 		columnsDragAndDropObject.createDragAndDropItems();
 		new YAHOO.util.DDTarget('source_measures_ul');
 		new YAHOO.util.DDTarget('dest_measures_ul');
 		new YAHOO.util.DDTarget('source_hierarchies_ul');
 		new YAHOO.util.DDTarget('dest_hierarchies_ul');
-		measuresDragAndDropObject	= new MyDragAndDropObject('source_measures_ul');
+		measuresDragAndDropObject	= new MyDragAndDropObject('source_measures_ul','dest_measures_ul');
 		measuresDragAndDropObject.createDragAndDropItems();
 		
 		//createDragAndDropItems('source_ul');

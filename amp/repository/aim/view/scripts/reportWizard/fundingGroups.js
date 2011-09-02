@@ -161,7 +161,7 @@ function getColDbId( liEl ) {
 function generateHierarchies(e) {
 	checkSelectedHierarchies();
 	
-	var newDDObj		= new MyDragAndDropObject();
+	var newDDObj		= new MyDragAndDropObject("source_hierarchies_ul","dest_hierarchies_ul");
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var hierUlEl		= document.getElementById("source_hierarchies_ul") ;
 	var items			= ulEl.getElementsByTagName("li");

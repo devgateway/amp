@@ -1,14 +1,19 @@
 		/**
 		* The MyDragAndDropObject class
 		*/
-		function MyDragAndDropObject ( containerId ) {
+		function MyDragAndDropObject ( containerId, destContainerId ) {
 			//alert('parentConstructor: ' + containerId);
-			this.containerId	= containerId;
+			this.containerId		= containerId;
+			this.destContainerId	= destContainerId;
 		}
 		
 			MyDragAndDropObject.prototype.onDragOver	= function (e, tId) {
 				var destObj			= document.getElementById(tId);
 				var srcObj			= document.getElementById(this.id);
+				
+				if ( ! this.checkDestination(destObj) )
+					return;
+								
 				if (destObj.nodeName.toLowerCase()=="li") {
 					if ( this.goingUp ) {
 						destObj.parentNode.insertBefore(srcObj, destObj);
@@ -92,8 +97,23 @@
 			obj.startDrag			= this.startDrag;
 			obj.endDrag				= this.endDrag;
 			obj.onDrag				= this.onDrag;
-			
+			obj.checkDestination	= this.checkDestination;
+			obj.containerId			= this.containerId;
+			obj.destContainerId		= this.destContainerId;
 		}
+		
+		MyDragAndDropObject.prototype.checkDestination			= function (destObj) {
+			var tempObj			= destObj;
+
+			while ( tempObj != null && (tempObj.nodeName.toLowerCase()!="ul" || tempObj.nodeName.toLowerCase()=="ol") ) {
+				tempObj		= tempObj.parentNode;
+			}
+			if (tempObj == null || (tempObj.id != this.destContainerId && tempObj.id != this.containerId ) )
+				return false;
+			
+			return true;
+		}
+		
 		MyDragAndDropObject.selectObj			= function (ddObj, srcObj, destObj) {
 			destObj.appendChild( srcObj );
 		}
@@ -138,9 +158,9 @@
 		ColumnsDragAndDropObject.prototype				= new MyDragAndDropObject();
 		ColumnsDragAndDropObject.prototype.parent		= MyDragAndDropObject;
 		ColumnsDragAndDropObject.prototype.constructor	= ColumnsDragAndDropObject;
-		function ColumnsDragAndDropObject (containerId) {
+		function ColumnsDragAndDropObject (containerId, destContainerId) {
 			//alert('childConstructor:' + containerId);
-			this.parent.call(this, containerId);
+			this.parent.call(this, containerId, destContainerId);
 			this.realWidth		= "29%";
 		}
 			ColumnsDragAndDropObject.prototype.createDragAndDropItems	= function () {
@@ -197,6 +217,9 @@
 				var srcObj			= this.newObj;
 				var onSourceArea	= false;
 				var pn				= destObj;
+				
+				if ( ! this.checkDestination(destObj))
+					return false;
 				
 				if ( destObj.id=="source_col_div" )
 						onSourceArea=true;

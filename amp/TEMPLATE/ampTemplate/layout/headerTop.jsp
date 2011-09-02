@@ -84,6 +84,7 @@ ${fn:replace(message,quote,escapedQuote)}
 			
 		</div>
 		<div class="logo">
+			<a href="/" class="logo" style="text-decoration: none">
             <logic:notEmpty name="defFlagExist" scope="application">
                 <logic:equal name="defFlagExist" scope="application" value="true">
                 </logic:equal>
@@ -91,6 +92,7 @@ ${fn:replace(message,quote,escapedQuote)}
 			<div class="amp_label"> 
 				 &nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
         	</div>
+        	</a>
 		</div>
 	</div>
 

@@ -109,8 +109,10 @@ table tr td {font-size:11px;}
 <div class="header">
 	<div class="centering">
 		<div class="logo">
+			<a href="/" class="logo" style="text-decoration: none">
 			<img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left>
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+			</a>
 		</div>
 		
 		<div id="usr_menu_logged">

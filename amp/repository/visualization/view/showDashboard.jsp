@@ -1932,7 +1932,6 @@ var callbackApplyFilterCall = {
 		  success: function(o) {
 			  refreshBoxes(o);
 			  refreshGraphs();
-			  loadingPanel.hide();
 		  },
 		  failure: function(o) {
 			  loadingPanel.hide();
@@ -2020,24 +2019,40 @@ function getSelectionsFromElement(elementId, text){
 	}
 	return sels;
 }
+var nonRefreshedMovies = [];
 
 function refreshGraphs(){
-
 	//Get array of graphs
 	var allGraphs = document.getElementsByName("flashContent");
-	//console.log("allgraphs:" + allGraphs.length);
-	//Iterate and refresh the graph
+	//Push it into an array that will be emptied as they become available
 	for(var idx = 0; idx < allGraphs.length; idx++){
-		// Get flash object and refresh it by calling internal
-		//console.log("Trying to refresh:" + allGraphs[idx].children[0].id);
-		try{
-			allGraphs[idx].children[0].refreshGraph();
+		nonRefreshedMovies.push(allGraphs[idx].children[0]);
+	}
+	refreshAsync();
+}
+
+function refreshAsync(){
+//	console.log("Refreshing graphs. Number of graphs to refresh: " + nonRefreshedMovies.length);
+	if(nonRefreshedMovies.length > 0){
+		//Get one flash movie, try to refresh it, if it doesn't work, push it back again
+		var currentMovie = nonRefreshedMovies.shift();
+//		console.log("popping one: " + currentMovie.id);
+		try
+		{
+			currentMovie.refreshGraph();
+//			console.log("success: " + currentMovie.id);
 		}
 		catch(e)
 		{
-			//console.log("Couldn't:" + e);
+//			console.log("back inside: " + currentMovie.id);
+			nonRefreshedMovies.push(currentMovie);
 		}
+		setTimeout(refreshAsync, 250);
 	}
+	else
+	{
+		loadingPanel.hide();	
+	}	
 }
 function refreshBoxes(o){
 

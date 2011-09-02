@@ -185,6 +185,8 @@ public class DbUtil {
         return retVal;
     }
 
+
+
     public static Collection getPrimaryToplevelSectors(){
         Collection retVal = null;
         try {
@@ -2511,6 +2513,50 @@ public class DbUtil {
         } catch (Exception ex) {
           logger.error("Error getting sector name from database " + ex);
         }
+        return retVal;
+    }
+
+    public static List<String> getTopSectorNames (List <Long> ids) {
+        List<String> retVal = null;
+        String whereClause = generateWhereclause(ids, new GenericIdGetter());
+        try {
+            List<String> result = null;
+
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select s.name from ");
+            queryStr.append(AmpSector.class.getName());
+            queryStr.append(" as s where s.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(whereClause);
+            Query q = sess.createQuery(queryStr.toString());
+            result = q.list();
+
+            queryStr = new StringBuilder("select s.parentSectorId.name from ");
+            queryStr.append(AmpSector.class.getName());
+            queryStr.append(" as s where s.parentSectorId.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(whereClause);
+            q = sess.createQuery(queryStr.toString());
+            result.addAll(q.list());
+
+            queryStr = new StringBuilder("select s.parentSectorId.parentSectorId.name from ");
+            queryStr.append(AmpSector.class.getName());
+            queryStr.append(" as s where s.parentSectorId.parentSectorId.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(whereClause);
+            q = sess.createQuery(queryStr.toString());
+            result.addAll(q.list());
+
+            Set <String>duplicateRemover = new HashSet<String>();
+            duplicateRemover.addAll(result);
+
+            retVal = new ArrayList<String>();
+            for (String secName : duplicateRemover) {
+                retVal.add(secName);
+            }
+
+
+        } catch(Exception ex) {
+            logger.debug("Unable to get top level sector names", ex);
+        }
+
         return retVal;
     }
 }

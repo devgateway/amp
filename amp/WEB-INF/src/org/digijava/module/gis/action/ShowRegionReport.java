@@ -1,17 +1,8 @@
 package org.digijava.module.gis.action;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,14 +10,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.form.GisRegReportForm;
 import org.digijava.module.gis.util.*;
 
@@ -47,6 +36,30 @@ public class ShowRegionReport extends Action {
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
 
         GisFilterForm filterForm = GisUtil.parseFilterRequest(request);
+
+        boolean isDevinfo = request.getParameter("devInfo")!=null && request.getParameter("devInfo").trim().compareToIgnoreCase("true") == 0;
+
+        if (!isDevinfo) {
+            List <Long> selSecIDs = null;
+            if (filterForm.getSelectedSectors() != null) {
+                selSecIDs = new ArrayList<Long>(Arrays.asList(filterForm.getSelectedSectors()));
+            } else {
+                selSecIDs = new ArrayList<Long>();
+            }
+
+            if (filterForm.getSelectedSecondarySectors() != null) {
+                selSecIDs.addAll(new ArrayList<Long>(Arrays.asList(filterForm.getSelectedSecondarySectors())));
+            }
+            if (filterForm.getSelectedTertiarySectors() != null) {
+                selSecIDs.addAll(new ArrayList<Long>(Arrays.asList(filterForm.getSelectedTertiarySectors())));
+            }
+
+            gisRegReportForm.setFilterAllSectors(filterForm.isFilterAllSectors());
+            if (!filterForm.isFilterAllSectors()) {
+                List<String> secNames = DbUtil.getTopSectorNames(selSecIDs);
+                gisRegReportForm.setSelSectorNames(secNames);
+            }
+        }
 
         gisRegReportForm.setStartYear(filterForm.getFilterStartYear());
         gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
@@ -89,29 +102,9 @@ public class ShowRegionReport extends Action {
             }
         }
 
-
-        /*
-        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        if (baseCurr == null) {
-            baseCurr = "USD";
-        }
-        //currently we are using base currency but in the future we may use value, selected from currency breakdown.
-        gisRegReportForm.setSelectedCurrency(baseCurr);
-        */
-
-
         gisRegReportForm.setSelectedCurrency(filterForm.getSelectedCurrency());
-
-
-
-
-
         String regionName = DbUtil.getLocationNameById(regLocId);
         gisRegReportForm.setRegName(regionName);
-
-
-
-
         return mapping.findForward("forward");
     }
 

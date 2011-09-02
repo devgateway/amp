@@ -1395,34 +1395,58 @@
 	
 	//Region popup report
 	function showRegionReport(regCode, regName, regLocId) {
-		var popup = window.open("about:blank", "regReportWnd", "height=500,width=850,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
-		var filterForm = $("#gisFilterForm");
-		filterForm.attr("method", "post");
-		filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
-		filterForm.attr("target", "regReportWnd");
 		
-		var allSectors = false;
-		if ($("input[name='selectedSectors']:checked").length + 
-				$("input[name='selectedSecondarySectors']:checked").length + 
-				$("input[name='selectedTertiarySectors']:checked").length == 0) {
-			$("input[name='selectedSectors']").attr("checked", "true");
-			$("input[name='selectedSecondarySectors']").attr("checked", "true");
-			$("input[name='selectedTertiarySectors']").attr("checked", "true");
-			allSectors = true;
+		if (!showDevinfo) {
+			var popup = window.open("about:blank", "regReportWnd", "height=500,width=850,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+			var filterForm = $("#gisFilterForm");
+			filterForm.attr("method", "post");
+			filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
+			filterForm.attr("target", "regReportWnd");
+			
+			var allSectors = false;
+			if ($("input[name='selectedSectors']:checked").length + 
+					$("input[name='selectedSecondarySectors']:checked").length + 
+					$("input[name='selectedTertiarySectors']:checked").length == 0) {
+				$("input[name='selectedSectors']").attr("checked", "true");
+				$("input[name='selectedSecondarySectors']").attr("checked", "true");
+				$("input[name='selectedTertiarySectors']").attr("checked", "true");
+				allSectors = true;
+			}
+			
+			filterForm[0].submit();
+			
+	    if (allSectors) {
+	    	$("input[name='selectedSectors']").removeAttr("checked");
+				$("input[name='selectedSecondarySectors']").removeAttr("checked");
+				$("input[name='selectedTertiarySectors']").removeAttr("checked");
+	    }
+			popup.focus();
+		} else {
+		
+			if ($("#mapModeFin").val() != "pledgesData") {
+				var mapLevel = getRadioValue("mapLevelRadio");
+				if (mapLevel == null) {
+					mapLevel = 2;
+				}
+				
+				var onlyCurWS = $("#showOnlyCurentWS").attr("checked");
+	      if (onlyCurWS == null) {
+	      	onlyCurWS = false;
+	      }
+				
+				var sec = document.getElementById("sectorsMapCombo") != null ? document.getElementById("sectorsMapCombo").value:document.getElementById("sectorsMapComboFin").value;
+				var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+				var toYear = document.getElementsByName('selectedToYear')[0].value;
+				
+			
+				var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&devInfo=true";
+				//alert(regRepUrl);
+				var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+				
+				popup.focus();
+			}
 		}
 		
-		filterForm[0].submit();
-		
-    if (allSectors) {
-    	$("input[name='selectedSectors']").removeAttr("checked");
-			$("input[name='selectedSecondarySectors']").removeAttr("checked");
-			$("input[name='selectedTertiarySectors']").removeAttr("checked");
-    }
-
-		
-		
-		
-		popup.focus();
 		
 		return false;
 	}

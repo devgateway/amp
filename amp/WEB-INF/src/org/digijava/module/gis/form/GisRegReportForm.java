@@ -36,6 +36,26 @@ public class GisRegReportForm extends ActionForm {
     private List activityLocationFundingList;
     private String selectedCurrency;
 
+    private List<String> selSectorNames;
+
+    private boolean filterAllSectors;
+
+    public boolean isFilterAllSectors() {
+        return filterAllSectors;
+    }
+
+    public void setFilterAllSectors(boolean filterAllSectors) {
+        this.filterAllSectors = filterAllSectors;
+    }
+
+    public List<String> getSelSectorNames() {
+        return selSectorNames;
+    }
+
+    public void setSelSectorNames(List<String> selSectorNames) {
+        this.selSectorNames = selSectorNames;
+    }
+
     public String getSectorIdStr() {
         return sectorIdStr;
     }

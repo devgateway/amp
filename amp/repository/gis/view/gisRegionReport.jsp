@@ -11,6 +11,7 @@
 
 
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"></script>
 
 <digi:instance property="gisRegReportForm"/>
 
@@ -62,9 +63,46 @@
 			</tr>
 			<tr>
 				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
-					<digi:trn>Sector</digi:trn>
+					<digi:trn>Sector(s)</digi:trn>
 				</td>
-				<td>&nbsp;<bean:write name="gisRegReportForm" property="selSectorName"/></td>
+				<td>&nbsp;
+					<logic:equal name="gisRegReportForm" property="filterAllSectors" value="true">
+						<digi:trn>All</digi:trn>
+					</logic:equal>
+					<logic:notEqual name="gisRegReportForm" property="filterAllSectors" value="true">
+						<bean:size id="secCount" name="gisRegReportForm" property="selSectorNames"/>
+						<logic:greaterThan name="secCount" value="1">
+							<digi:trn><span style="text-decoration:underline;" onMouseOver="showMultySectors(true)" onMouseOut="showMultySectors(false)">Multiple</span></digi:trn>
+							<script language="javascript">
+								function showMultySectors(val) {
+									if (val) {
+										$('#multySectorDiv').css('display','block')
+									} else {
+										$('#multySectorDiv').css('display','none')
+									}
+								}
+							</script>
+									
+							<div id="multySectorDiv" style="padding:5px; display:none; position:absolute; border:1px solid silver; background:white;">
+							<logic:iterate name="gisRegReportForm" property="selSectorNames" id="topSectorName">
+								<span style="text-decoration:none;font-size:10px">
+									<bean:write name="topSectorName"/><br>
+								</span>
+							</logic:iterate>
+						</div>
+						</logic:greaterThan>
+						<logic:lessEqual name="secCount" value="1">
+							<logic:iterate name="gisRegReportForm" property="selSectorNames" id="topSectorName">
+								<bean:write name="topSectorName"/>
+							</logic:iterate>
+						</logic:lessEqual>
+						
+							
+					</logic:notEqual>
+					<%--
+					<bean:write name="gisRegReportForm" property="selSectorName"/>
+					--%>
+				</td>
 			</tr>
 			<tr>
 				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">

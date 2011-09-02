@@ -204,7 +204,7 @@ public class ShowTeamReports extends Action {
                 case OWNER_DESC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.DESC,collator);break;
                 case DATE_ASC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.ASC);break;
                 case DATE_DESC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.DESC);break;
-                default: sort=new AdvancedReportUtil.AmpReportIdComparator();break;
+                default: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC, collator);break;
             }
            
 			List<AmpReports> teamResults =null;

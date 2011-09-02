@@ -1214,7 +1214,7 @@ public class ReportsFilterPicker extends MultiAction {
 		else 
 			arf.setBudget(null);
 		
-		arf.setJustSearch(filterForm.getJustSearch());
+		arf.setJustSearch(filterForm.getJustSearch()==null?false:filterForm.getJustSearch());
 
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);

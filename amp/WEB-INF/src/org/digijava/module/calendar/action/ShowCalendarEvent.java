@@ -326,7 +326,13 @@ public class ShowCalendarEvent extends Action {
                     }
         		}        		
         		if(!ceform.getMethod().equalsIgnoreCase("print")){
-        			ceform.setMethod("");
+        			//
+        			if (ceform.getMethod().equalsIgnoreCase("preview")) {
+        				// do nothing see AMPOPS-154
+        			} else {
+        				// i keep this, dunno if it is used somewhere, but should be removed
+        				ceform.setMethod(""); 
+        			}
                 	return mapping.findForward("preview");
         		}else{
         			

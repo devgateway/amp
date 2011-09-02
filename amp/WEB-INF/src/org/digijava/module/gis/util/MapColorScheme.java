@@ -23,7 +23,7 @@ public class MapColorScheme {
     }
 
     public static MapColorScheme getDefaultScheme() {
-        return new MapColorScheme(new ColorRGB(74,104,122),
+        return new MapColorScheme(new ColorRGB(255,255,255),
                                   new ColorRGB(214, 194, 158),
                                   new ColorRGB(0,0,100),
                                   new ColorRGB(255,255,255,170),

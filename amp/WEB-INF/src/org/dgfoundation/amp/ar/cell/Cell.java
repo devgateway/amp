@@ -85,7 +85,10 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	
 
 	public int compareTo(C o) {
-		return ((Comparable)this.getValue()).compareTo(o.getValue());
+		if(this.getValue()!=null && o.getValue()!=null)
+			return ((Comparable)this.getValue()).compareTo(o.getValue());
+		else
+			return 0;
 	}
 	
 	public abstract Comparable comparableToken();

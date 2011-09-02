@@ -7,11 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -30,8 +32,10 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -64,11 +68,13 @@ public class ActivityUtil {
 			session.clear();
 			AmpActivityVersion a = (AmpActivityVersion) am.getObject();
 			AmpActivityVersion oldA = a;
-
+            AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+			String validation = org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
+			
+		
 			if (a.getAmpActivityId() == null){
-				AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-				a.setActivityCreator(s.getAmpCurrentMember());
-				a.setCreatedBy(s.getAmpCurrentMember());
+				a.setActivityCreator(ampCurrentMember);
+				a.setCreatedBy(ampCurrentMember);
 			}
 			
 			if (a.getDraft() == null)
@@ -76,6 +82,48 @@ public class ActivityUtil {
 			boolean draftChange = draft != a.getDraft();
 			
 			a.setDraft(draft);
+			
+			//setting activity status....
+			AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
+			if((role.getTeamHead()!=null&&role.getTeamHead())||role.isApprover()){
+				if(draft){
+					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+				}
+				else{
+					a.setApprovalStatus(Constants.APPROVED_STATUS);
+					a.setApprovedBy(ampCurrentMember);
+					a.setApprovalDate(Calendar.getInstance().getTime());
+				}
+			}
+			else{
+				if("validationOff".equals(validation)){
+					a.setApprovalStatus(Constants.APPROVED_STATUS);
+				}
+				else{
+					if("newOnly".equals(validation)){
+						if(a.getAmpActivityId()==null){
+							a.setApprovalStatus(Constants.STARTED_STATUS);
+						}
+						else{
+							if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+								a.setApprovalStatus(Constants.EDITED_STATUS);
+							}
+						}
+					}
+					else{
+						if("allEdits".equals(validation)){
+							if(a.getAmpActivityId()==null){
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							}
+							else{
+								a.setApprovalStatus(Constants.EDITED_STATUS);
+							}
+						}
+					}
+					
+				}
+				
+			}
 			a.setDeleted(false);
 			//is versioning activated?
 			if (a != null && (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
@@ -139,7 +187,6 @@ public class ActivityUtil {
 				group.setAmpActivityLastVersion(a);
 				session.save(group);
 			}
-            AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);
 			a.setCreatedDate(Calendar.getInstance().getTime());

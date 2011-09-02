@@ -1,7 +1,8 @@
 package org.digijava.module.message.triggers;
 
 import java.util.Date;
-import org.digijava.module.aim.dbentity.AmpActivity;
+
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 
 public class NotApprovedActivityTrigger extends Trigger {
@@ -16,7 +17,7 @@ public class NotApprovedActivityTrigger extends Trigger {
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_SAVED_BY,PARAM_SAVE_DATE,PARAM_URL};
 
     public NotApprovedActivityTrigger(Object source) {
-        if(!(source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
+        if(!(source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
         this.source=source;
         forwardEvent();
     }
@@ -26,7 +27,7 @@ public class NotApprovedActivityTrigger extends Trigger {
     @Override
     protected Event generateEvent() {
         Event e=new Event(NotApprovedActivityTrigger.class);
-        AmpActivity act=(AmpActivity) source;
+        AmpActivityVersion act=(AmpActivityVersion) source;
         e.getParameters().put(PARAM_NAME,act.getName());
         if(act.getUpdatedBy()!=null){
             e.getParameters().put(PARAM_SAVED_BY,act.getUpdatedBy());
@@ -35,7 +36,7 @@ public class NotApprovedActivityTrigger extends Trigger {
         }
         e.getParameters().put(PARAM_ACTIVIY_CREATOR_TEAM, act.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_SAVE_DATE, new Date());
-        e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
+        e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
         e.getParameters().put(PARAM_ACTIVIY_ID,act.getAmpActivityId());
     return e;
     }

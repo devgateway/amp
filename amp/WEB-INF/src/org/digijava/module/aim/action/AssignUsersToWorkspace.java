@@ -76,6 +76,7 @@ public class AssignUsersToWorkspace extends Action {
 				newAppSettings.setFiscalCalendar(ampAppSettings	.getFiscalCalendar());
 				newAppSettings.setLanguage(ampAppSettings.getLanguage());
 				newAppSettings.setUseDefault(new Boolean(true));
+				newAppSettings.setValidation(ampAppSettings.getValidation());
 				try{
 					TeamUtil.addTeamMember(newMember,newAppSettings,site);
 				}catch (Exception e){

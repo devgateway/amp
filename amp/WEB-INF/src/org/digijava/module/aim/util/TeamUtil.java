@@ -378,6 +378,7 @@ public class TeamUtil {
                 ampAppSettings.setCurrency(curr);
                 ampAppSettings.setFiscalCalendar(fiscal);
                 ampAppSettings.setLanguage("English");
+                ampAppSettings.setValidation("validationOff");
                 session.save(ampAppSettings);
 
                 // update all child workspaces parent team

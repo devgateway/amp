@@ -4,9 +4,13 @@
 */
 package org.dgfoundation.amp.onepager.components.features;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.FeedbackMessage;
@@ -19,7 +23,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
@@ -30,7 +36,16 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 
 /**
  * Main component hub for all activity form subcomponents.
@@ -171,7 +186,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
 			boolean draft) {
 		AmpActivityModel a = (AmpActivityModel) am;
-		Long oldId = am.getObject().getAmpActivityId();
+		AmpActivityVersion activity=am.getObject();
+		Long oldId = activity.getAmpActivityId();
+		Boolean wasDraft=activity.getDraft();
+		AmpTeamMember modifiedBy = activity.getModifiedBy();
+		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+
 
 		//Before starting to save check lock
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
@@ -183,6 +204,62 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
 
 		info("Activity saved successfully");
+
+		/*
+		 * if activity created or created as draft 
+		 * and then saved the message should be sent to the list
+		 */
+		AmpActivityVersion newActivity=am.getObject();
+		if ((oldId == null || (wasDraft != null && wasDraft))
+				&& newActivity.getDraft() != null && !newActivity.getDraft()) {
+			new ActivitySaveTrigger(newActivity);
+		}
+    	String additionalDetails="approved";
+		//if validation is off in team setup no messages should be generated
+			String validation = DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
+			if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
+        	String approvalStatus = newActivity.getApprovalStatus();
+			if(approvalStatus.equals(Constants.APPROVED_STATUS)||approvalStatus.equals(Constants.STARTED_APPROVED_STATUS)){
+        		if(modifiedBy!=null){
+        			AmpTeamMemberRoles role=modifiedBy.getAmpMemberRole();
+            		boolean isTeamHead=false;
+            		if(role.getTeamHead()!=null&&role.getTeamHead()){
+            			isTeamHead=true;
+            		}
+            		if(!isTeamHead&&!role.isApprover()){
+            			if(oldId==null||("allEdits".equals(validation))){
+            				new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed
+            			}
+            		}
+        		}
+        		
+        	}else{
+        		if("allEdits".equals(validation)||oldId==null){
+        			new NotApprovedActivityTrigger(newActivity);
+            		additionalDetails="pending approval";
+        		}
+        	}
+        }
+		else{
+			if (newActivity.getDraft() != null&& newActivity.getDraft()){
+				additionalDetails="draft";
+			}
+		}
+			WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
+		    HttpServletRequest hsRequest   = cycle.getWebRequest().getHttpServletRequest();
+
+			if (oldId != null) {
+				List<String> details=new ArrayList<String>();
+				details.add(additionalDetails);
+				AuditLoggerUtil.logActivityUpdate(hsRequest, newActivity,details);
+			} else {
+				try {
+					AuditLoggerUtil.logObject(hsRequest, newActivity, "add",additionalDetails);
+				} catch (DgException e) {
+					e.printStackTrace();
+				}
+			}
+
 		//if (newActivity){
 			Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
 			String replaceStr;

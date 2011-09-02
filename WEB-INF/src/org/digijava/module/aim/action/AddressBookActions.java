@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -142,7 +143,8 @@ public class AddressBookActions extends DispatchAction {
 				AmpContact contact = (AmpContact) it.next();
 				JSONObject jcontact = new JSONObject();
 				jcontact.put("ID", contact.getId());
-				jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
+				String title = contact.getTitle()!=null?TranslatorWorker.translateText(contact.getTitle().getLabel(), request):"";
+				jcontact.put("title", title);
 				jcontact.put("name", contact.getName()+" "+contact.getLastname());
 				String emails="";
 				String orgs="";

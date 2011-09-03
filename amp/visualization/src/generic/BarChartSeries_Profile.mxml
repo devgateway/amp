@@ -39,7 +39,7 @@
 	creationComplete="application1_creationCompleteHandler(event);"
 >
 
-	<mx:HTTPService id="service" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)">
 	</mx:HTTPService>
 	<!--<mx:Style source="styles/charts.css"/>-->
 	<mx:Script>
@@ -59,6 +59,7 @@
 			import mx.core.DragSource;
 			import mx.events.DragEvent;
 			import flash.events.MouseEvent;
+			import mx.rpc.events.FaultEvent;
 
 			import org.axiis.utils.ObjectUtils;
 			import org.axiis.core.AxiisSprite;
@@ -79,6 +80,12 @@
 			private var curUrl:String = "";
 			private var strUrl:String = "";
 			private var dataAction:String = "";
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
 			
 			/**
 			 * This example is using xml data read from the file system. 
@@ -257,6 +264,17 @@
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
 
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -404,6 +422,13 @@
 				}
 				else
 					return " ";
+			}
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
 			}
 
 		]]>

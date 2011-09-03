@@ -39,7 +39,7 @@
 	xmlns:labels="org.axiis.charts.labels.*"
 	xmlns:utils="org.axiis.utils.*">
 
-	<mx:HTTPService id="service" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)">
 		<mx:request>
 			<linechart>true</linechart>
 		</mx:request>
@@ -64,7 +64,9 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-			
+
+			import mx.rpc.events.FaultEvent;
+
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
 			import org.axiis.events.LayoutItemEvent;
@@ -84,7 +86,13 @@
 			private var curUrl:String = "";
 			private var strUrl:String = "";
 			private var dataAction:String = "";
-			
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
+
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -116,6 +124,18 @@
 				} catch (errObject:Error) {
 				}
 				categories = categoriesLocal; 
+				if(categoriesLocal.length > 0)
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);					
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
 				
 				// Set the intial dp to the intial setting of the %data slider
 				hScale.dataProvider=ds.data.pivot.header.slice(1,dataSlice+1);
@@ -182,9 +202,20 @@
 					legendLayout.visible = true;
 				else
 					legendLayout.visible = false;
+
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				dc.visible = true;
 				
 			}
-			
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}		
 			private function captureSnapshot():void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
@@ -271,6 +302,17 @@
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -310,6 +352,11 @@
 
 			public function refreshGraph():void
 			{
+				
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
@@ -379,6 +426,13 @@
 				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
 				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
 			}
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
 
 		]]>
 	</mx:Script>
@@ -404,7 +458,7 @@
 	<mx:String id="dataFontFamily">Arial</mx:String>
 	<mx:Number id="dataFontSize">12</mx:Number>
 	<mx:String id="dataFontWeight">bold</mx:String>
-
+	<mx:Resize id="resize" />
 	<!--   
 	NumericExpression provides a convenient place to store the results of numeric calculations used in multiple places within an MXML document. 
 	By binding the results of a complex numeric computation to a NumericExpression's value property, you allow other objects to bind on that 
@@ -781,4 +835,11 @@
 		</mx:HBox>
 	</mx:HBox>
 -->
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontWeight="bold" fontSize="13" color="black" text="No data to show"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	</mx:Panel>
+
 </mx:Application>

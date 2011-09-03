@@ -1393,6 +1393,17 @@ function toggleSettings(){
 <table width="689" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr>
 <td valign="top">
+
+<!--  Start Global variables for all flash files -->
+<input type="hidden" id="GlobalFontSize" value="11" />
+<input type="hidden" id="GlobalFontFamily" value="Arial" />
+<input type="hidden" id="GlobalFontWeight" value="bold" />
+<input type="hidden" id="trnMessagePanel" value="<digi:trn jsFriendly='true'>Empty Dataset</digi:trn>" />
+<input type="hidden" id="trnMessageEmpty" value="<digi:trn jsFriendly='true'>No data to show</digi:trn>" />
+<input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading</digi:trn>" />
+<input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading data...</digi:trn>" />
+<!--  End Global variables for all flash files -->
+
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
 		<li><a href="#tab1"><div><digi:trn>Visualization</digi:trn></div></a></li>
@@ -1485,10 +1496,6 @@ function toggleSettings(){
 		</c:if>
 	
 		<fieldset class="chartFieldset">
-			<input type="hidden" id="GlobalFontSize" value="11" />
-			<input type="hidden" id="GlobalFontFamily" value="Arial" />
-			<input type="hidden" id="GlobalFontWeight" value="bold" />
-		
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="FundingChartHeader" class="chart_header" style="float:left">
 			<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">

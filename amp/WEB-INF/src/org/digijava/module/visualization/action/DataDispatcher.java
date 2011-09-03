@@ -638,9 +638,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("Sector Name");
+	    		csvString.append("\"Sector Name\"");
 	    		csvString.append(",");
-	    		csvString.append("Amount");
+	    		csvString.append("\"Amount\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5
@@ -967,9 +967,9 @@ public class DataDispatcher extends DispatchAction {
                 list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-        		csvString.append("Donor Name");
+        		csvString.append("\"Donor Name\"");
         		csvString.append(",");
-        		csvString.append("Amount");
+        		csvString.append("\"Amount\"");
         		csvString.append("\n");
                 BigDecimal othersValue = BigDecimal.ZERO;
                 // Take the top 5
@@ -1473,15 +1473,15 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-		csvString.append("Year");
+		csvString.append("\"Year\"");
 		csvString.append(",");
-		csvString.append(plannedTitle);
+		csvString.append("\"" +plannedTitle);
 		csvString.append("#");
-        csvString.append(Constants.PLANNED);
+        csvString.append(Constants.PLANNED + "\"");
         csvString.append(",");
-		csvString.append(actualTitle);
+		csvString.append("\"" + actualTitle);
 		csvString.append("#");
-        csvString.append(Constants.ACTUAL);
+        csvString.append(Constants.ACTUAL + "\"");
         csvString.append("\n");
 
         for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
@@ -1603,24 +1603,24 @@ public class DataDispatcher extends DispatchAction {
 		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext);
 
 		StringBuffer csvString = new StringBuffer();
-		csvString.append("Year");
+		csvString.append("\"Year\"");
 		csvString.append(",");
-		csvString.append(actComTranslatedTitle);
+		csvString.append("\"" + actComTranslatedTitle);
 		csvString.append("#");
-        csvString.append(Constants.COMMITMENT);
+        csvString.append(Constants.COMMITMENT + "\"");
         csvString.append(",");
-		csvString.append(actDisbTranslatedTitle);
+		csvString.append("\"" + actDisbTranslatedTitle);
 		csvString.append("#");
-        csvString.append(Constants.DISBURSEMENT);
+        csvString.append(Constants.DISBURSEMENT + "\"");
         if (filter.isExpendituresVisible()) {
 			csvString.append(",");
-			csvString.append(actExpTranslatedTitle);
+			csvString.append("\"" + actExpTranslatedTitle);
 			csvString.append("#");
-	        csvString.append(Constants.EXPENDITURE);
+	        csvString.append(Constants.EXPENDITURE + "\"");
 	    }
 		if (filter.isPledgeVisible()) {
 			csvString.append(",");
-			csvString.append(pledgesTranslatedTitle);
+			csvString.append("\"" + pledgesTranslatedTitle + "\"");
 		}
 		csvString.append("\n");
 
@@ -2032,9 +2032,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("Region Name");
+	    		csvString.append("\"Region Name\"");
 	    		csvString.append(",");
-	    		csvString.append("Amount");
+	    		csvString.append("\"Amount\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5

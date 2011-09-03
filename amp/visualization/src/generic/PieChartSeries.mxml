@@ -32,6 +32,8 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+
+			import mx.rpc.events.FaultEvent;
 			
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
@@ -40,6 +42,12 @@
 			private var curUrl:String = "";
 			private var strUrl:String = "";
 			private var dataAction:String = "";
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
 
 			private var xS:int; 
 			private var yS:int;
@@ -134,9 +142,16 @@
 					legendLayout.visible = true;
 				else
 					legendLayout.visible = false;
+
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				dc.visible = true;
 				
 			}
-			
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}			
 			private function captureSnapshot():void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
@@ -204,6 +219,17 @@
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
@@ -246,6 +272,10 @@
 			
 			public function refreshGraph():void
 			{
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
@@ -515,5 +545,8 @@
 	</mx:Canvas>
 	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
 		<mx:Label id="messageEmpty" fontFamily="Arial" fontWeight="bold" fontSize="14" color="black" text="No data for the selected year"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
 	</mx:Panel>
 </mx:Application>

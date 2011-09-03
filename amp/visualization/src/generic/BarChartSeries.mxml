@@ -77,6 +77,12 @@
 			private var strUrl:String = "";
 			private var dataAction:String = "";
 			
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
+			
 			public function start():void
 			{
 				// Creates array for the Legend with the data
@@ -214,6 +220,7 @@
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				dc.visible = true;
+
 			}
 
 			private function captureSnapshot():void
@@ -250,6 +257,16 @@
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
 				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
 
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
 				var strDomain:String = "";
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){

@@ -111,7 +111,7 @@
 						{
 							str = str.split("#")[0];
 						}
-						categoriesLocal.addItem({"pivotName" : str });
+						categoriesLocal.addItem({"pivotName" : str.replace("&placeHolder;",",") });
 					}
 				} catch (errObject:Error) {
 				}

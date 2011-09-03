@@ -37,10 +37,10 @@
 				}
 				var arrHeader:Array; 
 				if(datagrid_id.columns.length == 0){
-					arrHeader = arr[0].split(',');
+					arrHeader = arr[0].split('","');
 					for (var i2:int=0; i2<arrHeader.length; i2++) {
 						var array = arrHeader[i2].split("#");
-						addDataGridColumn(i2.toString(), array[0]);
+						addDataGridColumn(i2.toString(), array[0].replace('"',''));
 					}
 				}
 				datagrid_id.dataProvider = arrDest;

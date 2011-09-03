@@ -1326,15 +1326,17 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-		csvString.append("Year");
+		csvString.append("\"Year\"");
 		csvString.append(",");
 		Iterator<AmpCategoryValue> it = categoryValues.iterator();
 		while (it.hasNext()){
 			AmpCategoryValue value = it.next();
             String title = TranslatorWorker.translateText(value.getValue(),locale, siteId);
+			csvString.append("\"");
 			csvString.append(title);
 			csvString.append("#");
             csvString.append(value.getId());
+			csvString.append("\"");
             if(it.hasNext()) 
 				csvString.append(",");
 			else

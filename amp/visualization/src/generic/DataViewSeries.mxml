@@ -80,9 +80,16 @@
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
+				var params:Object;
+				if(idContainer == "AidType"){
+					params = {
+						"typeofaid" : "true"
+					};
+				}
+
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				if(start)
-					service.send();
+					service.send(params);
 				
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			

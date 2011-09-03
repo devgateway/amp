@@ -1236,6 +1236,8 @@ public class DataDispatcher extends DispatchAction {
 		}
         
         BigDecimal amtTotal = BigDecimal.ZERO;
+        HashMap<AmpCategoryValue, BigDecimal> hm = new HashMap<AmpCategoryValue, BigDecimal>();
+        
         for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
 			DecimalWraper funding = null;
@@ -1245,6 +1247,8 @@ public class DataDispatcher extends DispatchAction {
                 funding = DbUtil.getFunding(filter, startDate, endDate, null, ampCategoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
             }
             amtTotal = amtTotal.add(funding.getValue());
+            //Fill HashMap with totales per category value, to only fill non empty categories
+            hm.put(ampCategoryValue, funding.getValue());
 		}
        
         
@@ -1282,16 +1286,23 @@ public class DataDispatcher extends DispatchAction {
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
-						startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-						endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-		                DecimalWraper funding = null;
-		                if (typeOfAid) {
-		                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
-		                } else {
-		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
-		                }
-						xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
-						aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						BigDecimal totalCategory = hm.get(value);
+						if(!totalCategory.equals(BigDecimal.ZERO)){
+							startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+							endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+			                DecimalWraper funding = null;
+			                if (typeOfAid) {
+			                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+			                } else {
+			                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
+			                }
+							xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + i + "\"/>\n");
+							aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						}
+						else
+						{
+							aidTypeData += ">" + value.getValue() + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						}
 					}
 					xmlString.append("</year>\n");
 				}

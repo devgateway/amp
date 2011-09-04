@@ -38,11 +38,11 @@ StopWatch.next("Filters", true);
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
-		<li><a id="relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
-		<li><a id="sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
-		<li><a id="programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
-		<li><a id="financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
-		<li><a id="otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
+		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
+		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
+		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
+		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
 	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
 		<div id="donorsTab" style="height: 91%;">
@@ -82,21 +82,8 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
-				<bean:define id="reqSearchFieldWidth" toScope="request" value="80px" />
-				<div style="width: 76%; height: 100%; padding: 0px; float: left;">
-					<%@include file="bigFilterTable.jsp" %>
-				</div>
-				<div style="width:24%; margin-left: 76% ;font-size: 11px; height: 100%; ">
-					<field:display name="Joint Criteria" feature="Budget">
-							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
-							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
-					</field:display>
-                    <br/>
-					<field:display name="Government Approval Procedures" feature="Budget">
-						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
-							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
-					</field:display>
-				</div>
+				<%@include file="bigFilterTable.jsp" %>
+				
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
 				
 			</div>

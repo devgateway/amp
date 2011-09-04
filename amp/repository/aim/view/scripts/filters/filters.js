@@ -19,7 +19,7 @@ function resetFilter(){
 			aimReportsFilterPickerForm.fromYear.selectedIndex=0;
 		
 		if (aimReportsFilterPickerForm.toYear)
-			aimReportsFilterPickerForm.toYear.selectedIndex=0
+			aimReportsFilterPickerForm.toYear.selectedIndex=0;
 			
 		if (aimReportsFilterPickerForm.fromMonth)
 			aimReportsFilterPickerForm.fromMonth.selectedIndex=0;
@@ -66,14 +66,7 @@ function resetFilter(){
  		}
 
 			
-		if (aimReportsFilterPickerForm.jointCriteria){
-			aimReportsFilterPickerForm.jointCriteria.checked=false;
-		}
-
-		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
-			aimReportsFilterPickerForm.governmentApprovalProcedures.checked=false;
-		}
-		
+				
 		if (aimReportsFilterPickerForm.computedYear){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}
@@ -118,7 +111,7 @@ YAHOO.amptab.afterFiltersLoad   = function (){
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
 	 	
 
-	 }
+	 };
 	 	
 YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 	var bigDivEl            = document.getElementById(bigDivId);
@@ -136,7 +129,7 @@ YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 		 		}
 		 	}
 		}
-	}
+	};
 
 function toggleCheckChildren(checkboxEl) {
 	
@@ -184,7 +177,7 @@ DivManager.prototype.onSelect           = function () {
 	 		this.propertyObj.lastShownDiv.style.display     = "none";
 	 	this.divEl.style.display                = "block";
 	 	this.propertyObj.lastShownDiv   = this.divEl;
-	 	var parentDiv                                   = this.divEl
+	 	var parentDiv                                   = this.divEl;
 	 	var found                                               = false;
 	 	for (var i=0; i<4; i++) { //should be more than 5 steps aways
 		 	parentDiv       = parentDiv.parentNode;
@@ -197,4 +190,4 @@ DivManager.prototype.onSelect           = function () {
 	 		getSearchManagerInstanceById( parentDiv.id+"_search" ).setDiv(this.divEl);
 	 	else
 	 		alert("Not found");
-	 }
+	 };

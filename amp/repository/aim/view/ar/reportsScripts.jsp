@@ -320,9 +320,17 @@ saveReportEngine	= null;
 	
 	function showFilter() {
 		$("#myFilter").empty().html('<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>');
-		$("#myFilter").load("/aim/reportsFilterPicker.do");
+		//$("#myFilter").load("/aim/reportsFilterPicker.do");
+		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do", {
+			success: function(o) {
+				document.getElementById("myFilter").innerHTML	= o.responseText;
+				YAHOO.amptab.afterFiltersLoad();
+			},
+			failure:function (o) {
+				document.getElementById("myFilter").innerHTML	= "<digi:trn>There was a problem loading the filters</digi:trn>";
+			}
+		});
 		YAHOO.amptab.init();
-		YAHOO.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
  	 	element.style.height    = "450px";

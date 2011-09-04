@@ -87,6 +87,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedProjectCategory;
 	private Object[] selectedresponsibleorg;
 	private Object[] selectedArchivedStatus	= new Object[]{"1"};
+	private Object[] selectedActivitySettings;
 	
 	//private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
@@ -381,6 +382,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedBeneficiaryAgency = null;
 				this.selectedImplementingAgency = null;
 				this.selectedProjectCategory = null;
+				this.selectedActivitySettings	= null;
 				this.selectedBudgets = null;
 				this.governmentApprovalProcedures = null;
 				this.unallocatedLocation = null;
@@ -1006,6 +1008,21 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedProjectImplUnit(Long[] selectedProjectImplUnit) {
 		this.selectedProjectImplUnit = selectedProjectImplUnit;
+	}
+
+	/**
+	 * @return the selectedActivitySettings
+	 */
+	public Object[] getSelectedActivitySettings() {
+		return selectedActivitySettings;
+	}
+
+	/**
+	 * @param selectedActivitySettings the selectedActivitySettings to set
+	 */
+	public void setSelectedActivitySettings(Object[] selectedActivitySettings) {
+		this.selectedActivitySettings = selectedActivitySettings;
 	}	
+	
 	
 }

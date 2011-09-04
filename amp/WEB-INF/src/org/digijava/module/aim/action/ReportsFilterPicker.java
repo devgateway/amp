@@ -85,6 +85,10 @@ public class ReportsFilterPicker extends MultiAction {
 	private static Logger logger = Logger.getLogger(ReportsFilterPicker.class);
 	
 	final String KEY_RISK_PREFIX = "aim:risk:";
+	public final static String ONLY_JOINT_CRITERIA	= "0";
+	public final static String ONLY_GOV_PROCEDURES	= "1";
+	
+	
 	int curYear=new GregorianCalendar().get(Calendar.YEAR);
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -137,11 +141,11 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		
-//		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
-//		if ( existingFilter != null ) { 
-//			FilterUtil.populateForm(filterForm, existingFilter);
-//			request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
-//		}
+		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+		if ( existingFilter != null ) { 
+			FilterUtil.populateForm(filterForm, existingFilter);
+			//request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+		}
 
 		Long ampTeamId = null;
 		if (teamMember != null)
@@ -564,7 +568,31 @@ public class ReportsFilterPicker extends MultiAction {
 							rootRegions, "regionSelected");
 			filterForm.getFinancingLocationElements().add(regionsElement);
 		}
-		
+		if( FeaturesUtil.isVisibleField("Joint Criteria", ampContext) && 
+				FeaturesUtil.isVisibleField("Government Approval Procedures", ampContext) ) { 
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
+			activitySettings.setLabel("Both Settings");
+			activitySettings.setUniqueId("-1");
+			activitySettings.setChildren( children );
+			if ( FeaturesUtil.isVisibleField("Joint Criteria", ampContext) ) {
+				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
+				jointCriteriaDO.setLabel("Only Projects Under Joint Criteria");
+				jointCriteriaDO.setUniqueId(ONLY_JOINT_CRITERIA);
+				children.add(jointCriteriaDO);
+			}
+			if ( FeaturesUtil.isVisibleField("Government Approval Procedures", ampContext) ) {
+				HierarchyListableImplementation govProceduresDO	= new HierarchyListableImplementation();
+				govProceduresDO.setLabel("Only Projects Having Government Approval Procedures");
+				govProceduresDO.setUniqueId(ONLY_GOV_PROCEDURES);
+				children.add(govProceduresDO);
+			}
+			GroupingElement<HierarchyListableImplementation> activitySettingsElement	=
+					new GroupingElement<HierarchyListableImplementation>("Activity Display Settings", "filter_act_settings_div", 
+							activitySettings, "selectedActivitySettings");
+			filterForm.getFinancingLocationElements().add(activitySettingsElement);
+		}
 		
 		
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
@@ -822,6 +850,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSecondaryPrograms(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedNatPlanObj(null);
+		filterForm.setSelectedActivitySettings(null);
 		HttpSession httpSession = request.getSession();
 		
 		AmpApplicationSettings tempSettings = getAppSetting(request);
@@ -1212,8 +1241,27 @@ public class ReportsFilterPicker extends MultiAction {
 
 		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class, filterForm.getSelectedRisks()));
 
-		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
-		arf.setJointCriteria(filterForm.getJointCriteria());
+		if ( filterForm.getSelectedActivitySettings() != null && filterForm.getSelectedActivitySettings().length > 0 ) {
+			boolean isJointCriteria	= false;
+			boolean isGovProcedures	= false;
+			for (int i = 0; i < filterForm.getSelectedActivitySettings().length; i++) {
+				String element = filterForm.getSelectedActivitySettings()[i] + "";
+				if ( ONLY_JOINT_CRITERIA.equals(element) ) {
+					arf.setJointCriteria(true);
+					isJointCriteria		= true;
+				}
+				if ( ONLY_GOV_PROCEDURES.equals(element) ) {
+					arf.setGovernmentApprovalProcedures(true);
+					isGovProcedures		= true;
+				}
+			}
+			if (!isJointCriteria)
+				arf.setJointCriteria(null);
+			if (!isGovProcedures)
+				arf.setGovernmentApprovalProcedures(null);
+		}
+//		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
+//		arf.setJointCriteria(filterForm.getJointCriteria());
 
 		if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
 			arf.setDonorTypes(new HashSet());

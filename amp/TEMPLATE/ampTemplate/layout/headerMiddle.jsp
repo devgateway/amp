@@ -12,6 +12,9 @@
 <%@page import="org.digijava.module.aim.helper.Constants"%>
 
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+
 <!-- Core + Skin CSS -->
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
 
@@ -287,7 +290,7 @@ function adminHelp(){
 										siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 										session.setAttribute("site", siteDomain);
 										%>
-                                        <a class="yuiampmenuitemlabel" href="" target="name"
+                                        <a class="yuiampmenuitemlabel" href="" target="name" 
 											onClick="showAbout(); return false;">
                                         	<digi:trn key="aim:aboutamp">About AMP</digi:trn>
                                         </a>

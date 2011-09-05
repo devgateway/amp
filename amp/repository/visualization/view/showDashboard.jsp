@@ -2578,7 +2578,7 @@ function refreshBoxes(o){
 			var endYear =  "" + currentYear;
 			div = document.getElementById("ODAGrowthTitleLegend");
 			input = document.getElementById("ODAGrowthTitle");
-			value = "ODA Growth Percentage " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+			value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
 			div.innerHTML = value;
 			input.value = value;
 		}

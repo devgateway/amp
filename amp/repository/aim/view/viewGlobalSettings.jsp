@@ -317,38 +317,25 @@ function setIndex(index){
 											
 											 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
 										
-			                                  <%
-													                                  	String possibleValues = "possibleValues("
-													                                  								+ globalSett.getGlobalSettingsName()
-													                                  								+ ")";
-													                                  						String gsType = globalSett
-													                                  								.getGlobalSettingsPossibleValues();
-													                                  %>
+			                                  <%String possibleValues = "possibleValues("+ globalSett.getGlobalSettingsName()+ ")";
+												String gsType = globalSett.getGlobalSettingsPossibleValues();
+											  %>
 			
 			
 			                                  <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 											
-			                                    <%
-														                                    	if (globalSett.getGlobalSettingsName()
-														                                    									.trim().equalsIgnoreCase(
-														                                    											"Default Country".trim())) {
-														                                    %>
-			                                    <html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>' >
+			                                    <%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) {%>
+			                                    <html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%=globalSett.getGlobalSettingsValue()%>' >
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 			                                        <html:option value="${global.key}">${global.value}</html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
 			                                    <%
-			                                    	} else if (globalSett
-			                                    									.getGlobalSettingsName().trim()
-			                                    									.equalsIgnoreCase(
-			                                    											"Default Number Format"
-			                                    													.trim())) {
+			                                    	} else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Number Format".trim())) {
 			                                    %>
 			                                  	
 			                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text;width:100%" 
-			                                  	value='<%=globalSett
-																.getGlobalSettingsValue()%>'>
+			                                  	value='<%=globalSett.getGlobalSettingsValue()%>'>
 			                                      <option value="noselection"><digi:trn key="aim:gloablSetting:selectFormat">(Select Format)</digi:trn> </option>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 			                                        <option value="${global.key}">${global.value}</option>
@@ -360,11 +347,7 @@ function setIndex(index){
 			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn>
 
  												<%
- 													} else if (globalSett
- 																					.getGlobalSettingsName().trim()
- 																					.equalsIgnoreCase(
- 																							"Budget Support for PI 9"
- 																									.trim())) {
+ 													} else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {
  												%>
 													<html:select property="listOfValues" styleClass="inp-text;width:100%" multiple="true" name="globalSett">
 														<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
@@ -378,17 +361,12 @@ function setIndex(index){
 			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
 			                                      	<%
-			                                      		String key2 = "aim:globalSettings:"
-			                                      													+ globalSett
-			                                      															.getGlobalSettingsName()
-			                                      													+ ":"
-			                                      													+ global.getValue();
+			                                      		String key2 = "aim:globalSettings:"+ globalSett.getGlobalSettingsName()+ ":"+ global.getValue();
 			                                      	%>
 			                                      	<%
 			                                      		if (key2.length() > 100) {
-			                                      												key2 = key2
-			                                      														.substring(0, 50);
-			                                      											}
+			                                      				key2 = key2.substring(0, 50);
+			                                      		}
 			                                      	%>
 			                                      	<c:set var="newKey"><%=key2%></c:set>
 			                                        <c:set var="globSettings">
@@ -407,22 +385,16 @@ function setIndex(index){
 			                                    	<c:choose>
 				                                    	<c:when test='${type == "t_Date_No_Year"}'>
 				                                    		<%
-				                                    			String monthId = "month"
-				                                    													+ globalSett.getGlobalId();
-				                                    											String dayId = "day"
-				                                    													+ globalSett.getGlobalId();
-				                                    											String[] dateValues = globalSett
-				                                    													.getGlobalSettingsValue()
-				                                    													.split("/");
-				                                    											int monthNum = Integer
-				                                    													.parseInt(dateValues[1]);
+				                                    			String monthId = "month"+ globalSett.getGlobalId();
+				                                    			String dayId = "day"+ globalSett.getGlobalId();
+				                                    			String[] dateValues = globalSett.getGlobalSettingsValue().split("/");
+				                                    			int monthNum = Integer.parseInt(dateValues[1]);
 				                                    		%>
 				                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
 				                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>: 
 				                                    		<select styleClass="inp-text" id="<%=monthId%>" onchange="populateWithDays('<%=monthId%>','<%=dayId%>');createDateString('<%=monthId%>','<%=dayId%>')">
 				                                    			<%
-				                                    				for (int k = 1; k <= 12; k++) {
-				                                    													if (k == monthNum) {
+				                                    				for (int k = 1; k <= 12; k++) {if (k == monthNum) {
 				                                    			%>
 				                                    					<option selected="selected" value="<%=k%>"><%=k%></option>
 				                                    			<%
@@ -572,16 +544,14 @@ function setIndex(index){
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_static_range"}'>
 				                                    		<%
-				                                    			String dateValues = globalSett
-				                                    													.getGlobalSettingsValue();
-				                                    											int range = Integer
-				                                    													.parseInt(dateValues);
-				                                    											g_range = range;
+				                                    			String dateValues = globalSett.getGlobalSettingsValue();
+				                                    			int range = Integer.parseInt(dateValues);
+				                                    			g_range = range;
 				                                    		%>
 				                                    		<select styleClass="inp-text" name="gsfValue">
 				                                    			<%
 				                                    				for (int k = 10; k <= 100; k += 10) {
-				                                    													if (k == range) {
+				                                    				if (k == range) {
 				                                    			%>
 				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
 				                                    			<%

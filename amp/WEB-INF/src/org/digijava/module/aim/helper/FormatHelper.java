@@ -204,8 +204,8 @@ public class FormatHelper {
 	}
 	
 	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
-	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
-	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
+	decSymbols.setDecimalSeparator(decimalSeparator.trim().charAt(0));
+	decSymbols.setGroupingSeparator(groupSeparator.trim().charAt(0));
 	DecimalFormat formater = new DecimalFormat(format, decSymbols);
 	
 	return formater;

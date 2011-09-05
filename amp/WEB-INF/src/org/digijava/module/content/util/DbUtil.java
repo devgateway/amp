@@ -159,7 +159,10 @@ public class DbUtil {
 			Iterator<AmpContentItemThumbnail> itr = contentThumbnailsRemoved
 					.iterator();
 			while (itr.hasNext()) {
-				sess.delete(itr.next());
+                AmpContentItemThumbnail delItem = itr.next();
+                Query q = sess.createQuery("delete from " + AmpContentItemThumbnail.class.getName() + " where ampContentItemThumbnailId = " + String.valueOf(delItem.getAmpContentItemThumbnailId().longValue()));
+                q.executeUpdate();
+				//sess.delete(delItem);
 			}
 			//tx.commit();
 		} catch (Exception e) {

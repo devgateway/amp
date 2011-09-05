@@ -259,6 +259,9 @@ public class ContentManager extends DispatchAction {
 	{
 
 		ContentForm contentForm = (ContentForm) form;
+        if (contentForm.getContentThumbnailsRemoved() != null) {
+            contentForm.getContentThumbnailsRemoved().clear();
+        }
 
 		if (request.getParameter("id") != null) {
 			Long contentItemId = Long.parseLong(request.getParameter("id"));

@@ -84,7 +84,7 @@ ${fn:replace(message,quote,escapedQuote)}
 			
 		</div>
 		<div class="logo">
-			<a href="/" class="logo" style="text-decoration: none">
+			<a href="/" style="text-decoration: none">
             <logic:notEmpty name="defFlagExist" scope="application">
                 <logic:equal name="defFlagExist" scope="application" value="true">
                 </logic:equal>

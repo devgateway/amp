@@ -2513,82 +2513,81 @@ public class EditActivityForm extends ActionForm implements Serializable {
         
 		public String getConsumptionRate() {
 			String formatedConsumptionRate=null;
-			// if today = 09/2009 period should be 01/2009 to /08/2009
-			Calendar fromCalndar = GregorianCalendar.getInstance();
-			fromCalndar.add(Calendar.YEAR, -1);
-			fromCalndar.set(Calendar.DAY_OF_MONTH, 31);
-			fromCalndar.set(Calendar.MONTH, Calendar.DECEMBER);
-			fromCalndar.set(Calendar.HOUR, 11);
-			fromCalndar.set(Calendar.MINUTE, 59);
-			fromCalndar.set(Calendar.SECOND, 59);
-			fromCalndar.set(Calendar.AM_PM, Calendar.PM);
-			Date fromDate = fromCalndar.getTime();
-
-			Calendar toCalendar = GregorianCalendar.getInstance();
-			toCalendar.set(Calendar.DAY_OF_MONTH, 1);
-			toCalendar.set(Calendar.HOUR, 0);
-			toCalendar.set(Calendar.MINUTE, 0);
-			toCalendar.set(Calendar.SECOND, 0);
-			toCalendar.set(Calendar.MILLISECOND, 0);
-			toCalendar.set(Calendar.AM_PM, Calendar.AM);
-			Date toDate = toCalendar.getTime();
-			
-			Calendar toCalendar2 = GregorianCalendar.getInstance();
-			toCalendar2.set(Calendar.DAY_OF_MONTH, 1);
-			toCalendar2.add(Calendar.YEAR, 1);
-			toCalendar2.set(Calendar.MONTH, Calendar.JANUARY);
-			toCalendar2.set(Calendar.HOUR, 0);
-			toCalendar2.set(Calendar.MINUTE, 0);
-			toCalendar2.set(Calendar.SECOND, 0);
-			toCalendar2.set(Calendar.AM_PM, Calendar.AM);
-			Date toDate2 = toCalendar2.getTime();
-
+			Calendar calendar = GregorianCalendar.getInstance();
+			int currentYear=calendar.get(Calendar.YEAR);
 			if (fundingDetails != null) {
-				List<AmpFundingDetail> disbursements = new ArrayList<AmpFundingDetail>();
+				List<AmpFundingDetail> actualExpDisbMeasures = new ArrayList<AmpFundingDetail>();
 				for (FundingDetail detail : fundingDetails) {
 					Date transationDate = DateConversion.getDate(detail
 							.getTransactionDate());
+					calendar.setTime(transationDate);
+					int transactionYear=calendar.get(Calendar.YEAR);
+					
 					Double transactionAmount = FormatHelper.parseDouble(detail
 							.getTransactionAmount());
 					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
 							.getCurrencyCode());
-					if (detail.getTransactionType() == Constants.DISBURSEMENT
-							&& transationDate.after(fromDate)) {
-						if (detail.getAdjustmentType() == Constants.ACTUAL
-								&& transationDate.before(toDate)) {
+					if(detail.getAdjustmentType() == Constants.ACTUAL&&transactionYear==currentYear){
+						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.EXPENDITURE){
 							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
 									detail.getTransactionType(),
 									detail.getAdjustmentType(),
 									transactionAmount, transationDate,
 									currency, null);
-							disbursements.add(actualDisbFundingDet);
-						} else {
-							if (detail.getAdjustmentType() == Constants.PLANNED
-									&& transationDate.before(toDate2)) {
-								AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
-										detail.getTransactionType(),
-										detail.getAdjustmentType(),
-										transactionAmount, transationDate,
-										currency, null);
-								disbursements.add(actualDisbFundingDet);
-							}
-
+							actualExpDisbMeasures.add(actualDisbFundingDet);
 						}
-
-					}
+				}
 				}
 				FundingCalculationsHelper cal = new FundingCalculationsHelper();
-				cal.doCalculations(disbursements, currCode);
+				cal.doCalculations(actualExpDisbMeasures, currCode);
 				DecimalWraper totalActualDisb = cal.getTotActualDisb();
-				DecimalWraper totalPlannedDisb = cal.getTotPlanDisb();
-				if(totalPlannedDisb!=null&&totalPlannedDisb.doubleValue()!=0){
-					Double consumptionRate=totalActualDisb.doubleValue()/totalPlannedDisb.doubleValue();
+				DecimalWraper totalActualExp = cal.getTotActualExp();
+				if(totalActualExp!=null&&totalActualExp.doubleValue()!=0&&totalActualDisb!=null&&totalActualDisb.doubleValue()!=0){
+					Double consumptionRate=totalActualExp.doubleValue()/totalActualDisb.doubleValue();
 					NumberFormat formatter=DecimalFormat.getPercentInstance();
 					formatedConsumptionRate=formatter.format(consumptionRate);
 				}
-				
 			}
 			return formatedConsumptionRate;
+		}
+		public String getDeliveryRate() {
+			String formatedDeliveryRate=null;
+			Calendar calendar = GregorianCalendar.getInstance();
+			int currentYear=calendar.get(Calendar.YEAR);
+			if (fundingDetails != null) {
+				List<AmpFundingDetail> actualCommDisbMeasures = new ArrayList<AmpFundingDetail>();
+				for (FundingDetail detail : fundingDetails) {
+					Date transationDate = DateConversion.getDate(detail
+							.getTransactionDate());
+					calendar.setTime(transationDate);
+					int transactionYear=calendar.get(Calendar.YEAR);
+					
+					Double transactionAmount = FormatHelper.parseDouble(detail
+							.getTransactionAmount());
+					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
+							.getCurrencyCode());
+					if(detail.getAdjustmentType() == Constants.ACTUAL&&transactionYear==currentYear){
+						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.COMMITMENT){
+							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
+									detail.getTransactionType(),
+									detail.getAdjustmentType(),
+									transactionAmount, transationDate,
+									currency, null);
+							actualCommDisbMeasures.add(actualDisbFundingDet);
+						}
+				}
+				}
+				FundingCalculationsHelper cal = new FundingCalculationsHelper();
+				cal.doCalculations(actualCommDisbMeasures, currCode);
+				DecimalWraper totalActualDisb = cal.getTotActualDisb();
+				DecimalWraper totalActualComm = cal.getTotActualComm();
+				if(totalActualComm!=null&&totalActualComm.doubleValue()!=0&&totalActualDisb!=null&&totalActualDisb.doubleValue()!=0){
+					Double consumptionRate=totalActualDisb.doubleValue()/totalActualComm.doubleValue();
+					NumberFormat formatter=DecimalFormat.getPercentInstance();
+					formatedDeliveryRate=formatter.format(consumptionRate);
+				}
+			}
+			return formatedDeliveryRate;
 		}
         
         public List<FundingDetail> getCommitmentsDetails() {

@@ -375,6 +375,15 @@
                                 ${aimEditActivityForm.funding.consumptionRate}
                             </td>
                         </tr>
+                         <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+                                <digi:trn>DELIVERY RATE</digi:trn></td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB">
+                                ${aimEditActivityForm.funding.deliveryRate}
+                            </td>
+                        </tr>
                         </table>
                         </td>
                         </tr>

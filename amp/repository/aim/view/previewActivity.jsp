@@ -1,7 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="org.digijava.module.aim.helper.*"%>
 <%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
-<%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
 <%@ page import="java.io.PrintWriter,java.util.*"%>
 <%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>

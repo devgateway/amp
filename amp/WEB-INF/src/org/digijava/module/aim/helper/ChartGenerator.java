@@ -324,16 +324,26 @@ public class ChartGenerator {
 //            item.setType(msg);
 //        }
 
-		ChartParams cp = new ChartParams();
-		cp.setChartHeight(chartHeight);
-		cp.setChartWidth(chartWidth);
-		cp.setData(values);
-		cp.setTitle("");
-		cp.setSession(session);
-		cp.setWriter(pw);
-		cp.setUrl(url);
+        String retVal = null;
 
-		return generatePerformanceChart(cp,request);
+        if (values != null) {
+            ChartParams cp = new ChartParams();
+            cp.setChartHeight(chartHeight);
+            cp.setChartWidth(chartWidth);
+            cp.setData(values);
+            cp.setTitle("");
+            cp.setSession(session);
+            cp.setWriter(pw);
+            cp.setUrl(url);
+
+            retVal = generatePerformanceChart(cp,request);
+        }
+
+
+
+
+
+		return retVal;
 	}
 
 	public static String generateRiskChart(ChartParams cp,HttpServletRequest request) {

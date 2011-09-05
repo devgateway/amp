@@ -102,7 +102,10 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
 	}
 
 	public List<AmpXmlPatchLog> getLogs() {
-		return logs;
+		if (logs!=null){ 
+			return logs;
+		}
+		return new ArrayList<AmpXmlPatchLog>();
 	}
 
 	public void setLogs(List<AmpXmlPatchLog> logs) {

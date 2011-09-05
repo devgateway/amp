@@ -8,9 +8,10 @@
   <apply>
     <script>
       <lang delimiter=";" type="postgres">
-     		INSERT INTO amp_columns (columnid, columnName, aliasName, cellType, extractorView)
+     					DELETE FROM amp_columns WHERE columnName ='Pledges Zones';
+			INSERT INTO amp_columns (columnid, columnName, aliasName, cellType, extractorView)
 			VALUES(nextval('amp_columns_seq'), 'Pledges Zones', '', 'org.dgfoundation.amp.ar.cell.TextCell','v_pledges_zones');
-			
+			DELETE FROM amp_columns WHERE columnName ='Pledges Districts';
 			INSERT INTO amp_columns (columnid, columnName, aliasName, cellType, extractorView)
 			VALUES(nextval('amp_columns_seq'), 'Pledges Districts', '', 'org.dgfoundation.amp.ar.cell.TextCell','v_pledges_districts');
 			

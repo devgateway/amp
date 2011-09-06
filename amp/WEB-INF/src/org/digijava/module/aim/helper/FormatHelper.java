@@ -205,7 +205,9 @@ public class FormatHelper {
 	
 	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
 	decSymbols.setDecimalSeparator(decimalSeparator.trim().charAt(0));
-	decSymbols.setGroupingSeparator(groupSeparator.trim().charAt(0));
+        if(groupSeparator!=null&&groupSeparator.trim().length()>0){
+           decSymbols.setGroupingSeparator(groupSeparator.trim().charAt(0)); 
+        }
 	DecimalFormat formater = new DecimalFormat(format, decSymbols);
 	
 	return formater;

@@ -1,1 +1,0 @@
-update amp_component_type set selectable=true;

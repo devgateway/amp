@@ -1,4 +1,0 @@
-delete from amp_component_funding where amp_component_id not in (select amp_component_id from amp_components) or activity_id not in (select amp_activity_id from amp_activity);
-ALTER TABLE amp_component_funding ADD CONSTRAINT `FK2CAF3BA0C953704B` FOREIGN KEY (`activity_id`) REFERENCES `amp_activity` (`amp_activity_id`);
-ALTER TABLE amp_component_funding ADD CONSTRAINT `FK2CAF3BA0F098C638` FOREIGN KEY (`amp_component_id`) REFERENCES `amp_components` (`amp_component_id`);
-insert into amp_activity_components (amp_activity_id, amp_component_id) (select acf.activity_id, acf.amp_component_id from amp_component_funding acf where acf.activity_id not in (select aac.amp_activity_id from amp_activity_components aac where aac.amp_activity_id=acf.activity_id and aac.amp_component_id=acf.amp_component_id) group by acf.activity_id, acf.amp_component_id);

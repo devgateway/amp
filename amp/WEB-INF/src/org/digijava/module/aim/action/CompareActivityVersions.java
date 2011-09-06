@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -54,7 +55,7 @@ public class CompareActivityVersions extends DispatchAction {
 
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
-//beginTransaction();
+			//beginTransaction();
 
 			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
 			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
@@ -406,6 +407,30 @@ public class CompareActivityVersions extends DispatchAction {
 		// Get data from jsp.
 		ActionErrors errors = new ActionErrors();
 		boolean hasErrors = false;
+		
+		boolean ispartofamanagetmentworkspace = false;
+		boolean iscurrentworkspacemanager = false;
+		Long currentworkspaceid = (Long) request.getSession().getAttribute("TID");
+		
+		ArrayList userworkspaces = new ArrayList();
+		userworkspaces = (ArrayList) request.getSession().getAttribute(Constants.USER_WORKSPACES);
+		for (Iterator iterator = userworkspaces.iterator(); iterator.hasNext();) {
+			AmpTeamMember teammember = (AmpTeamMember) iterator.next();
+			if(teammember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)){
+				ispartofamanagetmentworkspace = true;
+			}
+			if (teammember.getAmpTeam().getIdentifier() == currentworkspaceid){
+				if (teammember.getAmpMemberRole().getTeamHead()){
+					iscurrentworkspacemanager = true;
+				}
+			}
+		}
+		
+		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
+		vForm.setAdvancemode((!ispartofamanagetmentworkspace & iscurrentworkspacemanager));
+		
+		
+		
 		List<CompareOutput> auxData = new ArrayList<CompareOutput>();
 		for (int i = 0; i < vForm.getMergedValues().length; i++) {
 			CompareOutput auxOutput = vForm.getOutputCollection().get(i);
@@ -508,7 +533,7 @@ public class CompareActivityVersions extends DispatchAction {
 					session.update(auxActivity);
 				}
 			}
-
+			
 			session.save(auxActivity);
 //session.flush();
 			//tx.commit();

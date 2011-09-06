@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 public class ViewActivityHistoryForm extends ActionForm implements Serializable {
 
 	private Long activityId;
-
+	private Boolean enableadvanceoptions;
 	private List<AmpActivityVersion> activities;
 
 	public Long getActivityId() {
@@ -29,4 +29,13 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 	public void setActivities(List<AmpActivityVersion> activities) {
 		this.activities = activities;
 	}
+
+	public Boolean getEnableadvanceoptions() {
+		return enableadvanceoptions;
+	}
+
+	public void setEnableadvanceoptions(Boolean enableadvanceoptions) {
+		this.enableadvanceoptions = enableadvanceoptions;
+	}
+
 }

@@ -28,7 +28,9 @@ public class CompareActivityVersionsForm extends ActionForm {
 	private String[] mergedValues = new String[] {};
 
 	private Long ampActivityId;
-
+	
+	private boolean advancemode;
+	
 	public Long getActivityOneId() {
 		return activityOneId;
 	}
@@ -107,5 +109,13 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	public void setAmpActivityId(Long ampActivityId) {
 		this.ampActivityId = ampActivityId;
+	}
+
+	public boolean isAdvancemode() {
+		return advancemode;
+	}
+
+	public void setAdvancemode(boolean advancemode) {
+		this.advancemode = advancemode;
 	}
 }

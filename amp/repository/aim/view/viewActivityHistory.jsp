@@ -44,9 +44,11 @@
 				</td>
 				<td>
 					<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
-						<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
-						<digi:trn>Make this the current version</digi:trn>
-						</div>
+						<logic:equal  name="aimViewActivityHistoryForm" property="enableadvanceoptions" value="true">
+							<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
+								<digi:trn>Make this the current version</digi:trn>
+							</div>
+						</logic:equal>
 					</c:if>
 					<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
 						<strong><digi:trn>Current Version</digi:trn></strong>
@@ -72,9 +74,11 @@
 				</td>
 				<td>
 					<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
-						<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
-						<digi:trn>Make this the current version</digi:trn>
-						</div>
+						<logic:equal name="aimViewActivityHistoryForm" property="enableadvanceoptions" value="true">
+							<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
+								<digi:trn>Make this the current version</digi:trn>
+							</div>
+						</logic:equal>
 					</c:if>
 					<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
 						<strong><digi:trn>Current Version</digi:trn></strong>

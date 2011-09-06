@@ -128,7 +128,9 @@
 			</table>
 			<br/>
 			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
-			<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
+			<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
+				<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
+			</logic:equal>
 			<input id="saveButton" type="button" value="<digi:trn>Save New Activity</digi:trn>" onclick="javascript:save();" />
 		</div>	
 	</div>

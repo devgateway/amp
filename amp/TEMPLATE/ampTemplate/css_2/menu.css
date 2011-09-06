@@ -297,7 +297,7 @@ html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px
 /*-------menu fixes by rafy-------*/
  html.chrome li#yui-gen14 {margin-top:-2px;}
 html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type,  html.gecko .bd_drop ul.first-of-type {border:none;margin-top:3px;}
-.bd_drop ul.first-of-type .bd_drop ul.first-of-type{margin-top:-3px;margin-left:-1px;border-right:2px solid #E8E8E8;border-top:2px solid #E8E8E8;border-bottom:2px solid #E8E8E8;}
+.bd_drop ul.first-of-type .bd_drop ul.first-of-type{margin-top:-3px;border-right:2px solid #E8E8E8;border-top:2px solid #fff;border-bottom:2px solid #E8E8E8;}
 html.chrome .bd_drop ul li ul.first-of-type {border:none;margin-top:15px;z-index:9999;float:left;}
 html.ie div.header {height:46px;}
 html.ie .yui-navset *{z-index:1;}

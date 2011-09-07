@@ -559,31 +559,34 @@ public class ActivityUtil {
 							session.update(organization);
 						}
 	    			}
-	    			session.update(ampContact);    			    			
+                               if (contact.getProperties() != null) {
+                                for (AmpContactProperty formProperty : contact.getProperties()) {
+                                    formProperty.setContact(ampContact);
+
+                                    if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
+                                        formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
+                                    }
+                                    AmpContactProperty newProperty = new AmpContactProperty();
+                                    newProperty.setContact(formProperty.getContact());
+                                    newProperty.setName(formProperty.getName());
+                                    newProperty.setValue(formProperty.getValue());
+                                    session.save(newProperty);
+
+                                }
+                            }
+                            session.update(ampContact);    			    			
 	    		}else{
-	    			session.save(contact);
+                            if (contact.getProperties() != null) {
+                                for (AmpContactProperty formProperty : contact.getProperties()) {
+                                    if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
+                                        formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
+                                    }
+                                    formProperty.setContact(contact);
+                                }
+                                session.save(contact);
+                            }
 	    		}
 	    		
-	    		
-	    		//save properties
-	    		if(contact.getProperties()!=null){
-					for (AmpContactProperty formProperty : contact.getProperties()) {
-						if(ampContact!=null){
-							formProperty.setContact(ampContact);
-						}else{
-							formProperty.setContact(contact);
-						}
-						if(formProperty.getActualValue()!=null&&formProperty.getCategoryValue()!=null){
-							formProperty.setValue(formProperty.getCategoryValue().getId()+" " +formProperty.getActualValue());
-						}
-						AmpContactProperty newProperty=new AmpContactProperty();
-						newProperty.setContact(formProperty.getContact());
-						newProperty.setName(formProperty.getName());
-						newProperty.setValue(formProperty.getValue());
-						session.save(newProperty);
-						
-					}
-				}
 	    		//save cont. organizations
 	    		if(contact.getOrganizationContacts()!=null){
 	    			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {

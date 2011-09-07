@@ -25,29 +25,6 @@ INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id
 	SELECT a.amp_activity_id, acv.id FROM amp_activity a, amp_category_value acv, amp_category_class acc 
 		where acv.amp_category_class_id=acc.id AND a.budget=acv.index_column AND 
 			acc.keyName='activity_budget';
-			
-
-CREATE or REPLACE VIEW v_on_off_budget AS 
-		SELECT a.amp_activity_id AS amp_activity_id,
-		case 
-			when acv.category_value='On' then 'yes' 
-			when acv.category_value='Off' then 'no' 
-			when acv.id is null then 'unallocated' 
-			else acv.category_value||'' 
-		end as budget 
-		
-		
-		FROM 
-		amp_activities_categoryvalues aac  
-		 JOIN amp_category_value acv on aac.amp_categoryvalue_id=acv.id 
-		 JOIN amp_category_class acc on (acc.id=acv.amp_category_class_id AND acc.keyName='activity_budget') 
-		 RIGHT JOIN amp_activity a ON  a.amp_activity_id=aac.amp_activity_id 
-		
-		order by a.amp_activity_id; 
-
-UPDATE amp_fields_visibility set name='On/Off/Treasure Budget' where name='On/Off Budget';
-UPDATE amp_columns set columnName='On/Off/Treasure Budget' where columnName='On/Off Budget';
-      
       </lang>
     </script>
   </apply>

@@ -358,7 +358,9 @@ function resetToDefaults(){
 	document.getElementById("commitments_visible").checked = true;
 	document.getElementById("disbursements_visible").checked = true;
 	document.getElementById("expenditures_visible").checked = true;
-	document.getElementById("pledge_visible").checked = true;
+	if (document.getElementById("pledge_visible")!=null){
+		document.getElementById("pledge_visible").checked = true;
+	}
 	document.getElementById("workspace_only").checked = false;
 	
 	document.getElementById("transaction_type_0").value = true;

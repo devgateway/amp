@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import org.digijava.module.aim.util.Output;
 
@@ -89,6 +90,9 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		AmpActivityContact aux = (AmpActivityContact) clone();
 		aux.activity = newActivity;
 		aux.id = null;
+                if(this.contact.getActivityContacts()==null){
+                    this.contact.setActivityContacts(new TreeSet<AmpActivityContact>());
+                }
 		this.contact.getActivityContacts().add(aux);
 		return aux;
 	}

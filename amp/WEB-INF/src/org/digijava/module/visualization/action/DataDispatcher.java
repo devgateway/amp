@@ -1149,19 +1149,6 @@ public class DataDispatcher extends DispatchAction {
         }
 	}	
 	
-	public ActionForward getSixthGraphData(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws java.lang.Exception {
-
-		VisualizationForm visualizationForm = (VisualizationForm) form;
-
-		DashboardFilter filter = visualizationForm.getFilter();
-		
-		String format = request.getParameter("format");
-		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
-		return null;
-	}
-	
 	public ActionForward getAidTypeGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
@@ -2226,7 +2213,9 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 		DashboardFilter filter = visualizationForm.getFilter();
-		
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+
 		String format = request.getParameter("format");
 		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 		
@@ -2276,7 +2265,19 @@ public class DataDispatcher extends DispatchAction {
 		}
         //donorList = DbUtil.getDonors(filter);
         Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
-        
+        StringBuffer csvString = new StringBuffer();
+        String text = TranslatorWorker.translateText("Organization",locale, siteId);
+		csvString.append("\"" + text + "\"");
+		csvString.append(",");
+		text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
+		csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
+		csvString.append(",");
+		csvString.append("\"" + text + " " + filter.getYear() + "\"");
+		csvString.append(",");
+		text = TranslatorWorker.translateText("Growth percent",locale, siteId);
+		csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
+		csvString.append("\n");
+		
         for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
 			AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -2293,12 +2294,21 @@ public class DataDispatcher extends DispatchAction {
             if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
             	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
                 map.put(ampOrganisation, growthPercent);
+                csvString.append(ampOrganisation.getName());
+        		csvString.append(",");
+        		csvString.append(amtPreviousYear);
+        		csvString.append(",");
+        		csvString.append(amtCurrentYear);
+        		csvString.append(",");
+        		csvString.append(growthPercent);
+        		csvString.append("\n");
             }
 		}
         
         Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,10l);
         
         StringBuffer xmlString = new StringBuffer();
+        
         List list = new LinkedList(mapSorted.entrySet());
 		Iterator it = list.iterator();
 		int index = 0;
@@ -2312,12 +2322,22 @@ public class DataDispatcher extends DispatchAction {
 			xmlString.append("<organization name=\"\">\n");
 			xmlString.append("</organization>\n");
 		}
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    			response.getOutputStream(), "UTF-8"), true);
-		out.println(xmlString.toString());
-		out.close();
-		return null;
-			
+		
+		if(format != null && format.equals("xml")){
+	        PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	    			response.getOutputStream(), "UTF-8"), true);
+			out.println(xmlString.toString());
+			out.close();
+			return null;
+		} else {
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	    			response.getOutputStream(), "UTF-8"), true);
+
+	    	out.println(csvString.toString());
+	    	out.close();
+	    	return null;
+		}
+		 
 	}	
 
 	

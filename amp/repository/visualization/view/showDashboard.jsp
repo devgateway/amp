@@ -1556,9 +1556,10 @@ function toggleSettings(){
 				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
 				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				</span>
+				<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'ODAGrowth')">
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'ODAGrowth', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">

@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -35,11 +36,12 @@ public class ShowRegionReport extends Action {
         response.setContentType("text/html");
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
 
-        GisFilterForm filterForm = GisUtil.parseFilterRequest(request);
+
 
         boolean isDevinfo = request.getParameter("devInfo")!=null && request.getParameter("devInfo").trim().compareToIgnoreCase("true") == 0;
 
         if (!isDevinfo) {
+            GisFilterForm filterForm = GisUtil.parseFilterRequest(request);
             List <Long> selSecIDs = null;
             if (filterForm.getSelectedSectors() != null) {
                 selSecIDs = new ArrayList<Long>(Arrays.asList(filterForm.getSelectedSectors()));
@@ -59,52 +61,120 @@ public class ShowRegionReport extends Action {
                 List<String> secNames = DbUtil.getTopSectorNames(selSecIDs);
                 gisRegReportForm.setSelSectorNames(secNames);
             }
-        }
-
-        gisRegReportForm.setStartYear(filterForm.getFilterStartYear());
-        gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
-
-        Long regLocId = Long.parseLong(request.getParameter("regLocId"));
-
-        Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
-
-        FundingData fndDat = null;
-        if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {
-            fndDat = (FundingData)((Map)filterResults[0]).values().iterator().next();
-        } else {
-            fndDat = new FundingData();
-        }
 
 
+            gisRegReportForm.setStartYear(filterForm.getFilterStartYear());
+            gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
 
-        gisRegReportForm.setActivityLocationFundingList(fndDat.getActivityLocationFundingList());
+            Long regLocId = Long.parseLong(request.getParameter("regLocId"));
 
-        if (fndDat.getCommitment() != null) {
-            gisRegReportForm.setActualCommitmentsStr(FormatHelper.formatNumber(fndDat.getCommitment().doubleValue()));
-        }
+            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
 
-        if (fndDat.getExpenditure() != null) {
-            gisRegReportForm.setActualExpendituresStr(FormatHelper.formatNumber(fndDat.getExpenditure().doubleValue()));
-        }
-
-        if (fndDat.getDisbursement() != null) {
-            gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
-        }
-
-        TeamMember tm = null;
-        Long teamId = null;
-        boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
-        if (curWorkspaceOnly) {
-            tm = (TeamMember)request.getSession().getAttribute("currentMember");
-            if (tm != null) {
-                AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
-                teamId = team.getAmpTeamId();
+            FundingData fndDat = null;
+            if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {
+                fndDat = (FundingData)((Map)filterResults[0]).values().iterator().next();
+            } else {
+                fndDat = new FundingData();
             }
-        }
 
-        gisRegReportForm.setSelectedCurrency(filterForm.getSelectedCurrency());
-        String regionName = DbUtil.getLocationNameById(regLocId);
-        gisRegReportForm.setRegName(regionName);
+
+
+            gisRegReportForm.setActivityLocationFundingList(fndDat.getActivityLocationFundingList());
+
+            if (fndDat.getCommitment() != null) {
+                gisRegReportForm.setActualCommitmentsStr(FormatHelper.formatNumber(fndDat.getCommitment().doubleValue()));
+            }
+
+            if (fndDat.getExpenditure() != null) {
+                gisRegReportForm.setActualExpendituresStr(FormatHelper.formatNumber(fndDat.getExpenditure().doubleValue()));
+            }
+
+            if (fndDat.getDisbursement() != null) {
+                gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
+            }
+
+            TeamMember tm = null;
+            Long teamId = null;
+            boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+            if (curWorkspaceOnly) {
+                tm = (TeamMember)request.getSession().getAttribute("currentMember");
+                if (tm != null) {
+                    AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                    teamId = team.getAmpTeamId();
+                }
+            }
+
+            gisRegReportForm.setSelectedCurrency(filterForm.getSelectedCurrency());
+            String regionName = DbUtil.getLocationNameById(regLocId);
+            gisRegReportForm.setRegName(regionName);
+        } else {
+        //DevInfo mode
+            GisFilterForm gisFilterForm = new GisFilterForm();
+            String sectorIdStr = request.getParameter("sectorIdStr");
+            List <Long> selSecIDs = new ArrayList <Long>();
+            if (sectorIdStr != null) {
+                selSecIDs.add(new Long(sectorIdStr));
+            }
+            List<String> secNames = DbUtil.getTopSectorNames(selSecIDs);
+            gisRegReportForm.setSelSectorNames(secNames);
+            Long[] secArr = new Long[selSecIDs.size()];
+            selSecIDs.toArray(secArr);
+            gisFilterForm.setSelectedSectors(secArr);
+
+            gisRegReportForm.setStartYear(gisRegReportForm.getStartYear());
+            gisRegReportForm.setEndYear(gisRegReportForm.getEndYear());
+            gisFilterForm.setFilterStartYear(gisRegReportForm.getStartYear());
+            gisFilterForm.setFilterEndYear(gisRegReportForm.getEndYear());
+
+
+            String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+            if (baseCurr == null) {
+                baseCurr = "USD";
+            }
+            gisFilterForm.setSelectedCurrency(baseCurr);
+
+            Long regLocId = Long.parseLong(request.getParameter("regLocId"));
+
+            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(gisFilterForm, regLocId);
+
+            FundingData fndDat = null;
+            if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {
+                fndDat = (FundingData)((Map)filterResults[0]).values().iterator().next();
+            } else {
+                fndDat = new FundingData();
+            }
+
+
+
+            gisRegReportForm.setActivityLocationFundingList(fndDat.getActivityLocationFundingList());
+
+            if (fndDat.getCommitment() != null) {
+                gisRegReportForm.setActualCommitmentsStr(FormatHelper.formatNumber(fndDat.getCommitment().doubleValue()));
+            }
+
+            if (fndDat.getExpenditure() != null) {
+                gisRegReportForm.setActualExpendituresStr(FormatHelper.formatNumber(fndDat.getExpenditure().doubleValue()));
+            }
+
+            if (fndDat.getDisbursement() != null) {
+                gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
+            }
+
+            TeamMember tm = null;
+            Long teamId = null;
+            boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+            if (curWorkspaceOnly) {
+                tm = (TeamMember)request.getSession().getAttribute("currentMember");
+                if (tm != null) {
+                    AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                    teamId = team.getAmpTeamId();
+                }
+            }
+
+            gisRegReportForm.setSelectedCurrency(gisFilterForm.getSelectedCurrency());
+            String regionName = DbUtil.getLocationNameById(regLocId);
+            gisRegReportForm.setRegName(regionName);
+        }
         return mapping.findForward("forward");
     }
 

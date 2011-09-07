@@ -501,8 +501,9 @@ public class ExportActivityToPDF extends Action {
 				if(FeaturesUtil.isVisibleField("Line Ministry Rank", ampContext)){
 					outputValue=TranslatorWorker.translateText("Line Ministry Rank", locale, siteId)+ "\t: ";
 					if(activity.getLineMinRank()!=null && activity.getLineMinRank().intValue()>0){
-						AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getLineMinRank().longValue() );
-						outputValue+=(cv.getValue()+1)+"\n";
+                                               outputValue+=(activity.getLineMinRank())+"\n";
+                                             
+                                                
 					}else{
 						outputValue+="\n";
 					}
@@ -511,8 +512,7 @@ public class ExportActivityToPDF extends Action {
 				if(FeaturesUtil.isVisibleField("Ministry of Planning Rank", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank", locale, siteId)+ "\t: ";
 					if(activity.getPlanMinRank()!=null && activity.getPlanMinRank().intValue()>0){
-						AmpCategoryValue cv = CategoryManagerUtil.getAmpCategoryValueFromDb( activity.getPlanMinRank().longValue() );
-						outputValue+=(cv.getIndex()+1)+"\n";
+                                            outputValue+=(activity.getPlanMinRank())+"\n";	    
 					}else{
 						outputValue+="\n";
 					}

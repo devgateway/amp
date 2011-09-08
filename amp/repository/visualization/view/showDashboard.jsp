@@ -2782,19 +2782,23 @@ function changeChart(e, chartType, container, useGeneric){
 	var startMovie = false;
 	//Get the calling object to select it and remove style.
 	if(e != null){
-		var caller = e.target || e.srcElement;
-		var linkBar = caller.parentNode.getElementsByTagName("A");
-	    for(var i in linkBar)
-	    {
-	    	linkBar[i].className = "";
-	    }
-	    caller.className = "sel_sm_b";
-	    startMovie = true; // This is set to true if it comes from clicking in the top right of the charts
+		if (e == "start"){
+			startMovie = true; 
+		} else {
+			var caller = e.target || e.srcElement;
+			var linkBar = caller.parentNode.getElementsByTagName("A");
+		    for(var i in linkBar)
+		    {
+		    	linkBar[i].className = "";
+		    }
+		    caller.className = "sel_sm_b";
+		    startMovie = true; // This is set to true if it comes from clicking in the top right of the charts
+		}
 	}
 
-	var palette = "0xff6600,0x7eae58,0x88bff5,0xbe0035,0x8b007e,0x99431c";
+	var palette = "0xFF6600,0x7EAE58,0x88BFF5,0xBE0035,0x8B007E,0x99431C,0xFF6666,0x94FF29,0x2929FF,0xFF29FF";
 	if (document.getElementById("show_monochrome").checked){
-		palette = "0x000000,0x999999,0x333333,0xcccccc,0x666666,0xeeeeee";
+		palette = "0x000000,0x969696,0x191919,0xAFAFAF,0x323232,0xC8C8C8,0x4B4B4B,0xE1E1E1,0x646464,0xFAFAFA,0x7D7D7D";
 	}
 	 
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
@@ -2971,19 +2975,19 @@ function hideFullDonors(){
 
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'FundingChart', true);
-	changeChart(null, 'bar', 'AidPredictability', true);
-	changeChart(null, 'bar', 'AidType', true);
-	changeChart(null, 'bar', 'FinancingInstrument', true);
+	changeChart("start", 'bar', 'ODAGrowth');
+	changeChart("start", 'bar', 'FundingChart', true);
+	changeChart("start", 'bar', 'AidPredictability', true);
+	changeChart("start", 'bar', 'AidType', true);
+	changeChart("start", 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart(null, 'bar_profile', 'DonorProfile', true);
+		changeChart("start", 'bar_profile', 'DonorProfile', true);
 	}
 	if (dashboardType!=3) {
-		changeChart(null, 'bar_profile', 'SectorProfile', true);
+		changeChart("start", 'bar_profile', 'SectorProfile', true);
 	}
 	if (dashboardType!=2) {
-		changeChart(null, 'bar_profile', 'RegionProfile', true);
+		changeChart("start", 'bar_profile', 'RegionProfile', true);
 	}
 }
 

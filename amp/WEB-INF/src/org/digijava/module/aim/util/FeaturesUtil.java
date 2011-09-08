@@ -2232,6 +2232,7 @@ public class FeaturesUtil {
 				module.setHasLevel(false);
 			else module.setHasLevel(true);
 			
+			if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet());
 			parent.getSubmodules().add(module);
 			
 			session.update(parent);

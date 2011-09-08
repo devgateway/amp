@@ -17,7 +17,7 @@
 		</properties>
 
 		<many-to-one name="permission" column="permission_id"
-			class="org.digijava.module.gateperm.core.Permission" cascade="none" />
+			class="org.digijava.module.gateperm.core.Permission" cascade="save-update" />
 
 	</class>
 </hibernate-mapping>

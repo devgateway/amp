@@ -1061,7 +1061,7 @@ function toggleSettings(){
 	<legend><span class=legend_label><digi:trn>Quick Filter</digi:trn></span></legend>
 <!--	<html:checkbox property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox>-->
 	<hr />
-	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onchange="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -2712,16 +2712,16 @@ window.onload=initPanel;
 var initialized = false;
 function initDashboard(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'FundingChart', true);
-	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'AidPredictability', true);
-	changeChart(null, 'bar', 'AidType', true);
-	changeChart(null, 'bar', 'FinancingInstrument', true);
+	changeChart('start', 'bar', 'FundingChart', true);
+	changeChart('start', 'bar', 'ODAGrowth');
+	changeChart('start', 'bar', 'AidPredictability', true);
+	changeChart('start', 'bar', 'AidType', true);
+	changeChart('start', 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart(null, 'bar_profile', 'DonorProfile', true);
+		changeChart('start', 'bar_profile', 'DonorProfile', true);
 	}
-	changeChart(null, 'bar_profile', 'SectorProfile', true);
-	changeChart(null, 'bar_profile', 'RegionProfile', true);
+	changeChart('start', 'bar_profile', 'SectorProfile', true);
+	changeChart('start', 'bar_profile', 'RegionProfile', true);
 	callbackApplyFilter();
 }
 
@@ -2975,20 +2975,16 @@ function hideFullDonors(){
 
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart("start", 'bar', 'ODAGrowth');
-	changeChart("start", 'bar', 'FundingChart', true);
-	changeChart("start", 'bar', 'AidPredictability', true);
-	changeChart("start", 'bar', 'AidType', true);
-	changeChart("start", 'bar', 'FinancingInstrument', true);
+	changeChart('start', 'bar', 'ODAGrowth');
+	changeChart('start', 'bar', 'FundingChart', true);
+	changeChart('start', 'bar', 'AidPredictability', true);
+	changeChart('start', 'bar', 'AidType', true);
+	changeChart('start', 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart("start", 'bar_profile', 'DonorProfile', true);
+		changeChart('start', 'bar_profile', 'DonorProfile', true);
 	}
-	if (dashboardType!=3) {
-		changeChart("start", 'bar_profile', 'SectorProfile', true);
-	}
-	if (dashboardType!=2) {
-		changeChart("start", 'bar_profile', 'RegionProfile', true);
-	}
+	changeChart('start', 'bar_profile', 'SectorProfile', true);
+	changeChart('start', 'bar_profile', 'RegionProfile', true);
 }
 
 function itemClick(id, type, year){

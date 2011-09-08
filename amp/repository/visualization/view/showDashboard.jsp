@@ -1955,6 +1955,12 @@ function callbackApplyFilter(e){
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+	document.getElementById("filterOrgGroups").innerHTML = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+	document.getElementById("filterOrganizations").innerHTML = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+	document.getElementById("filterSectorConfiguration").innerHTML = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
+	document.getElementById("filterSectors").innerHTML = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+	document.getElementById("filterRegions").innerHTML = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+
 }
 
 function applyFilterPopin(e){

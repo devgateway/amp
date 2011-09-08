@@ -24,7 +24,6 @@
   
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <digi:instance property="aimTeamReportsForm" />
-<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${aimTeamReportsForm.showTabs}">
 
@@ -53,6 +52,7 @@
 	<jsp:include page="tabManager/tabManager.jsp" />
 	
 </c:if>
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
 	<c:set var="translation">

@@ -48,7 +48,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 300px;
+	width: auto;
 	padding: 0;
 	margin: 0;
 	z-index: 1;

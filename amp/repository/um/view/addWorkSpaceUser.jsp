@@ -17,9 +17,9 @@
 <!--
 
 .contentbox_border{
-        border: 1px solid black;
+        border: 1px solid #CCCCCC;
 	border-width: 1px 1px 1px 1px; 
-	background-color: #ffffff;
+	background-color: #f2f2f2;
 }
 
 #statesautocomplete ul {
@@ -143,11 +143,10 @@
 
 <input type="hidden" name="actionFlag" value="">
 <input type="hidden" name="teamMemberId" />
-  <table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705>
+  <table bgColor=#ffffff cellPadding=5 cellspacing="1" width=1000 align="center">
 	<tr>
-		<td width=14>&nbsp;</td>
 		<td align=left valign="top" width=752>
-			<table cellPadding=5 cellspacing="0" width="100%">
+			<table cellPadding=0 cellspacing="0" width="1000">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -187,7 +186,7 @@
 					<!-- End navigation -->
 				</tr>
 			    <tr>
-			      <td colspan="2">
+			      <td colspan="2" height=25 style="padding-bottom:10px;padding-top:10px;">
 			        <span class=subtitle-blue>
 			          <digi:trn key="aim:viewEditUser:AddWorkspace">
 			          Add Workspace
@@ -196,30 +195,28 @@
 			      </td>
 			    </tr>
 				<tr>
-				<td noWrap width=616 vAlign="top">
-					<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
+				<td noWrap width=1000 vAlign="top">
+					<table class="contentbox_border" width="1000" border="0" bgcolor="#f4f4f2">
 					   <tr>			
 					      <td align="center">
 						     <table width="100%">
 							    <tr>
-							       <td style="background-color: #CCDBFF;height: 18px;"/>
+							       <td style="background-color: #c7d4db; height: 25px;" align=center><b>New User</b>
 							    </tr>
 							 </table>
 						  </td>
 					   </tr>
 					   <tr>
-						  <td valign="top" bgcolor="#f4f4f2" align="center">
+						  <td valign="top" bgcolor="#F2F2F2" align="center">
 					
 							<table border="0" cellpadding="0" cellspacing="0" width=772>
 								<tr>
-									<td width=14>&nbsp;
-									</td>
 									<td align=left valign="top" width=520>
 									
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
+												<td align=left noWrap colspan="2">
 													<digi:errors/>
 													<logic:notEmpty name="umAddUserForm" property="errors" >
 							                        <font color="red">
@@ -341,8 +338,6 @@
 									</td>
 								</tr>
 								<tr>
-									<td width=14>&nbsp;
-									</td>
 									<td align="center" valign="top" width=520><br>
 		             					<table border="0" cellPadding=5 cellspacing="0" width="80%">
 										<c:if test="${!empty umAddUserForm.assignedWorkspaces && umAddUserForm.assignedWorkspaces != null}">
@@ -377,9 +372,9 @@
 								</tr>
 							</table>
 							<br /><br />
-						  </td>
+					     </td>
 					   </tr>
-				    </table>
+			      </table>
 	            </td>
                 </tr>
   		     </table>

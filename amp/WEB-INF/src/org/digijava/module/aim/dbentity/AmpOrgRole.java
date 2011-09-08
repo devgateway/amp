@@ -106,12 +106,14 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 		if (this.percentage != null) {
 			out.getOutputs().add(new Output(null, new String[] { " Percentage: " }, new Object[] { this.percentage }));
 		}
+		if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
+			out.getOutputs().add(new Output(null, new String[] {" Department/Division:"}, new Object[] {this.additionalInfo}));
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		return "" + this.percentage;
+		return "" + this.percentage + "" + this.additionalInfo;
 	}
 	
 	@Override

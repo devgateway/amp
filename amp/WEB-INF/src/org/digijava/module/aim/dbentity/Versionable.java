@@ -4,10 +4,31 @@ import org.digijava.module.aim.util.Output;
 
 public interface Versionable {
 
+	/**
+	 * Used to identify that's the same object when comparing 
+	 * two activity versions (eg. when comparing two sets in the
+	 * activities, you'll have to identify the items one by one
+	 * and compare their differences)
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	public abstract boolean equalsForVersioning(Object obj);
 
+	/**
+	 * Used two compare two objects in versioning, 
+	 * return a combination of all the fields in the object
+	 * (see AmpFunding)
+	 * 
+	 * @return
+	 */
 	public abstract Object getValue();
 
+	/**
+	 * Formatted output that will be used to show the contents
+	 * of the object
+	 * @return
+	 */
 	public abstract Output getOutput();
 
 	/**

@@ -6,7 +6,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpFundingMTEFProjection implements Cloneable, Serializable {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection> {
 
 		private Long ampFundingMTEFProjectionId ;
 		private AmpCategoryValue projected; 
@@ -56,5 +56,9 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable {
 		protected Object clone() throws CloneNotSupportedException {
 			// TODO Auto-generated method stub
 			return super.clone();
+		}
+		@Override
+		public int compareTo(AmpFundingMTEFProjection o) {
+			return o.getAmpFundingMTEFProjectionId().compareTo(getAmpFundingMTEFProjectionId());
 		}
 }

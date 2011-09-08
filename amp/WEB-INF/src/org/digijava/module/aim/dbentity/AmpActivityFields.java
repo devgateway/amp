@@ -153,6 +153,7 @@ LoggerIdentifiable, Cloneable {
 	protected AmpCategoryValue modality;
 	@VersionableFieldSimple(fieldTitle = "Theme")
 	protected AmpTheme themeId;
+	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
@@ -227,7 +228,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Comments")
 	protected String comments;
 
-	@VersionableFieldSimple(fieldTitle = "Status")
+	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;

@@ -36,6 +36,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -185,6 +186,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected void saveMethod(AjaxRequestTarget target,
 			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
 			boolean draft) {
+		
+		OnePager op = this.findParent(OnePager.class);
+		//disable lock refresher
+		op.getEditLockRefresher().setEnabled(false);
+		
 		AmpActivityModel a = (AmpActivityModel) am;
 		AmpActivityVersion activity=am.getObject();
 		Long oldId = activity.getAmpActivityId();

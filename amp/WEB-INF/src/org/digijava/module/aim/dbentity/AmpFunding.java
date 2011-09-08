@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 
 public class AmpFunding implements Serializable, Versionable, Cloneable {
@@ -57,6 +58,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
 	// private Set survey;
 
+	
 	/**
 	 * @return
 	 */
@@ -442,6 +444,12 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		ret = ret + "-Conditions:" + (this.conditions == null ? "" : this.conditions.trim());
 		ret = ret + "-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim());
 		ret = ret + "-Active:" + this.active;
+		ret = ret + "-Delegated Cooperation:" + this.delegatedCooperation;
+		ret = ret + "-Delegated Partner:" + this.delegatedPartner;
+		ret = ret + "-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : "");
+		ret = ret + "-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : "");
+		ret = ret + "-Funding Status:" + (this.financingId != null ? this.financingId : "");
+		
 		// Compare fields from AmpFundingDetail.
 		List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
 		Collections.sort(auxDetails, fundingDetailsComparator);
@@ -450,6 +458,13 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			AmpFundingDetail auxDetail = iter.next();
 			ret = ret + auxDetail.getTransactionType() + "-" + auxDetail.getTransactionAmount() + "-"
 					+ auxDetail.getAmpCurrencyId() + "-" + auxDetail.getTransactionDate();
+			if (auxDetail.getPledgeid() != null)
+				ret += "-" + auxDetail.getPledgeid().getId();
+			ret += "-" + auxDetail.getDisbOrderId();
+			if (auxDetail.getContract() != null)
+				ret += "-" + auxDetail.getContract().getId();
+			ret += "-" + auxDetail.getExpCategory();
+			ret += "-" + auxDetail.getDisbursementOrderRejected();
 		}
 		return ret;
 	}
@@ -481,12 +496,12 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		if (this.typeOfAssistance != null) {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br />", "Type of Assistance:&nbsp;" },
-							new Object[] { this.typeOfAssistance.getEncodedValue() }));
+							new Object[] { this.typeOfAssistance.getValue() }));
 		}
 		if (this.financingInstrument != null) {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br />", "Financing Instrument:&nbsp;" },
-							new Object[] { this.financingInstrument.getEncodedValue() }));
+							new Object[] { this.financingInstrument.getValue() }));
 		}
 		if (this.conditions != null && !this.conditions.trim().equals("")) {
 			out.getOutputs().add(
@@ -501,6 +516,29 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br/>", "Active:&nbsp;" }, new Object[] { this.active.toString() }));
 		}
+		if (this.delegatedCooperation != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br/>", "Delegated Cooperation:&nbsp;" }, new Object[] { this.delegatedCooperation.toString() }));
+		}
+		if (this.delegatedPartner != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br/>", "Delegated Partner:&nbsp;" }, new Object[] { this.delegatedPartner.toString() }));
+		}
+		if (this.modeOfPayment != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Mode of Payment:&nbsp;" },
+							new Object[] { this.modeOfPayment.getValue() }));
+		}
+		if (this.fundingStatus != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Funding Status:&nbsp;" },
+							new Object[] { this.fundingStatus.getValue() }));
+		}
+		if (this.financingId != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Financing Id:&nbsp;" },
+							new Object[] { this.financingId }));
+		}
 
 		boolean trnComm = false;
 		boolean trnDisb = false;
@@ -514,48 +552,66 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			boolean error = false;
 			AmpFundingDetail auxDetail = iter.next();
 			String transactionType = "";
+			String extraValues = "";
 			Output auxOutDetail = null;
 			switch (auxDetail.getTransactionType().intValue()) {
-			case 0:
+			case Constants.COMMITMENT:
 				transactionType = "Commitments:&nbsp;";
+				if (auxDetail.getPledgeid() != null)
+					extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
 				if (!trnComm) {
 					out.getOutputs().add(
 							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
 					trnComm = true;
 				}
 				break;
-			case 1:
+			case Constants.DISBURSEMENT:
 				transactionType = " Disbursements:&nbsp;";
+				
+				if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
+					extraValues += " - " + auxDetail.getDisbOrderId();
+				if (auxDetail.getContract() != null)
+					extraValues += " - " + auxDetail.getContract().getContractName();
+				if (auxDetail.getPledgeid() != null)
+					extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+				
 				if (!trnDisb) {
 					out.getOutputs().add(
 							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
 					trnDisb = true;
 				}
 				break;
-			case 2:
+			case Constants.EXPENDITURE:
 				transactionType = " Expenditures:&nbsp;";
+				
+				if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0)
+					extraValues += " - " + auxDetail.getExpCategory();
+				
 				if (!trnExp) {
 					out.getOutputs().add(
 							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
 					trnExp = true;
 				}
 				break;
-			case 3:
+			case Constants.DISBURSEMENT_ORDER:
 				transactionType = " Disbursement Orders:&nbsp;";
+
+				if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
+					extraValues += " - " + auxDetail.getDisbOrderId();
+				if (auxDetail.getContract() != null)
+					extraValues += " - " + auxDetail.getContract().getContractName();
+				if (auxDetail.getDisbursementOrderRejected())
+					extraValues += " - " + "Rejected";
+				else
+					extraValues += " - " + "Not Rejected";
+
 				if (!trnDisbOrder) {
 					out.getOutputs().add(
 							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
 					trnDisbOrder = true;
 				}
 				break;
-			case 4:
-				transactionType = " MTEF Projection:&nbsp;";
-				if (!trnMTEF) {
-					out.getOutputs().add(
-							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
-					trnMTEF = true;
-				}
-				break;
+			
 			default:
 				error = true;
 				break;
@@ -566,8 +622,25 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				auxOutDetail.getOutputs().add(
 						new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",
 								auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ",
-								auxDetail.getTransactionDate() }));
+								auxDetail.getTransactionDate() + extraValues }));
 			}
+		}
+		
+		Iterator<AmpFundingMTEFProjection> it2 = this.mtefProjections.iterator();
+		while (it2.hasNext()) {
+			AmpFundingMTEFProjection mtef = (AmpFundingMTEFProjection) it2
+					.next();
+			if (!trnMTEF) {
+				out.getOutputs().add(
+						new Output(new ArrayList<Output>(), new String[] {"<br/>", " MTEF Projection:&nbsp;" }, new Object[] { "" }));
+				trnMTEF = true;
+			}
+			String adjustment = mtef.getProjected().getValue();
+			Output auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
+			auxOutDetail.getOutputs().add(
+					new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",
+							mtef.getAmount(), " ", mtef.getAmpCurrency(), " - ",
+							mtef.getProjectionDate() }));
 		}
 		return out;
 	}
@@ -621,6 +694,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
+		if (groupVersionedFunding == null)
+			groupVersionedFunding = System.currentTimeMillis();
 		return super.clone();
 	}
 }

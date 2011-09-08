@@ -4,7 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -51,7 +51,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		super(id, fundingModel, fmName, true);
 		
 		if (fundingModel.getObject().getFundingDetails() == null)
-			fundingModel.getObject().setFundingDetails(new HashSet());
+			fundingModel.getObject().setFundingDetails(new TreeSet());
 		
 		
 		AmpLabelFieldPanel<AmpOrganisation> orgLabel = new AmpLabelFieldPanel<AmpOrganisation>(
@@ -66,9 +66,10 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				funding.setAmpDonorOrgId(fundingModel.getObject().getAmpDonorOrgId());
 				funding.setAmpActivityId(am.getObject());
 
-				funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-				funding.setFundingDetails(new HashSet<AmpFundingDetail>());
-
+				funding.setMtefProjections(new TreeSet<AmpFundingMTEFProjection>());
+				funding.setFundingDetails(new TreeSet<AmpFundingDetail>());
+				funding.setGroupVersionedFunding(System.currentTimeMillis());
+				
 				parent.getSetModel().getObject().add(funding);
 				parent.getList().removeAll();
 				target.addComponent(parent);

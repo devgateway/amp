@@ -7,8 +7,10 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -38,10 +40,13 @@ public class AmpMTEFProjectionFormTableFeature extends
 	public AmpMTEFProjectionFormTableFeature(String id, String fmName,
 			IModel<AmpFunding> model) throws Exception {
 		super(id, model, fmName);
+		
+		getTableId().add(new SimpleAttributeModifier("width", "620"));
+		
 		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
 				model, "mtefProjections");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet<AmpFundingMTEFProjection>());
+			setModel.setObject(new TreeSet<AmpFundingMTEFProjection>());
 
 		setTitleHeaderColSpan(5);
 		AbstractReadOnlyModel<List<AmpFundingMTEFProjection>> listModel = OnePagerUtil

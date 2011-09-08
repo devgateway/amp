@@ -73,13 +73,9 @@ public class ViewActivityHistory extends Action {
 		auxList = qry.list();
 		Collections.sort(auxList, compareVersions);
 		Iterator<AmpActivityVersion> iter = auxList.iterator();
-		int i = 5;
 		while (iter.hasNext()) {
 			AmpActivityVersion auxActivity = iter.next();
-			if (i > 0) {
-				hForm.getActivities().add(auxActivity);
-			}
-			i--;
+			hForm.getActivities().add(auxActivity);
 		}
 		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
 		boolean ispartofamanagetmentworkspace = false;

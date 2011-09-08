@@ -76,6 +76,11 @@ public class OnePager extends AmpHeaderFooter {
 		};
 	public static final LinkedList<OnepagerSection> flist = new LinkedList<OnepagerSection>(Arrays.asList(test));
 	protected AbstractReadOnlyModel<List<AmpComponentPanel>> listModel;
+	private Component editLockRefresher;
+
+	public Component getEditLockRefresher() {
+		return editLockRefresher;
+	}
 
 	public static OnepagerSection findByName(String name){
 		Iterator<OnepagerSection> it = flist.iterator();
@@ -143,7 +148,6 @@ public class OnePager extends AmpHeaderFooter {
 			throw new RuntimeException(e);
 		}
 		
-		final Component editLockRefresher;
 		if (DEBUG_ACTIVITY_LOCK)
 			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
 		else
@@ -153,7 +157,7 @@ public class OnePager extends AmpHeaderFooter {
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
 					boolean ok = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey());
-					if (!ok)
+					if (editLockRefresher.isEnabled() && !ok)
 						getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
 					if (DEBUG_ACTIVITY_LOCK){
 						if (!ok)

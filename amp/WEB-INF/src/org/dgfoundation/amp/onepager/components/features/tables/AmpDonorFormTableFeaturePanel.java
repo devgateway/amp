@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -37,6 +38,8 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			int titleHeaderColSpan) throws Exception {
 		super(id, model, fmName);
 
+		getTableId().add(new SimpleAttributeModifier("width", "620"));
+		
 		setTitleHeaderColSpan(titleHeaderColSpan);
 		parentModel = new PropertyModel<Set<AmpFundingDetail>>(model,
 				"fundingDetails");

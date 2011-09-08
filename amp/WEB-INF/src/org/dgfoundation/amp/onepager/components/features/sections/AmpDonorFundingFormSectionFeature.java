@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
@@ -122,8 +123,9 @@ public class AmpDonorFundingFormSectionFeature extends
 				funding.setAmpDonorOrgId(choice);
 				funding.setAmpActivityId(am.getObject());
 
-				funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-				funding.setFundingDetails(new HashSet<AmpFundingDetail>());
+				funding.setMtefProjections(new TreeSet<AmpFundingMTEFProjection>());
+				funding.setFundingDetails(new TreeSet<AmpFundingDetail>());
+				funding.setGroupVersionedFunding(System.currentTimeMillis());
 
 				setModel.getObject().add(funding);
 				list.removeAll();

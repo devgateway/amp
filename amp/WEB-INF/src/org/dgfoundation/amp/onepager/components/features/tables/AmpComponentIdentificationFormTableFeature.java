@@ -125,7 +125,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 	protected void handleChanges(AjaxRequestTarget target, IModel<AmpComponent> componentModel) {
 		boolean update = updateVisibility(componentModel);
 		if (update){
-			target.addComponent(this);
+			//target.addComponent(this);
 			target.addComponent(componentFundingSection);
 			target.appendJavascript(OnePagerConst.getToggleChildrenJS(componentFundingSection));
 		}

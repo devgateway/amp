@@ -8,7 +8,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
-public class AmpFundingDetail implements Serializable, Cloneable
+public class AmpFundingDetail implements Serializable, Cloneable, Comparable<AmpFundingDetail>
 {
 	private Long ampFundDetailId ;
 	private Integer fiscalYear ;
@@ -411,6 +411,14 @@ public class AmpFundingDetail implements Serializable, Cloneable
 		public Object clone() throws CloneNotSupportedException {
 			// TODO Auto-generated method stub
 			return super.clone();
+		}
+
+
+		@Override
+		public int compareTo(AmpFundingDetail o) {
+			if (o.getAmpFundDetailId() == null) 
+				return -1;
+			return o.getAmpFundDetailId().compareTo(getAmpFundDetailId());
 		}
 
 }

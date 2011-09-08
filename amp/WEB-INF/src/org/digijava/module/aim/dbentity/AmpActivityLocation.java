@@ -59,12 +59,22 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
 		out.getOutputs().add(
 				new Output(null, new String[] { " Percentage:&nbsp;" },
 						new Object[] { this.locationPercentage != null ? this.locationPercentage : new Float(0) }));
+		out.getOutputs().add(
+				new Output(null, new String[] { "&nbsp;Latitude:&nbsp;"},
+						new Object[] { this.latitude != null ? this.latitude : "" }));
+		out.getOutputs().add(
+				new Output(null, new String[] { "&nbsp;Longitude:&nbsp;"},
+						new Object[] { this.longitude != null ? this.longitude : "" }));
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		return this.locationPercentage != null ? this.locationPercentage : new Float(0);
+		String ret = "";
+		ret = ret + "-Percentage:" + (this.locationPercentage != null ? this.locationPercentage : new Integer(0));
+		ret = ret + "-Latitude:" + (this.latitude != null ? this.latitude.trim() : "");
+		ret = ret + "-Longitude:" + (this.longitude != null ? this.longitude.trim() : "");
+		return ret;
 	}
 	
 	@Override

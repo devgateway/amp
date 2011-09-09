@@ -946,7 +946,11 @@ System.out.println("lang:"+lang);
                 // Message msg = TranslatorWorker.getInstance("").getByBody(xmlLangTag.getTitle().trim(), xmlLangTag.getCode(), siteId.toString());
                 Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(),xmlLangTag.getCode(), siteId.toString());
                 if(msg != null){
-                	TranslatorWorker.getInstance("").update(newMsg);
+                	msg.setSiteId(newMsg.getSiteId());
+                	msg.setMessage(newMsg.getMessage());
+                	msg.setKey(newMsg.getKey());
+                	msg.setLocale(newMsg.getLocale());
+                	TranslatorWorker.getInstance("").update(msg);
                 }else{
                 	TranslatorWorker.getInstance("").save(newMsg);
                 }

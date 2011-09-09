@@ -82,7 +82,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 
 /* HEADER */
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
-.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 0px;}
+.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
 .amp_label {padding-top:10px;float:left;font-size:14px;}
 .top_nav {position:absolute; right:30px; top:30px;}
@@ -679,3 +679,6 @@ html.ie div.header{z-index:9999;}
 #components_dots table tr td {font-size:11px;}
 table tr td {font-size:11px;}
 div.breadcrump_cont{display:none;}
+
+.dgf_footer {margin-top:15px; margin-bottom:15px; text-align:center; font-size:11px; color:#8B8B8B; line-height:18px;}
+.dgf_logo_footer {margin-bottom:5px;}

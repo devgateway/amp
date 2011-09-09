@@ -250,8 +250,8 @@ public class FilterUtil {
 	 	}
 		
 		form.setJustSearch( filter.isJustSearch() );
-		form.setRenderStartYear( filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );
-		form.setRenderEndYear( filter.getRenderEndYear()>0 ? filter.getRenderEndYear() : -1 );
+		form.setRenderStartYear( filter.getRenderStartYear()!=null&&filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );
+		form.setRenderEndYear(filter.getRenderEndYear()!=null&& filter.getRenderEndYear()>0 ? filter.getRenderEndYear() : -1 );
 		
 		form.setSelectedBeneficiaryAgency( FilterUtil.getObjectsIds(filter.getBeneficiaryAgency()) );
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );

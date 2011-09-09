@@ -140,6 +140,7 @@ public class ImportExportTranslations extends Action {
 			if (ioForm != null && ioForm.getSelectedLanguages() != null && ioForm.getSelectedLanguages().length > 0) {
 				long startTime = System.currentTimeMillis();
 				response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
 				response.setHeader("content-disposition", "attachment; filename=exportLanguage.xml");
 
 				Marshaller marshaller = ImportExportUtil.getMarshaller();

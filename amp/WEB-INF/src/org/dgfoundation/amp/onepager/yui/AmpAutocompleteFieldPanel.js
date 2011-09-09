@@ -30,33 +30,33 @@ function ac_left_padding(str,level) {
 };
 
 
-/* Function that is executed when mouse over an element */
-function eventFunction(e, bodyText) {
-    var x = 0;
-    var y = 0;
-    if (e.pageX || e.pageY) 	{
-        x = e.pageX;
-        y = e.pageY;
-    }
-    else if (e.clientX || e.clientY) 	{
-        x = e.clientX + document.body.scrollLeft;
-        y = e.clientY + document.body.scrollTop;
-    }
+///* Function that is executed when mouse over an element */
+//function eventFunction(e, bodyText) {
+//    var x = 0;
+//    var y = 0;
+//    if (e.pageX || e.pageY) 	{
+//        x = e.pageX;
+//        y = e.pageY;
+//    }
+//    else if (e.clientX || e.clientY) 	{
+//        x = e.clientX + document.body.scrollLeft;
+//        y = e.clientY + document.body.scrollTop;
+//    }
+//
+//	showPanel(bodyText, x,  y);
+//}
 
-	showPanel(bodyText, x,  y);
-}
+///* Updates the panels header, body and position and makes it visible */
+//function showPanel(bodyText, posX, posY) {
+//	informationPanel.setBody(bodyText);
+//	informationPanel.moveTo(posX+2, posY+2);
+//	informationPanel.show();
+//}
 
-/* Updates the panels header, body and position and makes it visible */
-function showPanel(bodyText, posX, posY) {
-	informationPanel.setBody(bodyText);
-	informationPanel.moveTo(posX+2, posY+2);
-	informationPanel.show();
-}
-
-/* Just makes the panel invisible */
-function hidePanel() {
-	informationPanel.hide();
-}
+///* Just makes the panel invisible */
+//function hidePanel() {
+//	informationPanel.hide();
+//}
 
 
 YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache,applyLocalFilter) {
@@ -87,12 +87,12 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
     	}
     	
-    	if(pResultData[2]!=''){
-    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
-    	}
-    	if(pResultData[3]!=''){
-    		formatedResult="<span class='"+pResultData[3]+"'>" +formatedResult+"</span>";
-    	}
+//    	if(pResultData[2]!=''){
+//    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
+//    	}
+//    	if(pResultData[3]!=''){
+//    		formatedResult="<span class='"+pResultData[3]+"'>" +formatedResult+"</span>";
+//    	}
     	return formatedResult;
     }; 
     
@@ -104,7 +104,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     //handler for selected items
     this.itemSelectHandler = function(sType, aArgs) {
     	ac_show_loading(indicatorId,inputId,toggleButtonId);
-    	hidePanel();
+    	//hidePanel();
     	var oData = aArgs[2];
     	//Function name is dynamic, ensure it exists
     	var callWicketFuncName="callWicket"+inputId;

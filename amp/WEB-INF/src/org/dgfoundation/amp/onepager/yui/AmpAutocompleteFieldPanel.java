@@ -286,10 +286,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
 	
-	protected  String getAdditionalDetails(CHOICE choice){
-		return "";
-	}
 	
+//	protected  String getAdditionalDetails(CHOICE choice){
+//		return "";
+//	}
+//	
 	/**
 	 * returns the  class of the text
 	 * should be overriden 
@@ -299,9 +300,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * @param choice
 	 *            the <CHOICE> object selected
 	 */
-	protected  String getStyleClass(CHOICE choice){
-		return null;
-	}
+//	protected  String getStyleClass(CHOICE choice){
+//		return null;
+//	}
 
 	// @Override
 	// public void updateModel() {
@@ -332,11 +333,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
-			// choiceValues.add(getChoiceValue(choice));
-			String details=getAdditionalDetails(choice);
-			String styleClass=getStyleClass(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
-					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "", styleClass!=null? styleClass:"" });
+					choiceLevel != null ? choiceLevel.toString() : "0" });
+//			String details=getAdditionalDetails(choice);
+//			String styleClass=getStyleClass(choice);
+//			choiceValues.add(new String[] { getChoiceValue(choice),
+//					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "", styleClass!=null? styleClass:"" });
 		}
 
 		return choiceValues.toArray(new String[0][0]);

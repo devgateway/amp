@@ -203,70 +203,70 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             public Integer getChoiceLevel(AmpContact choice) {
                 return null;
             }
-            @Override
-            public String getStyleClass(AmpContact choice) {
-            	if(choice.getId()==null){
-                     return "l_mid_b";
-                 }
-                return null;
-            }
-            @Override
-            public String getAdditionalDetails(AmpContact contact) {
-             	if(contact.getId()==null) return "";
-            	StringBuilder details=new StringBuilder();
-            	String emails="";
-				String orgs="";
-				String phones="";
-				String faxes="";
-            	if(contact.getTitle()!=null){
-            		details.append(contact.getTitle().getValue());
-            	}
-            	details.append(" ");
-        		details.append(contact.getNameAndLastName());
-        		details.append("<br/>");
-            	if(contact.getProperties()!=null){
-					for (AmpContactProperty property : contact.getProperties()) {
-						if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
-							emails+=property.getValue() +"<br/>";
-						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
-							
-							phones+=property.getValueAsFormatedPhoneNum()  +"<br/>";
-						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
-							faxes+=property.getValue()  +"<br/>";
-						}
-					}
-				}
-            	details.append("<br/>");
-            	details.append("Emails: ");
-            	details.append(emails);
-            	details.append("<br/>");
-
-            	
-            	details.append("<br/>");
-            	details.append("Phones: ");
-            	details.append(phones);
-            	details.append("<br/>");
-            	
-            	details.append("<br/>");
-            	details.append("Faxes: ");
-            	details.append(faxes);
-            	details.append("<br/>");
-
-				
-				if((contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0) || (contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0)){
-					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
-						orgs+=contact.getOrganisationName()+"<br/>";
-					}
-					for (AmpOrganisationContact contOrg : contact.getOrganizationContacts()) {
-						orgs+=contOrg.getOrganisation().getName()+"<br/>";
-					}
-				}
-				details.append("<br/>");
-            	details.append("Organizations: ");
-            	details.append(orgs);
-            	details.append("<br/>");
-                return DbUtil.filter(details.toString(),true);
-            }
+//            @Override
+//            public String getStyleClass(AmpContact choice) {
+//            	if(choice.getId()==null){
+//                     return "l_mid_b";
+//                 }
+//                return null;
+//            }
+//            @Override
+//            public String getAdditionalDetails(AmpContact contact) {
+//             	if(contact.getId()==null) return "";
+//            	StringBuilder details=new StringBuilder();
+//            	String emails="";
+//				String orgs="";
+//				String phones="";
+//				String faxes="";
+//            	if(contact.getTitle()!=null){
+//            		details.append(contact.getTitle().getValue());
+//            	}
+//            	details.append(" ");
+//        		details.append(contact.getNameAndLastName());
+//        		details.append("<br/>");
+//            	if(contact.getProperties()!=null){
+//					for (AmpContactProperty property : contact.getProperties()) {
+//						if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+//							emails+=property.getValue() +"<br/>";
+//						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+//							
+//							phones+=property.getValueAsFormatedPhoneNum()  +"<br/>";
+//						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+//							faxes+=property.getValue()  +"<br/>";
+//						}
+//					}
+//				}
+//            	details.append("<br/>");
+//            	details.append("Emails: ");
+//            	details.append(emails);
+//            	details.append("<br/>");
+//
+//            	
+//            	details.append("<br/>");
+//            	details.append("Phones: ");
+//            	details.append(phones);
+//            	details.append("<br/>");
+//            	
+//            	details.append("<br/>");
+//            	details.append("Faxes: ");
+//            	details.append(faxes);
+//            	details.append("<br/>");
+//
+//				
+//				if((contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0) || (contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0)){
+//					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
+//						orgs+=contact.getOrganisationName()+"<br/>";
+//					}
+//					for (AmpOrganisationContact contOrg : contact.getOrganizationContacts()) {
+//						orgs+=contOrg.getOrganisation().getName()+"<br/>";
+//					}
+//				}
+//				details.append("<br/>");
+//            	details.append("Organizations: ");
+//            	details.append(orgs);
+//            	details.append("<br/>");
+//                return DbUtil.filter(details.toString(),true);
+//            }
         };
         add(searchContacts);
 

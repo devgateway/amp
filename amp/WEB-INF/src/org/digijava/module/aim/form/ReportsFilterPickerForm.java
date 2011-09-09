@@ -138,8 +138,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Integer resetRenderStartYear;
 	private Integer resetRenderEndYear;
-
 	
+	private Collection<String> allgroupingseparators;
+	private Collection<String> alldecimalSymbols;
 	private String decimalSymbol;
 	private String customDecimalSymbol;
 	private String customDecimalSymbolTxt;
@@ -1022,6 +1023,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 	 */
 	public void setSelectedActivitySettings(Object[] selectedActivitySettings) {
 		this.selectedActivitySettings = selectedActivitySettings;
+	}
+
+	public Collection<String> getAlldecimalSymbols() {
+		return alldecimalSymbols;
+	}
+
+	public void setAlldecimalSymbols(Collection<String> alldecimalSymbols) {
+		this.alldecimalSymbols = alldecimalSymbols;
+	}
+
+	public Collection<String> getAllgroupingseparators() {
+		return allgroupingseparators;
+	}
+
+	public void setAllgroupingseparators(Collection<String> allgroupingseparators) {
+		this.allgroupingseparators = allgroupingseparators;
 	}	
 	
 	

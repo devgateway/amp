@@ -206,10 +206,34 @@ public class ReportsFilterPicker extends MultiAction {
 	     Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		 filterForm.setCalendars(allFisCalenders);
 		 
+		 ArrayList<String> decimalseparators = new ArrayList<String>();
+		 String selecteddecimalseparator  = String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator()));
+		 
+		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
+			 decimalseparators.add(selecteddecimalseparator);
+		 }
+		 
+		 decimalseparators.add(".");
+		 decimalseparators.add(",");
+		 decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 filterForm.setAlldecimalSymbols(decimalseparators);
+		 
+		 ArrayList<String> groupseparators = new ArrayList<String>();
+		 String selectedgroupingseparator  = String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator());
+		 
+		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
+			 groupseparators.add(selectedgroupingseparator);
+		 }
+		 
+		 groupseparators.add(".");
+		 groupseparators.add(",");
+		 groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 filterForm.setAllgroupingseparators(groupseparators);
+		 
 		 if (filterForm.getCustomDecimalSymbol() == null) {
-			 filterForm.setCustomDecimalSymbol(String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator())));
+			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
 			 filterForm.setCustomDecimalPlaces(FormatHelper.getDecimalFormat().getMaximumFractionDigits());
-			 filterForm.setCustomGroupCharacter(String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator()));
+			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);
 			 filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
 			 filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
 		 }

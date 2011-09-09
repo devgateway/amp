@@ -30,12 +30,8 @@
 			</td>
         	<td width="20%" height="18" nowrap="nowrap">
         		<html:select styleClass="dropdwn_sm" onchange="initFormatPopup();" property="customDecimalSymbol" styleId="customDecimalSymbol">
-	              <html:option value=",">,</html:option>
-	              <html:option value=".">.</html:option>
-	              <html:option value="CUSTOM">
-	                <digi:trn key="aim:formatPicket:custom">Custom</digi:trn>
-	              </html:option>
-            	</html:select>
+	             	<html:options property="alldecimalSymbols"/>
+	            </html:select>
            		<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt" onchange="initFormatPopup()"/>
            </td>
       	</tr>
@@ -47,7 +43,7 @@
     		<td>
 	    		<html:select styleClass="dropdwn_sm" property="customDecimalPlaces" styleId="customDecimalPlaces" onchange="initFormatPopup();">
 		              <html:option value="-1">
-		                <digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>
+		              		<digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>
 		              </html:option>
 		              <html:option value="0">0</html:option>
 		              <html:option value="1">1</html:option>
@@ -76,11 +72,7 @@
 			</td>
 	    	<td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
 	    		<html:select styleClass="dropdwn_sm" property="customGroupCharacter" styleId="customGroupCharacter" onchange="initFormatPopup();">
-            	<html:option value=".">.</html:option>
-              	<html:option value=",">,</html:option>
-              	<html:option value="CUSTOM">
-                	<digi:trn key="aim:formatPicket:custom">Custom</digi:trn>
-              	</html:option>
+            		<html:options property="allgroupingseparators"/>
             	</html:select>
             <html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" onchange="initFormatPopup()"/>
             </td>

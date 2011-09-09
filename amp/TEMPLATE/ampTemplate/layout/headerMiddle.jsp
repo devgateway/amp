@@ -217,7 +217,7 @@ function adminHelp(){
                                  <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd" style="border: 1px solid transparent; width:100px;">                    
                                       <ul>
                                        <feature:display name="Language Option" module="Tools">
 		                                        <li style="_width:240px">
@@ -252,9 +252,9 @@ function adminHelp(){
                                  <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd" style="border: 1px solid transparent; width:100px;">                    
                                       <ul>
-										<feature:display name="Admin Help" module="HELP">
+																			<feature:display name="Admin Help" module="HELP">
                                         <li class="yuiampmenuitem_drop">
                                         	<a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
                                         		<digi:trn>AMP Admin Help</digi:trn>

@@ -1,6 +1,7 @@
 package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +30,13 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -870,7 +873,7 @@ public class DbUtil {
 
     @SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
-            Date endDate, int transactionType,int adjustmentType) throws DgException {
+            Date endDate, int transactionType,int adjustmentType, int decimalsToShow) throws DgException {
         
     	Long startTime, endTime;
         startTime = System.currentTimeMillis();
@@ -953,8 +956,12 @@ public class DbUtil {
                             total = cal.getTotPlannedComm();
                         }
                 }
+                BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+                    divideByMillionDenominator = new BigDecimal(1000);
+                }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
-                map.put(aav, total.getValue());
+                map.put(aav, total.getValue().divide(divideByMillionDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
             
             endTime = System.currentTimeMillis();

@@ -105,7 +105,7 @@ public class DashboardUtil {
             divideByMillionDenominator = new BigDecimal(1000);
         }
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL);
+        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL, filter.getDecimalsToShow());
 		return sortByValue (map);
 	}
 	

@@ -53,7 +53,6 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.DashboardUtil;
@@ -1336,8 +1335,8 @@ public class DataDispatcher extends DispatchAction {
     		while (it.hasNext()){
     			AmpCategoryValue value = it.next();
                 // apply calendar filter
-                startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
-                endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                 DecimalWraper funding = null;
                 if (typeOfAid) {
                     funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);

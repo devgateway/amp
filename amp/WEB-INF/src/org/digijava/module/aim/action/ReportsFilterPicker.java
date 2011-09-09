@@ -141,8 +141,16 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		
-		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
-		if ( existingFilter != null ) { 
+		AmpARFilter existingFilter		=null;
+                boolean apply=request.getParameter("apply") != null && request.getAttribute("apply") == null;
+                if(filterForm.getSourceIsReportWizard()){
+                    existingFilter= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+                    apply=true;
+                }
+                else{
+                    existingFilter= (AmpARFilter)request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+                }
+		if ( existingFilter != null&&!apply ) { 
 			FilterUtil.populateForm(filterForm, existingFilter);
 			//request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
 		}
@@ -173,7 +181,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
 		}
-		
+		if(filterForm.getCurrency()==null){
 		AmpApplicationSettings tempSettings = getAppSetting(request);
 		if (tempSettings != null) {
 			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
@@ -181,6 +189,7 @@ public class ReportsFilterPicker extends MultiAction {
 			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		}
+               }
 		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 	     //Only currencies having exchanges rates AMP-2620

@@ -133,8 +133,8 @@ public class ExportWorkspaceManager2XSL extends Action {
                 }
                 List<TeamMember> teamMembers = new ArrayList<TeamMember>(TeamMemberUtil.getAllTeamMembers(team.getAmpTeamId()));
                 int merge=1;
-                int activitySize=1;
-                int memberSize=1;
+                int activitySize=0;
+                int memberSize=0;
                 if(activityList!=null&&!activityList.isEmpty()){
                     activitySize=activityList.size();
                 }
@@ -160,12 +160,12 @@ public class ExportWorkspaceManager2XSL extends Action {
                 	emptyCell2.setCellStyle(csLastCell);
                 }
               
-                for(int j=1;j<merge;j++){
+                for(int j=1;j<=merge;j++){
 
                     row = sheet.createRow(rowIndex++);
                     cellIndex = 0;
                     HSSFCell workspaceNameCell=row.createCell(cellIndex++);
-                    boolean isLastCellInColumn = j==merge-1;
+                    boolean isLastCellInColumn = j==merge;
 					if(isLastCellInColumn){ // last cell from merged cells
                     	 workspaceNameCell.setCellStyle(csLastCell);
                 	}
@@ -173,7 +173,7 @@ public class ExportWorkspaceManager2XSL extends Action {
                 		 workspaceNameCell.setCellStyle(cs);
                 	}
                     HSSFCell membCell;
-                    if (memberSize > j) {
+                    if (memberSize >= j) {
                         membCell = row.createCell(cellIndex++);
                         String teamMembersString = BULLETCHAR + teamMembers.get(j-1).getMemberName();
                         HSSFRichTextString membValue = new HSSFRichTextString(teamMembersString);
@@ -190,7 +190,7 @@ public class ExportWorkspaceManager2XSL extends Action {
                 		membCell.setCellStyle(cs);
                 	}
                     HSSFCell activityCell;
-                    if (activitySize > j) {
+                    if (activitySize >= j) {
                     	activityCell = row.createCell(cellIndex++);
                         String activityName = BULLETCHAR + activityList.get(j-1).getName();
                         HSSFRichTextString membValue = new HSSFRichTextString(activityName);

@@ -24,9 +24,11 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 		super(id, model, fmName, true);
 		
 		AmpTextFieldPanel<Double> value = new AmpTextFieldPanel<Double>("value", new PropertyModel<Double>(model, "value"), fieldPrefix + " Value");
+		value.getTextContainer().setRequired(true);
 		add(value);
 		
 		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("valueDate", new PropertyModel<Date>(model, "valueDate"), fieldPrefix + " Date");
+		date.getDate().setRequired(true);
 		add(date);
 		
 		AmpTextAreaFieldPanel<String> comments = new AmpTextAreaFieldPanel<String>("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
@@ -39,9 +41,11 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 		this.fmType = AmpFMTypes.MODULE;
 		
 		AmpTextFieldPanel<Double> val = new AmpTextFieldPanel<Double>("value", value, fieldPrefix + " Value", false, false, Double.class);
+		val.getTextContainer().setRequired(true);
 		add(val);
 		
 		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");
+		date.getDate().setRequired(true);
 		add(date);
 		
 		AmpTextAreaFieldPanel<String> com = new AmpTextAreaFieldPanel<String>("comment", comment, fieldPrefix + " Comments", false);

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -285,7 +286,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void populateItem(final ListItem<AmpComponentPanel> item) {
 				if (item.getModelObject() != null){
 					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
-					String itemId = item.getModelObject().getFMName().replaceAll(" ", "");
+					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
 					label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200); return false;"));
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);

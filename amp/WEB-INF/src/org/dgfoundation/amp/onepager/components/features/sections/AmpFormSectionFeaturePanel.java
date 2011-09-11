@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.model.IModel;
@@ -35,7 +36,7 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 			throws Exception {
 		super(id, fmName);	
 		this.am = am;
-		this.labelContainer.add(new SimpleAttributeModifier("id", fmName.replaceAll(" ", "")));
+		this.labelContainer.add(new SimpleAttributeModifier("id", Hex.encodeHexString(fmName.getBytes())));
 		
 		mrk = new TransparentWebMarkupContainer("foldable");
 		add(mrk);

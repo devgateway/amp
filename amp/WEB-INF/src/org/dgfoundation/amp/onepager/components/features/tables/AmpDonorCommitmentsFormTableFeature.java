@@ -14,6 +14,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -31,6 +32,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 	 * @param id
 	 * @param model
 	 * @param fmName
+	 * @param ampDonorCommitmentsSubsectionFeature 
 	 * @throws Exception
 	 */
 	public AmpDonorCommitmentsFormTableFeature(String id,
@@ -38,7 +40,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		super(id, model, fmName, Constants.COMMITMENT, 6);
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
+				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());
 
 		list = new ListView<AmpFundingDetail>("listCommitments", listModel) {
 

@@ -18,6 +18,22 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpDonorFundingInfoSubsectionFeature extends
 		AmpSubsectionFeaturePanel<AmpFunding> {
 
+	
+	private AmpCategorySelectFieldPanel financingInstrument;
+	private AmpCategorySelectFieldPanel typeOfAssistance;
+
+	public void checkChoicesRequired() {
+		AmpFunding funding = getModel().getObject();
+		if (funding.getFundingDetails() != null
+				&& funding.getFundingDetails().size() > 0) {
+			financingInstrument.getChoiceContainer().setRequired(true);
+			typeOfAssistance.getChoiceContainer().setRequired(true);
+		} else {
+			financingInstrument.getChoiceContainer().setRequired(false);
+			typeOfAssistance.getChoiceContainer().setRequired(false);
+		}
+	}
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -25,18 +41,21 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 	 * @throws Exception
 	 */
 	public AmpDonorFundingInfoSubsectionFeature(String id,
-			IModel<AmpFunding> model, String fmName) throws Exception {
+			final IModel<AmpFunding> model, String fmName) throws Exception {
 		super(id, fmName, model);
-		AmpCategorySelectFieldPanel financingInstrument = new AmpCategorySelectFieldPanel(
+		financingInstrument = new AmpCategorySelectFieldPanel(
 				"financingInstrument",
 				CategoryConstants.FINANCING_INSTRUMENT_KEY,
 				new PropertyModel<AmpCategoryValue>(model,
 						"financingInstrument"),
 				CategoryConstants.FINANCING_INSTRUMENT_NAME, true, false);
+		
+		
+
 		//financingInstrument.getChoiceContainer().setRequired(true);
 		add(financingInstrument);
 
-		AmpCategorySelectFieldPanel typeOfAssistance = new AmpCategorySelectFieldPanel(
+		typeOfAssistance = new AmpCategorySelectFieldPanel(
 				"typeOfAssistance", CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "typeOfAssistance"),
 				CategoryConstants.TYPE_OF_ASSISTENCE_NAME, true, false);
@@ -63,6 +82,15 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"Funding Organization Id");
 //		financingId.getNewLine().setVisible(false);
 		add(financingId);
+		
+		checkChoicesRequired();
+	}
+	
+	@Override
+	protected void onBeforeRender() {
+		// TODO Auto-generated method stub
+		super.onBeforeRender();
+		checkChoicesRequired();
 	}
 
 }

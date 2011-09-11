@@ -7,11 +7,10 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 import java.util.Date;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitmentsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -29,6 +28,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 	 * @param id
 	 * @param fmName
 	 * @param model
+	 * @param ampFundingItemFeaturePanel 
 	 * @throws Exception
 	 */
 	public AmpDonorCommitmentsSubsectionFeature(String id,
@@ -42,6 +42,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setTransactionAmount(0d);
+				fd.setReportingDate(new Date(System.currentTimeMillis()));
 				fd.setAdjustmentType(Constants.ACTUAL);
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpFundingId(model.getObject());
@@ -49,6 +50,8 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				model.getObject().getFundingDetails().add(fd);
 				commitsTableFeature.getList().removeAll();
 				target.addComponent(commitsTableFeature);
+				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				target.addComponent(parent.getFundingInfo());
 			}
 		};
 		add(addCommit);

@@ -43,7 +43,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 		super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
+				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());
 
 		list = new ListView<AmpFundingDetail>("listDisbOrders", listModel) {
 

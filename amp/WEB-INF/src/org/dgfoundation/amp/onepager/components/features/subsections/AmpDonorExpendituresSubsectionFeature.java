@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitmentsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorExpendituresFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -44,12 +45,15 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionAmount(0d);
+				fd.setReportingDate(new Date(System.currentTimeMillis()));
 				fd.setAdjustmentType(Constants.ACTUAL);
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.EXPENDITURE);
 				model.getObject().getFundingDetails().add(fd);
 				expTableFeature.getList().removeAll();
 				target.addComponent(expTableFeature);
+				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				target.addComponent(parent.getFundingInfo());
 			}
 		};
 		add(addCommit);

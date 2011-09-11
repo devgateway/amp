@@ -50,7 +50,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 
 		setTitleHeaderColSpan(5);
 		AbstractReadOnlyModel<List<AmpFundingMTEFProjection>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
+				.getReadOnlyListModelFromSetModel(setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator());
 
 		list = new ListView<AmpFundingMTEFProjection>("listMTEF",
 				listModel) {

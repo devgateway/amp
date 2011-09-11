@@ -1,15 +1,37 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
-public class AmpFundingDetail implements Serializable, Cloneable, Comparable<AmpFundingDetail>
-{
+public class AmpFundingDetail implements Serializable, Cloneable {
+	
+	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if(arg0.getReportingDate()!=null && arg1.getReportingDate()!=null) 
+				return arg0.getReportingDate().compareTo(arg1.getReportingDate());
+			if(arg0.getAmpFundDetailId()!=null && arg1.getAmpFundDetailId()!=null) 
+				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
+			if(arg0.getAmpFundDetailId()!=null && arg1.getAmpFundDetailId()==null) 
+				return -1;
+			if(arg0.getAmpFundDetailId()==null && arg1.getAmpFundDetailId()!=null) 
+				return 1;
+			return arg0.hashCode()-arg1.hashCode();
+		}
+		
+	}
+	
 	private Long ampFundDetailId ;
 	private Integer fiscalYear ;
 	private Integer fiscalQuarter;
@@ -414,11 +436,5 @@ public class AmpFundingDetail implements Serializable, Cloneable, Comparable<Amp
 		}
 
 
-		@Override
-		public int compareTo(AmpFundingDetail o) {
-			if (o.getAmpFundDetailId() == null) 
-				return -1;
-			return o.getAmpFundDetailId().compareTo(getAmpFundDetailId());
-		}
 
 }

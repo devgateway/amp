@@ -6,8 +6,10 @@ package org.dgfoundation.amp.onepager;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -73,6 +75,28 @@ public final class OnePagerUtil {
 
 	}
 
+	/**
+	 * Returns an {@link AbstractReadOnlyModel} wrapping a list from a source {@link SetModel}.
+	 * Useful to return a {@link ListView} compliant model out of a Hibernate {@link Set} 
+	 * @param <T> The type of object in the set
+	 * @param setModel the given set model
+	 * @param c the comparator used to provide total ordering of elements using an internal {@link TreeSet}
+	 * @return the returned model
+	 */
+	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel, final Comparator<T> c) {
+		return new AbstractReadOnlyModel<List<T>>() {
+			private static final long serialVersionUID = 3706184421459839210L;
+
+			@Override
+			public List<T> getObject() {
+				TreeSet<T> ts=new TreeSet<T>(c);
+				ts.addAll(setModel.getObject());
+				return new ArrayList<T>(ts);
+			}
+		};
+
+	}
+	
 	/**
 	 * Returns an {@link AbstractReadOnlyModel} wrapping a list from a source ArrayList.
 	 * Useful to return a {@link ListView} compliant model out of a Hibernate Set 

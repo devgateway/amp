@@ -40,6 +40,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 	
 
 	
+	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
+
 	/**
 	 * @param id
 	 * @param fmName
@@ -93,7 +95,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 						"delegatedPartner"), "Delegated Partner");
 		add(delegatedPartner);
 
-		AmpDonorFundingInfoSubsectionFeature fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
+		fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
 				"fundingInfoSubsection", fundingModel,"Funding Classification");
 		add(fundingInfo);
 		
@@ -122,6 +124,10 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		
 	
 	
+	}
+
+	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {
+		return fundingInfo;
 	}
 
 }

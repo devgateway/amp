@@ -14,6 +14,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
@@ -32,6 +34,11 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 
 	protected IModel<Set<AmpFundingDetail>> parentModel;
 	protected IModel<Set<AmpFundingDetail>> setModel;
+	
+	public AmpFundingItemFeaturePanel getParentFundingItem() {
+		AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+		return parent;
+	}
 
 	public AmpDonorFormTableFeaturePanel(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType,
@@ -72,6 +79,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				parentModel.getObject().remove(item.getModelObject());
 				target.addComponent(AmpDonorFormTableFeaturePanel.this);
 				list.removeAll();
+				target.addComponent(getParentFundingItem().getFundingInfo());
 			}
 		};
 	}

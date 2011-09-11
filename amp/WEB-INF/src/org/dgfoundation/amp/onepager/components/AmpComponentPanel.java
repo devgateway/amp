@@ -40,6 +40,10 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected AjaxCheckBox cascadeFmToChildren;
 	protected Label cascadeFmToChildrenLabel;
 	
+	public IModel<T> getModel() {
+		return (IModel<T>) getDefaultModel();
+	}
+	
 	public String getShorterFmName() {
 		int maxLen=26;
 		if(fmType.equals(AmpFMTypes.MODULE)) maxLen=13; 

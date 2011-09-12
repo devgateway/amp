@@ -6,10 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.image.Image;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-
-import com.visural.wicket.component.dropdown.DropDownImageResourceRef;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -53,7 +50,7 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 				target.appendJavascript(js);
 			}
 		};
-		link.add(new Image("dropdown",new DropDownImageResourceRef()));
+		//link.add(new Image("dropdown",new DropDownImageResourceRef()));
 		add(link);
 	}
 	

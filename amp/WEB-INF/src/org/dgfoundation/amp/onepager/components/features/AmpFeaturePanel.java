@@ -10,7 +10,6 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
 
 /**
  * Class implementing behavior for all descending feature panels. This is an
@@ -27,8 +26,6 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 	private static final long serialVersionUID = 2998131911444530012L;
 
 	protected Label labelContainer;
-
-	protected BeautyTipBehavior tooltipContainer;
 
 	public AmpFeaturePanel(String id, String fmName){
 		this(id, null, fmName, false);

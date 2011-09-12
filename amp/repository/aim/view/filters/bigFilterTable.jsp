@@ -66,7 +66,7 @@
 		</div>
 					<c:set var="displayProperty"> </c:set>
 					<logic:iterate id="element" name="elements" scope="page">
-						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;" id="${element.htmlDivId}">
+						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;width:100%" id="${element.htmlDivId}">
 							<bean:define id="reqEntityList" name="element" property="rootHierarchyListable.children" toScope="request" />
 							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
 							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>

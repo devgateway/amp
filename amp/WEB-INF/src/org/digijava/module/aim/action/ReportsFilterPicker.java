@@ -1089,10 +1089,10 @@ public class ReportsFilterPicker extends MultiAction {
 				Integer defaultStart = getDefaultStartYear(request);
 				Integer defaultEnd = getDefaultEndYear(request);
 				if (filterForm.getCalendar() != null) {
-					if (filterForm.getRenderStartYear() > 0)
+					if (filterForm.getRenderStartYear() < 0)
 					filterForm.setRenderStartYear(getYearOnCalendar(filterForm.getCalendar(), defaultStart,tempSettings));
 				
-					if (filterForm.getRenderEndYear()> 0)
+					if (filterForm.getRenderEndYear()< 0)
 					filterForm.setRenderEndYear(getYearOnCalendar(filterForm.getCalendar(), defaultEnd,tempSettings));
 
 				}

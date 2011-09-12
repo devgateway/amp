@@ -15,7 +15,6 @@
 <!--[if IE 8]><link href='/TEMPLATE/ampTemplate/css_2/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]-->
 
 
-
 <wicket:head></wicket:head>
 
 <script src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js" type="text/javascript"> </script>
@@ -33,55 +32,10 @@
 </head>
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<!-- HEADER START 
-<wicket:jsp file="/TEMPLATE/ampTemplate/layout/wicketHeaderLayout.jsp" layouts="addEditLayout;headerTopLayout;headerMiddleLayout" />
-<div class="header">
-<div class="centering">
-<div class="top_nav">
-	<a href="#">AMP Admin</a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">HELP 
-	<a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0/></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">English 
-	<a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0 /></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">
-	<a href="/aim/j_acegi_currentLogframe.apply(currentLogframe);out">LOGOUT</a></div>
-<div class="logo"><img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left><div class="amp_label"> &nbsp;Aid Management Platform 2.0</div></div>
-</div>
-</div>
--->
-<center>
-<div class="header">
-	<div class="centering">
-		<div class="logo">
-			<img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left>
-			<div class="amp_label">&nbsp;Aid Management Platform 2.0</div>
-		</div>
+<!-- HEADER START -->
+ 
+<wicket:jsp file="/TEMPLATE/ampTemplate/layout/wicketAdminHeaderLayout.jsp" layouts="headerTopLayout;headerMiddleLayout" />
 
-		
-		<div id="usr_menu_logged">
-			<a href="javascript:showUserProfile(2)">AMP Admin</a>			
-			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">		
-			
-			
-              <span title="Workspace name">                
-                	<strong style="color:#FFFFFF">EAMM Administrator</strong>	
-              </span>              
-			 	
-		</div>
-	</div>
-</div>
-</center>
-<!-- HEADER END -->
-
-
-<!-- MAIN MENUSTART -->
-<center>
-	<div class="main_menu">
-		<div class="centering">
-			<div class="menu_item">
-				<div class="menu_item_cont"><a href="/admin.do">Admin Tools</a></div>
-			</div>
-		</div>
-	</div>
-</center>
-<!-- MAIN MENU END -->
 
 
 <!-- BREADCRUMP START -->
@@ -107,20 +61,11 @@
 <div align="right">
 <input type="button" wicket:id="fmmode" value="FM Mode" class="buttonx" />
 </div>
-<!-- FOOTER START 
-<div class="footer"><center><img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP 1.13.42 build 08.Feb.2010 - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</center></div>
--->
-<div class="footer">
-	<center>
-		<img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP <b>2.0</b> build <b>ALPHA</b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
-      		<a href='/admin/'>Admin</a>
-      		<a href='/admin/switchDevelopmentMode.do'>User/Dev Mode</a>
-	</center>
- </div>
-<!-- FOOTER END  
+<!-- FOOTER START -->
+<span id="wicketFooter" class="footer">
+	<wicket:jsp file="/TEMPLATE/ampTemplate/layout/footerAdminLayout2.jsp" layouts="footerLayout" />
+</span>
 
- <wicket:jsp file="/TEMPLATE/ampTemplate/layout/footerLayout2.jsp" layouts="footerLayout" />
--->
 
 </body>
 </html>

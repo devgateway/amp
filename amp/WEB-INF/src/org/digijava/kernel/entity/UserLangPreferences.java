@@ -27,7 +27,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.request.Site;
 import java.io.Serializable;
 
-public class UserLangPreferences {
+public class UserLangPreferences implements Serializable{
 
     private UserPreferencesPK id;
     private Locale navigationLanguage;

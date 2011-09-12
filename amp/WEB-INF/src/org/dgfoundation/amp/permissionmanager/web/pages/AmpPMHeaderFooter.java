@@ -4,10 +4,14 @@
 package org.dgfoundation.amp.permissionmanager.web.pages;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.Cookie;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -15,6 +19,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -32,6 +37,19 @@ public class AmpPMHeaderFooter extends WebPage {
 	public AmpPMHeaderFooter() {
 		// TODO Auto-generated constructor stub
 		
+		Cookie[] cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+		if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("digi_language")) {
+                	String languageCode = cookies[i].getValue();
+                	Session.get().setLocale(new Locale(languageCode));
+                    if (languageCode != null) {
+                        break;
+                    }
+                }
+            }
+        }
+		
 		add(new HeaderContributor(new com.google.excanvas.ExCanvasHeaderContributor()));
 		add(new JQueryBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
@@ -47,32 +65,7 @@ public class AmpPMHeaderFooter extends WebPage {
 		};
 
 		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
-		//add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
-//		String changeTrnMode = "Enable TrnMode";
-////		add(new AjaxLink("changeTrnMode", new Model(changeTrnMode)) {
-//
-//			@Override
-//			public void onClick(AjaxRequestTarget arg0) {
-//				AmpWebSession session = (AmpWebSession) getSession();
-//				if (session.isTranslatorMode())
-//					session.setTranslatorMode(false);
-//				else
-//					session.setTranslatorMode(true);
-//				setResponsePage(OnePager.class);
-//			}
-//		});
-//
-//		add(new AjaxLink("changeFmMode", new Model("FM Mode")) {
-//			@Override
-//			public void onClick(AjaxRequestTarget arg0) {
-//				AmpWebSession session = (AmpWebSession) getSession();
-//				if (session.isFmMode())
-//					session.setFmMode(false);
-//				else
-//					session.setFmMode(true);
-//				setResponsePage(PermissionManager.class);
-//			}
-//		});
+
 		
 		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
 			    @Override

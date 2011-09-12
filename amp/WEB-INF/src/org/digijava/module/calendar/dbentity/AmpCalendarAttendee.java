@@ -1,9 +1,11 @@
 package org.digijava.module.calendar.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
-public class AmpCalendarAttendee {
+public class AmpCalendarAttendee implements Serializable{
     private Long id;
     private AmpCalendar ampCalendar;
     private AmpTeamMember member;

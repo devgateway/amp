@@ -111,7 +111,7 @@
 						</html:select>
 					</td>
 					<td valign="top">
-						<input type="button" value="Unselect All" class="buttonx" onclick="unselectAll()">
+						<input type="button" value="<digi:trn>Unselect All</digi:trn>" class="buttonx" onclick="unselectAll()">
 					</td>
 				</tr>
 				<tr>
@@ -124,7 +124,7 @@
                         <html:submit onclick="return validateSave()" styleClass="buttonx">
 							<digi:trn key="gis:editIndicatorChartWidget:btnSave">Save</digi:trn>
 						</html:submit>
-						<input type="button" value="Cancel" onclick="cancelEdit(this.form)" class="buttonx">
+						<input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancelEdit(this.form)" class="buttonx">
 					</td>
 				</tr>
 			</table>

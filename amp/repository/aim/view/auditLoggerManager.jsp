@@ -48,16 +48,16 @@ function actionChanged(value){
 	var header = document.getElementById("frecuencyHeaderId");
 	if (header!= null){
 		if (value == 'delete'){
-			header.innerHTML= "Older then:&nbsp;&nbsp;";
+			header.innerHTML= "<digi:trn jsFriendly='true'>Older then</digi:trn>:&nbsp;&nbsp;";
 		}
 		if (value == 'export'){
-			header.innerHTML= "Selected Period:&nbsp;&nbsp;";
+			header.innerHTML= "<digi:trn jsFriendly='true'>Selected Period</digi:trn>:&nbsp;&nbsp;";
 		}
 	}
 }
 
 function submitClean(){
-	if (document.getElementById("actionId").value == 'delete' && ! confirm("Do you really want to delete this log information ?")){
+	if (document.getElementById("actionId").value == 'delete' && ! confirm("<digi:trn jsFriendly='true'>Do you really want to delete this log information</digi:trn> ?")){
 		return;
 	}
 
@@ -200,7 +200,7 @@ function toggleSettings(){
                                  </tr>
                                  <tr>
 									<td align="right">
-                                 	<strong id="frecuencyHeaderId"><digi:trn>Older then:</digi:trn>&nbsp;&nbsp; </strong>
+                                 	<strong id="frecuencyHeaderId"><digi:trn>Older then</digi:trn>:&nbsp;&nbsp; </strong>
                                  	</td>
                                  	<td align="left" height="30px">
                                  	<html:select property="frecuency" styleClass="inp-text" >
@@ -214,13 +214,13 @@ function toggleSettings(){
                                  </tr>
                                  <tr>
                                 	<td align="right">
-                                 		<input  class="dr-menu" type="button" onclick="submitClean()" value="OK">
+                                 		<input  class="dr-menu" type="button" onclick="submitClean()" value="<digi:trn>OK</digi:trn>">
                                  		&nbsp;
 									</td>
 									
 									<td align="left">
 									
-																			<input class="dr-menu" type="button" value="Cancel" onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
+																			<input class="dr-menu" type="button" value="<digi:trn>Cancel</digi:trn>" onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
 									</td>
                                  </tr>
                                  </table>

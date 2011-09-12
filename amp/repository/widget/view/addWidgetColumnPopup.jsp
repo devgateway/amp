@@ -28,6 +28,8 @@
 body {font-family:Arial, Helvetica, sans-serif}
 .buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .inputx, td input.inp-text, table#addUserContainer tr td input, td select {border:1px solid #D0D0D0; background-color:#FFFFFF}
+.inputx_sm_200 {border:1px solid #D0D0D0; background-color:#FFFFFF; font-size:11px; width:250px;}
+hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 
 
 </style>
@@ -44,24 +46,22 @@ body {font-family:Arial, Helvetica, sans-serif}
 			<td colspan="2" align="center">
 				<span class="subtitle-blue">
 					<digi:trn key="gis:addwidgetcolumn:pageTitle"><b>Add new column</b></digi:trn>
-				</span>
-			</td>
+				</span>			</td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap" width="50%">
+			<td align="right" nowrap="nowrap" width="40%">
 				<font color="red">*</font><strong><digi:trn key="gis:addwidgetcolumn:typeTitle">Type:</digi:trn></strong></td>
-			<td width="50%">
+			<td width="60%">
 				<c:if test="${cForm.colColumnEdit}">
 					<html:select name="cForm" property="colSelectedType" tabindex="1" disabled="true">
-						<html:optionsCollection name="cForm" property="columnTypes" label="label" styleClass="inputx" value="value"/>
+						<html:optionsCollection name="cForm" property="columnTypes" label="label" styleClass="inputx_sm_200" value="value"/>
 					</html:select>
 				</c:if>
 				<c:if test="${not cForm.colColumnEdit}">
 					<html:select name="cForm" property="colSelectedType" tabindex="1">
-						<html:optionsCollection name="cForm" property="columnTypes" label="label" styleClass="inputx" value="value"/>
+						<html:optionsCollection name="cForm" property="columnTypes" label="label" styleClass="inputx_sm_200" value="value"/>
 					</html:select>
-				</c:if>
-			</td>
+				</c:if>			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">
@@ -100,18 +100,16 @@ body {font-family:Arial, Helvetica, sans-serif}
                 </field:display>
 		<tr>
 			<td colspan="2">
-				<hr>
-			</td>
+				<hr>			</td>
 		</tr>
 		<tr>
-			<td align="right">
+			<td colspan="2" align="center">
 				<c:set var="cancelButton"><digi:trn key="gis:cancelButton">Cancel</digi:trn></c:set>
 				<input type="button" value="${cancelButton}" class="buttonx" onclick="javascript:window.close()" tabindex="9">
-			</td>
-			<td>
-				<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
-				<input type="button" onclick="addColumnToWidget(this.form)" class="buttonx" value="${addButton}" title="Submit" tabindex="8">
-			</td>
+			
+				<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn>
+				</c:set>
+				<input type="button" onclick="addColumnToWidget(this.form)" class="buttonx" value="${addButton}" title="Submit" tabindex="8">			</td>
 		</tr>
 	</table>
 

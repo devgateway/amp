@@ -86,10 +86,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	private boolean useCache=true;
 	
-	/**
-	 * If YUI client side datasource cache should be used (some instances of this control may require no cache)
-	 */
-	private boolean applyLocalFilter=true;
+
+	
 	
 
 	/**
@@ -177,24 +175,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	}
 	
 	
-	/**
-	 * 
-	 * @param id
-	 * @param fmName
-	 * @param hideLabel  the FM name @see {@link AmpFMTypes}
-	 * @param objectListModelClass the model to retrieve the list of items
-	 * @param useCache if YUI should use client side cache
-	 * @param applyLocalFilter if YUI should apply local filter
-	 */
-	public AmpAutocompleteFieldPanel(
-			String id,
-			String fmName,
-			boolean hideLabel,
-			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache,boolean applyLocalFilter) {
-		this(id,fmName,hideLabel,objectListModelClass,useCache);
-		this.applyLocalFilter=applyLocalFilter;
-	}
-	
+
 
 	/**
 	 * 
@@ -210,22 +191,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		this(id, fmName, false, objectListModelClass,useCache);
 	}
 	
-	/**
-	 * Constructs a new component. Initializes all subcomponents
-	 * 
-	 * @see YuiAutoComplete#YuiAutoComplete(String, String, Class)
-	 * @param id
-	 * @param hideLabel
-	 *            if true, the visible text label of the component is not shown
-	 * @param model
-	 */
 	public AmpAutocompleteFieldPanel(
 			String id,
 			String fmName,
 			boolean hideLabel,
-			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
+			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
 		super(id, null, fmName, hideLabel, true);
-
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 		this.objectListModelClass = objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");
@@ -236,8 +208,29 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		add(textField);
 		container = new WebMarkupContainer("container");
 		container.setOutputMarkupId(true);
-		add(container);
-		add(new YuiAutoCompleteBehavior());
+		add(container);    
+		add(new YuiAutoCompleteBehavior(){
+			@Override
+			public void renderHead(IHeaderResponse response) {
+				super.renderHead(response);
+				response.renderJavascriptReference(new JavascriptResourceReference(
+						clazz,
+						"AmpAutocompleteCommonScripts.js"));
+				response.renderJavascriptReference(new JavascriptResourceReference(
+						clazz,
+						jsName));
+				/*
+				 * currently renderOnDomReadyJavascript doesn't work as expected in IE8
+				 * that is why jquery's $(document).ready has been added here
+				 */
+				response.renderOnDomReadyJavascript("$(document).ready(function() {"+getJsVarName()
+						+ " = new YAHOO.widget."+ autoCompeleteVar+"('"
+						+ textField.getMarkupId() + "', '" + getCallbackUrl()
+						+ "', '" + container.getMarkupId() + "', '"
+						+ toggleButton.getMarkupId() + "', '"
+						+ indicator.getMarkupId() + "', " +useCache+  ");});");
+			}
+		});
 
 		indicator = new WebMarkupContainer("indicator");
 		indicator.setOutputMarkupId(true);
@@ -258,6 +251,23 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			}
 		};
 		textField.add(onSelectBehavior);
+	}
+	
+	/**
+	 * Constructs a new component. Initializes all subcomponents
+	 * 
+	 * @see YuiAutoComplete#YuiAutoComplete(String, String, Class)
+	 * @param id
+	 * @param hideLabel
+	 *            if true, the visible text label of the component is not shown
+	 * @param model
+	 */
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+		this(id, fmName, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete");
 	}
 
 	/**
@@ -287,22 +297,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
 	
 	
-//	protected  String getAdditionalDetails(CHOICE choice){
-//		return "";
-//	}
-//	
-	/**
-	 * returns the  class of the text
-	 * should be overriden 
-	 * when we what special style for the element (e.g. bold)
-	 * 
-	 *
-	 * @param choice
-	 *            the <CHOICE> object selected
-	 */
-//	protected  String getStyleClass(CHOICE choice){
-//		return null;
-//	}
 
 	// @Override
 	// public void updateModel() {
@@ -335,10 +329,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Integer choiceLevel = getChoiceLevel(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
 					choiceLevel != null ? choiceLevel.toString() : "0" });
-//			String details=getAdditionalDetails(choice);
-//			String styleClass=getStyleClass(choice);
-//			choiceValues.add(new String[] { getChoiceValue(choice),
-//					choiceLevel != null ? choiceLevel.toString() : "0" ,details != null ? details : "", styleClass!=null? styleClass:"" });
 		}
 
 		return choiceValues.toArray(new String[0][0]);
@@ -426,23 +416,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	private class YuiAutoCompleteBehavior extends AbstractDefaultAjaxBehavior {
 
-		@Override
-		public void renderHead(IHeaderResponse response) {
-			super.renderHead(response);
-			response.renderJavascriptReference(new JavascriptResourceReference(
-					AmpAutocompleteFieldPanel.class,
-					"AmpAutocompleteFieldPanel.js"));
-			/*
-			 * currently renderOnDomReadyJavascript doesn't work as expected in IE8
-			 * that is why jquery's $(document).ready has been added here
-			 */
-			response.renderOnDomReadyJavascript("$(document).ready(function() {"+getJsVarName()
-					+ " = new YAHOO.widget.WicketAutoComplete('"
-					+ textField.getMarkupId() + "', '" + getCallbackUrl()
-					+ "', '" + container.getMarkupId() + "', '"
-					+ toggleButton.getMarkupId() + "', '"
-					+ indicator.getMarkupId() + "', " +useCache+ ", "+applyLocalFilter+ ");});");
-		}
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {

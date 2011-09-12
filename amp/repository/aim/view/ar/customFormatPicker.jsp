@@ -134,22 +134,25 @@
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
 			<td width="40%" style="text-align: right">
-				<digi:trn>Year Range</digi:trn></td>
-			<td><digi:trn>From</digi:trn>: 	<html:select  styleClass="dropdwn_sm" property="renderStartYear">
-					<html:option value="-1">
-						<digi:trn key="rep:filer:All">All</digi:trn>
-					</html:option>
-					<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
-				</html:select> &nbsp;
-				<digi:trn>To</digi:trn>: &nbsp; 
-				<html:select property="renderEndYear" styleClass="dropdwn_sm">
-					<html:option value="-1">
-						<digi:trn key="rep:filer:All">All</digi:trn>
-					</html:option>
-					<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
-				</html:select></td>
+				<digi:trn>Year Range</digi:trn>
+			</td>
+			<td>
+				<digi:trn>From</digi:trn>:
+					<html:select styleClass="dropdwn_sm" property="renderStartYear">
+						<html:option value="-1">
+							<digi:trn key="rep:filer:All">All</digi:trn>
+						</html:option>
+						<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
+					</html:select> &nbsp;
+					<digi:trn>To</digi:trn>: &nbsp; 
+					<html:select property="renderEndYear" styleClass="dropdwn_sm">
+						<html:option value="-1">
+							<digi:trn key="rep:filer:All">All</digi:trn>
+						</html:option>
+						<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
+					</html:select>
+			</td>
 		</tr>
-
 	</logic:notEqual>
   </table>
 <br>

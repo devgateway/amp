@@ -216,13 +216,20 @@ public final class PMUtil {
 //					cp=new CompositePermission(false);
 //				}
 		    
-		    if (p!=null && p.isDedicated()) {
+		   // if (p!=null && p.isDedicated()) {
+		    if (p!=null) {
 				CompositePermission cp = (CompositePermission)p;
 				PMUtil.deleteCompositePermission(cp, session,true);
+				List<PermissionMap> permMaps = getGlobalPermissionMapListForPermissibleClass(globalPermissionMapForPermissibleClass);
+				if(permMaps!=null)
+					for (Iterator it = permMaps.iterator(); it.hasNext();) {
+						PermissionMap pmAux = (PermissionMap) it.next();
+						PMUtil.deletePermissionMap(pmAux, session);						
+					}
 				//PMUtil.deletePermissionMap(ampObjectVisibility)
 		    }
 		    
-//		    pm=new PermissionMap(); 
+		    pm=new PermissionMap(); 
 		    pm.setObjectIdentifier(null);
 		    pm.setPermissibleCategory(permCategory);
 
@@ -562,6 +569,7 @@ public final class PMUtil {
 			e.printStackTrace();
 		}
 		List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampObjectVisibility);
+		if(pmList!=null)
 		for (PermissionMap permissionMap : pmList) {
 			if(permissionMap!=null) {
 			    Permission p=permissionMap.getPermission();

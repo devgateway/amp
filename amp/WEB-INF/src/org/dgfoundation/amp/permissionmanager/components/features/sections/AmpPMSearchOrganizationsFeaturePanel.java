@@ -16,6 +16,7 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMOrganizationsUsersTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
@@ -72,11 +73,11 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 		idsList = orgsTable.getList();
 		
 		
-		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {
+//		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpOrganisation> autoComplete = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations",AmpOrganisationSearchModel.class) {
 
 			@Override
-			protected String getChoiceValue(AmpOrganisation choice)
-					throws Throwable {
+			protected String getChoiceValue(AmpOrganisation choice) {
 				return choice.getAcronymAndName();
 			}
 
@@ -104,8 +105,9 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(35));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
-		add(searchOrgs);
+		add(autoComplete);
+	//	final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
+		
 
 //		add(new Link("saveButton"){
 //			@Override
@@ -133,6 +135,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 //			}
 //			
 //		});
+			
 		
 	}
 

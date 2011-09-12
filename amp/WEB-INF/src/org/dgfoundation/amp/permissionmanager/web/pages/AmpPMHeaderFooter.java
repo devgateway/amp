@@ -13,7 +13,6 @@ import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -50,7 +49,6 @@ public class AmpPMHeaderFooter extends WebPage {
             }
         }
 		
-		add(new HeaderContributor(new com.google.excanvas.ExCanvasHeaderContributor()));
 		add(new JQueryBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
 		add(ampajax);

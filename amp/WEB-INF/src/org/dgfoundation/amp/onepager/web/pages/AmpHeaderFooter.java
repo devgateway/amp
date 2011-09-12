@@ -13,26 +13,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.AmpWebSession;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.wicketstuff.jquery.JQueryBehavior;
-
-import wicket.contrib.tinymce.settings.TinyMCESettings;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -54,8 +45,6 @@ public class AmpHeaderFooter extends WebPage {
             }
         }
 		
-		add(new HeaderContributor(
-				new com.google.excanvas.ExCanvasHeaderContributor()));
 		add(new JQueryBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
 		add(ampajax);

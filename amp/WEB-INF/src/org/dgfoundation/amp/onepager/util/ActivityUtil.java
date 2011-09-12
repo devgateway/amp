@@ -27,6 +27,8 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -199,6 +201,8 @@ public class ActivityUtil {
 			saveEditors(session); 
 			saveComments(a, session); 
 			
+			updateComponentFunding(a, session);
+			
 			session.update(a); //should have saved by now
 			
 			am.setObject(a);
@@ -275,6 +279,27 @@ public class ActivityUtil {
 		
 		
 		return act;
+	}
+
+
+	private static void updateComponentFunding(AmpActivityVersion a,
+			Session session) {
+		if (a.getComponents() == null)
+			return;
+		Iterator<AmpComponentFunding> it1 = a.getComponentFundings().iterator();
+		while (it1.hasNext()) {
+			AmpComponentFunding cf = (AmpComponentFunding) it1
+					.next();
+			Iterator<AmpComponent> it2 = a.getComponents().iterator();
+			while (it2.hasNext()) {
+				AmpComponent comp = (AmpComponent) it2.next();
+				if (comp.getTitle().compareTo(cf.getComponent().getTitle()) == 0){
+					cf.setComponent(comp);
+					break;
+				}
+			}
+			session.update(cf);
+		}
 	}
 
 	private static void saveComments(AmpActivityVersion a, Session session) {

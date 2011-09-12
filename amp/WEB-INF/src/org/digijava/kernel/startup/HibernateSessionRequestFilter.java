@@ -23,7 +23,7 @@ import org.hibernate.StaleObjectStateException;
  * {@link http://community.jboss.org/wiki/OpenSessionInView}
  */
 public class HibernateSessionRequestFilter implements Filter {
-	private static Logger log = Logger.getLogger(AmpActivityModel.class);
+	private static Logger log = Logger.getLogger(HibernateSessionRequestFilter.class);
 	/**
 	 * 
 	 */

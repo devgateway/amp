@@ -43,7 +43,7 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 
 			AmpComponentIdentificationFormTableFeature firstSection = 
 				new AmpComponentIdentificationFormTableFeature("typeAndTitle", activityModel, 
-						componentModel, componentFunding, "Component");
+						componentModel, componentsSetModel, componentFunding, "Component");
 			add(firstSection);
 			
 			AmpComponentsFundingSubsectionFeature commitments = new AmpComponentsFundingSubsectionFeature("commitments", activityModel, 

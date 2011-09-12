@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
+import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
@@ -49,7 +50,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityProgram>());
 		
-		final AmpActivityProgramSettings programSettings = ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
+		
+		final IModel<AmpActivityProgramSettings> programSettings = PersistentObjectModel.getModel(ProgramUtil.getAmpActivityProgramSettings(programSettingsString));
 
 		AbstractReadOnlyModel<List<AmpActivityProgram>> listModel = new AbstractReadOnlyModel<List<AmpActivityProgram>>() {
 			private static final long serialVersionUID = 1L;
@@ -59,11 +61,11 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				Set<AmpActivityProgram> allProgs = setModel.getObject();
 				Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
 				
-				if (programSettings != null){
+				if (programSettings.getObject() != null){
 					Iterator<AmpActivityProgram> it = allProgs.iterator();
 					while (it.hasNext()) {
 						AmpActivityProgram prog = (AmpActivityProgram) it.next();
-						if (prog != null && prog.getProgramSetting() != null && prog.getProgramSetting().getAmpProgramSettingsId() == programSettings.getAmpProgramSettingsId())
+						if (prog != null && prog.getProgramSetting() != null && prog.getProgramSetting().getAmpProgramSettingsId() == programSettings.getObject().getAmpProgramSettingsId())
 							specificProgs.add(prog);
 					}
 				}
@@ -128,7 +130,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				AmpActivityProgram aap = new AmpActivityProgram();
 				aap.setActivity(am.getObject());
 				aap.setProgram(choice);
-				aap.setProgramSetting(programSettings);
+				aap.setProgramSetting(programSettings.getObject());
 				
 				setModel.getObject().add(aap);
 

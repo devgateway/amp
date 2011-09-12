@@ -62,7 +62,7 @@ public class AmpComponentsFundingFormTableFeature extends
 						AmpComponentFunding comp = (AmpComponentFunding) iterator
 						.next();
 						if (comp.getTransactionType() == transactionType)
-							if (/*comp.getComponent().equals(componentModel.getObject())*/ comp.getComponent().hashCode() == componentModel.getObject().hashCode())
+							if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
 								result.add(comp);
 					}
 				}

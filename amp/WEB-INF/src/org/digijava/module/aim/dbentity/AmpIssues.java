@@ -44,9 +44,9 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 	public void setMeasures(Set measures) {
 		this.measures = measures;
 	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	public boolean equals(Object arg) {
 		if (arg instanceof AmpIssues) {
 			AmpIssues issue = (AmpIssues) arg;
@@ -54,6 +54,7 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 		}
 		throw new ClassCastException();
 	}
+	 */
 	public Date getIssueDate() {
 		return issueDate;
 	}

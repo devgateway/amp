@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -42,10 +43,17 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		amount.getTextContainer().setRequired(true);
 		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
 		add(amount);
+		
+		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
+			@Override
+			public List<AmpCurrency> getObject() {
+				return (List<AmpCurrency>) CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
+			}
+		};
+		
 		currency = new AmpSelectFieldPanel<AmpCurrency>("currency",
 				new PropertyModel<AmpCurrency>(model, propertyCurrency),
-				(List<? extends AmpCurrency>) CurrencyUtil
-						.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE),
+				currencyList,
 				fmCurrency, true, false);
 		currency.getChoiceContainer().setRequired(true);
 		add(currency);

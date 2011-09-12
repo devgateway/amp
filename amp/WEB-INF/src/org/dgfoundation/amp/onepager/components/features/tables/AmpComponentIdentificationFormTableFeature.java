@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.util.ComponentsUtil;
 
@@ -47,13 +49,14 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 	
 	/**
 	 * @param id
+	 * @param componentsFundingsSetModel 
 	 * @param componentFundingSection 
 	 * @param fmName
 	 * @param am
 	 * @throws Exception
 	 */
 	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
-			final IModel<AmpComponent> componentModel, WebMarkupContainer componentFundingSection, String fmName) throws Exception{
+			final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, WebMarkupContainer componentFundingSection, String fmName) throws Exception{
 		super(id, activityModel,fmName, true);
 		setTitleHeaderColSpan(5);
 		
@@ -105,6 +108,17 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			protected void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = componentModel.getObject();
 				setModel.getObject().remove(comp);
+				
+				//Remove all fundings from fundings set
+				if (componentsFundingsSetModel.getObject() != null){
+					Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
+					while (it.hasNext()) {
+						AmpComponentFunding cf = (AmpComponentFunding) it
+								.next();
+						if (cf.getComponent().equals(comp))
+							it.remove();
+					}
+				}
 				target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));
 			}
 		};

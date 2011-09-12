@@ -88,6 +88,11 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private Double totAmountCountryContractFunding;
     private transient AmpCurrency totalAmountCurrencyCountry;  
     
+    /**
+     * @Deprecated
+     * They don't seem to be used no more
+     */
+    @Deprecated
     private transient Set amendments;    
     /**
      * 
@@ -493,10 +498,11 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		this.totalAmountCurrencyCountry = totalAmountCurrencyCountry;
 	}
 
+	@Deprecated
 	public Set getAmendments() {
 		return amendments;
 	}
-
+	@Deprecated
 	public void setAmendments(Set amendments) {
 		this.amendments = amendments;
 	}
@@ -640,6 +646,8 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 								" - ", auxDisb.getCurrency(), " - ", auxDisb.getDate() }));
 			}
 		}
+		/*
+		 * Amendments don't seem to be used no more
 		if (this.amendments != null) {
 			List auxAmendList = new ArrayList(this.amendments);
 			Collections.sort(auxAmendList, amendComparator);
@@ -651,6 +659,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 								auxAmend.getAmount(), " - ", auxAmend.getCurrency(), " - ", auxAmend.getDate() }));
 			}
 		}
+		 */
 		return out;
 	}
 
@@ -683,6 +692,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 						+ auxDisb.getDate();
 			}
 		}
+		/*
 		if (this.amendments != null) {
 			List auxAmendList = new ArrayList(this.amendments);
 			Collections.sort(auxAmendList, amendComparator);
@@ -692,6 +702,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 				ret = ret + auxAmend.getAmount() + "-" + auxAmend.getCurrency() + "-" + auxAmend.getDate();
 			}
 		}
+		*/
 		return ret;
 	}
 
@@ -744,6 +755,8 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 				newIPADisb.setContract(aux);
 			}
 		}
+		/*
+		 * Amendments don't seem to be used no more
 		if (aux.getAmendments() != null) {
 			Iterator<IPAContractAmendment> iterAmend = aux.getAmendments().iterator();
 			while (iterAmend.hasNext()) {
@@ -753,7 +766,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 				newIPAAmend.setContract(aux);
 			}
 		}
-
+		*/
 		return aux;
 	}
 	

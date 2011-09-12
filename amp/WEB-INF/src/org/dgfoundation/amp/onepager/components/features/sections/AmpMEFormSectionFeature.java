@@ -4,7 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -25,9 +23,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
@@ -35,22 +31,18 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
-import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * M&E section
@@ -126,12 +118,12 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		final IModel<AmpIndicator> newInd = getNewIndicatorModel();
 		
 		AmpTextFieldPanel<String> indName = new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.MODULE);
-		indName.getTextContainer().setRequired(true);
+		//indName.getTextContainer().setRequired(true);
 		add(indName);
 		
 		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.MODULE));
 		AmpTextFieldPanel<String> indCode = new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.MODULE);
-		indCode.getTextContainer().setRequired(true);
+		//indCode.getTextContainer().setRequired(true);
 		add(indCode);
 		
 		AmpDatePickerFieldPanel datePicker = new AmpDatePickerFieldPanel("indDate", new PropertyModel<Date>(newInd, "creationDate"), "Creation Date");
@@ -197,7 +189,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		final AmpMinSizeCollectionValidationField<AmpSector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpSector>(
 				"minSizeSectorsValidator", sectorListModel, "minSizeSectorsValidator");
 
-		add(minSizeCollectionValidationField);
+		//add(minSizeCollectionValidationField);
 
 
 		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName,AmpSectorSearchModel.class) {			

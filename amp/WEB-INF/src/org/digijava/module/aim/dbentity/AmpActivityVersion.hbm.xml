@@ -217,7 +217,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding" />
 		</set>
 
-		<set name="components" table="AMP_ACTIVITY_COMPONENTS" lazy="true" inverse="true" cascade="none">
+		<set name="components" table="AMP_ACTIVITY_COMPONENTS" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpComponent"
@@ -237,9 +237,9 @@
 		</set>
 	
 		
-		<set name="componentFundings" cascade="all-delete-orphan">
+		<set name="componentFundings" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
-			<key column="amp_activity_id" />
+			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
 		</set>			
 		

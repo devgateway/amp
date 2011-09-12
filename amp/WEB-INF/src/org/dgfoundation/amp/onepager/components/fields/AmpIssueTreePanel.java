@@ -47,7 +47,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		String levelChildrenName = setName.get(levelClass);
 		final PropertyModel levelChildren = new PropertyModel(objModel, levelChildrenName);
 	
-		final TextArea name =new TextArea("name", new PropertyModel(objModel.getObject(),"name"));
+		final TextArea name =new TextArea("name", new PropertyModel(objModel,"name"));
 		addFormComponent(name);
 		Label label = new Label("label", levelLabel);
 		add(label);
@@ -57,9 +57,9 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 			final DateTextField date;
 			
 			if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0)
-				date = new DateTextField("date", new PropertyModel(objModel.getObject(),"issueDate"));
+				date = new DateTextField("date", new PropertyModel(objModel,"issueDate"));
 			else 
-				date = new DateTextField("date", new PropertyModel(objModel.getObject(),"observationDate"));
+				date = new DateTextField("date", new PropertyModel(objModel,"observationDate"));
 					
 			date.setOutputMarkupId(true);
 			

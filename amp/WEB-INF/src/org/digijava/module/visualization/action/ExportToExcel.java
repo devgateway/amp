@@ -138,6 +138,16 @@ public class ExportToExcel extends Action {
 	        cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 	        cellStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
 	        
+	        HSSFCellStyle cellStyleLeft = wb.createCellStyle();
+	        cellStyleLeft.setWrapText(true);
+	        cellStyleLeft.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+	        cellStyleLeft.setBorderRight(HSSFCellStyle.BORDER_THIN);
+	        cellStyleLeft.setDataFormat(df.getFormat("General"));
+	        cellStyleLeft.setFont(fontCell);
+	        cellStyleLeft.setWrapText(true);
+	        cellStyleLeft.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+	        cellStyleLeft.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+	        
 	        HSSFCellStyle lastCellStyle = wb.createCellStyle();
 	        lastCellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 	        lastCellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
@@ -146,6 +156,15 @@ public class ExportToExcel extends Action {
 	        lastCellStyle.setWrapText(true);
 	        lastCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 	        lastCellStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+
+	        HSSFCellStyle lastCellStyleLeft = wb.createCellStyle();
+	        lastCellStyleLeft.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+	        lastCellStyleLeft.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+	        lastCellStyleLeft.setBorderRight(HSSFCellStyle.BORDER_THIN);
+	        lastCellStyleLeft.setFont(fontCell);
+	        lastCellStyleLeft.setWrapText(true);
+	        lastCellStyleLeft.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+	        lastCellStyleLeft.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 
 	     // title cells
 	        HSSFCellStyle titleCS = wb.createCellStyle();
@@ -227,24 +246,24 @@ public class ExportToExcel extends Action {
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             cellNum = 0;
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Currency Type: " + vForm.getFilter().getCurrencyCode());
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            cell.setCellStyle(cellStyleLeft);
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Fiscal Start Year: " + vForm.getFilter().getYear());
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            cell.setCellStyle(cellStyleLeft);
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Years in Range: " + vForm.getFilter().getYearsInRange());
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleLeft);
             String itemList = "";
             Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
             if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
@@ -254,12 +273,12 @@ public class ExportToExcel extends Action {
 			} else {
 				itemList = "All";
 			}
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Organization Groups: " + itemList);
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleLeft);
             itemList = "";
             Long[] orgIds = vForm.getFilter().getOrgIds();
             if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
@@ -269,12 +288,12 @@ public class ExportToExcel extends Action {
 			} else {
 				itemList = "All";
 			}
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Organizations : " + itemList);
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleLeft);
             itemList = "";
             Long[] sectorIds = vForm.getFilter().getSelSectorIds();
             if (sectorIds != null && sectorIds.length != 0 && sectorIds[0]!=-1) {
@@ -284,12 +303,12 @@ public class ExportToExcel extends Action {
 			} else {
 				itemList = "All";
 			}
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Sectors : " + itemList);
             cell.setCellValue(headerText);
-            cell.setCellStyle(cellStyle);
+            cell.setCellStyle(cellStyleLeft);
             itemList = "";
             Long[] locationIds = vForm.getFilter().getSelLocationIds();
             if (locationIds != null && locationIds.length != 0 && locationIds[0]!=-1) {
@@ -299,13 +318,14 @@ public class ExportToExcel extends Action {
 			} else {
 				itemList = "All";
 			}
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Locations : " + itemList);
             cell.setCellValue(headerText);
-            cell.setCellStyle(lastCellStyle);
-            sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            cell.setCellStyle(lastCellStyleLeft);
+            //cell.getCellStyle().setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             
             rowNum++;
 	        //Summary table.
@@ -430,15 +450,19 @@ public class ExportToExcel extends Action {
 			    	row = sheet.createRow(rowNum++);
 			        cellNum = 0;
 			        Map.Entry entry = (Map.Entry)it.next();
-			    	HSSFCellStyle st = null;
-			    	if (it.hasNext())
+			        HSSFCellStyle st = null;
+			        HSSFCellStyle stLf = null;
+			    	if (it.hasNext()){
 			    		st = cellStyle;
-		            else
+			    		stLf = cellStyleLeft;
+			    	} else {
 		            	st = lastCellStyle;
+		            	stLf = lastCellStyleLeft;
+			    	}
 			        cell = row.createCell(cellNum++);
 		            headerText = new HSSFRichTextString(entry.getKey().toString());
 		            cell.setCellValue(headerText);
-		            cell.setCellStyle(st);
+		            cell.setCellStyle(stLf);
 		            cell = row.createCell(cellNum++);
 		            headerText = new HSSFRichTextString(entry.getValue().toString());
 		            cell.setCellValue(headerText);
@@ -986,41 +1010,41 @@ public class ExportToExcel extends Action {
 	            //rowNum = rowNum+27;
 	            //pic6.resize();
 		    }
-	        for(short i=0;i<7;i++){
+	        for(short i=0;i<10;i++){
 	             sheet.setColumnWidth(i , COLUMN_WIDTH);
 	        }
 	        if (sheet2!=null){
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet2.setColumnWidth(i , COLUMN_WIDTH);
 		        } 
 	        }
 	        if (sheet3!=null){
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet3.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
 	        if (sheet4!=null){ 
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet4.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
 	        if (sheet5!=null){ 
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet5.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
 	        if (sheet6!=null){ 
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet6.setColumnWidth(i , COLUMN_WIDTH);
 		        } 
 	        }
 	        if (sheet7!=null){ 
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet7.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
 	        if (sheet8!=null){ 
-	        	 for(short i=0;i<7;i++){
+	        	 for(short i=0;i<10;i++){
 		             sheet8.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }

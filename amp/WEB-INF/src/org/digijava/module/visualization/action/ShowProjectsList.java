@@ -95,7 +95,14 @@ public class ShowProjectsList extends Action {
 	        while(it.hasNext()){
 	        	AmpActivityVersion act = it.next();
 				newFilter.setActivityId(act.getAmpActivityId());
-	        	DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	        	DecimalWraper fundingCal = null;
+	        	if (type.equals("FundingChart")){
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
+	        	} else if (type.equals("AidPredictability")){
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Integer.parseInt(id));
+	        	} else {
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	        	}
 	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        	itemProjectsList.put(act, total);
 			}

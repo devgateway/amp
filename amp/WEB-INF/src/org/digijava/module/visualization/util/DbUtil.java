@@ -1053,16 +1053,21 @@ public class DbUtil {
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
         oql += " inner join act.ampActivityGroup actGroup ";
-        oql += " inner join act.sectors actsec inner join actsec.classificationConfig config  ";
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
-
         if (sectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
 
-        oql += " where config.id=:config and fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        if (sectorCondition) {
+        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        } else {
+        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        }
+        //oql += " where config.id=:config and fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -1108,7 +1113,9 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("config", filter.getSelSectorConfigId());
+            if (sectorCondition) {
+            	query.setLong("config", filter.getSelSectorConfigId());
+            }
 
             if (assistanceTypeId != null) {
                 query.setLong("assistanceTypeId", assistanceTypeId);

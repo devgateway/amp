@@ -10,11 +10,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -42,6 +45,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 			final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
 		super(id, fmName, am);
 		this.fmType = AmpFMTypes.MODULE;
+
+	
 		
 		AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
 				"implementationLevel",
@@ -65,21 +70,51 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 		implementationLocation.setOutputMarkupId(true);
 		add(implementationLocation);
 
+		final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
+				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, implementationLocation);
+
+		
 		// add behavior to update implementation location when implementation
 		// level choice changes
+		// when chaging implementation level, remove all locations
 		implementationLevel.getChoiceContainer().add(
 				new AjaxFormComponentUpdatingBehavior("onchange") {
 					private static final long serialVersionUID = -8419230552388122030L;
-
+					
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						target.addComponent(implementationLocation);
+						Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+						if(set.size()>0) {
+							locationsTable.getSetModel().getObject().clear();
+							locationsTable.getList().removeAll();
+							target.appendJavascript(OnePagerConst.getToggleChildrenJS(locationsTable));
+							target.addComponent(locationsTable);
+						}
 					}
 				});
 
+		//when changing implementation location, remove all locations
+		implementationLocation.getChoiceContainer().add(
+						new AjaxFormComponentUpdatingBehavior("onchange") {
+							private static final long serialVersionUID = -8419230552388122030L;
+							
+							@Override
+							protected void onUpdate(AjaxRequestTarget target) {
+								Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+								if(set.size()>0) {
+									locationsTable.getSetModel().getObject().clear();
+									locationsTable.getList().removeAll();
+									target.appendJavascript(OnePagerConst.getToggleChildrenJS(locationsTable));
+									target.addComponent(locationsTable);
+								}
+							}
+						});
+		
+		
+		
 		// add location table
-		AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
-				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, implementationLocation);
+		
 		add(locationsTable);
 	}
 

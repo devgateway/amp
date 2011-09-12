@@ -44,6 +44,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class AmpLocationFormTableFeature extends
 		AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityLocation> {
 
+	private IModel<Set<AmpActivityLocation>> setModel;
+
+	public IModel<Set<AmpActivityLocation>> getSetModel() {
+		return setModel;
+	}
+
 	protected String getFormattedLocationName(AmpCategoryValueLocations l) {
 		return getFormattedLocationName(new StringBuffer(), l).toString();
 	}
@@ -68,7 +74,7 @@ public class AmpLocationFormTableFeature extends
 			throws Exception {
 		super(id, am, fmName);
 		setTitleHeaderColSpan(4);
-		final IModel<Set<AmpActivityLocation>> setModel = new PropertyModel<Set<AmpActivityLocation>>(
+		setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet());

@@ -122,13 +122,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				am.setObject(am.getObject());
 				saveMethod(target, am, feedbackPanel, true);
 			}
-			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
 				target.addComponent(feedbackPanel);
 			}
 		};
+		saveAsDraft.getButton().setDefaultFormProcessing(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		activityForm.add(saveAsDraft);
 

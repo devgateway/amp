@@ -384,7 +384,7 @@ public class CalendarEventForm
         //method=null;
         searchOrgKey=null;
         teamsMap=null;
-        privateEvent=false;
+        privateEvent=true;
 
         calendarTypes=null;
         selectedCalendarTypeId=null;

@@ -11,6 +11,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
@@ -77,11 +79,8 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 		AmpTextFieldPanel permName = new AmpTextFieldPanel("permissionName", new PropertyModel(cpModel,"name"), "Permission Name", false, true);
 		addPermForm.add(permName);
 	
-//		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("permissionFormTable", cpModel, "Permission Form Table", false);
-//		permGatesFormTable.setTableWidth(300);
-//		addPermForm.add(permGatesFormTable);
 		
-		addPermForm.add(new AjaxFallbackLink("resetPermissionButton"){
+		addPermForm.add(new AmpAjaxLinkField("resetPermissionButton","Reset Permission Button","Reset Permission"){
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				cpModel.setObject(null);
@@ -90,24 +89,17 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 			}
 		});
 		
-		Button saveAndSubmit = new Button("savePermissionButton") {
-
-			//AjaxRequestTarget target, Form<?> form
-			public void onSubmit() {
-					// TODO Auto-generated method stub
-					System.out.println("savePermissionButton  submit pressed");
-//					try {
-//						//PMUtil.savePermission(cpModel,permGatesFormTable.getGatesSet());
-//					} catch (DgException e) {
-//						e.printStackTrace();
-//					}
-					cpModel.setObject(null);
-					addPermForm.clearInput();
-					//target.addComponent(AmpPMAddPermissionFormFeaturePanel.this);
-					System.out.println("PM new permission created");
+		
+		AmpButtonField  saveAndSubmit = new AmpButtonField("savePermissionButton", "Save Permission Button", true, true) {
+			
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				// TODO Auto-generated method stub
+				System.out.println("savePermissionButton  submit pressed");
+				cpModel.setObject(null);
+				addPermForm.clearInput();
+				System.out.println("PM new permission created");
 			}
-
-
 		};
 		addPermForm.add(saveAndSubmit);
 		

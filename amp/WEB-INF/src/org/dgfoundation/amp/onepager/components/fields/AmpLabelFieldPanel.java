@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 
 /**
  * Represents a simple amp label field (text) 
@@ -29,7 +30,7 @@ public class AmpLabelFieldPanel<T> extends AmpFieldPanel<T> {
 
 	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName, boolean hideLabel) {
 		super(id, model, fmName,hideLabel);
-		valueLabel=new Label("valueLabel",model);
+		valueLabel=new TrnLabel("valueLabel",model.getObject().toString());
 		add(valueLabel);
 	}
 	

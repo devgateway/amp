@@ -15,7 +15,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -23,7 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
@@ -71,16 +70,16 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		workspaces.setOutputMarkupId(true);
 		form.add(workspaces);
 		
-		List<String> permissionPriority = PMUtil.getPermissionPriority();
-		final IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
+		List<String> permissionPriorityList = PMUtil.getPermissionPriority();
+		final IModel<String> permissionChoiceModel = new Model(permissionPriorityList.get(0));
 		
 		//permission priority radiobutton
-		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
+		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriorityList);
 
 		permissionPriorityChoices.setSuffix("");
 		form.add(permissionPriorityChoices);
 		
-		final Label permPriorityLabel = new Label("permPriorityLabel", "Permission Priority:");
+		final AmpLabelFieldPanel<String> permPriorityLabel = new AmpLabelFieldPanel<String>("permPriorityLabel", new Model("Permission Priority"), "Permission Priority", true);
 		form.add(permPriorityLabel);
 		
 		//show workspace checkbox

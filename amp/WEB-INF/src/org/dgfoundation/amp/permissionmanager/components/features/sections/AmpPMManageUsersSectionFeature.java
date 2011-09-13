@@ -9,20 +9,17 @@ import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageUsersTableFeaturePanel;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -85,7 +82,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		searchUsers.getTextField().add(sizeModifier);
 		add(searchUsers);
 		
-		add(new AjaxLink("addOrgsToUsers"){
+		AmpAjaxLinkField addVerifiedOrgsBtn = new AmpAjaxLinkField("addOrgsToUsers","Add Verified Organizations Button","Add Verified Organizations"){
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -98,7 +95,9 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
-		});
+		};
+		addVerifiedOrgsBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		add(addVerifiedOrgsBtn);
 		
 	}
 

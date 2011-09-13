@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMPermissibleCategoryChoiceRenderer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
@@ -90,24 +91,24 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		});
 		form.add(dropDownPermCategories);
 
-//		DropDownChoice dropDownPerms = new DropDownChoice("globalPerms", globalPermissionModel, globalPermissionsList, new ChoiceRenderer("name"));
-//		form.add(dropDownPerms);
-
-		form.add(new AjaxFallbackLink("resetGlobalPermissionButton"){
+		AmpAjaxLinkField resetGlobalPerm = new AmpAjaxLinkField("resetGlobalPermissionButton","Reset Global Permission Button","Reset"){
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				form.clearInput();
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
-		});
-		
-		Button saveAndSubmit = new Button("saveGlobalPermissionButton") {
-			public void onSubmit() {
+		};
+		resetGlobalPerm.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		form.add(resetGlobalPerm);
+
+		AmpButtonField saveAndSubmit = new AmpButtonField("saveGlobalPermissionButton", "Save Global Permission", "Save", true, true){
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form){
 					System.out.println("saveGlobalPermissionButton  submit pressed");
 					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject(), globalPermissionMapForPermissibleClassModel.getObject());
 					System.out.println("PM global permission assigned");
 			}
 		};
+		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		form.add(saveAndSubmit);
 		add(form);
 	}

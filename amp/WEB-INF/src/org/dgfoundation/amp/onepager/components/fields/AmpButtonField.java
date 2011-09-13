@@ -63,8 +63,12 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		this(id, fmName, hideLabel, false);
 	}
 
-	public AmpButtonField(String id, String fmName, boolean hideLabel,
-			boolean hideNewLine) {
+	public AmpButtonField(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
+		this(id,  fmName,  null,  hideLabel,  hideNewLine);
+	}
+	
+	
+	public AmpButtonField(String id, String fmName, String buttonCaption, boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
 		button = new IndicatingAjaxButton("fieldButton", new Model<String>(
 				fmName)) {
@@ -116,13 +120,13 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 		Site site = session.getSite();
 		
-		String genKey = TranslatorWorker.generateTrnKey(fmName);
+		String genKey = TranslatorWorker.generateTrnKey(buttonCaption==null?fmName:buttonCaption);
 		String translatedValue;
-		button.add(new AttributeModifier("value", new Model(fmName)));
+		button.add(new AttributeModifier("value", new Model(buttonCaption==null?fmName:buttonCaption)));
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											fmName, TranslatorWorker.TRNTYPE_LOCAL, null);
+											buttonCaption==null?fmName:buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null);
 			button.add(new AttributeModifier("value", new Model(translatedValue)));
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

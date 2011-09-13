@@ -22,6 +22,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -159,18 +161,19 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	        }
 
 	      }); 
-		
-		
-		form.add(new AjaxFallbackLink("resetFieldPermissionButton"){
+		AmpAjaxLinkField resetFieldPermBtn = new AmpAjaxLinkField("resetFieldPermissionButton","Reset Field Permission Button","Reset"){
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				form.clearInput();
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
-		});
+		};
+		resetFieldPermBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		form.add(resetFieldPermBtn);
 		
-		Button saveAndSubmit = new Button("saveFieldPermissionButton") {
-			public void onSubmit() {
+		
+		AmpButtonField saveAndSubmit = new AmpButtonField("saveFieldPermissionButton", "Save Field Permission Button","Save", true, true){
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form){
 					System.out.println("saveFieldPermissionButton  submit pressed");
 					if(PMUtil.ROLE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0)
 						PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, null);
@@ -182,6 +185,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 					System.out.println("PM field permission assigned");
 			}
 		};
+		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		form.add(saveAndSubmit);
 		
 		add(form);

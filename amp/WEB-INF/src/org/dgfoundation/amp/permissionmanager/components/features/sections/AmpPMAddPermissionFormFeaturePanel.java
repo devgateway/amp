@@ -3,12 +3,14 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -79,16 +81,16 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 		AmpTextFieldPanel permName = new AmpTextFieldPanel("permissionName", new PropertyModel(cpModel,"name"), "Permission Name", false, true);
 		addPermForm.add(permName);
 	
-		
-		addPermForm.add(new AmpAjaxLinkField("resetPermissionButton","Reset Permission Button","Reset Permission"){
+		AmpAjaxLinkField resetPermBtn = new AmpAjaxLinkField("resetPermissionButton","Reset Permission Button","Reset Permission"){
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				cpModel.setObject(null);
 				addPermForm.clearInput();
 				target.addComponent(AmpPMAddPermissionFormFeaturePanel.this);
 			}
-		});
-		
+		};
+		addPermForm.add(resetPermBtn);
+		resetPermBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		
 		AmpButtonField  saveAndSubmit = new AmpButtonField("savePermissionButton", "Save Permission Button", true, true) {
 			
@@ -101,6 +103,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 				System.out.println("PM new permission created");
 			}
 		};
+		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		addPermForm.add(saveAndSubmit);
 		
 		//adding the form

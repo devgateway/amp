@@ -24,6 +24,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -111,6 +114,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				fd.setAdjustmentType(Constants.ACTUAL);
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.DISBURSEMENT_ORDER);
+				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				Set fundingDetails = model.getObject().getFundingDetails();
 				fd.setDisbOrderId(generateNewDisbOrderId(fundingDetails));
 				fundingDetails.add(fd);

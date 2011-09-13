@@ -14,6 +14,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -47,6 +50,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionType(Constants.COMMITMENT);
+				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				model.getObject().getFundingDetails().add(fd);
 				commitsTableFeature.getList().removeAll();
 				target.addComponent(commitsTableFeature);

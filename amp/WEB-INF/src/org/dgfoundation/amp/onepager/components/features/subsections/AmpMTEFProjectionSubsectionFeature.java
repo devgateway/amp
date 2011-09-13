@@ -15,6 +15,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
@@ -46,6 +49,7 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				projection.setAmount(0d);
 				projection.setProjectionDate(new Date(System.currentTimeMillis()));
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
+				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				model.getObject().getMtefProjections().add(projection);
 				mtefTableFeature.getList().removeAll();
 				target.addComponent(mtefTableFeature);

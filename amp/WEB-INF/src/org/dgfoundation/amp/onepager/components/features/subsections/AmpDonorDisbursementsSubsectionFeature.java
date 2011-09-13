@@ -16,6 +16,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Displays the funding disbursements subsection
@@ -52,6 +55,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
 				fd.setAdjustmentType(Constants.ACTUAL);
 				fd.setTransactionDate(new Date(System.currentTimeMillis()));
+				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				fd.setTransactionType(Constants.DISBURSEMENT);
 				model.getObject().getFundingDetails().add(fd);
 				disbursementsTableFeature.getList().removeAll();

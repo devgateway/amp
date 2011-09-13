@@ -58,7 +58,8 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 		add(value);
 		
 		date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");
-		date.getDate().setRequired(true);
+		if (fieldPrefix.compareTo("Revised") != 0)
+			date.getDate().setRequired(true);
 		add(date);
 		
 		AmpTextAreaFieldPanel<String> comments = new AmpTextAreaFieldPanel<String>("comment", comment, fieldPrefix + " Comments", false);

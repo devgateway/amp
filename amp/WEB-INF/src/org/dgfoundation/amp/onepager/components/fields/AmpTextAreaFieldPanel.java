@@ -42,7 +42,7 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		textAreaContainer = new TextArea<T>("richText", model);
 		textAreaContainer.setOutputMarkupId(true);
 		if(wysiwyg){
-			textAreaContainer.add(new SimpleAttributeModifier("onclick", "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "');"));
+			textAreaContainer.add(new SimpleAttributeModifier("onclick", "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {on:{instanceReady : function( ev ){this.focus();}}} );"));
 		}
 		addFormComponent(textAreaContainer);
 	}

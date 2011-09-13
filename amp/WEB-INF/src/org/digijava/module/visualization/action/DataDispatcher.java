@@ -1561,10 +1561,10 @@ public class DataDispatcher extends DispatchAction {
 			yearsInRange = filter.getYearsInRangePie() - 1;
 		}
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		String pledgesTranslatedTitle =TranslatorWorker.translateText("Pledges", locale, siteId) ;
-		String actComTranslatedTitle =TranslatorWorker.translateText("Actual commitments", locale, siteId) ;
-		String actDisbTranslatedTitle = TranslatorWorker.translateText("Actual disbursements", locale, siteId) ;
-		String actExpTranslatedTitle = TranslatorWorker.translateText("Actual expenditures", locale, siteId) ;;
+		String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges", locale, siteId) ;
+		String comTranslatedTitle = TranslatorWorker.translateText("Commitments", locale, siteId) ;
+		String disbTranslatedTitle = TranslatorWorker.translateText("Disbursements", locale, siteId) ;
+		String expTranslatedTitle = TranslatorWorker.translateText("Expenditures", locale, siteId) ;;
 		// String pledgesTranslatedTitle =
 		// TranslatorWorker.translateText("Pledges", opt.getLangCode(),
 		// opt.getSiteId());
@@ -1590,21 +1590,25 @@ public class DataDispatcher extends DispatchAction {
 
 		StringBuffer csvString = new StringBuffer();
 		csvString.append("\"Year\"");
-		csvString.append(",");
-		csvString.append("\"" + actComTranslatedTitle);
-		csvString.append("#");
-        csvString.append(Constants.COMMITMENT + "\"");
-        csvString.append(",");
-		csvString.append("\"" + actDisbTranslatedTitle);
-		csvString.append("#");
-        csvString.append(Constants.DISBURSEMENT + "\"");
-        if (filter.isExpendituresVisible()) {
+		if (filter.isCommitmentsVisible()) {
 			csvString.append(",");
-			csvString.append("\"" + actExpTranslatedTitle);
+			csvString.append("\"" + comTranslatedTitle);
+			csvString.append("#");
+	        csvString.append(Constants.COMMITMENT + "\"");
+		}
+        if (filter.isDisbursementsVisible()) {
+    		csvString.append(",");
+	        csvString.append("\"" + disbTranslatedTitle);
+			csvString.append("#");
+	        csvString.append(Constants.DISBURSEMENT + "\"");
+        }
+        if (filter.isExpendituresVisible() && expendituresVisible) {
+			csvString.append(",");
+			csvString.append("\"" + expTranslatedTitle);
 			csvString.append("#");
 	        csvString.append(Constants.EXPENDITURE + "\"");
 	    }
-		if (filter.isPledgeVisible()) {
+		if (filter.isPledgeVisible() && pledgesVisible) {
 			csvString.append(",");
 			csvString.append("\"" + pledgesTranslatedTitle + "\"");
 		}
@@ -1626,7 +1630,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+TranslatorWorker.translateText("Disbursements", locale, siteId)+"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
@@ -1634,7 +1638,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+ TranslatorWorker.translateText("Commitments", locale, siteId)+"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
@@ -1642,7 +1646,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+ TranslatorWorker.translateText("Expenditures", locale, siteId)+"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
+					.append("<fundingtype category=\""+ expTranslatedTitle +"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + i + "\"/>\n");
 					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
@@ -1686,41 +1690,35 @@ public class DataDispatcher extends DispatchAction {
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 
-			DecimalWraper fundingComm = DbUtil
-					.getFunding(filter, startDate, endDate, null, null,
-							Constants.COMMITMENT, Constants.ACTUAL);
-			csvString
-					.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			csvString.append(",");
-			DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,
-					endDate, null, null, Constants.DISBURSEMENT,
-					Constants.ACTUAL);
-			csvString
-					.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			DecimalWraper fundingExp = new DecimalWraper();
-			if (filter.isExpendituresVisible()) {
+			if (filter.isCommitmentsVisible()) {
+				DecimalWraper fundingComm = DbUtil.getFunding(filter, startDate, endDate, null, null,Constants.COMMITMENT, Constants.ACTUAL);
+				csvString.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				csvString.append(",");
-				fundingExp = DbUtil.getFunding(filter, startDate, endDate,
-						null, null, Constants.EXPENDITURE, Constants.ACTUAL);
-				csvString.append(fundingExp.getValue().divide(
-						divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			}
+			
+			if (filter.isDisbursementsVisible()) {
+	    		DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
+	    		csvString.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			}
+			
+			DecimalWraper fundingExp = new DecimalWraper();
+			if (filter.isExpendituresVisible() && expendituresVisible) {
+				csvString.append(",");
+				fundingExp = DbUtil.getFunding(filter, startDate, endDate,null, null, Constants.EXPENDITURE, Constants.ACTUAL);
+				csvString.append(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
-			if (filter.isPledgeVisible()) {
-				fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
-						filter.getSelOrgGroupIds(), startDate, endDate,
-						currCode);
+			if (filter.isPledgeVisible() && pledgesVisible) {
+				fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
 				csvString.append(",");
-				csvString.append(fundingPledge.getValue().divide(
-						divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
-			if (fundingPledge.doubleValue() != 0
-					|| fundingComm.doubleValue() != 0
-					|| fundingDisb.doubleValue() != 0
-					|| fundingExp.doubleValue() != 0) {
+			
+			//if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0 || fundingExp.doubleValue() != 0) {
 				// nodata = false;
-			}
+			//}
+			
 			csvString.append("\n");
 			// totalPledges += fundingPledge;
 			// totalCommitments = totalCommitments.add(fundingComm.getValue());

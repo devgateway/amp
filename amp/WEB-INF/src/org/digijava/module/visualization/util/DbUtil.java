@@ -423,14 +423,18 @@ public class DbUtil {
 				return sectors;
 			}
 		} else {
+			//Get the selected Organization Groups and Organizations
 			Long[] orgGroupIds = filter.getSelOrgGroupIds();
 	        Long[] orgIds = filter.getOrgIds();
 	        
+	        //Get the funding transaction type
 	        int transactionType = filter.getTransactionType();
+
+	        //Get the user logged in to filter later
 	        TeamMember teamMember = filter.getTeamMember();
-	        // apply calendar filter
+
+	        //Get the Fiscal Calendar to determine Start/End Date
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
-	        
 	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
 	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 	        Long[] locationIds = filter.getSelLocationIds();
@@ -442,20 +446,16 @@ public class DbUtil {
 	         */
 	        try {
 	            String oql = "select distinct sec  from ";
-	            oql += AmpFundingDetail.class.getName()
-	                    + " as fd inner join fd.ampFundingId f ";
-	            oql += "   inner join f.ampActivityId act ";
-	            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+	            oql += " inner join f.ampActivityId act ";
+	            oql += " inner join act.sectors actSec ";
+	            oql += " inner join actSec.sectorId sec ";
 	            oql += " inner join act.ampActivityGroup actGroup ";
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
 	            oql += "  where fd.adjustmentType = 1";
-	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                oql += " and fd.transactionType =:transactionType  ";
-	            //} else {
-	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            //}
+                oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -480,8 +480,7 @@ public class DbUtil {
 					oql += ActivityUtil.getApprovedActivityQueryString("act");
 				}
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
-	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) " 
-	            	+ " and sec.parentSectorId is null";// get only primary sectors
+	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
 	            
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 

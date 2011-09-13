@@ -151,14 +151,21 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
-			//Long[] oldIds = filter.getSectorIds();
 			Long[] ids = {sector.getAmpSectorId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            //filter.setSectorIds(oldIds);
 	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-	        map.put(sector, total);
+            AmpSector topLevelSector = getTopLevelParent(sector);
+            if(map.containsKey(topLevelSector)){
+            	BigDecimal currentTotal = map.get(topLevelSector);
+            	map.put(topLevelSector, total.add(currentTotal));
+            }
+            else
+            {
+    	        map.put(topLevelSector, total);
+            }
+
 		}
 		return sortByValue (map);
 	}
@@ -466,4 +473,14 @@ public class DashboardUtil {
                 getTeams(tm, teams);
             }
         }
-    }}
+    }
+    
+    // This recursive method helps the generateLevelHierarchy method.
+	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
+		if (topLevelSector.getParentSectorId() != null) {
+			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
+		}
+		return topLevelSector;
+	}
+
+}

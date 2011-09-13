@@ -2039,7 +2039,7 @@ var nonRefreshedMovies = [];
 
 function refreshGraphs(){
 	//Get array of graphs
-	var allGraphs = document.getElementsByName("flashContent");
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	//Push it into an array that will be emptied as they become available
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		nonRefreshedMovies.push(allGraphs[idx].children[0]);
@@ -2047,6 +2047,18 @@ function refreshGraphs(){
 	refreshAsync();
 }
 
+function getElementsByName_iefix(tag, name) {
+    var elem = document.getElementsByTagName(tag);
+    var arr = new Array();
+    for(i = 0,iarr = 0; i < elem.length; i++) {
+         att = elem[i].getAttribute("name");
+         if(att == name) {
+              arr[iarr] = elem[i];
+              iarr++;
+         }
+    }
+    return arr;
+}
 function refreshAsync(){
 //	console.log("Refreshing graphs. Number of graphs to refresh: " + nonRefreshedMovies.length);
 	if(nonRefreshedMovies.length > 0){
@@ -2712,16 +2724,16 @@ window.onload=initPanel;
 var initialized = false;
 function initDashboard(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart('start', 'bar', 'FundingChart', true);
-	changeChart('start', 'bar', 'ODAGrowth');
-	changeChart('start', 'bar', 'AidPredictability', true);
-	changeChart('start', 'bar', 'AidType', true);
-	changeChart('start', 'bar', 'FinancingInstrument', true);
+	changeChart(null, 'bar', 'FundingChart', true);
+	changeChart(null, 'bar', 'ODAGrowth');
+	changeChart(null, 'bar', 'AidPredictability', true);
+	changeChart(null, 'bar', 'AidType', true);
+	changeChart(null, 'bar', 'FinancingInstrument', true);
 	if (dashboardType!=1) {
-		changeChart('start', 'bar_profile', 'DonorProfile', true);
+		changeChart(null, 'bar_profile', 'DonorProfile', true);
 	}
-	changeChart('start', 'bar_profile', 'SectorProfile', true);
-	changeChart('start', 'bar_profile', 'RegionProfile', true);
+	changeChart(null, 'bar_profile', 'SectorProfile', true);
+	changeChart(null, 'bar_profile', 'RegionProfile', true);
 	callbackApplyFilter();
 }
 

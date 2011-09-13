@@ -360,7 +360,6 @@ public class CategoryManager extends Action {
 //beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
 			dbCategory.addPossibleValues( new Vector() );
-			
 			if (myForm.getEditedCategoryId() != null) {
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
 				Query query			= dbSession.createQuery(queryString);

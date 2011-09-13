@@ -59,47 +59,47 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 public void init() {
 		 super.init();
 		 
-//		 getResourceSettings().setStripJavascriptCommentsAndWhitespace(true);
+		 getResourceSettings().setStripJavascriptCommentsAndWhitespace(true);
 		 //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);
-//		 if (true) {		
-//			 ResourceMount.mountWicketResources("script", this);
-//
-//			 ResourceMount mount = new ResourceMount();
-//			 //.setResourceVersionProvider(new RevisionVersionProvider());
-//			 
-//			 
-//			 LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
-//			 csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
-//			 //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
-//			 
-//			 
-//			 LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
-//			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.js"));
-//			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.debug.js"));
-//			 //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
-//			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
-//			 jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
-//			 jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
-//			 jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
+		 if (true) {		
+			 ResourceMount.mountWicketResources("script", this);
+
+			 ResourceMount mount = new ResourceMount();
+			 //.setResourceVersionProvider(new RevisionVersionProvider());
+			 
+			 
+			 LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
+			 //csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
+			 //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
+			 
+			 
+			 LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
+			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.js"));
+			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.debug.js"));
+			 //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
+			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
+			 jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
+			 jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
+			 jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
 //			 jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));			 
 //			 jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));			 
 //			 jslist.add(new ResourceSpec(YuiLib.class, "yuiloader.js")); //can't use the min version, because the normal one will be included too
 //			 jslist.add(new ResourceSpec(YuiLib.class, "calendar/calendar-min.js"));
-//			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 //			 jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
-//			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
-//			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
-//			 
-//			 mount.clone()
-//			 	.setPath("/style/all-23.css")
-//			 	.addResourceSpecs(csslist)
-//			 	.mount(this);
-//			 
-//			 mount.clone()
-//			 .setPath("/style/all-2.js")
-//			 .addResourceSpecs(jslist)
-//			 .mount(this);
-//		 }
+			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
+			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
+			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
+			 
+			 mount.clone()
+			 	.setPath("/style/all-23.css")
+			 	.addResourceSpecs(csslist)
+			 	.mount(this);
+			 
+			 mount.clone()
+			 .setPath("/style/all-2.js")
+			 .addResourceSpecs(jslist)
+			 .mount(this);
+		 }
  		 
 		 /**
 		  * 

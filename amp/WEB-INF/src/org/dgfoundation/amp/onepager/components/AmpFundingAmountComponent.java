@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +14,17 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.MaskConverter;
+import org.apache.wicket.util.convert.converters.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Reusable component capturing an amount item in AMP (the tuple amount /
@@ -39,10 +46,19 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			String fmDate, String propertyDate) {
 		super(id, model);
 		amount = new AmpTextFieldPanel<Double>("amount",
-				new PropertyModel<Double>(model, propertyAmount), fmAmount,true);
+				new PropertyModel<Double>(model, propertyAmount), fmAmount,true) {
+			public IConverter getInternalConverter(java.lang.Class<?> type) {
+				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
+				NumberFormat formatter = FormatHelper.getDecimalFormat();
+//				formatter.setMinimumFractionDigits(0);
+				converter.setNumberFormat(getLocale(), formatter);
+				return converter; 
+			}
+		};
 		amount.getTextContainer().setRequired(true);
 		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
 		add(amount);
+		
 		
 		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
 			@Override

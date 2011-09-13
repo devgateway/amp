@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
@@ -148,4 +149,13 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 
 	
+	/**
+	 * Override to implement custom converters for the enclosing container
+	 * @param type
+	 * @return
+	 */
+	public IConverter getInternalConverter(final Class<?> type) {
+		return null;
+	}
+
 }

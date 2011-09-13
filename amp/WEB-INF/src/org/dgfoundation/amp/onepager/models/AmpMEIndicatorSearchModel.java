@@ -8,16 +8,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
+import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel.PARAM;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author aartimon@dginternational.org
@@ -37,24 +40,28 @@ public class AmpMEIndicatorSearchModel extends
 
 	
 	@Override
-	protected ArrayList<AmpIndicator> load() {
+	protected List<AmpIndicator> load() {
 		try {
-			ArrayList<AmpIndicator> ret = new ArrayList<AmpIndicator>();
-			session = PersistenceManager.getSession();
-			Query query = session
-					.createQuery("from "
-							+ AmpIndicator.class.getName()
-							+ " o");
+			List<AmpIndicator> ret = new ArrayList<AmpIndicator>();
+			session = PersistenceManager.getRequestDBSession();
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
-			List<AmpSector> list = query.list();
+			Criteria crit = session.createCriteria(AmpIndicator.class);
+			crit.setCacheable(true);
+			if (input.trim().length() > 0){
+				Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
+				crit.add(junction);
+			}
+			if (maxResults != null && maxResults != 0)
+				crit.setMaxResults(maxResults);
+			ret = crit.list();
 			//session.close();
-			return new ArrayList(list);
+			return ret;
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (SQLException e) {
+		} catch (DgException e) {
 			throw new RuntimeException(e);
-		}
+		} 
 	}
 
 }

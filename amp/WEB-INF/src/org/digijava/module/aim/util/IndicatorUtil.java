@@ -1164,9 +1164,13 @@ public class IndicatorUtil {
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.REVISED){
-					bean.setRevisedTargetVal(new Float(value.getValue()));
+					if(value.getValue()!=null){
+						bean.setRevisedTargetVal(new Float(value.getValue()));
+					}
 					bean.setRevisedTargetValComments(value.getComment());
-					bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					if(value.getValueDate()!=null){
+						bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					}
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 			}

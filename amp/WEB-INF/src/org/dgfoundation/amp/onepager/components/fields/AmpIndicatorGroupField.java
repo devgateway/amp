@@ -19,36 +19,49 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 
 	private static final long serialVersionUID = 0L;
+	private AmpTextFieldPanel<Double> value;
+	private AmpDatePickerFieldPanel date;
+	
+	public AmpTextFieldPanel<Double> getValue() {
+		return value;
+	}
 
+
+	public AmpDatePickerFieldPanel getDate() {
+		return date;
+	}
+
+
+	
 	public AmpIndicatorGroupField(String id, IModel<AmpIndicatorValue> model, String fmName, String fieldPrefix) {
 		super(id, model, fmName, true);
 		
-		AmpTextFieldPanel<Double> value = new AmpTextFieldPanel<Double>("value", new PropertyModel<Double>(model, "value"), fieldPrefix + " Value");
+		value = new AmpTextFieldPanel<Double>("value", new PropertyModel<Double>(model, "value"), fieldPrefix + " Value");
 		value.getTextContainer().setRequired(true);
 		add(value);
 		
-		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("valueDate", new PropertyModel<Date>(model, "valueDate"), fieldPrefix + " Date");
+		date = new AmpDatePickerFieldPanel("valueDate", new PropertyModel<Date>(model, "valueDate"), fieldPrefix + " Date");
 		date.getDate().setRequired(true);
 		add(date);
 		
-		AmpTextAreaFieldPanel<String> comments = new AmpTextAreaFieldPanel<String>("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
+		AmpTextAreaFieldPanel<String> comments  = new AmpTextAreaFieldPanel<String>("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
 		add(comments);
 	}
 
 
-	public AmpIndicatorGroupField(String id, IModel<Double> value, IModel<Date> valueDate, IModel<String> comment, String fmName, String fieldPrefix) {
+	public AmpIndicatorGroupField(String id, IModel<Double> val, IModel<Date> valueDate, IModel<String> comment, String fmName, String fieldPrefix) {
 		super(id, fmName, true);
 		this.fmType = AmpFMTypes.MODULE;
 		
-		AmpTextFieldPanel<Double> val = new AmpTextFieldPanel<Double>("value", value, fieldPrefix + " Value", false, false, Double.class);
-		val.getTextContainer().setRequired(true);
-		add(val);
+		value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false, Double.class);
+		value.getTextContainer().setRequired(true);
+		add(value);
 		
-		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");
+		date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");
 		date.getDate().setRequired(true);
 		add(date);
 		
-		AmpTextAreaFieldPanel<String> com = new AmpTextAreaFieldPanel<String>("comment", comment, fieldPrefix + " Comments", false);
-		add(com);
+		AmpTextAreaFieldPanel<String> comments = new AmpTextAreaFieldPanel<String>("comment", comment, fieldPrefix + " Comments", false);
+		add(comments);
 	}
 }

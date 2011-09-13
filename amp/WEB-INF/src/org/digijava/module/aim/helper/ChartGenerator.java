@@ -526,7 +526,7 @@ public class ChartGenerator {
 							  String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
 							targetValueType=msg;
 
-						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED&&ampIndValue.getValue()!=null) {
 							targetValue = ampIndValue.getValue();
 							targetValueType =  "target".toLowerCase();
 							targetValueType = targetValueType.replaceAll(" ", "");

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -161,7 +162,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
 				
+				//revised data should be the same target data when first init
 				tmp = (AmpIndicatorValue) revisedVal.clone(); 
+				if(tmp.getValue()==null&&tmp.getValueDate()==null){
+					tmp.setValue(targetVal.getValue());
+					tmp.setValueDate(targetVal.getValueDate());
+					tmp.setComment(targetVal.getComment());
+					revised.getValue().getTextContainer().setModelObject(targetVal.getValue());
+					revised.getDate().getDate().setModelObject(targetVal.getValueDate());
+				}
+				
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());
@@ -186,6 +196,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 					target.setEnabled(false);
 					revised.setVisible(true);
 					valuesSet.setObject(true);
+					art.addComponent(target);
 				}
 
 				art.addComponent(base.getParent());

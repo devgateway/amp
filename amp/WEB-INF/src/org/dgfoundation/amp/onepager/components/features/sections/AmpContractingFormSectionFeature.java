@@ -73,6 +73,7 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				IPAContract comp = new IPAContract();
+				comp.setActivity(am.getObject());
 				setModel.getObject().add(comp);
 				target.addComponent(this.getParent());
 				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContractingFormSectionFeature.this));

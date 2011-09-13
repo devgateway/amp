@@ -30,16 +30,6 @@ public class AmpActor  implements Serializable, Cloneable
 	public void setMeasure(AmpMeasure measure) {
 		this.measure = measure;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object arg) {
-		if (arg instanceof AmpActor) {
-			AmpActor actor = (AmpActor) arg;
-			return actor.getAmpActorId().equals(ampActorId);
-		} 
-		throw new ClassCastException();
-	}
 	public String getNameTrimmed() {
 		return name.replace(" ", "");
 	}

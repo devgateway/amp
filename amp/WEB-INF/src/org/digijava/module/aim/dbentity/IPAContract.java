@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -528,7 +529,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		if (this.activityCategory != null) {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br />", "Category:&nbsp;" }, new Object[] { this.activityCategory
-							.getEncodedValue() }));
+							.getValue() }));
 		}
 		if (this.contractType != null) {
 			out.getOutputs().add(
@@ -747,14 +748,36 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		aux.id = null;
 
 		if (aux.getDisbursements() != null) {
+			HashSet<IPAContractDisbursement> set = new HashSet<IPAContractDisbursement>();
 			Iterator<IPAContractDisbursement> iterDisb = aux.getDisbursements().iterator();
 			while (iterDisb.hasNext()) {
 				IPAContractDisbursement auxDisb = iterDisb.next();
 				IPAContractDisbursement newIPADisb = (IPAContractDisbursement) auxDisb.clone();
 				newIPADisb.setId(null);
 				newIPADisb.setContract(aux);
+				set.add(auxDisb);
 			}
+			
+			if (set.size() > 0)
+				aux.disbursements = set;
+			else
+				aux.disbursements = null;
 		}
+		
+		if (aux.organizations != null){
+			HashSet<AmpOrganisation> set = new HashSet<AmpOrganisation>();
+			Iterator<AmpOrganisation> it = aux.organizations.iterator();
+			while (it.hasNext()) {
+				AmpOrganisation org = (AmpOrganisation) it.next();
+				set.add(org);
+			}
+			if (set.size() > 0)
+				aux.organizations = set;
+			else
+				aux.organizations = null;
+		}
+		
+		
 		/*
 		 * Amendments don't seem to be used no more
 		if (aux.getAmendments() != null) {
@@ -767,6 +790,8 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 			}
 		}
 		*/
+		aux.setAmendments(null);
+		
 		return aux;
 	}
 	

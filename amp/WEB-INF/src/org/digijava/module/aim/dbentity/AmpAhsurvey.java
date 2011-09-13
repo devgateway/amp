@@ -129,7 +129,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 			public int compare(Object o1, Object o2) {
 				AmpAhsurveyResponse aux1 = (AmpAhsurveyResponse) o1;
 				AmpAhsurveyResponse aux2 = (AmpAhsurveyResponse) o2;
-				return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
+				return aux1.getAmpQuestionId().getQuestionNumber().compareTo(aux2.getAmpQuestionId().getQuestionNumber());
 			}
 		};
 

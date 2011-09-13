@@ -17,14 +17,6 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable {
 		this.name = name;
 	}
 
-	public boolean equals(Object arg) {
-		if (arg instanceof AmpRegionalObservationActor) {
-			AmpRegionalObservationActor actor = (AmpRegionalObservationActor) arg;
-			return actor.getAmpRegionalObservationActorId().equals(ampRegionalObservationActorId);
-		}
-		throw new ClassCastException();
-	}
-
 	public String getNameTrimmed() {
 		return name.replace(" ", "");
 	}

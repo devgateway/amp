@@ -4,7 +4,7 @@
 	<class name="org.digijava.module.aim.dbentity.IPAContractDisbursement"
 		table="IPA_CONTRACT_DISBURSEMENT">
 		<cache usage="read-write" />
-		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
+		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">IPA_CONTRACT_DISBURSEMENT_seq</param>
 			</generator>
@@ -14,7 +14,7 @@
 		<many-to-one name="currency" column="currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="contract" column="ipa_contract_id"
-			class="org.digijava.module.aim.dbentity.IPAContract" cascade="save-update" />
+			class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" />
 		<property name="date" column="date_" type="java.util.Date" />
 	</class>
 </hibernate-mapping>

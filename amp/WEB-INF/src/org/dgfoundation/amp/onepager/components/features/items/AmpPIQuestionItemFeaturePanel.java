@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -28,6 +29,8 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.hibernate.Session;
 
 import com.rc.retroweaver.runtime.Arrays;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * @author aartimon@dginternational.org
@@ -59,7 +62,9 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 			@Override
 			public List<AmpAhsurveyQuestion> getObject() {
 				Set<AmpAhsurveyQuestion> set = (Set<AmpAhsurveyQuestion>)surveyIndicator.getObject().getQuestions();
-				return new ArrayList<AmpAhsurveyQuestion>(set);
+				ArrayList<AmpAhsurveyQuestion> list = new ArrayList<AmpAhsurveyQuestion>(set);
+				Collections.sort(list, new AmpAhsurveyQuestion.AhsurveyQuestionComparator());
+				return list;
 			}
 		};
 		
@@ -98,7 +103,7 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 					answer.setSuffix(" ");
 					item.add(answer);
 					
-					TextArea hidden = new TextArea("answerInput");
+					TextField hidden = new TextField("answerInput");
 					hidden.setVisible(false);
 					item.add(hidden);
 					
@@ -106,12 +111,12 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 					if (qtype.compareTo("calculated") == 0){
 						Label l = new Label("answer", "calculated");
 						item.add(l);
-						TextArea hidden = new TextArea("answerInput");
+						TextField hidden = new TextField("answerInput");
 						hidden.setVisible(false);
 						item.add(hidden);
 					} else
 						if (qtype.compareTo("input") == 0){
-							TextArea<String> input = new TextArea<String>("answerInput", new PropertyModel<String>(responseModel, "response"));
+							TextField<String> input = new TextField<String>("answerInput", new PropertyModel<String>(responseModel, "response"));
 							item.add(input);
 							WebMarkupContainer hidden = new WebMarkupContainer("answer");
 							hidden.setVisible(false);

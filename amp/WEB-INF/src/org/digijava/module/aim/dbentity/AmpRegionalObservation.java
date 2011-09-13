@@ -33,14 +33,6 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 		this.activity = activity;
 	}
 
-	public boolean equals(Object arg) {
-		if (arg instanceof AmpRegionalObservation) {
-			AmpRegionalObservation issue = (AmpRegionalObservation) arg;
-			return issue.getAmpRegionalObservationId().equals(ampRegionalObservationId);
-		}
-		throw new ClassCastException();
-	}
-
 	public Long getAmpRegionalObservationId() {
 		return ampRegionalObservationId;
 	}
@@ -81,20 +73,70 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "&nbsp;Name:&nbsp;" }, new Object[] { this.name != null ? this.name
-						: "Empty Name" }));
+				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+						: "" }));
 		if (this.observationDate != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "&nbsp;Date:&nbsp;" }, new Object[] { this.observationDate }));
+			out.getOutputs().add(new Output(null, new String[] { " Date:&nbsp;" }, new Object[] { this.observationDate }));
 		}
-
+		
+		if (this.regionalObservationMeasures != null){
+			Output outs = new Output(new ArrayList<Output>(), new String[] {"<br/>", " Measures:" }, new Object[] { "" });
+			outs.setOutputs(new ArrayList<Output>());
+			
+			Iterator<AmpRegionalObservationMeasure> it1 = this.regionalObservationMeasures.iterator();
+			while (it1.hasNext()) {
+				AmpRegionalObservationMeasure measure = (AmpRegionalObservationMeasure) it1.next();
+				outs.getOutputs().add(new Output(null, new String[] {" Name:&nbsp;"}, new Object[] {measure.getName() != null ? measure.getName() : ""}));
+				
+				if (measure.getActors() != null && measure.getActors().size() > 0){
+					String[] actors = new String[measure.getActors().size()];
+					Iterator<AmpRegionalObservationActor> it2 = measure.getActors().iterator();
+					int i = 0;
+					while (it2.hasNext()) {
+						AmpRegionalObservationActor actor = (AmpRegionalObservationActor) it2.next();
+						if (actor.getName() != null){
+							actors[i] = actor.getName();
+							if (it2.hasNext())
+								actors[i] += ", ";
+							i++;
+						}
+					}
+					Output out1 = new Output(new ArrayList<Output>(), new String[] {"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actors:&nbsp;"}, actors);
+					
+					outs.getOutputs().add(out1);
+				}
+			}
+			out.getOutputs().add(outs);
+		}
+		
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		String value = " " + this.name + this.observationDate;
-		//Iterator<AmpRegionalObservationMeasure> i = this.regionalObservationMeasures.iterator() 
+		String value = "";
+		if (name != null)
+			value += name;
+		if (observationDate != null)
+			value += observationDate;
+		
+		if (regionalObservationMeasures != null){
+			Iterator<AmpRegionalObservationMeasure> it1 = regionalObservationMeasures.iterator();
+			while (it1.hasNext()) {
+				AmpRegionalObservationMeasure m = (AmpRegionalObservationMeasure) it1.next();
+				if (m.getName() != null)
+					value += m.getName();
+				if (m.getActors() != null){
+					Iterator<AmpRegionalObservationActor> it2 = m.getActors().iterator();
+					while (it2.hasNext()) {
+						AmpRegionalObservationActor a = (AmpRegionalObservationActor) it2.next();
+						if (a.getName() != null)
+							value += a.getName();
+					}
+				}
+			}
+		}
+		
 		return value;
 	}
 

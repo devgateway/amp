@@ -79,18 +79,70 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
 				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
-						: "Empty Name" }));
+						: "" }));
 		if (this.issueDate != null) {
 			out.getOutputs().add(new Output(null, new String[] { " Date:&nbsp;" }, new Object[] { this.issueDate }));
 		}
-		// TODO add measures.
+		
+		if (this.measures != null){
+			Output outs = new Output(new ArrayList<Output>(), new String[] {"<br/>", " Measures:" }, new Object[] { "" });
+			outs.setOutputs(new ArrayList<Output>());
+			
+			Iterator<AmpMeasure> it1 = this.measures.iterator();
+			while (it1.hasNext()) {
+				AmpMeasure measure = (AmpMeasure) it1.next();
+				outs.getOutputs().add(new Output(null, new String[] {" Name:&nbsp;"}, new Object[] {measure.getName() != null ? measure.getName() : ""}));
+				
+				if (measure.getActors() != null && measure.getActors().size() > 0){
+					String[] actors = new String[measure.getActors().size()];
+					Iterator<AmpActor> it2 = measure.getActors().iterator();
+					int i = 0;
+					while (it2.hasNext()) {
+						AmpActor actor = (AmpActor) it2.next();
+						if (actor.getName() != null){
+							actors[i] = actor.getName();
+							if (it2.hasNext())
+								actors[i] += ", ";
+							i++;
+						}
+					}
+					Output out1 = new Output(new ArrayList<Output>(), new String[] {"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actors:&nbsp;"}, actors);
+					
+					outs.getOutputs().add(out1);
+				}
+			}
+			out.getOutputs().add(outs);
+		}
+		
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		// TODO add measures.
-		return this.issueDate != null ? this.issueDate : "";
+		String value = "";
+		if (name != null)
+			value += name;
+		if (issueDate != null)
+			value += issueDate;
+		
+		if (measures != null){
+			Iterator<AmpMeasure> it1 = measures.iterator();
+			while (it1.hasNext()) {
+				AmpMeasure m = (AmpMeasure) it1.next();
+				if (m.getName() != null)
+					value += m.getName();
+				if (m.getActors() != null){
+					Iterator<AmpActor> it2 = m.getActors().iterator();
+					while (it2.hasNext()) {
+						AmpActor a = (AmpActor) it2.next();
+						if (a.getName() != null)
+							value += a.getName();
+					}
+				}
+			}
+		}
+		
+		return value;
 	}
 	
 	@Override

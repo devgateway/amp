@@ -27,14 +27,6 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 		this.actors = actors;
 	}
 
-	public boolean equals(Object arg) {
-		if (arg instanceof AmpRegionalObservationMeasure) {
-			AmpRegionalObservationMeasure measure = (AmpRegionalObservationMeasure) arg;
-			return measure.getAmpRegionalObservationMeasureId().equals(ampRegionalObservationMeasureId);
-		}
-		throw new ClassCastException();
-	}
-
 	public Long getAmpRegionalObservationMeasureId() {
 		return ampRegionalObservationMeasureId;
 	}

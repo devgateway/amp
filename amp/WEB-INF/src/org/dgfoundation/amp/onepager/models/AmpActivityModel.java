@@ -129,10 +129,13 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 				hibernateSession.setFlushMode(FlushMode.AUTO);
 			} catch (Throwable t) {
 			try {
+				logger.error("Error while flushing session:", t);
 				if (hibernateSession.getTransaction().isActive()) {
 					logger.info("Trying to rollback database transaction after exception");
 					hibernateSession.getTransaction().rollback();
 				}
+				else
+					logger.error("Can't rollback transaction because transaction not active");
 			} catch (Throwable rbEx) {
 				logger.error("Could not rollback transaction after exception!",
 						rbEx);

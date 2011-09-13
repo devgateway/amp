@@ -50,6 +50,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.translation.util.TranslationManager;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  * @author aartimon@dginternational.org
  * @since Mar 30, 2011
@@ -79,7 +81,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("orgSearch","Search Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getAcronymAndName();
+				return choice.getName();
 			}
 
 			@Override
@@ -101,7 +103,9 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 			private static final long serialVersionUID = 3706184421459839210L;
 			@Override
 			public List<AmpAhsurveyIndicator> getObject() {
-				return new ArrayList<AmpAhsurveyIndicator>(DbUtil.getAllAhSurveyIndicators());
+				ArrayList<AmpAhsurveyIndicator> list = new ArrayList<AmpAhsurveyIndicator>(DbUtil.getAllAhSurveyIndicators());
+				Collections.sort(list, new AmpAhsurveyIndicator.AhsurveyIndicatorComparator());
+				return list;
 			}
 		};
 

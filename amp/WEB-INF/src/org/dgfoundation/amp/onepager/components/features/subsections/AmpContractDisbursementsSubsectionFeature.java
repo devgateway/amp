@@ -98,7 +98,7 @@ public class AmpContractDisbursementsSubsectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				IPAContractDisbursement comp = new IPAContractDisbursement();
-				comp.setContract(model.getObject());
+				//comp.setContract(model.getObject());
 				disbModel.getObject().add(comp);
 				target.addComponent(this.getParent());
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));

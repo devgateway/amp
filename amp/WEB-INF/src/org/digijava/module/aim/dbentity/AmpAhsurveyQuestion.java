@@ -7,6 +7,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class AmpAhsurveyQuestion implements Serializable{
 
@@ -16,6 +17,23 @@ public class AmpAhsurveyQuestion implements Serializable{
 	private Integer questionNumber;
 	private AmpAhsurveyQuestionType ampTypeId;
 	private String status;
+	
+	public static class AhsurveyQuestionComparator implements Comparator<AmpAhsurveyQuestion>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpAhsurveyQuestion arg0, AmpAhsurveyQuestion arg1) {
+			if (arg0.getQuestionNumber() != null && arg1.getQuestionNumber() != null){
+				return arg0.getQuestionNumber().compareTo(arg1.getQuestionNumber());
+			}
+			return arg0.hashCode()-arg1.hashCode();
+		}
+		
+	}
 	
 	/**
 	 * @return Returns the ampIndicatorId.

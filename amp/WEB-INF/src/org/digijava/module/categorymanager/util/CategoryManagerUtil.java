@@ -753,7 +753,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				AmpCategoryClass ampCategoryClass	= resultList.get(0);
 				
 				if ( ampCategoryClass.getPossibleValues() == null )
-					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>() );
+					ampCategoryClass.addPossibleValues( new ArrayList<AmpCategoryValue>() );
 				
 				ampCategoryValue 	= new AmpCategoryValue();
 				ampCategoryValue.setValue(value);

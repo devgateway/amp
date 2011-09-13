@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -31,6 +33,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.PossibleValue;
@@ -160,12 +163,12 @@ public class CategoryManager extends Action {
 				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
 					TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
 					treeSet.addAll( ampCategoryClass.getPossibleValues() );
-					ampCategoryClass.setPossibleValues( new ArrayList(treeSet) );
+					ampCategoryClass.addPossibleValues( new ArrayList(treeSet) );
 				}
 			}
 		}
                 
-		/* END- Ordering the values alphabetically if necessary */
+		/* END- Ordering the values alphabetically if necessary */		
 		String errorString		= CategoryManagerUtil.checkImplementationLocationCategory();
 		if ( errorString != null ) {
 			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.implLocProblem", errorString);
@@ -356,7 +359,8 @@ public class CategoryManager extends Action {
 			dbSession						= PersistenceManager.getSession();
 //beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
-			dbCategory.setPossibleValues( new Vector() );
+			dbCategory.addPossibleValues( new Vector() );
+			
 			if (myForm.getEditedCategoryId() != null) {
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
 				Query query			= dbSession.createQuery(queryString);

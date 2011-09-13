@@ -3,16 +3,16 @@
 <form wicket:id="ampFieldPMForm">
 	<table width="952" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 
-	  	<tr><td colspan="3" ><center><h3>Assign Field Permission</h3></center></td></tr>
+	  	<tr><td colspan="3" ><center><h3><wicket:trn>Assign Field Permission</wicket:trn></h3></center></td></tr>
 	  	<tr><td colspan="3" >&nbsp;</td></tr>
 	  	<tr><td colspan="3"  align="center">
-	  			<div style="float: left;"><input wicket:id="showWorkspace" type="checkbox" /> Show Workspace</div>
+	  			<div style="float: left;"><input wicket:id="showWorkspace" type="checkbox" /> <wicket:trn>Show Workspace</wicket:trn></div>
 	  			<div style="float: right;">
-	  				<span wicket:id="permPriorityLabel"><b>Permission priority:</b></span>
+	  				<span wicket:id="permPriorityLabel"><b><wicket:trn>Permission priority</wicket:trn>:</b></span>
 		  			<span wicket:id="permissionPriorityChoices">
-						<input type="radio"/>Cummulative 
-						<input type="radio"/>Workspace based permission 
-						<input type="radio"/>Role based permission
+						<input type="radio"/><wicket:trn>Cummulative </wicket:trn>
+						<input type="radio"/><wicket:trn>Workspace based permission</wicket:trn>
+						<input type="radio"/><wicket:trn>Role based permission</wicket:trn>
 					</span>
 				</div> 
 			</td>
@@ -29,11 +29,11 @@
 			 <td  width="10">&nbsp;</td>
 	    	 <td valign="top" >
 	    	 	<br/>
-	    	 	<div class="perm_view_cont">&nbsp;&nbsp;&nbsp;<b>Edit field permissions:</b><br />
+	    	 	<div class="perm_view_cont">&nbsp;&nbsp;&nbsp;<b><wicket:trn>Edit field permissions</wicket:trn>:</b><br />
 				<div class="perm_wrksp_det"><span wicket:id="permGatesFieldsForm"/></div>
 				<hr />
 				<div wicket:id="workspaces">
-					<b>&nbsp;&nbsp;&nbsp;Choose workspace</b>:
+					<b>&nbsp;&nbsp;&nbsp;<wicket:trn>Choose workspace</wicket:trn></b>:
 					<div class="perm_wrksp_det_short"><span wicket:id="permWorkspacesFieldsForm"/></div>
 				</div>
 				<hr />

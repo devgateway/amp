@@ -56,7 +56,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		super(id, ampTreeVisibilityBeanModel, fmName, hideLabel);
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();
 
-		fieldPermissionsTabs.add(new AbstractTab(new Model("Add Field Permission")){
+		fieldPermissionsTabs.add(new AbstractTab(new Model(getTranslation("Add Field Permission"))){
 		      public Panel getPanel(String panelId)
 		      {
 		    	AmpPMAddFieldPermissionPanel newGlobalPerm = null;

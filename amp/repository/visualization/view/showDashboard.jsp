@@ -1878,17 +1878,17 @@ var callbackChildrenCall = {
 
 function callbackChildren(e) {
 	var parentId, targetId, targetObj;
-	if (e == undefined){
+	//if (e == undefined){
 		parentId = this.value;
 		targetId = this.id;
 		targetObj = this;
-	}
-	else
-	{
-		parentId = e.target.value;
-		targetId = e.target.id;
-		targetObj = e.target;
-	}
+	//}
+	//else
+	//{
+	//	parentId = e.target.value;
+	//	targetId = e.target.id;
+	//	targetObj = e.target;
+	//}
 	
 	var objectType = "";
 

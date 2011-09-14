@@ -32,7 +32,8 @@ public class EditorWrapperModel extends Model<String> {
 
 		AmpAuthWebSession session = ((AmpAuthWebSession)Session.get()); 
 		
-		if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 || !m.getObject().startsWith(KEY_PREFIX)){
+		//if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 || !m.getObject().startsWith(KEY_PREFIX)){
+		if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 ){
 			//no editor key
 			String eKey = generateEditorKey(session, id);
 			m.setObject(eKey);

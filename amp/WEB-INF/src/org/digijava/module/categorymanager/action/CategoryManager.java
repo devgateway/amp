@@ -126,26 +126,26 @@ public class CategoryManager extends Action {
 			this.deleteCategory(new Long( request.getParameter("delete") ));
 		}
                 else{
-		/**
-		 * Adding a new category to the database
-		 */
-		if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed().booleanValue()) {
-			myForm.setSubmitPressed(false);
-			boolean saved	= this.saveCategoryToDatabase(myForm, errors);
-			if (!saved) {
-				/*try{
-					AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
-					this.populateForm(ampCategoryClass, myForm);
-				}
-				catch (Exception e) {
-					// TODO: handle exception
-					logger.info(e.getMessage());
-					e.printStackTrace();
-				}*/
-				this.saveErrors(request, errors);
-				return mapping.findForward("createOrEditCategory");
-			}
-		}
+					/**
+					 * Adding a new category to the database
+					 */
+					if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed().booleanValue()) {
+						myForm.setSubmitPressed(false);
+						boolean saved	= this.saveCategoryToDatabase(myForm, errors);
+						if (!saved) {
+							/*try{
+								AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
+								this.populateForm(ampCategoryClass, myForm);
+							}
+							catch (Exception e) {
+								// TODO: handle exception
+								logger.info(e.getMessage());
+								e.printStackTrace();
+							}*/
+							this.saveErrors(request, errors);
+							return mapping.findForward("createOrEditCategory");
+						}
+					}
                 }
 		/**
 		 * loading existing categories
@@ -163,7 +163,7 @@ public class CategoryManager extends Action {
 				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
 					TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
 					treeSet.addAll( ampCategoryClass.getPossibleValues() );
-					ampCategoryClass.addPossibleValues( new ArrayList(treeSet) );
+					ampCategoryClass.setPossibleValues( new ArrayList(treeSet) );
 				}
 			}
 		}
@@ -249,7 +249,7 @@ public class CategoryManager extends Action {
 		Session dbSession			= null;
 		Collection returnCollection	= null;
 		try {
-			dbSession			= PersistenceManager.getSession();
+			dbSession			= PersistenceManager.openNewSession();
 			String queryString;
 			Query qry;
 			if ( categoryId != null ){
@@ -278,7 +278,7 @@ public class CategoryManager extends Action {
 			ex.printStackTrace();
 		} finally {
 			try {
-				PersistenceManager.releaseSession(dbSession);
+				dbSession.close();
 			} catch (Exception ex2) {
 				logger.error("releaseSession() failed :" + ex2);
 			}
@@ -343,9 +343,6 @@ public class CategoryManager extends Action {
 		boolean retValue					= true;
 		
 		
-//beginTransaction();
-		
-		
 		try {
 			/* Testing if entered category key is not already used */
 			if ( myForm.getEditedCategoryId() == null && 
@@ -356,10 +353,10 @@ public class CategoryManager extends Action {
 				return false;
 			}
 			
-			dbSession						= PersistenceManager.getSession();
-//beginTransaction();
+			dbSession						= PersistenceManager.openNewSession();
+			tx								= dbSession.beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
-			dbCategory.addPossibleValues( new Vector() );
+			dbCategory.setPossibleValues( new Vector() );
 			if (myForm.getEditedCategoryId() != null) {
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
 				Query query			= dbSession.createQuery(queryString);
@@ -424,7 +421,7 @@ public class CategoryManager extends Action {
 						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
 							iterCV.remove();
 							try{
-//session.flush();
+								dbSession.flush();
 								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
 																		ampCategoryValue.getValue()) )
 										throw new Exception("This value is in CategoryConstants.java and used by the system");
@@ -468,7 +465,7 @@ public class CategoryManager extends Action {
 						dbSession.saveOrUpdate( dbCategory );
 					}
 					else{
-//session.flush();
+						dbSession.flush();
 						//label category states updates
 						String queryString	= "delete from " + AmpLinkedCategoriesState.class.getName() + " s where s.mainCategory=:dbCategory";
 						dbSession.createQuery(queryString).setEntity("dbCategory", dbCategory).executeUpdate();
@@ -483,7 +480,7 @@ public class CategoryManager extends Action {
 
 					}
 					
-					//tx.commit();
+					tx.commit();
 				}
 			}
 		} catch (Exception ex) {
@@ -496,9 +493,9 @@ public class CategoryManager extends Action {
 			
 		} finally {
 			try {
-				PersistenceManager.releaseSession(dbSession);
+				dbSession.close();
 			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
+				logger.error("close hibernate session failed in saveCategoryToDatabase :" + ex2);
 			}
 		}
 		return retValue;

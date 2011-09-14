@@ -683,7 +683,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		Session dbSession			= null;
 		Collection col=new ArrayList();
 		try {
-			dbSession						= PersistenceManager.getSession();
+			dbSession						= PersistenceManager.openNewSession();
 			//AmpCategoryClass dbCategory		= new AmpCategoryClass();
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
 				Query query			= dbSession.createQuery(queryString);
@@ -695,7 +695,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			logger.error("Error retrieving AmpCategoryClass with key '" + key + "': " + ex);
 		} finally {
 			try {
-				PersistenceManager.releaseSession(dbSession);
+				dbSession.close();
 			} catch (Exception ex2) {
 				logger.error("releaseSession() failed :" + ex2);
 			}
@@ -753,7 +753,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				AmpCategoryClass ampCategoryClass	= resultList.get(0);
 				
 				if ( ampCategoryClass.getPossibleValues() == null )
-					ampCategoryClass.addPossibleValues( new ArrayList<AmpCategoryValue>() );
+					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>() );
 				 
 				ampCategoryValue 	= new AmpCategoryValue();
 				ampCategoryValue.setValue(value);

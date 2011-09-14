@@ -66,22 +66,10 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	public List<AmpCategoryValue> getPossibleValues() {
 		return possibleValues;
 	}
-	private void setPossibleValues(List<AmpCategoryValue> possibleValues) {
+	public void setPossibleValues(List<AmpCategoryValue> possibleValues) {
 		this.possibleValues = possibleValues;
 	}
-	public void addPossibleValues(List<AmpCategoryValue> p) {
-		if (p != null && !p.isEmpty()) {
-			getPossibleValues().addAll(p);
-			Iterator i = p.iterator();
-			AmpCategoryValue acv = null;
-			while (i.hasNext()) {
-				acv = (AmpCategoryValue) i.next();
-				if (acv != null) {
-					acv.setAmpCategoryClass(this);
-				}			
-			}
-		} 
-	}
+
 	public String getKeyName() {
 		return keyName;
 	}

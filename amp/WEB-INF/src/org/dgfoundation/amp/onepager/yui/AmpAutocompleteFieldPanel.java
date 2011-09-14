@@ -214,7 +214,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			public void renderHead(IHeaderResponse response) {
 				super.renderHead(response);
 				response.renderJavascriptReference(new JavascriptResourceReference(
-						clazz,
+						AmpAutocompleteFieldPanel.class,
 						"AmpAutocompleteCommonScripts.js"));
 				response.renderJavascriptReference(new JavascriptResourceReference(
 						clazz,

@@ -99,15 +99,16 @@ public class AuditLoggerUtil {
 			session.save(aal);
 			//tx.commit();
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.error("Cannot save audit logger :", ex);
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (Exception e1) {
-					logger.error("Release session failed :", e1);
-					throw new DgException("Cannot rallback",e1);
-				}
-			}
+//			if (tx!=null){
+//				try {
+//					tx.rollback();
+//				} catch (Exception e1) {
+//					logger.error("Release session failed :", e1);
+//					throw new DgException("Cannot rallback",e1);
+//				}
+//			}
 			throw new DgException("Cannot save audit logger",ex);
 		} 
 		return;

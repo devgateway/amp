@@ -334,6 +334,11 @@ public class AmpMessageWorker {
         approval.setSenderId( creator.getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         approval.setCreationDate(new Date());
+        //
+        if (e.getParameters().get(AbstractCalendarEventTrigger.PARAM_TEAM_MANAGER) != null) {
+        	myHashMap.put(MessageConstants.OBJECT_TEAM, creator.getAmpTeam().getAmpTeamId().toString()); 
+            
+        }
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, (String)e.getParameters().get(AbstractCalendarEventTrigger.PARAM_TEAM_MANAGER));
         User user = creator.getUser();
         String receivers = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + user.getName() + ";";
@@ -511,7 +516,15 @@ public class AmpMessageWorker {
 				template.getDescription(), myMap));
 		newApproval.setDraft(false);
 		newApproval.setCreationDate(new Date());
-		Long teamId = Long.parseLong(myMap.get(MessageConstants.OBJECT_TEAM));
+		//
+		Long teamId = null;
+		if (myMap.containsKey(MessageConstants.OBJECT_TEAM)) {
+			teamId = Long.parseLong(myMap.get(MessageConstants.OBJECT_TEAM));
+		} else {
+			if (approver.getAmpTeam() != null) {
+				teamId = approver.getAmpTeam().getAmpTeamId();	
+			}			
+		}
 		// receivers
 		String receivers = "";
 		/*

@@ -155,6 +155,9 @@ public class DEMappingFieldsDisplay {
 		  public int compare(Object a, Object b) {
 //			if("Add new".compareTo((String)this.base.get(a)) ==0) return -1;
 //			if("Add new".compareTo((String)this.base.get(b)) ==0) return 1;
+			if (this.base == null) return -1;
+			if (this.base.get(a)== null) return -1;
+			if (this.base.get(b)== null) return 1;
 		    return ((String)this.base.get(a)).compareTo((String)this.base.get(b));
 		}
 	}

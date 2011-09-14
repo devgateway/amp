@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -84,7 +85,7 @@ public class AmpCategoryGroupFieldPanel extends
 			boolean ordered, Boolean nullValid, boolean hideLabel) throws Exception {
 		super(id,categoryKey,fmName,ordered,false,null,hideLabel);
 		choiceContainer = new RadioChoice<AmpCategoryValue>(
-				"choice",model, choices)
+				"choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
 				.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);

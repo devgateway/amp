@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
@@ -59,9 +60,9 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 			@Override
 			public Object getDisplayValue(Boolean object) {
 				if (object)
-					return choicesModel.getObject()[0];
+					return TranslatorUtil.getTranslation(choicesModel.getObject()[0]);
 				else
-					return choicesModel.getObject()[1];
+					return TranslatorUtil.getTranslation(choicesModel.getObject()[1]);
 			}
 		};
 		choiceContainer = new RadioChoice<Boolean>("choice", model, choices, renderer);

@@ -37,6 +37,7 @@ function spawnEditBox(labelId) {
 		editor.setAttribute('onkeydown', 'if (!Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('class', 'inputx');
 		editor.setAttribute('key', label.getAttribute('key'));
+		editor.setAttribute('style', 'width: 300px');
 		
 		//neutralize all href parent containers in order for this to work
 		var container = label.parentNode;

@@ -12,6 +12,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpContract
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractDisbursementsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractFundingAllocationSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractOrganizationsSubsectionFeature;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.IPAContract;
 
 /**
@@ -33,7 +34,7 @@ public class AmpContractsItemFeaturePanel extends AmpFeaturePanel<IPAContract> {
 		IPAContract c = contractModel.getObject();
 		
 		if (c.getContractName() == null || c.getContractName().trim().compareTo("") == 0){
-			c.setContractName("New Contract");
+			c.setContractName(TranslatorUtil.getTranslation("New Contract"));
 		}
 		
 		final Label contractNameLabel = new Label("contractName", new PropertyModel<String>(contractModel, "contractName"));

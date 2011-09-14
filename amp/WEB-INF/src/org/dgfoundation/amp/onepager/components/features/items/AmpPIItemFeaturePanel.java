@@ -34,6 +34,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
@@ -116,28 +117,28 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 				
 				Label indCode = new Label("indCode", new PropertyModel<String>(sv, "indicatorCode"));
 				item.add(indCode);
-				Label indName = new Label("indName", new PropertyModel<String>(sv, "name"));
+				Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
 				item.add(indName);
 				
 				String code = sv.getIndicatorCode();
 				if (code.compareTo("7") == 0){
-					String msg = TranslatorUtil.getTranslatedText("No question here. This indicator is calculated by the system based on information entered for disbursements for this project/programme");
-					Label l = new Label("qList", new Model(msg));
+					String msg = "No question here. This indicator is calculated by the system based on information entered for disbursements for this project/programme";
+					Label l = new TrnLabel("qList", new Model(msg));
 					item.add(l);
 				} else 
 					if (code.compareTo("10a") == 0){
-						String msg = TranslatorUtil.getTranslatedText("No question at the activity level; this indicator is calculated using the Calendar Module");
-						Label l = new Label("qList", new Model(msg));
+						String msg = "No question at the activity level; this indicator is calculated using the Calendar Module";
+						Label l = new TrnLabel("qList", new Model(msg));
 						item.add(l);
 					} else 
 						if (code.compareTo("10b") == 0){
-							String msg = TranslatorUtil.getTranslatedText("No question at the activity level; this indicator is calculated using the Document Management Module");
-							Label l = new Label("qList", new Model(msg));
+							String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
+							Label l = new TrnLabel("qList", new Model(msg));
 							item.add(l);
 						} else 
 							if (code.compareTo("10b") == 0){
-								String msg = TranslatorUtil.getTranslatedText("No question at the activity level; this indicator is calculated using the Document Management Module");
-								Label l = new Label("qList", new Model(msg));
+								String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
+								Label l = new TrnLabel("qList", new Model(msg));
 								item.add(l);
 							} else {
 								AmpPIQuestionItemFeaturePanel q = new AmpPIQuestionItemFeaturePanel("qList", "PI Questions List", PersistentObjectModel.getModel(sv), survey);

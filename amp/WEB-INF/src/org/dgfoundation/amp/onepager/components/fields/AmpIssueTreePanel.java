@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -43,7 +44,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		this.fmType = AmpFMTypes.MODULE;
 		
 		final Class levelClass = tree.get(level);
-		final String levelLabel = labelName.get(levelClass);
+		final String levelLabel = TranslatorUtil.getTranslation(labelName.get(levelClass));
 		String levelChildrenName = setName.get(levelClass);
 		final PropertyModel levelChildren = new PropertyModel(objModel, levelChildrenName);
 	

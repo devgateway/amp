@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.PIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
@@ -93,7 +94,7 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				
 				IModel<AmpAhsurveyResponse> responseModel = PersistentObjectModel.getModel(response);
 				
-				Label indName = new Label("qtext", new PropertyModel<String>(item.getModelObject(), "questionText"));
+				Label indName = new TrnLabel("qtext", new PropertyModel<String>(item.getModelObject(), "questionText"));
 				item.add(indName);
 				
 				String qtype = item.getModelObject().getAmpTypeId().getName();

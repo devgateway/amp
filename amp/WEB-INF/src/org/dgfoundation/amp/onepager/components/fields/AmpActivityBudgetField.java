@@ -6,10 +6,12 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.ActivityBudgetModel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 import com.rc.retroweaver.runtime.Arrays;
@@ -52,7 +54,7 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 			toggleExtraFields(false);
 
 		final String[] budgetElements = new String[] {"No answer", "On", "Off", "Treasury"};
-		DropDownChoice budgetDD = new DropDownChoice("choice", new ActivityBudgetModel(model, budgetElements), Arrays.asList(budgetElements)); 
+		DropDownChoice budgetDD = new DropDownChoice("choice", new ActivityBudgetModel(model, budgetElements), Arrays.asList(budgetElements), new TranslatedChoiceRenderer<String>()); 
 		budgetDD.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {

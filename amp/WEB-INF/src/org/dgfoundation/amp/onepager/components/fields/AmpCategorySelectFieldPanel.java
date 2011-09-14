@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.SetModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -76,7 +77,7 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 			boolean ordered, Boolean nullValid, boolean hideLabel) throws Exception {
 		super(id,categoryKey,fmName,ordered,false,null,hideLabel);
 		choiceContainer = new DropDownChoice<AmpCategoryValue>(
-				"choice",model, choices)
+				"choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
 				.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
@@ -109,7 +110,7 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 			else
 				choiceContainer = new DropDownChoice<AmpCategoryValue>(
 						"choice",
-						new AmpMultiValueDropDownChoiceModel<AmpCategoryValue>(model), choices)
+						new AmpMultiValueDropDownChoiceModel<AmpCategoryValue>(model), choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
 						.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);

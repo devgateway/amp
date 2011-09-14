@@ -14,6 +14,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.entity.Locale;
@@ -38,6 +39,7 @@ public class TrnLabel extends Label {
 
 	private CharSequence key;
 
+	
 	/**
 	 * NOT MEANT FOR GENERAL USE, only translation classes may use
 	 * If you really know what you're doing and need a TrnLabel with
@@ -49,6 +51,9 @@ public class TrnLabel extends Label {
 		super.setDefaultModelObject(translate(label));
 		addKeyAttribute(TranslatorWorker.generateTrnKey(label));
 		trnLabel();
+	}
+	public TrnLabel(String id, IModel<String> label) {
+		this(id, label.getObject());
 	}
 
 	private void addKeyAttribute(String key){

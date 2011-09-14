@@ -206,7 +206,7 @@ public class FormatHelper {
 	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
 	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
     
-	if(groupSeparator!=null&&groupSeparator.trim().length()>0){
+	if(groupSeparator!=null){
           decSymbols.setGroupingSeparator(groupSeparator.charAt(0)); 
      }
 	DecimalFormat formater = new DecimalFormat(format, decSymbols);

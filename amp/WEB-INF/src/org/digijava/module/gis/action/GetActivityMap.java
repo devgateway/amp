@@ -45,6 +45,7 @@ public class GetActivityMap extends Action {
 
         try {
 
+            MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
             GisUtil gisUtil = new GisUtil();
             sos = response.getOutputStream();
 
@@ -111,7 +112,6 @@ public class GetActivityMap extends Action {
                         fill = false;
                     }
 
-                    MapColorScheme colorScheme = MapColorScheme.getDefaultScheme();
                     colorScheme.setBackgroundColor(new ColorRGB(221, 221, 221));
                     colorScheme.setTerrainColor(new ColorRGB(120, 120, 120));
                     colorScheme.setBorderColor(new ColorRGB(139, 139, 139, 50));

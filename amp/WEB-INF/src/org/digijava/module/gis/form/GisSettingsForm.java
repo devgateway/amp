@@ -3,10 +3,11 @@ package org.digijava.module.gis.form;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisSettings;
+import org.digijava.module.gis.util.MapColorScheme;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,6 +22,8 @@ public class GisSettingsForm extends ActionForm {
     Long[] secSchemesSelected;
     Long[] programsSelected;
     GisSettings gisSettings;
+    String selectedColorPreset;
+    List<MapColorScheme> availableColorSchemes;
 
     public GisSettings getGisSettings() {
         return gisSettings;
@@ -28,6 +31,22 @@ public class GisSettingsForm extends ActionForm {
 
     public void setGisSettings(GisSettings gisSettings) {
         this.gisSettings = gisSettings;
+    }
+
+    public String getSelectedColorPreset() {
+        return selectedColorPreset;
+    }
+
+    public void setSelectedColorPreset(String selectedColorPreset) {
+        this.selectedColorPreset = selectedColorPreset;
+    }
+
+    public List<MapColorScheme> getAvailableColorSchemes() {
+        return availableColorSchemes;
+    }
+
+    public void setAvailableColorSchemes(List<MapColorScheme> availableColorSchemes) {
+        this.availableColorSchemes = availableColorSchemes;
     }
 
     public Collection<AmpSectorScheme> getSecShcemes() {

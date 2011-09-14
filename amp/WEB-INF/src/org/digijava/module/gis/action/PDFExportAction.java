@@ -307,24 +307,26 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			mapLevel = "2";
 		}
 
+        MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
 		if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
 			if (secId != null && indId != null) {
 				AmpIndicator indicator = IndicatorUtil.getIndicator(indId);
 				indicatorName = indicator.getName();
 				sectorName = SectorUtil.getAmpSector(secId).getName();
+
 				if (mapCode != null && mapCode.trim().length() > 0) {
 					outMapByteArray = getMapImageSectorIndicator(mapCode,
-							secId, indId, subGroup, indYear, mapLevel);
+							secId, indId, subGroup, indYear, mapLevel, colorScheme);
 				} else {
 					outMapByteArray = getMapImageSectorIndicator("TZA", secId,
-							indId, subGroup, indYear, mapLevel);
+							indId, subGroup, indYear, mapLevel, colorScheme);
 				}
 
 			} else {
 				if (mapCode != null && mapCode.trim().length() > 0) {
-					outMapByteArray = getMapImage(mapCode);
+					outMapByteArray = getMapImage(mapCode, colorScheme);
 				} else {
-					outMapByteArray = getMapImage("TZA");
+					outMapByteArray = getMapImage("TZA", colorScheme);
 				}
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
@@ -348,7 +350,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
             }
 
-            outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", mapLevel);
+            outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", mapLevel, colorScheme);
 
         }
 		// Get the Map Image
@@ -1478,7 +1480,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode,
 			Long secId, Long indId, String subgroupId, String indYear,
-			String mapLevel) throws Exception {
+			String mapLevel, MapColorScheme colorScheme) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1594,7 +1596,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 
 		List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList, map, min,
-				max, MapColorScheme.getDefaultScheme());
+				max, colorScheme);
 
 		int canvasWidth = 700;
 		int canvasHeight = 700;
@@ -1615,7 +1617,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			gisUtil.addDataToImage(g2d, map.getSegments(), hilightData,
 					hilightDashData, canvasWidth, canvasHeight, rect.getLeft(),
 					rect.getRight(), rect.getTop(), rect.getBottom(), true,
-					false, MapColorScheme.getDefaultScheme());
+					false, colorScheme);
 
 			gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
 					canvasHeight, rect.getLeft(), rect.getRight(),
@@ -1637,7 +1639,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-   private ByteArrayOutputStream getMapImageFinancial(Object[] fundingList, String fundingType, String mapCode, String mapLevel) throws Exception {
+   private ByteArrayOutputStream getMapImageFinancial(Object[] fundingList, String fundingType, String mapCode, String mapLevel, MapColorScheme colorScheme) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1698,7 +1700,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 
 		List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList, map,
-				new Double(min.doubleValue()), new Double(max.doubleValue()), MapColorScheme.getDefaultScheme());
+				new Double(min.doubleValue()), new Double(max.doubleValue()), colorScheme);
 
 		int canvasWidth = 700;
 		int canvasHeight = 700;
@@ -1718,7 +1720,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		gisUtil.addDataToImage(g2d, map.getSegments(), hilightData, null,
 				canvasWidth, canvasHeight, rect.getLeft(), rect.getRight(),
 				rect.getTop(), rect.getBottom(), true, false,
-				MapColorScheme.getDefaultScheme());
+				colorScheme);
 
 		gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
 				canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(),
@@ -1740,7 +1742,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-	private ByteArrayOutputStream getMapImage(String mapCode) {
+	private ByteArrayOutputStream getMapImage(String mapCode, MapColorScheme colorScheme) {
 		GisUtil gisUtil = new GisUtil();
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
@@ -1767,7 +1769,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (map != null) {
 			gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
 					canvasHeight, rect.getLeft(), rect.getRight(),
-					rect.getTop(), rect.getBottom(), true, false);
+					rect.getTop(), rect.getBottom(), true, false, colorScheme);
 
 			gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
 					canvasHeight, rect.getLeft(), rect.getRight(),

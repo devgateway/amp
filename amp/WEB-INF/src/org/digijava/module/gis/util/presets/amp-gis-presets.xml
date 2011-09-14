@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<amp-gis-presets>
+	<color-schemes>
+		<scheme name="default" display-name="Default color scheme (Gray-blue)">
+			<background>
+				<color type="RGBA">
+					<red>74</red>
+					<green>104</green>
+					<blue>122</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>214</red>
+					<green>194</green>
+					<blue>158</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>100</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<gradient-min>
+				<color type="RGBA">
+					<red>23</red>
+					<green>49</green>
+					<blue>65</blue>
+				</color>
+			</gradient-min>
+			<gradient-max>
+				<color type="RGBA">
+					<red>218</red>
+					<green>220</green>
+					<blue>221
+					</blue>
+				</color>
+			</gradient-max>
+		</scheme>
+		
+		<scheme name="yello-orange" display-name="Yello-Orange Scheme">
+			<background>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>214</red>
+					<green>194</green>
+					<blue>158</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>100</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<gradient-min>
+				<color type="RGBA">
+					<red>217</red>
+					<green>95</green>
+					<blue>14</blue>
+				</color>
+			</gradient-min>
+			<gradient-max>
+				<color type="RGBA">
+					<red>255</red>
+					<green>247</green>
+					<blue>188</blue>
+				</color>
+			</gradient-max>
+		</scheme>
+		
+		<scheme name="green" display-name="Green Scheme">
+			<background>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>214</red>
+					<green>194</green>
+					<blue>158</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>100</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<gradient-min>
+				<color type="RGBA">
+					<red>44</red>
+					<green>162</green>
+					<blue>95</blue>
+				</color>
+			</gradient-min>
+			<gradient-max>
+				<color type="RGBA">
+					<red>229</red>
+					<green>245</green>
+					<blue>249</blue>
+				</color>
+			</gradient-max>
+		</scheme>
+		
+		<scheme name="green-blue" display-name="Green-Blue Scheme">
+			<background>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>214</red>
+					<green>194</green>
+					<blue>158</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>100</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<gradient-min>
+				<color type="RGBA">
+					<red>67</red>
+					<green>162</green>
+					<blue>202</blue>
+				</color>
+			</gradient-min>
+			<gradient-max>
+				<color type="RGBA">
+					<red>224</red>
+					<green>243</green>
+					<blue>219</blue>
+				</color>
+			</gradient-max>
+		</scheme>
+		
+		<scheme name="magenta" display-name="Magenta Scheme">
+			<background>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>214</red>
+					<green>194</green>
+					<blue>158</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>100</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>0</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<gradient-min>
+				<color type="RGBA">
+					<red>117</red>
+					<green>107</green>
+					<blue>177</blue>
+				</color>
+			</gradient-min>
+			<gradient-max>
+				<color type="RGBA">
+					<red>239</red>
+					<green>237</green>
+					<blue>245</blue>
+				</color>
+			</gradient-max>
+		</scheme>		
+		
+	</color-schemes>
+</amp-gis-presets>

@@ -18,6 +18,8 @@ public class GisSettings implements Serializable {
 
     private int sectorSchemeFilterMode;
 
+    private String selectedPreset;
+
     public GisSettings() {
 
     }
@@ -28,6 +30,13 @@ public class GisSettings implements Serializable {
 
     }
 
+    public String getSelectedPreset() {
+        return selectedPreset;
+    }
+
+    public void setSelectedPreset(String selectedPreset) {
+        this.selectedPreset = selectedPreset;
+    }
 
     public String getSiteId() {
         return siteId;

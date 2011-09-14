@@ -180,6 +180,7 @@ public class GetFoundingDetails extends Action {
             CoordinateRect rect = gisUtil.getMapRect(map);
 
             if (rect != null) {
+                MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
                 if (action.equalsIgnoreCase(GisUtil.ACTION_PAINT_MAP)) {
                     response.setContentType("image/png");
 
@@ -199,13 +200,14 @@ public class GetFoundingDetails extends Action {
                     }
 
                     if (map != null) {
+
 	                    gisUtil.addDataToImage(g2d,
 	                                           map.getSegments(),
 	                                           -1,
 	                                           canvasWidth, canvasHeight,
 	                                           rect.getLeft(), rect.getRight(),
 	                                           rect.getTop(), rect.getBottom(),
-	                                           fill, false);
+	                                           fill, false, colorScheme);
 	
 	                    if (request.getParameter("noCapt") == null) {
 	
@@ -244,7 +246,6 @@ public class GetFoundingDetails extends Action {
 
                     xml.output(sos);
                 } else if (action.equalsIgnoreCase("getSelectedFilterMap")) {
-
                         Object[] filteredData = (Object[]) request.getSession().getAttribute("GIS_FILTER_RESULTS");
                         Object[] fundingList = (Object[])filteredData[1];
                         GisFilterForm filterForm = (GisFilterForm)filteredData[0];
@@ -303,7 +304,8 @@ public class GetFoundingDetails extends Action {
 
 
 
-                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),colorScheme);
 
                     BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
 
@@ -314,7 +316,7 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
-                            rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+                            rect.getTop(), rect.getBottom(), true, false, colorScheme);
 
                     gisUtil.addCaptionsToImage(g2d,
                             map.getSegments(),
@@ -541,7 +543,7 @@ public class GetFoundingDetails extends Action {
                         }
                     }
                     
-                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),MapColorScheme.getDefaultScheme());
+                    List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,map, new Double(min.doubleValue()), new Double(max.doubleValue()),colorScheme);
 
                     BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,BufferedImage.TYPE_INT_ARGB);
 
@@ -552,7 +554,7 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     gisUtil.addDataToImage(g2d,map.getSegments(), hilightData,null,canvasWidth, canvasHeight,rect.getLeft(), rect.getRight(),
-                            rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+                            rect.getTop(), rect.getBottom(), true, false, colorScheme);
 
                     gisUtil.addCaptionsToImage(g2d,
                             map.getSegments(),
@@ -725,7 +727,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,
-                            map, new Double(0), new Double(100), MapColorScheme.getDefaultScheme());
+                            map, new Double(0), new Double(100), colorScheme);
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
@@ -743,7 +745,7 @@ public class GetFoundingDetails extends Action {
                                            hilightData, null,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+                                           rect.getTop(), rect.getBottom(), true, false, colorScheme);
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),
@@ -915,7 +917,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     List hilightData = RMMapCalculationUtil.prepareHilightSegments(segmentDataList,
-                            map, min, max, MapColorScheme.getDefaultScheme());
+                            map, min, max, colorScheme);
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
@@ -934,7 +936,7 @@ public class GetFoundingDetails extends Action {
                                            hilightDashData,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
+                                           rect.getTop(), rect.getBottom(), true, false, colorScheme);
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),

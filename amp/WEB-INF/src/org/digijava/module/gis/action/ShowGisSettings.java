@@ -1,5 +1,6 @@
 package org.digijava.module.gis.action;
 
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -7,7 +8,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -15,6 +15,8 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisSettings;
 import org.digijava.module.gis.form.GisSettingsForm;
 import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.gis.util.GisUtil;
+import org.digijava.module.gis.util.MapColorScheme;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +81,21 @@ public class ShowGisSettings extends Action {
         frm.setSecShcemes(secShcemes);
         frm.setTopLevelPrograms(topLevelPrograms);
 
+        Map<String, MapColorScheme> availColorSchemesMap = GisUtil.getAllMapColorSchemePresets();
+        MapColorScheme selColorScheme = GisUtil.getActiveColorScheme(request);
+
+        List <MapColorScheme> availSchemes = new ArrayList<MapColorScheme>();
+        if (availColorSchemesMap != null && !availColorSchemesMap.isEmpty()) {
+            Set <String> keySet = availColorSchemesMap.keySet();
+            for (String key : keySet) {
+                availSchemes.add(availColorSchemesMap.get(key));
+            }
+        } else {
+            availSchemes.add(MapColorScheme.getDefaultColorScheme());
+        }
+
+        frm.setAvailableColorSchemes(availSchemes);
+        frm.setSelectedColorPreset(selColorScheme.getName());
 
         return mapping.findForward("forward");
     }
@@ -87,6 +104,7 @@ public class ShowGisSettings extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         GisSettingsForm frm = (GisSettingsForm) form;
+
 
         org.digijava.module.aim.util.DbUtil.update(frm.getGisSettings());
 
@@ -113,6 +131,8 @@ public class ShowGisSettings extends Action {
             org.digijava.module.aim.util.DbUtil.update(program);
 
         }
+
+
 
 
 

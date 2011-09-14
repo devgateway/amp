@@ -1720,6 +1720,8 @@ public class DbUtil {
             Query q = sess.createQuery(queryStr.toString());
             q.setString("SITE_ID", siteId);
             q.setString("INSTANCE_ID", instanceId);
+            q.setCacheable(true);
+            q.setCacheRegion("AMP_GIS_CACHE");
 
             retVal = (GisSettings)q.uniqueResult();
 

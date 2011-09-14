@@ -1,11 +1,17 @@
 package org.digijava.module.gis.util;
 
+import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+
 /**
  * User: George Kvizhinadze
  * Date: Nov 1, 2010
  * Time: 2:59:31 PM
  */
 public class MapColorScheme {
+
+    private String name;
+    private String displayName;
 
     private ColorRGB backgroundColor;
     private ColorRGB terrainColor;
@@ -19,11 +25,13 @@ public class MapColorScheme {
     private ColorRGB gradientMaxColor;
 
     public MapColorScheme() {
-        
+
     }
 
-    public static MapColorScheme getDefaultScheme() {
-        return new MapColorScheme(new ColorRGB(255,255,255),
+    public static MapColorScheme getDefaultColorScheme() {
+
+        return new MapColorScheme("default", "Default Color Scheme",
+                                  new ColorRGB(74,104,122),
                                   new ColorRGB(214, 194, 158),
                                   new ColorRGB(0,0,100),
                                   new ColorRGB(255,255,255,170),
@@ -32,10 +40,10 @@ public class MapColorScheme {
                                   new ColorRGB(0,0,3,3),
                                   new ColorRGB(23,49,65),
                                   new ColorRGB(218,220,221));
-
     }
 
-    public MapColorScheme(ColorRGB backgroundColor,
+    public MapColorScheme(String name, String displayName,
+                          ColorRGB backgroundColor,
                           ColorRGB terrainColor,
                           ColorRGB waterColor,
                           ColorRGB borderColor,
@@ -53,7 +61,25 @@ public class MapColorScheme {
         this.textColor = textColor;
         this.gradientMinColor = gradientMinColor;
         this.gradientMaxColor = gradientMaxColor;
-        
+        this.name = name;
+        this.displayName = displayName;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public ColorRGB getGradientMinColor() {

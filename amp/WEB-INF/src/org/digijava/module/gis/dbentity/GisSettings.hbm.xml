@@ -9,5 +9,9 @@
         </composite-id>
 
 		<property name="sectorSchemeFilterMode" column="SEC_SCHEME_FILTER_MODE" type="int" />
+
+        <property name="selectedPreset" column="SELECTED_PRESET" type="java.lang.String" />
+
+
 	</class>
 </hibernate-mapping>

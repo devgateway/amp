@@ -5,26 +5,31 @@ import java.awt.Graphics2D;
 import java.awt.font.GlyphVector;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Field;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
+
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
-import org.digijava.module.gis.dbentity.GisMap;
-import org.digijava.module.gis.dbentity.GisMapPoint;
-import org.digijava.module.gis.dbentity.GisMapSegment;
-import org.digijava.module.gis.dbentity.GisMapShape;
+import org.digijava.module.gis.dbentity.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.BasicStroke;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.TexturePaint;
-import java.awt.geom.Rectangle2D;
 import java.awt.Rectangle;
 
-import java.awt.geom.*;
 
 /**
  *
@@ -47,6 +52,7 @@ public class GisUtil {
 
 
     private static Map loadedMaps = null;
+    private static Map <String, MapColorScheme> colorSchemePresets = null;
 
     static {
         loadedMaps = new HashMap();
@@ -86,18 +92,6 @@ public class GisUtil {
         }
     }
 
-    public void addDataToImage(Graphics2D g2d, List mapData, int segmentNo,
-                               int canvasWidth, int canvasHeight,
-                               float mapLeftX,
-                               float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill, boolean showGrid) {
-
-        MapColorScheme mapColorScheme = MapColorScheme.getDefaultScheme();
-        addDataToImage(g2d,mapData, segmentNo,
-                        canvasWidth, canvasHeight, mapLeftX,
-                        mapRightX, mapTopY, mapLowY, fill,
-                        showGrid, mapColorScheme);
-    }
 
     public void addDataToImage(Graphics2D g2d, List mapData, int segmentNo,
                                int canvasWidth, int canvasHeight,
@@ -447,7 +441,7 @@ public class GisUtil {
             g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5,
                          canvasHeight - border * 2 + 5);
         } catch (Exception ex) {
-            
+            ex.printStackTrace();
         }
 
 
@@ -779,6 +773,139 @@ public class GisUtil {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return retVal;
+    }
+
+    public static MapColorScheme getActiveColorScheme (HttpServletRequest request) {
+        MapColorScheme retVal = null;
+        GisSettings settings = DbUtil.getGisSettings(request);
+        if (settings != null && settings.getSelectedPreset() != null && !settings.getSelectedPreset().isEmpty()) {
+            retVal = getMapColorSchemeByName(settings.getSelectedPreset());
+        } else {
+            retVal = MapColorScheme.getDefaultColorScheme();
+        }
+        return retVal;
+    }
+
+    public static MapColorScheme getMapColorSchemeByName (String name) {
+        Map<String, MapColorScheme> schemes = getAllMapColorSchemePresets();
+        return schemes == null?null:schemes.get(name);
+    }
+
+
+    public static Map<String, MapColorScheme> getAllMapColorSchemePresets (){
+        Map mapSchemes = null;
+        if (colorSchemePresets != null) {
+            mapSchemes = colorSchemePresets;
+        } else {
+            //Init color schemes. Load from XML config
+            InputStream inStr = MapColorScheme.class.getResourceAsStream("/org/digijava/module/gis/util/presets/amp-gis-presets.xml");
+            try {
+                DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+                Document xmlDoc = docBuilder.parse(inStr);
+
+                XPathFactory xpfactory = XPathFactory.newInstance();
+                XPath xp = xpfactory.newXPath();
+                XPathExpression schemeExpr = xp.compile("//amp-gis-presets/color-schemes/scheme");
+
+                NodeList colorSchemes = (NodeList) schemeExpr.evaluate(xmlDoc, XPathConstants.NODESET);
+
+                mapSchemes = new HashMap();
+
+                for (int schemeIdx = 0; schemeIdx < colorSchemes.getLength(); schemeIdx ++) {
+                    Element schemeNode = (Element) colorSchemes.item(schemeIdx);
+                    MapColorScheme mapColorSchemeObj = createSchemeObjFromConfigNode(schemeNode);
+                    mapSchemes.put(mapColorSchemeObj.getName(), mapColorSchemeObj);
+                }
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e1) {
+                e1.printStackTrace();
+            } catch (XPathException e2) {
+                e2.printStackTrace();
+            } catch (IOException e3) {
+                e3.printStackTrace();
+            }
+            colorSchemePresets = mapSchemes;
+        }
+
+        return mapSchemes;
+    }
+
+    private static MapColorScheme createSchemeObjFromConfigNode (Element schemeNode) {
+        MapColorScheme retVal = null;
+
+        retVal = new MapColorScheme();
+        retVal.setName(schemeNode.getAttribute("name"));
+        retVal.setDisplayName(schemeNode.getAttribute("display-name"));
+
+        NodeList colorNodes = schemeNode.getElementsByTagName("color");
+        for (int colorItemIdx = 0; colorItemIdx < colorNodes.getLength(); colorItemIdx ++) {
+            Node colorNodeItem = colorNodes.item(colorItemIdx);
+            String parentNodeTagName = colorNodeItem.getParentNode().getNodeName();
+            if (parentNodeTagName.equalsIgnoreCase("background")) {
+                retVal.setBackgroundColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("terrain")) {
+                retVal.setTerrainColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("water")) {
+                retVal.setWaterColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("border")) {
+                retVal.setBorderColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("region-border")) {
+                retVal.setRegionBorderColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("dash-lines")) {
+                retVal.setDashColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("captions")) {
+                retVal.setTextColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("gradient-min")) {
+                retVal.setGradientMinColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } else if (parentNodeTagName.equalsIgnoreCase("gradient-max")) {
+                retVal.setGradientMaxColor(createColorObjFromFromConfigNode(colorNodeItem));
+            }
+
+        }
+
+        return retVal;
+    }
+
+    private static ColorRGB createColorObjFromFromConfigNode(Node colorNodeItem) {
+        ColorRGB retVal = null;
+
+
+        if (colorNodeItem.getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("RGBA")) {
+            boolean alphaSet = false;
+            retVal = new ColorRGB();
+            NodeList colorComponents = colorNodeItem.getChildNodes();
+            for (int componentIdx = 0; componentIdx < colorComponents.getLength(); componentIdx ++) {
+                Node componentNode = colorComponents.item(componentIdx);
+
+                String nodeValue = null;
+                int nodeValueCasted = 0;
+                if (componentNode.hasChildNodes()) {
+                    nodeValue = componentNode.getChildNodes().item(0).getNodeValue();
+                    if (nodeValue != null && !nodeValue.isEmpty()) {
+                        nodeValueCasted = Integer.parseInt(nodeValue.trim());
+                    }
+                }
+                if (componentNode.getNodeName().equalsIgnoreCase("red")) {
+                    retVal.setRed(nodeValueCasted);
+                } else if (componentNode.getNodeName().equalsIgnoreCase("green")) {
+                    retVal.setGreen(nodeValueCasted);
+                } else if (componentNode.getNodeName().equalsIgnoreCase("blue")) {
+                    retVal.setBlue(nodeValueCasted);
+                } else if (componentNode.getNodeName().equalsIgnoreCase("alpha")) {
+                    retVal.setAlpha(nodeValueCasted);
+                    alphaSet = true;
+                }
+            }
+
+            if (!alphaSet) {
+                retVal.setAlpha(255);
+            }
+
+        }
+
         return retVal;
     }
     

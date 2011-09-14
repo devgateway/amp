@@ -4,7 +4,6 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
-		<form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
 		<form-bean name="gisFoundingDetailsForm" type="org.digijava.module.gis.form.GisFoundingDetailsForm"/>
 		<form-bean name="gisDemoForm" type="org.digijava.module.gis.form.GisDemoForm"/>
 		<form-bean name="gisRegReportForm" type="org.digijava.module.gis.form.GisRegReportForm"/>
@@ -32,10 +31,6 @@
 	<action name="gisDashboardForm" path="/gis/showPublicGis" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
     	  <forward name="forward" path="/showLayout.do?layout=gisDashboardPublicLayout" />
     	</action>
-
-	<action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
-    	  <forward name="forward" path="/showLayout.do?layout=mapLoader" />
-	    </action>
 
 	<action name="gisMapLoaderForm" path="/gis/getActivityMap" scope="request" type="org.digijava.module.gis.action.GetActivityMap" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />

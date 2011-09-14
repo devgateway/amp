@@ -79,7 +79,7 @@
 					</fieldset>
 					<br>
 					<fieldset>
-						<legend><digi:trn>Project settiongs</digi:trn></legend>
+						<legend><digi:trn>Project settings</digi:trn></legend>
 						
 						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
 							<tr>
@@ -99,6 +99,21 @@
 							</logic:iterate>
 						</table>
 					</fieldset>	
+					
+					<fieldset>
+						<legend><digi:trn>Map color scheme settings</digi:trn></legend>
+						
+						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
+							<tr>
+								<td height="20" colspan="2" bgcolor="#c7d4db">
+									<html:select name="gisSettingsForm" property="gisSettings.selectedPreset">
+										<html:optionsCollection name="gisSettingsForm" property="availableColorSchemes" label="displayName" value="name" />
+									</html:select>
+								</td>
+							</tr>	
+							
+						</table>
+					</fieldset>
 			</td>
 		</tr>
 		<tr>

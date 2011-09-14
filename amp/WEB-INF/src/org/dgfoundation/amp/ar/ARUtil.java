@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.cell.DateCell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -493,9 +494,19 @@ public final class ARUtil {
 	}
 
 	private static void cleanListCell(ListCell cell) {
-		List<TextCell> listCells = (List)cell.getValue();
-		for (TextCell tCell : listCells) {
-			ARUtil.cleanTextCell(tCell);
+		/* Donor commitment date some times is a ListCell of DateCell 
+		 * in such case it should not not execute the clean */
+		boolean process = false;
+		for (Object o : (List)cell.getValue()) {
+		    if (o.getClass().equals(TextCell.class)){
+		    	process = true;
+		    }
+		}
+		if (process){
+			List<TextCell> listCells = (List)cell.getValue();
+			for (TextCell tCell : listCells) {
+				ARUtil.cleanTextCell(tCell);
+			}
 		}
 	}
 

@@ -42,8 +42,8 @@ public class AmpMEIndicatorSearchModel extends
 	@Override
 	protected List<AmpIndicator> load() {
 		try {
-			List<AmpIndicator> ret = new ArrayList<AmpIndicator>();
-			session = PersistenceManager.getRequestDBSession();
+			List<AmpIndicator> ret = null;
+			session = AmpActivityModel.getHibernateSession();
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 			Criteria crit = session.createCriteria(AmpIndicator.class);
@@ -58,8 +58,6 @@ public class AmpMEIndicatorSearchModel extends
 			//session.close();
 			return ret;
 		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		} catch (DgException e) {
 			throw new RuntimeException(e);
 		} 
 	}

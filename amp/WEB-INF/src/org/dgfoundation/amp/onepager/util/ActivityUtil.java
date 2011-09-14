@@ -161,6 +161,7 @@ public class ActivityUtil {
 			}
 			
 			saveContacts(a, session);
+			saveIndicators(a, session);
 
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
@@ -196,7 +197,7 @@ public class ActivityUtil {
 			a.setModifiedBy(ampCurrentMember);
 			a.setTeam(ampCurrentMember.getAmpTeam());
 			
-			saveIndicators(a, session);
+			
 			saveResources(a); 
 			saveEditors(session); 
 			saveComments(a, session); 

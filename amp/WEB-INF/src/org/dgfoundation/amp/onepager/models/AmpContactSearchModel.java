@@ -6,9 +6,6 @@ package org.dgfoundation.amp.onepager.models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.digijava.kernel.exception.DgException;
-
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -43,7 +40,7 @@ public class AmpContactSearchModel extends
 	@Override
 	protected List<AmpContact> load() {
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = AmpActivityModel.getHibernateSession();
 			Criteria crit = session.createCriteria(AmpContact.class);
 			crit.setCacheable(true);
 			if (input.trim().length() > 0) {
@@ -68,8 +65,6 @@ public class AmpContactSearchModel extends
 			newContact.setLastname("Change Lastname");
 			ret.add(newContact);
 			return ret;
-		} catch (DgException ex) {
-			throw new RuntimeException(ex);
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
 		}

@@ -1,1 +1,0 @@
-delete from amp_team_reports  where report not in (select amp_report_id from amp_reports);

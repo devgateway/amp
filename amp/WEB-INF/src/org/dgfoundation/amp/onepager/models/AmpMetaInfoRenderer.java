@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.models;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 
 /**
  * Renderer for {@link MetaInfo} objects. Shows the
@@ -34,7 +35,7 @@ public class AmpMetaInfoRenderer<T extends Comparable<? super T>> implements
 	 */
 	@Override
 	public Object getDisplayValue(MetaInfo<T> object) {
-		return object.getCategory();
+		return TranslatorUtil.getTranslatedText(object.getCategory());
 	}
 
 	/**

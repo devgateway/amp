@@ -12,6 +12,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -56,7 +57,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		super(id, ampTreeVisibilityBeanModel, fmName, hideLabel);
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();
 
-		fieldPermissionsTabs.add(new AbstractTab(new Model(getTranslation("Add Field Permission"))){
+		fieldPermissionsTabs.add(new AbstractTab(new Model(TranslatorUtil.getTranslation("Add Field Permission"))){
 		      public Panel getPanel(String panelId)
 		      {
 		    	AmpPMAddFieldPermissionPanel newGlobalPerm = null;

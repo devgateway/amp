@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -37,7 +38,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		// TODO Auto-generated constructor stub
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
 
-		globalPermissionsTabs.add(new AbstractTab(new Model(getTranslation("Add Global Permission"))){
+		globalPermissionsTabs.add(new AbstractTab(new Model(TranslatorUtil.getTranslation("Add Global Permission"))){
 		      public Panel getPanel(String panelId)
 		      {
 		    	  AmpPMAddGlobalPermissionPanel newGlobalPerm = null;

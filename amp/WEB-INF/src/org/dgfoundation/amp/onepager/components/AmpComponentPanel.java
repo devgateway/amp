@@ -267,21 +267,4 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		super.onBeforeRender();
 	}
-	
-	public String getTranslation(String strTrn){
-		String genKey = TranslatorWorker.generateTrnKey(strTrn);
-		String translatedValue=strTrn;
-		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-		Site site = session.getSite();
-		try {
-			translatedValue = TranslatorWorker.getInstance(genKey).
-									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null);
-		} catch (WorkerException e) {
-			logger.error("Can't translate:", e);
-			return strTrn;
-		}
-		return translatedValue;
-	}
-	
 }

@@ -28,7 +28,16 @@ public class AmpCategoryValueLocations implements Identifiable,
 	private String geoCode;
 	private String code;
 	private String iso3;
+	private String fullName;
 	
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	private boolean translateable	= true;
 
 	public String getCode() {

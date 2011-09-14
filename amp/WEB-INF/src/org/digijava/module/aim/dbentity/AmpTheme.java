@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
-import org.digijava.module.aim.util.AmpComboboxDisplayable;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
-public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,  AmpComboboxDisplayable
+public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivityVersion activityId;
@@ -428,7 +428,7 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		}
 
 		@Override
-		public AmpComboboxDisplayable getParent() {
+		public AmpAutoCompleteDisplayable getParent() {
 			return getParentThemeId();
 		}
 

@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -196,7 +197,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 	}
 
 	@Override
-	public List<CHOICE> getChoiceList(String input) {
+	public Collection<CHOICE> getChoiceList(String input) {
 		this.input = input;
 		if (input!=null && input.length()>0 && input.length() < 2)
 			return Collections.emptyList();

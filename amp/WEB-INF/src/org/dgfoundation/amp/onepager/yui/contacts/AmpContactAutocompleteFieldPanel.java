@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.yui.contacts;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
@@ -29,7 +30,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 
 	@Override
 	protected String[][] getChoiceValues(String input) {
-		List<AmpContact> choices = getChoices(input);
+		Collection<AmpContact> choices = getChoices(input);
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (AmpContact choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);

@@ -5,16 +5,15 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
@@ -35,7 +34,7 @@ public class AmpPIOrganisationSearchModel extends
 	private Session session;
 
 	@Override
-	protected List<AmpOrganisation> load() {
+	protected Collection<AmpOrganisation> load() {
 		List<AmpOrganisation> ret = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();

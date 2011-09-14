@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -27,6 +30,8 @@ import org.hibernate.criterion.Restrictions;
 public class AmpLocationSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpCategoryValueLocations> {
 
+	public static final String PARENT_DELIMITER="\\] \\[";
+	
 	public enum PARAM implements AmpAutoCompleteModelParam {
 		LAYER
 	};
@@ -39,7 +44,7 @@ public class AmpLocationSearchModel extends
 	private static final long serialVersionUID = -1967371789152747599L;
 
 	@Override
-	protected List<AmpCategoryValueLocations> load() {
+	protected Collection<AmpCategoryValueLocations> load() {
 		List<AmpCategoryValueLocations> ret = new ArrayList<AmpCategoryValueLocations>();
 		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
 		if (layerModel == null || layerModel.getObject().size() < 1)
@@ -56,9 +61,28 @@ public class AmpLocationSearchModel extends
 			crit.setCacheable(true);
 			Junction junction = Restrictions.conjunction().add(
 					Restrictions.eq("parentCategoryValue", cvLayer));
-			if (input.trim().length() > 0)
-				junction.add(getTextCriterion("name", input));
+			if (input.trim().length() > 0) {
+				if(isExactMatch()) {
+					String[] strings = input.split(PARENT_DELIMITER);
+					
+					if(strings.length>1) {					
+						String locName = strings[strings.length-1].substring(0,strings[strings.length-1].length()-2);
+						junction.add( Restrictions.eq("name",locName));
+						String parentName=null;
+						if(strings.length==2)
+							parentName = strings[0].substring(1);
+						else
+							parentName=strings[strings.length-2];
+						crit.createCriteria("parentLocation").add(Restrictions.eq("name", parentName));
+					} else {
+						junction.add(Restrictions.eq("name", input.substring(1, input.length()-2)));
+					}
+					
+					
+				} else junction.add(getTextCriterion("name", input));
+			}
 			crit.add(junction);
+			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
 			ret = crit.list();

@@ -5,22 +5,20 @@ package org.dgfoundation.amp.permissionmanager.components.features.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
-import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -79,7 +77,7 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 //	}
 
 	@Override
-	protected List<AmpObjectVisibility> load() {
+	protected Collection<AmpObjectVisibility> load() {
 		List<AmpObjectVisibility> ret = null;
 		try {
 			

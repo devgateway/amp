@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -36,7 +36,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 	};
 
 	@Override
-	protected List<AmpTheme> load() {
+	protected Collection<AmpTheme> load() {
 		try {
 			List<AmpTheme> ret = new ArrayList<AmpTheme>();
 			Session session = null;
@@ -57,7 +57,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				List<AmpTheme> themes = new ArrayList<AmpTheme>();
 
 				themes = crit.list();
-				ret = createTreeView(themes);
+				ret.addAll((Collection<? extends AmpTheme>) createTreeView(themes));
 
 				if (isExactMatch())
 					return ret;

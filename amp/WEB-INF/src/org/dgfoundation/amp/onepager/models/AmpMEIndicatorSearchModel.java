@@ -4,22 +4,19 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel.PARAM;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -40,7 +37,7 @@ public class AmpMEIndicatorSearchModel extends
 
 	
 	@Override
-	protected List<AmpIndicator> load() {
+	protected Collection<AmpIndicator> load() {
 		try {
 			List<AmpIndicator> ret = null;
 			session = AmpActivityModel.getHibernateSession();
@@ -52,6 +49,7 @@ public class AmpMEIndicatorSearchModel extends
 				Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
 				crit.add(junction);
 			}
+			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
 			ret = crit.list();

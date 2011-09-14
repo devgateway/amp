@@ -44,8 +44,8 @@ public class AmpOrganisationSearchModel extends
 				crit.add(
 						Restrictions.disjunction()
 								.add(getTextCriterion("name", input))
-								.add(getTextCriterion("acronym", input)))
-						.addOrder(Order.asc("name"));
+								.add(getTextCriterion("acronym", input)));
+			crit.addOrder(Order.asc("name"));
 
 			if (params != null) {
 				Integer maxResults = (Integer) getParams().get(

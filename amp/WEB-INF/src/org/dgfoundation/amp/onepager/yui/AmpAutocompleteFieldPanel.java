@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.yui;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -323,7 +323,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * @return the array with values
 	 */
 	protected String[][] getChoiceValues(String input) {
-		List<CHOICE> choices = getChoices(input);
+		Collection<CHOICE> choices = getChoices(input);
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
@@ -345,7 +345,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * @param input
 	 * @return
 	 */
-	protected List<CHOICE> getChoices(String input) {
+	protected Collection<CHOICE> getChoices(String input) {
 		if (input != null && input.length() > 0 && input.length() < 2)
 			return Collections.emptyList();
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
@@ -381,11 +381,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
 					.newInstance(input, modelParams);
 			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
-			List<CHOICE> choices = newInstance.getObject();
+			Collection<CHOICE> choices = newInstance.getObject();
 			
 			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
 			
-			return choices.get(0);
+			return choices.iterator().next();
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchMethodException e) {

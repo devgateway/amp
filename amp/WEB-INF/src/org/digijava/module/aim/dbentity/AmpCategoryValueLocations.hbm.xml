@@ -10,6 +10,7 @@
 		</id>
 
 		<property name="name" column="location_name" type="java.lang.String" />
+		
 		<many-to-one name="parentCategoryValue" column="parent_category_value"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
 		<many-to-one name="parentLocation" column="parent_location"

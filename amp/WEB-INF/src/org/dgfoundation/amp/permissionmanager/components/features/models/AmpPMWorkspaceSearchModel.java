@@ -4,20 +4,16 @@
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
-import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -44,7 +40,7 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 	 */
 
 	@Override
-	protected List<AmpTeam> load() {
+	protected Collection<AmpTeam> load() {
 		List<AmpTeam> ret = null;
 		try {
 			

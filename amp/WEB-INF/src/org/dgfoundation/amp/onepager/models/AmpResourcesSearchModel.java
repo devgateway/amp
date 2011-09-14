@@ -5,9 +5,12 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
 import javax.jcr.Node;
+
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -28,7 +31,7 @@ public class AmpResourcesSearchModel extends
 	private static final long serialVersionUID = 8211300754918658832L;
 	
 	@Override
-	protected ArrayList<NodeWrapper> load() {
+	protected Collection<NodeWrapper> load() {
 		ArrayList<NodeWrapper> ret = new ArrayList<NodeWrapper>();
 		try {
 			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();

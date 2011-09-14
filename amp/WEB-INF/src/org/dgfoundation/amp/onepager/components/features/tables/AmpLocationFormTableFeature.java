@@ -160,7 +160,7 @@ public class AmpLocationFormTableFeature extends
 		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
 			@Override
 			protected String getChoiceValue(AmpCategoryValueLocations choice) {
-				return choice.getName();
+				return getFormattedLocationName(choice);
 			}
 
 			@Override

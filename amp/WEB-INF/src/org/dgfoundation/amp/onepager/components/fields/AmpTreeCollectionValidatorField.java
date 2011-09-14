@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.validators.AmpTreeCollectionValidator;
-import org.digijava.module.aim.util.AmpComboboxDisplayable;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 
 /**
  * @author mihai
@@ -40,12 +40,12 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 			AbstractReadOnlyModel<String> model=new AbstractReadOnlyModel<String>() {
 			@Override
 			public String getObject() {
-				Set<AmpComboboxDisplayable> quickItems=new TreeSet<AmpComboboxDisplayable>();
+				Set<AmpAutoCompleteDisplayable> quickItems=new TreeSet<AmpAutoCompleteDisplayable>();
 				for (T t : collectionModel.getObject()) quickItems.add(getItem(t));
 				
 				Set<String> ret=new TreeSet<String>();
 				for (T t : collectionModel.getObject()) {
-					AmpComboboxDisplayable node=getItem(t).getParent();
+					AmpAutoCompleteDisplayable node=getItem(t).getParent();
 					while(node!=null) {
 						if(quickItems.contains(node)) ret.add(getItem(t)+"("+node+")");
 						node=node.getParent();
@@ -60,6 +60,6 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 		return model;
 	}
 
-	public abstract AmpComboboxDisplayable getItem(T t);
+	public abstract AmpAutoCompleteDisplayable getItem(T t);
 	
 }

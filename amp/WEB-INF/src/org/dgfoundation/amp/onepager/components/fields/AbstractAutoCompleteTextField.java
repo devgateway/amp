@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public abstract class AbstractAutoCompleteTextField<CHOICE> extends TextField {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractAutoCompleteTextField.class);
 	private static final long serialVersionUID = 1L;
 	protected AutoCompleteChoiceBehavior autoCompleteBehavior;
-	private transient List<CHOICE> choiceList;
+	private transient Collection<CHOICE> choiceList;
 
 	/**
 	 * Constructor
@@ -280,7 +281,7 @@ public abstract class AbstractAutoCompleteTextField<CHOICE> extends TextField {
 	 *            current input text
 	 * @return iterator over all possible choice objects
 	 */
-	protected abstract List<CHOICE> getChoiceList(final String searchTextInput);
+	protected abstract Collection<CHOICE> getChoiceList(final String searchTextInput);
 
 	/**
 	 * Gets the string value from the specified choice

@@ -30,7 +30,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.util.AmpComboboxDisplayable;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -98,7 +98,7 @@ public class AmpSectorsFormTableFeature extends
 		final AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
 				"treeSectorsValidator", listModel, "treeSectorsValidator") {
 					@Override
-					public AmpComboboxDisplayable getItem(AmpActivitySector t) {
+					public AmpAutoCompleteDisplayable getItem(AmpActivitySector t) {
 						return t.getSectorId();
 					}			
 		};

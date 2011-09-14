@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,6 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -40,8 +40,8 @@ public class AmpSectorSearchModel extends
 	private Session session;
 
 	@Override
-	protected List<AmpSector> load() {
-		List<AmpSector> ret = null;
+	protected Collection<AmpSector> load() {
+		Collection<AmpSector> ret = null;
 		try {
 			ret = new ArrayList<AmpSector>();
 			session = PersistenceManager.getRequestDBSession();
@@ -60,7 +60,7 @@ public class AmpSectorSearchModel extends
 				crit.setMaxResults(maxResults);
 			List<AmpSector> list = crit.list();
 
-			ret = createTreeView(list);
+			ret = (Collection<AmpSector>) createTreeView(list);
 
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);

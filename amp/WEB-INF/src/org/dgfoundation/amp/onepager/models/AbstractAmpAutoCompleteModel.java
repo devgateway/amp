@@ -4,17 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.util.AmpComboboxDisplayable;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -23,7 +21,7 @@ import org.hibernate.criterion.Restrictions;
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
  */
 public abstract class AbstractAmpAutoCompleteModel<T> extends
-		LoadableDetachableModel<java.util.List<T>> {
+		LoadableDetachableModel<java.util.Collection<T>> {
 
 	private static final Integer MAX_RESULTS_VALUE = 0;
 
@@ -113,7 +111,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 *            if this current sector is a search hit (if it has been found
 	 *            externally by mysql or its through recursive call
 	 */
-	protected void addToRootTree(Collection tree, AmpComboboxDisplayable obj,
+	protected void addToRootTree(Collection<AmpAutoCompleteDisplayable> tree, AmpAutoCompleteDisplayable obj,
 			boolean searchHit) {
 		if (obj.getParent() == null)
 			tree.add(obj);
@@ -135,10 +133,10 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 * @param obj
 	 *            the sector to be added to the output list
 	 */
-	protected void addToRootList(List list, AmpComboboxDisplayable obj) {
+	protected void addToRootList(Collection<AmpAutoCompleteDisplayable> list, AmpAutoCompleteDisplayable obj) {
 		list.add(obj);
-		Collection<AmpComboboxDisplayable> children = obj.getVisibleSiblings();
-		for (AmpComboboxDisplayable ampSector : children) {
+		Collection<? extends AmpAutoCompleteDisplayable> children = obj.getVisibleSiblings();
+		for (AmpAutoCompleteDisplayable ampSector : children) {
 			addToRootList(list, ampSector);
 		}
 	}
@@ -153,16 +151,17 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 *         diplayed by the combobox if {@link PARAM.EXACT_MATCH} is true, do
 	 *         not process further
 	 */
-	protected List createTreeView(List l) {
+	protected Collection<? extends AmpAutoCompleteDisplayable> createTreeView(Collection l) {
 		Boolean b = (Boolean) params.get(PARAM.EXACT_MATCH);
 		if (b != null && b)
 			return l;
-		List ret = new ArrayList();
-		Set<Object> root = new TreeSet();
+		Collection<AmpAutoCompleteDisplayable> ret = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
+		
+		Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>();
 		for (Object o : l)
-			addToRootTree(root, (AmpComboboxDisplayable) o, true);
+			addToRootTree(root, (AmpAutoCompleteDisplayable) o, true);
 		for (Object o : root)
-			addToRootList(ret, (AmpComboboxDisplayable) o);
+			addToRootList(ret, (AmpAutoCompleteDisplayable) o);
 
 		return ret;
 	}

@@ -4,8 +4,12 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -38,7 +42,7 @@ public class AmpContactSearchModel extends
 	 * @see org.apache.wicket.model.LoadableDetachableModel#load()
 	 */
 	@Override
-	protected List<AmpContact> load() {
+	protected Collection<AmpContact> load() {
 		try {
 			session = AmpActivityModel.getHibernateSession();
 			Criteria crit = session.createCriteria(AmpContact.class);
@@ -46,10 +50,9 @@ public class AmpContactSearchModel extends
 			if (input.trim().length() > 0) {
 				crit.add(
 						Restrictions.disjunction().add(
-								getTextCriterion("fullname", input))).addOrder(
-						Order.asc("name"));
+								getTextCriterion("fullname", input)));
 			}
-
+			crit.addOrder(Order.asc("name"));
 			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
 			if (maxResults != null && maxResults.intValue() != 0) {
 				crit.setMaxResults(maxResults);

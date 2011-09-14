@@ -79,7 +79,7 @@
 				column="organization" lazy="false"/>
 		</set>
 
-		<set name="disbursements" cascade="all-delete-orphan" inverse="true">
+		<set name="disbursements" cascade="all-delete-orphan" inverse="false">
 			<cache usage="read-write" />
 			<key column="ipa_contract_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContractDisbursement" />

@@ -77,10 +77,16 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		AmpActivityContact aac = (AmpActivityContact)o;
 		int result=this.getContact().compareTo(aac.getContact());
 		if(result==0){
-			result=this.activity.compareTo(aac.getActivity());
+			if ((this.activity != null || aac.getActivity() != null) && (this.activity == null || aac.getActivity() == null))
+				return -1;
+			if (this.activity != null && this.activity != null)
+				result=this.activity.compareTo(aac.getActivity());
 		}
 		if(result==0){
-			result=this.contactType.compareTo(aac.getContactType());
+			if ((this.contactType != null || aac.getContactType() != null) || (this.contactType == null || this.getContactType() == null))
+				return -1;
+			if (this.contactType != null && this.getContactType() != null)
+				result=this.contactType.compareTo(aac.getContactType());
 		}
 		return result;
 	}

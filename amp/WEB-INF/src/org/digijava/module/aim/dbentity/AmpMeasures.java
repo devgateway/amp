@@ -5,7 +5,8 @@ import java.util.Set;
 
 import org.digijava.module.aim.annotations.reports.Identificator;
 
-
+//seems that it's no longer used
+@Deprecated
 public class AmpMeasures  implements Serializable, Comparable
 {
 	@Identificator

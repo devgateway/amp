@@ -223,13 +223,13 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     	r.setDataIntervalStart(dataIntervalStart);
     	r.setDataIntervalEnd(dataIntervalEnd);
     	r.setValueType(valueType);
-    	r.setLogFrame(logFrame);
-    	r.setRisk(risk);
+    	//r.setLogFrame(logFrame);
+    	//r.setRisk(risk);
+    	//r.setIndicatorConnection(indicatorConnection);
     	r.setDefaultInd(defaultInd);
-    	r.setIndicatorConnection(indicatorConnection);
-    	r.setLocation(location);
-    	r.setIndicatorSource(indicatorSource);
-    	r.setSubgroup(subgroup);
+    	//r.setLocation(location);
+    	//r.setIndicatorSource(indicatorSource);
+    	//r.setSubgroup(subgroup);
     }
 
 }

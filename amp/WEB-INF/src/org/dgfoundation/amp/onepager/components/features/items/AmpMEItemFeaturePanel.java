@@ -106,6 +106,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 				break;
 			case AmpIndicatorValue.TARGET:
 				val.copyValuesTo(targetVal);
+				logFrameModel.setObject(val.getLogFrame());
+				riskModel.setObject(val.getRisk());
 				valuesSet.setObject(true);
 				break;
 			case AmpIndicatorValue.REVISED:
@@ -126,8 +128,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", new PropertyModel(targetVal, "value"), new PropertyModel(targetVal, "valueDate"), new PropertyModel(targetVal, "comment"), "Target Value", "Target");
 		if (valuesSet.getObject()){
 			target.setEnabled(false);
-			logFrameModel.setObject(targetVal.getLogFrame());
-			riskModel.setObject(targetVal.getRisk());
 		}
 		else
 			target.setEnabled(true);

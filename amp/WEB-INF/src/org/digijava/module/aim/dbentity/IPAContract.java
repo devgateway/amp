@@ -800,4 +800,9 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
+	
+	@Override
+	public String toString() {
+		return (contractName == null ? "" : contractName);
+	}
 }

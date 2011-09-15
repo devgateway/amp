@@ -104,13 +104,24 @@
 					}
 				} catch (errObject:Error) {
 					for(i = 0; i < service.lastResult.year.length; i++){
-						for(j = 0; j < service.lastResult.year[i][dataField].length; j++){
-							currentValue = service.lastResult.year[i][dataField][j].amount;
+						if(service.lastResult.year[i][dataField].hasOwnProperty("length")) {
+							for(j = 0; j < service.lastResult.year[i][dataField].length; j++){
+								currentValue = service.lastResult.year[i][dataField][j].amount;
+								//Just add the categories in the last iteration
+								if(i == service.lastResult.year.length-1)
+									categoriesLocal.addItem(service.lastResult.year[i][dataField][j]);
+								if (maxValue < currentValue) maxValue = currentValue;
+							}
+						}
+						else
+						{
+							currentValue = service.lastResult.year[i][dataField].amount;
 							//Just add the categories in the last iteration
 							if(i == service.lastResult.year.length-1)
-								categoriesLocal.addItem(service.lastResult.year[i][dataField][j]);
+								categoriesLocal.addItem(service.lastResult.year[i][dataField]);
 							if (maxValue < currentValue) maxValue = currentValue;
 						}
+						
 					}
 				}
 				categories = categoriesLocal;
@@ -231,7 +242,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -271,7 +282,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{

@@ -98,7 +98,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		form.add(webLink);
 		
         // create the ajax button used to submit the form
-        form.add(new AjaxButton("ajaxSubmit")
+		AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true)
         {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form)
@@ -106,6 +106,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             	target.addComponent(form);
             	target.addComponent(resourcesList);
             }
-        });
+        };
+        form.add(submit);
 	}
 }

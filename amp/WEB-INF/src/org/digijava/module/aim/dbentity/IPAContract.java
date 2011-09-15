@@ -579,7 +579,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		if (this.totalAmount != null) {
 			out.getOutputs().add(
 					new Output(null, new String[] { "<br />", "Total Amount:&nbsp;" }, new Object[] { this.totalAmount,
-							" - ", this.totalAmountCurrency.getCurrencyCode() }));
+							" - ", (this.totalAmountCurrency != null ? this.totalAmountCurrency.getCurrencyCode() : "")}));
 		}
 		if (this.contractTotalValue != null) {
 			out.getOutputs().add(

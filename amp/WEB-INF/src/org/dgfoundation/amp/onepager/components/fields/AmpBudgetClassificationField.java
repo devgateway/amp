@@ -134,8 +134,10 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 	}
 	
 	public void addToTargetActivityBudget(AjaxRequestTarget target){
-		target.addComponent(budgetDepartment.getParent());
-		//same parent, but just in case someone will change the code and split the components
-		target.addComponent(budgetProgram.getParent());
+		if (budgetDepartment.getParent().getParent().isVisible()){
+			target.addComponent(budgetDepartment.getParent());
+			//same parent, but just in case someone will change the code and split the components
+			target.addComponent(budgetProgram.getParent());
+		}
 	}
 }

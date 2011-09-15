@@ -64,9 +64,7 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 					toggleExtraFields(true);
 				else
 					toggleExtraFields(false);
-				
-				if (previousValue != budgetExtras.isVisible()) //need to redraw it
-					updateExtraFields(target);
+				updateExtraFields(target);
 			}
 		});
 		

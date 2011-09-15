@@ -18,6 +18,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author aartimon@dginternational.org since Oct 22, 2010
@@ -43,11 +44,19 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 			try {
 				session = PersistenceManager.getRequestDBSession();
 
+				String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
+				AmpActivityProgramSettings aaps = ProgramUtil
+						.getAmpActivityProgramSettings(pType);
+				AmpTheme def = aaps.getDefaultHierarchy();
+				
 				Criteria crit = session.createCriteria(AmpTheme.class);
 				crit.setCacheable(true);
 
 				if (input.trim().length() > 0)
 					crit.add(getTextCriterion("name", input));
+				
+				if(!isExactMatch())
+					crit.add(Restrictions.eq("parentThemeId",def));
 
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
@@ -62,10 +71,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				if (isExactMatch())
 					return ret;
 
-				String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
-				AmpActivityProgramSettings aaps = ProgramUtil
-						.getAmpActivityProgramSettings(pType);
-				AmpTheme def = aaps.getDefaultHierarchy();
+				
 				if (def != null) {
 					AmpTheme defUsed = new AmpTheme();
 					defUsed.setName(def.getName());

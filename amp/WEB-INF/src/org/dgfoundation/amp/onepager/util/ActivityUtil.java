@@ -192,8 +192,11 @@ public class ActivityUtil {
 			}
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);
-			a.setCreatedDate(Calendar.getInstance().getTime());
-			a.setModifiedDate(Calendar.getInstance().getTime());
+			Date updatedDate = Calendar.getInstance().getTime();
+			if (a.getCreatedDate() == null)
+				a.setCreatedDate(updatedDate);
+			a.setUpdatedDate(updatedDate);
+			a.setModifiedDate(updatedDate);
 			a.setModifiedBy(ampCurrentMember);
 			a.setTeam(ampCurrentMember.getAmpTeam());
 			

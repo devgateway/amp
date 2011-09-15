@@ -1408,7 +1408,7 @@ function toggleSettings(){
 
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
-		<li><a href="#tab1"><div><digi:trn>Visualization</digi:trn></div></a></li>
+		<li><a href="#tab1"><div id="visualizationDiv"><digi:trn>Visualization</digi:trn></div></a></li>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
@@ -2719,6 +2719,7 @@ YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChil
 YAHOO.util.Event.onAvailable("sector_config_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
+YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
 YAHOO.util.Event.onDOMReady(initDashboard);
 window.onload=initPanel;
 var initialized = false;

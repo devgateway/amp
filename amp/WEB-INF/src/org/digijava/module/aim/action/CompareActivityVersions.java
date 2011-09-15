@@ -52,6 +52,8 @@ public class CompareActivityVersions extends DispatchAction {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
 		Session session = PersistenceManager.getRequestDBSession();
+		
+		setAdvancemode(vForm, request);
 
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
@@ -408,28 +410,7 @@ public class CompareActivityVersions extends DispatchAction {
 		ActionErrors errors = new ActionErrors();
 		boolean hasErrors = false;
 		
-		boolean ispartofamanagetmentworkspace = false;
-		boolean iscurrentworkspacemanager = false;
-		Long currentworkspaceid = (Long) request.getSession().getAttribute("TID");
-		
-		ArrayList userworkspaces = new ArrayList();
-		userworkspaces = (ArrayList) request.getSession().getAttribute(Constants.USER_WORKSPACES);
-		for (Iterator iterator = userworkspaces.iterator(); iterator.hasNext();) {
-			AmpTeamMember teammember = (AmpTeamMember) iterator.next();
-			if(teammember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)){
-				ispartofamanagetmentworkspace = true;
-			}
-			if (teammember.getAmpTeam().getIdentifier() == currentworkspaceid){
-				if (teammember.getAmpMemberRole().getTeamHead()){
-					iscurrentworkspacemanager = true;
-				}
-			}
-		}
-		
-		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
-		vForm.setAdvancemode((!ispartofamanagetmentworkspace & iscurrentworkspacemanager));
-		
-		
+		setAdvancemode(vForm, request);
 		
 		List<CompareOutput> auxData = new ArrayList<CompareOutput>();
 		for (int i = 0; i < vForm.getMergedValues().length; i++) {
@@ -585,5 +566,27 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 		}
 		return aux;
+	}
+	
+	private void setAdvancemode(CompareActivityVersionsForm vForm, HttpServletRequest request){
+		boolean ispartofamanagetmentworkspace = false;
+		boolean iscurrentworkspacemanager = false;
+		Long currentworkspaceid = (Long) request.getSession().getAttribute("TID");
+		
+		ArrayList userworkspaces = new ArrayList();
+		userworkspaces = (ArrayList) request.getSession().getAttribute(Constants.USER_WORKSPACES);
+		for (Iterator iterator = userworkspaces.iterator(); iterator.hasNext();) {
+			AmpTeamMember teammember = (AmpTeamMember) iterator.next();
+			if (teammember.getAmpTeam().getIdentifier() == currentworkspaceid){
+				if(teammember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)){
+					ispartofamanagetmentworkspace = true;
+				}
+				if (teammember.getAmpMemberRole().getTeamHead()){
+					iscurrentworkspacemanager = true;
+				}
+			}
+		}
+		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
+		vForm.setAdvancemode((!ispartofamanagetmentworkspace & iscurrentworkspacemanager));
 	}
 }

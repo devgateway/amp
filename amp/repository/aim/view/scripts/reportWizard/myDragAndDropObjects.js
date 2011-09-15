@@ -105,7 +105,9 @@
 		MyDragAndDropObject.prototype.checkDestination			= function (destObj) {
 			var tempObj			= destObj;
 
-			while ( tempObj != null && (tempObj.nodeName.toLowerCase()!="ul" || tempObj.nodeName.toLowerCase()=="ol") ) {
+			while ( tempObj != null && (tempObj.nodeName.toLowerCase()!="ul" && tempObj.nodeName.toLowerCase()!="ol" ) ) {
+				if ( tempObj.nodeName.toLowerCase()!="div" && tempObj.id == this.containerId)
+					break;
 				tempObj		= tempObj.parentNode;
 			}
 			if (tempObj == null || (tempObj.id != this.destContainerId && tempObj.id != this.containerId ) )

@@ -522,6 +522,11 @@ public class DbUtil {
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         Long[] sectorIds = filter.getSelSectorIds();
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+
+        //Sectors should include all the subsectors
+        if(sectorCondition){
+        	sectorIds = getAllDescendants(sectorIds);
+        }
         /*
          * We are selecting sectors which are funded
          * In selected year by the selected organization
@@ -598,7 +603,32 @@ public class DbUtil {
 
      }
     
-    public static List<AmpOrganisation> getDonors(DashboardFilter filter) throws DgException {
+    public static Long[] getAllDescendants(Long[] sectorIds) {
+        // Make it recursive carefully
+    	List<Long> tempSectorIds = new ArrayList<Long>();
+        List<AmpSector> sectors = new ArrayList<AmpSector>();
+    	for(Long sectorId : sectorIds){
+            sectors.add(getAmpSector(sectorId));
+            List<AmpSector> childrenSectors = getAmpSubSectors(sectorId);
+            if(childrenSectors!=null){
+                sectors.addAll(childrenSectors);
+                 for (AmpSector sector : childrenSectors) {
+                    List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
+                    if( grandChildren!=null){
+                         sectors.addAll(grandChildren);
+                    }
+                }
+            }
+    	}
+        Iterator<AmpSector> it = sectors.iterator();
+        while(it.hasNext()){
+        	AmpSector currentSector = it.next();
+        	tempSectorIds.add(currentSector.getAmpSectorId());
+        }
+		return (Long[]) tempSectorIds.toArray(new Long[0]);
+	}
+
+	public static List<AmpOrganisation> getDonors(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
         Long[] orgIds= filter.getOrgIds();
@@ -777,6 +807,7 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
+        	sectorIds = getAllDescendants(sectorIds);
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -1185,4 +1216,68 @@ public class DbUtil {
         }
 
     }
+	public static AmpSector getAmpSector(Long id) {
+
+		Session session = null;
+		Query qry = null;
+		Iterator itr = null;
+		AmpSector ampSector = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpSector.class.getName()
+					+ " s where (s.ampSectorId=:ampSectorId)";
+
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampSectorId", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				ampSector = (AmpSector) itr.next();
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get amp_sector info");
+			logger.debug("Exceptiion " + ex);
+		}
+//session.flush();
+		return ampSector;
+
+	}
+	public static ArrayList getAmpSubSectors(Long ampSectorId) {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList subsector = new ArrayList();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from "
+					+ AmpSector.class.getName()
+					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId";
+			q = session.createQuery(queryString);
+			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+
+				ampSector = (AmpSector) iter.next();
+				subsector.add(ampSector);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sub sectors  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return subsector;
+	}
 }

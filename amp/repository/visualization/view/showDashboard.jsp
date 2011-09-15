@@ -1842,16 +1842,16 @@ var callbackChildrenCall = {
 			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
 			    		subSectorDropdown.options.length = 0;
 			    		subSectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
-			    		for(var i = 1; i < results.children.length; i++){
-			    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    		for(var i = 0; i < results.children.length; i++){
+			    			subSectorDropdown.options[subSectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
 			    	case "Region":
 			    		var zonesDropdown = document.getElementById("zone_dropdown_id");
 			    		zonesDropdown.options.length = 0;
 			    		zonesDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
-			    		for(var i = 1; i < results.children.length; i++){
-			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    		for(var i = 0; i < results.children.length; i++){
+			    			zonesDropdown.options[zonesDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
 			    	  case "Config":
@@ -1861,8 +1861,8 @@ var callbackChildrenCall = {
 				    		sectorDropdown.options.length = 0;
 				    		subSectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
 				    		sectorDropdown.options[0] = new Option("<digi:trn>All</digi:trn>", -1);
-				    		for(var i = 1; i < results.children.length; i++){
-				    			sectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+				    		for(var i = 0; i < results.children.length; i++){
+				    			sectorDropdown.options[sectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 				    		}
 				    		break;
 			    	

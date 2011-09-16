@@ -44,10 +44,10 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
-				fd.setTransactionAmount(0d);
-				fd.setReportingDate(new Date(System.currentTimeMillis()));
-				fd.setAdjustmentType(Constants.ACTUAL);
-				fd.setTransactionDate(new Date(System.currentTimeMillis()));
+//				fd.setTransactionAmount(0d);
+//				fd.setReportingDate(new Date(System.currentTimeMillis()));
+				//fd.setAdjustmentType(Constants.ACTUAL);
+//				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionType(Constants.COMMITMENT);
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));

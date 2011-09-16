@@ -49,9 +49,9 @@ public class AmpRegionalTransactionsSubsectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpRegionalFunding fd = new AmpRegionalFunding();
-				fd.setTransactionAmount(0d);
+				//fd.setTransactionAmount(0d);
 				fd.setAdjustmentType(Constants.ACTUAL);
-				fd.setTransactionDate(new Date(System.currentTimeMillis()));
+				//fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(transactionType);
 				fd.setRegionLocation(cvLocationModel.getObject());
 				fd.setActivity(am.getObject());

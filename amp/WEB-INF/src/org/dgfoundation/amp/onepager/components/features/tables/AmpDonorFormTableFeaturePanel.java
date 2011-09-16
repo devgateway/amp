@@ -56,12 +56,14 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 
 	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model) {
-		return new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
+		AmpGroupFieldPanel<MetaInfo<Integer>> groupFieldPanel = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
 				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
 						"adjustmentType"), OnePagerConst.adjustmentTypes),
 				Arrays.asList(OnePagerConst.adjustmentTypes),
 				"Adjustment Type", true, false,
 				new AmpMetaInfoRenderer<Integer>());
+		groupFieldPanel.getChoiceContainer().setRequired(true);
+		return groupFieldPanel;
 	}
 
 	protected AmpFundingAmountComponent getFundingAmountComponent(

@@ -9,9 +9,13 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
+import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
 
 /**
@@ -21,6 +25,10 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 
 	private static final long serialVersionUID = 8689694759950444529L;
 	protected AbstractChoice<?, T> choiceContainer;
+
+	public AbstractChoice<?, T> getChoiceContainer() {
+		return choiceContainer;
+	}
 
 	/**
 	 * Construct a group field panel for a {@link RadioChoice} (so just single select)
@@ -37,9 +45,18 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer) {
 		super(id, fmName, hideLabel);
 		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
-		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
+		//((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
-		add(choiceContainer);
+		addFormComponent(choiceContainer);
+	}
+	
+	@Override
+	protected void initFormComponent(FormComponent<?> fc) {
+		formComponent = fc;
+		feedbackLabel.setComponent(fc);
+		fc.setLabel(new Model<String>(fmName));
+		final ChoiceComponentVisualErrorBehavior cvb = new ChoiceComponentVisualErrorBehavior( feedbackContainer);
+		fc.add(cvb);
 	}
 
 	/**
@@ -62,10 +79,10 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 		else {
 			choiceContainer = new RadioChoice<T>("choice",
 					new AmpMultiValueDropDownChoiceModel<T>(model), choicesList,renderer);
-			((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
+			//((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		}
 		choiceContainer.setOutputMarkupId(true);
-		add(choiceContainer);
+		addFormComponent(choiceContainer);
 	}
 
 	/**

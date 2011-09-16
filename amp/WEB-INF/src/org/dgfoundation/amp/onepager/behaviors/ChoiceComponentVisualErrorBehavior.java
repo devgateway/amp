@@ -1,25 +1,20 @@
+/**
+ * 
+ */
 package org.dgfoundation.amp.onepager.behaviors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 
 /**
- * Behavior that checks if a {@link FormComponent} is valid. Valid {@link FormComponent} objects get the CSS class
- * 'formcomponent valid' and invalid {@link FormComponent} objects get the CSS class 'formcomponent invalid'.
+ * @author mihai
  *
- * See {@link AjaxFormComponentUpdatingBehavior} for more details over the parent class.
- *
- * You can use this code under Apache 2.0 license, as long as you retain the copyright messages.
- *
- * Tested with Wicket 1.3.4, Wicket 1.4.13
- * @author Daan, StuQ.nl
- * @author mpostelnicu@dgateway.org
  */
-public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehavior implements AmpComponentVisualErrorInterface {
+public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentUpdatingBehavior implements AmpComponentVisualErrorInterface {
 
 	
 	private String previousClass;
@@ -37,8 +32,8 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      * @param updateComponent is the {@link Component} that must be updated (for example the {@link FeedbackLabel}
      *        containing the error message for this {@link FormComponent})  
      */
-    public ComponentVisualErrorBehavior(String event, Component updateComponent) {
-        super(event);
+    public ChoiceComponentVisualErrorBehavior(Component updateComponent) {
+        super();
         this.updateComponent=updateComponent;
     }
 
@@ -53,7 +48,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     public void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(true);
-        OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS);
+    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS);
     }
 
   
@@ -70,7 +65,6 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     		updateComponent.setVisible(false);
     	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, true, previousClass);
     }
-
 
 	@Override
 	public String getPreviousClass() {
@@ -92,4 +86,5 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
 	public FormComponent<?> getRelatedFormComponent() {
 		return getFormComponent();
 	}
+
 }

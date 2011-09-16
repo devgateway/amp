@@ -47,10 +47,10 @@ public class AmpDonorExpendituresSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
-				fd.setTransactionAmount(0d);
+				//fd.setTransactionAmount(0d);
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
 				fd.setAdjustmentType(Constants.ACTUAL);
-				fd.setTransactionDate(new Date(System.currentTimeMillis()));
+				///fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.EXPENDITURE);
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				model.getObject().getFundingDetails().add(fd);

@@ -103,9 +103,10 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 
 									} else {
 										target.focusComponent(component);
-										String js = String.format(
-												"$('#%s').change();",
-												component.getMarkupId());
+										String js = null;
+										if(component.getParent() instanceof AmpGroupFieldPanel<?>) 
+												js=String.format("$('#%s').trigger('update');",component.getMarkupId());
+										else js=String.format("$('#%s').change();",component.getMarkupId());
 										target.appendJavascript(js);
 										target.addComponent(component);
 									}

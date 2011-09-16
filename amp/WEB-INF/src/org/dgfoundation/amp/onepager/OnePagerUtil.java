@@ -12,16 +12,20 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.SetModel;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.dgfoundation.amp.onepager.behaviors.AmpComponentVisualErrorInterface;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
@@ -153,4 +157,35 @@ public final class OnePagerUtil {
 			}
 		}
 	}
+	
+	 /**
+     * Changes the CSS class of the linked {@link FormComponent} via AJAX.
+     *
+     * @param ajaxRequestTarget of type AjaxRequestTarget
+     * @param valid Was the validation successful?
+     * @param cssClass The CSS class that must be set on the linked {@link FormComponent}
+     * @param component the component rendering the error
+     */
+	 public static void changeCssClass(final AmpComponentVisualErrorInterface component, AjaxRequestTarget ajaxRequestTarget, boolean valid, String cssClass) {
+	    	if(cssClass==null) return;
+	        FormComponent formComponent = component.getRelatedFormComponent();
+	        if(formComponent.isValid() == valid){
+	        	formComponent.add(
+				new AttributeModifier("class", true, new Model(cssClass)) {
+					@Override
+					protected String newValue(final String currentValue,
+							final String replacementValue) {
+						if(!currentValue.equals(AmpComponentVisualErrorInterface.INVALID_CLASS)) component.setPreviousClass(currentValue);
+						return replacementValue;
+					}
+				});
+	      	
+	            ajaxRequestTarget.addComponent(formComponent);
+	            ajaxRequestTarget.appendJavascript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
+	        }
+
+	        if(component.getUpdateComponent()!=null){
+	            ajaxRequestTarget.addComponent(component.getUpdateComponent().getParent());
+	        }
+	    }
 }

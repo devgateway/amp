@@ -46,8 +46,8 @@ public class AmpMTEFProjectionSubsectionFeature extends
 			protected void onClick(AjaxRequestTarget target) {
 				AmpFundingMTEFProjection projection= new AmpFundingMTEFProjection();
 				projection.setAmpFunding(model.getObject());
-				projection.setAmount(0d);
-				projection.setProjectionDate(new Date(System.currentTimeMillis()));
+				//projection.setAmount(0d);
+//				projection.setProjectionDate(new Date(System.currentTimeMillis()));
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
 				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				model.getObject().getMtefProjections().add(projection);

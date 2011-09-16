@@ -7,14 +7,17 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 
 /**
  * @author mihai
- *
+ * This flavor of {@link AmpComponentVisualErrorInterface} is used to capture the update of {@link RadioChoice}S which act differently than the rest of components.
+ * Thus, we use {@link AjaxFormChoiceComponentUpdatingBehavior} as superclass...
+ * @see ComponentVisualErrorBehavior for all other components but {@link RadioChoice}
  */
-public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentUpdatingBehavior implements AmpComponentVisualErrorInterface {
+public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentEventUpdatingBehavior implements AmpComponentVisualErrorInterface {
 
 	
 	private String previousClass;
@@ -32,8 +35,8 @@ public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentU
      * @param updateComponent is the {@link Component} that must be updated (for example the {@link FeedbackLabel}
      *        containing the error message for this {@link FormComponent})  
      */
-    public ChoiceComponentVisualErrorBehavior(Component updateComponent) {
-        super();
+    public ChoiceComponentVisualErrorBehavior(String event,Component updateComponent) {
+        super(event);
         this.updateComponent=updateComponent;
     }
 
@@ -48,7 +51,7 @@ public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentU
     public void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(true);
-    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS);
+    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS,false);
     }
 
   
@@ -63,7 +66,7 @@ public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentU
     public void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(false);
-    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, true, previousClass);
+    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, true, previousClass,false);
     }
 
 	@Override

@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -45,18 +46,15 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer) {
 		super(id, fmName, hideLabel);
 		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
-		//((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
+		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
 	}
 	
+
 	@Override
-	protected void initFormComponent(FormComponent<?> fc) {
-		formComponent = fc;
-		feedbackLabel.setComponent(fc);
-		fc.setLabel(new Model<String>(fmName));
-		final ChoiceComponentVisualErrorBehavior cvb = new ChoiceComponentVisualErrorBehavior( feedbackContainer);
-		fc.add(cvb);
+	protected AjaxEventBehavior visualErrorBehavior() {
+		return new ChoiceComponentVisualErrorBehavior("onclick",feedbackContainer);
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 		else {
 			choiceContainer = new RadioChoice<T>("choice",
 					new AmpMultiValueDropDownChoiceModel<T>(model), choicesList,renderer);
-			//((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
+			((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		}
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);

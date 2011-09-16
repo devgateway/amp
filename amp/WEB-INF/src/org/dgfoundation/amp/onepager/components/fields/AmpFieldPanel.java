@@ -4,12 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
+import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
@@ -44,20 +47,18 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected void initFormComponent(FormComponent<?> fc) {
 		formComponent = fc;
 		feedbackLabel.setComponent(fc);
-		fc.setLabel(new Model<String>(fmName));
-		final ComponentVisualErrorBehavior cvb = new ComponentVisualErrorBehavior("onchange", feedbackContainer);
-		fc.add(cvb);
-//		fc.add(new AjaxFormComponentValidatorBehaviour() {
-//			@Override
-//			protected void onError(AjaxRequestTarget target, RuntimeException e) {
-//				cvb.onError(target, e);
-//			}
-//			
-//			@Override
-//			protected void onUpdate(AjaxRequestTarget target) {
-//				cvb.onUpdate(target);
-//			}
-//		});
+		fc.setLabel(new Model<String>(fmName));		
+		fc.add(visualErrorBehavior());
+	}
+	
+	/**
+	 * This is a special {@link AjaxEventBehavior} crafted for visual ajax error feedback.
+	 * This can come in several flavors, for example the {@link AbstractChoice}S is using a different kind of event, {@link ChoiceComponentVisualErrorBehavior}
+	 * By default we use {@link ComponentVisualErrorBehavior}
+	 * @return the event behavior to be added to the form component, triggering ajax validation
+	 */
+	protected AjaxEventBehavior visualErrorBehavior() {
+		return new ComponentVisualErrorBehavior("onchange", feedbackContainer);
 	}
 
 	/**

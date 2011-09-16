@@ -17,6 +17,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -165,8 +166,9 @@ public final class OnePagerUtil {
      * @param valid Was the validation successful?
      * @param cssClass The CSS class that must be set on the linked {@link FormComponent}
      * @param component the component rendering the error
+     * @param rectangleHighlight draws a red rectangle around the component - does not work well for {@link RadioChoice} so we use <code>false</code> here for now
      */
-	 public static void changeCssClass(final AmpComponentVisualErrorInterface component, AjaxRequestTarget ajaxRequestTarget, boolean valid, String cssClass) {
+	 public static void changeCssClass(final AmpComponentVisualErrorInterface component, AjaxRequestTarget ajaxRequestTarget, boolean valid, String cssClass, final boolean rectangleHighlight) {
 	    	if(cssClass==null) return;
 	        FormComponent formComponent = component.getRelatedFormComponent();
 	        if(formComponent.isValid() == valid){
@@ -176,7 +178,8 @@ public final class OnePagerUtil {
 					protected String newValue(final String currentValue,
 							final String replacementValue) {
 						if(!currentValue.equals(AmpComponentVisualErrorInterface.INVALID_CLASS)) component.setPreviousClass(currentValue);
-						return replacementValue;
+						if(rectangleHighlight) return replacementValue;
+						return currentValue;
 					}
 				});
 	      	

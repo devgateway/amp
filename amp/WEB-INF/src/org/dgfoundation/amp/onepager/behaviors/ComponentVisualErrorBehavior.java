@@ -30,6 +30,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
 	/** Field updateComponent holds the component that must be updated when validation is done.*/
     private Component updateComponent = null;
 
+
     /**
      * Constructor.
      *
@@ -38,7 +39,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      *        containing the error message for this {@link FormComponent})  
      */
     public ComponentVisualErrorBehavior(String event, Component updateComponent) {
-        super(event);
+        super(event);        
         this.updateComponent=updateComponent;
     }
 
@@ -53,7 +54,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     public void onError(final AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(true);
-        OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS);
+        OnePagerUtil.changeCssClass(this,ajaxRequestTarget, false, INVALID_CLASS,true);
     }
 
   
@@ -68,7 +69,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
     public void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
     	if(updateComponent!=null) 
     		updateComponent.setVisible(false);
-    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, true, previousClass);
+    	OnePagerUtil.changeCssClass(this,ajaxRequestTarget, true, previousClass,true);
     }
 
 

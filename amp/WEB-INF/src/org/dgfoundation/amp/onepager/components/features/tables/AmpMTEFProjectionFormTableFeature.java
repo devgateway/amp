@@ -67,6 +67,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 									item.getModel(), "projected"),
 							CategoryConstants.MTEF_PROJECTION_NAME, true,
 							false, true);
+					projected.getChoiceContainer().setRequired(true);
 					item.add(projected);
 				} catch (Exception e) {
 					throw new RuntimeException(e);

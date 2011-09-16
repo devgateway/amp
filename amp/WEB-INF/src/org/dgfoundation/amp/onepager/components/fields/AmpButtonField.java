@@ -11,9 +11,13 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.HiddenField;
+import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.LabelTranslatorBehaviour;
@@ -92,21 +96,29 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 							@Override
 							public Object component(FormComponent component) {
 								if (!component.isValid()) {
+									
+									//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
+									//like for example a list of sectors with percentages
+									//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
 									if (component instanceof HiddenField) {									
 										 target.appendJavascript("$('#"+ component.getMarkupId() +"').parents().show();");
 										 target.appendJavascript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
 										 target.addComponent(component);
 										 if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-											 ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);
-										
-										//target.addComponent(arg0);
+											 ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
 
 									} else {
 										target.focusComponent(component);
 										String js = null;
-										if(component.getParent() instanceof AmpGroupFieldPanel<?>) 
-												js=String.format("$('#%s').trigger('update');",component.getMarkupId());
-										else js=String.format("$('#%s').change();",component.getMarkupId());
+										
+										//we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
+										//For the rest of the components we use onChange
+										if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
+												|| component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
+											js=String.format("$('#%s').click();",component.getMarkupId());										
+										else 											
+											js=String.format("$('#%s').change();",component.getMarkupId());
+										
 										target.appendJavascript(js);
 										target.addComponent(component);
 									}

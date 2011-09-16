@@ -6,9 +6,13 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Set;
 
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -97,6 +101,11 @@ public class AmpCategoryGroupFieldPanel extends
 		this(id,categoryKey,model,fmName,ordered,nullValid,false);
 	}
 
+	
+	@Override
+	protected AjaxEventBehavior visualErrorBehavior() {
+		return new ChoiceComponentVisualErrorBehavior("onclick",feedbackContainer);
+	}
 
 	
 }

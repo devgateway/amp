@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -55,6 +56,7 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				target.addComponent(mtefTableFeature);
 				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
 				target.addComponent(parent.getFundingInfo());
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(parent.getFundingInfo()));
 			}
 		};
 		add(addMTEF);

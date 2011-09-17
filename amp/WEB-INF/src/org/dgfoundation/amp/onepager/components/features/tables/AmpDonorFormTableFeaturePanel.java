@@ -82,6 +82,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				target.addComponent(AmpDonorFormTableFeaturePanel.this);
 				list.removeAll();
 				target.addComponent(getParentFundingItem().getFundingInfo());
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
 			}
 		};
 	}

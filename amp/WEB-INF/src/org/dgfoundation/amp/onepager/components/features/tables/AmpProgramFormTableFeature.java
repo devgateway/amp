@@ -13,21 +13,24 @@ import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -74,12 +77,39 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			}
 		};
 
+		
+		final AmpPercentageCollectionValidatorField<AmpActivityProgram> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivityProgram>(
+				"programPercentageTotal", listModel, "programPercentageTotal") {
+			@Override
+			public Number getPercentage(AmpActivityProgram item) {
+				return item.getProgramPercentage();
+			}
+		};
+		
+		add(percentageValidationField);
+		
+		
+		final AmpUniqueCollectionValidatorField<AmpActivityProgram> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityProgram>(
+				"uniqueProgramsValidator", listModel, "uniqueProgramsValidator") {
+			@Override
+		 	public Object getIdentifier(AmpActivityProgram t) {
+				return t.getProgram().getName();
+		 	}	
+		};
+		
+		add(uniqueCollectionValidationField);
+		
 		list = new ListView<AmpActivityProgram>("listProgs", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<AmpActivityProgram> item) {
 				final MarkupContainer listParent=this.getParent();
-				item.add(new TextField<String>("percent",new PropertyModel<String>(item.getModel(), "programPercentage")));
+				
+				PropertyModel<Double> percModel = new PropertyModel<Double>(
+						item.getModel(), "programPercentage");
+				AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "programPercentage",percentageValidationField);
+
+				item.add(percentageField);
 				
 				item.add(new Label("name", item.getModelObject().getProgram().getName()));
 				
@@ -90,6 +120,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(listParent);
 						list.removeAll();
+						percentageValidationField.reloadValidationField(target);
+						uniqueCollectionValidationField.reloadValidationField(target);
 					}
 				};
 				item.add(delProgram);
@@ -132,10 +164,17 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				aap.setProgram(choice);
 				aap.setProgramSetting(programSettings.getObject());
 				
+				if(list.size()>0)
+					aap.setProgramPercentage(0f);
+				else 
+					aap.setProgramPercentage(100f); 
+				
 				setModel.getObject().add(aap);
 
 				list.removeAll();
 				target.addComponent(list.getParent());
+				percentageValidationField.reloadValidationField(target);
+				uniqueCollectionValidationField.reloadValidationField(target);
 			}
 
 			@Override

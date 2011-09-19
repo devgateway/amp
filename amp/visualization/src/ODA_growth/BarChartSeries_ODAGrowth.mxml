@@ -110,6 +110,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 				//				categories = categoriesLocal; 
 				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = Math.round(minValue * 1.05);
+				haxis.maxScale = Math.round(maxValue * 1.05);
+				haxis.minScale = Math.round(minValue * 1.05);
+				 
 				dataProvider = service.lastResult.organization;
 				if("length" in service.lastResult.organization) // If it's not empty
 				{
@@ -143,23 +146,46 @@ OTHER DEALINGS IN THE SOFTWARE.
 				//Set the title and the rest of the parameters for legend
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
-				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
 				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
 				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
+				var rotateDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'RotateDataLabel')}"));
+				
+				//Get Global setting for the fonts
+				var globalFontFamily:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontFamily')}"));				
+				var globalFontSize:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontSize')}"));				
+				var globalFontWeight:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontWeight')}"));
+				
+				this.fontFamily = globalFontFamily;
+				this.fontSize = Number(globalFontSize);
+				this.fontWeight = globalFontWeight;
 				
 				chartLabel.text = title;
-				if(fontFamily != "")
-					chartLabel.setStyle("fontFamily", fontFamily);
-				else
-					chartLabel.setStyle("fontFamily", "Verdana");
-				
 				chartLabel.setStyle("fontSize", fontSize);
+				chartLabel.setStyle("fontFamily", globalFontFamily);
 				
 				if(boldTitle == "true")
 					chartLabel.setStyle("fontWeight", "bold");
 				else
 					chartLabel.setStyle("fontWeight", "normal");
-
+				
+				
+				if(showDataLabel == "true")
+					myCluster.showDataLabel = true;
+				else
+					myCluster.showDataLabel = false;
+				
+				/*if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+				
+				if(rotateDataLabel == "true")
+					myCluster.dataLabelRotateAngle = -90;
+				else
+					myCluster.dataLabelRotateAngle = 0;
+				*/
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				dc.visible = true;
@@ -269,7 +295,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 			
 			private function labelFunction(obj:Object):String
 			{
-				return obj.value + " %";
+				if(myCluster.showDataLabel == true)
+					return "<b>" + obj.value + " % </b>";
+				else
+					return "";
 			}
 			public function refreshGraph():void
 			{
@@ -353,6 +382,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Number id="percentGap">.02</mx:Number>
 	<axiis:NumericExpression id="labelLayout" value="1"></axiis:NumericExpression>
 	<mx:Resize id="resize" />
+	<mx:String id="fontFamily">Arial</mx:String>
+	<mx:Number id="fontSize">12</mx:Number>
+	<mx:String id="fontWeight">bold</mx:String>
+	<mx:String id="dataFontFamily">Arial</mx:String>
+	<mx:Number id="dataFontSize">12</mx:Number>
+	<mx:String id="dataFontWeight">bold</mx:String>
+	<mx:Number id="legendOffset">40</mx:Number>
 	
 	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0" maxLayout="{dc.width}"/>
 	
@@ -362,7 +398,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			   verticalCenter="0"
 			   width="634"
 			   height="400"
-			   dragEnter="dragEnterHandler(event);" 
+			   dragEnter="dragEnterHandler(event);"
 			   dragDrop="dragDropHandler(event);"
 			   >
 	<axiis:DataCanvas top="50"
@@ -374,12 +410,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 					  verticalCenter="0" horizontalCenter="0">
 		<axiis:backgroundGeometries>
 			<axiis:HAxis
+				id="haxis"
 				x="20"
 				horizontalScale="{vScale}"
 				width="{dc.width}"
 				height="{dc.height}"
 				tickGap="5"
+				fontFamily="{fontFamily}"
+				fontSize="{fontSize}"
+				fontWeight="{fontWeight}"
 				showGridArea="false"
+				showZeroLine="true" 
 				/>
 		</axiis:backgroundGeometries>
 		<axiis:layouts> 
@@ -394,19 +435,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 									  width="{hLayout.currentReference.width}"
 									  height="{hLayout.currentReference.height*.73}"
 									  y="0"
-									  x="0"
+									  x="20"
 									  dataProvider="{hLayout.currentDatum}"
 									  dataField="{childDataField}"
 									  labelField="{childLabelField}"
 									  labelFunction="{labelFunction}"
 									  dataTipLabelFunction="{dataTipLabelFunction}"
-									  percentGap="1"
+									  percentGap=".1"
 									  fill="{clusterFill}"
 									  stroke="{colStroke}"
 									  horizontalScale="{vScale}"
-									  fontFamily="Myriad Pro"
+									  dataFontColor="{outerPalette.currentColor}"
+									  fontColor="[0x000000]"
+									  fontFamily="{fontFamily}"
+									  fontSize="{fontSize}"
+									  fontWeight="{fontWeight}"
+									  dataFontFamily="{dataFontFamily}"
+									  dataFontSize="{dataFontSize}"
+									  dataFontWeight="{dataFontWeight}"
 									  showLabel="false"
-									  fontColor="[0x000000]"/>
+									  showDataLabel="true"
+									  />
 					<axiis:BarCluster id="myCluster2"
 									  width="{hLayout.currentReference.width}"
 									  height="{hLayout.currentReference.height*.73}"
@@ -420,10 +469,16 @@ OTHER DEALINGS IN THE SOFTWARE.
 									  fill="{clusterFill}"
 									  stroke="{colStroke}"
 									  horizontalScale="{vScale}"
-									  fontFamily="Myriad Pro"
-									  fontColor="[0x000000]"/>
+									  dataFontColor="{outerPalette.currentColor}"
+									  fontColor="[0x000000]"
+									  fontFamily="{fontFamily}"
+									  fontSize="{fontSize}"
+									  fontWeight="{fontWeight}"
+									  dataFontFamily="{dataFontFamily}"
+									  dataFontSize="{dataFontSize}"
+									  dataFontWeight="{dataFontWeight}"
+									  visible="true"/>
 				</axiis:layouts>
-
 			</axiis:VBoxLayout>
 		</axiis:layouts>
 		

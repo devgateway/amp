@@ -1141,7 +1141,7 @@
     </action>
     <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions" parameter="method">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />
-    	<forward name="reload"  path="/aim/viewChannelOverview.do?tabIndex=0" />
+    	<forward name="reload"  path="/aim/viewActivityPreview.do" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     

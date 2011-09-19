@@ -1550,12 +1550,13 @@ function toggleSettings(){
 					<option value="16">16</option>
 				</select>
 				&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold"><digi:trn>Bold</digi:trn></label><br/>
-				<span style="display:none">
-				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
-				</span>
+<!--				<span style="display:none">-->
+<!--				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend"><digi:trn>Show legend</digi:trn></label>-->
+<!--				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide"><digi:trn>Divide by thousands</digi:trn></label>-->
+				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+<!--				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label>-->
+<!--				</span>-->
+				</br>
 				<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'ODAGrowth')">
 				</div>

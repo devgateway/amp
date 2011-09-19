@@ -2272,7 +2272,7 @@ public class DataDispatcher extends DispatchAction {
 		csvString.append("\"" + text + " " + filter.getYear() + "\"");
 		csvString.append(",");
 		text = TranslatorWorker.translateText("Growth percent",locale, siteId);
-		csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
+		csvString.append("\"" + text + "\"");
 		csvString.append("\n");
 		
         for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
@@ -2290,15 +2290,17 @@ public class DataDispatcher extends DispatchAction {
             BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
             	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
-                map.put(ampOrganisation, growthPercent);
-                csvString.append(ampOrganisation.getName());
-        		csvString.append(",");
-        		csvString.append(amtPreviousYear);
-        		csvString.append(",");
-        		csvString.append(amtCurrentYear);
-        		csvString.append(",");
-        		csvString.append(growthPercent);
-        		csvString.append("\n");
+                if ((growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
+                	map.put(ampOrganisation, growthPercent);
+                    csvString.append(ampOrganisation.getName());
+            		csvString.append(",");
+            		csvString.append(amtPreviousYear);
+            		csvString.append(",");
+            		csvString.append(amtCurrentYear);
+            		csvString.append(",");
+            		csvString.append(growthPercent);
+            		csvString.append("\n");
+				} 
             }
 		}
         

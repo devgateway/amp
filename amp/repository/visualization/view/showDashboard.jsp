@@ -2070,6 +2070,9 @@ function refreshAsync(){
 //		console.log("popping one: " + currentMovie.id);
 		try
 		{
+			if (YAHOO.env.ua.gecko <= 1.91) {
+				currentMovie.scrollIntoView(true)
+			}
 			currentMovie.refreshGraph();
 //			console.log("success: " + currentMovie.id);
 		}
@@ -2078,10 +2081,11 @@ function refreshAsync(){
 //			console.log("back inside: " + currentMovie.id);
 			nonRefreshedMovies.push(currentMovie);
 		}
-		setTimeout(refreshAsync, 250);
+		setTimeout(refreshAsync, 500);
 	}
 	else
 	{
+		scroll(0,0);
 		loadingPanel.hide();	
 	}	
 }
@@ -2856,7 +2860,6 @@ function changeChart(e, chartType, container, useGeneric){
 				swfobject.embedSWF("/repository/visualization/view/charts/PieChartSeries.swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			else
 				swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
-			break;
 			break;
 		case "line":
 			if(useGeneric)

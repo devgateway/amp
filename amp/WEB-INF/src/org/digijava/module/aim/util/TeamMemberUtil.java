@@ -24,19 +24,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
@@ -1597,9 +1585,9 @@ public class TeamMemberUtil {
         Query qry = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.openNewSession();
             session.setFlushMode(FlushMode.COMMIT);
-
+            tx = session.beginTransaction();
 //beginTransaction();
             for (int i = 0; i < id.length; i++) {
                 if (id[i] != null) {
@@ -1626,7 +1614,16 @@ public class TeamMemberUtil {
 							session.delete(callatt);
 							
 						}
-                    }                    
+                    }
+
+                    //Remove refferences to AMP_CONTACT (creator_id field)
+                    StringBuilder queryStr = new StringBuilder("update ");
+                    queryStr.append(AmpContact.class.getName());
+                    queryStr.append(" as cont set cont.creator=null where cont.creator = :SEL_USER");
+                    Query contDetQuery = session.createQuery(queryStr.toString());
+                    contDetQuery.setLong("SEL_USER", id[i]);
+                    int success = contDetQuery.executeUpdate();
+
                    
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
@@ -1725,7 +1722,7 @@ public class TeamMemberUtil {
                    
                 }
             }
-            //tx.commit();
+            tx.commit();
         } catch (Exception e) {
             logger.error("Unable to removeTeamMembers " + e.getMessage());
             e.printStackTrace();
@@ -1737,6 +1734,15 @@ public class TeamMemberUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                try {
+                    //PersistenceManager.releaseSession(session);
+                    session.close();
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed", ex1);
+                }
+            }
         }
     }
 

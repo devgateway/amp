@@ -74,6 +74,7 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.LazyInitializationException;
 import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -583,7 +584,16 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		if (true) { 
 			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
-			HierarchyListableUtil.changeTranslateable(regions, false);
+			try {
+				HierarchyListableUtil.changeTranslateable(regions, false);
+			}
+			catch (LazyInitializationException e) {
+				logger.warn("The regions had to be loaded again");
+				logger.warn(e.getMessage());
+				DynLocationManagerUtil.clearRegionsOfDefaultCountryCache();
+				regions		= DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+				HierarchyListableUtil.changeTranslateable(regions, false);
+			}
 			
 			Iterator<AmpCategoryValueLocations> it = regions.iterator();
 			while (it.hasNext()) {

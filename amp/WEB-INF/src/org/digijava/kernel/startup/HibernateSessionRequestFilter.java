@@ -17,6 +17,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
+import org.hibernate.Transaction;
 
 /**
  * @author mihai
@@ -55,7 +56,9 @@ public class HibernateSessionRequestFilter implements Filter {
  
             // Commit and cleanup
             log.debug("Committing the database transaction");
-            PersistenceManager.getCurrentSession().getTransaction().commit();
+            Transaction tx	= PersistenceManager.getCurrentSession().getTransaction();
+            	if (tx.isActive())
+            		tx.commit();
             
             PersistenceManager.removeClosedSessionsFromTraceMap();
  

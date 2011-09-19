@@ -40,6 +40,13 @@ public class DynLocationManagerUtil {
 	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = Collections.synchronizedList(
 	 			new ArrayList<AmpCategoryValueLocations>()   ); 
 
+	
+	public static void clearRegionsOfDefaultCountryCache() {
+		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
+			DynLocationManagerUtil.regionsOfDefaultCountry.clear();
+		}
+	}
+	
 	public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(
 			AmpCategoryClass implLoc, DynLocationManagerForm myForm,
 			ActionMessages errors) {

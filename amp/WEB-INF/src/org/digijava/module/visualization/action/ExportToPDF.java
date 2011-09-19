@@ -158,6 +158,8 @@ public class ExportToPDF extends Action {
             filterTitleCell.setColspan(1);
             filtersTbl.addCell(filterTitleCell);
             
+            cell = new PdfPCell(new Paragraph("All amounts in millions"));
+            filtersTbl.addCell(cell);
             cell = new PdfPCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
             filtersTbl.addCell(cell);
             cell = new PdfPCell(new Paragraph("Fiscal Start Year: " + vForm.getFilter().getYear()));
@@ -313,7 +315,7 @@ public class ExportToPDF extends Action {
             
             //ODA Growth 
             if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-	            if (ODAGrowthOpt.equals("1")) {
+            	if (ODAGrowthOpt.equals("1")) {
 	            	doc.newPage();
 	            	subTitle = new Paragraph(ODAGrowthTrn, SUBTITLEFONT);
 	                subTitle.setAlignment(Element.ALIGN_LEFT);

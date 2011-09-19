@@ -171,6 +171,8 @@ public class ExportToWord extends Action {
             filterTitleCell.setBackgroundColor(TITLECOLOR);
             filtersTbl.addCell(filterTitleCell);
             
+            cell = new RtfCell(new Paragraph("All amounts in millions"));
+            filtersTbl.addCell(cell);
             cell = new RtfCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);

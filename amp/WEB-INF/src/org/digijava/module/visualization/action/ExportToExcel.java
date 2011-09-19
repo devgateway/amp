@@ -246,7 +246,13 @@ public class ExportToExcel extends Action {
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             cellNum = 0;
-            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+          //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString("All amounts in millions");
+            cell.setCellValue(headerText);
+            cell.setCellStyle(cellStyleLeft);
+          //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
             headerText = new HSSFRichTextString("Currency Type: " + vForm.getFilter().getCurrencyCode());

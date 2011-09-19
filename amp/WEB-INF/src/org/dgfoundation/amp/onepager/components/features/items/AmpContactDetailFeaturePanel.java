@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
@@ -116,7 +117,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 				@Override
                 protected void populateItem(final ListItem<AmpContactProperty> item) {
                 	//AmpContactProperty property = item.getModelObject();
-                    AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>( "Are you sure you want to delete this?")) {
+					String translatedMessage = TranslatorUtil.getTranslatedText("Are you sure you want to delete this?");
+                    AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>(translatedMessage)) {
 
                         /**
 						 * 
@@ -128,8 +130,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             setModel.getObject().remove(item.getModelObject());
                             target.addComponent(resultcontainer);
                         }
-                        
-
                     };
                     if (!item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(item.getModel(), "value");

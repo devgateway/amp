@@ -146,6 +146,7 @@ html.chrome .bd_drop{margin-top:-15px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px;}
+#quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:1px; padding-left:7px;}
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
 .desktop_tab_base {border-bottom:1px solid #F2F2F2; padding-left:1px;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}

@@ -251,6 +251,7 @@ public class VisualizationForm extends ActionForm {
 		private String donorTableData;
 		private String sectorTableData;
 		private String regionTableData;
+		private String ODAGrowthTableData;
 		private int fundingOpt = 3;
 		private int aidPredicOpt = 3;
 		private int aidTypeOpt = 3;
@@ -260,7 +261,7 @@ public class VisualizationForm extends ActionForm {
 		private int regionOpt = 3;
 		private int summaryOpt = 1;	
 		private int typeOpt = 0;
-		private int ODAGrowthOpt = 1;
+		private int ODAGrowthOpt = 3;
 		
 		public BufferedImage getAidPredictabilityGraph() {
 			return aidPredictabilityGraph;
@@ -380,6 +381,14 @@ public class VisualizationForm extends ActionForm {
 
 		public void setRegionTableData(String regionTableData) {
 			this.regionTableData = regionTableData;
+		}
+
+		public String getODAGrowthTableData() {
+			return ODAGrowthTableData;
+		}
+
+		public void setODAGrowthTableData(String ODAGrowthTableData) {
+			this.ODAGrowthTableData = ODAGrowthTableData;
 		}
 
 		public int getFundingOpt() {

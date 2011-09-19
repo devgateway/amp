@@ -85,7 +85,7 @@ public class ExportToWord extends Action {
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
-            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth chart", langCode, siteId);
+            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
             String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
             String topRegionTrn = TranslatorWorker.translateText("Top 5 Regions", langCode, siteId);
@@ -349,12 +349,43 @@ public class ExportToWord extends Action {
             
             //ODA Growth 
             if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-	            if (ODAGrowthOpt.equals("1")) {
-	            	doc.newPage();
-	            	subTitle = new Paragraph(ODAGrowthTrn, SUBTITLEFONT);
-	                subTitle.setAlignment(Element.ALIGN_LEFT);
-	                doc.add(subTitle);
-		            SimpleTable ODAGraph = new SimpleTable();
+            	if (!ODAGrowthOpt.equals("0")){
+                	doc.newPage();
+                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+                    subTitle.setAlignment(Element.ALIGN_LEFT);
+                    doc.add(subTitle);
+                    doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+    	            Table ODAGrowthTbl = null;
+    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+    	            colspan = (ODAGrowthRows[1].split(">").length); 
+    	            ODAGrowthTbl = new Table(colspan);
+    	            ODAGrowthTbl.setWidth(100);
+    	            singleRow = ODAGrowthRows[1].split(">");
+    	            for (int i = 0; i < singleRow.length; i++) {
+    	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+    	            	cell.setBackgroundColor(TITLECOLOR);
+    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    	            	ODAGrowthTbl.addCell(cell);
+    				}
+    	            count = 0;
+    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
+    	            	singleRow = ODAGrowthRows[i].split(">");
+    	            	for (int j = 0; j < singleRow.length; j++) {
+    	                	cell = new RtfCell(new Paragraph(singleRow[j]));
+    	                	if (count % 2 == 0)
+    	    		        	cell.setBackgroundColor(CELLCOLOR);
+    	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    	                	ODAGrowthTbl.addCell(cell);
+    	    			}
+    	            	count++;
+    				}
+    	            doc.add(ODAGrowthTbl);
+    	            doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+	            	SimpleTable ODAGraph = new SimpleTable();
 	                SimpleCell row = new SimpleCell(SimpleCell.ROW);
 	                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
 	                //cel.setBorder(1);

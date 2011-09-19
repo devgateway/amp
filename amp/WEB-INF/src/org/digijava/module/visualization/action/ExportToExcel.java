@@ -53,6 +53,7 @@ public class ExportToExcel extends Action {
         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode = RequestUtils.getNavigationLanguage(request).getCode();
         VisualizationForm vForm = (VisualizationForm) form;
+        String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         String fundingOpt = request.getParameter("fundingOpt");
         String aidPredicOpt = request.getParameter("aidPredicOpt");
         String aidTypeOpt = request.getParameter("aidTypeOpt");
@@ -65,6 +66,7 @@ public class ExportToExcel extends Action {
     	try {
 			String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 			String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+			String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
 	        String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
 	        String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
@@ -475,6 +477,75 @@ public class ExportToExcel extends Action {
 		            cell.setCellStyle(st);
 			    }
 	        }	
+	      //ODA Growth Table.
+		    HSSFSheet sheet1 = null;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+			    if (!ODAGrowthOpt.equals("0")){
+			    	sheet1 = wb.createSheet(ODAGrowthTrn);
+			    	rowNum=1;
+			    }
+			    if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+			    	cellNum = 0;
+			    	headerText = null;
+			    	row = sheet1.createRow(rowNum++);
+			    	cell = row.createCell(cellNum++);
+			    	String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+	
+			    	headerText = new HSSFRichTextString(ODAGrowthTrn + " (" + currName + ")");
+			    	cell.setCellValue(headerText);
+			    	cell.setCellStyle(subHeaderCS);
+			            
+			    	cellNum = 0;
+		            row = sheet1.createRow(rowNum++);
+		            singleRow = ODAGrowthRows[1].split(">");
+		            for (int i = 0; i < singleRow.length; i++) {
+		            	cell = row.createCell(cellNum++);
+			            headerText = new HSSFRichTextString(singleRow[i]);
+			            cell.setCellValue(headerText);
+			            cell.setCellStyle(subHeaderCS);
+					}
+		            for (int i = 2; i < ODAGrowthRows.length; i++) {
+		            	singleRow = ODAGrowthRows[i].split(">");
+		            	cellNum = 0;
+				        row = sheet1.createRow(rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == ODAGrowthRows.length-1)
+				    		st = lastCellStyle;
+			            else
+			            	st = cellStyle;
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		cell = row.createCell(cellNum++);
+		 		            headerText = new HSSFRichTextString(singleRow[j]);
+		 		            cell.setCellValue(headerText);
+		 		            cell.setCellStyle(st);
+		    			}
+					}
+	            }
+			    if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+			    	rowNum++;
+			    	rowNum++;
+			        cellNum = 0;
+			        row = sheet1.createRow(rowNum++);
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(ODAGrowthTrn + " Chart");
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(headerCS);
+		            
+			        ByteArrayOutputStream ba0 = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba0);
+		            int pictureIndex0 = wb.addPicture(ba0.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+		            HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();
+		            HSSFPicture pic =  patriarch.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex0);
+		            HSSFClientAnchor anchor = (HSSFClientAnchor) pic.getAnchor();
+		            anchor.setCol2((short)5);
+		            anchor.setDx1(0);
+		            anchor.setDx2(0);
+		            anchor.setRow2(rowNum+25);
+		            anchor.setDy1(0);
+		            anchor.setDy2(0);
+	            }
+		    }		    
+		    
 		  //Funding Table.
 		    HSSFSheet sheet2 = null;
 		    if (!fundingOpt.equals("0")){
@@ -1018,6 +1089,11 @@ public class ExportToExcel extends Action {
 		    }
 	        for(short i=0;i<10;i++){
 	             sheet.setColumnWidth(i , COLUMN_WIDTH);
+	        }
+	        if (sheet1!=null){
+	        	 for(short i=0;i<10;i++){
+		             sheet1.setColumnWidth(i , COLUMN_WIDTH);
+		        } 
 	        }
 	        if (sheet2!=null){
 	        	 for(short i=0;i<10;i++){

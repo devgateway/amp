@@ -74,9 +74,8 @@ public class ExportToPDF extends Action {
         	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
-            String odaGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
+            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
-            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth chart", langCode, siteId);
             String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
             String topRegionTrn = TranslatorWorker.translateText("Top 5 Regions", langCode, siteId);
             String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
@@ -315,13 +314,38 @@ public class ExportToPDF extends Action {
             
             //ODA Growth 
             if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-            	if (ODAGrowthOpt.equals("1")) {
-	            	doc.newPage();
-	            	subTitle = new Paragraph(ODAGrowthTrn, SUBTITLEFONT);
-	                subTitle.setAlignment(Element.ALIGN_LEFT);
-	                doc.add(subTitle);
-	                doc.add(new Paragraph(" "));
-	                PdfPTable ODAGraph = new PdfPTable(1);
+            	if (!ODAGrowthOpt.equals("0")){
+                	doc.newPage();
+                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+                    subTitle.setAlignment(Element.ALIGN_LEFT);
+                    doc.add(subTitle);
+                    doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+    	            PdfPTable ODAGrowthTbl = null;
+    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+    	            colspan = (ODAGrowthRows[1].split(">").length); 
+    	            ODAGrowthTbl = new PdfPTable(colspan);
+    	            ODAGrowthTbl.setWidthPercentage(100);
+    	            singleRow = ODAGrowthRows[1].split(">");
+    	            for (int i = 0; i < singleRow.length; i++) {
+    	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    	            	ODAGrowthTbl.addCell(cell);
+    				}
+    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
+    	            	singleRow = ODAGrowthRows[i].split(">");
+    	            	for (int j = 0; j < singleRow.length; j++) {
+    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    	                	ODAGrowthTbl.addCell(cell);
+    	    			}
+    				}
+    	            doc.add(ODAGrowthTbl);
+    	            doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+	            	PdfPTable ODAGraph = new PdfPTable(1);
 		            ODAGraph.setWidthPercentage(100);
 		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);

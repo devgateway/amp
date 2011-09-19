@@ -2263,17 +2263,22 @@ public class DataDispatcher extends DispatchAction {
         //donorList = DbUtil.getDonors(filter);
         Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
         StringBuffer csvString = new StringBuffer();
+        String odaGrowthData = "";
         String text = TranslatorWorker.translateText("Organization",locale, siteId);
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
+		odaGrowthData += "<"+ text +">";
 		text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
 		csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
 		csvString.append(",");
+		odaGrowthData += text + " " + filter.getYearToCompare() + ">";
 		csvString.append("\"" + text + " " + filter.getYear() + "\"");
 		csvString.append(",");
+		odaGrowthData += text + " " + filter.getYear() + ">";
 		text = TranslatorWorker.translateText("Growth percent",locale, siteId);
 		csvString.append("\"" + text + "\"");
 		csvString.append("\n");
+		odaGrowthData += text +">";
 		
         for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
 			AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
@@ -2294,15 +2299,21 @@ public class DataDispatcher extends DispatchAction {
                 	map.put(ampOrganisation, growthPercent);
                     csvString.append(ampOrganisation.getName());
             		csvString.append(",");
+            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
             		csvString.append(amtPreviousYear);
             		csvString.append(",");
+            		odaGrowthData += amtPreviousYear +">";
             		csvString.append(amtCurrentYear);
             		csvString.append(",");
+            		odaGrowthData += amtCurrentYear +">";
             		csvString.append(growthPercent);
             		csvString.append("\n");
+            		odaGrowthData += growthPercent +">";
 				} 
             }
 		}
+        
+        visualizationForm.getExportData().setODAGrowthTableData(odaGrowthData);
         
         Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,10l);
         

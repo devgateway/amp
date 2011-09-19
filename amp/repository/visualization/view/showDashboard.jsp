@@ -865,8 +865,10 @@ function toggleSettings(){
 			        <td class="inside" width="30%" >
 					<div class="selector_type"><b><digi:trn>ODA Growth</digi:trn></b></div>
 					<div>
-			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>Exclude ODA Growth</digi:trn></html:radio><br />
-			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_1" value="1"><digi:trn>Inculde ODA Growth</digi:trn></html:radio><br />
+			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+			             <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 			        </div>
 			        </td>
 		    	</c:if>

@@ -754,6 +754,12 @@ public class AmpMessageWorker {
             if (eventMsgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
                 msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
             }
+        }         
+        
+        for (AmpMessageState state : eventMsgStateMap.values()) {
+            if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+                msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
+            }
         }       
         
         for (AmpMessageState state : msgStateMap.values()) {

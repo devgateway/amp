@@ -397,9 +397,14 @@
 				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
 			}
 
-
-
-
+			private function getLegendY(currentIndex:Number ,y:Number):Number{
+				return (currentIndex < 4) ? y-5 : y + 25;
+			}
+			
+			private function getLegendX(currentIndex:Number ,x:Number):Number{
+				return (currentIndex < 4) ? currentIndex*160 : (currentIndex-4)*160;
+			}
+			
 			protected function service_faultHandler(event:FaultEvent):void
 			{
 				dc.visible = false;
@@ -664,22 +669,22 @@
 				<axiis:drawingGeometries> 
 					<degrafa:RasterText 
 						id="legendText" 
-						y="{legendLayout.currentReference.y}" 
-						x="{legendLayout.currentReference.x + 14}" 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)}" 
 						text="{legendLayout.currentDatum['category']}"
 						fontFamily="{fontFamily}"
 						fontSize="{fontSize}"
 						fontWeight="{fontWeight}"
 						wordWrap="true"
-						width="90"
+						width="150"
 						height="50"
 						autoSize="left"
 						
 						/> 
 					<degrafa:RegularRectangle 
 						id="legendSquare" width="10" height="10" fill="{legendFill}" 
-						y="{legendLayout.currentReference.y+4}" 
-						x="{legendLayout.currentReference.x}"/> 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)+4}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)-14}"/> 
 				</axiis:drawingGeometries> 
 			</axiis:HBoxLayout> 
 		</axiis:layouts>

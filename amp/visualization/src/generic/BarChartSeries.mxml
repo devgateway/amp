@@ -126,7 +126,7 @@
 				}
 				categories = categoriesLocal;
 				categoriesAmount = categories.length;
-				vScale.maxValue = Math.round(maxValue * 1.05);
+				vScale.maxValue = maxValue * 1.05;
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.year;
 				if("length" in service.lastResult.year) // If it's not empty
@@ -329,7 +329,7 @@
 				if(isSprite)	
 					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(ObjectUtils.getProperty(this, obj.data,childDataField));
 				if(!isNaN(Number(obj.amount)) && Number(obj.amount) > 0 ){ 
-					return formatter.format(obj.amount);
+					return formatter.format(Number(obj.amount));
 				}
 				else
 					return " ";

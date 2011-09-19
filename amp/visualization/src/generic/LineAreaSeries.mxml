@@ -224,7 +224,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -317,7 +317,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -771,7 +771,7 @@
 	<mx:Number id="dataSlice">20</mx:Number>
 	<mx:Number id="slider">25</mx:Number>
 	<mx:Number id="labelRotate">0</mx:Number>
-	<mx:Boolean id="area">true</mx:Boolean>
+	<mx:Boolean id="area">false</mx:Boolean>
 	<mx:Boolean id="showMarker">true</mx:Boolean>
 	<mx:Number id="layoutGroup">{LineSeriesGroup.MODE_BASELINE}</mx:Number>
 

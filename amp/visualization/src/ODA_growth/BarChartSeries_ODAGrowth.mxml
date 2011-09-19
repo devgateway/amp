@@ -94,6 +94,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 				try {
 					maxValue =  service.lastResult.organization.value;
 					minValue = 0;
+					if (maxValue < 0){
+						minValue = maxValue;
+						maxValue = 0;
+					}
 				} catch (errObject:Error) {
 					for(var i:Number = 0; i < service.lastResult.organization.length; i++){
 						var currentValue:Number = service.lastResult.organization[i].value;

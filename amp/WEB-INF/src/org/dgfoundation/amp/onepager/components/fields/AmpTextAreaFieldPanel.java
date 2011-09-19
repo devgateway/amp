@@ -4,9 +4,14 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.io.Serializable;
+
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import wicket.contrib.tinymce.TinyMceBehavior;
@@ -41,9 +46,15 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		
 		textAreaContainer = new TextArea<T>("richText", model);
 		textAreaContainer.setOutputMarkupId(true);
+		Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
+		preview.setVisible(false);
+		preview.setOutputMarkupId(true);
 		if(wysiwyg){
-			textAreaContainer.add(new SimpleAttributeModifier("onclick", "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {on:{instanceReady : function( ev ){this.focus();}}} );"));
+			preview.setVisible(true);
+			textAreaContainer.add(new SimpleAttributeModifier("style", "display: none;"));
+			preview.add(new SimpleAttributeModifier("onclick", "$('#"+ preview.getMarkupId() +"').hide();CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {on:{instanceReady : function( ev ){this.focus();}}} );$('#"+ textAreaContainer.getMarkupId() +"').show();"));
 		}
+		add(preview);
 		addFormComponent(textAreaContainer);
 	}
 

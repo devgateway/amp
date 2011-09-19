@@ -67,7 +67,8 @@ public class AddThemeIndicator extends Action {
 			
 			for (int i = 0; i < themeForm.getIndid().length; i++) {				
 				AmpIndicator indicator=IndicatorUtil.getIndicator(themeForm.getIndid()[i]);
-				IndicatorUtil.assignIndicatorToTheme(theme, indicator);
+				//IndicatorUtil.assignIndicatorToTheme(theme, indicator);
+				theme.getIndicators().add(IndicatorUtil.assignIndicatorToTheme(theme, indicator));
 			}
 		}
 		
@@ -127,7 +128,8 @@ public class AddThemeIndicator extends Action {
 				if (indId != null) {
 					for (int j = 0; j < indId.length; j++) {
 						//IndicatorUtil.deleteIndtheme(indId[j]);
-						IndicatorUtil.removeConnection(indId[j]);
+						theme.getIndicators().remove(IndicatorUtil.removeConnection(indId[j]));
+						//IndicatorUtil.removeConnection(indId[j]);
 					}
 				}
 			}

@@ -330,9 +330,7 @@ function closeWindow()
 									type="org.digijava.module.aim.dbentity.AmpIndicator">
 										<tr>
 											<td bgcolor=#f2f2f2 width=10>
-											<html:multibox property="indid">
-													<bean:write name="indicators" property="indicatorId" />
-											</html:multibox>
+												<html:multibox property="indid" value="${indicators.indicatorId}"/>
 											</td>
 											<td bgcolor=#f2f2f2 width="100%">
 											<bean:write name="indicators" property="name" />

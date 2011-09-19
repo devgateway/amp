@@ -338,8 +338,10 @@ public class IndicatorUtil {
 	 * @param conenctionId id of the connection bean.
 	 * @throws DgException
 	 */
-	public static void removeConnection(Long connectionId)throws DgException{
-		removeConnection(getConnectionToTheme(connectionId));
+	public static IndicatorTheme removeConnection(Long connectionId)throws DgException{
+		IndicatorTheme con = getConnectionToTheme(connectionId);
+		removeConnection(con);
+		return con;
 	}
 	
 	/**

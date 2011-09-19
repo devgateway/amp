@@ -6,7 +6,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 
@@ -71,7 +71,7 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		if(!jsAdded)
-			response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(getSliderPM()));
+			response.renderOnDomReadyJavascript(OnePagerUtil.getToggleJS(getSliderPM()));
 		jsAdded=true;
 	}
 	

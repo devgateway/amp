@@ -10,7 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMViewGlobalPermsTableFeaturePanel;
 import org.digijava.module.gateperm.core.Permission;
@@ -39,7 +39,7 @@ public class AmpPMManageGlobalPanel extends AmpComponentPanel {
 			@Override
 			protected void onAjaxEvent(AjaxRequestTarget target) {
 				target.addComponent(AmpPMManageGlobalPanel.this);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
 			}
 		};
 		add(pager);

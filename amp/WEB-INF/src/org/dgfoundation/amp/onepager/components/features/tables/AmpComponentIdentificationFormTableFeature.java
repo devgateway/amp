@@ -21,7 +21,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -141,7 +141,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		if (update){
 			//target.addComponent(this);
 			target.addComponent(componentFundingSection);
-			target.appendJavascript(OnePagerConst.getToggleChildrenJS(componentFundingSection));
+			target.appendJavascript(OnePagerUtil.getToggleChildrenJS(componentFundingSection));
 		}
 	}
 	

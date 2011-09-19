@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpPIItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -62,7 +61,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
 				list.removeAll();
 
 				target.addComponent(list.getParent());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPIFormSectionFeature.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPIFormSectionFeature.this));
 			}
 		};
 		add(addbutton);

@@ -10,7 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
@@ -75,7 +75,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				parent.getSetModel().getObject().add(funding);
 				parent.getList().removeAll();
 				target.addComponent(parent);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(parent));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
 				
 			}
 		};

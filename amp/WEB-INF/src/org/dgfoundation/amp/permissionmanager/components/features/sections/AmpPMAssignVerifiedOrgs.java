@@ -12,7 +12,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
@@ -89,7 +89,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				idOrgsList.removeAll();
 				target.addComponent(idOrgsList.getParent());
 				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 			}
 
 			@Override
@@ -126,7 +126,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				idUsersList.removeAll();
 				target.addComponent(idUsersList.getParent());
 				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 			}
 
 			@Override

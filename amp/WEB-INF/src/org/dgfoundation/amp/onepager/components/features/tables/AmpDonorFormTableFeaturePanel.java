@@ -13,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
@@ -82,7 +83,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				target.addComponent(AmpDonorFormTableFeaturePanel.this);
 				list.removeAll();
 				target.addComponent(getParentFundingItem().getFundingInfo());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
 			}
 		};
 	}

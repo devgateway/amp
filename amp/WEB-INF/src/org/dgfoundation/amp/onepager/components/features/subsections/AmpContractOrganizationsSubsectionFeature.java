@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
@@ -81,8 +80,8 @@ public class AmpContractOrganizationsSubsectionFeature extends
 						public void onClick(AjaxRequestTarget target) {
 							orgs.getObject().remove(item.getModelObject());
 							target.addComponent(AmpContractOrganizationsSubsectionFeature.this);
-							target.appendJavascript(OnePagerConst.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-							target.appendJavascript(OnePagerConst.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+							target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+							target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
 						}
 					};
 					item.add(delete);
@@ -105,8 +104,8 @@ public class AmpContractOrganizationsSubsectionFeature extends
 				orgs.getObject().add(choice);
 				list.removeAll();
 				target.addComponent(AmpContractOrganizationsSubsectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-				target.appendJavascript(OnePagerConst.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+				target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
 			}
 
 			@Override

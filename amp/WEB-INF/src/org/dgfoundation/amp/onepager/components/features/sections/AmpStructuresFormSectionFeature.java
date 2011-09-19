@@ -16,7 +16,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpStructureField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -65,7 +65,7 @@ public class AmpStructuresFormSectionFeature extends
 				AmpStructure stru = new AmpStructure();
 				setModel.getObject().add(stru);
 				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(this.getParent()));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
 				list.removeAll();
 			}
 		};

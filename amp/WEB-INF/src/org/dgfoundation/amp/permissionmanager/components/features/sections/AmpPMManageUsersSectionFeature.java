@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
@@ -65,7 +65,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				idsList.removeAll();
 				usersTable.getSliders().clear();
 				target.addComponent(AmpPMManageUsersSectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
+				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 			@Override
@@ -92,7 +92,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				searchUsers.setVisible(visible);
 				usersOrgs.setVisible(!visible);
 				target.addComponent(AmpPMManageUsersSectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
+				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 		};

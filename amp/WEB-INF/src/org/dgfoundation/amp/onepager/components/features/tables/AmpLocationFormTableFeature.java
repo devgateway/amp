@@ -17,7 +17,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -138,7 +137,7 @@ public class AmpLocationFormTableFeature extends
 							}
 							regionalFundingFeature.getList().removeAll();
 							target.addComponent(regionalFundingFeature);
-							target.appendJavascript(OnePagerConst.getToggleChildrenJS(regionalFundingFeature));
+							target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 							
 							percentageValidationField.reloadValidationField(target);							
 						}
@@ -199,7 +198,7 @@ public class AmpLocationFormTableFeature extends
 				target.addComponent(list.getParent());
 				regionalFundingFeature.getList().removeAll();
 				target.addComponent(regionalFundingFeature);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(regionalFundingFeature));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 				list.removeAll();
 			}
 

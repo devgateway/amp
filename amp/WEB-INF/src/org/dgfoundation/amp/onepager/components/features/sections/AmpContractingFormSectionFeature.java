@@ -16,7 +16,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContractsItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -56,7 +55,7 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(AmpContractingFormSectionFeature.this);
-						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
+						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
 						//list.removeAll();
 					}
 				};
@@ -76,7 +75,7 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 				comp.setActivity(am.getObject());
 				setModel.getObject().add(comp);
 				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
 			}
 		};
 		add(addbutton);

@@ -18,7 +18,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -200,8 +200,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 				}
 
 				art.addComponent(base.getParent());
-				art.appendJavascript(OnePagerConst.getToggleChildrenJS(this.getParent()));
-				art.appendJavascript(OnePagerConst.getClickToggle2JS(this.getParent()));
+				art.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+				art.appendJavascript(OnePagerUtil.getClickToggle2JS(this.getParent()));
 			}
 		};
 		add(setValue);

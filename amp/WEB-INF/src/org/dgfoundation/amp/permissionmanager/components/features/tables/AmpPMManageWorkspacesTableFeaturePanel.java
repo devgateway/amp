@@ -19,7 +19,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
@@ -91,7 +90,7 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		 for (TransparentWebMarkupContainer c: sliders) {
-			response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
+			response.renderOnDomReadyJavascript(OnePagerUtil.getToggleJS(c));	
 		} ;
 		 
 	}

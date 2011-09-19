@@ -16,7 +16,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -87,7 +86,7 @@ public class AmpDonorFundingFormSectionFeature extends
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(AmpDonorFundingFormSectionFeature.this);
-						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 						list.removeAll();
 					}
 				};
@@ -126,7 +125,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				setModel.getObject().add(funding);
 				list.removeAll();
 				target.addComponent(AmpDonorFundingFormSectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 			}
 
 			@Override

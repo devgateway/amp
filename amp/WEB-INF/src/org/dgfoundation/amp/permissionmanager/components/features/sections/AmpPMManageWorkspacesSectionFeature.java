@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
@@ -80,7 +80,7 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				idsList.removeAll();
 				workspacesTable.getSliders().clear();
 				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
+				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
 			}
 
 			@Override

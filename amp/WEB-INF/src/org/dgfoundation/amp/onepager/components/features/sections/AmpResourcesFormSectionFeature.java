@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpResourcesSearchModel;
@@ -68,7 +69,7 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 				ad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
 				am.getObject().getActivityDocuments().add(ad);
 				target.addComponent(resourcesList);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
 			}
 
 			@Override

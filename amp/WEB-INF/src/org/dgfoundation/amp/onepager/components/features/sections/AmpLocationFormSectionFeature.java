@@ -10,7 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -88,7 +88,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 						if(set.size()>0) {
 							locationsTable.getSetModel().getObject().clear();
 							locationsTable.getList().removeAll();
-							target.appendJavascript(OnePagerConst.getToggleChildrenJS(locationsTable));
+							target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
 							target.addComponent(locationsTable);
 						}
 					}
@@ -105,7 +105,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								if(set.size()>0) {
 									locationsTable.getSetModel().getObject().clear();
 									locationsTable.getList().removeAll();
-									target.appendJavascript(OnePagerConst.getToggleChildrenJS(locationsTable));
+									target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
 									target.addComponent(locationsTable);
 								}
 							}

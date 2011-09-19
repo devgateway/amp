@@ -191,4 +191,49 @@ public final class OnePagerUtil {
 	            ajaxRequestTarget.addComponent(component.getUpdateComponent().getParent());
 	        }
 	    }
+
+	/**
+	 * Use to set the slider for current component only
+	 * @param c - make sure that c has setMarkupId(true)
+	 * @return
+	 */
+	public static String getToggleJS(Component c)
+	{
+		return String.format(OnePagerConst.toggleJS, c.getMarkupId());
+	}
+
+	/**
+	 * Use to set the slider for current component's children
+	 * @param c - make sure that c has setMarkupId(true)
+	 * @return
+	 */
+	public static String getToggleChildrenJS(Component c)
+	{
+		return String.format(OnePagerConst.toggleChildrenJS, c.getMarkupId());
+	}
+
+	public static String getToggleJSPM(Component c)
+	{
+		return String.format(OnePagerConst.toggleJSPM, c.getMarkupId());
+	}
+
+	/**
+	 * Slide the section on refresh
+	 * Use this when c is a sibbling with the slider or the slider itself
+	 * @param c
+	 * @return
+	 */
+	public static String getClickToggleJS(Component c){
+		return String.format(OnePagerConst.clickToggleJS, c.getMarkupId());
+	}
+
+	/**
+	 * Slide the section on refresh
+	 * Use this when c is the parent to the slider
+	 * @param c
+	 * @return
+	 */
+	public static String getClickToggle2JS(Component c){
+		return String.format(OnePagerConst.clickToggle2JS, c.getMarkupId());
+	}
 }

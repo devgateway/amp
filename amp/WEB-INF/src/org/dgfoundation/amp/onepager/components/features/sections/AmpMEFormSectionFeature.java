@@ -20,7 +20,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -77,7 +76,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 						//setModel.getObject().remove(item.getModelObject());
 						list.removeAll();
 						target.addComponent(AmpMEFormSectionFeature.this);
-						target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 					}
 				};
 				item.add(deleteLinkField);
@@ -104,7 +103,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				//setModel.getObject().add(ia);
 				list.removeAll();
 				target.addComponent(list.getParent());
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 			}
 
 			@Override
@@ -244,7 +243,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 					newInd.setObject(getNewIndicator());
 					
 					target.addComponent(list.getParent());
-					target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+					target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 				} catch (Exception e) {
 					logger.error(e);
 				}

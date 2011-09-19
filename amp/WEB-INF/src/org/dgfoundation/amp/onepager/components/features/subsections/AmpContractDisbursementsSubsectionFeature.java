@@ -84,8 +84,8 @@ public class AmpContractDisbursementsSubsectionFeature extends
 					public void onClick(AjaxRequestTarget target) {
 						disbModel.getObject().remove(item.getModelObject());
 						target.addComponent(AmpContractDisbursementsSubsectionFeature.this);
-						target.appendJavascript(OnePagerConst.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
-						target.appendJavascript(OnePagerConst.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+						target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+						target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
 					}
 				};
 				item.add(delete);
@@ -101,8 +101,8 @@ public class AmpContractDisbursementsSubsectionFeature extends
 				//comp.setContract(model.getObject());
 				disbModel.getObject().add(comp);
 				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
-				target.appendJavascript(OnePagerConst.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+				target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
 			}
 		};
 		add(addbutton);

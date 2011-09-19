@@ -241,27 +241,27 @@ $(document).ready(function() {
 					                  						<table>
 					                  							<logic:present name="isUserLogged" scope="session">
 																	<c:if test="${!aimTeamReportsForm.showTabs}">
-																		<div style="float: right; font-size: 11px;">
-																			<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
-										                       				<digi:trn>Not filtered Report</digi:trn>&nbsp;
-										                       				<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
-										                       				<digi:trn>Filtered Report</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
-										                       				<digi:trn>Edit Report</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
-										                       				<digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;
+																		<div class="filtered"style="float: right; font-size: 11px;">
+																			<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
+										                       				<span><digi:trn>Not filtered Report</digi:trn>&nbsp;
+										                       				<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" /></span>
+										                       				<span><digi:trn>Filtered Report</digi:trn>&nbsp;
+										                   					<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+										                       				<span><digi:trn>Edit Report</digi:trn>&nbsp;
+										                   					<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+										                       				<span><digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 										                       			</div>
 																	</c:if>
 																	<c:if test="${aimTeamReportsForm.showTabs}">
-										               					<div style="float: right; font-size: 11px;">
-										                   					<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
+										               					<div  class="filtered" style="float: right; font-size: 11px;">
+										                   					<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
 										                       				<digi:trn>Not filtered Tab</digi:trn>&nbsp;
-										                       				<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+										                       				<span><img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" /></span>
 										                       				<digi:trn>Filtered Tab</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+										                   					<span><img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
 										                       				<digi:trn>Edit Tab</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
-										                       				<digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;
+										                   					<span><img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+										                       				<span><digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 										                       			</div>
 																	</c:if>
 					           									</logic:present>

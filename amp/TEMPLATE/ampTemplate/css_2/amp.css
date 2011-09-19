@@ -683,3 +683,5 @@ div.breadcrump_cont{display:none;}
 
 .dgf_footer {margin-top:15px; margin-bottom:15px; text-align:center; font-size:11px; color:#8B8B8B; line-height:18px;}
 .dgf_logo_footer {margin-bottom:5px;}
+html.ie div.filtered {width:950px;text-align:right;}
+td.orgtype select{width:135px;font-size:11px;}

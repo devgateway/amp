@@ -249,8 +249,9 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " 
 				+ AmpAuditLogger.class.getName() 
-				+ " f where f.teamName like '" + teamname + "'";
+				+ " f where f.teamName=:teamname";
 			qry = session.createQuery(qryStr);
+                        qry.setString("teamname", teamname);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

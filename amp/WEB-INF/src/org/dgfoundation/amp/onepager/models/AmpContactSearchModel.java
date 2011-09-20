@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -64,8 +65,8 @@ public class AmpContactSearchModel extends
 				ret = new ArrayList<AmpContact>();
 			}
 			AmpContact newContact = new AmpContact();
-			newContact.setName("Change Name");
-			newContact.setLastname("Change Lastname");
+			newContact.setName(TranslatorUtil.getTranslation("Change Name"));
+			newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
 			ret.add(newContact);
 			return ret;
 		} catch (HibernateException e) {

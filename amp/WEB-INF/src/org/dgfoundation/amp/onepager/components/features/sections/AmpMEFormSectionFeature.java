@@ -32,6 +32,7 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -68,8 +69,10 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			protected void populateItem(final ListItem<IndicatorActivity> item) {
 				AmpMEItemFeaturePanel indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"));
 				item.add(indicator);
+				
+				String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");
 				AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-						"delete", "Delete ME Item", new Model<String>("Do you really want to delete this indicator?")) {
+						"delete", "Delete ME Item", new Model<String>(translatedMessage)) {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						am.getObject().getIndicators().remove(item.getModelObject());

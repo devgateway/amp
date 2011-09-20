@@ -104,7 +104,7 @@ YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containe
 		YAHOO.util.Dom.get(toggleButtonId).disabled=false;
 		if (aResults.length == 0) {
 			mySpan.style.display = 'block';
-			mySpan.innerHTML = "No results found!";
+			mySpan.innerHTML = "${noResults}!";
 		} else {
 			mySpan.style.display = 'none';
 		}

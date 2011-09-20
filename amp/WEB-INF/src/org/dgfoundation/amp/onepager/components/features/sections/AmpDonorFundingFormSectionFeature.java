@@ -21,6 +21,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -80,8 +81,9 @@ public class AmpDonorFundingFormSectionFeature extends
 				}
 				item.add(fundingItemFeature);
 
+				String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
 				AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-						"delFunding", "Delete Funding Item",new Model<String>("Do you really want to delete this funding item?")) {
+						"delFunding", "Delete Funding Item",new Model<String>(translatedMessage)) {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());

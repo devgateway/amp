@@ -22,13 +22,20 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
+import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
@@ -216,9 +223,16 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 				response.renderJavascriptReference(new JavascriptResourceReference(
 						AmpAutocompleteFieldPanel.class,
 						"AmpAutocompleteCommonScripts.js"));
-				response.renderJavascriptReference(new JavascriptResourceReference(
-						clazz,
-						jsName));
+				
+				IModel variablesModel = new AbstractReadOnlyModel() {
+					public Map getObject() {
+						Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
+								2);
+						variables.put("noResults", TranslatorUtil.getTranslation("No results found"));
+						return variables;
+					}
+				};
+				response.renderJavascriptReference(new TextTemplateResourceReference(clazz, jsName, variablesModel));
 				/*
 				 * currently renderOnDomReadyJavascript doesn't work as expected in IE8
 				 * that is why jquery's $(document).ready has been added here

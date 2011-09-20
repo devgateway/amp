@@ -30,7 +30,7 @@ public class AmpLabelFieldPanel<T> extends AmpFieldPanel<T> {
 
 	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName, boolean hideLabel) {
 		super(id, model, fmName,hideLabel);
-		valueLabel=new TrnLabel("valueLabel",model.getObject().toString());
+		valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : "null"));
 		add(valueLabel);
 	}
 	

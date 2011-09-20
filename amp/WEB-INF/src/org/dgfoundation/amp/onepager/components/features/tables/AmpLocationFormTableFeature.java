@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -108,10 +109,8 @@ public class AmpLocationFormTableFeature extends
 				("longitudeid", new PropertyModel<String>(item.getModel(), "Longitude"),"Longitude",false);
 				item.add(longitude);
 				
-				
-				AmpDeleteLinkField delLocation = new AmpDeleteLinkField("delLocation","Delete Location",new Model<String>
-					("Delete this location and any related funding elements, if any?")) {
-					
+				String translatedText = TranslatorUtil.getTranslation("Delete this location and any related funding elements, if any?");
+				AmpDeleteLinkField delLocation = new AmpDeleteLinkField("delLocation","Delete Location",new Model<String>(translatedText)) {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						

@@ -129,8 +129,8 @@ public abstract class ColumnWorker {
 		Connection conn=null;
 		CellColumn cc=null;
 		try {
-			sess= PersistenceManager.getSession();
-			conn=sess.connection();
+			conn=PersistenceManager.getJdbcConnection();
+			
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -207,8 +207,8 @@ public abstract class ColumnWorker {
 		} 
 		finally {
 			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
+				if (conn != null && !conn.isClosed()) {
+					conn.close();
 				}
 			} catch (Exception e) {
 				logger.error(e);

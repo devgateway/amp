@@ -75,7 +75,7 @@
 	<tr>
 		<td>
 			<table width="100%" class="inside">
-				<tr bgColor="#d7eafd">
+				<tr bgColor="#c7d4db">
 					<c:forEach var="col" items="${dform.columns}" varStatus="cvarstat">
 						<td class="inside">
 							<c:if test="${col.type==1}">

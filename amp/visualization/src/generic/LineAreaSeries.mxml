@@ -426,6 +426,15 @@
 				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
 				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
 			}
+			
+			private function getLegendY(currentIndex:Number ,y:Number):Number{
+				return (currentIndex < 4) ? y-5 : y + 25;
+			}
+			
+			private function getLegendX(currentIndex:Number ,x:Number):Number{
+				return (currentIndex < 4) ? currentIndex*160 : (currentIndex-4)*160;
+			}
+			
 			protected function service_faultHandler(event:FaultEvent):void
 			{
 				dc.visible = false;
@@ -659,10 +668,10 @@
 				enableRollOver="true"
 				/>
 			<axiis:HBoxLayout id="legendLayout" 
-							  x="0"
+							  x="-40"
 							  y="{myLineGroup.height+30}"
-							  width="{dc.width-25}"
-							  height="300"
+							  width="{mxc1.width}"
+							  height="50"
 							  dataProvider="{categories}"
 							  dataField="pivotName" 
 							  showDataTips="false"
@@ -670,20 +679,21 @@
 				<axiis:drawingGeometries> 
 					<degrafa:RasterText 
 						id="legendText" 
-						y="{legendLayout.currentReference.y}" 
-						x="{legendLayout.currentReference.x+12}" 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)}" 
 						text="{legendLayout.currentDatum['pivotName']}" 
 						fontFamily="{fontFamily}"
 						fontWeight="{fontWeight}"
 						fontSize="{fontSize}"
 						wordWrap="true"
-						width="75"
+						width="150"
 						height="50"
+						autoSize="left"
 						/> 
 					<degrafa:RegularRectangle 
 						id="legendSquare" width="10" height="10" fill="{legendFill}" 
-						y="{legendLayout.currentReference.y+4}" 
-						x="{legendLayout.currentReference.x}"/> 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)+4}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)-14}"/>
 				</axiis:drawingGeometries> 
 			</axiis:HBoxLayout> 
 				 
@@ -731,7 +741,9 @@
 			<degrafa:GradientStop color="{areaPalette.currentColor}" alpha=".95"/>
 			<degrafa:GradientStop color="{areaPalette.currentColor | 0x999933}" alpha=".65"/>
 		</degrafa:LinearGradientFill>
-		<degrafa:LinearGradientFill id="legendFill" angle="90" enableEvents="false">
+		<degrafa:SolidFill id="legendFill" 
+						   color="{legendPalette.currentColor}" /> 
+		<degrafa:LinearGradientFill id="legendFill2" angle="90" enableEvents="false">
 			<degrafa:GradientStop color="{legendPalette.currentColor}" alpha=".95"/>
 			<degrafa:GradientStop color="{legendPalette.currentColor | 0x999933}" alpha=".65"/>
 		</degrafa:LinearGradientFill>

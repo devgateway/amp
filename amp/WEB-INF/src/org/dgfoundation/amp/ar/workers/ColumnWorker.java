@@ -163,6 +163,7 @@ public abstract class ColumnWorker {
 			}
 					
 			ResultSet rs = ps.executeQuery();
+			rs.setFetchSize(500);
 			rsmd=rs.getMetaData();
 			
 			//Set parameters to query

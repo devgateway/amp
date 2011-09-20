@@ -51,6 +51,7 @@
         timeToLiveSeconds="3600"
         diskPersistent="false"
         maxElementsOnDisk="100000"
+        memoryStoreEvictionPolicy="LRU" 
     />
 	
 	<!-- 

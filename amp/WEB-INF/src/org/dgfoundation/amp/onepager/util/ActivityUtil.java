@@ -12,8 +12,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -22,8 +24,10 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -41,6 +45,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
@@ -66,13 +71,12 @@ public class ActivityUtil {
 		Session session = AmpActivityModel.getHibernateSession();	
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
+		AmpActivityVersion a = (AmpActivityVersion) am.getObject();
+		AmpActivityVersion oldA = a;
+		boolean newActivity = false;
 		try {
 			session.clear();
-			AmpActivityVersion a = (AmpActivityVersion) am.getObject();
-			AmpActivityVersion oldA = a;
             AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			String validation = org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
-			
 		
 			if (a.getAmpActivityId() == null){
 				a.setActivityCreator(ampCurrentMember);
@@ -82,50 +86,9 @@ public class ActivityUtil {
 			if (a.getDraft() == null)
 				a.setDraft(false);
 			boolean draftChange = draft != a.getDraft();
-			
 			a.setDraft(draft);
 			
-			//setting activity status....
-			AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
-			if((role.getTeamHead()!=null&&role.getTeamHead())||role.isApprover()){
-				if(draft){
-					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
-				}
-				else{
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
-					a.setApprovedBy(ampCurrentMember);
-					a.setApprovalDate(Calendar.getInstance().getTime());
-				}
-			}
-			else{
-				if("validationOff".equals(validation)){
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
-				}
-				else{
-					if("newOnly".equals(validation)){
-						if(a.getAmpActivityId()==null){
-							a.setApprovalStatus(Constants.STARTED_STATUS);
-						}
-						else{
-							if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-								a.setApprovalStatus(Constants.EDITED_STATUS);
-							}
-						}
-					}
-					else{
-						if("allEdits".equals(validation)){
-							if(a.getAmpActivityId()==null){
-								a.setApprovalStatus(Constants.STARTED_STATUS);
-							}
-							else{
-								a.setApprovalStatus(Constants.EDITED_STATUS);
-							}
-						}
-					}
-					
-				}
-				
-			}
+			setActivityStatus(ampCurrentMember, draft, a);
 			a.setDeleted(false);
 			//is versioning activated?
 			if (a != null && (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
@@ -186,6 +149,7 @@ public class ActivityUtil {
 			}
 			else{
 				//new activity => create ActivityGroup for it
+				newActivity = true;
 				group = new AmpActivityGroup();
 				group.setAmpActivityLastVersion(a);
 				session.save(group);
@@ -217,7 +181,60 @@ public class ActivityUtil {
 		} finally {
 			ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
 			AmpActivityModel.endConversation();
+			try {
+				ServletContext sc = wicketSession.getHttpSession().getServletContext();
+				Site site = wicketSession.getSite();
+				Locale locale = wicketSession.getLocale();
+				LuceneUtil.addUpdateActivity(sc, !newActivity, site, locale, am.getObject());
+			} catch (Exception e) {
+				logger.error("error while trying to update lucene logs:", e);
+			}
 		}
+	}
+
+	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a) {
+		String validation = org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
+		//setting activity status....
+		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
+		if((role.getTeamHead()!=null&&role.getTeamHead())||role.isApprover()){
+			if(draft){
+				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+			}
+			else{
+				a.setApprovalStatus(Constants.APPROVED_STATUS);
+				a.setApprovedBy(ampCurrentMember);
+				a.setApprovalDate(Calendar.getInstance().getTime());
+			}
+		}
+		else{
+			if("validationOff".equals(validation)){
+				a.setApprovalStatus(Constants.APPROVED_STATUS);
+			}
+			else{
+				if("newOnly".equals(validation)){
+					if(a.getAmpActivityId()==null){
+						a.setApprovalStatus(Constants.STARTED_STATUS);
+					}
+					else{
+						if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+							a.setApprovalStatus(Constants.EDITED_STATUS);
+						}
+					}
+				}
+				else{
+					if("allEdits".equals(validation)){
+						if(a.getAmpActivityId()==null){
+							a.setApprovalStatus(Constants.STARTED_STATUS);
+						}
+						else{
+							a.setApprovalStatus(Constants.EDITED_STATUS);
+						}
+					}
+				}
+				
+			}
+			
+		}		
 	}
 
 	/**

@@ -20,10 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -47,14 +45,11 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
-import org.dgfoundation.amp.Util;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
@@ -722,18 +717,14 @@ public class LuceneUtil implements Serializable {
 		}
 	}
 	
-    public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id) {
-		logger.info("Updating activity!");
+    public static void addUpdateActivity(ServletContext sc, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion act){
+    	logger.info("Updating activity!");
 		try {
-			ServletContext sc = request.getSession().getServletContext();
 			if (update) {
-				deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(id));
+				deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(act.getAmpActivityPreviousVersion().getAmpActivityId()));
 			}
 			IndexWriter indexWriter = null;
 			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
-			AmpActivityVersion act = ActivityUtil.loadActivity(id);
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 			Document doc = null;
 			String projectid = act.getAmpId();
@@ -744,12 +735,16 @@ public class LuceneUtil implements Serializable {
 					componentsCode.add(c.getCode());
 				}
 			}
+			
+			String language = navigationLanguage.getLanguage();
+			String siteId = site.getSiteId();
 			doc = activity2Document(String.valueOf(act.getAmpActivityId()), projectid, String.valueOf(act.getName()),
-					Util.getEditorBody(site, act.getDescription(), navigationLanguage), Util.getEditorBody(site, act
-							.getObjective(), navigationLanguage), Util.getEditorBody(site, act.getPurpose(),
-							navigationLanguage), Util.getEditorBody(site, act.getResults(), navigationLanguage), Util
-							.getEditorBody(site, act.getContactName(), navigationLanguage), componentsCode, act
-							.getCrisNumber(), act.getBudgetCodeProjectID());
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getDescription(), language), 
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getObjective(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getPurpose(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getResults(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getContactName(), language),
+					componentsCode, act.getCrisNumber(), act.getBudgetCodeProjectID());
 
 			if (doc != null) {
 				try {
@@ -763,6 +758,20 @@ public class LuceneUtil implements Serializable {
 		} catch (Exception e) {
 			logger.error(e);
 		}
+    }
+    
+    
+    /**
+     * @deprecated Shouldn't be used anymore, code commented because it doesn't work anymore
+     * @param request
+     * @param update
+     * @param id
+     */
+    @Deprecated
+    public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id) {
+		/**
+		 * Code removed
+		 */
 	}
 	
 	/**

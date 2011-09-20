@@ -6,9 +6,7 @@ package org.dgfoundation.amp.onepager.components.features;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RequestCycle;
@@ -112,8 +110,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 			
 		};
+		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
+		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
-		saveAndSubmit.getButton().add(new AttributePrepender("onclick", new Model("for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), ""));
+		saveAndSubmit.getButton().add(updateEditors);
 		activityForm.add(saveAndSubmit);
 
 		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -130,6 +130,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveAsDraft.getButton().setDefaultFormProcessing(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAsDraft.getButton().add(updateEditors);
 		activityForm.add(saveAsDraft);
 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {

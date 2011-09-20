@@ -231,6 +231,7 @@ BREADCRUMB END -->
 <!--
 
 YAHOO.namespace("YAHOO.amp");
+popinPanels = new Array();
 
 var myPanel = new YAHOO.widget.Panel("newPanel", {
 	width:"750px",
@@ -269,30 +270,59 @@ function clearAllLocalSearchResults(){
 }
 
 function showPopin() {
-	var msg='\n<digi:trn>Advanced Filters</digi:trn>';
-	myPanel.setHeader(msg);
-	var element = document.getElementById("dialog2");
-	element.style.display 	= "inline";
-	myPanel.setBody(element);
-	myPanel.show();
+	if ( popinPanels['Panel1'] == null ) {
+		popinPanels['Panel1'] = new YAHOO.widget.Panel('Panel1', {
+		width:"750px",
+		maxHeight:"500px",
+		fixedcenter: true,
+	    constraintoviewport: false,
+	    underlay:"none",
+	    close:true,
+	    visible:false,
+	    modal:true,
+	    draggable:true,
+	    context: ["showbtn", "tl", "bl"]
+	    });
+		popinPanels['Panel1'].render(document.body);
+		var msg='\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>';
+		popinPanels['Panel1'].setHeader(msg);
+		var element = document.getElementById("dialog2");
+		element.style.display 	= "inline";
+		popinPanels['Panel1'].setBody(element);
+	}
+	popinPanels['Panel1'].show();
 	changeTab(0);
-	
-	
 }
+
 function hidePopin() {
-	myPanel.hide();
+	popinPanels['Panel1'].hide();
 }
 
 function showExport() {
-	var msg='\n<digi:trn jsFriendly="true">Export Options</digi:trn>';
-	myPanel.setHeader(msg);
-	var element = document.getElementById("exportPopin");
-	element.style.display 	= "inline";
-	myPanel.setBody(element);
-	myPanel.show();
+	if ( popinPanels['Panel2'] == null ) {
+		popinPanels['Panel2'] = new YAHOO.widget.Panel('Panel2', {
+		width:"750px",
+		maxHeight:"500px",
+		fixedcenter: true,
+	    constraintoviewport: false,
+	    underlay:"none",
+	    close:true,
+	    visible:false,
+	    modal:true,
+	    draggable:true,
+	    context: ["showbtn", "tl", "bl"]
+	    });
+		popinPanels['Panel2'].render(document.body);
+		var msg='\n<digi:trn jsFriendly="true">Export Options</digi:trn>';
+		popinPanels['Panel2'].setHeader(msg);
+		var element = document.getElementById("exportPopin");
+		element.style.display 	= "inline";
+		popinPanels['Panel2'].setBody(element);
+	}
+	popinPanels['Panel2'].show();
 }
 function hideExport() {
-	myPanel.hide();
+	popinPanels['Panel2'].hide();
 }
 
 function doExport(){
@@ -501,7 +531,7 @@ function toggleSettings(){
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
 								<td class="side_opt_sel" id="general_selector">
@@ -522,7 +552,7 @@ function toggleSettings(){
 								</b>
 							</div>
 					</div>
-					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="generalDivList">
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="generalDivList">
 						<c:if test="${!visualizationform.filter.fromPublicView}">
 							<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 						</c:if>
@@ -634,12 +664,12 @@ function toggleSettings(){
 		<div id="organizationsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
 								<td class="side_opt_sel"  id="org_grp_selector">
@@ -653,7 +683,7 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
@@ -666,7 +696,7 @@ function toggleSettings(){
 							</div>
 							
 					</div>
-					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="orgGrpDivList">
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="orgGrpDivList">
 						<ul style="list-style-type: none">
 						<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -704,12 +734,12 @@ function toggleSettings(){
 		<div id="regionsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
 								<td class="side_opt_sel"  id="region_selector">
@@ -723,7 +753,7 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
@@ -736,7 +766,7 @@ function toggleSettings(){
 									 <input type="button" onclick="findNext('regionDivList')"  class="buttonx" value="&gt;&gt;"/>
 							</div>
 					</div>
-					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="regionDivList">
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="regionDivList">
 						<ul style="list-style-type: none">
 						<li>
 							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
@@ -775,12 +805,12 @@ function toggleSettings(){
 		<div id="sectorsTab" style="height: 91%;" >
 			<div class="grayBorder">
 				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25; border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
 						<div class="inside">
 							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 						</div>
 					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:2px; ">		
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
 						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 							<tr style="cursor: pointer;" >
 								<td class="side_opt_sel"  id="sector_selector">
@@ -794,7 +824,7 @@ function toggleSettings(){
 					</div>
 				</div>
 				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 25;border: 1px solid #CCCCCC;border-bottom: 0px;">
+					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
 							<div class="inside" style="float: left" >&nbsp;
 								<b class="ins_header">
 									<digi:trn>Member Selector</digi:trn>
@@ -808,7 +838,7 @@ function toggleSettings(){
 							</div>
 							
 					</div>
-					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="sectorDivList">
+					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="sectorDivList">
 						<ul style="list-style-type: none">
 						<c:forEach items="${visualizationform.filter.configWithSectorAndSubSectors}" var="item" >
 						<c:set var="item" scope="request" value="${item}"/>

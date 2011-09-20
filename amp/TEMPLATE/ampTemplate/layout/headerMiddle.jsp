@@ -148,12 +148,22 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                	</li>
 	                              		</feature:display>
 									</module:display>
-									<!--<li class="yuiampmenuitem_drop">
-		                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
-		                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>
-		                                </a> 
-	                                </li>
-								--></ul>
+									 <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
+			                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
+		                                <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=sector"  onclick="return canExit()">
+			                                	<digi:trn key="sectorDashboard">Sector Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
+		                                <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=region"  onclick="return canExit()">
+			                                	<digi:trn key="regionDashboard">Region Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
+								</ul>
 						</div>
 						</div>                    
 					</li>

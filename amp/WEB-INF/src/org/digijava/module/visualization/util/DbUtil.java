@@ -268,10 +268,6 @@ public class DbUtil {
         }
         
         oql += " and actloc is NULL ";
-
-        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
         
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -379,9 +375,6 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-					oql += ActivityUtil.getApprovedActivityQueryString("act");
-				}
 	            oql += "  and parcv.value = 'Region'";// get only regions
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -476,9 +469,6 @@ public class DbUtil {
 	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 	            }
 	
-	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-					oql += ActivityUtil.getApprovedActivityQueryString("act");
-				}
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
 	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
 	            
@@ -704,10 +694,6 @@ public class DbUtil {
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
-	
-	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-					oql += ActivityUtil.getApprovedActivityQueryString("act");
-				}
 	           
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -823,10 +809,8 @@ public class DbUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
 
-        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-        if(filter.getFromPublicView() != filter.getFromPublicView()){
+        
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
         }
         else
@@ -1128,7 +1112,7 @@ public class DbUtil {
         if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
-        if(filter.getFromPublicView() != filter.getFromPublicView()){
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
         }
         else

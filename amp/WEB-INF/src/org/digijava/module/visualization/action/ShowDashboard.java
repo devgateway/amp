@@ -1,11 +1,12 @@
 package org.digijava.module.visualization.action;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -22,18 +23,17 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.um.action.addWorkSpaceUser;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class ShowDashboard extends Action {
@@ -47,15 +47,21 @@ public class ShowDashboard extends Action {
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 		String visualizationType = request.getParameter("type") == null ? "donor"
 				: (String) request.getParameter("type");
-
+		
+		HttpSession session = request.getSession();
+	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		boolean fromPublicView = false;
+		if (tm == null) {
+			fromPublicView = true;
+		}
 		if (visualizationType.equals("sector")) {
-			prepareSectorDashboard(visualizationForm);
+			prepareSectorDashboard(visualizationForm,fromPublicView);
 			return mapping.findForward("sector");
 		} else if (visualizationType.equals("donor")) {
-			prepareDonorDashboard(visualizationForm);
+			prepareDonorDashboard(visualizationForm,fromPublicView);
 			return mapping.findForward("donor");
 		} else if (visualizationType.equals("region")) {
-			prepareRegionDashboard(visualizationForm);
+			prepareRegionDashboard(visualizationForm,fromPublicView);
 			return mapping.findForward("region");
 		} else {
 			return null;
@@ -63,7 +69,7 @@ public class ShowDashboard extends Action {
 
 	}
 
-	private void prepareRegionDashboard(VisualizationForm visualizationForm) {
+	private void prepareRegionDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
@@ -78,9 +84,10 @@ public class ShowDashboard extends Action {
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter);
 		}
+		filter.setFromPublicView(fromPublicView);
 	}
 
-	private void prepareDonorDashboard(VisualizationForm visualizationForm) {
+	private void prepareDonorDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
 
 		// Check if filter is initialized
 		// Filter initialization includes options for the filter
@@ -99,6 +106,7 @@ public class ShowDashboard extends Action {
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter);
 		}
+		filter.setFromPublicView(fromPublicView);
 
 		// Get Summary Information
 		//DashboardUtil.getSummaryAndRankInformation(visualizationForm);
@@ -138,9 +146,7 @@ public class ShowDashboard extends Action {
 		if(filter.getOrgGroupId()!=-1){
 
 		orgs = DbUtil.getDonorOrganisationByGroupId(
-				filter.getOrgGroupId(), false); // TODO: Determine how
-															// this will work in
-															// the public view
+				filter.getOrgGroupId(), filter.getFromPublicView());
 		}
 		filter.setOrganizations(orgs);
 		try {
@@ -282,7 +288,7 @@ public class ShowDashboard extends Action {
         }
 	}
 
-	private void prepareSectorDashboard(VisualizationForm visualizationForm) {
+	private void prepareSectorDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
@@ -297,6 +303,7 @@ public class ShowDashboard extends Action {
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter);
 		}
+		filter.setFromPublicView(fromPublicView);
 	}
 
 }

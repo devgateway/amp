@@ -361,7 +361,10 @@ function resetToDefaults(){
 	if (document.getElementById("pledge_visible")!=null){
 		document.getElementById("pledge_visible").checked = true;
 	}
-	document.getElementById("workspace_only").checked = false;
+	if (document.getElementById("workspace_only")!=null){
+		document.getElementById("workspace_only").checked = false;
+	}
+	
 	
 	document.getElementById("transaction_type_0").value = true;
 	document.getElementById("transaction_type_1").value = false;
@@ -520,7 +523,9 @@ function toggleSettings(){
 							</div>
 					</div>
 					<div style="height: 145;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 145; padding:20px; " id="generalDivList">
-						<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						<c:if test="${!visualizationform.filter.fromPublicView}">
+							<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						</c:if>
 						<hr />
 						<br />
 						<digi:trn>For Time Series Comparison, what data do you want to show</digi:trn>? <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
@@ -1413,7 +1418,9 @@ function toggleSettings(){
 		<li><a href="#tab1"><div id="visualizationDiv"><digi:trn>Visualization</digi:trn></div></a></li>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
+		<c:if test="${!visualizationform.filter.fromPublicView}">
 		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
+		</c:if>
 		</c:if>
 	</ul>
 	<div class="yui-content">
@@ -1806,8 +1813,10 @@ function toggleSettings(){
 	<div id="tab2">
 		<digi:trn>No Contact Information available for current filter selection</digi:trn>
 	</div>
+	<c:if test="${!visualizationform.filter.fromPublicView}">
 	<div id="tab3">
 	</div>
+	</c:if>
 	</c:if>
 	</div>
 </div>
@@ -1988,7 +1997,9 @@ function applyFilterPopin(e){
 	if (document.getElementById("pledge_visible")!=null){
 		document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
 	}
-	document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	if (document.getElementById("workspace_only")!=null){
+		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	}
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {

@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -154,7 +155,7 @@ public class DashboardUtil {
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	        BigDecimal total = fundingCal.getValue();
+	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             AmpSector topLevelSector = getTopLevelParent(sector);
             if(map.containsKey(topLevelSector)){
             	BigDecimal currentTotal = map.get(topLevelSector);
@@ -166,11 +167,6 @@ public class DashboardUtil {
             }
 
 		}
-		for(AmpSector currentSector : map.keySet()){
-			BigDecimal value = map.get(currentSector);
-			map.put(currentSector, value.divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			
-		} 
 		return sortByValue (map);
 	}
 	
@@ -192,7 +188,6 @@ public class DashboardUtil {
 			//Long[] oldIds = filter.getSectorIds();
 			Long[] ids = {sector.getAmpSectorId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-//			newFilter.setSelSectorIds(DbUtil.getAllDescendants(ids));
 			newFilter.setSelSectorIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
             //filter.setSectorIds(oldIds);

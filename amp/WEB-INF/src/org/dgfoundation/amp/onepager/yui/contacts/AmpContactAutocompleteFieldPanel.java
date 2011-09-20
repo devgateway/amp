@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
@@ -47,7 +48,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 	@Override
 	protected String getChoiceValue(AmpContact choice) {
 		if (choice.getId() == null) {
-			return "add new contact";
+			return TranslatorUtil.getTranslation("add new contact");
 		}
 		return choice.getFullname();
 	}

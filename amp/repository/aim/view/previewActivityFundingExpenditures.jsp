@@ -26,32 +26,35 @@
 <c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-
-
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
 
 						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Expenditure"
-								feature="Expenditures">
-								<digi:trn
-									key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+							<td align="right" bgcolor="#FFFFFF">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
 								</digi:trn>
-							</field:display></td>
-							<td align="right"><field:display name="Date Expenditure"
-								feature="Expenditures">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
+							</module:display>
+							</td>
+							<td align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="transactionDate" />
+								</module:display>
+							</td>
 
-							<td align="right"><field:display name="Amount Expenditure"
-								feature="Expenditures">
-								<!-- <FONT color=blue>*</FONT> -->
-								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
-								name="Currency Expenditure" feature="Expenditures">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display> &nbsp;</td>
+							<td align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								
+								</module:display>
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="currencyCode" />&nbsp;
+								</module:display>
+								</td>
 							<td align="left" bgcolor="#ffffff"></td>
 						</tr>
 						<tr>
@@ -94,25 +97,30 @@
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 
 						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Expenditure"
-								feature="Expenditures">
-								<digi:trn
-									key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+							<td align="right" bgcolor="#FFFFFF">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
 								</digi:trn>
-							</field:display></td>
-							<td align="right"><field:display name="Date Expenditure"
-								feature="Expenditures">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td align="right"><field:display name="Amount Expenditure"
-								feature="Expenditures">
-								<!-- <FONT color="blue">*</FONT> -->
-								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
-								name="Currency Expenditure" feature="Expenditures">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display> &nbsp;</td>
+							</module:display>
+							</td>
+							<td align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="transactionDate" />
+								</module:display>
+							</td>
+							<td align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
+										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;
+								</module:display>		
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
+										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+									<bean:write name="fundingDetail" property="currencyCode" />
+								</module:display>&nbsp;
+							</td>
 							<td align="left" bgcolor="#ffffff"></td>
 
 						</tr>

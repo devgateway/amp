@@ -51,48 +51,50 @@
 										<tr>
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
+												<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification" 
+													parentModule="/Activity Form/Donor Funding/Funding Item/">
 												<tr>
 													<td>
 													<table cellspacing="1" cellpadding="0" border="0" width="100%">
 														<tr>
 															<td>
-															<table width="100%" border="0" cellpadding="0"
-																bgcolor="#dddddd" cellspacing="1" style="font-size:11px;">
-																<field:display name="Funding Organization Id"
-																	feature="Funding Information">
-																	<tr>
-																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
-																		<digi:trn key="aim:fundingOrgId">
-                                                                                    Funding Organization Id
-                                                                          </digi:trn>
-																		</a></td>
-																		<td width="1">:</td>
-																		<td align="left"><bean:write
-																			name="funding" property="orgFundingId" /></td>
-																	</tr>
-																</field:display>
-																<field:display name="Funding Organization Name"
-																	feature="Funding Information">
-																	<tr>
-																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
-																		<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
-																		</a></td>
-																		<td width="1">:</td>
-																		<td align="left">
-																		${fundingOrganization.orgName}</td>
-																	</tr>
-																</field:display>
-
+															<table width="100%" border="0" cellpadding="0" bgcolor="#dddddd" cellspacing="1" style="font-size:11px;">
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Organization Id"
+																	parentModule="/Activity Form/Donor Funding/Funding Item/Funding Classification">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
+																			<digi:trn key="aim:fundingOrgId">Funding Organization Id</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																		<bean:write name="funding" property="orgFundingId" />
+																	</td>
+																</tr>
+																</module:display>
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Donor Organisation" 
+																	parentModule="/Activity Form/Donor Funding/Funding Item">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
+																			<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																		${fundingOrganization.orgName}
+																	</td>
+																</tr>
+																</module:display>
 																<!-- type of assistance -->
-																<field:display name="Type Of Assistance"
-																	feature="Funding Information">
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification/Type of Assistence"
+																	parentModule="/Activity Form/Donor Funding/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
 																		<digi:trn key="aim:typeOfAssist">
-                                                                                    Type of Assistance </digi:trn>
+		                                                                                  Type of Assistance </digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left"><logic:notEmpty
@@ -101,9 +103,10 @@
 																				property="typeOfAssistance.value" />
 																		</logic:notEmpty></td>
 																	</tr>
-																</field:display>
-																<field:display name="Financing Instrument"
-																	feature="Funding Information">
+																</module:display>
+																
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification/Financing Instrument"
+																	parentModule="/Activity Form/Donor Funding/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>
@@ -116,8 +119,9 @@
 																				property="financingInstrument.value" />
 																		</logic:notEmpty></td>
 																	</tr>
-																</field:display>
-																<field:display name="Funding Status"  feature="Funding Information">
+																</module:display>
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Status"
+																	parentModule="/Activity Form/Donor Funding/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn>Funding Status</digi:trn>'>
@@ -130,8 +134,9 @@
 																				property="fundingStatus.value" />
 																		</logic:notEmpty></td>
 																	</tr>
-																</field:display>
-																<field:display name="Mode of Payment"  feature="Funding Information">
+																</module:display>
+																<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification/Mode of Payment"
+																	parentModule="/Activity Form/Donor Funding/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn>Mode of Payment</digi:trn>'>
@@ -144,7 +149,9 @@
 																				property="modeOfPayment.value" />
 																		</logic:notEmpty></td>
 																	</tr>
-																</field:display>
+																</module:display>
+																
+																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 																<field:display name="Donor Objective" feature="Funding Information">
 																	<tr>
 																		<td align="left" width="150"><a
@@ -157,21 +164,25 @@
 																		</td>
 																	</tr>
 																</field:display>
+																
 															</table>
 															</td>
 														</tr>
 													</table>
 													</td>
 												</tr>
+												</module:display>
 												<tr>
-												<td><!-- Begin funding detail -->
-												<table width="100%" border="0" align="center"
-													cellpadding="2" cellspacing="0" style="font-size:11px;">
-													<bean:define id="funding" name="funding" scope="page"
-														toScope="request"
-														type="org.digijava.module.aim.helper.Funding"></bean:define>
-													<jsp:include page="previewActivityFundingCommitments.jsp" />
-
+												<td>
+												<!-- Begin funding detail -->
+												<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;">
+													<bean:define id="funding" name="funding" scope="page" toScope="request"
+														type="org.digijava.module.aim.helper.Funding">
+													</bean:define>
+													<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+														<jsp:include page="previewActivityFundingCommitments.jsp" />
+													</module:display>
 													<feature:display module="Funding"
 														name="Disbursement">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
@@ -182,7 +193,7 @@
 													</feature:display>
 
                                                     <feature:display module="Funding" name="Disbursement Orders">
-                                                        <jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
+                                                        <jsp:include page="previewActivityFundingExpenditures.jsp" />
                                                     </feature:display>
 
 													<feature:display module="Funding" name="Undisbursed Balance">
@@ -195,13 +206,13 @@
 												<tr>
 
 													<td bgcolor="#ffffff" style="font-size:11px; color:#000000;">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+													<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 													<FONT color=blue>* <digi:trn
 														key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)
+														The amount entered are in thousands (000)
 		  												</digi:trn>
 													</FONT>
-</gs:test>
+													</gs:test>
 													</td>
 												</tr>
 											</table>
@@ -281,7 +292,7 @@
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB"><digi:trn
                                 key='aim:totalActualdisbursement'>
-                                                                                                        TOTAL ACTUAL DISBURSEMENT </digi:trn>
+                                TOTAL ACTUAL DISBURSEMENT </digi:trn>
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">

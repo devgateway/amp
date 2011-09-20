@@ -22,14 +22,16 @@
 			title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
 		<digi:trn key="aim:plannedcommitments">PLANNED COMMITMENTS </digi:trn>
 		</a></td>
-		<td bgcolor="#FFFFCC"><c:if
-			test="${aimEditActivityForm.funding.fixerate == true}">
-			<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
-		</c:if></td>
+		<td bgcolor="#FFFFCC">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 </feature:display>
 <c:if test="${!empty funding.fundingDetails}">
-<feature:display name="Planned Commitments" module="Measures">
+<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Add Commitment" 
+	parentModule="/Activity Form/Donor Funding/Funding Item/Commitments">
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
@@ -81,7 +83,7 @@
       		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
-	</feature:display>
+	</module:display>
 
 	<tr><td colspan="4" height="7px"></td></tr>
 	<tr>
@@ -100,32 +102,37 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 						<tr bgcolor="#ffffff">
-							<td width="40%" align="right"  bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Commitment"
-								feature="Commitments">
+							<td width="40%" align="right"  bgcolor="#FFFFFF">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<digi:trn
 									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
 								</digi:trn>
-							</field:display></td>
-
-
-							<td height="18" align="right"><field:display name="Date Commitment"
-								feature="Commitments">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td height="18" align="right"><field:display
-								name="Amount Commitment" feature="Commitments">
-								<!-- <font color="blue">*</font>-->
+							</module:display>
+							</td>
+							<td height="18" align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+									<bean:write name="fundingDetail" property="transactionDate" />
+								</module:display>
+							</td>
+							<td height="18" align="right">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Amount" 
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<bean:write name="fundingDetail" property="transactionAmount" />
-							</field:display> <field:display name="Currency Commitment"
-								feature="Commitments">
+							</module:display>
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Currency"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display>&nbsp;</td>
-							<td height="18"><field:display name="Exchange Rate"
-								feature="Funding Information">
-								<bean:write name="fundingDetail" property="formattedRate" />
-							</field:display></td>
+							</module:display> &nbsp;
+							</td>
+							<!--Exchange Rate not found-->
+							<td height="18">
+								<field:display name="Exchange Rate" feature="Funding Information">
+									<bean:write name="fundingDetail" property="formattedRate" />
+								</field:display>
+							</td>
 						</tr>
 			</logic:equal>
 		</logic:equal>

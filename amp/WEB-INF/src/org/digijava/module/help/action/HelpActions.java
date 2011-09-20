@@ -881,6 +881,7 @@ public class HelpActions extends DispatchAction {
         
         
 	    //xml import
+        if(xmlContent == null) return mapping.findForward("admin");
 	    JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Unmarshaller m = jc.createUnmarshaller();
         help_in = (AmpHelpRoot) m.unmarshal(new ByteArrayInputStream(xmlContent));

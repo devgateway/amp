@@ -517,17 +517,28 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
 		if(divide){
 			filter.setDivideThousands(true);
 		}
+
+		BigDecimal divideByDenominator;
+
+		if (filter.getDivideThousands())
+			divideByDenominator = new BigDecimal(1000);
+		else
+			divideByDenominator = new BigDecimal(1);
         
-		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		if ("true"
+				.equals(FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+			if (filter.getDivideThousands())
+				divideByDenominator = new BigDecimal(1000000);
+			else
+				divideByDenominator = new BigDecimal(1000);
+		}
         BigDecimal sectorTotal = BigDecimal.ZERO;
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -596,14 +607,16 @@ public class DataDispatcher extends DispatchAction {
 						Map.Entry entry = (Map.Entry)it.next();
 						AmpSector sec = (AmpSector) entry.getKey();
 	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), sectorTotal);
+	 	                BigDecimal value = (BigDecimal)entry.getValue();
+	 	                
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
+    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
+    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -617,11 +630,11 @@ public class DataDispatcher extends DispatchAction {
 	 	            BigDecimal percentage = getPercentage(othersValue, sectorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	              		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	              		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                		index++;
     	                }
 	                }
@@ -697,7 +710,7 @@ public class DataDispatcher extends DispatchAction {
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                if(allData.containsKey(i)){
 	                	BigDecimal[] currentAmounts = allData.get(i);
 	                	currentAmounts[index] = amount;
@@ -740,7 +753,7 @@ public class DataDispatcher extends DispatchAction {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	            BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
 	            } else {
@@ -853,14 +866,26 @@ public class DataDispatcher extends DispatchAction {
 		if(divide){
 			filter.setDivideThousands(true);
 		}
+		BigDecimal divideByDenominator;
+
+		if (filter.getDivideThousands())
+			divideByDenominator = new BigDecimal(1000);
+		else
+			divideByDenominator = new BigDecimal(1);
+        
+
 		
-		
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
         
-		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		if ("true"
+				.equals(FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+			if (filter.getDivideThousands())
+				divideByDenominator = new BigDecimal(1000000);
+			else
+				divideByDenominator = new BigDecimal(1000);
+		}
+		
 		BigDecimal donorTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -919,15 +944,16 @@ public class DataDispatcher extends DispatchAction {
     					Map.Entry entry = (Map.Entry)it.next();
     					AmpOrganisation org = (AmpOrganisation) entry.getKey();
      	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), donorTotal);
+	 	                BigDecimal value = (BigDecimal)entry.getValue();
      	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
      	                if (donut){
      	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
+     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
      	                		index++;
      	                	}
      	                } else {
      	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
+     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\"/>\n");
      	                		index++;
  	     	                }
      	                }
@@ -941,11 +967,11 @@ public class DataDispatcher extends DispatchAction {
      	           	BigDecimal percentage = getPercentage(othersValue, donorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -1022,7 +1048,7 @@ public class DataDispatcher extends DispatchAction {
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(allData.containsKey(i)){
                     	BigDecimal[] currentAmounts = allData.get(i);
                     	currentAmounts[index] = amount;
@@ -1065,7 +1091,7 @@ public class DataDispatcher extends DispatchAction {
                 startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                 DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
 	            } else {
@@ -1901,13 +1927,24 @@ public class DataDispatcher extends DispatchAction {
 		if(divide){
 			filter.setDivideThousands(true);
 		}
-		
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+
+		BigDecimal divideByDenominator;
+
+		if (filter.getDivideThousands())
+			divideByDenominator = new BigDecimal(1000);
+		else
+			divideByDenominator = new BigDecimal(1);
+        
+		if ("true"
+				.equals(FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+			if (filter.getDivideThousands())
+				divideByDenominator = new BigDecimal(1000000);
+			else
+				divideByDenominator = new BigDecimal(1000);
+		}
 		String othersTitle = "Other";
         
-		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
         BigDecimal regionTotal = BigDecimal.ZERO;
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -1975,14 +2012,15 @@ public class DataDispatcher extends DispatchAction {
 						Map.Entry entry = (Map.Entry)it.next();
 						AmpCategoryValueLocations loc = (AmpCategoryValueLocations) entry.getKey();
 	 	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), regionTotal);
+	 	                BigDecimal value = (BigDecimal)entry.getValue();
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ entry.getValue() + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
+    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -1996,11 +2034,11 @@ public class DataDispatcher extends DispatchAction {
 	 	            BigDecimal percentage = getPercentage(othersValue, regionTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -2077,7 +2115,7 @@ public class DataDispatcher extends DispatchAction {
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                if(allData.containsKey(i)){
 	                	BigDecimal[] currentAmounts = allData.get(i);
 	                	currentAmounts[index] = amount;
@@ -2120,7 +2158,7 @@ public class DataDispatcher extends DispatchAction {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	            BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
 	            } else {

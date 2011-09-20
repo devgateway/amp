@@ -234,7 +234,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -279,7 +279,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -320,12 +320,14 @@
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"itemId" : itemId
 				};
+				params["divide"] = divide;
 				
 				service.send(params);
 //				start();

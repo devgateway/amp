@@ -284,7 +284,7 @@ function hidePopin() {
 }
 
 function showExport() {
-	var msg='\n<digi:trn>Export Options</digi:trn>';
+	var msg='\n<digi:trn jsFriendly="true">Export Options</digi:trn>';
 	myPanel.setHeader(msg);
 	var element = document.getElementById("exportPopin");
 	element.style.display 	= "inline";

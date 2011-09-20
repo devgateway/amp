@@ -14,6 +14,10 @@ $(document).ready(function(){
 	$('#wicketFooter').replaceWith($('#footer'));
 	$('#wicketRightMenu').replaceWith($('#rightMenu'));
 	$('#footer').css("display", "inline"); 
+	
+	window.onbeforeunload = function() {
+	    return 'Are you sure you want to navigate away from this page?';
+	};
 });
 
 //////////////////////////////////////////////////////////////

@@ -2286,7 +2286,8 @@ public class DataDispatcher extends DispatchAction {
 				donorList.add(DbUtil.getOrganisation(filter.getOrgIds()[i]));
 			}
 		} else {
-			Map<AmpOrganisation, BigDecimal> map = visualizationForm.getRanksInformation().getFullDonors();
+			donorList.addAll(DbUtil.getDonors(filter));
+			/*Map<AmpOrganisation, BigDecimal> map = visualizationForm.getRanksInformation().getFullDonors();
 			List list = new LinkedList(map.entrySet());
 		    int counter = 0;
 		    for (Iterator it = list.iterator(); it.hasNext();) {
@@ -2296,7 +2297,7 @@ public class DataDispatcher extends DispatchAction {
 		        if (counter>=10) {
 					break;
 				}
-		    }
+		    }*/
 		}
         //donorList = DbUtil.getDonors(filter);
         Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
@@ -2353,7 +2354,7 @@ public class DataDispatcher extends DispatchAction {
         
         visualizationForm.getExportData().setODAGrowthTableData(odaGrowthData);
         
-        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,10l);
+        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,9l);
         
         StringBuffer xmlString = new StringBuffer();
         

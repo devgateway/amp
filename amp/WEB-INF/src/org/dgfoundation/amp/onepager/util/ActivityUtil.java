@@ -88,7 +88,6 @@ public class ActivityUtil {
 			boolean draftChange = draft != a.getDraft();
 			a.setDraft(draft);
 			
-			setActivityStatus(ampCurrentMember, draft, a);
 			a.setDeleted(false);
 			//is versioning activated?
 			if (a != null && (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
@@ -154,6 +153,7 @@ public class ActivityUtil {
 				group.setAmpActivityLastVersion(a);
 				session.save(group);
 			}
+			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);
 			Date updatedDate = Calendar.getInstance().getTime();
@@ -192,11 +192,12 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a) {
+	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity) {
 		String validation = org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
-		if((role.getTeamHead()!=null&&role.getTeamHead())||role.isApprover()){
+		boolean teamLeadFlag    = (role.getTeamHead()!=null && role.getTeamHead())||role.isApprover() ;
+		if(teamLeadFlag){
 			if(draft){
 				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}
@@ -207,32 +208,46 @@ public class ActivityUtil {
 			}
 		}
 		else{
-			if("validationOff".equals(validation)){
-				a.setApprovalStatus(Constants.APPROVED_STATUS);
+			if(draft){
+				a.setApprovalStatus(Constants.STARTED_STATUS);
 			}
-			else{
-				if("newOnly".equals(validation)){
-					if(a.getAmpActivityId()==null){
-						a.setApprovalStatus(Constants.STARTED_STATUS);
-					}
-					else{
-						if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-							a.setApprovalStatus(Constants.EDITED_STATUS);
-						}
-					}
+			else
+				if("validationOff".equals(validation)){
+					if(newActivity)
+						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+					else a.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
 				else{
-					if("allEdits".equals(validation)){
-						if(a.getAmpActivityId()==null){
+					if("newOnly".equals(validation)){
+						if(newActivity){
+							//all the new activities will have the started status
 							a.setApprovalStatus(Constants.STARTED_STATUS);
 						}
 						else{
-							a.setApprovalStatus(Constants.EDITED_STATUS);
+	//						if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+	//							a.setApprovalStatus(Constants.EDITED_STATUS);
+	//						}
+							//if we edit an existing not validated status it will keep the old status - started
+							if(oldA.getApprovalStatus().equals(Constants.STARTED_STATUS))
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							//if we edit an existing activity that is validated or startedvalidated or edited
+							else  a.setApprovalStatus(Constants.APPROVED_STATUS);
 						}
 					}
+					else{
+						if("allEdits".equals(validation)){
+							if(newActivity){
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							}
+							else{
+								if(oldA.getApprovalStatus().equals(Constants.STARTED_STATUS))
+									a.setApprovalStatus(Constants.STARTED_STATUS);
+								else a.setApprovalStatus(Constants.EDITED_STATUS);
+							}
+						}
+					}
+					
 				}
-				
-			}
 			
 		}		
 	}

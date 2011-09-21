@@ -79,4 +79,6 @@ public class GlobalSettingsConstants {
     
     public static final String ALLOW_ACTIVITY_OVERWRITING = "Do you want to allow Activity overwriting ?";
     
+    public static final String PROJECTS_VALIDATION = "Projects Validation";
+    
 }

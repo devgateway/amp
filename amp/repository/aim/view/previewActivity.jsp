@@ -330,7 +330,8 @@ function collapseAll() {
 						<td>
 							<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>							
 							<input type="button" class="buttonx" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
-						</td>	
+						</td>
+						<%-- 	
 						<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 							<feature:display name="Edit Activity" module="Previews">
 								<field:display feature="Edit Activity" name="Edit Activity Button">  
@@ -353,6 +354,25 @@ function collapseAll() {
 											<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 												<input type="button" class="buttonx" onclick="javascript:editActivity()" value="${trn}"/>
 											</c:if>
+										</td>	
+									</logic:equal>
+								</field:display>
+							</feature:display>
+						</module:display>
+						--%>
+						<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Edit Activity" module="Previews">
+								<field:display feature="Edit Activity" name="Edit Activity Button">
+									<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
+										<td>
+											<c:set var="trn"><digi:trn>EDIT</digi:trn></c:set>
+											<input type="button" class="buttonx" onclick="javascript:editActivity()" value="${trn}"/>
+										</td>
+									</logic:equal>
+									<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
+										<td>
+											<c:set var="trn"><digi:trn>VALIDATE</digi:trn></c:set>							
+												<input type="button" class="buttonx" onclick="javascript:editActivity()" value="${trn}"/>
 										</td>	
 									</logic:equal>
 								</field:display>

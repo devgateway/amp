@@ -4,6 +4,14 @@
   <keyword>Pledge Names</keyword>
   <author>Mauricio</author>
   <description>This patch add a new category for Pledges Names</description>
+  <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) from amp_category_class WHERE category_name='Pledges Names'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger> 
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

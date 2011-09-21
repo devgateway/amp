@@ -524,9 +524,11 @@
 				fontColor="0"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				tickGap="5"
-				showGridArea="false"
-				labelFunction="{axisLabel}"/>
+				tickGap="20"
+				labelFunction="{axisLabel}"
+				showGridArea="true"
+				gridFill="{areaFill}"
+				/>
 		</axiis:backgroundGeometries>
 
 		<!-- Layouts -->
@@ -728,6 +730,8 @@
 	A GradientStop defines the objects that control a transition as part of a gradient fill. Stops will be equally spaced unless ratio is specified
 	-->
 	<mx:Array id="fills">
+		<degrafa:SolidFill id="areaFill" color="{0xEEEEEE}">
+		</degrafa:SolidFill>
 		<degrafa:LinearGradientFill id="clusterFill" angle="45">
 			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
 			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>

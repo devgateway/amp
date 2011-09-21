@@ -2,6 +2,7 @@ package org.digijava.module.translation.action;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -29,7 +31,7 @@ public class AdvTrnSaveChanges extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
+		ServletContext context = request.getSession().getServletContext();
 		//get current site
 		String siteId = RequestUtils.getSite(request).getId().toString();
 		//get buffer
@@ -44,15 +46,20 @@ public class AdvTrnSaveChanges extends Action {
 			Message message = change.getElement();
 			Operation operation = change.getOperation();
 			message.setSiteId(siteId);
+			String suffix =  message.getLocale();
 			
 			if (operation.equals(Operation.ADD)){
 				worker.save(message);
+				LuceneWorker.addItemToIndex(message, context,suffix);
 			}
 			if (operation.equals(Operation.UPDATE)){
 				worker.update(message);
+				LuceneWorker.deleteItemFromIndex(message, context,suffix);
+				LuceneWorker.addItemToIndex(message, context,suffix);
 			}
 			if (operation.equals(Operation.DELETE)){
 				worker.delete(message);
+				LuceneWorker.deleteItemFromIndex(message, context,suffix);
 			}
 			buffer.undoOperation(message);
 		}

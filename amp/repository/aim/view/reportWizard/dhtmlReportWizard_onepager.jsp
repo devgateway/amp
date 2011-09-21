@@ -189,7 +189,7 @@
 		//alert( YAHOO.util.Dom.getDocumentHeight() );
 		//alert( document.body.clientHeight );
 		var rd				= document.getElementsByName("reportDescription")[0];
-		rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
+		//rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
 		
 		repManagerParams	= { // Global scoped object
 				desktopTab: ${myForm.desktopTab},

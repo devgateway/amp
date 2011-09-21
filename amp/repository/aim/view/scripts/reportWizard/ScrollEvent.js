@@ -41,19 +41,36 @@ function KeepWithScroll (markerElId, keeperElId) {
 	
 	this.keeperEl		= document.getElementById(this.keeperElId);
 	this.keeperElX		= YAHOO.util.Dom.getX(this.keeperEl);
+	this.keeperElWidth	= YAHOO.util.Dom.getRegion(this.keeperEl).width;
+	//alert(this.keeperElWidth);
 	
 	onScrollHide(this.markerElId, this);
 	onScrollShow(this.markerElId, this);
 }
 
 KeepWithScroll.prototype.onHide	= function( arguments ) {
+	if (YAHOO.env.ua.ie > 0) {
+		var top = YAHOO.util.Dom.getDocumentScrollTop();
+		//var vHeight = YAHOO.util.Dom.getViewportHeight();
+		var newTop	= top + 10 ;
+		
+		this.hidden		= true;
+		this.keeperEl.style.position	= "absolute";
+		this.keeperEl.style.width		= this.keeperElWidth;
+		this.keeperEl.style.float		= "";
+		this.keeperEl.style.top			= newTop + "px";
+		this.keeperEl.style.left		= this.keeperElX + "px";
+		this.keeperEl.style.backgroundColor	= "white";
+	}
 	if ( !this.hidden ) {
 		this.hidden		= true;
 		this.keeperEl.style.position	= "fixed";
+		this.keeperEl.style.float		= "";
 		this.keeperEl.style.top			= "3px";
-		this.keeperEl.style.left		= this.keeperElX;
+		this.keeperEl.style.left		= this.keeperElX + "px";
 		this.keeperEl.style.backgroundColor	= "white";
-//		alert("hidden");
+	//	alert(this.keeperElX);
+	//	alert("hidden");
 	}
 };
 
@@ -64,6 +81,6 @@ KeepWithScroll.prototype.onShow	= function( arguments ) {
 		this.keeperEl.style.top			= "";
 		this.keeperEl.style.left		= "";
 		this.keeperEl.style.backgroundColor	= "";
-//		alert("shown");
+	//	alert("shown");
 	}
 };

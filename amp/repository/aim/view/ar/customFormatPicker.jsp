@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.form.ReportsFilterPickerForm"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page pageEncoding="UTF-8"%>
@@ -163,10 +164,11 @@
 			<html:submit styleClass="buttonx"  property="applyFormat" styleId="applyFormatBtn">
 				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
 			</html:submit>&nbsp; 
+			<c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 			
 				<input type="hidden" name="apply" value="true">
 				<html:hidden property="resetFormat" value="false"/>
-				<html:button styleClass="buttonx" onclick="ResetCustom(<%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>);" property="applyFormat">
+				<html:button styleClass="buttonx" onclick="ResetCustom(${maxFractionDigits});" property="applyFormat">
 				<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
 			</html:button>
 	</div>

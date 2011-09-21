@@ -15,7 +15,7 @@
 			INSERT INTO amp_columns (columnid, columnName, aliasName, cellType, extractorView)
 			VALUES(nextval('amp_columns_seq'), 'Pledges Districts', '', 'org.dgfoundation.amp.ar.cell.TextCell','v_pledges_districts');
 			
-			DROP VIEW v_pledges_regions;
+			DROP VIEW IF EXISTS v_pledges_regions;
 			
 			CREATE OR REPLACE VIEW v_pledges_regions AS 
 			select 

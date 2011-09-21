@@ -41,7 +41,7 @@ function KeepWithScroll (markerElId, keeperElId) {
 	
 	this.keeperEl		= document.getElementById(this.keeperElId);
 	this.keeperElX		= YAHOO.util.Dom.getX(this.keeperEl);
-	this.keeperElWidth	= YAHOO.util.Dom.getRegion(this.keeperEl).width;
+	this.keeperElWidth	= YAHOO.util.Dom.getRegion(this.keeperEl).width + 10;
 	//alert(this.keeperElWidth);
 	
 	onScrollHide(this.markerElId, this);
@@ -56,16 +56,16 @@ KeepWithScroll.prototype.onHide	= function( arguments ) {
 		
 		this.hidden		= true;
 		this.keeperEl.style.position	= "absolute";
-		this.keeperEl.style.width		= this.keeperElWidth;
-		this.keeperEl.style.float		= "";
+		this.keeperEl.style.width		= this.keeperElWidth + "px";
+		//this.keeperEl.style.float		= "";
 		this.keeperEl.style.top			= newTop + "px";
-		this.keeperEl.style.left		= this.keeperElX + "px";
+		this.keeperEl.style.left		= (this.keeperElX-10) + "px";
 		this.keeperEl.style.backgroundColor	= "white";
 	}
 	if ( !this.hidden ) {
 		this.hidden		= true;
 		this.keeperEl.style.position	= "fixed";
-		this.keeperEl.style.float		= "";
+		//this.keeperEl.style.float		= "";
 		this.keeperEl.style.top			= "3px";
 		this.keeperEl.style.left		= this.keeperElX + "px";
 		this.keeperEl.style.backgroundColor	= "white";

@@ -4,7 +4,14 @@
   <keyword>xmlpatcher</keyword>
   <author>Mauricio</author>
   <description>This patch add program column to pledge reports</description>
-  
+  <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) from amp_columns WHERE columnName='Pledges Programs'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger> 
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

@@ -1,1 +1,0 @@
-update amp_columns set extractorView = 'v_responsible_org_groups' where extractorView = 'v_responsible_organisation_groups';

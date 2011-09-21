@@ -1,2 +1,0 @@
-delete from amp_features_templates where feature in ( select id  from amp_features_visibility where name="Dynamic Region Manager"  );
-delete from amp_features_visibility where name="Dynamic Region Manager";

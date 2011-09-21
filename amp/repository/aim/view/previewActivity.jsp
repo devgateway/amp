@@ -43,9 +43,10 @@
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"
 ></script>
+
 <script language="JavaScript">
 
-<!--
+
 
 function exportToPdf (actId) {
 	openURLinResizableWindow("/aim/exportActToPDF.do?activityid="+actId, 780, 500);
@@ -122,9 +123,8 @@ function editActivity() {
 	document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
 }
 
-function expandAll() {
-   
-	$("img[id$='_minus']").show();
+function expandAll(){
+   	$("img[id$='_minus']").show();
 	$("img[id$='_plus']").hide();	
 	$("div[id$='_dots']").hide();
 	$("div[id^='act_']").show('fast');
@@ -3257,8 +3257,8 @@ function collapseAll() {
 	</table>
 	<!-- MAIN CONTENT PART END -->
 </digi:form>
-<script language="javascript">
-$(document).ready(function(){
-	expandAll();
-});
+<script language="JavaScript">
+	$(document).ready(function(){
+		expandAll();
+	});
 </script>

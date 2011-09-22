@@ -52,8 +52,7 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 			s = bis.readLine();
 		}
 		
-		session = PersistenceManager.getSession();
-		connection = session.connection();
+		connection = PersistenceManager.getJdbcConnection();
 		
 		connection.setAutoCommit(false);
 
@@ -91,7 +90,7 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 	} finally {
 		try {
 			connection.setAutoCommit(true);
-			PersistenceManager.releaseSession(session);
+			connection.close();
 			
 		} catch (SQLException e) {
 			logger.error(e);

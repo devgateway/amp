@@ -9,24 +9,6 @@
 
 
 
-<style>
-	#content{
-		height: 100%;
-	}
-	#demo{
-		height: 100%;
-	}
-	#div1{
-		height: 96%;
-	}
-	
-	SELECT {
-	Font-size:10px;
-	font-family:Verdana,Arial,Helvetica,sans-serif;
-	width:200px;
-}
-</style>
-
 <%
 String countryName = "";
 String ISO = null;
@@ -81,44 +63,12 @@ else {
 <%--
 <h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 --%>
-<TABLE cellSpacing=0 cellPadding=0  width="100%"  border=0 valign="top" align="left">
-  <TBODY>
-    <TR>
-        <TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
+
             <digi:insert attribute="headerTop" />
-        </TD>
-    </TR>
-    <TR>
-        <TD width="100%" align="center" vAlign="top" bgcolor="#376091">
-            <TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#376091">
-                <TBODY>
-                    <TR bgColor=#376091 height="15">
-                        <TD align="left" vAlign="center" height="15">
                             <digi:insert attribute="headerMiddle" />
-                        </TD>
-                        <TD align="right" vAlign="top" height="15">
                             <digi:insert attribute="loginWidget" />
-                        </TD>
-                    </TR>
-                </TBODY>
-            </TABLE>
-        </TD>
-    </TR>
-    <TR>
-    	<TD align="left">
 				<digi:insert attribute="body" />
-			</TD>
-		</TR>
-		<TR>
-			<TD>&nbsp;</TD>
-		</TR>
-		<TR>
-	    <TD width="100%" >
 	        <digi:insert attribute="footer" />
-	    </TD>
-  </TR>
-</TABLE>
-		
 		
 	</BODY>
 </HTML>

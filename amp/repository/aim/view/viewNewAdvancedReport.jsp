@@ -16,6 +16,7 @@
  
   
 <!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 

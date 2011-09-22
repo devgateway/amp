@@ -320,7 +320,8 @@ public class AddAmpActivity extends Action {
     			AmpCurrency element = (AmpCurrency) iter.next();
     			 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
     					{
-    				 	eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+    				 		if(element!=null && element.getCurrencyCode()!=null) 
+    				 			eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
     					}
     			}
       }

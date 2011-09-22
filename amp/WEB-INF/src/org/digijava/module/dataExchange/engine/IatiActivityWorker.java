@@ -480,7 +480,7 @@ public class IatiActivityWorker {
 
 	
 	
-	private void processFundingStep(AmpActivityVersion a, ArrayList<Transaction> iatiTransactionList,	JAXBElement<CodeReqType> iatiDefaultFinanceType,
+	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,	JAXBElement<CodeReqType> iatiDefaultFinanceType,
 			JAXBElement<CodeReqType> iatiDefaultAidType, String iatiDefaultCurrency) {
 		
 		if(iatiTransactionList.isEmpty()) return;
@@ -491,17 +491,17 @@ public class IatiActivityWorker {
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCIAL_INSTRUMENT_NAME,null,null,"active");
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
-			Transaction t = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(a,t,typeOfAssistance, financingInstrument, iatiDefaultCurrency);
+			Transaction transaction = (Transaction) it.next();
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency);
 			if(f!=null)
 				fundings.add(f);
 		}
 		
-		if(a.getFunding() == null) 
-			a.setFunding(new HashSet());
+		if(activity.getFunding() == null) 
+			activity.setFunding(new HashSet());
 		else
-			a.getFunding().clear();
-		a.getFunding().addAll(fundings);
+			activity.getFunding().clear();
+		activity.getFunding().addAll(fundings);
 
 	}
 
@@ -620,7 +620,8 @@ public class IatiActivityWorker {
 		ampFunding.setFinancingInstrument(financingInstrument);
 		ampFunding.setModeOfPayment(modeOfPayment);
 		
-		if(a !=null ) ampFunding.setAmpActivityId(a);
+		if(a !=null ) 
+			ampFunding.setAmpActivityId(a);
 		Set<AmpFunding> ampFundings = a.getFunding();
 		if(ampFundings!=null)
 			for (AmpFunding af : ampFundings) {

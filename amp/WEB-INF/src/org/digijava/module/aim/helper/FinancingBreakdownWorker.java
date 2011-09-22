@@ -19,10 +19,11 @@ public class FinancingBreakdownWorker
 	{
 			AmpOrganisation ampOrganisation = ampFunding.getAmpDonorOrgId();
 			if ( logger.isDebugEnabled() )
-			logger.debug("getDonor() of worker class returning organisation "
-			+ ampOrganisation.getName() ) ;
 			if (ampOrganisation!=null)
+				{logger.debug("getDonor() of worker class returning organisation "
+						+ ampOrganisation.getName() ) ;
 				return ampOrganisation.getName() ;
+				}
 			return"";
 	}
 

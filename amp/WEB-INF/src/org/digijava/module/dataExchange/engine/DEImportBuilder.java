@@ -2115,7 +2115,9 @@ public class DEImportBuilder {
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
 			int noAct = 0;
 			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
-				IatiActivity iAct = (IatiActivity) it.next();
+				Object obj =  it.next();
+				if( !(obj instanceof IatiActivity) ) continue;
+				IatiActivity iAct = (IatiActivity) obj;
 				String logAct = "";
 				String title = "";
 				String iatiID = "";

@@ -1122,6 +1122,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                     while(fundItr.hasNext()) {
                         AmpFunding ampFunding = (AmpFunding) fundItr.next();
                         AmpOrganisation org = ampFunding.getAmpDonorOrgId();
+                        if(org == null || org.getAmpOrgId()==null) continue;
                         FundingOrganization fundOrg = new FundingOrganization();
                         fundOrg.setAmpOrgId(org.getAmpOrgId());
                         fundOrg.setOrgName(org.getName());
@@ -1927,7 +1928,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		AmpCurrency element = (AmpCurrency) iter.next();
 		 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
 				{
-			 	eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+			 		if(element!=null && element.getCurrencyCode()!=null)
+			 			eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 				}
 		}
 
@@ -2046,7 +2048,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 	else{ //not a management team
 		//there is another simple way to write these "if"s, but it is more clear like this
 		eaForm.setButtonText("edit");
-		if(!activity.getDraft())
+		if(activity!=null && activity.getDraft()!=null && !activity.getDraft())
 			if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
 				//global validation off
 				eaForm.setButtonText("edit");

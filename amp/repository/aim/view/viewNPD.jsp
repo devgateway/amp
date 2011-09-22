@@ -284,7 +284,7 @@ background-color:#FFFFFF;
 						</tr>
 						<tr>
 						<td colspan="2" align="center">
-						<input type="button" class="buttonx_sm btn_save" value="<digi:trn>Apply Filter</digi:trn>" onclick="applyFilter()"/>
+						<input type="button" class="buttonx_sm btn_save" style="width: auto;overflow: visible;" value="<digi:trn>Apply Filter</digi:trn>" onclick="applyFilter()"/>
 						</td>
 						</tr>
 					</table>
@@ -318,7 +318,7 @@ background-color:#FFFFFF;
 						</tr>
 					</table>
 					<br />
-					<input type="button" class="buttonx_sm btn_save"
+					<input type="button" class="buttonx_sm btn_save" style="width: auto;overflow: visible;"
 						value="<digi:trn>Apply Changes</digi:trn>" onclick="doChanges();"></div>
 					</div>
 					</td>

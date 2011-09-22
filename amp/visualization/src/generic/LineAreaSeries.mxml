@@ -567,9 +567,11 @@
 				fontWeight="{fontWeight}"
 				fontColor="0"
 				tickGap="5"
-				showGridArea="false"
 				majorTickSpacing="50"
-				labelFunction="{axisLabel}"/>
+				labelFunction="{axisLabel}"
+				showGridArea="true"
+				gridFill="{gridAreaFill}"
+				/>
 			<!--
 			HCategoryAxis renders values from left to right between a indexed collection of string values and is intended to be rendered beneath other layouts to provide a point of reference for those visualizations.
 			HCategory Axis trys to optmize its layout based on the maximum widht/length of all labels in collection 
@@ -737,6 +739,8 @@
 	A GradientStop defines the objects that control a transition as part of a gradient fill. Stops will be equally spaced unless ratio is specified
 	-->
 	<mx:Array id="fills">
+		<degrafa:SolidFill id="gridAreaFill" color="{0xEEEEEE}">
+		</degrafa:SolidFill>
 		<degrafa:LinearGradientFill id="areaFill" angle="90" enableEvents="false">
 			<degrafa:GradientStop color="{areaPalette.currentColor}" alpha=".95"/>
 			<degrafa:GradientStop color="{areaPalette.currentColor | 0x999933}" alpha=".65"/>

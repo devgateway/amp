@@ -99,7 +99,8 @@ public class Constants
 	public static final String GLOBALSETTINGS_INCLUDE_PLANNED="Totals include planned";
 	
 	//added in burkina
-	public static final String GLOBALSETTINGS_DEFAULT_EX_RATE_SEPARATOR="Default Exchange Rate Separator";
+	//moved to GlobalSettingsCOnstants
+	//public static final String GLOBALSETTINGS_DEFAULT_EX_RATE_SEPARATOR="Default Exchange Rate Separator";
 	
 	public static final String GLOBALSETTINGS_ECS="ECS Enabled";
 	

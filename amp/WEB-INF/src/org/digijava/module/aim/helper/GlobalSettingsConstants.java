@@ -81,4 +81,6 @@ public class GlobalSettingsConstants {
     
     public static final String PROJECTS_VALIDATION = "Projects Validation";
     
+    public static final String EXCHANGE_RATE_SEPARATOR = "Default Exchange Rate Separator";
+    
 }

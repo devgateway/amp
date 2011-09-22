@@ -297,7 +297,10 @@ function fnSubmit() {
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>                                        </td>
                                         <td vAlign="middle" align="center">
-										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>										</td>                                   
+										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes 
+										  (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).
+										  </digi:trn><digi:trn>Default Decimal Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %> &nbsp;&nbsp;and Default Exchange Rate Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR) %>
+										  </digi:trn>"/></td>                                   
                                         
                                         <td vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->

@@ -38,7 +38,7 @@ else {
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+	    <digi:ref href="css2/amp.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 			

@@ -1593,7 +1593,7 @@ function toggleSettings(){
 <!--				<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label for="ODAGrowthShowLegend"><digi:trn>Show legend</digi:trn></label>-->
 <!--				&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label for="ODAGrowthDivide"><digi:trn>Divide by thousands</digi:trn></label>-->
 				&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-<!--				&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label>-->
+				&nbsp;<input type="checkbox" id="ODAGrowthIgnore" checked="checked"><label for="ODAGrowthIgnore"><digi:trn>Ignore big values</digi:trn></label>
 <!--				</span>-->
 				</br>
 				<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
@@ -2647,7 +2647,15 @@ function refreshBoxes(o){
 			var endYear =  "" + currentYear;
 			div = document.getElementById("ODAGrowthTitleLegend");
 			input = document.getElementById("ODAGrowthTitle");
-			value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
+				value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + fundType +" (" + startYear + "-" + endYear + ")";
+			} else {
+				value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+				if (getSelectionsFromElement("organization_check",true)!="" && getSelectionsFromElement("organization_check",false).indexOf(',') ==-1) {
+					value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + getSelectionsFromElement("organization_check",true);
+				}
+			}
+			
 			div.innerHTML = value;
 			input.value = value;
 		}

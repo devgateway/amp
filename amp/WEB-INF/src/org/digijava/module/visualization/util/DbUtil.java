@@ -1014,6 +1014,26 @@ public class DbUtil {
         return org;
     }
     
+    public static Collection<AmpOrganisation> getOrganisationsFromGroup(Long id) {
+        Session session = null;
+        Collection<AmpOrganisation> orgs = null;
+        
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from "
+                + AmpOrganisation.class.getName() + " o "
+                + "where (o.orgGrpId=:id)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("id", id, Hibernate.LONG);
+            orgs = qry.list();
+            
+        } catch (Exception ex) {
+            logger.error("Unable to get organisations by group from database", ex);
+        }
+        logger.debug("Getting organisations successfully ");
+        return orgs;
+    }
+    
     public static AmpOrgGroup getOrgGroup(Long id) {
         Session session = null;
         AmpOrgGroup orgGrp = null;

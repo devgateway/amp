@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +108,8 @@ public class DataDispatcher extends DispatchAction {
 		Long[] orgsIds = visualizationForm.getFilter().getOrgIds();
 		Long orgsId = visualizationForm.getFilter().getOrgId();
 		if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
+			Long[] temp = {orgsId};
+			visualizationForm.getFilter().setOrgIds(temp);
 			orgs.add(DbUtil.getOrganisation(orgsId));
 		} else {
 			visualizationForm.getFilter().setOrgId(-1l);//unset orgId
@@ -2256,7 +2259,8 @@ public class DataDispatcher extends DispatchAction {
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
-        
+		boolean ignore = request.getParameter("ignore") != null ? Boolean.parseBoolean(request.getParameter("ignore")) : (format != null && format.equals("xml"))? true : false;
+
 		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
@@ -2285,108 +2289,196 @@ public class DataDispatcher extends DispatchAction {
 			for (int i = 0; i < filter.getOrgIds().length; i++) {
 				donorList.add(DbUtil.getOrganisation(filter.getOrgIds()[i]));
 			}
+		} else if (filter.getSelOrgGroupIds() != null && filter.getSelOrgGroupIds().length == 1 && filter.getSelOrgGroupIds()[0]!=-1) {
+			donorList.addAll(DbUtil.getOrganisationsFromGroup(filter.getSelOrgGroupIds()[0]));
 		} else {
 			donorList.addAll(DbUtil.getDonors(filter));
-			/*Map<AmpOrganisation, BigDecimal> map = visualizationForm.getRanksInformation().getFullDonors();
-			List list = new LinkedList(map.entrySet());
-		    int counter = 0;
-		    for (Iterator it = list.iterator(); it.hasNext();) {
-		        Map.Entry entry = (Map.Entry)it.next();
-		        donorList.add((AmpOrganisation) entry.getKey());
-		        counter++;
-		        if (counter>=10) {
-					break;
-				}
-		    }*/
 		}
         //donorList = DbUtil.getDonors(filter);
-        Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
-        StringBuffer csvString = new StringBuffer();
-        String odaGrowthData = "";
-        String text = TranslatorWorker.translateText("Organization",locale, siteId);
-		csvString.append("\"" + text + "\"");
-		csvString.append(",");
-		odaGrowthData += "<"+ text +">";
-		text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
-		csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
-		csvString.append(",");
-		odaGrowthData += text + " " + filter.getYearToCompare() + ">";
-		csvString.append("\"" + text + " " + filter.getYear() + "\"");
-		csvString.append(",");
-		odaGrowthData += text + " " + filter.getYear() + ">";
-		text = TranslatorWorker.translateText("Growth percent",locale, siteId);
-		csvString.append("\"" + text + "\"");
-		csvString.append("\n");
-		odaGrowthData += text +">";
-		
-        for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
-			AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			Long[] ids = {ampOrganisation.getAmpOrgId()};
-			newFilter.setOrgIds(ids);
-            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYearToCompare().intValue());
-            fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
-            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
-                if ((growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
-                	map.put(ampOrganisation, growthPercent);
-                    csvString.append(ampOrganisation.getName());
-            		csvString.append(",");
-            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
-            		csvString.append(amtPreviousYear);
-            		csvString.append(",");
-            		odaGrowthData += amtPreviousYear +">";
-            		csvString.append(amtCurrentYear);
-            		csvString.append(",");
-            		odaGrowthData += amtCurrentYear +">";
-            		csvString.append(growthPercent);
-            		csvString.append("\n");
-            		odaGrowthData += growthPercent +">";
-				} 
-            }
-		}
-        
-        visualizationForm.getExportData().setODAGrowthTableData(odaGrowthData);
-        
-        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,9l);
-        
-        StringBuffer xmlString = new StringBuffer();
-        
-        List list = new LinkedList(mapSorted.entrySet());
-		Iterator it = list.iterator();
-		int index = 0;
-		while(it.hasNext()){
-			Map.Entry entry = (Map.Entry)it.next();
-			AmpOrganisation org = (AmpOrganisation) entry.getKey();
-			xmlString.append("<organization name=\"" + org.getAcronym() + "\" value=\""+ entry.getValue() + "\" label=\"" + org.getName() + "\" />\n");
-		}
-        
-		if (xmlString.length()==0) {
-			xmlString.append("<organization name=\"\">\n");
-			xmlString.append("</organization>\n");
-		}
-		
-		if(format != null && format.equals("xml")){
-	        PrintWriter out = new PrintWriter(new OutputStreamWriter(
-	    			response.getOutputStream(), "UTF-8"), true);
-			out.println(xmlString.toString());
-			out.close();
-			return null;
-		} else {
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-	    			response.getOutputStream(), "UTF-8"), true);
+        if (filter.getOrgIds()!= null && filter.getOrgIds().length == 1 && filter.getOrgIds()[0]!=-1){
+        	StringBuffer csvString = new StringBuffer();
+            String odaGrowthData = "";
+            Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();
+            String text = TranslatorWorker.translateText("Year",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append(",");
+			odaGrowthData += "<"+ text +">";
+			text = TranslatorWorker.translateText("Fundings Previous Year",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append(",");
+			odaGrowthData += text + ">";
+			text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append(",");
+			odaGrowthData += text + ">";
+			text = TranslatorWorker.translateText("Growth percent",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append("\n");
+			odaGrowthData += text +">";
+			
+			for (int i = filter.getYear().intValue(); i > filter.getYear().intValue() - 10; i--) {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i-1);
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i-1);
+	            fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
+	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
+	                if (!ignore || (growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
+	                	map.put("" + (i-1) + "-" + i, growthPercent);
+	                    csvString.append("" + (i-1) + " - " + i);
+	            		csvString.append(",");
+	            		odaGrowthData += "<"+ "" + (i-1) + " - " + i +">";
+	            		csvString.append(amtPreviousYear);
+	            		csvString.append(",");
+	            		odaGrowthData += amtPreviousYear +">";
+	            		csvString.append(amtCurrentYear);
+	            		csvString.append(",");
+	            		odaGrowthData += amtCurrentYear +">";
+	            		csvString.append(growthPercent);
+	            		csvString.append("\n");
+	            		odaGrowthData += growthPercent +">";
+					} 
+	            }
+			}
+			visualizationForm.getExportData().setODAGrowthTableData(odaGrowthData);
+	        StringBuffer xmlString = new StringBuffer();
+	        List list = new LinkedList(map.entrySet());
+			Iterator it = list.iterator();
+			int index = 0;
+			while(it.hasNext()){
+				Map.Entry entry = (Map.Entry)it.next();
+				String yearInterval = (String) entry.getKey();
+				BigDecimal value = (BigDecimal) entry.getValue();
+				String valueStr = "" + value.toBigInteger();
+				if (value.compareTo(new BigDecimal(105))==1) {
+					value = new BigDecimal(105);
+					valueStr = ">>> " + valueStr;
+				} else if (value.compareTo(new BigDecimal(-105))==-1){
+					value = new BigDecimal(-105);
+					valueStr = valueStr + " <<<";
+				}
+				xmlString.append("<organization name=\"" + yearInterval + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + yearInterval + "\" />\n");
+			}
+	        
+			if (xmlString.length()==0) {
+				xmlString.append("<organization name=\"\">\n");
+				xmlString.append("</organization>\n");
+			}
+			
+			if(format != null && format.equals("xml")){
+		        PrintWriter out = new PrintWriter(new OutputStreamWriter(
+		    			response.getOutputStream(), "UTF-8"), true);
+				out.println(xmlString.toString());
+				out.close();
+				return null;
+			} else {
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+		    			response.getOutputStream(), "UTF-8"), true);
 
-	    	out.println(csvString.toString());
-	    	out.close();
-	    	return null;
-		}
-		 
+		    	out.println(csvString.toString());
+		    	out.close();
+		    	return null;
+			}
+        } else {
+        	StringBuffer csvString = new StringBuffer();
+            String odaGrowthData = "";
+            Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
+            String text = TranslatorWorker.translateText("Organization",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append(",");
+			odaGrowthData += "<"+ text +">";
+			text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
+			csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
+			csvString.append(",");
+			odaGrowthData += text + " " + filter.getYearToCompare() + ">";
+			csvString.append("\"" + text + " " + filter.getYear() + "\"");
+			csvString.append(",");
+			odaGrowthData += text + " " + filter.getYear() + ">";
+			text = TranslatorWorker.translateText("Growth percent",locale, siteId);
+			csvString.append("\"" + text + "\"");
+			csvString.append("\n");
+			odaGrowthData += text +">";
+			
+	        for (Iterator iterator = donorList.iterator(); iterator.hasNext();) {
+				AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				Long[] ids = {ampOrganisation.getAmpOrgId()};
+				newFilter.setOrgIds(ids);
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYearToCompare().intValue());
+	            fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
+	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
+	                if (!ignore || (growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
+	                	map.put(ampOrganisation, growthPercent);
+	                    csvString.append(ampOrganisation.getName());
+	            		csvString.append(",");
+	            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
+	            		csvString.append(amtPreviousYear);
+	            		csvString.append(",");
+	            		odaGrowthData += amtPreviousYear +">";
+	            		csvString.append(amtCurrentYear);
+	            		csvString.append(",");
+	            		odaGrowthData += amtCurrentYear +">";
+	            		csvString.append(growthPercent);
+	            		csvString.append("\n");
+	            		odaGrowthData += growthPercent +">";
+					} 
+	            }
+			}
+	        visualizationForm.getExportData().setODAGrowthTableData(odaGrowthData);
+	        
+	        Map<AmpOrganisation, BigDecimal> mapSorted = DashboardUtil.sortByValue(map,9l);
+	        
+	        StringBuffer xmlString = new StringBuffer();
+	        
+	        List list = new LinkedList(mapSorted.entrySet());
+			Iterator it = list.iterator();
+			int index = 0;
+			while(it.hasNext()){
+				Map.Entry entry = (Map.Entry)it.next();
+				AmpOrganisation org = (AmpOrganisation) entry.getKey();
+				BigDecimal value = (BigDecimal) entry.getValue();
+				String valueStr = "" + value.toBigInteger();
+				if (value.compareTo(new BigDecimal(105))==1) {
+					value = new BigDecimal(105);
+					valueStr = ">>> " + valueStr;
+				} else if (value.compareTo(new BigDecimal(-105))==-1){
+					value = new BigDecimal(-105);
+					valueStr = valueStr + " <<<";
+				}
+				xmlString.append("<organization name=\"" + org.getAcronym() + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + org.getName() + "\" />\n");
+			}
+	        
+			if (xmlString.length()==0) {
+				xmlString.append("<organization name=\"\">\n");
+				xmlString.append("</organization>\n");
+			}
+			
+			if(format != null && format.equals("xml")){
+		        PrintWriter out = new PrintWriter(new OutputStreamWriter(
+		    			response.getOutputStream(), "UTF-8"), true);
+				out.println(xmlString.toString());
+				out.close();
+				return null;
+			} else {
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+		    			response.getOutputStream(), "UTF-8"), true);
+
+		    	out.println(csvString.toString());
+		    	out.close();
+		    	return null;
+			}
+        }
 	}	
 
 	

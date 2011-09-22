@@ -776,6 +776,39 @@ System.out.println("lang:"+lang);
 			return retVal;
 		}
 	
+	public static String renderHelpPrintPreview(Collection topics,String helpType,HttpServletRequest request) throws Exception{
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		String retVal = "";
+		Iterator iter = topics.iterator();
+		if(iter.hasNext()){			
+			while (iter.hasNext()) {
+				retVal += "<table width=\"1000px\">";
+				retVal +="<tr height=\"5px\"><td>&nbsp;</td></tr>";
+				HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
+				HelpTopic topic = (HelpTopic) item.getMember();
+				if(topic.getTopicKey()!=null){
+					retVal +="<tr>";
+					retVal += "<td align=\"center\"><span style=\"font: 20px bold;\">";
+					retVal += getTrn(topic.getTopicKey(), request);
+					retVal += "</span></td>";
+					retVal +="</tr>";
+				}
+				retVal +="<tr height=\"5px\"><td>&nbsp;</td></tr>";
+				if(topic.getBodyEditKey()!=null){					
+					Editor editor = DbUtil.getEditor(topic.getBodyEditKey(), lang);
+					retVal +="<tr><td style=\"text-align:left;\">"+editor.getBody()+"</td></tr>";
+				}
+				
+				retVal += "</table>";
+				if (item.getChildren() != null || item.getChildren().size() > 0) {
+					retVal += renderHelpPrintPreview(item.getChildren(),helpType,request);
+				}
+			}
+			
+		}		
+		return retVal;
+	}
+	
 	 public static String getTrn(String defResult, HttpServletRequest request){
         try {
         return TranslatorWorker.translateText(defResult, request);

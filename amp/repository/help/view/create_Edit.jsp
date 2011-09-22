@@ -43,6 +43,15 @@ function printPreview (){
 	window.open("/help/helpActions.do?actionType=printPreview&helpTopicId="+selectedTopicId);
 }
 
+function printAllPreview (){
+	var mode ="default";
+	var winLoc=window.location.href;
+	if(winLoc.indexOf('/help/admin/')!=-1){
+		mode="admin";
+	}
+	window.open("/help/helpActions.do?actionType=printPreviewForWholeHelp&mode="+mode);
+}
+
 function remove(){
     if(validate(getKey())){
         var actUrl = "<%=removeTopic%>"+"~helpTopicId="+selectedTopicId+"~wizardStep=0~multi=false";
@@ -166,17 +175,20 @@ function GetXmlHttpObj()	{
                                 <c:set var="savetreeState">
                                   <digi:trn>Click here to Delete Help Topic</digi:trn>
                                 </c:set>
-										<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a><digi:secure group="Help Administrators"> |
+                                	<a class="link" onclick="printAllPreview();" title="${topicEdit}" ><digi:trn>Print All</digi:trn></a> |
+									
+									<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a>
+									
+									<digi:secure group="Help Administrators"> |
 										
-                                      <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
+                                    <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
 
-                                      <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |
+                                    <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |
 
-                                      <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
+                                    <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
 
-
-                                        <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
-                                        </digi:secure>
+                                    <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
+                                 </digi:secure>
 
 
                           </div>

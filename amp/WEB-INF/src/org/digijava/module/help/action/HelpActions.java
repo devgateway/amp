@@ -90,6 +90,16 @@ public class HelpActions extends DispatchAction {
 		}
 		return mapping.findForward("helpPrintPreview");
 	}
+	
+	public ActionForward printPreviewForWholeHelp(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response)throws Exception{
+		HelpForm helpForm = (HelpForm) form;
+		String mode=request.getParameter("mode");
+		String siteId=RequestUtils.getSite(request).getSiteId();
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, mode));
+        //String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+		
+		return mapping.findForward("allHelpPrintPreview");
+	}
 
 
      public ActionForward getbody(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response)throws Exception{

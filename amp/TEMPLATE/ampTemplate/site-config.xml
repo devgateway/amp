@@ -708,6 +708,7 @@
 			</module>
 			<module name="help">
 				<page>printPreview</page>
+				<page>allHelpPrintPreview</page>
 			</module>
 		</page-group>
 		<page-group masterLayout="noLayout" tile="body">

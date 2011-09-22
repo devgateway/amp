@@ -20,8 +20,9 @@
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 <style>
-.paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px;}
+.paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px; font-family:Arial, Helvetica, sans-serif;}
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
+.l_sm {font-size:11px; color:#376091;}
 </style>
 <!-- Individual YUI JS files --> 
 

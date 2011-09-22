@@ -228,7 +228,7 @@ public class ActivityUtil {
 	//							a.setApprovalStatus(Constants.EDITED_STATUS);
 	//						}
 							//if we edit an existing not validated status it will keep the old status - started
-							if(oldA.getApprovalStatus().equals(Constants.STARTED_STATUS))
+							if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
 								a.setApprovalStatus(Constants.STARTED_STATUS);
 							//if we edit an existing activity that is validated or startedvalidated or edited
 							else  a.setApprovalStatus(Constants.APPROVED_STATUS);
@@ -240,7 +240,7 @@ public class ActivityUtil {
 								a.setApprovalStatus(Constants.STARTED_STATUS);
 							}
 							else{
-								if(oldA.getApprovalStatus().equals(Constants.STARTED_STATUS))
+								if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
 									a.setApprovalStatus(Constants.STARTED_STATUS);
 								else a.setApprovalStatus(Constants.EDITED_STATUS);
 							}

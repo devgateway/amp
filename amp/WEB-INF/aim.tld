@@ -232,6 +232,13 @@
 				add Organization button visible or not
 			</description>
 		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<required>false</required>
+			<description>
+				styleClass
+			</description>
+		</attribute>
 		
 		<description>
 			The name of the form on any scope that will be used to set

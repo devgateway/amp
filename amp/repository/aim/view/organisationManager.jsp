@@ -126,11 +126,11 @@
 					</html:select></td>
 					<td width="50"><c:set var="trnResetBtn">
 						<digi:trn key="aim:btnReset"> Reset </digi:trn>
-					</c:set> <input type="button" value="${trnResetBtn}" class="dr-menu"
+					</c:set> <input type="button" value="${trnResetBtn}" class="buttonx_sm"
 						onclick="return resetSearch()"></td>
 					<td width="300"><c:set var="trnGoBtn">
 						<digi:trn key="aim:btnGo"> GO </digi:trn>
-					</c:set> <input type="button" value="${trnGoBtn}" class="dr-menu"
+					</c:set> <input type="button" value="${trnGoBtn}" class="buttonx_sm"
 						onclick="return searchOrganization()"></td>
 				</tr>
 				<tr>

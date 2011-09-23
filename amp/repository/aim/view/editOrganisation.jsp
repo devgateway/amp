@@ -981,8 +981,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     <tr>
                                         <td  align="center" colspan="2">
 										<hr>
-                                            <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
-                                            <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
+                                            <input  class="buttonx_sm" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
+                                            <input  class="buttonx_sm" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
 											<hr />
                                         </td>
 
@@ -1213,9 +1213,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
                                                                             <tr>
                                                                                 <td colspan="2">
-                                                                                    <input type="button" class="dr-menu" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
                                                                                     <c:if test="${not empty aimAddOrgForm.sectors}">
-                                                                                        <input type="button" class="dr-menu" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                                                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                                     </c:if>
                                                                                 </td>
                                                                             </tr>
@@ -1322,7 +1322,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                    	</td>
                                                                     <td>
                                                                         <c:if test="${empty aimAddOrgForm.recipients}">
-                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                 </c:if>
                                                                 <c:if test="${not empty aimAddOrgForm.recipients}">
                                                                     <table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding" id="recipientTbl">
@@ -1345,8 +1345,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                         </c:forEach>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                         <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                        <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
+                                                                         <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                        <input type="button" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
                                                                         </td>
                                                                         </tr>
 
@@ -1403,7 +1403,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                             <td>
 
                                                 <c:if test="${empty aimAddOrgForm.selectedLocs}">
-                                                    <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
+                                                    <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
                                                 </c:if>
 
                                                 <c:if test="${not empty aimAddOrgForm.selectedLocs}">
@@ -1431,9 +1431,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                         </c:forEach>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
+                                                                <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
 
-                                                                <input type="button" class="dr-menu" onclick="javascript:removeSelLocations();" value='<digi:trn>Remove Location</digi:trn>' />
+                                                                <input type="button" class="buttonx_sm" onclick="javascript:removeSelLocations();" value='<digi:trn>Remove Location</digi:trn>' />
 
                                                             </td>
                                                         </tr>
@@ -1496,7 +1496,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
                                     </tr>
                                     </c:if>
                                      <tr>
@@ -1545,7 +1545,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </c:otherwise>
                                     </c:choose>
                                 </c:set>
-                                <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="${staffButtonTxt}" /></td>
+                                <td style="text-align:center"><input type="button" class="buttonx_sm" style="width:80px" onclick="addStaff()" value="${staffButtonTxt}" /></td>
                                 </tr>
                             </table>
                             </div>
@@ -1604,7 +1604,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
+                                        <td colspan="7" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
                                     </tr>
                                 </c:if>
                                      <tr>
@@ -1618,7 +1618,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         <digi:trn>Type</digi:trn>
                                     </td>
                                      <td style="text-align:center">
-                                       <aim:addOrganizationButton refreshParentDocument="true" collection="budgetOrgs"   form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                       <aim:addOrganizationButton refreshParentDocument="true" collection="budgetOrgs"   form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                     </td>
                                     <td style="width:150px;text-align:center;  "  class="tdBoldClass">
                                         <digi:trn>Amount</digi:trn>
@@ -1663,7 +1663,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </c:forEach>
                                         </table>
                                         <c:if test="${not empty aimAddOrgForm.budgetOrgs}">
-                                        <input type="button" style="width:80px" onclick="deleteBudgetOrg()" value="<digi:trn>Delete</digi:trn>" />
+                                        <input type="button" class="buttonx_sm" style="width:80px" onclick="deleteBudgetOrg()" value="<digi:trn>Delete</digi:trn>" />
                                         </c:if>
                                     </td>
                                     <td style="text-align:center"><html:text name="aimAddOrgForm" property="orgInfoAmount"  styleClass="inp-text"/></td>
@@ -1688,7 +1688,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     </c:choose>
                                 </c:set>
 
-                                    <td style="text-align:center"><input type="button" style="width:80px" onclick="addOrgInfo()" value="${budgetInfoButtonTxt}" /></td>
+                                    <td style="text-align:center"><input type="button" class="buttonx_sm" style="width:80px" onclick="addOrgInfo()" value="${budgetInfoButtonTxt}" /></td>
                                 </tr>
                             </table>
                             </div>
@@ -1796,12 +1796,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
                             <tr>
                                 <td>
-                                    <input type="button" class="dr-menu" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
                                 </td>
                                 <td>
                                     &nbsp;
                                     <c:if test="${not empty aimAddOrgForm.sectors}">
-                                        <input type="button" class="dr-menu" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                     </c:if>
                                 </td>
 
@@ -1935,7 +1935,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                             </tr>
                             <tr valign="baseline">
                                 <td colspan="1" width="10px"><input
-                                        type="button" class="dr-menu" onclick="addPledge();"
+                                        type="button" class="buttonx_sm" onclick="addPledge();"
                                         value='<digi:trn>Add Pledge</digi:trn>' />
                                 </td>
                                 <td colspan="5" align="right">
@@ -2077,11 +2077,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                        </td>
 								                    </tr>
 								                      <tr>
-								                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="removeSelectedContacts()" value="<digi:trn>Delete</digi:trn>"></td>
+								                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="removeSelectedContacts()" value="<digi:trn>Delete</digi:trn>"></td>
 								                    </tr>
 								                </c:if>
 								                <tr>
-								                    <td colspan="2"><aim:addContactButton collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
+								                    <td colspan="2"><aim:addContactButton styleClass="buttonx_sm" collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
 								                </tr>
 								
 								            </table>
@@ -2153,7 +2153,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         <td colspan="2" align="center">
         	<c:set var="showTheFollowingDocuments" value="PUBLIC" /> 
         	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>        	
-            <html:button styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
+            <html:button styleClass="buttonx_sm" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
                 <digi:trn>Add Documents From Repository</digi:trn>
             </html:button> <br />
             <br />
@@ -2168,17 +2168,17 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             <tr>
                 <td align="center">
 				<hr />
-                	<html:button styleClass="dr-menu" property="submitButton" onclick="return validateSaveOrg()">
+                	<html:button styleClass="buttonx_sm" property="submitButton" onclick="return validateSaveOrg()">
                         <digi:trn>Save</digi:trn>
                 	</html:button>
-                	<input type="reset" value="<digi:trn>Reset</digi:trn>" class="dr-menu">
-                	<input type="button" value="<digi:trn>Cancel</digi:trn>"  class="dr-menu" onclick="cancel()">
+                	<input type="reset" value="<digi:trn>Reset</digi:trn>" class="buttonx_sm">
+                	<input type="button" value="<digi:trn>Cancel</digi:trn>"  class="buttonx_sm" onclick="cancel()">
                 </td>
             </tr>
             <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                 <tr>
                     <td align="center">
-                        <input type="button"  class="dr-menu" value="<digi:trn>Delete this Organization</digi:trn>" onclick="return msg()">
+                        <input type="button"  class="buttonx_sm" value="<digi:trn>Delete this Organization</digi:trn>" onclick="return msg()">
                     </td>
                 </tr>
             </c:if>

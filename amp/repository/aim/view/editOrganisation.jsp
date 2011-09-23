@@ -1278,7 +1278,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                         <td valign="top">
                                                             <table cellpadding="5" cellspacing="5">
                                                                 <tr>
-                                                                    <td nowrap style=" text-align:right" class="tdBoldClass"><digi:trn>Legal Personality Number</digi:trn></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Legal Personality Number</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="legalPersonNum" styleId="legalPersonNum"/>
                                                                     </td>
@@ -1702,32 +1702,32 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             </c:when>
             <c:otherwise>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass" width=50%><digi:trn>DAC Code</digi:trn></td>
-                    <td width="505" height="30px">
+                    <td class="tdBoldClass" width=20%><digi:trn>DAC Code</digi:trn></td>
+                    <td  height="30px">
                     	<html:text property="dacOrgCode" size="15" styleId="dacOrgCode"/></td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>ISO Code</digi:trn></td>
-                    <td width="500px" height="30px" ><html:text
+                    <td  class="tdBoldClass"><digi:trn>ISO Code</digi:trn></td>
+                    <td height="30px" ><html:text
                             name="aimAddOrgForm" property="orgIsoCode" size="15" styleId="orgIsoCode"/>
                     </td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Organization Code</digi:trn><font
+                    <td class="tdBoldClass"><digi:trn>Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
-                    <td width="500px" height="30px"><html:text
+                    <td  height="30px"><html:text
                         property="orgCode" size="15" styleId="orgCode"/></td>
                 </tr>
 
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn><font
+                    <td class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
-                    <td width="500px" height="30px"><html:text
+                    <td  height="30px"><html:text
                         property="budgetOrgCode" size="15" styleId="budgetOrgCode"/></td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Fiscal Calendar</digi:trn></td>
-                    <td width="500px" height="30px"><html:select
+                    <td  class="tdBoldClass"><digi:trn>Fiscal Calendar</digi:trn></td>
+                    <td  height="30px"><html:select
                             property="fiscalCalId" styleClass="selectStyle" styleId="fiscalCalId">
                             <c:set var="translation">
                                 <digi:trn>Fiscal Calendar</digi:trn>
@@ -1742,7 +1742,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         </html:select>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Sectors Scheme</digi:trn></td>
+                    <td  class="tdBoldClass"><digi:trn>Sectors Scheme</digi:trn></td>
                     <td>
                         <html:select property="ampSecSchemeId" styleClass="selectStyle">
                             <c:set var="translation">
@@ -1756,7 +1756,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     </td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn></td>
+                    <td  class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn></td>
                     <td>
                         <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
                             <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
@@ -1855,7 +1855,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                		
               <!-- End Departments -->
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass">
+                    <td  class="tdBoldClass">
                         <digi:trn>
                             Pledges
                         </digi:trn>
@@ -2108,20 +2108,20 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 </c:if>
 <c:if test="${aimAddOrgForm.type!='NGO'}">
     <tr>
-        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization URL</digi:trn></td>
+        <td  class="tdBoldClass"><digi:trn>Organization URL</digi:trn></td>
         <td>
             <html:text property="orgUrl" styleId="orgUrl" size="35" />
         </td>
     </tr>
     <tr>
-        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Address</digi:trn></td>
-        <td width="500px" height="30px">
+        <td  class="tdBoldClass"><digi:trn>Address</digi:trn></td>
+        <td  height="30px">
             <html:textarea property="address" styleId="address"/>
         </td>
     </tr>
     <tr>
-        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Description</digi:trn></td>
-        <td width="500px" height="30px">
+        <td  class="tdBoldClass"><digi:trn>Description</digi:trn></td>
+        <td  height="30px">
             <html:textarea property="description" styleId="description"/>
         </td>
     </tr>

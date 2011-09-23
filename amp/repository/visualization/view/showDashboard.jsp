@@ -371,7 +371,7 @@ function getOptionChecked (elements){
 }
 
 function resetToDefaults(){
-	loadingPanel.show();
+	//loadingPanel.show();
 	var trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	
 	unCheckOptions("org_grp_check");
@@ -412,7 +412,7 @@ function resetToDefaults(){
 	document.getElementById("filterSectors").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = "<digi:trn jsFriendly='true'>Primary</digi:trn>";;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	applyFilterPopin();
+	//applyFilterPopin();
 }
 
 function removeOptionsDropdown(object){

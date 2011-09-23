@@ -17,7 +17,7 @@
 	<digi:trn>Activity Versions</digi:trn>
 	<br />
 	 -->
-	<div style="height: 540px; overflow: scroll;">
+	<div style="height: 520px; overflow: scroll;">
 		<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
 			<tr bgcolor="#999999" height="20">
 				<td bgcolor="#999999">&nbsp;</td>

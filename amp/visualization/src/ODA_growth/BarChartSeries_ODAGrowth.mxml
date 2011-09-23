@@ -111,7 +111,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 					mxc1.height = 400;
 				}
 				
-				//				categories = categoriesLocal; 
+				if (maxValue > 100) maxValue = 100;
+				if (minValue < -100) minValue = -100; 
 				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = Math.round(minValue * 1.05);
 				haxis.maxScale = Math.round(maxValue * 1.05);
@@ -192,7 +193,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				*/
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
-				dc.visible = true;
+				//dc.visible = true;
 	
 			}
 			private function sizeLoadingPanel(w:uint, h:uint):void {
@@ -294,13 +295,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 					if (i % 3 == 0)
 						newlabel = newlabel + "\r";
 				}
-				return "<b>" + newlabel + "</b>" + "\r" + obj.value + " %";
+				return "<b>" + newlabel + "</b>" + "\r" + obj.data.valueStr + " %";
 			}
 			
 			private function labelFunction(obj:Object):String
 			{
 				if(myCluster.showDataLabel == true)
-					return "<b>" + obj.value + " % </b>";
+					return "<b>" + obj.valueStr + " % </b>";
 				else
 					return "";
 			}
@@ -310,10 +311,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
 				
-
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var ignore:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Ignore')}"));
 				var params = {
 					"format" : "xml",
-					"typeofaid" : "true"
+					"typeofaid" : "true",
+					"ignore" : ignore
 				};
 				service.send(params);
 			}
@@ -419,11 +422,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 				horizontalScale="{vScale}"
 				width="{dc.width}"
 				height="{dc.height}"
-				tickGap="5"
+				tickGap="20"
 				fontFamily="{fontFamily}"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				showGridArea="false"
+				showGridArea="true"
+				gridFill="{areaFill}"
 				showZeroLine="true" 
 				/>
 		</axiis:backgroundGeometries>
@@ -502,6 +506,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 	-->
 	
 	<mx:Array id="fills">
+		<degrafa:SolidFill id="areaFill" color="{0xEEEEEE}">
+		</degrafa:SolidFill>
 		<degrafa:LinearGradientFill id="clusterFill" angle="45">
 			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
 			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>

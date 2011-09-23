@@ -12,4 +12,3 @@ alter table qrtz_job_details alter column is_stateful type boolean using pc_char
 alter table qrtz_job_details alter column requests_recovery type boolean using pc_chartobool(requests_recovery);
 --other stuff
 alter table perm_map alter column object_identifier type integer using pc_chartoint(object_identifier);
-#alter table amp_activity_version alter column budget type boolean using pc_inttobool(budget);

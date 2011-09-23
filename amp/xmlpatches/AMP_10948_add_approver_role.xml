@@ -11,8 +11,9 @@
        <apply>
         <script>
             <lang  delimiter=";" type="postgres">
+            	update amp_team_member_roles set approver=false;
                 ALTER TABLE amp_team_member_roles ALTER COLUMN amp_team_mem_role_id SET DEFAULT nextval('"amp_team_member_roles_seq"'); 
-                Insert into amp_team_member_roles (role, description,team_head,approver) values ('Workspace Approver','Workspace Approver',false,true);
+                Insert into amp_team_member_roles (role, description, read_permission, write_permission, delete_permission,team_head,approver) values ('Workspace Approver','Workspace Approver',true,true,true,false,true);
             </lang>
         </script>
     </apply>

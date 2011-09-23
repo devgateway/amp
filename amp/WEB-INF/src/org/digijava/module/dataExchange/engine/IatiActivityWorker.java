@@ -492,7 +492,7 @@ public class IatiActivityWorker {
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency);
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings);
 			if(f!=null)
 				fundings.add(f);
 		}
@@ -506,10 +506,8 @@ public class IatiActivityWorker {
 	}
 
 	
-	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,
-			AmpCategoryValue iatiDefaultFinanceType,
-			AmpCategoryValue iatiDefaultAidType,
-			String iatiDefaultCurrency) {
+	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
+			String iatiDefaultCurrency, Set<AmpFunding> fundings) {
 
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -622,7 +620,7 @@ public class IatiActivityWorker {
 		
 		if(a !=null ) 
 			ampFunding.setAmpActivityId(a);
-		Set<AmpFunding> ampFundings = a.getFunding();
+		Set<AmpFunding> ampFundings = fundings;
 		if(ampFundings!=null)
 			for (AmpFunding af : ampFundings) {
 				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){

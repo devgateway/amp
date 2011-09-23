@@ -33,11 +33,11 @@
 					<td align="left" style="padding-right:10px;"><html:text property="lastname" styleClass="inputx" size="30"
 						styleId="lastname" /></td>
 					<td align="left"><html:button property="submitButton"
-						onclick="return searchContact()">
+						onclick="return searchContact()" styleClass="buttonx_sm">
 						<digi:trn>Search</digi:trn>
 					</html:button></td>
 					<td align="left"><html:button property="submitButton"
-						onclick="myPanelContact.hide()">
+						onclick="myPanelContact.hide()" styleClass="buttonx_sm">
 						<digi:trn>Cancel</digi:trn>
 					</html:button></td>
 				</tr>
@@ -150,17 +150,17 @@
 				</div>
 				</div>
 				<center>
-				<html:button styleClass="dr-menu" property="addButton"
+				<html:button styleClass="buttonx_sm" property="addButton"
 					onclick="addSelectedContacts()">
 					<digi:trn>Add</digi:trn>
 				</html:button>
 				</c:if>
-				<html:button styleClass="dr-menu" property="addButton"
+				<html:button styleClass="buttonx_sm" property="addButton"
 					onclick="createNewContact()">
 					<digi:trn>Create New Contact</digi:trn>
 				</html:button>
 				
-				<html:button styleClass="dr-menu" property="submitButton"
+				<html:button styleClass="buttonx_sm" property="submitButton"
 					onclick="myPanelContact.hide()">
 					<digi:trn>Cancel</digi:trn>
 				</html:button>

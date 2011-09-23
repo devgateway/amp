@@ -102,11 +102,11 @@
 												disabled="true"
 											</c:if> 
 											
-											type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
+											type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="buttonx"
 											onclick="buttonAddLocation()">
 										</td>
 										<td>
-											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
+											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="buttonx" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>

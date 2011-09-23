@@ -193,15 +193,15 @@
 									</tr>
 									<tr>
 										<td align="center" colspan=2>
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="return searchSector()">
+											<html:button  styleClass="buttonx_sm" property="submitButton" onclick="return searchSector()">
 												<digi:trn key="btn:search">Search</digi:trn>
 											</html:button>
 										&nbsp;&nbsp;
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="return selectSector()">
+											<html:button  styleClass="buttonx_sm" property="submitButton" onclick="return selectSector()">
 												<digi:trn key="btn:back">Back</digi:trn>
 											</html:button>
 										&nbsp;&nbsp;
-										<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+										<html:button  styleClass="buttonx_sm" property="submitButton" onclick="closeWindow()">
 											<digi:trn key="btn:close">Close</digi:trn>
 										</html:button>
 										</td>
@@ -294,18 +294,18 @@
 												<tr>
 													<td>
 
-														<html:button styleClass="dr-menu" property="addButton" onclick="addSelectedSectors()">
+														<html:button styleClass="buttonx_sm" property="addButton" onclick="addSelectedSectors()">
 															<digi:trn key="btn:add">Add</digi:trn>
 														</html:button>
 
 													</td>
 													<td>
-														<html:reset  styleClass="dr-menu" property="submitButton">
+														<html:reset  styleClass="buttonx_sm" property="submitButton">
 															<digi:trn key="btn:clear">Clear</digi:trn>
 														</html:reset>
 													</td>
 													<td>
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+														<html:button  styleClass="buttonx_sm" property="submitButton" onclick="closeWindow()">
 															<digi:trn key="btn:close">Close</digi:trn>
 														</html:button>
 													</td>

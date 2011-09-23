@@ -350,15 +350,15 @@
     </td>
   </tr>
   </module:display>
-  <module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION">
+  <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION">
   <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
 	    <c:set var="trnDataExchangeExportTitle">
-			<digi:trn>Click here to view Partial Data Import Manager</digi:trn>
+			<digi:trn>Click here to view Data Import Manager</digi:trn>
 		</c:set>
 	   <digi:link module="dataExchange"  href="/manageSource.do" title="${trnDataExchangeExportTitle}" >
-	      <digi:trn>Partial Data Import Manager</digi:trn>
+	      <digi:trn>Data Import Manager</digi:trn>
 	   </digi:link>
 	</td>
   </tr>

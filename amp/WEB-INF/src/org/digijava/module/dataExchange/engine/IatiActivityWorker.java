@@ -621,6 +621,8 @@ public class IatiActivityWorker {
 		if(a !=null ) 
 			ampFunding.setAmpActivityId(a);
 		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
+		//TODO check if we want to keep the old fundings here and merge them. 
+		//If mode of payment or funding status or other fields are changed it should not merge them.
 		if(ampFundings!=null)
 			for (AmpFunding af : ampFundings) {
 				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){

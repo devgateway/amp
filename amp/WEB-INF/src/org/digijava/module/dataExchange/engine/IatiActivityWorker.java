@@ -620,7 +620,7 @@ public class IatiActivityWorker {
 		
 		if(a !=null ) 
 			ampFunding.setAmpActivityId(a);
-		Set<AmpFunding> ampFundings = fundings;
+		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
 		if(ampFundings!=null)
 			for (AmpFunding af : ampFundings) {
 				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){

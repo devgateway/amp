@@ -140,8 +140,11 @@ html.chrome .bd_drop{margin-top:-15px;}
 .cont_search_cont {padding:10px;}
 .right_menu {margin-bottom:20px;}
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
+.right_menu_header_big {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header_big.gif);width:200px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:11px; font-weight:bold; }
 .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px; }
+.right_menu_box_big {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:198px; }
+
 .right_menu_cont {padding:10px; font-size:11px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}

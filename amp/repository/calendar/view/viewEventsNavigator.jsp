@@ -30,10 +30,10 @@ function selectCalendarType(view, type) {
                 <tr>
                 	<td nowrap="nowrap">
 	                	<div class="right_menu" style="margin-bottom: 0px;">
-							<div class="right_menu_header">
+							<div class="right_menu_header_big">
 								<div class="right_menu_header_cont">Calendar Type</div>
 							</div>
-							<div class="right_menu_box">
+							<div class="right_menu_box_big">
 								<div class="right_menu_cont">
 									<digi:trn>Type</digi:trn>&nbsp;
 									<html:select styleClass="selector_type" name="calendarViewForm" property="selectedCalendarType" onchange="selectCalendarType('${calendarViewForm.view}', '${calendarViewForm.selectedCalendarType}')">

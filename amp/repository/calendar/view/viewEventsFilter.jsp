@@ -128,12 +128,12 @@ function changeEventTypesState(){
 <feature:display name="Filter" module="Calendar">
 	<field:display name="Event Type Filter" feature="Filter">
 		<div class="right_menu">
-			<div class="right_menu_header">
+			<div class="right_menu_header_big">
 				<div class="right_menu_header_cont">
 					<digi:trn>Event Types</digi:trn>
 				</div>
 			</div>
-			<div class="right_menu_box" >
+			<div class="right_menu_box_big" >
 	    		<c:if test="${!empty calendarViewForm.filter.eventTypes}">
 	      			<table cellpadding="0" cellspacing="0">
 	        			<c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}" varStatus="stat">
@@ -160,10 +160,10 @@ function changeEventTypesState(){
 	</div>
 	<field:display name="Donor Filter" feature="Filter">
 		<div class="right_menu">
-			<div class="right_menu_header">
+			<div class="right_menu_header_big">
 				<div class="right_menu_header_cont"><digi:trn>Donors</digi:trn></div>
 		  	</div>
-		  	<div class="right_menu_box" style="overflow: auto;">
+		  	<div class="right_menu_box_big" style="overflow: auto;">
 			    <c:if test="${!empty calendarViewForm.filter.donors}">
 			    	<ul style="height:175px; width: 350px; list-style-type: none outside none; padding: 0px; font-size: 11px;white-space: nowrap;">
 			        	<li style="white-space: nowrap; margin: 5px;">

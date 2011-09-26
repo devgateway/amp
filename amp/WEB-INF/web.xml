@@ -7,6 +7,23 @@
 	<display-name>AMP 2.0</display-name>
 	<description>Aid Management Platform</description>
 
+
+	<!-- ******************************************* -->
+	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
+	<!-- ******************************************* -->
+	<listener>
+		<listener-class>
+			org.dgfoundation.amp.error.keeper.DigiXmlECSLoaderListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.dgfoundation.ecs.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!--                 SEGMENT END                 -->
+	<!--  ADD ENTRIES BELOW -->
+
 	<!-- Web listener -->
 	<listener>
 		<listener-class>
@@ -29,23 +46,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-
-	<!-- ******************************************* -->
-	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
-	<!-- ******************************************* -->
-	<listener>
-		<listener-class>
-			org.dgfoundation.amp.error.keeper.DigiXmlECSLoaderListener
-		</listener-class>
-	</listener>
-	<listener>
-		<listener-class>
-			org.dgfoundation.ecs.ContextLoaderListener
-		</listener-class>
-	</listener>
-	<!--                 SEGMENT END                 -->
-		        
-	<!--  ADD ENTRIES BELOW -->
 
 	<!-- Correct EhCache shutdown -->
  	<listener>

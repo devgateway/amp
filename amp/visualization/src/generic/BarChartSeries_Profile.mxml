@@ -100,18 +100,17 @@
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
 				if(isNaN(sliderYear.value))
 				{
+					var labelArray:Array = new Array();
 					try {
 						startYear = service.lastResult[profileDataField].startYear;
 						endYear = service.lastResult[profileDataField].endYear;
 						sliderYear.value = endYear;
+						labelArray = service.lastResult[profileDataField].yearsLabels.split(",")
 					} catch (errObject:Error) {
 						startYear = service.lastResult[profileDataField][0].startYear;
 						endYear = service.lastResult[profileDataField][0].endYear;
 						sliderYear.value = endYear;
-					}
-					var labelArray:Array = new Array(); 
-					for (var index:Number=startYear; index <= endYear; index++){
-						labelArray[labelArray.length] = index;
+						labelArray = service.lastResult[profileDataField][0].yearLabels.split(",")
 					}
 					sliderYear.labels = labelArray;
 				}
@@ -418,7 +417,7 @@
 				var isSprite:Boolean = (obj is AxiisSprite)
 				formatter.precision = decimalsToShow;
 				if(isSprite)	
-					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(Number(obj.data.value));
+					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(ObjectUtils.getProperty(this, obj.data,childDataField));
 				if(!isNaN(Number(obj.value)) && Number(obj.value) > 0 ){ 
 					return formatter.format(obj.value);
 				}
@@ -699,7 +698,7 @@
 	</axiis:DataCanvas>
 		
 		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
-		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="250" x="300" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="350" x="230" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
 		<mx:Label mouseMove="mouseOverHandler(event);" x="100" y="10" id="chartLabel" height="36" fontSize="12"/>
 		
 	</mx:Canvas>

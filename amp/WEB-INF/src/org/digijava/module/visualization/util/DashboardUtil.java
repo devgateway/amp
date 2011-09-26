@@ -2,6 +2,7 @@ package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -481,6 +482,28 @@ public class DashboardUtil {
 			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
 		}
 		return topLevelSector;
+	}
+
+	public static String getYearName(String headingFY, Long fiscalCalendarId, Date startDate, Date endDate) {
+		String result = "";
+		String startYear = "";
+		String endYear = "";
+        AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+		SimpleDateFormat simpleDateformat=new SimpleDateFormat("yyyy");
+		startYear = simpleDateformat.format(startDate);
+		endYear = simpleDateformat.format(endDate);
+		
+		if(startYear.equalsIgnoreCase(endYear)){
+			result = startYear;
+		}
+		else
+		{
+			SimpleDateFormat shortSimpleDateformat=new SimpleDateFormat("yy");
+			startYear = shortSimpleDateformat.format(startDate);
+			endYear = shortSimpleDateformat.format(endDate);
+			result = headingFY + " " + startYear + "-" + endYear;
+		}
+		return result;
 	}
 
 }

@@ -1,2 +1,0 @@
-delete from amp_widget_value where column_id  in (select id from amp_widget_column where filter_item_provider=2) and filter_item_id not in (select amp_org_grp_id  from amp_org_group);
-delete from amp_widget_value where column_id  in (select id from amp_widget_column where filter_item_provider=1) and filter_item_id not in(select amp_org_id   from amp_organisation);

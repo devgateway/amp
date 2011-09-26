@@ -1,1 +1,0 @@
-CREATE OR REPLACE VIEW `v_donors` AS select `f`.`amp_activity_id` AS `amp_activity_id`,`o`.`name` AS `name`,`f`.`amp_donor_org_id` AS `amp_donor_org_id`,o.org_grp_id,o.org_type_id from `amp_funding` `f`,`amp_organisation` o where  `f`.`amp_donor_org_id` = `o`.`amp_org_id` order by `f`.`amp_activity_id`,`o`.`name`;

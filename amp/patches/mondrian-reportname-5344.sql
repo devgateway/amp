@@ -1,2 +1,0 @@
-UPDATE `off_line_reports` SET `off_line_reports`.`name` = 'Report by Financing Instrument and Donor Information' WHERE
-`off_line_reports`.`name` ='Reports by Sector, Financing Instrument and Donor Information'

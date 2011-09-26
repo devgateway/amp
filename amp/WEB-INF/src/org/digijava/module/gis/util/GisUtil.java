@@ -50,6 +50,9 @@ public class GisUtil {
     public static String ACTION_GET_IMAGE_MAP = "getImageMap";
     public static String ACTION_GET_SEGMENT_INFO = "getSegmentInfo";
 
+    public static String GIS_MODE_DEVINFO = "devinfo";
+    public static String GIS_MODE_FUNDINGS = "fundings";
+
 
     private static Map loadedMaps = null;
     private static Map <String, MapColorScheme> colorSchemePresets = null;

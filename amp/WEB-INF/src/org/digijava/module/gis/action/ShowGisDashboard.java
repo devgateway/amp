@@ -34,6 +34,7 @@ import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.gis.util.GisUtil;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 
 /**
@@ -52,6 +53,11 @@ public class ShowGisDashboard extends Action {
         if (baseCurr == null) {
             baseCurr = "USD";
         }
+
+        if (gisForm.getGisDashboardMode() == null || gisForm.getGisDashboardMode().isEmpty()) {
+            gisForm.setGisDashboardMode(GisUtil.GIS_MODE_FUNDINGS);
+        }
+
         //currently we are using base currency but in the future we may use value, selected from currency breakdown.
         gisForm.setSelectedCurrency(baseCurr);
 

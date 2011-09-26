@@ -47,6 +47,16 @@ public class GisDashboardForm extends ActionForm {
 	private Object[] selectedPrimaryPrograms;
 	private Object[] selectedSecondaryPrograms;
 
+    private String gisDashboardMode;
+
+    public String getGisDashboardMode() {
+        return gisDashboardMode;
+    }
+
+    public void setGisDashboardMode(String gisDashboardMode) {
+        this.gisDashboardMode = gisDashboardMode;
+    }
+
     public String getSelectedCurrency() {
         return selectedCurrency;
     }

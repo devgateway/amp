@@ -107,6 +107,14 @@
 		diskPersistent="false"
 		maxElementsOnDisk="1000000"
 		/>
+
+	<cache
+		name="AMP_GIS_CACHE"
+		maxElementsInMemory="100"
+		overflowToDisk="false"
+		diskPersistent="false"
+		maxElementsOnDisk="1000"
+		/>
 		
     <!-- See http://ehcache.sourceforge.net/documentation/#mozTocId258426 for how to configure caching for your objects -->
 </ehcache>

@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ page import="org.digijava.module.gis.util.GisUtil" %>
+
 <digi:instance property="gisDashboardForm"/>
 <html:hidden property="selectedCurrency" styleId="selCurr"/>
 
@@ -81,6 +83,25 @@
 <link href="TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
+
+<bean:define id="mapMode" name="gisDashboardForm" property="gisDashboardMode"/>
+<bean:define id="isDevInfoMode">true</bean:define>
+<bean:define id="finMode"><%= org.digijava.module.gis.util.GisUtil.GIS_MODE_FUNDINGS %></bean:define>
+<c:if test="${finMode == mapMode}">
+	<c:set var="isDevInfoMode">false</c:set>
+</c:if>
+
+<%--
+<c:set var="isDevInfoMode">
+		<feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
+</c:set>
+
+
+<c:if test="${isDevInfoMode==''}">
+<c:set var="isDevInfoMode">false</c:set>
+</c:if>
+--%>
+
 <script language="JavaScript">
 	var validatedRegPercentage = false;
 	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
@@ -95,9 +116,9 @@
 
 <script language="JavaScript">
     var showDevinfo = false;
-    <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
+    <logic:equal name="isDevInfoMode" value="true">
         showDevinfo = true;
-    </feature:display>
+    </logic:equal>
 </script>
 
 
@@ -108,13 +129,6 @@
 
 
 
-<bean:define id="isDevInfoMode">true</bean:define>
-	<c:set var="isDevInfoMode"><feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
-</c:set>
-
-<c:if test="${isDevInfoMode==''}">
-<c:set var="isDevInfoMode">false</c:set>
-</c:if>
 
 <jsp:include page="gisFilterScripts.jsp" />
 <jsp:include page="gisFilter.jsp" />
@@ -219,11 +233,15 @@
 				<AREA TITLE="90-100%" SHAPE=RECT COORDS="630,0,700,20">
 			</MAP>
 			--%>
+			<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>	
 
     
-    <div id="imageMapContainer" style="visibility:hidden;"></div>
+    
+    
+    
+    
     
     <!-- DevInfo block -->
 <c:if test="${isDevInfoMode == true}">
@@ -253,7 +271,22 @@
 	</tr>
 	--%>
 	
-    
+	
+	<feature:display name="Show DevInfo data" module="GIS DASHBOARD">
+	  <tr>
+	    <td width="200" nowrap style="font-size:12px">
+	      <b><digi:trn>Map Mode</digi:trn>:</b>
+	    </td>
+			<td width="90%">
+				<html:form action="gis/index.do">
+					<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+						<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+						<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+					</html:select> 
+				</html:form>
+			</td>
+		</tr>
+	</feature:display>
     
 	<feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">	
 		<field:display name="Map Level Switch" feature="GIS DASHBOARD">
@@ -356,6 +389,23 @@
 	          </span>
         </td>
     </tr>
+    
+    <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
+    <tr>
+	    <td nowrap style="font-size:12px">
+	      <b><digi:trn>Map Mode</digi:trn>:</b>
+	    </td>
+			<td colspan="2">
+				<html:form action="gis/index.do">
+					<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+						<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+						<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+					</html:select> 
+				</html:form> 
+			</td>
+		</tr>
+	</feature:display>
+    
     <tr>
         <td colspan="3">
             <img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">

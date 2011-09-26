@@ -216,7 +216,7 @@ function selectCalendarType(view, type) {
 									                      <c:otherwise>${item.dayOfMonth}</c:otherwise>
 									                    </c:choose>
 									                    <c:if test="${!item.enabled}"></span></c:if>
-									                    <c:if test="${!item.nolink}"></a><br /></c:if>
+									                    <c:if test="${!item.nolink}"><br /></a></c:if>
 									                  </td>
 									                </c:forEach>
 									            </tr>

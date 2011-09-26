@@ -883,6 +883,8 @@ public class LocationUtil {
         		DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
         	if ( tempLoc != null ) 
         		throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
+        	
+        	loc.getParentLocation().getChildLocations().add(loc);
         }
         
 //        if ( loc.getCode() != null && loc.getCode().length() > 0 ) {

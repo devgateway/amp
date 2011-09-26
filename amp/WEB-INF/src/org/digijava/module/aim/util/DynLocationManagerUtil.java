@@ -96,11 +96,12 @@ public class DynLocationManagerUtil {
 
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession
 					.load(AmpCategoryValueLocations.class, id);
-
-			String queryString = "delete from " + AmpLocation.class.getName()
-					+ " a where a.location=" + loc.getId();
-			Query qry = dbSession.createQuery(queryString);
-			qry.executeUpdate();
+			
+			loc.getParentLocation().getChildLocations().remove(loc);
+//			String queryString = "delete from " + AmpLocation.class.getName()
+//					+ " a where a.location=" + loc.getId();
+//			Query qry = dbSession.createQuery(queryString);
+//			qry.executeUpdate();
 
 			if (loc != null)
 				dbSession.delete(loc);

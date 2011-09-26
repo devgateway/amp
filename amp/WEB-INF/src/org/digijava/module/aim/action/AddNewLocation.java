@@ -63,7 +63,7 @@ public class AddNewLocation extends Action {
                 if (addRegForm.getEditedId() == null) {
                     location = new AmpCategoryValueLocations();
                     AmpCategoryValueLocations parentLoc=null;
-					if(addRegForm.getParentLocationId()!=-1) parentLoc = LocationUtil.getAmpCategoryValueLocationById(addRegForm.getParentLocationId());
+					if(addRegForm.getParentLocationId()!=-1) parentLoc = DynLocationManagerUtil.getLocation(addRegForm.getParentLocationId(), true);
                     AmpCategoryValue parentCatVal = CategoryManagerUtil.getAmpCategoryValueFromDb(addRegForm.getParentCatValId());
                     location.setParentLocation(parentLoc);
                     location.setParentCategoryValue(parentCatVal);

@@ -17,22 +17,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
-		<tr>
-			<td align="right" valign="top" nowrap="nowrap" class="prv_left"><img id="group_funding_plus"
-				onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/images/arrow_right.gif" /> <img
-				id="group_funding_minus" onclick="toggleGroup('group_funding')"
-				src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
-				style="display: none" /> <digi:trn key="aim:funding">Funding</digi:trn>
-			</td>
-			<td bgcolor="#ffffff" class="prv_right"><b>
-			<div id="group_funding_dots" style="display: block"><bean:write
-				name="aimEditActivityForm" property="funding.totalCommitted" /> <bean:write
-				name="aimEditActivityForm" property="currCode" /> &nbsp; ...</div>
-			</b> <br />
-			<div id="act_group_funding"
-				style="display: none; position: relative; left: 10px;">
-			<table width="95%" cellspacing="1" cellpadding="0" border="0"
+	<table width="95%" cellspacing="1" cellpadding="0" border="0"
 				align="center">
 				<tr>
 					<td>
@@ -404,8 +389,4 @@
 					</td>
 				</tr>
 			</table>
-			</div>
-			</td>
-		</tr>
-
-
+			

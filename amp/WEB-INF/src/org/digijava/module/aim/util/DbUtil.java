@@ -1342,7 +1342,7 @@ public class DbUtil {
         String ans = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select act from " + AmpActivity.class.getName() + " act where act.ampActivityId=:actId";
+            String qry = "select act from " + AmpActivityVersion.class.getName()+ " act where act.ampActivityId=:actId";
             q = session.createQuery(qry);
             q.setParameter("actId", actId, Hibernate.LONG);
             Iterator itr = q.list().iterator();

@@ -96,8 +96,7 @@
 	</tr>
 
 	<!-- Start Actual Disbursements -->
-	<logic:iterate name="funding" property="fundingDetails"
-		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 						<tr bgcolor="#ffffff">
@@ -140,13 +139,12 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><digi:trn
-			key='aim:subtotalActualdisbursement'>
-                                                                                    SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>
+			key='aim:subtotalActualdisbursement'>SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
-                                  ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
+                 ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
              </c:if>&nbsp;
         </td>
                    

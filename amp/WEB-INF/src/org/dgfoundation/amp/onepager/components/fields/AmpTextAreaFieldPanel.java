@@ -39,7 +39,7 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	 * @param wysiwyg if true, {@link TinyMceBehavior} will be added to the {@link TextArea}
 	 */
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
-		super(id, fmName);
+		super(id, fmName, false, true);
 		if (wysiwyg){
 			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
 		}

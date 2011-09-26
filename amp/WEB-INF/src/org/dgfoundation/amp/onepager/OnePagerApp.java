@@ -132,9 +132,14 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 //		 BeanFactory factory = new XmlBeanFactory(resource);
 //		 sessionFactory=(SessionFactory) factory.getBean("sessionFactory");
 		 
-		 //Check if One Pager FM root exists, if not try to add it
+		 /**
+		  * Added through recurring patch now
+		  *	Check if One Pager FM root exists, if not try to add it
+		  *
 		 FMUtil.checkFmRoot(FMUtil.fmRootActivityForm);
 		 FMUtil.checkFmRoot(FMUtil.fmRootPermissionManager);
+		  *
+		  */
 		 
 		 //set UTF-8 as the default encoding for all requests
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");

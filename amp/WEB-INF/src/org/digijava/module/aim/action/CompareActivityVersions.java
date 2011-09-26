@@ -482,6 +482,10 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setModifiedDate(Calendar.getInstance().getTime());
 			auxActivity.setModifiedBy(member);
 			auxActivity.setAmpActivityPreviousVersion(vForm.getOldActivity());
+			
+			auxActivity.setMergedActivity(true);
+			auxActivity.setMergeSource1(vForm.getActivityOne());
+			auxActivity.setMergeSource2(vForm.getActivityTwo());
 			session.update(auxActivity);
 
 			// Insert fields selected by user into AmpActity properties.

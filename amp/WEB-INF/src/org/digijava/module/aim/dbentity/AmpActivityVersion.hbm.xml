@@ -291,6 +291,12 @@
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 		</set>
+		
+		<property name="mergedActivity" column="merged_activity" type="java.lang.Boolean" />
+		<many-to-one name="mergeSource1" column="merge_source1"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+		<many-to-one name="mergeSource2" column="merge_source2"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 	' 
 	>
 ]>

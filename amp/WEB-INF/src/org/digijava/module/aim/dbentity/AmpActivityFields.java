@@ -380,9 +380,36 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion ampActivityPreviousVersion;
 	protected Date modifiedDate;
 	protected AmpTeamMember modifiedBy;
+	
+	protected Boolean mergedActivity;
+	protected AmpActivityVersion mergeSource1;
+	protected AmpActivityVersion mergeSource2;
 
 	//protected Set <AmpActivityContact> activityContacts;
 
+	public Boolean getMergedActivity() {
+		return mergedActivity;
+	}
+
+	public void setMergedActivity(Boolean mergedActivity) {
+		this.mergedActivity = mergedActivity;
+	}
+
+	public AmpActivityVersion getMergeSource1() {
+		return mergeSource1;
+	}
+
+	public void setMergeSource1(AmpActivityVersion mergeSource1) {
+		this.mergeSource1 = mergeSource1;
+	}
+
+	public AmpActivityVersion getMergeSource2() {
+		return mergeSource2;
+	}
+
+	public void setMergeSource2(AmpActivityVersion mergeSource2) {
+		this.mergeSource2 = mergeSource2;
+	}
 
 	public Integer getBudget() {
 		return budget;

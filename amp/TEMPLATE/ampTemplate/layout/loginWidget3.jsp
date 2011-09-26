@@ -107,6 +107,7 @@
                         
   					</div>
   					<div id="login_menu">
+					<feature:display name="Enable New User Registration" module="Login - User Management">
 					<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 					</c:set>
@@ -114,6 +115,7 @@
 			    		<digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
 			  		</digi:link>	
 				 	&nbsp;|&nbsp; 
+				 	</feature:display>
 					<c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>

@@ -104,8 +104,8 @@ function page (page, ampSelectedClass){
 			<!-- BREADCRUMP START -->
 			<tr>
 				<td height="33">
-					<div class="breadcrump_cont"> 
-						<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
+					<div class="breadcrump_1"> 
+						<span class="sec_name"><digi:trn>Data Import Manager</digi:trn></span>
 						<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>
 						<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
 						<span class="breadcrump_sep"><b>»</b></span>
@@ -125,6 +125,13 @@ function page (page, ampSelectedClass){
 			<tr>
 			    <td class="main_side_1">
 				    <table class="inside" width="980px" border=0 cellpadding="0" cellspacing="0" style="margin:10px;" id="tableRecords">
+				    	<tr>
+		    				<td align=right colspan="8" class="inside">
+		    					<a href="/dataExchange/mapFields.do" >
+		    					<b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    					<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true" class="t_sm"><b>[+] <digi:trn>Create New Source</digi:trn></b></a>
+		   					 </td>
+	  					</tr>
 						<tr>
 						<td colspan="8" align="center" background="images/ins_header.gif" class="inside"><b class="ins_header"><digi:trn>Filter by</digi:trn>:
 							<html:select property="selectedAmpClass" styleClass="dropdwn_sm" onchange="showFilter()" styleId="filterAmpClass">
@@ -180,7 +187,7 @@ function page (page, ampSelectedClass){
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside">
 								  		<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
-								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
+								  			<html:option value="-1"><digi:trn>Add new</digi:trn></html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels">
 												<html:option value="${cls.key}">
 												${cls.value}

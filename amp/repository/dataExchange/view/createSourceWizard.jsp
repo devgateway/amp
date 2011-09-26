@@ -171,7 +171,7 @@ function cancelImportManager() {
 	<tr>
 		<td height="33">
 			<div class="breadcrump_cont"> 
-				<span class="sec_name"><digi:trn>Partial Data Import Manager</digi:trn></span>
+				<span class="sec_name"><digi:trn>Data Import Manager</digi:trn></span>
 				<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>
 				<span class="breadcrump_sep"><b>»</b></span><a href="/dataExchange/manageSource.do" class="l_sm"><digi:trn>Import Manager</digi:trn></a>
 				<span class="breadcrump_sep"><b>»</b></span>

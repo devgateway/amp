@@ -564,13 +564,13 @@ public class IatiActivityWorker {
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					String tName = printList(item.getValue().getContent()).toLowerCase();
 					String tCode = item.getValue().getCode().toLowerCase();
-					if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
+					if("commitment".compareTo(tName) == 0 || "c".compareTo(tCode) ==0)
 						transactionType ="c";
 					else 
-						if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
+						if("disbursement".compareTo(tName) == 0 || "d".compareTo(tCode) ==0)
 							transactionType ="d";
 						else
-							if("commitment".compareTo(tName) ==0 || "c".compareTo(tCode) ==0)
+							if("expenditure".compareTo(tName) == 0 || "e".compareTo(tCode) ==0)
 								transactionType ="e";
 					//the transaction is not C or D or E then it is not imported in AMP
 							else return null;
@@ -597,11 +597,19 @@ public class IatiActivityWorker {
 				}
 			}
 		}
+		
+		//we can not import funding with Donor null
+		if(ampOrg == null) 
+			return null;
+		//TODO add a default donor like default currency ;)
+		
 		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
 		ampFunding.setActive(true);
 		ampFunding.setAmpDonorOrgId(ampOrg);
+		ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+		
 		if("d".compareTo(transactionType) ==0)
 			populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
 		else

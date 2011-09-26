@@ -150,7 +150,7 @@ function cancelImportManager() {
  function checkAttachment (){
 	 var attachmentDiv = document.getElementById("attachmentDiv");
 	 if(attachmentDiv != null){
-		 var currentFileToAttach = document.getElementById("uploadedFile");
+		 var currentFileToAttach = document.getElementById("fileUploaded");
 		 if(currentFileToAttach.value != null && currentFileToAttach.value != ''){
 			 alert('Please remove old attachment first');
 			 return false;

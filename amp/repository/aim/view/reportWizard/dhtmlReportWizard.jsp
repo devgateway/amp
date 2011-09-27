@@ -189,7 +189,7 @@
 		rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
 		
 		
-		var repManagerParams	= {
+		repManagerParams	= {
 									desktopTab: ${myForm.desktopTab},
 									onePager: ${myForm.onePager},
 									reportUsesFilters: ${reportUsesFilters},

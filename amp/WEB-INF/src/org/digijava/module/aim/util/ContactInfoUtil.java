@@ -195,9 +195,9 @@ public class ContactInfoUtil {
 			//sort
 			if(sortBy!=null && sortDir!=null){
 				if (sortBy.equals("name") && sortDir.equals("asc")) {
-					queryString += " order by cont.name " ;
+					queryString += " order by concat(cont.name,cont.lastname) " ;
 				} else if (sortBy.equals("name") && sortDir.equals("desc")) {
-					queryString += " order by cont.name desc " ;
+					queryString += " order by concat(cont.name,cont.lastname) desc " ;
 				}else if(sortBy.equals("title") && sortDir.equals("asc")){
 					queryString += " order by cont.title ";
 				}else if(sortBy.equals("title") && sortDir.equals("desc")){

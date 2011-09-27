@@ -1456,6 +1456,8 @@ function toggleSettings(){
 	<div class="yui-content">
 	<div id="tab1">
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Region Profile" parentModule="Org./Sector/Region Dashboards">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
 				<div id="RegionProfileHeader" class="chart_header" style="float:left">
@@ -1493,9 +1495,13 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+		</module:display>
+		</module:display>
 		</c:if>
 	
 			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<module:display name="Org./Sector/Region Dashboards">
+			<module:display name="Sector Profile" parentModule="Org./Sector/Region Dashboards">
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
@@ -1534,8 +1540,12 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+		</module:display>
+		</module:display>
 		</c:if>
-	
+		
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="ODA Historical Trend - Funding chart" parentModule="Org./Sector/Region Dashboards">
 		<fieldset class="chartFieldset">
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
 			<div id="FundingChartHeader" class="chart_header" style="float:left">
@@ -1574,7 +1584,12 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
+		</module:display>
+		</module:display>
+		
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+		<module:display name="Org./Sector/Region Dashboards">
+		<feature:display name="Org. Dashboard - ODA Growth Percentage" module="Org. Dashboard">
 			<fieldset class="chartFieldset">
 				<legend><span id="ODAGrowthTitleLegend" class=legend_label></span></legend>
 				<div id="ODAGrowthHeader" class="chart_header" style="float:left">
@@ -1613,7 +1628,12 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+		</feature:display> 
+		</module:display>
 		</c:if>
+		
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Aid Predictability chart" parentModule="Org./Sector/Region Dashboards"> 
 		<fieldset class="chartFieldset">
 			<legend><span id="AidPredictabilityTitleLegend" class=legend_label></span></legend>
 			<div id="AidPredictabilityHeader" class="chart_header" style="float:left">
@@ -1650,6 +1670,11 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
+		</module:display>
+		</module:display>
+		
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Aid Type chart" parentModule="Org./Sector/Region Dashboards">
 		<fieldset class="chartFieldset">
 			<legend><span id="AidTypeTitleLegend" class=legend_label></span></legend>
 			<div id="AidTypeHeader" class="chart_header" style="float:left">
@@ -1686,6 +1711,11 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
+		</module:display> 
+		</module:display>
+		
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Financing Instrument chart" parentModule="Org./Sector/Region Dashboards">
 		<fieldset class="chartFieldset">
 			<legend><span id="FinancingInstrumentTitleLegend" class=legend_label></span></legend>
 			<div id="FinancingInstrumentHeader" class="chart_header" style="float:left">
@@ -1722,7 +1752,12 @@ function toggleSettings(){
 				<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 			</div> 
 		</fieldset>
+		</module:display> 
+		</module:display>
+		
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Donor Profile" parentModule="Org./Sector/Region Dashboards"> 
 			<fieldset class="chartFieldset">
 				<legend><span id="DonorProfileTitleLegend" class=legend_label></span></legend>
 				<div id="DonorProfileHeader" class="chart_header" style="float:left">
@@ -1759,8 +1794,12 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+		</module:display>
+		</module:display>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Sector Profile" parentModule="Org./Sector/Region Dashboards">
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
 				<div id="SectorProfileHeader" class="chart_header" style="float:left">
@@ -1798,8 +1837,12 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+			</module:display>
+			</module:display>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
+		<module:display name="Org./Sector/Region Dashboards">
+		<module:display name="Region Profile" parentModule="Org./Sector/Region Dashboards">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
 				<div id="RegionProfileHeader" class="chart_header" style="float:left">
@@ -1837,6 +1880,8 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
+			</module:display>
+			</module:display>
 		</c:if>
 	</div>
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">

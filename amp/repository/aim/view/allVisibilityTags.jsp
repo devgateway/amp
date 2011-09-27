@@ -1022,3 +1022,24 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Mandatory Indicator For Recipients" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form"></field:display>
+
+<!--  -->
+<module:display name="Org./Sector/Region Dashboards"></module:display>
+
+<module:display name="Org. Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - ODA Growth Percentage" module="Org. Dashboard"></feature:display> 
+
+<module:display name="Sector Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Sector Dashboard in public View" module="Sector Dashboard"></feature:display> 
+
+<module:display name="Region Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Region Dashboard in public View" module="Region Dashboard"></feature:display> 
+
+<module:display name="Aid Predictability chart" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="Aid Type chart" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="ODA Historical Trend - Funding chart" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="Financing Instrument chart" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="Donor Profile" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="Sector Profile" parentModule="Org./Sector/Region Dashboards"></module:display> 
+<module:display name="Region Profile" parentModule="Org./Sector/Region Dashboards"></module:display> 

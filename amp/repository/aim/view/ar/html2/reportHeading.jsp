@@ -46,7 +46,7 @@
 					</c:if>
 				</logic:iterate>
 		</logic:notEmpty>
-  		<td class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
+  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">
   			${repHierarchy.column.columnName} 
   			<c:if test="${sortIconPath!=''}">

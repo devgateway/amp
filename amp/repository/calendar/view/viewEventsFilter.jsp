@@ -133,20 +133,20 @@ function changeEventTypesState(){
 					<digi:trn>Event Types</digi:trn>
 				</div>
 			</div>
-			<div class="right_menu_box_big" >
+			<div class="right_menu_box_big" style="max-height:175px; overflow: auto;">
 	    		<c:if test="${!empty calendarViewForm.filter.eventTypes}">
 	      			<table cellpadding="0" cellspacing="0">
 	        			<c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}" varStatus="stat">
 	         				 <tr>
+	         				 	<td>
+	              					<html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>
+	            				</td>
 	            				<td style="width:29px;padding-left:10px;text-align:center;">
 	              					<div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
 	              					</div>
 	            				</td>
 	            				<td style="padding:5px;text-align:left;font-size:11px; width: 80px;" nowrap="nowrap">
 		             				<div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
-	            				</td>
-	            				<td>
-	              					<html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>
 	            				</td>
 	          				</tr>
 	        			</c:forEach>
@@ -163,20 +163,24 @@ function changeEventTypesState(){
 			<div class="right_menu_header_big">
 				<div class="right_menu_header_cont"><digi:trn>Donors</digi:trn></div>
 		  	</div>
-		  	<div class="right_menu_box_big" style="overflow: auto;">
+		  	<div class="right_menu_box_big" style="height:175px; overflow: auto;">
 			    <c:if test="${!empty calendarViewForm.filter.donors}">
-			    	<ul style="height:175px; width: 350px; list-style-type: none outside none; padding: 0px; font-size: 11px;white-space: nowrap;">
-			        	<li style="white-space: nowrap; margin: 5px;">
+			    	<table cellpadding="0" cellspacing="0">
+						<tr>
+			        		<td>
 			            	<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>
 			            	<digi:trn>None</digi:trn>
-			        	</li>
+			            	</td>
+			            </tr>
 			        	<c:forEach var="donor" items="${calendarViewForm.filter.donors}" varStatus="stat">
-			          		<li style="white-space: nowrap; margin: 5px;">
+							<tr>
+								<td style="overflow: auto;">
 		              			<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}" styleId="donors_${stat.index}"/>
 		              			${donor.label} 
-			          		</li>
+								</td>
+							</tr>
 			        	</c:forEach>
-			      	</ul>
+			      	</table>
 				</c:if>
 			</div>
 		</div>

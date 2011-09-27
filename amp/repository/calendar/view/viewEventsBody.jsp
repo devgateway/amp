@@ -351,7 +351,7 @@ window.onload=init;
 </script>
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>
-	<div id="scheduler_here" class="dhx_cal_container"  style='padding:2% 0% 2% 0%; width:100%; height:93%;max-height:570;  position:relative'>
+	<div id="scheduler_here" class="dhx_cal_container"  style='padding:2% 0% 2% 0%; width:100%; height:600; max-height:600; position:relative'>
 		<div class="dhx_cal_navline" style="z-index:10">
 <!--			<div class="dhx_cal_prev_button" style="">&nbsp;</div>-->
 <!--			<div class="dhx_cal_date" style=""></div>-->

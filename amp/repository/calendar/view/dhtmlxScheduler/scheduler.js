@@ -33,7 +33,7 @@ scheduler.xy={
 }
 scheduler.set_sizes=function(){
 	var w = this._x = this._obj.clientWidth;
-	var h = this._y = this._obj.clientHeight;
+	var h = this._y = _isIE? this._obj.clientHeight*0.85 :  this._obj.clientHeight;
 	
 	//alert(w+"-"+h);
 	
@@ -516,11 +516,12 @@ scheduler._reset_month_scale=function(b,dd,sd){
 	var height=(Math.floor(b.clientHeight/rows)-22);
 	
 	this._colsS.height=height+22;
+	if (height < 1) {
+		height = 1;
+	}
 	for (var i=0; i<=7; i++)
-		tdcss[i]=" style='height:"+height+"px; width:"+((this._cols[i]||0)-1)+"px;' "
+		tdcss[i]=" style='height:"+height+"px; width:"+((this._cols[i]||0)-(_isIE?0:1))+"px;' "
 
-	
-	
 	
 	this._min_date=sd;
 	var html="<table cellpadding='0' cellspacing='0'>";

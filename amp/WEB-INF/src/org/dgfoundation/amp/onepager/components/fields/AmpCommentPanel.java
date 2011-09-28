@@ -194,7 +194,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 								} else {
 									replaceComponentTagBody(markupStream,
 											openTag,
-											"<p style=\"white-space: normal; margin-top: 0px; margin-bottom: 0px;\">"+getDefaultModelObjectAsString()+"</p>");
+											"<div style=\"word-wrap: break-word; max-width: 280px; margin-top: 0px; margin-bottom: 0px; \">"+getDefaultModelObjectAsString()+"</div>");
 								}
 							}
 						};

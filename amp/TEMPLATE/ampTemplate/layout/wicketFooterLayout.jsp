@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <!-- FOOTER START -->
-<span id="footer" style="display: none;">
+<span id="footer">
 	<digi:insert attribute="footer" />
 </span>
 <!-- FOOTER END  -->

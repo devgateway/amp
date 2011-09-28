@@ -444,6 +444,9 @@
 	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
 	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
 	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
+	
+	<page name="wicketHeader" page="wicketHeader"></page>
+	<page name="wicketFooter" page="wicketFooter"></page>
 </secondary-pages>
 <module>
 

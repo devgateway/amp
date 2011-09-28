@@ -104,7 +104,7 @@ table tr td {font-size:11px;}
  <logic:notEmpty name="currentMember" scope="session">
  	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
  </logic:notEmpty>
-<center>
+<div style="text-align:center">
 <!-- HEADER START -->
 <div class="header">
 	<div class="centering">
@@ -130,7 +130,7 @@ table tr td {font-size:11px;}
 	</div>
 </div>
 <!-- HEADER END -->
-</center>
+</div>
 <script type="text/javascript">
 	function selectwkspace(id){
 		var url = "/selectTeam.do?id="+id;

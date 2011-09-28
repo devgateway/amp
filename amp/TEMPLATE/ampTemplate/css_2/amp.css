@@ -1,5 +1,5 @@
 html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;width:100%;}
-body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;font-size:12px;}
+body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;font-size:12px; margin: 0px;}
 
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}

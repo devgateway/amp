@@ -670,6 +670,7 @@ html.ie .login_nav {font-size:11px; padding-top:13px; width:500px;text-align:rig
 html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:162px; }
 html.ie li.tri a{background:(/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left;  font-size:11px;}
 html.ie li.tri {padding:0px;margin:0px;text-indent:none;backgrund:red;}
+html.ie li.tri:first-child{padding:0px 0px 0px 10px;}
 html.ie div.header {overflow:visible;}
 html.ie .main_menu .bd_drop {position:absolute;z-index:9999;}
 html.ie .main_menu .bd_drop .bd_drop{width:180px;}
@@ -700,3 +701,6 @@ html.ie .yui-ac-content {z-index:9999;}
 .field_text_big {font-size:12px;}
 .toogle_open {text-align:right; margin-bottom:15px;}
 .toogle_open a {font-size:11px; font-weight:bold;}
+table#jobmanagertable td{border-bottom:1px solid #cccccc;padding:3px;}
+td#jobcpanel a {font-weight:bold; padding:2px;}
+ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;font-weight:normal;}

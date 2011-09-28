@@ -23,6 +23,7 @@ import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
+import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
 import org.wicketstuff.jquery.JQueryBehavior;
 
 /**
@@ -67,6 +68,9 @@ public class AmpHeaderFooter extends WebPage {
 				AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpStructuresFormSectionFeature.class, "gisPopup.js"));
+		
+		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader"));
+		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
 	}
 	
 	public HttpServletRequest getServletRequest(){

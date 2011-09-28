@@ -312,53 +312,6 @@ public class ExportToPDF extends Action {
 	            doc.add(new Paragraph(" "));
             }
             
-            //ODA Growth 
-            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-            	if (!ODAGrowthOpt.equals("0")){
-                	doc.newPage();
-                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
-                    subTitle.setAlignment(Element.ALIGN_LEFT);
-                    doc.add(subTitle);
-                    doc.add(new Paragraph(" "));
-                }
-            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
-    	            PdfPTable ODAGrowthTbl = null;
-    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
-    	            colspan = (ODAGrowthRows[1].split(">").length); 
-    	            ODAGrowthTbl = new PdfPTable(colspan);
-    	            ODAGrowthTbl.setWidthPercentage(100);
-    	            singleRow = ODAGrowthRows[1].split(">");
-    	            for (int i = 0; i < singleRow.length; i++) {
-    	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    	            	ODAGrowthTbl.addCell(cell);
-    				}
-    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
-    	            	singleRow = ODAGrowthRows[i].split(">");
-    	            	for (int j = 0; j < singleRow.length; j++) {
-    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
-    	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-    	                	ODAGrowthTbl.addCell(cell);
-    	    			}
-    				}
-    	            doc.add(ODAGrowthTbl);
-    	            doc.add(new Paragraph(" "));
-                }
-            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
-	            	PdfPTable ODAGraph = new PdfPTable(1);
-		            ODAGraph.setWidthPercentage(100);
-		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);
-		            img = Image.getInstance(ba.toByteArray());
-		            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
-		            ODAGraph.addCell(img);
-		            //cell = new PdfPCell(new Paragraph(odaGrowthTrn, HEADERFONT));
-		            //ODAGraph.addCell(cell);
-		            doc.add(ODAGraph);
-		            doc.add(new Paragraph(" "));
-	            }
-            }
-          
           //Funding Table.
             if (!fundingOpt.equals("0")){
             	doc.newPage();
@@ -410,6 +363,53 @@ public class ExportToPDF extends Action {
 	            doc.add(new Paragraph(" "));
             }
             
+          //ODA Growth 
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+            	if (!ODAGrowthOpt.equals("0")){
+                	doc.newPage();
+                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+                    subTitle.setAlignment(Element.ALIGN_LEFT);
+                    doc.add(subTitle);
+                    doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+    	            PdfPTable ODAGrowthTbl = null;
+    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+    	            colspan = (ODAGrowthRows[1].split(">").length); 
+    	            ODAGrowthTbl = new PdfPTable(colspan);
+    	            ODAGrowthTbl.setWidthPercentage(100);
+    	            singleRow = ODAGrowthRows[1].split(">");
+    	            for (int i = 0; i < singleRow.length; i++) {
+    	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    	            	ODAGrowthTbl.addCell(cell);
+    				}
+    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
+    	            	singleRow = ODAGrowthRows[i].split(">");
+    	            	for (int j = 0; j < singleRow.length; j++) {
+    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    	                	ODAGrowthTbl.addCell(cell);
+    	    			}
+    				}
+    	            doc.add(ODAGrowthTbl);
+    	            doc.add(new Paragraph(" "));
+                }
+            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+	            	PdfPTable ODAGraph = new PdfPTable(1);
+		            ODAGraph.setWidthPercentage(100);
+		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+		            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
+		            ODAGraph.addCell(img);
+		            //cell = new PdfPCell(new Paragraph(odaGrowthTrn, HEADERFONT));
+		            //ODAGraph.addCell(cell);
+		            doc.add(ODAGraph);
+		            doc.add(new Paragraph(" "));
+	            }
+            }
+          
           //Aid Predictability Table.
             if (!aidPredicOpt.equals("0")){
             	doc.newPage();

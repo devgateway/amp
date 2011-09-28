@@ -297,6 +297,23 @@ div.tabpanel div.tab-panel {
 	border: 1px solid #CCCCCC;
 	font-size:10px;
 }
+
+div.tabpanel div.comment-word-break {
+  /* The following styles prevent unbroken strings from breaking the layout */
+  overflow: auto;
+  white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap; /* HP printers */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+  -moz-binding: url('xbl.xml#wordwrap'); /* Firefox (using XBL) */
+  max-width: 280px; 
+  margin-top: 0px; 
+  margin-bottom: 0px;
+}
+
 div.tabpanel div.tab-row li {
 	display:inline;
 	list-style-type:none;
@@ -354,6 +371,7 @@ div.tabpanel div.tab-row a:hover {
 
 .paris_question {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-top:10px; margin-bottom:2px;}
 .paris_answer {background-color:#FFFFFF; border:1px solid #E0E5EB; padding:3px; margin-bottom:5px; line-height:18px;}
+
 
 
 /* -- ONE PAGER END -- */

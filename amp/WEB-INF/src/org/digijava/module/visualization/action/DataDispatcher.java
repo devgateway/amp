@@ -184,9 +184,10 @@ public class DataDispatcher extends DispatchAction {
         endTime = System.currentTimeMillis();
         logger.info("Initial Part of ApplyFilter:" + (endTime - startTime));
 		
-		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
+		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
 		
     	startTime = System.currentTimeMillis();
+        request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, "Step 8/8: Preparing to refresh charts");
 		
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();
@@ -1931,6 +1932,30 @@ public class DataDispatcher extends DispatchAction {
 		try {
 			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
 			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+		return null;
+	}
+	public ActionForward getProgress(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		response.setContentType("text/plain");
+		
+		OutputStreamWriter outputStream = null;
+		StringBuffer progressText = new StringBuffer();
+		if(request.getSession().getAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION) != null)
+			progressText.append(request.getSession().getAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION));
+		else
+			progressText.append(" ");
+		
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(progressText.toString());
 		} finally {
 			if (outputStream != null) {
 				outputStream.close();

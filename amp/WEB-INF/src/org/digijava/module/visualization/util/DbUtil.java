@@ -896,6 +896,173 @@ public class DbUtil {
         return total;
     }
 
+    /**
+     * Returns funding amount
+     * @param orgID
+     * @param year
+     * @param assistanceTypeId
+     * @param currCode
+     * @param transactionType
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
+    @SuppressWarnings("unchecked")
+    public static List<AmpFundingDetail> getFundingDetails(DashboardFilter filter, Date startDate,
+            Date endDate, Long assistanceTypeId,
+            Long financingInstrumentId) throws DgException {
+        
+        String oql = "";
+        Long[] orgIds = filter.getOrgIds();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+        
+        TeamMember tm = filter.getTeamMember();
+        Long[] locationIds = filter.getSelLocationIds();
+        Long[] sectorIds = filter.getSelSectorIds();
+        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+
+        if (locationCondition && sectorCondition) {
+        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+        } else if (locationCondition)  {
+        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+        } else if (sectorCondition)  {
+        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+        } else {
+            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
+        }
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        oql += " inner join act.ampActivityGroup actGroup ";
+        if (locationCondition) {
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+
+        if (sectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
+            oql += " inner join actsec.sectorId sec ";
+        }
+
+        if (sectorCondition) {
+        	oql += " where config.id=:config  ";
+        }
+        else
+        {
+        	oql += " where 1=1 ";
+        }
+        	
+
+        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+            }
+        } else {
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+        }
+        if (locationCondition) {
+            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        }
+
+        if (sectorCondition) {
+        	Long startTime, endTime;
+            startTime = System.currentTimeMillis();
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+            endTime = System.currentTimeMillis();
+            logger.info("Getting descendants:" + (endTime - startTime));
+        }
+
+        if (filter.getActivityId()!=null) {
+            oql += " and act.ampActivityId =:activityId ";
+        }
+
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        if (assistanceTypeId != null) {
+            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
+        }
+        if (financingInstrumentId != null) {
+            oql += "   and f.financingInstrument=:financingInstrumentId  ";
+        }
+
+        
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+        }
+        else
+        {
+            oql += DashboardUtil.getTeamQuery(tm);
+        }
+
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            if (sectorCondition) {
+            	query.setLong("config", filter.getSelSectorConfigId());
+            }
+            //if ((orgIds == null || orgIds.length == 0 || orgIds[0] == -1) && orgGroupId != -1) {
+            //    query.setLong("orgGroupId", orgGroupId);
+            //}
+            if (assistanceTypeId != null) {
+                query.setLong("assistanceTypeId", assistanceTypeId);
+            }
+            if (financingInstrumentId != null) {
+                query.setLong("financingInstrumentId", financingInstrumentId);
+            }
+            if (filter.getActivityId()!=null) {
+                query.setLong("activityId", filter.getActivityId());
+            }
+            fundingDets = query.list();
+
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(
+                    "Cannot load fundings from db", e);
+        }
+
+
+        return fundingDets;
+    }
+
+    public static DecimalWraper calculateDetails(DashboardFilter filter, List<AmpFundingDetail> fundingDets,
+            int transactionType,int adjustmentType){
+        DecimalWraper total = null;
+        String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} 
+        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        cal.doCalculations(fundingDets, currCode, transactionType, adjustmentType);
+        switch (transactionType) {
+            case Constants.EXPENDITURE:
+                if (Constants.PLANNED == adjustmentType) {
+                    total = cal.getTotPlannedExp();
+                } else {
+                    total = cal.getTotActualExp();
+                }
+                break;
+            case Constants.DISBURSEMENT:
+                if (Constants.ACTUAL == adjustmentType) {
+                    total = cal.getTotActualDisb();
+                } else {
+                    total = cal.getTotPlanDisb();
+                }
+                break;
+            default:
+                if (Constants.ACTUAL == adjustmentType) {
+                    total = cal.getTotActualComm();
+                } else {
+                    total = cal.getTotPlannedComm();
+                }
+        }
+        return total;
+    }
 	@SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
             Date endDate, int transactionType,int adjustmentType, int decimalsToShow) throws DgException {

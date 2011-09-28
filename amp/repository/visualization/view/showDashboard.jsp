@@ -88,21 +88,20 @@ yuiLoadingPanel.prototype = {
             visible:false
         });
     
-       loadingPanel.setBody(this.conf.header + 
-               '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
-               loadingPanel.render(document.body);
-               $D.addClass(loadingPanel.id, 'tcc_lightboxLoader');
-               var cancelLink = document.createElement('a');
-               $D.setStyle(cancelLink, 'cursor', 'pointer');
-               cancelLink.appendChild(document.createTextNode('<digi:trn>Cancel</digi:trn>'));
-               $E.on(cancelLink, 'click', function(e, o){
-       	           o.self.loadingPanel.hide();
-       	           o.self.cancelEvent.fire();
-       	           window.stop();
-               }, {self:this});
-               loadingPanel.appendToBody(document.createElement('br'));
-               loadingPanel.appendToBody(cancelLink);
-               $D.setStyle(loadingPanel.body, 'text-align', 'center');
+       loadingPanel.setBody(this.conf.header + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
+       loadingPanel.render(document.body);
+       $D.addClass(loadingPanel.id, 'tcc_lightboxLoader');
+       var cancelLink = document.createElement('a');
+       $D.setStyle(cancelLink, 'cursor', 'pointer');
+       cancelLink.appendChild(document.createTextNode('<digi:trn>Cancel</digi:trn>'));
+       $E.on(cancelLink, 'click', function(e, o){
+           o.self.loadingPanel.hide();
+           o.self.cancelEvent.fire();
+           window.stop();
+       }, {self:this});
+       loadingPanel.appendToBody(document.createElement('br'));
+       loadingPanel.appendToBody(cancelLink);
+       $D.setStyle(loadingPanel.body, 'text-align', 'center');
 //               $D.addClass(document.body, 'yui-skin-sam');
         this.loadingPanel = loadingPanel;
     },
@@ -2027,6 +2026,7 @@ function countSelected (selector){
 
 var callbackApplyFilterCall = {
 		  success: function(o) {
+			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();
 		  },
@@ -2036,12 +2036,15 @@ var callbackApplyFilterCall = {
 		};
 
 function callbackApplyFilter(e){
+	panelLoaded = false;
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
 
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+	refreshLoadingPanel();
+
 	document.getElementById("filterOrgGroups").innerHTML = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
 	document.getElementById("filterOrganizations").innerHTML = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 	document.getElementById("filterSectorConfiguration").innerHTML = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
@@ -2049,6 +2052,23 @@ function callbackApplyFilter(e){
 	document.getElementById("filterRegions").innerHTML = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
 
 }
+var panelLoaded = false;
+function refreshLoadingPanel(){
+	if(!panelLoaded){
+		var sUrl="/visualization/dataDispatcher.do?action=getProgress&rnd=" + Math.floor(Math.random()*50000);
+		var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackUpdateLoadingPanel);
+	}
+}
+var callbackUpdateLoadingPanel = {
+		  success: function(o) {
+			  loadingPanel.loadingPanel.setBody(o.responseText + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
+			  if(!panelLoaded)
+  			  	setTimeout(refreshLoadingPanel, 1000);
+		  },
+		  failure: function(o) {
+			  alert("error");
+		  }
+		};
 
 function applyFilterPopin(e){
 	

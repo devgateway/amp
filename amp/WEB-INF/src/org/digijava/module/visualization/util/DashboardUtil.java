@@ -18,12 +18,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -44,6 +47,7 @@ import org.digijava.module.aim.helper.Constants;
 public class DashboardUtil {
 	
 	private static Logger logger = Logger.getLogger(DashboardUtil.class);
+	public static final String VISUALIZATION_PROGRESS_SESSION = "visualizationProgressSession";
 
 	public static Map<AmpOrganisation, BigDecimal> getRankDonors(Collection<AmpOrganisation> donorList, DashboardFilter filter, Integer selectedYear) throws DgException{
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
@@ -223,7 +227,7 @@ public class DashboardUtil {
 	    return result;
 	} 
 	
-	public static void getSummaryAndRankInformation (VisualizationForm form) throws DgException{
+	public static void getSummaryAndRankInformation (VisualizationForm form, HttpServletRequest request) throws DgException{
     	Long startTimeTotal, endTimeTotal;
         startTimeTotal = System.currentTimeMillis();
     	Long startTime, endTime;
@@ -238,6 +242,7 @@ public class DashboardUtil {
         }
         endTime = System.currentTimeMillis();
         logger.info("Gathering information:" + (endTime - startTime));
+        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 1/8: Gathering initial information");
         startTime = System.currentTimeMillis();
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
         endTime = System.currentTimeMillis();
@@ -277,14 +282,20 @@ public class DashboardUtil {
         logger.info("Getting Donors:" + (endTime - startTime));
         startTime = System.currentTimeMillis();
 		if (activityList.size()>0) {
+	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 2/8: Gathering aggregated information on commitments");
+	        startTime = System.currentTimeMillis();
+	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
+	        endTime = System.currentTimeMillis();
+	        logger.info("Getting Funding Details:" + (endTime - startTime));
 			DecimalWraper fundingCal = null;
 	        startTime = System.currentTimeMillis();
-			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, Constants.ACTUAL);
 	        endTime = System.currentTimeMillis();
 	        logger.info("First time getting Total Commitments:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        startTime = System.currentTimeMillis();
-			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 3/8: Gathering aggregated information on disbursements");
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, Constants.ACTUAL);
 	        endTime = System.currentTimeMillis();
 	        logger.info("First time getting Total Disbursements:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
@@ -295,18 +306,22 @@ public class DashboardUtil {
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        startTime = System.currentTimeMillis();
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 4/8: Gathering aggregated sector information");
 				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullSectors:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 5/8: Gathering aggregated location information");
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullRegions:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 6/8: Gathering full list of projects");
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullProjects:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 7/8: Gathering aggregated donor information");
 				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullDonors:" + (endTime - startTime));

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.util.convert.converters.AbstractNumberConverter;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -160,11 +161,25 @@ public class FormatHelper {
    public static DecimalFormat getDecimalFormat(){
        return getDefaultFormat();
    }
-                       
-    
-    
    
-    public static DecimalFormat getDefaultFormat() {
+   public static DecimalFormat getDecimalFormat(boolean replaceSpacesToNoBreakSpace){
+       return getDefaultFormat(replaceSpacesToNoBreakSpace);
+   }
+   
+    
+    
+   public static DecimalFormat getDefaultFormat() {
+	   return getDefaultFormat(false);
+   }
+
+    /**
+     * 
+     * @param replaceSpacesToNoBrSpace Convert spaces to no-break space (U+00A0) to fix problems with browser conversions.
+	 * Space is not valid thousands-separator, but no-br space is.
+	 * @see AbstractNumberConverter
+     * @return
+     */
+	public static DecimalFormat getDefaultFormat(boolean replaceSpacesToNoBrSpace) {
 
 	String format = "###,###,###,###.##";
 	String decimalSeparator = ".";
@@ -174,6 +189,11 @@ public class FormatHelper {
 	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
 	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
+	
+	if(replaceSpacesToNoBrSpace) {
+		decimalSeparator=decimalSeparator.replace(' ', '\u00A0');
+		groupSeparator=groupSeparator.replace(' ', '\u00A0');
+	}
 
 	if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {		
 		//use the decimal separator to learn how many decimals we have:

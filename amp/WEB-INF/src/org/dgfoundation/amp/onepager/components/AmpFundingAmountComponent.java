@@ -49,7 +49,8 @@ public class AmpFundingAmountComponent<T> extends Panel {
 				new PropertyModel<Double>(model, propertyAmount), fmAmount,true) {
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-				NumberFormat formatter = FormatHelper.getDecimalFormat();
+				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
+				
 //				formatter.setMinimumFractionDigits(0);
 				converter.setNumberFormat(getLocale(), formatter);
 				return converter; 

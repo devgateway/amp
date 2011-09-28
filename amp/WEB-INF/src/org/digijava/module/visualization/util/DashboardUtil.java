@@ -224,6 +224,10 @@ public class DashboardUtil {
 	} 
 	
 	public static void getSummaryAndRankInformation (VisualizationForm form) throws DgException{
+    	Long startTimeTotal, endTimeTotal;
+        startTimeTotal = System.currentTimeMillis();
+    	Long startTime, endTime;
+        startTime = System.currentTimeMillis();
 		DashboardFilter filter = form.getFilter();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
@@ -232,8 +236,20 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-        Collection activityListReduced = DbUtil.getActivities(filter);
+        endTime = System.currentTimeMillis();
+        logger.info("Gathering information:" + (endTime - startTime));
+        startTime = System.currentTimeMillis();
+        ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
+        endTime = System.currentTimeMillis();
+        logger.info("Getting Sectors:" + (endTime - startTime));
+		filter.setAllSectorList(allSectorList);
+        startTime = System.currentTimeMillis();
 
+        Collection activityListReduced = DbUtil.getActivities(filter);
+        endTime = System.currentTimeMillis();
+        logger.info("Getting Activity List Reduced:" + (endTime - startTime));
+
+        startTime = System.currentTimeMillis();
         HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
         Iterator iter = activityListReduced.iterator();
         while (iter.hasNext()) {
@@ -244,15 +260,33 @@ public class DashboardUtil {
             AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
             activityList.put(ampActivityId, activity);
         }
+        endTime = System.currentTimeMillis();
+        logger.info("Going through activity list preparing the Hash:" + (endTime - startTime));
         
+        startTime = System.currentTimeMillis();
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
+        endTime = System.currentTimeMillis();
+        logger.info("Getting Sectors:" + (endTime - startTime));
+        startTime = System.currentTimeMillis();
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
+        endTime = System.currentTimeMillis();
+        logger.info("Getting Regions:" + (endTime - startTime));
+        startTime = System.currentTimeMillis();
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
+        endTime = System.currentTimeMillis();
+        logger.info("Getting Donors:" + (endTime - startTime));
+        startTime = System.currentTimeMillis();
 		if (activityList.size()>0) {
 			DecimalWraper fundingCal = null;
+	        startTime = System.currentTimeMillis();
 			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
+	        endTime = System.currentTimeMillis();
+	        logger.info("First time getting Total Commitments:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+	        startTime = System.currentTimeMillis();
 			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+	        endTime = System.currentTimeMillis();
+	        logger.info("First time getting Total Disbursements:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
@@ -260,11 +294,22 @@ public class DashboardUtil {
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
+		        startTime = System.currentTimeMillis();
 				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null));
+		        endTime = System.currentTimeMillis();
+		        logger.info("setFullSectors:" + (endTime - startTime));
+		        startTime = System.currentTimeMillis();
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null));
+		        endTime = System.currentTimeMillis();
+		        logger.info("setFullRegions:" + (endTime - startTime));
+		        startTime = System.currentTimeMillis();
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
-//				form.getRanksInformation().setFullProjects(getRankActivities(activityList.values(), form.getFilter()));
+		        endTime = System.currentTimeMillis();
+		        logger.info("setFullProjects:" + (endTime - startTime));
+		        startTime = System.currentTimeMillis();
 				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null));
+		        endTime = System.currentTimeMillis();
+		        logger.info("setFullDonors:" + (endTime - startTime));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -281,6 +326,8 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
 		}
+        endTimeTotal = System.currentTimeMillis();
+        logger.info("Total Execution Time:" + (endTimeTotal - startTimeTotal));
 		
 		
 	}

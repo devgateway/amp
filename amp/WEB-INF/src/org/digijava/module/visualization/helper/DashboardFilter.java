@@ -1,5 +1,6 @@
 package org.digijava.module.visualization.helper;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -83,6 +84,7 @@ public class DashboardFilter {
     private List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
     //private List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorWithSubSectors;
     private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
+    private ArrayList<AmpSector> allSectorList;
     
 	public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
@@ -97,6 +99,7 @@ public class DashboardFilter {
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
+    	newFilter.setAllSectorList(this.getAllSectorList());
     	return newFilter;
     }
 	
@@ -657,6 +660,14 @@ public class DashboardFilter {
 
 	public void setSelSectorConfigId(Long selSectorConfigId) {
 		this.selSectorConfigId= selSectorConfigId;
+	}
+
+
+	public void setAllSectorList(ArrayList<AmpSector> allSectorList) {
+		this.allSectorList = allSectorList;
+	}
+	public ArrayList<AmpSector> getAllSectorList() {
+		return allSectorList;
 	}
 
 	

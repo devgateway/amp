@@ -76,6 +76,11 @@ public class DataDispatcher extends DispatchAction {
 	public ActionForward applyFilter(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
+    	Long startTimeTotal, endTimeTotal;
+        startTimeTotal = System.currentTimeMillis();
+    	Long startTime, endTime;
+        startTime = System.currentTimeMillis();
+		
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
@@ -176,8 +181,12 @@ public class DataDispatcher extends DispatchAction {
 				visualizationForm.getFilter().setSelLocationIds(zonesIds);
 			}
 		}
+        endTime = System.currentTimeMillis();
+        logger.info("Initial Part of ApplyFilter:" + (endTime - startTime));
 		
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
+		
+    	startTime = System.currentTimeMillis();
 		
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();
@@ -486,6 +495,9 @@ public class DataDispatcher extends DispatchAction {
 		
 		root.put("objectType", "lists");
 		root.put("children", children);
+
+		endTime = System.currentTimeMillis();
+        logger.info("Final Part of ApplyFilter:" + (endTime - startTime));
 
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;

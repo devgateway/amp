@@ -515,7 +515,7 @@ public class DbUtil {
 
         //Sectors should include all the subsectors
         if(sectorCondition){
-        	sectorIds = getAllDescendants(sectorIds);
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
         }
         /*
          * We are selecting sectors which are funded
@@ -757,7 +757,7 @@ public class DbUtil {
         } else if (sectorCondition)  {
         	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
         } else {
-            oql = "select fd ";
+            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
         }
         oql += " from ";
         oql += AmpFundingDetail.class.getName()
@@ -793,8 +793,12 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds);
+        	Long startTime, endTime;
+            startTime = System.currentTimeMillis();
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+            endTime = System.currentTimeMillis();
+            logger.info("Getting descendants:" + (endTime - startTime));
         }
 
         if (filter.getActivityId()!=null) {
@@ -844,9 +848,14 @@ public class DbUtil {
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
+        	Long startTime, endTime;
+            startTime = System.currentTimeMillis();
             fundingDets = query.list();
+            endTime = System.currentTimeMillis();
+            logger.info("Getting Funding:" + (endTime - startTime));
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
+            startTime = System.currentTimeMillis();
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
             /*Depending on what is selected in the filter
@@ -874,6 +883,8 @@ public class DbUtil {
                         total = cal.getTotPlannedComm();
                     }
             }
+            endTime = System.currentTimeMillis();
+            logger.info("Calculating Funding:" + (endTime - startTime));
 
         } catch (Exception e) {
             logger.error(e);
@@ -885,7 +896,7 @@ public class DbUtil {
         return total;
     }
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
             Date endDate, int transactionType,int adjustmentType, int decimalsToShow) throws DgException {
         
@@ -936,7 +947,6 @@ public class DbUtil {
             		hmName.put(id, name);
             		hm.put(id, afda);
             	}
-            	logger.info("act:" + id);
             }
 
             Iterator<Long> it2 = hm.keySet().iterator();
@@ -1259,7 +1269,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			queryString = " select Sector from "
+			queryString = " select new AmpSector(ampSectorId, parentSectorId) from "
 					+ AmpSector.class.getName()
 					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId";
 			q = session.createQuery(queryString);
@@ -1284,4 +1294,48 @@ public class DbUtil {
 		}
 		return subsector;
 	}
+	public static ArrayList<AmpSector> getAmpSectors() {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList<AmpSector> sector = new ArrayList<AmpSector>();
+		String queryString = null;
+		Iterator<AmpSector> iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from "
+					+ AmpSector.class.getName()
+					+ " Sector where Sector.parentSectorId is not null order by Sector.name";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				ampSector = (AmpSector) iter.next();
+				sector.add(ampSector);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Sector names  from database "
+					+ ex.getMessage());
+		}
+		return sector;
+	}
+    private static Long[] getAllDescendants(Long[] sectorIds,
+			ArrayList<AmpSector> allSectorList) {
+    	//Go through the list to determine the children
+    	List<Long> tempSectorIds = new ArrayList<Long>();
+		for(AmpSector as : allSectorList){
+			for(Long i : sectorIds){
+		    	if(!tempSectorIds.contains(i)) tempSectorIds.add(i);
+    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId() == i){
+    	    		tempSectorIds.add(as.getAmpSectorId());
+    			} else if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId() == i){
+    	    		tempSectorIds.add(as.getAmpSectorId());
+    			}
+    		}
+    	}
+		return (Long[]) tempSectorIds.toArray(new Long[0]);
+	}
+
 }

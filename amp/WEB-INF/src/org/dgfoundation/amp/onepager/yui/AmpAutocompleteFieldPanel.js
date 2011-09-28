@@ -40,7 +40,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     	var oData = aArgs[2];
     	//Function name is dynamic, ensure it exists
     	var callWicketFuncName="callWicket"+inputId;
-    	if (typeof(window[callWicketFuncName]) === "function")  window[callWicketFuncName](oData[0]);
+    	if (typeof(window[callWicketFuncName]) === "function")  window[callWicketFuncName](encodeURIComponent(oData[0]));
     	 else throw("Error.  Function " + callWicketFuncName + " does not exist.");
     };
     this.autoComplete.itemSelectEvent.subscribe(this.itemSelectHandler);//subscribes this handler to YUI autocomplete

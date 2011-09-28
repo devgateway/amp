@@ -101,12 +101,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		add(list);
 
 		
-		AmpMinSizeCollectionValidationField<AmpFunding> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpFunding>(
-				"minSizeDonorFundingValidator", listModel, "minSizeDonorFundingValidator");
-
-		add(minSizeCollectionValidationField);
-
-		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchFundingOrgs","Search Funding Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {

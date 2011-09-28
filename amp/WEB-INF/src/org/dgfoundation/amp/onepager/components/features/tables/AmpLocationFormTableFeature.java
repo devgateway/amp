@@ -24,9 +24,11 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -91,6 +93,18 @@ public class AmpLocationFormTableFeature extends
 		};
 		
 		add(percentageValidationField);
+		
+		
+		final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityLocation>(
+				"uniqueLocationsValidator", listModel, "uniqueLocationsValidator") {
+			@Override
+		 	public Object getIdentifier(AmpActivityLocation t) {
+				return t.getLocation().getName();
+		 	}	
+		};
+
+		add(uniqueCollectionValidationField);
+		
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 
 			@Override
@@ -139,6 +153,7 @@ public class AmpLocationFormTableFeature extends
 							target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 							
 							percentageValidationField.reloadValidationField(target);							
+							uniqueCollectionValidationField.reloadValidationField(target);
 						}
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(listParent);
@@ -198,6 +213,8 @@ public class AmpLocationFormTableFeature extends
 				regionalFundingFeature.getList().removeAll();
 				target.addComponent(regionalFundingFeature);
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+				percentageValidationField.reloadValidationField(target);		
+				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();
 			}
 

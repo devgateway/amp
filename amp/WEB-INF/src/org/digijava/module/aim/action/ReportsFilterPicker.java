@@ -238,6 +238,26 @@ public class ReportsFilterPicker extends MultiAction {
 			 filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
 			 filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
 		 }
+		
+		AmpApplicationSettings tempSettings = getAppSetting(request);
+		if (tempSettings != null) {
+			filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());
+
+			if (filterForm.getCurrency() == null) {
+				filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
+			}
+			if (tempSettings.getFiscalCalendar()!=null && filterForm.getCalendar() == null) {
+				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+			}
+		} else {
+			filterForm.setDefaultCurrency(CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getAmpCurrencyId());
+			if (filterForm.getCalendar() == null) {
+				String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+				if (value != null) {
+					filterForm.setCalendar(Long.parseLong(value));
+				}
+			}
+		}
 
 		if(request.getParameter("init")!=null || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
 				return null; 

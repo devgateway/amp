@@ -497,8 +497,12 @@ function ResetCustom(maxFractionDigits) {
 	//alert(aimReportsFilterPickerForm3.amountinthousands.checked);
 	aimReportsFilterPickerForm3.customAmountinThousands.checked = false;
 	initFormatPopup();
-	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
-	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
+	if(document.aimReportsFilterPickerForm3.renderStartYear){
+		document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
+	}
+	if(document.aimReportsFilterPickerForm3.renderEndYear){
+		document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
+	}
 	if (aimReportsFilterPickerForm3.currency)
 		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
 }

@@ -17,8 +17,8 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
-	<table width="95%" cellspacing="1" cellpadding="0" border="0"
-				align="center">
+<div id="donor_fund">
+	<table width="95%" cellspacing="1" cellpadding="0" border="1" align="center">
 				<tr>
 					<td>
 					<table width="100%" border="0" align="right" cellpadding="0"
@@ -389,4 +389,4 @@
 					</td>
 				</tr>
 			</table>
-			
+</div>			

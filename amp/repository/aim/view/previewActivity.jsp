@@ -220,14 +220,14 @@ function collapseAll() {
     	<c:set var="trn">
 			<digi:trn>Export To PDF</digi:trn>
 		</c:set> 
-		<a style="cursor: pointer;" onclick="javascript:exportToPdf(${actId})" class="l_sm"><digi:trn>${trn}</digi:trn></a>
+		<a style="cursor: pointer;" onclick="javascript:exportToPdf(${actId})" class="l_sm" style="color:#376091;"><digi:trn>${trn}</digi:trn></a>
     </td>
 	<td width=10>&nbsp;</td>
     <td align=right>
     	<img src="img_2/ico_print.gif" width="15" height="18" />
     </td>
     <td align=right>
-    	<a style="cursor: pointer;" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm">
+    	<a style="cursor: pointer;" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="color:#376091;">
     		<digi:trn key="aim:print">Print</digi:trn>
     	</a>
     </td>
@@ -957,19 +957,18 @@ function collapseAll() {
 				  </table>
 					</c:forEach>
 			</module:display>
+			<br />
 			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
 				<digi:trn><b>Primary Programs</b>
 				  <hr />
-				  <br /></digi:trn>
+				  </digi:trn>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
 				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 				  <tr>
 					  <td width=85%>
-					<c:out value="${program.hierarchyNames}" />
-					</td>
+					<c:out value="${program.hierarchyNames}" />					</td>
 					<td width=15% align=right>
-					<b><c:out value="${program.programPercentage}"/>%</b>
-					</td>
+					<b><c:out value="${program.programPercentage}"/>%</b>					</td>
 					</tr>
 					</table>
 					<hr>
@@ -984,7 +983,6 @@ function collapseAll() {
 					<td width="15%" align=right><b><c:out value="${program.programPercentage}"/>%</b></td>
 					</tr>
 					</table>
-					<br/>
 				</c:forEach>
 			</module:display>
 		</div>

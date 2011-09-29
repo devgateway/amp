@@ -696,7 +696,7 @@ html.ie .yui-ac-content {z-index:9999;}
 
 /* ACTIVITY WIDGET PREVIEW CLASSES */
 .activity_preview_name {font-size:18px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; width:690px; overflow:hidden; height:22px; margin-right:10px;}
-.activity_preview_header {background-color:#F0F0F0; height:32px; border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;}
+.activity_preview_header {background-color:#F0F0F0; height:45px; border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;}
 .field_text_big {font-size:12px;}
 .toogle_open {text-align:right; margin-bottom:15px;}
 .toogle_open a {font-size:11px; font-weight:bold; color:#376091;}

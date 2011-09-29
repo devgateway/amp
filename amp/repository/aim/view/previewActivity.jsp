@@ -95,14 +95,6 @@ function disable() {
 	return true;
 }
 
-function toggleGroup(group_id){
-	var strId='#'+group_id;
-	$(strId+'_minus').toggle();
-	$(strId+'_plus').toggle();
-	$(strId+'_dots').toggle();
-	$('#act_'+group_id).toggle('fast');
-}
-
 function viewChanges(){
 	openNewWindow(650,200);
 	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
@@ -242,7 +234,10 @@ function collapseAll() {
 	<fieldset>
 		<legend>
 			<span class=legend_label>
-				<digi:trn>Commitement info</digi:trn>&nbsp; (${aimEditActivityForm.currCode})			</span>		</legend>
+				<digi:trn>Funding Information</digi:trn>&nbsp; 
+				(${aimEditActivityForm.currCode})			
+			</span>		
+		</legend>
 		<div class="field_text_big">
 			<digi:trn>Total Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
@@ -311,8 +306,8 @@ function collapseAll() {
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-    	<input type="button" value="Expand All" class="buttonx_sm"> 
-    	<input type="button" value="Collapse All" class="buttonx_sm">    </td>
+    	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall">    
+    </td>
     <td align=right>
 	    <c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
 	    <input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
@@ -337,9 +332,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Identification" parentModule="/Activity Form">
 	<fieldset>
 		<legend>
-			<span class=legend_label><digi:trn>Identification</digi:trn></span>		</legend>
-		<div class="toogle_open" id="toggleidentification">
-			<a id="identificationlink" style="cursor: pointer;"><digi:trn>Close</digi:trn></a>		</div>
+			<span class=legend_label id="identificationlink" style="cursor: pointer;">
+				<digi:trn>Identification</digi:trn>
+			</span>		
+		</legend>
 		<div id="identificationdiv">	
 			<digi:trn key="aim:ampId">AMP ID</digi:trn>:&nbsp;<br /><b><c:out value="${aimEditActivityForm.identification.ampId}"/></b> <br>
 			<hr />	
@@ -771,9 +767,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Planning" parentModule="/Activity Form">	
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Planning</digi:trn></span>	</legend>
-	<div class="toogle_open" id="toggleplanning">
-		<a id="planninglink" style="cursor: pointer;">Close</a>	</div>
+		<span class=legend_label id="planninglink" style="cursor: pointer;">
+			<digi:trn>Planning</digi:trn>
+		</span>
+		</legend>
 	<div id="planningdiv">
 		<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 			<br>
@@ -843,10 +840,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Location" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Location</digi:trn></span>	</legend>
-	<div class="toogle_open" id="togglelocation">
-		<a id="locationlink" style="cursor: pointer;">close</a>	</div>
-	<div id="locationdiv">
+		<span class=legend_label id="locationlink" style="cursor: pointer;">
+			<digi:trn>Location</digi:trn></span>	
+		</legend>
+		<div id="locationdiv">
 		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 			<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
@@ -924,9 +921,9 @@ function collapseAll() {
 <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>National Plan</digi:trn></span>	</legend>
-	<div class="toogle_open" id="togglenationalplan">
-		<a id="nationalplanlink" style="cursor: pointer;"><digi:trn>Open</digi:trn></a>	</div>
+		<span class=legend_label id="nationalplanlink" style="cursor: pointer;">
+			<digi:trn>National Plan</digi:trn></span>	
+		</legend>
 	<div id="programdiv">
 		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
@@ -948,9 +945,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
 	<fieldset>
 		<legend>
-			<span class=legend_label><digi:trn>Program</digi:trn></span>		</legend>
-		<div class="toogle_open" id="toggleprogram">
-			<a id="programlink" style="cursor: pointer;"><digi:trn>Open</digi:trn></a>		</div>
+			<span class=legend_label id="programlink" style="cursor: pointer;">
+				<digi:trn>Program</digi:trn>
+			</span>		
+		</legend>
 		<div id="programdiv">
 			<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 				<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
@@ -999,11 +997,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="sectorslink" style="cursor: pointer;">
 			<digi:trn>Sectors</digi:trn>
-		</span>	</legend>
-	<div class="toogle_open" id="togglesectors">
-		<a id="sectorslink" style="cursor: pointer;"><digi:trn>Open</digi:trn></a>	</div>
+		</span>	
+	</legend>
 	<div id="sectorsdiv">
 		<c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
 			<bean:define id="emptySector" value="Sector"/>
@@ -1079,11 +1076,10 @@ function collapseAll() {
 	<module:display name="/Activity Form/Donor Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
-				<span class=legend_label>
+				<span class=legend_label id="fundinglink" style="cursor: pointer;">
 					<digi:trn>Donor Funding</digi:trn>
-				</span>			</legend>
-			<div class="toogle_open" id="togglefunding">
-				<a id="fundinglink" style="cursor: pointer;"><digi:trn>Open</digi:trn></a>			</div>
+				</span>			
+			</legend>
 			<div id="fundingdiv">
 				<bean:define id="aimEditActivityForm" name="aimEditActivityForm"scope="page" toScope="request"/>
 				<jsp:include page="previewActivityFunding.jsp"/>
@@ -1098,11 +1094,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="regionalfundinglink" style="cursor: pointer;">
 			<digi:trn>Regional Funding</digi:trn>
-		</span>	</legend>
-	<div class="toogle_open" id="toggleregionalfunding">
-		<a id="regionalfundinglink" style="cursor: pointer;"><digi:trn>Open</digi:trn></a>	</div>
+		</span>	
+	</legend>
 	<div id="regionalfundingdiv">
 	<c:if test="${!empty aimEditActivityForm.funding.regionalFundings}">
 	<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
@@ -1233,11 +1228,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Components" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="componentlink" style="cursor: pointer;">
 			<digi:trn>Components</digi:trn>
-		</span>	</legend>
-	<div class="toogle_open" id="componentlink">
-		<a id="componentlink"><digi:trn>Open</digi:trn></a>	</div>
+		</span>	
+	</legend>
 	<div id="componentdiv">
 		<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
 			<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
@@ -1498,9 +1492,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Issues Section/Issue Field" parentModule="/Activity Form/Issues Section">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Issues</digi:trn> </span>	</legend>
-	<div class="toogle_open" id="toogleissues">
-		<a id="issueslink"><digi:trn>Open</digi:trn></a>	</div>
+		<span class=legend_label id="issueslink" style="cursor: pointer;">
+			<digi:trn>Issues</digi:trn> 
+		</span>	
+	</legend>
 	<div id="issuesdiv">
 		<c:if test="${!empty aimEditActivityForm.issues.issues}">
 		<table width="100%" cellSpacing="2" cellPadding="2" border="0">
@@ -1550,9 +1545,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
 	<fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Related Documents</digi:trn></span>	</legend>
-	<div class="toogle_open">
-		<a id="documentslink"><digi:trn>Open</digi:trn></a>	</div>
+		<span class=legend_label id="documentslink" style="cursor: pointer;">
+			<digi:trn>Related Documents</digi:trn>
+		</span>	
+	</legend>
 	<div id="documnetsdiv">
 	<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
@@ -1651,9 +1647,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Related Organizations" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Related Organizations</digi:trn></span>	</legend>
-	<div class="toogle_open">
-		<a id="relatedorglink">Open</a>	</div>
+		<span class=legend_label id="relatedorglink" style="cursor: pointer;">
+			<digi:trn>Related Organizations</digi:trn>
+		</span>	
+	</legend>
 	<div id="relateorgdiv">
 		<module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">
 			<b><digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn></b>
@@ -1850,9 +1847,10 @@ function collapseAll() {
 <module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Contact Information</digi:trn></span>	</legend>
-	<div class="toogle_open">
-		<a id="contactlink"><digi:trn>Open</digi:trn></a>	</div>
+		<span class=legend_label id="contactlink" style="cursor: pointer;">
+			<digi:trn>Contact Information</digi:trn>
+		</span>	
+	</legend>
 	<div id="contactdiv">
 		<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 			<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
@@ -1943,12 +1941,10 @@ function collapseAll() {
 <field:display name="Activity Performance" feature="Activity Dashboard" >
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>M & I</digi:trn>
-	</span>	</legend>
-	<div class="toogle_open">
-		<a id="milink">
-			<digi:trn>Open</digi:trn>
-		</a>	</div>
+		<span class=legend_label id="milink" style="cursor: pointer;">
+			<digi:trn>M & I</digi:trn>
+		</span>	
+	</legend>
 	<div id="midiv">
 		<%
 			if (actPerfChartUrl != null) {
@@ -1976,9 +1972,10 @@ function collapseAll() {
 <field:display name="Project Risk" feature="Activity Dashboard">
 <fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Project Risk</digi:trn></span>	</legend>
-	<div class="toogle_open">
-		<a id="projectrisklink"><digi:trn>Open</digi:trn></a>	</div>
+		<span class=legend_label id="projectrisklink" style="cursor: pointer;">
+			<digi:trn>Project Risk</digi:trn>
+		</span>	
+	</legend>
 	<div id="projectriskdiv">
 		<digi:trn key="aim:meActivityRisk" > Activity - Risk</digi:trn> <br />
 		<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>
@@ -2007,11 +2004,9 @@ function collapseAll() {
 <feature:display name="Proposed Project Cost" module="Funding">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
 			<digi:trn>Proposed Project Cost</digi:trn>
 		</span>	</legend>
-	<div class="toogle_open">
-		<a id="proposedcostlink"><digi:trn>Open</digi:trn></a>	</div>
 	<div id="proposedcostdiv">
 		<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
@@ -2042,11 +2037,10 @@ function collapseAll() {
 <feature:display name="Costing" module="Activity Costing">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="costinglink" style="cursor: pointer;">
 			<digi:trn>Costing</digi:trn>
-		</span>	</legend>
-	<div class="toogle_open">
-		<a id="costinglink"><digi:trn>Open</digi:trn></a>	</div>
+		</span>	
+	</legend>
 	<div id=costingdiv>
 		<table width="100%" style="font-size:11px;">
 			<tr>
@@ -2063,11 +2057,10 @@ function collapseAll() {
 <feature:display name="Contracting" module="Contracting">
 <fieldset>
 	<legend>
-		<span class=legend_label>
+		<span class=legend_label id="ipalink" style="cursor: pointer;">
 			<digi:trn>IPA Contracting</digi:trn>
-		</span>	</legend>
-	<div class="toogle_open">
-		<a id="ipalink"><digi:trn>Open</digi:trn></a>	</div>
+		</span>	
+	</legend>
 	<div id="ipadiv">
 		<table width="100%">
 			<tr>
@@ -2435,8 +2428,8 @@ function collapseAll() {
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-    	<input type="button" value="Expand All" class="buttonx_sm"> 
-    	<input type="button" value="Collapse All" class="buttonx_sm">    </td>
+    	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall_1">    
+    </td>
     <td align=right>
     	<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
     	<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
@@ -2521,7 +2514,7 @@ function collapseAll() {
 		  });
 	});
 	$("#milink").click(function() {
-		  $("div#milink").toggle('slow', function() {
+		  $("div#midiv").toggle('slow', function() {
 		  });
 	});
 	$("#projectrisklink").click(function() {
@@ -2540,5 +2533,29 @@ function collapseAll() {
 		  $("div#ipadiv").toggle('slow', function() {
 		  });
 	});
+	$("#collapseall").click(function() {
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow', function() {
+			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
+			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+		  	  }else{
+			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
+		  	  }
+		  });
+	});
+	
+	$("#collapseall_1").click(function() {
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow', function() {
+			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
+			  		$("collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		$("collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+		  	  }else{
+			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
+		  	  }
+		  });
+	});
+	
 	
 </script>

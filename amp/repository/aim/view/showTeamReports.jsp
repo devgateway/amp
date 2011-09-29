@@ -205,6 +205,8 @@ $(document).ready(function() {
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
+<digi:errors/>
+
 <table align="center">
 	<tr>
 		<td>

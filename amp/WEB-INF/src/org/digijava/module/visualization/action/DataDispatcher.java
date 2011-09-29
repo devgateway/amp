@@ -81,6 +81,16 @@ public class DataDispatcher extends DispatchAction {
     	Long startTime, endTime;
         startTime = System.currentTimeMillis();
 		
+		String trnStep0, trnStep8;
+		trnStep0 = trnStep8 = "";
+		try{
+			trnStep0 = TranslatorWorker.translateText("Initializing Data Collection", request);
+			trnStep8 = TranslatorWorker.translateText("Step 8/8: Preparing to refresh charts", request);
+		}
+		catch(Exception e){
+			logger.error("Couldn't retrieve translation for progress steps");
+		}
+        request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep0);
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
@@ -187,7 +197,7 @@ public class DataDispatcher extends DispatchAction {
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
 		
     	startTime = System.currentTimeMillis();
-        request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, "Step 8/8: Preparing to refresh charts");
+        request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();

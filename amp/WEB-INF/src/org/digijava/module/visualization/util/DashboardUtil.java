@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -228,6 +229,22 @@ public class DashboardUtil {
 	} 
 	
 	public static void getSummaryAndRankInformation (VisualizationForm form, HttpServletRequest request) throws DgException{
+		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7;
+		trnStep1 = trnStep2 = trnStep3 = trnStep4 = trnStep5 = trnStep6 = trnStep7 = "";
+		try{
+			trnStep1 = TranslatorWorker.translateText("Step 1/8: Gathering initial information", request);
+			trnStep2 = TranslatorWorker.translateText("Step 2/8: Gathering aggregated information on commitments", request);
+			trnStep3 = TranslatorWorker.translateText("Step 3/8: Gathering aggregated information on disbursements", request);
+			trnStep4 = TranslatorWorker.translateText("Step 4/8: Gathering aggregated sector information", request);
+			trnStep5 = TranslatorWorker.translateText("Step 5/8: Gathering aggregated location information", request);
+			trnStep6 = TranslatorWorker.translateText("Step 6/8: Gathering full list of projects", request);
+			trnStep7 = TranslatorWorker.translateText("Step 7/8: Gathering aggregated donor information", request);
+		}
+		catch(Exception e){
+			logger.error("Couldn't retrieve translation for progress steps");
+		}
+		
+		
     	Long startTimeTotal, endTimeTotal;
         startTimeTotal = System.currentTimeMillis();
     	Long startTime, endTime;
@@ -242,7 +259,7 @@ public class DashboardUtil {
         }
         endTime = System.currentTimeMillis();
         logger.info("Gathering information:" + (endTime - startTime));
-        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 1/8: Gathering initial information");
+        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
         startTime = System.currentTimeMillis();
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
         endTime = System.currentTimeMillis();
@@ -282,7 +299,7 @@ public class DashboardUtil {
         logger.info("Getting Donors:" + (endTime - startTime));
         startTime = System.currentTimeMillis();
 		if (activityList.size()>0) {
-	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 2/8: Gathering aggregated information on commitments");
+	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
 	        startTime = System.currentTimeMillis();
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
 	        endTime = System.currentTimeMillis();
@@ -294,7 +311,7 @@ public class DashboardUtil {
 	        logger.info("First time getting Total Commitments:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        startTime = System.currentTimeMillis();
-	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 3/8: Gathering aggregated information on disbursements");
+	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, Constants.ACTUAL);
 	        endTime = System.currentTimeMillis();
 	        logger.info("First time getting Total Disbursements:" + (endTime - startTime));
@@ -306,22 +323,22 @@ public class DashboardUtil {
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        startTime = System.currentTimeMillis();
-		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 4/8: Gathering aggregated sector information");
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
 				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullSectors:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
-		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 5/8: Gathering aggregated location information");
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullRegions:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
-		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 6/8: Gathering full list of projects");
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullProjects:" + (endTime - startTime));
 		        startTime = System.currentTimeMillis();
-		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, "Step 7/8: Gathering aggregated donor information");
+		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
 				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null));
 		        endTime = System.currentTimeMillis();
 		        logger.info("setFullDonors:" + (endTime - startTime));

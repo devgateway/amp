@@ -703,3 +703,5 @@ html.ie .yui-ac-content {z-index:9999;}
 table#jobmanagertable td{border-bottom:1px solid #cccccc;padding:3px;}
 td#jobcpanel a {font-weight:bold; padding:2px;}
 ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;font-weight:normal;}
+#identificationdiv {line-height:18px;}
+#identificationdiv p {margin:0; padding:0;}

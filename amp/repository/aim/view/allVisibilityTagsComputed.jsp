@@ -794,3 +794,35 @@
 <field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
+
+
+<!--  -->
+<module:display name="Org./Sector/Region Dashboards"></module:display>
+
+<module:display name="Org. Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - ODA Growth Percentage" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - Aid Predictability chart" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - Aid Type chart" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - ODA Historical Trend - Funding chart" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - Financing Instrument chart" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - Sector Profile chart" module="Org. Dashboard"></feature:display> 
+<feature:display name="Org. Dashboard - Region Profile chart" module="Org. Dashboard"></feature:display> 
+
+<module:display name="Sector Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Sector Dashboard in public View" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - Aid Predictability chart" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - Aid Type chart" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - ODA Historical Trend - Funding chart" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - Financing Instrument chart" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - Donor Profile chart" module="Sector Dashboard"></feature:display> 
+<feature:display name="Sector Dashboard - Region Profile chart" module="Sector Dashboard"></feature:display> 
+
+<module:display name="Region Dashboard" parentModule="Org./Sector/Region Dashboards"></module:display>
+<feature:display name="Show Region Dashboard in public View" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - Aid Predictability chart" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - Aid Type chart" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - ODA Historical Trend - Funding chart" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - Financing Instrument chart" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - Donor Profile chart" module="Region Dashboard"></feature:display> 
+<feature:display name="Region Dashboard - Sector Profile chart" module="Region Dashboard"></feature:display> 

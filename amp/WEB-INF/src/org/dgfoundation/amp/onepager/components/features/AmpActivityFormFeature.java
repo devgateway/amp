@@ -6,9 +6,12 @@ package org.dgfoundation.amp.onepager.components.features;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -16,6 +19,8 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -28,6 +33,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -60,6 +66,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	
 
 	protected Form<AmpActivityVersion> activityForm;
+	public Form<AmpActivityVersion> getActivityForm() {
+		return activityForm;
+	}
+
+	public void setActivityForm(Form<AmpActivityVersion> activityForm) {
+		this.activityForm = activityForm;
+	}
+
+	public ListView<AmpComponentPanel> getFeatureList() {
+		return featureList;
+	}
+
+	private ListView<AmpComponentPanel> featureList;
 
 	/**
 	 * @param id
@@ -117,10 +136,33 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		activityForm.add(saveAndSubmit);
 
 		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.MODULE, true) {
+			TextField<String> titleField=null;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
-				saveMethod(target, am, feedbackPanel, true);
+				
+
+				/*
+				 * search for the identification section and get the title field
+				 * the title field needs to be required even if saving as draft.
+				 * Therefore we force validation using .validate() and refresh the field.
+				 */
+				form.visitChildren(AmpIdentificationFormSectionFeature.class,
+						new Component.IVisitor<AmpIdentificationFormSectionFeature>() {
+							@Override
+							public Object component(AmpIdentificationFormSectionFeature ifs) {
+								titleField= ifs.getTitle().getTextContainer();
+								return Component.IVisitor.STOP_TRAVERSAL;
+							}
+					
+				});
+				String js=String.format("$('#%s').click();",titleField.getMarkupId());		
+				target.appendJavascript(js);
+				target.addComponent(titleField);
+				titleField.validate();//the default form processing is false, so we need to enforce validation on the component(s) we need validated (in our case only title)
+				
+				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
+				if(titleField.isValid()) saveMethod(target, am, feedbackPanel, true);				
 			}
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
@@ -128,7 +170,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.addComponent(feedbackPanel);
 			}
 		};
-		saveAsDraft.getButton().setDefaultFormProcessing(false);
+		saveAsDraft.getButton().setDefaultFormProcessing(false); //disable global validation of the form
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		saveAsDraft.getButton().add(updateEditors);
 		activityForm.add(saveAsDraft);
@@ -165,7 +207,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		activityForm.add(preview);
 		
-		ListView<AmpComponentPanel> list = new ListView<AmpComponentPanel>("featureList", listModel) {
+		featureList = new ListView<AmpComponentPanel>("featureList", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<AmpComponentPanel> item) {
@@ -179,8 +221,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					
 			}
 		};
-		list.setReuseItems(true);
-		activityForm.add(list);
+		featureList.setReuseItems(true);
+		activityForm.add(featureList);
 		
 		quickMenu(am, listModel);
 	}

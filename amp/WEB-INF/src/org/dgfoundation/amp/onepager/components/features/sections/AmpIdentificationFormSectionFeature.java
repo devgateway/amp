@@ -43,6 +43,11 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 	private static final long serialVersionUID = 8568986144567957699L;
+	private AmpTextFieldPanel<String> title;
+
+	public AmpTextFieldPanel<String> getTitle() {
+		return title;
+	}
 
 	/**
 	 * @param id
@@ -56,8 +61,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			this.fmType = AmpFMTypes.MODULE;
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
-			// textField - mandatory
-			AmpTextFieldPanel<String> title = new AmpTextFieldPanel<String>(
+			title = new AmpTextFieldPanel<String>(
 					"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
 			title.getTextContainer().setRequired(true);

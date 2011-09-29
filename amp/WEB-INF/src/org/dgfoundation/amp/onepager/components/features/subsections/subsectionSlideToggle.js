@@ -19,8 +19,13 @@ $(window).resize(function() {
 });
 
 $(window).scroll(function() {
+	var mainContentTop = $('#mainContent').offset().top - 23;
 	var mainContentLeft = $('#mainContent').offset().left;
 	var currentScrollLeft = $(window).scrollLeft();
 	mainContentLeft = mainContentLeft + 800 - currentScrollLeft;
+	var currentScrollTop = mainContentTop - $(window).scrollTop();
+	if (currentScrollTop < 0)
+		currentScrollTop = 2;
+	$('#rightMenu').css('top', currentScrollTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 });

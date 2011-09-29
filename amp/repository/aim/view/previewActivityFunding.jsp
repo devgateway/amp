@@ -18,7 +18,7 @@
 
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <div id="donor_fund">
-	<table width="95%" cellspacing="1" cellpadding="0" border="1" align="center">
+	<table width="95%" cellspacing="1" cellpadding="0" border="0" align="center">
 				<tr>
 					<td>
 					<table width="100%" border="0" align="right" cellpadding="0"

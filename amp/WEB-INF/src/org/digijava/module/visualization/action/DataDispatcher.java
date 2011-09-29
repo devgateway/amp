@@ -491,7 +491,7 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootNumOfDons);
 		
 		rootAvgProjs.put("type", "AvgProjSize");
-		rootAvgProjs.put("value", FormatHelper.formatNumber( visualizationForm.getSummaryInformation().getAverageProjectSize()));
+		rootAvgProjs.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getAverageProjectSize().doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 		children.add(rootAvgProjs);
 		
 		root.put("objectType", "lists");

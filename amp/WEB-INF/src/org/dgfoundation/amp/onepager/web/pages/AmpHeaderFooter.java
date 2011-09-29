@@ -69,7 +69,7 @@ public class AmpHeaderFooter extends WebPage {
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpStructuresFormSectionFeature.class, "gisPopup.js"));
 		
-		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader"));
+		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
 		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
 	}
 	

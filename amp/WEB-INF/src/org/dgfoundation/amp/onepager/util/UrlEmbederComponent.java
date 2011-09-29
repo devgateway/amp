@@ -17,8 +17,11 @@ public class UrlEmbederComponent extends Label {
 	private static final Logger logger = Logger.getLogger(UrlEmbederComponent.class);
 
 	private String _url;
-	
+
 	public UrlEmbederComponent(String id, final String url) {
+		this(id, url, "");
+	}
+	public UrlEmbederComponent(String id, final String url, final String callBackJs) {
 		super(id);
 		this._url = url;
 		setRenderBodyOnly(false);
@@ -29,7 +32,7 @@ public class UrlEmbederComponent extends Label {
 			@Override
 			public void renderHead(IHeaderResponse response) {
 				super.renderHead(response);
-				response.renderOnLoadJavascript("$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\");");
+				response.renderOnLoadJavascript("$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\", function() { " + callBackJs + " });");
 			}
 		});
 	}

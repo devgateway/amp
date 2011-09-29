@@ -25,12 +25,14 @@
 								<div class="right_menu_header">
 								<div  class="right_menu_header_cont"><wicket:trn>Quick Links</wicket:trn></div>
 								</div>
-								<div class="right_menu_box" style="margin-top:-15px;background:#fff;">
-					            	<ul style="padding:5px 0px 0px 5px;">
-										<li class="tri" wicket:id="quickList">
-											<a wicket:id="quickName" href="#">Identification</a>
-										</li>
-					                </ul>
+								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
+									
+									<select id="myjumpbox" style="width: 161px;"
+									 onchange="var selVal = $('#myjumpbox option:selected').val();$('#'+selVal).parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#' + selVal).offset().top}, 1200);">
+									     <option selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<wicket:trn>-------- Jump To --------  </wicket:trn></option>
+									     <option wicket:id="quickList" value=""><span wicket:id="quickName"></span></option>
+									</select>
+									
 								</div>
 							</div>
 							<div class="right_menu" style="margin-top:10px;">

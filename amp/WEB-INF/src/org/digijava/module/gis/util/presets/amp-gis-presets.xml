@@ -75,23 +75,23 @@
 		<scheme name="yello-orange" display-name="Yello-Orange Scheme">
 			<background>
 				<color type="RGBA">
-					<red>73</red>
-					<green>66</green>
-					<blue>62</blue>
+					<red>226</red>
+					<green>216</green>
+					<blue>190</blue>
 				</color>
 			</background>
 			<terrain>
 				<color type="RGBA">
-					<red>127</red>
-					<green>74</green>
-					<blue>41</blue>
+					<red>169</red>
+					<green>120</green>
+					<blue>90</blue>
 				</color>
 			</terrain>
 			<water>
 				<color type="RGBA">
-					<red>241</red>
-					<green>197</green>
-					<blue>91</blue>
+					<red>194</red>
+					<green>179</green>
+					<blue>144</blue>
 				</color>
 			</water>
 			<border>

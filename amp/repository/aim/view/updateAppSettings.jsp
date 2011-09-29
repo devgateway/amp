@@ -210,8 +210,8 @@ function loadShareRules(){
 								<td class="inside">
 									<html:select property="language" styleClass="inputx insidex">
 								  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
-								    <html:options collection="languages" property="code" labelProperty="name" />
-										                		 -->
+								    
+										                		 
 										                		<c:forEach var="element" items="${aimUpdateAppSettingsForm.languages}">
 																	<c:set var="trn">
 																		<digi:trn>${element.name}</digi:trn>

@@ -38,8 +38,8 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	 * @param fmName
 	 * @param wysiwyg if true, {@link TinyMceBehavior} will be added to the {@link TextArea}
 	 */
-	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
-		super(id, fmName, false, true);
+	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
 		if (wysiwyg){
 			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
 		}
@@ -63,6 +63,9 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		this.fmType = fmType;
 	}
 	
+	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
+		this(id, model, fmName, wysiwyg, false, true);
+	}
 	
 
 }

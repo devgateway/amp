@@ -10,18 +10,20 @@ import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -84,61 +86,67 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 			});
 		add(structureTypes);
 		
-		final TextField<String> name = new TextField<String>("name", new PropertyModel<String>(structureModel, "title"));
+		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 		name.setOutputMarkupId(true);
-		OnChangeAjaxBehavior nameOnChange = new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, structureModel);
-			}
-		};
-		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
-		name.add(nameOnChange);
+		name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
+//		OnChangeAjaxBehavior nameOnChange = new OnChangeAjaxBehavior() {
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				handleChanges(target, structureModel);
+//			}
+//		};
+//		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
+//		name.add(nameOnChange);
 		add(name);
 
-		final TextField<String> description = new TextField<String>("description", new PropertyModel<String>(structureModel, "description"));
+		final AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
 		description.setOutputMarkupId(true);
-		description.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, structureModel);
-			}
-			});
+//		description.add(new OnChangeAjaxBehavior() {
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				handleChanges(target, structureModel);
+//			}
+//			});
+		//.add(new AttributeAppender("cols", new Model("1"), ";"));
+		description.getTextAreaContainer().add(new SimpleAttributeModifier("cols", "20"));
 		add(description);
 		
 		
 
-		final TextField<String> longitude = new TextField<String>("longitude", new PropertyModel<String>(structureModel, "longitude"));
+		final AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitude", new PropertyModel<String>(structureModel, "longitude"),"Structure Longitude", true, true);
 		longitude.setOutputMarkupId(true);
-		longitude.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, structureModel);
-			}
-			});
+//		longitude.add(new OnChangeAjaxBehavior() {
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				handleChanges(target, structureModel);
+//			}
+//			});
+		longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 		add(longitude);
 
-		final TextField<String> latitude = new TextField<String>("latitude", new PropertyModel<String>(structureModel, "latitude"));
+		final AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String>("latitude", new PropertyModel<String>(structureModel, "latitude"),"Structure Latitude", true, true);
 		latitude.setOutputMarkupId(true);
-		latitude.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, structureModel);
-			}
-			});
+//		latitude.add(new OnChangeAjaxBehavior() {
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				handleChanges(target, structureModel);
+//			}
+//			});
+		latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 		add(latitude);
 
-		final TextField<String> shape = new TextField<String>("shape", new PropertyModel<String>(structureModel, "shape"));
+		final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
 		shape.setOutputMarkupId(true);
-		shape.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, structureModel);
-			}
-			});
+//		shape.add(new OnChangeAjaxBehavior() {
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				handleChanges(target, structureModel);
+//			}
+//			});
+		shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 		add(shape);
 
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("deleteStructure", "Delete Structure", "Delete Structure") {
+		AmpDeleteLinkField addbutton = new AmpDeleteLinkField("deleteStructure", "Delete Structure") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				AmpStructure stru = structureModel.getObject();

@@ -89,9 +89,9 @@
 			</terrain>
 			<water>
 				<color type="RGBA">
-					<red>194</red>
-					<green>179</green>
-					<blue>144</blue>
+					<red>200</red>
+					<green>170</green>
+					<blue>150</blue>
 				</color>
 			</water>
 			<border>
@@ -104,17 +104,17 @@
 			</border>
 			<region-border>
 				<color type="RGBA">
-					<red>200</red>
-					<green>101</green>
-					<blue>28</blue>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
 					<alpha>70</alpha>
 				</color>
 			</region-border>
 			<dash-lines>
 				<color type="RGBA">
-					<red>0</red>
-					<green>0</green>
-					<blue>0</blue>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
 					<alpha>150</alpha>
 				</color>
 			</dash-lines>

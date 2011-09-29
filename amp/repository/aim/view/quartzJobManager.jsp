@@ -177,7 +177,7 @@
                                         </td>
                                     </tr>
                                 </c:if>
-                                <c:forEach var="job" items="${quartzJobManagerForm.jobs}">
+                                <c:forEach var="job" items="${quartzJobManagerForm.jobs}" varStatus="loop">
                                     <c:choose>
                                         <c:when test="${job.manualJob&&job.startDateTime==job.finalFireDateTime}">
                                             <c:set var="manualJobName">
@@ -188,50 +188,60 @@
                                             </c:set>
                                         </c:when>
                                         <c:otherwise>
-                                             <tr>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.name}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.startDateTime}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.endDateTime}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.prevFireDateTime}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.nextFireDateTime}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;${job.finalFireDateTime}
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;font-size:11px;">
-                                            &nbsp;
-                                            <c:if test="${job.paused}">
-                                                <b><digi:trn key="aim:job:stPaused">Paused</digi:trn></b>
+                                        	<c:if test="${loop.index % 2 eq 0}">
+                                        		<c:set var="bgcolor_even_odd">
+                                            		background:#ffffff
+                                            	</c:set>
                                             </c:if>
-                                            <c:if test="${!job.paused}">
-                                                <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
+                                        	<c:if test="${loop.index % 2 ne 0}">
+                                        		<c:set var="bgcolor_even_odd">
+                                            		background:#F2F2F2
+                                            	</c:set>
                                             </c:if>
-                                        </td>
-                                        <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;">
-                                            &nbsp;
-                                            <c:if test="${job.paused}">
-                                                [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
-                                                [<a href="javaScript:resumeJob('${job.name}');"><digi:trn key="aim:job:lnkResume">Resume</digi:trn></a>]
-                                                [<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]
-                                            </c:if>
-                                            <c:if test="${!job.paused}">
-                                                [<a href="javaScript:pauseJob('${job.name}');"><digi:trn key="aim:job:lnkPause">Pause</digi:trn></a>]
-                                                [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
-                                                [<a href="javaScript:editJob('${job.name}');"><digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn></a>]
-                                            </c:if>
-                                              [<a href="javaScript:runJobNow('${job.name}');"><digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn></a>]
-                                             [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
-                                        </td>
-                                    </tr>
+	                                        <tr>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.name}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.startDateTime}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.endDateTime}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.prevFireDateTime}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.nextFireDateTime}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;${job.finalFireDateTime}
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                            &nbsp;
+		                                            <c:if test="${job.paused}">
+		                                                <b><digi:trn key="aim:job:stPaused">Paused</digi:trn></b>
+		                                            </c:if>
+		                                            <c:if test="${!job.paused}">
+		                                                <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
+		                                            </c:if>
+		                                        </td>
+		                                        <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;${bgcolor_even_odd};">
+		                                            &nbsp;
+		                                            <c:if test="${job.paused}">
+		                                                [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
+		                                                [<a href="javaScript:resumeJob('${job.name}');"><digi:trn key="aim:job:lnkResume">Resume</digi:trn></a>]
+		                                                [<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]
+		                                            </c:if>
+		                                            <c:if test="${!job.paused}">
+		                                                [<a href="javaScript:pauseJob('${job.name}');"><digi:trn key="aim:job:lnkPause">Pause</digi:trn></a>]
+		                                                [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
+		                                                [<a href="javaScript:editJob('${job.name}');"><digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn></a>]
+		                                            </c:if>
+		                                              [<a href="javaScript:runJobNow('${job.name}');"><digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn></a>]
+		                                             [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
+		                                        </td>
+	                                    	</tr>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>

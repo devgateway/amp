@@ -883,13 +883,13 @@ function collapseAll() {
 						<tr>
 							<td width="85%">
 								<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
-	                                            	<b>[${ancestorLoc}]</b> 
+	                                            	[${ancestorLoc}] 
 	                                           </c:forEach>
 	                                       </td>
 							<td width="15%" align="right">
 								<field:display name="Regional Percentage" feature="Location">
 									<c:if test="${selectedLocs.showPercent}">
-										<c:out value="${selectedLocs.percent}"/>%
+										<b><c:out value="${selectedLocs.percent}"/>%</b>
 									</c:if>
 								</field:display>
 							</td>
@@ -974,9 +974,12 @@ function collapseAll() {
 		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
-				
-				<b>${nationalPlanObjectivePrograms.hierarchyNames}</b>
-				${nationalPlanObjectivePrograms.programPercentage}%
+				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+					  <tr>
+ 						   <td width=85%>${nationalPlanObjectivePrograms.hierarchyNames}</td>
+  					   	  <td width=15%><b>${nationalPlanObjectivePrograms.programPercentage}%</b></td>
+					  </tr>
+				</table>
 				<hr />
 			</c:forEach>
 		</c:if>
@@ -996,12 +999,17 @@ function collapseAll() {
 		<div id="programdiv">
 			<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 				<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-					<b><c:out value="${program.hierarchyNames}" /></b>&nbsp; 
-					<c:out value="${program.programPercentage}"/>%<hr>
+				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+				  <tr>
+					  <td width=85%><c:out value="${program.hierarchyNames}" /></td>
+					  <td width=15% align=right4><c:out value="${program.programPercentage}"/>%</td>
+				  </tr>
+				  </table>
+					<hr>
 				</c:forEach>
 			</module:display>
 			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
-				<digi:trn><b>Primary Programs</b></digi:trn>
+				<digi:trn><b>Primary Programs</b><br /></digi:trn>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
 					<c:out value="${program.hierarchyNames}" />&nbsp; 
 					<c:out value="${program.programPercentage}"/>%
@@ -1009,7 +1017,7 @@ function collapseAll() {
 				</c:forEach>	
 			</module:display>
 			<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-				<digi:trn><b>Secondary Programs</b></digi:trn>
+				<digi:trn><b>Secondary Programs</b><br /></digi:trn>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 					<c:out value="${program.hierarchyNames}" />&nbsp; 
 					<c:out value="${program.programPercentage}"/>%
@@ -1054,7 +1062,10 @@ function collapseAll() {
 				<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
 					<c:if test="${sectors.configId==config.id}">
 						<module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
-							<c:out value="${sectors.sectorScheme}" />
+							<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+							  <tr>
+								  <td width=85%>
+						  <c:out value="${sectors.sectorScheme}" />
 							<c:if test="${!empty sectors.sectorName}">
 								<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 								<c:out value="${sectors.sectorName}"/>
@@ -1067,13 +1078,17 @@ function collapseAll() {
 							<c:if test="${!empty sectors.subsectorLevel2Name}">
 								<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 								<c:out value="${sectors.subsectorLevel2Name}" />
-							</c:if>&nbsp;&nbsp;
+							</c:if></td>
+							<td width=15% align=right>
                                        	<c:if test="${sector.sectorPercentage!=''}">
 								<c:if test="${sector.sectorPercentage!='0'}">
-                                          		(<c:out value="${sectors.sectorPercentage}"/>)%
+                                          		<b>(<c:out value="${sectors.sectorPercentage}"/>)%</b>
                                             </c:if>
+							</td>
+							</tr>
+							</table>
 							</c:if>
-							<br />
+							<hr>
 						</module:display>
 					</c:if>
 				</c:forEach>

@@ -1,5 +1,5 @@
 html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;width:100%;}
-body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;font-size:12px; margin: 0px;}
+body {font-family: Arial, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;font-size:12px; margin: 0px;}
 
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
@@ -174,12 +174,12 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .show_legend {float:right; font-size:11px; padding-top:9px;} 
 .desktop_project_name {font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left:10px;}
-.desktop_project_name_op {font-size:11px; color:#FF6000;  font-family:Verdana, Arial, Helvetica, sans-serif;background-color: #FDF5F0}
+.desktop_project_name_op {font-size:11px; color:#FF6000;  font-family: Arial, Helvetica, sans-serif;background-color: #FDF5F0}
 .desktop_project_name_op_level1 {background-color: #FBE8DD}
 .desktop_project_name_op_levels {background-color: #FDF5F0}
 .desktop_project_name_sel {/*background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px;*/ font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-top:3px; padding-bottom:3px; padding-left:5px;}
 .desktop_project_count {font-size:11px;text-align:right; font-family:Arial, Helvetica, sans-serif; font-weight:bold; padding-bottom:5px; padding-top:5px; padding-right:5px;}
-.desktop_project_count_bolder {font-size:9px;font-weight:bold;text-align:right; font-family:Verdana, Arial, Helvetica, sans-serif;}
+.desktop_project_count_bolder {font-size:9px;font-weight:bold;text-align:right; font-family: Arial, Helvetica, sans-serif;}
 .desktop_project_count_sel {font-size:11px; /*background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC; */ text-align:right; font-family:Arial, Helvetica, sans-serif; padding-left:5px; padding-right:5px;}
 .organization_box {background-color:#EFEFEF; font-size:11px; margin-bottom:5px;}
 .organization_box_content {padding:10px;}

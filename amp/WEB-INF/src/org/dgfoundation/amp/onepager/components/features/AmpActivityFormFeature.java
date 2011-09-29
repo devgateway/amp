@@ -288,11 +288,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if (item.getModelObject() != null){
 					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
 					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
-					//label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200); return false;"));
+					label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200); return false;"));
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);
 					item.add(label);
-					item.add(new AttributeModifier("value", new Model<String>(itemId)));
 				}
 				else{
 					WebMarkupContainer tmp = new WebMarkupContainer("quickName");

@@ -22,17 +22,15 @@
 				<br />
 					<div id="rightMenu" style="float: right; position: fixed; display:none; margin:0px 0px 0px 15px;">
 							<div id="quickfloat" class="right_menu" style="margin:0px;">
-								<div class="right_menu_header">
-								<div  class="right_menu_header_cont"><wicket:trn>Quick Links</wicket:trn></div>
+								<div onclick="$(this).siblings('div:first').slideToggle('normal', function () { if ($(this).is(':hidden')) {$('#qListLabel').html('+' + $('#qListLabel').html().substring(1));} else {$('#qListLabel').html('-' + $('#qListLabel').html().substring(1));}});" class="right_menu_header">
+								<div id="qListLabel" class="right_menu_header_cont">- <wicket:trn>Quick Links</wicket:trn></div>
 								</div>
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
-									
-									<select id="myjumpbox" style="width: 161px;"
-									 onchange="var selVal = $('#myjumpbox option:selected').val();$('#'+selVal).parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#' + selVal).offset().top}, 1200);">
-									     <option selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<wicket:trn>-------- Jump To --------  </wicket:trn></option>
-									     <option wicket:id="quickList" value=""><span wicket:id="quickName"></span></option>
-									</select>
-									
+					            	<ul style="padding:5px 0px 0px 5px; margin: 0px;">
+										<li class="tri" wicket:id="quickList">
+											<a class="hoverUnderline" wicket:id="quickName" href="#">Identification</a>
+										</li>
+					                </ul>
 								</div>
 							</div>
 							<div class="right_menu" style="margin-top:10px;">

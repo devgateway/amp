@@ -149,7 +149,7 @@ html.chrome .bd_drop{margin-top:-15px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px;}
-#quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;}
+#quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:10px; padding-bottom:1px; padding-left:7px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}
 html.ie #quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat;  list-style:none; width:140px; font-size:12px; padding-bottom:5px; }
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
@@ -707,3 +707,6 @@ ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;
 #identificationdiv p {margin:0; padding:0;}
 #relateorgdiv ul {margin:0;}
 #donor_fund a {color:#000000; font-weight:bold;}
+
+a.hoverUnderline {text-decoration: none;}
+a:HOVER.hoverUnderline {text-decoration: underline;}

@@ -471,7 +471,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>
 						<tr style="display: none" id="tr_url">
 							<td>
-								<div class="t_sm"><b><digi:trn>URL</digi:trn>:</b><font color="red">*</font></div>
+								<div class="t_sm"><b><digi:trn>URL (ex. www.exemple.com)</digi:trn>:</b><font color="red">*</font></div>
 							</td>
 							<td><html:text property="webLink" size="32"></html:text></td>
 						</tr>

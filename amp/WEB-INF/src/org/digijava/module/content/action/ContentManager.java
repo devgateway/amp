@@ -317,20 +317,22 @@ public class ContentManager extends DispatchAction {
 		if(contentItem.getContentThumbnails()==null){
 			contentItem.setContentThumbnails(new HashSet<AmpContentItemThumbnail>());
 		}
-		for(AmpContentItemThumbnail thumbnail:contentForm.getContentThumbnails()){
-			if(thumbnail.getAmpContentItemThumbnailId()!=null){
-				for(AmpContentItemThumbnail oldThumbnail:contentItem.getContentThumbnails()){
-					if( oldThumbnail.getAmpContentItemThumbnailId()!=null&&oldThumbnail.getAmpContentItemThumbnailId().equals(thumbnail.getAmpContentItemThumbnailId())){
-						oldThumbnail.setPlaceholder(thumbnail.getPlaceholder());
-						break;
-					}
-				}
-			}
-			else{
-				thumbnail.setContentItem(contentItem);
-				contentItem.getContentThumbnails().add(thumbnail);
-			}	
-		}
+        if (contentForm.getContentThumbnails() != null && !contentForm.getContentThumbnails().isEmpty()) {
+            for(AmpContentItemThumbnail thumbnail:contentForm.getContentThumbnails()){
+                if(thumbnail.getAmpContentItemThumbnailId()!=null){
+                    for(AmpContentItemThumbnail oldThumbnail:contentItem.getContentThumbnails()){
+                        if( oldThumbnail.getAmpContentItemThumbnailId()!=null&&oldThumbnail.getAmpContentItemThumbnailId().equals(thumbnail.getAmpContentItemThumbnailId())){
+                            oldThumbnail.setPlaceholder(thumbnail.getPlaceholder());
+                            break;
+                        }
+                    }
+                }
+                else{
+                    thumbnail.setContentItem(contentItem);
+                    contentItem.getContentThumbnails().add(thumbnail);
+                }
+            }
+        }
 		if(contentForm.getContentThumbnailsRemoved() != null && contentForm.getContentThumbnailsRemoved().size() > 0)
 			DbUtil.removeThumbnails(contentItem, contentForm.getContentThumbnailsRemoved());
 		DbUtil.save(contentItem);

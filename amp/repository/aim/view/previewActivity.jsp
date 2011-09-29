@@ -345,13 +345,13 @@ function collapseAll() {
 			<hr />	
 			<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:projectTitle">Project title</digi:trn>:&nbsp;
-				<b><c:out value="${aimEditActivityForm.identification.title}"/></b>&nbsp;
+				<b><c:out value="${aimEditActivityForm.identification.title}"/></b>
 				<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;
-				<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
+				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b><hr />
 				<b>${aimEditActivityForm.identification.statusReason}</b>
 				<hr />
 			</module:display>
@@ -367,14 +367,14 @@ function collapseAll() {
 			
 			<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
 				<logic:present name="currentMember" scope="session">
-					<digi:trn key="aim:objectiveComments">Objective Comments:</digi:trn>
+					<digi:trn key="aim:objectiveComments">Objective Comments:</digi:trn><hr>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 							<logic:equal name="comments" property="key" value="Objective Assumption">
 								<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 									 
-										<br /><digi:trn>Objective Assumption</digi:trn>:&nbsp;									
+										<digi:trn>Objective Assumption</digi:trn>:&nbsp;									
 										<b><bean:write name="comment" property="comment" />
-</b>									<br/>
+</b>									<hr>
 								</logic:iterate>
 							</logic:equal>
 							<logic:equal name="comments" property="key" value="Objective Verification">
@@ -493,31 +493,31 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 				<digi:trn >Purpose</digi:trn>
 				<c:if test="${aimEditActivityForm.identification.purpose!=null}">
-					<c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
-					<digi:edit key="${objKey}"></digi:edit>
+					<b><c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
+					<digi:edit key="${objKey}"></digi:edit></b>
 				</c:if>
 				<logic:present name="aimEditActivityForm" property="coments.allComments">
-					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<br />
+					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<hr>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 						<logic:equal name="comments" property="key" value="Purpose Assumption">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 								 <digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:
 								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+								<hr />
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Purpose Verification">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 								 <digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:
 								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+								<br/><hr />
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 								<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:
 								<b><bean:write name="comment" property="comment" /></b>
-								<br/><hr />
+								<hr>
 							</logic:iterate>
 						</logic:equal>
 					</logic:iterate> 
@@ -529,23 +529,23 @@ function collapseAll() {
 					<c:if test="${aimEditActivityForm.identification.results!=null}">
 						<b><c:set var="objKey" value="${aimEditActivityForm.identification.results}"/></b>
 						<digi:edit key="${objKey}"></digi:edit>
-						<br>
+						<hr>
 					</c:if> 
 				<logic:present name="aimEditActivityForm" property="comments.allComments">
-					<digi:trn>Results Comments:</digi:trn>
+					<digi:trn>Results Comments:</digi:trn><hr>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 						<logic:equal name="comments" property="key" value="Results Assumption">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<br /><digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:
+								<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:
 								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+								<hr>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Results Verification">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 								<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:
 								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+								<hr>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">

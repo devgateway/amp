@@ -266,7 +266,7 @@ html.chrome #show_login_pop_box{display:none; margin:37px 0px 0px 55px;width:240
 
 /* PREVIEW */
 .prv_left {font-size:11px; color:#6A6A6A; padding-right:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8; }
-.prv_right {font-size:11px; padding-left:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8;}
+.prv_right {/*font-size:11px; padding-left:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8;*/}
 .funding {background-color:#F3F3F3; margin-top:7px; margin-bottom:7px;}
 .funding_cont {padding:10px;}
 .funding_det {background-color:#FFFFCC; margin-bottom:2px;}
@@ -699,9 +699,11 @@ html.ie .yui-ac-content {z-index:9999;}
 .activity_preview_header {background-color:#F0F0F0; height:32px; border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;}
 .field_text_big {font-size:12px;}
 .toogle_open {text-align:right; margin-bottom:15px;}
-.toogle_open a {font-size:11px; font-weight:bold;}
+.toogle_open a {font-size:11px; font-weight:bold; color:#376091;}
 table#jobmanagertable td{border-bottom:1px solid #cccccc;padding:3px;}
 td#jobcpanel a {font-weight:bold; padding:2px;}
 ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;font-weight:normal;}
 #identificationdiv {line-height:18px;}
 #identificationdiv p {margin:0; padding:0;}
+#relateorgdiv ul {margin:0;}
+#donor_fund a {color:#000000; font-weight:bold;}

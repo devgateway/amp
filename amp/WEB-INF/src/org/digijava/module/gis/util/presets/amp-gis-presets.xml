@@ -75,38 +75,38 @@
 		<scheme name="yello-orange" display-name="Yello-Orange Scheme">
 			<background>
 				<color type="RGBA">
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
+					<red>73</red>
+					<green>66</green>
+					<blue>62</blue>
 				</color>
 			</background>
 			<terrain>
 				<color type="RGBA">
-					<red>214</red>
-					<green>194</green>
-					<blue>158</blue>
+					<red>127</red>
+					<green>74</green>
+					<blue>41</blue>
 				</color>
 			</terrain>
 			<water>
 				<color type="RGBA">
-					<red>0</red>
-					<green>0</green>
-					<blue>100</blue>
+					<red>241</red>
+					<green>197</green>
+					<blue>91</blue>
 				</color>
 			</water>
 			<border>
 				<color type="RGBA">
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
+					<red>107</red>
+					<green>107</green>
+					<blue>107</blue>
 					<alpha>170</alpha>
 				</color>
 			</border>
 			<region-border>
 				<color type="RGBA">
-					<red>0</red>
-					<green>0</green>
-					<blue>0</blue>
+					<red>200</red>
+					<green>101</green>
+					<blue>28</blue>
 					<alpha>70</alpha>
 				</color>
 			</region-border>
@@ -285,9 +285,9 @@
 		<scheme name="magenta" display-name="Magenta Scheme">
 			<background>
 				<color type="RGBA">
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
+					<red>188</red>
+					<green>188</green>
+					<blue>188</blue>
 				</color>
 			</background>
 			<terrain>
@@ -299,9 +299,9 @@
 			</terrain>
 			<water>
 				<color type="RGBA">
-					<red>0</red>
-					<green>0</green>
-					<blue>100</blue>
+					<red>98</red>
+					<green>157</green>
+					<blue>217</blue>
 				</color>
 			</water>
 			<border>

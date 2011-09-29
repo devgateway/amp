@@ -4,7 +4,7 @@
 	width:220px;
 	position:relative;	
 	overflow:hidden;
-	z-index: 2000;
+	z-index: 20000;
 }
 .DHTMLSuite_calendarContent{	/* Sub div inside DHTMLSuite_calendar - this is the div where content is added */
 	position:relative;	/* IMPORTANT - This must always be like this in order to make it possible to position sub elements correctly, especially the iframe */

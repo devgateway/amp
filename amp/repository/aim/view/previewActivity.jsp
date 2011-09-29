@@ -341,47 +341,47 @@ function collapseAll() {
 		<div class="toogle_open" id="toggleidentification">
 			<a id="identificationlink" style="cursor: pointer;"><digi:trn>Close</digi:trn></a>		</div>
 		<div id="identificationdiv">	
-			<digi:trn key="aim:ampId">AMP ID</digi:trn>:&nbsp;<c:out value="${aimEditActivityForm.identification.ampId}"/> <br>
+			<digi:trn key="aim:ampId">AMP ID</digi:trn>:&nbsp;<b><c:out value="${aimEditActivityForm.identification.ampId}"/></b> <br>
 			<hr />	
 			<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:projectTitle">Project title</digi:trn>:&nbsp;
-				<c:out value="${aimEditActivityForm.identification.title}"/>&nbsp;
+				<b><c:out value="${aimEditActivityForm.identification.title}"/></b>&nbsp;
 				<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;
 				<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
-				${aimEditActivityForm.identification.statusReason}
+				<b>${aimEditActivityForm.identification.statusReason}</b>
 				<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
-					<c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
-					<digi:edit key="${objKey}"></digi:edit>
+					<b><c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
+					<digi:edit key="${objKey}"></digi:edit></b>
 					<hr />
 				</c:if>
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
 				<logic:present name="currentMember" scope="session">
-					<digi:trn key="aim:objectiveComments">Objective Comments</digi:trn>
+					<digi:trn key="aim:objectiveComments">Objective Comments:</digi:trn>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 							<logic:equal name="comments" property="key" value="Objective Assumption">
 								<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-									<b> 
-										<digi:trn>Objective Assumption</digi:trn>:&nbsp;									</b>
-										<bean:write name="comment" property="comment" />
-									<br/>
+									 
+										<br /><digi:trn>Objective Assumption</digi:trn>:&nbsp;									
+										<b><bean:write name="comment" property="comment" />
+</b>									<br/>
 								</logic:iterate>
 							</logic:equal>
 							<logic:equal name="comments" property="key" value="Objective Verification">
 								<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-									<b> 
-										<digi:trn>Objective Verification</digi:trn>:&nbsp;									</b>
-										<bean:write name="comment" property="comment" />
+									 
+										<digi:trn>Objective Verification</digi:trn>:&nbsp;									
+										<b><bean:write name="comment" property="comment" /></b>
 									<br/><hr />
 								</logic:iterate>
 							</logic:equal>
@@ -391,9 +391,9 @@ function collapseAll() {
 								<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
 									<logic:iterate name="comments" id="comment" property="value" 
 										type="org.digijava.module.aim.dbentity.AmpComments">
-										<b> 
-											<digi:trn>Objective Objectively Verifiable Indicators</digi:trn>:&nbsp;										</b>
-											<bean:write name="comment" property="comment"/>
+										 
+											<digi:trn>Objective Objectively Verifiable Indicators</digi:trn>:&nbsp;										
+											<b><bean:write name="comment" property="comment"/></b>
 									</logic:iterate>
 								</logic:equal>
 							</module:display>
@@ -404,8 +404,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:description">Description</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.description!=null}">
-					<c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
-					<digi:edit key="${descKey}"></digi:edit>
+					<b><c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
+					<digi:edit key="${descKey}"></digi:edit></b>
 					<hr />
 				</c:if>
 			</module:display>
@@ -413,8 +413,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
 				<digi:trn>Project Comments</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-					<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
-					<digi:edit key="${projcomKey}"></digi:edit>
+					<b><c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
+					<digi:edit key="${projcomKey}"></digi:edit></b>
 					<hr />
 				</c:if>
 			</module:display>
@@ -422,7 +422,7 @@ function collapseAll() {
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<field:display name="NPD Clasification" feature="Identification">
 				<digi:trn>NPD Clasification</digi:trn>:&nbsp;
-				<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>
+				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>
 				<hr />
 			</field:display>
 			
@@ -430,7 +430,7 @@ function collapseAll() {
 				<digi:trn>Lessons Learned</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
 					<bean:define id="lessonsLearnedKey">
-						<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
+						<b><c:out value="${aimEditActivityForm.identification.lessonsLearned}"/></b>
 					</bean:define>
 					<digi:edit key="<%=lessonsLearnedKey%>" />
 					<hr />
@@ -497,26 +497,26 @@ function collapseAll() {
 					<digi:edit key="${objKey}"></digi:edit>
 				</c:if>
 				<logic:present name="aimEditActivityForm" property="coments.allComments">
-					<digi:trn>Purpose Comments</digi:trn>:&nbsp;
+					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<br />
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 						<logic:equal name="comments" property="key" value="Purpose Assumption">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b> <digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</b>
-								<bean:write name="comment" property="comment" />
+								 <digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<br/>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Purpose Verification">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b> <digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</b>
-								<bean:write name="comment" property="comment" />
+								 <digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<br/>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b> <digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:</b>
-								<bean:write name="comment" property="comment" />
+								<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<br/><hr />
 							</logic:iterate>
 						</logic:equal>
@@ -527,32 +527,32 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Results" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:results">Results</digi:trn>:&nbsp;
 					<c:if test="${aimEditActivityForm.identification.results!=null}">
-						<c:set var="objKey" value="${aimEditActivityForm.identification.results}"/>
+						<b><c:set var="objKey" value="${aimEditActivityForm.identification.results}"/></b>
 						<digi:edit key="${objKey}"></digi:edit>
 						<br>
 					</c:if> 
 				<logic:present name="aimEditActivityForm" property="comments.allComments">
-					<digi:trn>Results Comments</digi:trn>
+					<digi:trn>Results Comments:</digi:trn>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 						<logic:equal name="comments" property="key" value="Results Assumption">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b><digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</b>
-								<bean:write name="comment" property="comment" />
+								<br /><digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<br/>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Results Verification">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b> <digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</b>
-								<bean:write name="comment" property="comment" />
+								<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<br/>
 							</logic:iterate>
 						</logic:equal>
 						<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<b> 
-									<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:								</b>
-								<bean:write name="comment" property="comment" />
+								 
+									<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:
+								<b><bean:write name="comment" property="comment" /></b>
 								<hr>
 							</logic:iterate>
 						</logic:equal>
@@ -564,7 +564,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>:&nbsp;
 					<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
-							<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
+							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/></b>
 						<hr />
 					</c:if> 
 			</module:display>
@@ -574,7 +574,7 @@ function collapseAll() {
 			
 				<digi:trn>Project Implementing Unit</digi:trn>
 				<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/></b>
 					<hr>
 				</c:if> 
 			</field:display>
@@ -582,20 +582,20 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 				<digi:trn>A.C. Chapter</digi:trn>
 				<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/></b>
 					<hr />
 				</c:if>
 			</module:display>
 					 
 			<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
 				<digi:trn>Cris Number</digi:trn>:&nbsp;
-					<c:out value="${aimEditActivityForm.identification.crisNumber}"/><hr />
+					<b><c:out value="${aimEditActivityForm.identification.crisNumber}"/></b><hr />
 			</module:display>
 					
 			<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 				<digi:trn>Procurement System</digi:trn>
 				<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/></b>
 					<hr />
 				</c:if>
 			</module:display>
@@ -603,7 +603,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
 				<digi:trn>Reporting System</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/></b>
 					<hr />
 				</c:if> 
 			</module:display>
@@ -611,7 +611,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
 				<digi:trn>Audit System</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/></b>
 					<hr />	
 				</c:if> 
 			</module:display>
@@ -619,7 +619,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
 				<digi:trn>Institutions</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.identification.institutions > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/></b>
 					<hr />
 				</c:if>
 			</module:display>
@@ -628,7 +628,7 @@ function collapseAll() {
 			<field:display name="Project Category" feature="Identification">
 				<digi:trn>Project Category</digi:trn>
 				<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
-					<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>
 					<hr />	
 				</c:if>
 			</field:display>
@@ -636,7 +636,7 @@ function collapseAll() {
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<field:display name="Government Agreement Number" feature="Identification">
 				<digi:trn>Government Agreement Number</digi:trn>
-				<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/><hr /></field:display>
+				<b><c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/></b><hr /></field:display>
 	</module:display>
 	<!-- END IDENTIFICATION SECTION -->
 	<!-- BUDGET SECTION -->
@@ -662,18 +662,18 @@ function collapseAll() {
 		<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 			<field:display name="Project Code" feature="Budget">
 				<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: 
-				<bean:write name="aimEditActivityForm" property="identification.projectCode"/>
+				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
 			</field:display>
 		</c:if>
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:
-			<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
-			<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/>
+			<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
+			<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/></b>
 			<digi:trn>Imputations</digi:trn>:<br />
 			<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
-				<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> - 
+				<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> - 
 				<bean:write name="imputation" property="code" /> - 
-				<bean:write name="imputation" property="description" />
+				<bean:write name="imputation" property="description" /></b>
 				<hr>
 			</logic:iterate>
 		</c:if>
@@ -686,7 +686,7 @@ function collapseAll() {
 				<c:forEach var="selectedsector" items="${aimEditActivityForm.identification.budgetsectors}">
 					<c:if test="${aimEditActivityForm.identification.selectedbudgedsector==selectedsector.idsector}">
 						<li style="margin-left: 10px">
-							<c:out value="${selectedsector.code}" /> - <c:out value="${selectedsector.sectorname}" />
+							<b><c:out value="${selectedsector.code}" /> - <c:out value="${selectedsector.sectorname}" /></b>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -697,7 +697,7 @@ function collapseAll() {
 				<c:forEach var="selectedorgs" items="${aimEditActivityForm.identification.budgetorgs}">
 					<c:if test="${aimEditActivityForm.identification.selectedorg==selectedorgs.ampOrgId}">
 						<li style="margin-left: 10px"><c:out value="${selectedorgs.budgetOrgCode}"/> - 
-						<c:out value="${selectedorgs.name}" /></li>
+						<b><c:out value="${selectedorgs.name}" /></b></li>
 					</c:if>
 				</c:forEach>
 				<br>
@@ -707,8 +707,8 @@ function collapseAll() {
 				<c:forEach var="selecteddep" items="${aimEditActivityForm.identification.budgetdepartments}">
 					<c:if test="${aimEditActivityForm.identification.selecteddepartment==selecteddep.id}">
 						<li style="margin-left: 10px">
-							<c:out value="${selecteddep.code}"/> - 
-							<c:out value="${selecteddep.name}"/>
+							<b><c:out value="${selecteddep.code}"/> - 
+							<c:out value="${selecteddep.name}"/></b>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -719,7 +719,7 @@ function collapseAll() {
 				<c:forEach var="selectedprog" items="${aimEditActivityForm.identification.budgetprograms}">
 					<c:if test="${aimEditActivityForm.identification.selectedprogram==selectedprog.ampThemeId}">
 						<li style="margin-left: 10px">
-							<c:out value="${selectedprog.themeCode}"/> - <c:out value="${selectedprog.name}" />
+							<b><c:out value="${selectedprog.themeCode}"/> - <c:out value="${selectedprog.name}" /></b>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -740,10 +740,10 @@ function collapseAll() {
 						<tr>
 							<td>
 								<c:if test="${!empty selectedOrganizations.organisation.ampOrgId}">
-									<bean:define id="selectedOrgForPopup" 
+									<b><bean:define id="selectedOrgForPopup" 
 										name="selectedOrganizations" 
 										type="org.digijava.module.aim.helper.OrgProjectId"
-										toScope="request"/>
+										toScope="request"/></b>
 										<!-- jsp:include page="previewOrganizationPopup.jsp" /-->
 								</c:if>							</td>
 						</tr>
@@ -756,10 +756,10 @@ function collapseAll() {
 	<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
 		<digi:trn>Humanitarian Aid</digi:trn>:&nbsp;
 		<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
-			<digi:trn key="aim:no">No</digi:trn>
+			<b><digi:trn key="aim:no">No</digi:trn></b>
 		</c:if> 
 		<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
+			<b><digi:trn key="aim:yes">Yes</digi:trn></b>
 		</c:if>
 		
 	</module:display>

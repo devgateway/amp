@@ -89,6 +89,9 @@ public class LuceneUtil implements Serializable {
      */
     public final static String ID_FIELD = "id";
 
+    
+    public final static int MAX_LUCENE_RESULTS	= 2000;
+    
     /**
      * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
      * 					  directory for your index
@@ -774,16 +777,22 @@ public class LuceneUtil implements Serializable {
 		 */
 	}
 	
+    
+    public static Hits search(String index, String field, String searchString){
+    	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true);
+    }
+    
 	/**
 	 * Runs a search in the index and returns the results
 	 * 
 	 * @param index the index where the search will be done
 	 * @param field the field where you do the search
 	 * @param searchString
+	 * @param maxLuceneResults maximum hits in lucene
 	 * 
 	 * @return a Hits object that contains the results
 	 */
-	public static Hits search(String index, String field, String searchString){
+	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry){
 		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
 		Hits hits = null;
@@ -791,7 +800,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(index);
-			searchString = searchString.trim();
+			String searchString = origSearchString.trim();
 			if (searchString.charAt(0) == '*')
 				searchString = searchString.substring(1);
 			//AMP-3806
@@ -808,11 +817,22 @@ public class LuceneUtil implements Serializable {
 			query = parser.parse(searchString.trim()+"*");
 			BooleanQuery bol = new BooleanQuery();
 			bol.add(query,BooleanClause.Occur.MUST);
-			bol.setMaxClauseCount(2000);
+			bol.setMaxClauseCount(maxLuceneResults);
 			hits = indexSearcher.search(bol);
 			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (BooleanQuery.TooManyClauses e1) {
+			//TODO Make lucene search only through the activities from the current workspace
+			String msg	= "Too many clauses found. More than " + maxLuceneResults + ".";
+			if (retry)
+				msg		+= "Will retry with " + maxLuceneResults*10;
+			logger.warn ( msg  );
+			if ( retry )
+				return LuceneUtil.search(index, field, origSearchString, maxLuceneResults*10, false);
+			else
+				e1.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		return hits;
 	}

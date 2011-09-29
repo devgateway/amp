@@ -796,7 +796,7 @@ function collapseAll() {
 			<digi:trn>Line Ministry Rank</digi:trn>:&nbsp;
 				<c:if test="${aimEditActivityForm.planning.lineMinRank == -1}"></c:if> 
 				<c:if test="${aimEditActivityForm.planning.lineMinRank != -1}">
-					${aimEditActivityForm.planning.lineMinRank}													
+					<b>${aimEditActivityForm.planning.lineMinRank}</b>													
 				</c:if>
 		</module:display>
 		
@@ -805,63 +805,63 @@ function collapseAll() {
 			<digi:trn>Ministry of Planning Rank</digi:trn>:&nbsp;
 			<c:if test="${aimEditActivityForm.planning.planMinRank == -1}"></c:if> 
 			<c:if test="${aimEditActivityForm.planning.planMinRank != -1}">
-				${aimEditActivityForm.planning.planMinRank}													
+				<b>${aimEditActivityForm.planning.planMinRank}</b>													
 			</c:if>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;
-			${aimEditActivityForm.planning.originalStartDate}
+			<b>${aimEditActivityForm.planning.originalStartDate}</b>
 		</module:display>
 							
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<field:display name="Actual Start Date" feature="Planning">
 			<hr>
 			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
-			${aimEditActivityForm.planning.revisedStartDate}
+			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</field:display>
 							
 		<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Proposed Approval Date</digi:trn>:&nbsp;
-			${aimEditActivityForm.planning.originalAppDate}
+			<b>${aimEditActivityForm.planning.originalAppDate}</b>
 		</module:display>
 							
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<field:display name="Actual Approval Date" feature="Planning">
 			<hr>
 				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
-				${aimEditActivityForm.planning.revisedAppDate}
+				<b>${aimEditActivityForm.planning.revisedAppDate}</b>
 		</field:display>
 		
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
-			<c:out value="${aimEditActivityForm.planning.contractingDate}"/>
+			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>
 		</module:display>
 					
 		<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
-			<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>
+			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
 		
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<field:display name="Proposed Completion Date" feature="Planning">
 			<hr>
 			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
-			${aimEditActivityForm.planning.proposedCompDate}
+			<b>${aimEditActivityForm.planning.proposedCompDate}</b>
 		</field:display>
 		
 		<module:display name="/Activity Form/Planning/current completion date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Current Completion Date</digi:trn>:&nbsp;
-			<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>
+			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>
 		</module:display>
 		<hr>
 		<digi:trn>Duration of project</digi:trn>:&nbsp;
-		${aimEditActivityForm.planning.projectPeriod }
+		<b>${aimEditActivityForm.planning.projectPeriod }</b>
 	</div>	
 </fieldset>
 </module:display>
@@ -975,8 +975,9 @@ function collapseAll() {
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
 				
-				${nationalPlanObjectivePrograms.hierarchyNames}
+				<b>${nationalPlanObjectivePrograms.hierarchyNames}</b>
 				${nationalPlanObjectivePrograms.programPercentage}%
+				<hr />
 			</c:forEach>
 		</c:if>
 	</div>
@@ -995,20 +996,20 @@ function collapseAll() {
 		<div id="programdiv">
 			<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 				<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-					<c:out value="${program.hierarchyNames}" />&nbsp; 
-					<c:out value="${program.programPercentage}"/>%<br />
+					<b><c:out value="${program.hierarchyNames}" /></b>&nbsp; 
+					<c:out value="${program.programPercentage}"/>%<hr>
 				</c:forEach>
 			</module:display>
 			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
-				<digi:trn>Primary Programs</digi:trn>
+				<digi:trn><b>Primary Programs</b></digi:trn>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
 					<c:out value="${program.hierarchyNames}" />&nbsp; 
 					<c:out value="${program.programPercentage}"/>%
-					<br/>
+					<hr>
 				</c:forEach>	
 			</module:display>
 			<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-				<digi:trn>Secondary Programs</digi:trn>
+				<digi:trn><b>Secondary Programs</b></digi:trn>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 					<c:out value="${program.hierarchyNames}" />&nbsp; 
 					<c:out value="${program.programPercentage}"/>%
@@ -1089,6 +1090,7 @@ function collapseAll() {
 			</tr>
 			</c:forEach>
 		</table>
+		<hr />
 	</c:if>
 </div>
 </fieldset>

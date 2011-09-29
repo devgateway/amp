@@ -142,30 +142,30 @@
                     </tr>
                     <tr>
                         <td>
-                            <table>
+                            <table style="border:1px solid #cccccc;" id="jobmanagertable">
                                 <tr>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:200px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:200px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmName">Name</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:80px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmStartDate">Start date</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:80px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmEndDate">End date</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:80px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmPrevFireDate">Previus fire date</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:80px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmNextFiredate">Next fire date</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:80px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:80px;;">
                                         <b><digi:trn key="aim:job:clmFinalFireDate">Final fire date</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:50px;border-left:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:50px;border-right:1px solid #fff;">
                                         <b><digi:trn key="aim:job:clmStatus">Status</digi:trn></b>
                                     </td>
-                                    <td style="background-color:#CCCCCC;text-align:left;padding: 5px 5px 5px 5px;width:100px;border-left:solid 1px #000000;border-right:solid 1px #000000;">
+                                    <td style="background-color:#c7d4db;text-align:center;padding: 5px 5px 5px 5px;width:100px;">
                                         <b><digi:trn key="aim:job:clmCommands">Commands</digi:trn></b>
                                     </td>
                                 </tr>
@@ -199,25 +199,25 @@
                                             	</c:set>
                                             </c:if>
 	                                        <tr>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style="font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:left;">
 		                                            &nbsp;${job.name}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;${job.startDateTime}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;${job.endDateTime}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;${job.prevFireDateTime}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;${job.nextFireDateTime}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;${job.finalFireDateTime}
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;font-size:11px;${bgcolor_even_odd};">
+		                                        <td style=";font-size:11px;${bgcolor_even_odd};border-right:1px solid #cccccc;text-align:center;">
 		                                            &nbsp;
 		                                            <c:if test="${job.paused}">
 		                                                <b><digi:trn key="aim:job:stPaused">Paused</digi:trn></b>
@@ -226,7 +226,7 @@
 		                                                <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
 		                                            </c:if>
 		                                        </td>
-		                                        <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;${bgcolor_even_odd};">
+		                                        <td style="${bgcolor_even_odd};">
 		                                            &nbsp;
 		                                            <c:if test="${job.paused}">
 		                                                [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
@@ -250,57 +250,31 @@
                         <td>&nbsp;
                             
                         </td>
-                        <td>
+                        <td valign="top">
+                        <div class="right_menu">
+						<div class="right_menu_header">
+						<div class="right_menu_header_cont">
+						Other links
+						</div>
+
+						</div>
+						<div class="right_menu_box">
+						<div class="right_menu_cont">
+                        <ul id="jobquicklinks">
+			<li class="tri"><digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></li>
+           <li class="tri"> <c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set></li>
+            <li class="tri"><digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link></li>
+				 
+					</ul>
+			        
+			        
+			 
+	          
+	             		
+		</div>
+	</div>
                             <!-- Other Links -->
-                            <table cellpadding="0" cellspacing="0" width="10"0>
-                                <tr>
-                                    <td bgColor=#c9c9c7 class=box-title>
-                                        <digi:trn key="aim:otherLinks">
-                                            Other links
-                                        </digi:trn>
-                                    </td>
-                                    <td style="background-image: url(module/aim/images/corner-r.gif);background-repeat:no-repeat;height:17px">
-                                        &nbsp;&nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td bgColor=#ffffff class=box-border colspan="2">
-                                        <table cellPadding=5 cellspacing="1" width="100%">
-                                            <tr>
-                                                <td>
-                                                    <digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-                                                </td>
-                                                <td>
-                                                     <digi:link module="aim"  href="/admin.do" >
-                                                        <digi:trn key="aim:AmpAdminHome">
-                                                            Admin Home
-                                                        </digi:trn>
-                                                    </digi:link>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                <digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-                                                </td>
-                                                <td nowrap>
-                                                    <c:set var="trn">
-                                                        <digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn>
-                                                    </c:set>
-                                                    <digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}">
-                                                        <digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn>
-                                                    </digi:link>
-
-                                                </td>
-                                            </tr>
-
-                                            <!-- end of other links -->
-                                        </table>
-
-
-
-                                    </td>
-                                </tr>
-                            </table>
+                           
                  </td>
                  </tr>
                  </table>

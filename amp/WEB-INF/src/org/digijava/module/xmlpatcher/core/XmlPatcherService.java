@@ -218,7 +218,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 				ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
 				iterator.remove();
 			} else
-				logger.info("Will not apply " + ampPatch.getPatchId()
+				logger.debug("Will not apply " + ampPatch.getPatchId()
 						+ " due to conditions not met.");
 
 			log.setElapsed(System.currentTimeMillis() - timeStart);

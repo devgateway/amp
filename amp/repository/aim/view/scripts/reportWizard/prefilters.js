@@ -11,7 +11,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 		this.resetString	= "";
 	
 	this.filterPanel = new YAHOO.widget.Panel("new", {
-			width:"900px",
+			width:"870px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -50,7 +50,7 @@ Filters.prototype.success	= function (o) {
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
 		YAHOO.amptab.afterFiltersLoad();
-		this.filterPanel.cfg.setProperty("height", "400px" );
+		this.filterPanel.cfg.setProperty("height", "482px" );
 		
 		this.filterPanel.show();
 		
@@ -74,6 +74,10 @@ Filters.prototype.showFilters	= function() {
 	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
+
+	this.filterPanel.cfg.setProperty("height", "482px" );
+	this.filterPanel.cfg.setProperty("width", "870px" );
+	this.filterPanel.center();
 	this.filterPanel.show();
 	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
 	this.resetString		= "";

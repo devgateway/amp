@@ -66,8 +66,8 @@ function eventType(){
 
         var occStartDate = document.getElementById("selectedStartDate").value;
         var occEndDate = document.getElementById("selectedEndDate").value;
-    
-        var start = parseInt(occStartDate.slice(0,occStartDate.indexOf("/")));
+
+		var start = parseInt(occStartDate.slice(0,occStartDate.indexOf("/")));
         var end = parseInt(occEndDate.slice(0,occEndDate.indexOf("/")));
 
         var daily_occurance_duration = end-start;
@@ -88,7 +88,7 @@ function eventType(){
 		}
 
 		var periodValid = true;
-    
+		var recurrDays = 0;
 	    if(Yearly){
         
     	//var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
@@ -103,6 +103,7 @@ function eventType(){
         		document.getElementById("hiddenMonth").value = '';
         		document.getElementById("weekDays").value = '';
 				document.getElementById("hidden").value = rec;
+				recurrDays = 365 * document.getElementById("recurrYearly").value;
 	 		}
    		}
 	
@@ -116,6 +117,7 @@ function eventType(){
 	        	document.getElementById("type").value = 'month';
 	        	document.getElementById("hiddenMonth").value = month;
 	        	document.getElementById("weekDays").value = '';
+	        	recurrDays = 30 * document.getElementById("selectedStartMonth").value;
 			}
 		}
 
@@ -129,6 +131,7 @@ function eventType(){
         		document.getElementById("type").value = 'day';
         		document.getElementById("hiddenMonth").value = '';
         		document.getElementById("weekDays").value = '';
+        		recurrDays = 1 * document.getElementById("recurrDaily").value;
         	}
     	}
 
@@ -151,11 +154,49 @@ function eventType(){
 					}
 				}
 				document.getElementById("weekDays").value = result;
+				recurrDays = 7 * document.getElementById("recurrWeekly").value;
 	    	}
 		}
+
+		var diffDays = (compareDates(occStartDate, occEndDate, true) / (24 * 60 * 60 * 1000));
+		
+		if ((recurrDays > 0) && (diffDays >= recurrDays)){
+			alert ('<digi:trn jsFriendly="true">Recursive Period Should Be Greater Than Event Duration</digi:trn>');
+            periodValid = false;
+		}
+		if (compareDates(recEndDate, occEndDate, false)==-1 || compareDates(recEndDate, occEndDate, false)==0){
+			alert ('<digi:trn jsFriendly="true">End Recursive Date Should Be Greater Than End Date</digi:trn>');
+            periodValid = false;
+		}
+		
 		if (periodValid){
 			submit();
 		}
+}
+
+function compareDates(date1, date2, diffDate)
+{
+    var dt1  = parseInt(date1.substring(0,2),10);
+    var mon1 = parseInt(date1.substring(3,5),10);
+    var yr1  = parseInt(date1.substring(6,10),10);
+    var dt2  = parseInt(date2.substring(0,2),10);
+    var mon2 = parseInt(date2.substring(3,5),10);
+    var yr2  = parseInt(date2.substring(6,10),10);
+    var date1 = new Date(yr1, mon1, dt1);
+    var date2 = new Date(yr2, mon2, dt2);
+    if (diffDate){
+		return Math.abs(date1-date2);
+    } else {
+    	if(date2-0 < date1-0)
+	    {
+	        return 1;
+	    } else if (date2-0 > date1-0) {
+	        return -1;
+	    } else if (date2-0 == date1-0) {
+	        return 0;
+	    }
+	    return null;
+    }
 }
 
 function checkSelectedDays(){

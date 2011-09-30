@@ -149,7 +149,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                              		</feature:display>
 									</module:display>
 										
-										<module:display name="Org. Dashboard" parentModule="Org./Sector/Region Dashboards">
+										<module:display name="Org. Dashboard" parentModule="Visualization Dashboards">
 	                                        <feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard">
 	                                        <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
@@ -159,7 +159,7 @@ ${fn:replace(message,quote,escapedQuote)}
 			                                </feature:display>
 		                                </module:display>
 		                                
-		                                <module:display name="Sector Dashboard" parentModule="Org./Sector/Region Dashboards">
+		                                <module:display name="Sector Dashboard" parentModule="Visualization Dashboards">
 			                                <feature:display name="Show Sector Dashboard in public View" module="Sector Dashboard">
 			                                <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=sector"  onclick="return canExit()">
@@ -169,7 +169,7 @@ ${fn:replace(message,quote,escapedQuote)}
 			                                </feature:display>
 		                                </module:display>
 		                                
-		                                <module:display name="Region Dashboard" parentModule="Org./Sector/Region Dashboards">
+		                                <module:display name="Region Dashboard" parentModule="Visualization Dashboards">
 			                                <feature:display name="Show Region Dashboard in public View" module="Region Dashboard">
 			                                <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=region"  onclick="return canExit()">
@@ -669,7 +669,7 @@ function adminHelp(){
 			                            </li> 
                                         </module:display>                                        
 										
-										<module:display name="Org. Dashboard" parentModule="Org./Sector/Region Dashboards">
+										<module:display name="Org. Dashboard" parentModule="Visualization Dashboards">
 	                                        <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
 				                                	<digi:trn key="donorDashboard">Organization Dashboard</digi:trn>
@@ -677,7 +677,7 @@ function adminHelp(){
 			                                </li>
 		                                </module:display>
 		                                
-		                                <module:display name="Sector Dashboard" parentModule="Org./Sector/Region Dashboards">
+		                                <module:display name="Sector Dashboard" parentModule="Visualization Dashboards">
 			                                <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=sector"  onclick="return canExit()">
 				                                	<digi:trn key="sectorDashboard">Sector Dashboard</digi:trn>
@@ -685,7 +685,7 @@ function adminHelp(){
 			                                </li>
 		                                </module:display>
 		                                
-		                                <module:display name="Region Dashboard" parentModule="Org./Sector/Region Dashboards">
+		                                <module:display name="Region Dashboard" parentModule="Visualization Dashboards">
 			                                <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=region"  onclick="return canExit()">
 				                                	<digi:trn key="regionDashboard">Region Dashboard</digi:trn>

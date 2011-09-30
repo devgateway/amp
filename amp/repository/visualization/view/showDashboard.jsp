@@ -1455,8 +1455,6 @@ function toggleSettings(){
 	<div class="yui-content">
 	<div id="tab1">
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-		<module:display name="Org./Sector/Region Dashboards">
-		<module:display name="Region Profile" parentModule="Org./Sector/Region Dashboards">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
 				<div id="RegionProfileHeader" class="chart_header" style="float:left">
@@ -1494,13 +1492,9 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
-		</module:display>
-		</module:display>
 		</c:if>
 	
 			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-			<module:display name="Org./Sector/Region Dashboards">
-			<module:display name="Sector Profile" parentModule="Org./Sector/Region Dashboards">
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
@@ -1539,25 +1533,29 @@ function toggleSettings(){
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
 			</fieldset>
-		</module:display>
-		</module:display>
 		</c:if>
 		
 		<c:set var="showFundingChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showFundingChart" >
 			<feature:display name="Org. Dashboard - ODA Historical Trend - Funding chart" module="Org. Dashboard">
-				<c:set var="showFundingChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showFundingChart" >
 			<feature:display name="Region Dashboard - ODA Historical Trend - Funding chart" module="Region Dashboard">
-				<c:set var="showFundingChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showFundingChart">
 			<feature:display name="Sector Dashboard - ODA Historical Trend - Funding chart" module="Sector Dashboard">
-				<c:set var="showFundingChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showFundingChart eq 1 }">
 		<fieldset class="chartFieldset">
@@ -1645,19 +1643,25 @@ function toggleSettings(){
 		
 		<c:set var="showAidPredictabilityChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showAidPredictabilityChart">
 			<feature:display name="Org. Dashboard - Aid Predictability chart" module="Org. Dashboard">
-				<c:set var="showAidPredictabilityChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showAidPredictabilityChart">
 			<feature:display name="Region Dashboard - Aid Predictability chart" module="Region Dashboard">
-				<c:set var="showAidPredictabilityChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showAidPredictabilityChart">
 			<feature:display name="Sector Dashboard - Aid Predictability chart" module="Sector Dashboard">
-				<c:set var="showAidPredictabilityChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showAidPredictabilityChart eq 1 }">
 		<fieldset class="chartFieldset">
@@ -1701,19 +1705,25 @@ function toggleSettings(){
 		
 		<c:set var="showAidTypeChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showAidTypeChart">
 			<feature:display name="Org. Dashboard - Aid Type chart" module="Org. Dashboard">
-				<c:set var="showAidTypeChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showAidTypeChart">
 			<feature:display name="Region Dashboard - Aid Type chart" module="Region Dashboard">
-				<c:set var="showAidTypeChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showAidTypeChart">
 			<feature:display name="Sector Dashboard - Aid Type chart" module="Sector Dashboard">
-				<c:set var="showAidTypeChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showAidTypeChart eq 1 }">
 		<fieldset class="chartFieldset">
@@ -1756,19 +1766,25 @@ function toggleSettings(){
 		
 		<c:set var="showFinancingInstrumentChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showFinancingInstrumentChart">
 			<feature:display name="Org. Dashboard - Financing Instrument chart" module="Org. Dashboard">
-				<c:set var="showFinancingInstrumentChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showFinancingInstrumentChart">
 			<feature:display name="Region Dashboard - Financing Instrument chart" module="Region Dashboard">
-				<c:set var="showFinancingInstrumentChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showFinancingInstrumentChart">
 			<feature:display name="Sector Dashboard - Financing Instrument chart" module="Sector Dashboard">
-				<c:set var="showFinancingInstrumentChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showFinancingInstrumentChart eq 1 }">
 		<fieldset class="chartFieldset">
@@ -1812,14 +1828,18 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
 		<c:set var="showDonorProfileChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showDonorProfileChart">
 			<feature:display name="Region Dashboard - Donor Profile chart" module="Region Dashboard">
-				<c:set var="showDonorProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showDonorProfileChart">
 			<feature:display name="Sector Dashboard - Donor Profile chart" module="Sector Dashboard">
-				<c:set var="showDonorProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showDonorProfileChart eq 1 }">
 			<fieldset class="chartFieldset">
@@ -1864,14 +1884,18 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
 		<c:set var="showSectorProfileChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showSectorProfileChart">
 			<feature:display name="Org. Dashboard - Sector Profile chart" module="Org. Dashboard">
-				<c:set var="showSectorProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			<c:set var="showSectorProfileChart">
 			<feature:display name="Region Dashboard - Sector Profile chart" module="Region Dashboard">
-				<c:set var="showSectorProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showSectorProfileChart eq 1 }">
 			<fieldset class="chartFieldset">
@@ -1917,14 +1941,18 @@ function toggleSettings(){
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 		<c:set var="showRegionProfileChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+			<c:set var="showRegionProfileChart">
 			<feature:display name="Org. Dashboard - Region Profile chart" module="Org. Dashboard">
-				<c:set var="showRegionProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+			<c:set var="showRegionProfileChart">
 			<feature:display name="Sector Dashboard - Region Profile chart" module="Sector Dashboard">
-				<c:set var="showRegionProfileChart">1</c:set>
+				1
 			</feature:display>
+			</c:set>
 		</c:if>
 		<c:if test="${showRegionProfileChart eq 1 }">
 			<fieldset class="chartFieldset">
@@ -2805,34 +2833,43 @@ function refreshBoxes(o){
 					value = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn> " + " - " + getSelectionsFromElement("organization_check",true);
 				}
 			}
-			
-			div.innerHTML = value;
-			input.value = value;
+			if (div != null)
+				div.innerHTML = value;
+			if (input != null)
+				input.value = value;
 		}
 		div = document.getElementById("AidPredictabilityTitleLegend");
 		input = document.getElementById("AidPredictabilityTitle");
 		value = trnAidPredictability + " - " + fundType;
-		div.innerHTML = value;
-		input.value = value;
+		if (div != null)
+			div.innerHTML = value;
+		if (input != null)
+			input.value = value;
 	
 		div = document.getElementById("AidTypeTitleLegend");
 		input = document.getElementById("AidTypeTitle");
 		value = trnAidType + " - " + fundType;
-		div.innerHTML = value;
-		input.value = value;
+		if (div != null)
+			div.innerHTML = value;
+		if (input != null)
+			input.value = value;
 	
 		div = document.getElementById("FinancingInstrumentTitleLegend");
 		input = document.getElementById("FinancingInstrumentTitle");
 		value = trnFinancingInstrument + " - " + fundType;
-		div.innerHTML = value;
-		input.value = value;
+		if (div != null)
+			div.innerHTML = value;
+		if (input != null)
+			input.value = value;
 	
 		if (dashboardType!=1) {
 			div = document.getElementById("DonorProfileTitleLegend");
 			input = document.getElementById("DonorProfileTitle");
 			value = trnDonorProfile + " - " + fundType;
-			div.innerHTML = value;
-			input.value = value;
+			if (div != null)
+				div.innerHTML = value;
+			if (input != null)
+				input.value = value;
 		}
 		if (dashboardType !=3 || dashboardType == 3) {
 			div = document.getElementById("SectorProfileTitleLegend");
@@ -2845,8 +2882,10 @@ function refreshBoxes(o){
 			{
 				value = trnSectorProfile + " - " + fundType;
 			}
-			div.innerHTML = value;
-			input.value = value;
+			if (div != null)
+				div.innerHTML = value;
+			if (input != null)
+				input.value = value;
 		}
 		if (dashboardType!=2 ||  dashboardType == 2) {
 			div = document.getElementById("RegionProfileTitleLegend");
@@ -2859,8 +2898,10 @@ function refreshBoxes(o){
 			{
 				value = trnRegionProfile + " - " + fundType;
 			}
-			div.innerHTML = value;
-			input.value = value;
+			if (div != null)
+				div.innerHTML = value;
+			if (input != null)
+				input.value = value;
 		}
 	}
 	catch(e){

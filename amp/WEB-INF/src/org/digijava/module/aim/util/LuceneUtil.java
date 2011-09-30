@@ -814,7 +814,7 @@ public class LuceneUtil implements Serializable {
 			searchString = searchString.replace("[","\\[");
 			searchString = searchString.replace("]","\\]");
 			
-			query = parser.parse(searchString.trim()+"*");
+			query = parser.parse(searchString.trim());
 			BooleanQuery bol = new BooleanQuery();
 			bol.add(query,BooleanClause.Occur.MUST);
 			bol.setMaxClauseCount(maxLuceneResults);

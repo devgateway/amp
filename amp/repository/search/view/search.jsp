@@ -77,8 +77,11 @@
 			</c:set>
 			
 			</c:if>
-
-			<div class="${keywordClasses}" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: <html:text
+			<c:set var="searchTooltip">
+				<digi:trn>You can use the * wildcard for matching any character</digi:trn>
+			</c:set>
+			<div class="${keywordClasses}" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: 
+				<html:text title="${searchTooltip}" 
 				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
 			<html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">

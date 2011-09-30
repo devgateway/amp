@@ -231,8 +231,8 @@ public class DbUtil {
         int transactionType = filter.getTransactionType();
         TeamMember tm = filter.getTeamMember();
         Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "select fd ";
         oql += " from ";
@@ -327,8 +327,8 @@ public class DbUtil {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 	        /*
@@ -428,8 +428,8 @@ public class DbUtil {
 
 	        //Get the Fiscal Calendar to determine Start/End Date
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
-	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] locationIds = filter.getSelLocationIds();
 	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 	        /*
@@ -506,8 +506,8 @@ public class DbUtil {
         // apply calendar filter
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         Long[] locationIds = filter.getSelLocationIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         Long[] sectorIds = filter.getSelSectorIds();
@@ -640,8 +640,8 @@ public class DbUtil {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] locationIds = filter.getSelLocationIds();
 	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 	        Long[] sectorIds = filter.getSelSectorIds();

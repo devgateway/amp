@@ -172,7 +172,7 @@ public class ShowDashboard extends Action {
 			e.printStackTrace();
 		}
 
-		if (filter.getYear() == null) {
+		if (filter.getStartYear() == null) {
 			Long year = null;
 			try {
 				year = Long.parseLong(FeaturesUtil
@@ -180,8 +180,12 @@ public class ShowDashboard extends Action {
 			} catch (NumberFormatException ex) {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}
-			filter.setYear(year);
-			filter.setYearToCompare(year-1);
+			filter.setStartYear(year-5);
+			filter.setStartYearQuickFilter(year-5);
+			filter.setStartYearFilter(year-5);
+			filter.setEndYear(year);
+			filter.setEndYearQuickFilter(year);
+			filter.setEndYearFilter(year);
 		}
 		filter.setYears(new ArrayList<BeanWrapperImpl>());
 		long yearFrom = Long
@@ -191,8 +195,8 @@ public class ShowDashboard extends Action {
 				.parseLong(FeaturesUtil
 						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 		long maxYear = yearFrom + countYear;
-		if (maxYear < filter.getYear()) {
-			maxYear = filter.getYear();
+		if (maxYear < filter.getStartYear()) {
+			maxYear = filter.getStartYear();
 		}
 		for (long i = yearFrom; i <= maxYear; i++) {
 			filter.getYears().add(new BeanWrapperImpl(new Long(i)));

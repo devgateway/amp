@@ -176,9 +176,9 @@ public class ExportToWord extends Action {
             cell = new RtfCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph("Fiscal Start Year: " + vForm.getFilter().getYear()));
+            cell = new RtfCell(new Paragraph("Start Year: " + vForm.getFilter().getStartYear()));
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph("Years in Range: " + vForm.getFilter().getYearsInRange()));
+            cell = new RtfCell(new Paragraph("End Year: " + vForm.getFilter().getEndYear()));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             String itemList = "";

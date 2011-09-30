@@ -161,9 +161,9 @@ public class ExportToPDF extends Action {
             filtersTbl.addCell(cell);
             cell = new PdfPCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph("Fiscal Start Year: " + vForm.getFilter().getYear()));
+            cell = new PdfPCell(new Paragraph("Start Year: " + vForm.getFilter().getStartYear()));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph("Years in Range: " + vForm.getFilter().getYearsInRange()));
+            cell = new PdfPCell(new Paragraph("End Year: " + vForm.getFilter().getEndYear()));
             filtersTbl.addCell(cell);
             String itemList = "";
             Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();

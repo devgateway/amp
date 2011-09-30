@@ -20,7 +20,12 @@ public class DashboardFilter {
     
     private static final long serialVersionUID = 1L;
     private int dashboardType;
-    private Long year;
+    private Long startYear;
+    private Long endYear;
+    private Long startYearQuickFilter;
+    private Long endYearQuickFilter;
+    private Long startYearFilter;
+    private Long endYearFilter;
     private Long currencyId;
     private Boolean workspaceOnly;
     private Boolean showMonochrome;
@@ -65,9 +70,6 @@ public class DashboardFilter {
     private Boolean divideThousands;
     private Integer divideThousandsDecimalPlaces;
    
-    private int yearsInRange = 5;
-    private int yearsInRangePie = 7;
-    private int yearsInRangeLine = 8;
     private Long yearToCompare;
     private Boolean commitmentsVisible = true;
     private Boolean disbursementsVisible= true;
@@ -188,32 +190,6 @@ public class DashboardFilter {
 
     public void setPledgeVisible(Boolean pledgeVisible) {
         this.pledgeVisible = pledgeVisible;
-    }
-    public int getYearsInRange() {
-    	if(yearsInRange == 0) yearsInRange = 5;
-        return yearsInRange;
-    }
-
-    public void setYearsInRange(int yearsInRange) {
-        this.yearsInRange = yearsInRange;
-    }
-
-    public int getYearsInRangePie() {
-    	if(yearsInRangePie == 0) yearsInRangePie = 7;
-        return yearsInRangePie;
-    }
-
-    public void setYearsInRangePie(int yearsInRangePie) {
-        this.yearsInRangePie = yearsInRangePie;
-    }
-
-    public int getYearsInRangeLine() {
-    	if(yearsInRangeLine == 0) yearsInRangeLine = 8;
-        return yearsInRangeLine;
-    }
-
-    public void setYearsInRangeLine(int yearsInRangeLine) {
-        this.yearsInRangeLine = yearsInRangeLine;
     }
 
     public Long getYearToCompare() {
@@ -341,12 +317,24 @@ public class DashboardFilter {
         this.organizations = organizations;
     }
 
-    public Long getYear() {
-        return year;
+    public Long getStartYear() {
+        return startYear;
     }
 
-    public void setYear(Long year) {
-        this.year = year;
+    public void setStartYear(Long year) {
+        this.startYear = year;
+        this.startYearFilter = year;
+        this.startYearQuickFilter = year;
+    }
+
+    public Long getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(Long year) {
+        this.endYear = year;
+        this.endYearFilter = year;
+        this.endYearQuickFilter = year;
     }
 
     public Collection<BeanWrapperImpl> getYears() {
@@ -668,6 +656,62 @@ public class DashboardFilter {
 	}
 	public ArrayList<AmpSector> getAllSectorList() {
 		return allSectorList;
+	}
+
+
+
+
+	public void setStartYearQuickFilter(Long startYearQuickFilter) {
+		this.startYearQuickFilter = startYearQuickFilter;
+	}
+
+
+
+
+	public Long getStartYearQuickFilter() {
+		return startYearQuickFilter;
+	}
+
+
+
+
+	public void setEndYearQuickFilter(Long endYearQuickFilter) {
+		this.endYearQuickFilter = endYearQuickFilter;
+	}
+
+
+
+
+	public Long getEndYearQuickFilter() {
+		return endYearQuickFilter;
+	}
+
+
+
+
+	public void setStartYearFilter(Long startYearFilter) {
+		this.startYearFilter = startYearFilter;
+	}
+
+
+
+
+	public Long getStartYearFilter() {
+		return startYearFilter;
+	}
+
+
+
+
+	public void setEndYearFilter(Long endYearFilter) {
+		this.endYearFilter = endYearFilter;
+	}
+
+
+
+
+	public Long getEndYearFilter() {
+		return endYearFilter;
 	}
 
 	

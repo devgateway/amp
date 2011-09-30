@@ -51,8 +51,8 @@ public class ShowProjectsList extends Action {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, Integer.parseInt(year));
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, Integer.parseInt(year));
     	} else {
-    		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange()-1);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+    		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
     	}
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {

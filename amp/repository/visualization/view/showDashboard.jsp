@@ -22,7 +22,7 @@
 		padding:0px 0px 0px 0px;
 		vertical-align:top;
 		width:634px;
-		height:400px;
+		height:460px;
 		clear: both;
 	    background-color: #FFFFFF;
 	}
@@ -203,6 +203,22 @@ function clearSearch(divId){
 	$("#"+divId+" span").css("color","black").css("font-weight","normal");
 }
 
+function toggleHeader(button, containerId){
+	var trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
+	var trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
+	var container = document.getElementById(containerId);
+	var imgShow = "<img src=\"/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif\" vspace=\"5\" align=\"absMiddle\"/>"; 
+	var imgHide = "<img src=\"/TEMPLATE/ampTemplate/img_2/ico_perm_close.gif\" vspace=\"5\" align=\"absMiddle\"/>"; 
+	if(container.style.display == "none"){
+		container.style.display = "block";
+		button.innerHTML = imgHide + " " + trnHideSettings;
+	}
+	else if(container.style.display == "block"){
+		container.style.display = "none";	
+		button.innerHTML = imgShow + " " + trnShowSettings;
+	}
+	
+}
 -->
 </script>
 
@@ -382,7 +398,6 @@ function resetToDefaults(){
 	unCheckOptions("sub_sector_check");
 	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
-	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
 	
 	document.getElementById("commitments_visible").checked = true;
 	document.getElementById("disbursements_visible").checked = true;
@@ -587,15 +602,10 @@ function toggleSettings(){
    								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
 							</html:select> 	
 						</td>
-						<td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
-					    <td>
-							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:option value="0">0</html:option>
-	                            <html:option value="1">1</html:option>
-	                            <html:option value="2">2</html:option>
-	                            <html:option value="3">3</html:option>
-	                            <html:option value="4">4</html:option>
-	                            <html:option value="5">5</html:option>
+						<td><b><digi:trn>Start year</digi:trn>:</b></td>
+				    	<td>
+				    		 <html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
 	                        </html:select>
 						</td>
 				 	</tr>
@@ -607,9 +617,18 @@ function toggleSettings(){
 	                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
 	                        </html:select>
 						</td>
-				  		<td><b><digi:trn>Years range</digi:trn>:</b></td>
+						<td><b><digi:trn>End year</digi:trn>:</b></td>
+				    	<td>
+				    		 <html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+	                        </html:select>
+						</td>
+					</tr>
+					<tr>
+						<td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
 					    <td>
-							<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:option value="0">0</html:option>
 	                            <html:option value="1">1</html:option>
 	                            <html:option value="2">2</html:option>
 	                            <html:option value="3">3</html:option>
@@ -621,39 +640,6 @@ function toggleSettings(){
 				    	<td>
 				    		 <html:select property="filter.yearToCompare" styleId="yearToCompare_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-					</tr>
-					<tr>
-						<td><b><digi:trn>Fiscal Year Start</digi:trn>:</b></td>
-				    	<td>
-				    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-						<td><b><digi:trn>Years range for linechart</digi:trn>:</b></td>
-					    <td>
-							<html:select property="filter.yearsInRangeLine" styleId="yearsInRangeLine_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:option value="1">1</html:option>
-	                            <html:option value="2">2</html:option>
-	                            <html:option value="3">3</html:option>
-	                            <html:option value="4">4</html:option>
-	                            <html:option value="5">5</html:option>
-	                            <html:option value="6">6</html:option>
-	                            <html:option value="7">7</html:option>
-	                            <html:option value="8">8</html:option>
-	                        </html:select>
-						</td>
-						<td><b><digi:trn>Years range for piechart</digi:trn>:</b></td>
-					    <td>
-							<html:select property="filter.yearsInRangePie" styleId="yearsInRangePie_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:option value="1">1</html:option>
-	                            <html:option value="2">2</html:option>
-	                            <html:option value="3">3</html:option>
-	                            <html:option value="4">4</html:option>
-	                            <html:option value="5">5</html:option>
-	                            <html:option value="6">6</html:option>
-	                            <html:option value="7">7</html:option>
 	                        </html:select>
 						</td>
 					</tr>
@@ -1015,11 +1001,9 @@ function toggleSettings(){
 <!-- MAIN CONTENT PART START -->
 
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
-<html:hidden property="filter.year" styleId="currentYear"/>
+<html:hidden property="filter.startYear" styleId="startYear"/>
+<html:hidden property="filter.endYear" styleId="endYear" />
 <html:hidden property="filter.yearToCompare" styleId="yearToCompare"/>
-<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
-<html:hidden property="filter.yearsInRangeLine" styleId="yearsInRangeLine" />
-<html:hidden property="filter.yearsInRangePie" styleId="yearsInRangePie" />
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
@@ -1069,9 +1053,9 @@ function toggleSettings(){
 	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 	<strong>
 	<digi:trn>Selected Filters</digi:trn>:</strong>
-	   <i><digi:trn>Currency type</digi:trn>: </i><label id="filterCurrency"></label> | 
-	   <i><digi:trn>Fiscal start year</digi:trn>: </i><label id="filterFiscalYear">${visualizationform.filter.year}</label> | 
-	   <i><digi:trn>Years range</digi:trn>: </i><label id="filterYearsRange">${visualizationform.filter.yearsInRange}</label> | 
+	   <i><digi:trn>Currency type</digi:trn>: </i><label id="filterCurrency"></label> |
+	   <i><digi:trn>Start year</digi:trn>: </i><label id="filterStartYear">${visualizationform.filter.startYear}</label> | 
+	   <i><digi:trn>End year</digi:trn>: </i><label id="filterEndYear">${visualizationform.filter.endYear}</label> | 
 	   <i><digi:trn>Org. groups</digi:trn>: </i><label id="filterOrgGroups"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Configuration</digi:trn>: </i><label id="filterSectorConfiguration"><digi:trn>Primary</digi:trn></label> | 
@@ -1099,7 +1083,25 @@ function toggleSettings(){
 	<hr />
 	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
-	<table cellspacing="0" cellpadding="0" width="100%"> 
+	<table cellspacing="0" cellpadding="0" width="100%">
+		<tr>
+			<td><digi:trn>Start Year</digi:trn>:
+		 	</td>
+			<td align="right">
+				<html:select property="filter.startYearQuickFilter" styleId="startYearQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+				</html:select>
+		 	</td>
+		</tr>
+		<tr>
+			<td><digi:trn>End Year</digi:trn>:
+		 	</td>
+			<td align="right">
+				<html:select property="filter.endYearQuickFilter" styleId="endYearQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+				</html:select>
+		 	</td>
+		</tr>
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<tr>
 		  <td><digi:trn>Organization Group</digi:trn>:</td>
@@ -1560,31 +1562,30 @@ function toggleSettings(){
 		<c:if test="${showFundingChart eq 1 }">
 		<fieldset class="chartFieldset">
 			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
-			<div id="FundingChartHeader" class="chart_header" style="float:left">
-			<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
-			<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
-			&nbsp;<digi:trn>Size</digi:trn>
-			<select id="FundingChartFontSize">
-				<option value="12">12</option>
-				<option value="13">13</option>
-				<option value="14">14</option>
-				<option value="15">15</option>
-				<option value="16">16</option>
-			</select>
-			&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold"><digi:trn>Bold</digi:trn></label><br/>
-			<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend"><digi:trn>Show legend</digi:trn></label>
-			&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide"><digi:trn>Divide by thousands</digi:trn></label>
-			&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-			&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
-			<input type="hidden" id="FundingChartDataAction" value="getFundingsGraphData" />
-			<input type="hidden" id="FundingChartDataField" value="fundingtype" />
-			<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FundingChart')">
+			<div style="float:left;">
+				<a onclick="toggleHeader(this, 'FundingChartHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
+				<div id="FundingChartHeader" class="chart_header" style="display:none;">
+				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
+				<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
+				&nbsp;<digi:trn>Size</digi:trn>
+				<select id="FundingChartFontSize">
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+				</select>
+				&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				<input type="hidden" id="FundingChartDataAction" value="getFundingsGraphData" />
+				<input type="hidden" id="FundingChartDataField" value="fundingtype" />
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FundingChart')">
+				</div>
 			</div>
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="<digi:trn>Data View</digi:trn>"/></div>
-			<br />
-			<br />
-			<br />
-			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
 					<a href="http://www.adobe.com/go/getflashplayer">
@@ -2150,12 +2151,19 @@ var callbackApplyFilterCall = {
 
 function callbackApplyFilter(e){
 	panelLoaded = false;
+	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
+	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
+	document.getElementById("startYear_dropdown").value = document.getElementById("startYearQuickFilter_dropdown").value;
+	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	loadingPanel.show();
+
 	YAHOO.util.Connect.setForm('visualizationform');
 
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+
+
 	refreshLoadingPanel();
 
 	document.getElementById("filterOrgGroups").innerHTML = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
@@ -2179,7 +2187,7 @@ var callbackUpdateLoadingPanel = {
   			  	setTimeout(refreshLoadingPanel, 1000);
 		  },
 		  failure: function(o) {
-			  alert("error");
+//			  alert("error");
 		  }
 		};
 
@@ -2187,16 +2195,15 @@ function applyFilterPopin(e){
 	
 //var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
-	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
-	document.getElementById("filterFiscalYear").innerHTML = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
+	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
+	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
+	//Copy the values of the start/end year from the Advanced to the quick
+	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
+	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
+
 	document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
-	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
-	document.getElementById("filterYearsRange").innerHTML = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
-	document.getElementById("yearsInRangeLine").value = document.getElementById("yearsInRangeLine_dropdown").options[document.getElementById("yearsInRangeLine_dropdown").selectedIndex].value;
-	document.getElementById("yearsInRangePie").value = document.getElementById("yearsInRangePie_dropdown").options[document.getElementById("yearsInRangePie_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
-
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
 	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
 	if (document.getElementById("expenditures_visible")!=null){
@@ -2817,10 +2824,10 @@ function refreshBoxes(o){
 	try
 	{
 		if (dashboardType==1) {
-			var currentYear = document.getElementById("currentYear").value;
-			var startYear = document.getElementById("yearToCompare").value;
-			if (startYear == "0" || startYear == "" || startYear == null || startYear >= currentYear){
-				startYear =  "" + (currentYear - 1);
+			var currentYear = document.getElementById("startYear").value;
+			var yearToCompare = document.getElementById("yearToCompare").value;
+			if (yearToCompare == "0" || yearToCompare == "" || yearToCompare == null || yearToCompare >= currentYear){
+				yearToCompare =  "" + (currentYear - 1);
 			}
 			var endYear =  "" + currentYear;
 			div = document.getElementById("ODAGrowthTitleLegend");
@@ -2908,13 +2915,11 @@ function refreshBoxes(o){
 		
 	}
 
-	var currentYear = document.getElementById("currentYear").value;
-	var yearsInRange = document.getElementById("yearsInRange").value;
-	var startYear =  "" + (currentYear - yearsInRange + 1);
-	var endYear =  "" + currentYear;
+	var startYear = document.getElementById("startYear").value;
+	var endYear = document.getElementById("endYear").value;
 
 	div = document.getElementById("topProjectsTitle");
-	if (yearsInRange == 1) {
+	if (startYear == endYear) {
 		inner = trnTopProjects + " (" + startYear + ")";
 	} else {
 		inner = trnTopProjects + " (" + startYear + "-" + endYear + ")";
@@ -2922,7 +2927,7 @@ function refreshBoxes(o){
 	div.innerHTML = inner;
 	if (dashboardType!=3) {
 		div = document.getElementById("topSectorsTitle");
-		if (yearsInRange == 1) {
+		if (startYear == endYear) {
 			inner = trnTopSectors + " (" + startYear + ")";
 		} else {
 			inner = trnTopSectors + " (" + startYear + "-" + endYear + ")";
@@ -2931,7 +2936,7 @@ function refreshBoxes(o){
 	}
 	if (dashboardType!=1) {
 		div = document.getElementById("topDonorsTitle");
-		if (yearsInRange == 1) {
+		if (startYear == endYear) {
 			inner = trnTopDonors + " (" + startYear + ")";
 		} else {
 			inner = trnTopDonors + " (" + startYear + "-" + endYear + ")";
@@ -2940,7 +2945,7 @@ function refreshBoxes(o){
 	}
 	if (dashboardType!=2) {
 		div = document.getElementById("topRegionsTitle");
-		if (yearsInRange == 1) {
+		if (startYear == endYear) {
 			inner = trnTopRegions + " (" + startYear + ")";
 		} else {
 			inner = trnTopRegions + " (" + startYear + "-" + endYear + ")";
@@ -3084,7 +3089,7 @@ function changeChart(e, chartType, container, useGeneric){
 	switch(chartType){
 		case "bar":
 			if(useGeneric)
-				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries.swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries.swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
 			else
 				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
 			break;

@@ -76,11 +76,6 @@ public class DataDispatcher extends DispatchAction {
 	public ActionForward applyFilter(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-    	Long startTimeTotal, endTimeTotal;
-        startTimeTotal = System.currentTimeMillis();
-    	Long startTime, endTime;
-        startTime = System.currentTimeMillis();
-		
 		String trnStep0, trnStep8;
 		trnStep0 = trnStep8 = "";
 		try{
@@ -93,8 +88,9 @@ public class DataDispatcher extends DispatchAction {
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep0);
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
-		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		HttpSession session = request.getSession();
+
+		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 			visualizationForm.getFilter().setTeamMember(tm);
@@ -108,7 +104,6 @@ public class DataDispatcher extends DispatchAction {
 		visualizationForm.getFilter().setSectorIds(getLongArrayFromParameter(request.getParameter("sectorIds")));
 		visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
-
 		
 		Long[] orgsGrpIds = visualizationForm.getFilter().getOrgGroupIds();
 		Long orgsGrpId = visualizationForm.getFilter().getOrgGroupId();
@@ -147,10 +142,7 @@ public class DataDispatcher extends DispatchAction {
 			configId = Long.parseLong(configIdAsString);
 			visualizationForm.getFilter().setSelSectorConfigId(configId);
 		}
-		
-		
-		
-		
+
 		if ((subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) && (subSecsId == null || subSecsId == -1)) {
 			if (secsIds == null || secsIds.length == 0 || secsIds[0] == -1) {
 				Long[] temp = {secsId};
@@ -191,12 +183,8 @@ public class DataDispatcher extends DispatchAction {
 				visualizationForm.getFilter().setSelLocationIds(zonesIds);
 			}
 		}
-        endTime = System.currentTimeMillis();
-        logger.info("Initial Part of ApplyFilter:" + (endTime - startTime));
-		
+
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
-		
-    	startTime = System.currentTimeMillis();
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		
 		JSONObject root = new JSONObject();
@@ -507,9 +495,6 @@ public class DataDispatcher extends DispatchAction {
 		root.put("objectType", "lists");
 		root.put("children", children);
 
-		endTime = System.currentTimeMillis();
-        logger.info("Final Part of ApplyFilter:" + (endTime - startTime));
-
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;
 
@@ -579,18 +564,7 @@ public class DataDispatcher extends DispatchAction {
 
         Date startDate = null;
         Date endDate = null;
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-        int yearsInRange=filter.getYearsInRange()-1;
-        if (lineChart) {
-        	yearsInRange=filter.getYearsInRangeLine()-1;
-		}
-        if (donut) {
-        	yearsInRange=filter.getYearsInRangePie()-1;
-		}
-        //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+
         try {
 	        Map map = visualizationForm.getRanksInformation().getFullSectors();
             if(sectorId != null && !sectorId.equals("-1")){
@@ -609,8 +583,8 @@ public class DataDispatcher extends DispatchAction {
 	            else
 	            	map = DashboardUtil.getRankSectors(DbUtil.getSectors(filter), filter, selectedYear);
 			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 			}
 	        
 	        if (map==null) {
@@ -742,7 +716,7 @@ public class DataDispatcher extends DispatchAction {
 	            csvString.append(sec.getAmpSectorId());
 	            csvString.append(",");
 	            sectorData += sec.getName() + ">";
-	            for (Long i = year - yearsInRange; i <= year; i++) {
+	            for (Long i = filter.getStartYear(); i <= filter.getEndYear().intValue(); i++) {
 	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 	    			Long[] ids = {sec.getAmpSectorId()};
 	    			newFilter.setSelSectorIds(ids);
@@ -788,7 +762,7 @@ public class DataDispatcher extends DispatchAction {
 		        sectorData += "Others";
 	        }
 	        csvString.append("\n");
-	        for (Long i = year - yearsInRange; i <= year; i++) {
+	        for (Long i = filter.getStartYear(); i <= filter.getEndYear().intValue(); i++) {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -806,7 +780,7 @@ public class DataDispatcher extends DispatchAction {
 	        }
 	      //Put headers
 	        if (!allData.isEmpty()){
-		        for (Long i = year - yearsInRange; i <= year; i++) {
+		        for (Long i = filter.getStartYear(); i <= filter.getEndYear().intValue(); i++) {
 		        	csvString.append(i);
 		        	sectorData += "<" + i;
 		        	if (list.size()>0){
@@ -939,18 +913,6 @@ public class DataDispatcher extends DispatchAction {
         
         Date startDate = null;
         Date endDate = null;
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-        int yearsInRange=filter.getYearsInRange()-1;
-        
-        if (lineChart) {
-        	yearsInRange=filter.getYearsInRangeLine()-1;
-		}
-        if (donut) {
-        	yearsInRange=filter.getYearsInRangePie()-1;
-		}
 
         try {
         	Map map = visualizationForm.getRanksInformation().getFullDonors();
@@ -961,8 +923,8 @@ public class DataDispatcher extends DispatchAction {
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
                 map = DashboardUtil.getRankDonors(DbUtil.getDonors(filter), filter, selectedYear);
 			} else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getStartYear().intValue());
 			}
             if (map==null) {
 	        	map = new HashMap<AmpOrganisation, BigDecimal>();
@@ -1093,7 +1055,7 @@ public class DataDispatcher extends DispatchAction {
 	            csvString.append(org.getAmpOrgId());
 	            csvString.append(",");
                 donorData += org.getName() + ">";
-                for (Long i = year - yearsInRange; i <= year; i++) {
+                for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
         			Long[] ids = {org.getAmpOrgId()};
         			newFilter.setOrgIds(ids);
@@ -1139,7 +1101,7 @@ public class DataDispatcher extends DispatchAction {
 		        donorData += "Others";
 	        }
             csvString.append("\n");
-	        for (Long i = year - yearsInRange; i <= year; i++) {
+            for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
                 startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                 DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -1157,7 +1119,7 @@ public class DataDispatcher extends DispatchAction {
             }
           //Put headers
 	        if (!allData.isEmpty()){
-		        for (Long i = year - yearsInRange; i <= year; i++) {
+                for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
 		        	csvString.append(i);
 		        	donorData += "<" + i;
 		        	if (list.size()>0){
@@ -1266,10 +1228,7 @@ public class DataDispatcher extends DispatchAction {
         }
         Date startDate = null;
         Date endDate = null;
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
+
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpCategoryValue> categoryValues = null;
         if (typeOfAid) {
@@ -1278,15 +1237,6 @@ public class DataDispatcher extends DispatchAction {
             categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
         }
         
-        int yearsInRange=filter.getYearsInRange()-1;
-        if (linechart) {
-        	yearsInRange=filter.getYearsInRangeLine()-1;
-		}
-
-        if (donut) {
-        	yearsInRange=filter.getYearsInRangePie()-1;
-		}
-
         /*if(selectedYear != null){
         	year = selectedYear;
         	yearsInRange = 0;
@@ -1295,8 +1245,8 @@ public class DataDispatcher extends DispatchAction {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
 		} else {
-			startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		}
         String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
 
@@ -1313,7 +1263,6 @@ public class DataDispatcher extends DispatchAction {
                 funding = DbUtil.getFunding(filter, startDate, endDate, null, ampCategoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
             }
             amtTotal = amtTotal.add(funding.getValue());
-            //Fill HashMap with totales per category value, to only fill non empty categories
             hm.put(ampCategoryValue, funding.getValue());
 		}
        
@@ -1355,7 +1304,7 @@ public class DataDispatcher extends DispatchAction {
 			{
 				String aidTypeData = "";
 				
-				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+                for (int i = filter.getStartYear().intValue(); i <= filter.getEndYear().intValue(); i++) {
 					startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 					endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 					String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
@@ -1418,7 +1367,7 @@ public class DataDispatcher extends DispatchAction {
 			else
 				csvString.append("\n");
 		}
-        for (Long i = year - yearsInRange; i <= year; i++) {
+        for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
             startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
@@ -1474,7 +1423,6 @@ public class DataDispatcher extends DispatchAction {
 			filter.setDivideThousands(true);
 		}
 
-		Long year = filter.getYear();
 		BigDecimal divideByDenominator;
 
         if (filter.getDivideThousands())
@@ -1490,11 +1438,6 @@ public class DataDispatcher extends DispatchAction {
             	divideByDenominator=new BigDecimal(1000);
         }
 
-
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-
 		Long currId = filter.getCurrencyId();
 		String currCode;
 		if (currId == null) {
@@ -1505,13 +1448,7 @@ public class DataDispatcher extends DispatchAction {
 		} else {
 			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
 		}
-		int yearsInRange = filter.getYearsInRange() - 1;
-		if (linechart) {
-			yearsInRange = filter.getYearsInRangeLine() - 1;
-		}
-		if (donut) {
-			yearsInRange = filter.getYearsInRangePie() - 1;
-		}
+
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 
 		String plannedTitle = TranslatorWorker.translateText("Planned", locale, siteId);
@@ -1521,7 +1458,7 @@ public class DataDispatcher extends DispatchAction {
 			StringBuffer xmlString = new StringBuffer();
 			//Loop funding types
 			String aidPredData = "";
-			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+            for (int i = filter.getStartYear().intValue(); i <= filter.getEndYear().intValue(); i++) {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 		        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
@@ -1563,7 +1500,7 @@ public class DataDispatcher extends DispatchAction {
         csvString.append(Constants.ACTUAL + "\"");
         csvString.append("\n");
 
-        for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+        for (int i = filter.getStartYear().intValue(); i <= filter.getEndYear().intValue(); i++) {
             // apply calendar filter
             Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
@@ -1612,7 +1549,19 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long year = filter.getYear();
+		Long startYear, endYear;
+		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("startYear"));
+			endYear = Long.parseLong(request.getParameter("endYear"));
+		}
+		else
+		{
+			startYear = filter.getStartYear();
+			endYear = filter.getEndYear();
+		}
+
 		BigDecimal divideByDenominator;
 		//Set it here, and unset it at the end. This should go to the Advanced Filters
 		if(divide){
@@ -1633,11 +1582,6 @@ public class DataDispatcher extends DispatchAction {
 				divideByDenominator = new BigDecimal(1000);
 		}
 
-		if (year == null || year == -1) {
-			year = Long.parseLong(FeaturesUtil
-					.getGlobalSettingValue("Current Fiscal Year"));
-		}
-
 		Long currId = filter.getCurrencyId();
 		String currCode;
 		if (currId == null) {
@@ -1648,13 +1592,7 @@ public class DataDispatcher extends DispatchAction {
 		} else {
 			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
 		}
-		int yearsInRange = filter.getYearsInRange() - 1;
-		if (linechart) {
-			yearsInRange = filter.getYearsInRangeLine() - 1;
-		}
-		if (donut) {
-			yearsInRange = filter.getYearsInRangePie() - 1;
-		}
+
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 		String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges", locale, siteId) ;
 		String comTranslatedTitle = TranslatorWorker.translateText("Commitments", locale, siteId) ;
@@ -1703,7 +1641,7 @@ public class DataDispatcher extends DispatchAction {
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
 			String fundingData = "";
-			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+            for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 				
@@ -1769,7 +1707,7 @@ public class DataDispatcher extends DispatchAction {
 			filter.setDivideThousands(false);
 		}
 
-		for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+        for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
 			// apply calendar filter
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
@@ -2045,17 +1983,7 @@ public class DataDispatcher extends DispatchAction {
 
         Date startDate = null;
         Date endDate = null;
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-        int yearsInRange=filter.getYearsInRange()-1;
-        if (lineChart) {
-        	yearsInRange=filter.getYearsInRangeLine()-1;
-		}
-        if (donut) {
-        	yearsInRange=filter.getYearsInRangePie()-1;
-		}
+
         try {
 	        Map map = visualizationForm.getRanksInformation().getFullRegions();
             if(regionId != null && !regionId.equals("-1")){
@@ -2076,8 +2004,8 @@ public class DataDispatcher extends DispatchAction {
 
 	        
 	        } else {
-				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-yearsInRange);
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 			}
 	        if (map==null) {
 	        	map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
@@ -2207,7 +2135,7 @@ public class DataDispatcher extends DispatchAction {
 	            csvString.append(loc.getId());
 	            csvString.append(",");
 	            regionData += loc.getName() + ">";
-	            for (Long i = year - yearsInRange; i <= year; i++) {
+                for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
 	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 	    			Long[] ids = {loc.getId()};
 	    			newFilter.setSelLocationIds(ids);
@@ -2253,7 +2181,7 @@ public class DataDispatcher extends DispatchAction {
 		        regionData += "Others";
 	        }
 	        csvString.append("\n");
-	        for (Long i = year - yearsInRange; i <= year; i++) {
+            for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -2272,7 +2200,7 @@ public class DataDispatcher extends DispatchAction {
 			
             //Put headers
 	        if (!allData.isEmpty()){
-		        for (Long i = year - yearsInRange; i <= year; i++) {
+                for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
 		        	csvString.append(i);
 		        	regionData += "<" + i;
 		        	if (list.size()>0){
@@ -2370,14 +2298,13 @@ public class DataDispatcher extends DispatchAction {
 
         Date startDate = null;
         Date endDate = null;
-        Long year = filter.getYear();
-        if (year == null || year == -1) {
-            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        Long startYear = filter.getStartYear();
+        if (startYear == null || startYear == -1) {
+        	startYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
-        int yearsInRange=filter.getYearsInRange()-1;
         
-        if (filter.getYearToCompare()==null || filter.getYearToCompare().intValue()==0 || filter.getYearToCompare().intValue()>= filter.getYear()){
-        	filter.setYearToCompare(filter.getYear()-1);
+        if (filter.getYearToCompare()==null || filter.getYearToCompare().intValue()==0 || filter.getYearToCompare().intValue()>= filter.getStartYear()){
+        	filter.setYearToCompare(filter.getStartYear()-1);
         }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpOrganisation> donorList = new ArrayList();
@@ -2412,7 +2339,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("\n");
 			odaGrowthData += text +">";
 			
-			for (int i = filter.getYear().intValue(); i > filter.getYear().intValue() - 10; i--) {
+			for (int i = filter.getStartYear().intValue(); i >= filter.getEndYear().intValue(); i--) {
 				startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -2491,9 +2418,9 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
 			csvString.append(",");
 			odaGrowthData += text + " " + filter.getYearToCompare() + ">";
-			csvString.append("\"" + text + " " + filter.getYear() + "\"");
+			csvString.append("\"" + text + " " + filter.getStartYear() + "\"");
 			csvString.append(",");
-			odaGrowthData += text + " " + filter.getYear() + ">";
+			odaGrowthData += text + " " + filter.getStartYear() + ">";
 			text = TranslatorWorker.translateText("Growth percent",locale, siteId);
 			csvString.append("\"" + text + "\"");
 			csvString.append("\n");
@@ -2504,8 +2431,8 @@ public class DataDispatcher extends DispatchAction {
 				DashboardFilter newFilter = filter.getCopyFilterForFunding();
 				Long[] ids = {ampOrganisation.getAmpOrgId()};
 				newFilter.setOrgIds(ids);
-	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getStartYear().intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
@@ -2660,140 +2587,4 @@ public class DataDispatcher extends DispatchAction {
 		}
 		return null;
 	}
-    /*   
-	public ActionForward getActivitiesList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
-
-		VisualizationForm visualizationForm = (VisualizationForm)form;
-		DashboardFilter filter = visualizationForm.getFilter();
-		String type = request.getParameter("type");
-		String id = request.getParameter("id");
-		String year = request.getParameter("year");
-
-		if (id==null && id.equals("0") && id.length()!=0) {
-			return null;
-		}
-        JSONObject root = new JSONObject();
-	    JSONArray children = new JSONArray();
-	    JSONObject child = new JSONObject();
-	    
-	    Date startDate = null;
-        Date endDate = null;
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        if (year!=null && !year.equals("0") && year.length()!=0) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, Integer.parseInt(year));
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, Integer.parseInt(year));
-    	} else {
-    		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange()-1);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-    	}
-    	
-        if (type.equals("region")){
-	    	Long[] ids = {Long.parseLong(id)};
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelLocationIds(ids);
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("sector")){
-	    	Long[] ids = {Long.parseLong(id)};
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelSectorIds(ids);
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("donor")){
-	    	Long[] ids = {Long.parseLong(id)};
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setOrgIds(ids);
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("funding")){
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("aidPredictability")){
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), Integer.parseInt(id));
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("aidType")){
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-        if (type.equals("finInstrument")){
-            List<AmpActivityVersion> activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), Constants.ACTUAL);
-            Iterator<AmpActivityVersion> it = activities.iterator();
-            while(it.hasNext()){
-            	AmpActivityVersion act = it.next();
-				child.put("ID", act.getAmpActivityId());
-				child.put("name", act.getName());
-				children.add(child);
-			}
-			root.put("children", children);
-	    }
-
-		response.setContentType("text/json-comment-filtered");
-		OutputStreamWriter outputStream = null;
-
-		try {
-			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
-			outputStream.write(root.toString());
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
-		return null;
-	}
-	*/
 }

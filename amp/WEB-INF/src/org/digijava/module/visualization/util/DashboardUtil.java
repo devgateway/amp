@@ -53,8 +53,8 @@ public class DashboardUtil {
 	public static Map<AmpOrganisation, BigDecimal> getRankDonors(Collection<AmpOrganisation> donorList, DashboardFilter filter, Integer selectedYear) throws DgException{
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         if (selectedYear!=null) {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
@@ -80,8 +80,8 @@ public class DashboardUtil {
 	public static Map<AmpActivityVersion, BigDecimal> getRankActivities (Collection<AmpActivityVersion> actList,  DashboardFilter filter) throws DgException{
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
@@ -104,8 +104,8 @@ public class DashboardUtil {
 	public static Map<AmpActivityVersion, BigDecimal> getRankActivitiesByKey(Collection<Long> actList,  DashboardFilter filter) throws DgException{
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
@@ -118,8 +118,8 @@ public class DashboardUtil {
 	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegions (Collection<AmpCategoryValueLocations> regionsList, DashboardFilter filter, Integer selectedYear) throws DgException{
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         if (selectedYear!=null) {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
@@ -145,8 +145,8 @@ public class DashboardUtil {
 	public static Map<AmpSector, BigDecimal> getRankSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer selectedYear) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         if (selectedYear!=null) {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
@@ -179,8 +179,8 @@ public class DashboardUtil {
 	public static Map<AmpSector, BigDecimal> getRankSubSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer selectedYear) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         if (selectedYear!=null) {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
@@ -251,8 +251,8 @@ public class DashboardUtil {
         startTime = System.currentTimeMillis();
 		DashboardFilter filter = form.getFilter();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);

@@ -263,13 +263,13 @@ public class ExportToExcel extends Action {
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Fiscal Start Year: " + vForm.getFilter().getYear());
+            headerText = new HSSFRichTextString("Start Year: " + vForm.getFilter().getStartYear());
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Years in Range: " + vForm.getFilter().getYearsInRange());
+            headerText = new HSSFRichTextString("End Year: " + vForm.getFilter().getEndYear());
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             String itemList = "";

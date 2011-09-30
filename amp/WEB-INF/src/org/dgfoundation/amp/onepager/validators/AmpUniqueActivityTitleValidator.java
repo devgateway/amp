@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.validators;
 
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -17,14 +18,14 @@ import org.digijava.module.aim.util.ActivityUtil;
  */
 public class AmpUniqueActivityTitleValidator implements IValidator<String> {
 
-	private final AmpActivityGroup ampActivityGroup;
+	private final PropertyModel<AmpActivityGroup> ampActivityGroupModel;
 
 	/**
-	 * @param ampActivityGroup 
+	 * @param propertyModel 
 	 * 
 	 */
-	public AmpUniqueActivityTitleValidator(AmpActivityGroup ampActivityGroup) {
-		this.ampActivityGroup = ampActivityGroup;
+	public AmpUniqueActivityTitleValidator(PropertyModel<AmpActivityGroup> propertyModel) {
+		this.ampActivityGroupModel = propertyModel;
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +34,7 @@ public class AmpUniqueActivityTitleValidator implements IValidator<String> {
 	@Override
 	public void validate(IValidatable<String> validatable) {
 			if(validatable.getValue().trim().length()==0) return;
-			AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(validatable.getValue(),ampActivityGroup);
+			AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(validatable.getValue(),ampActivityGroupModel.getObject());
 			if(activityByName!=null)
 			{
 				ValidationError error = new ValidationError();

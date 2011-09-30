@@ -2944,6 +2944,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	  Conjunction conjunction = Restrictions.conjunction();
 	  conjunction.add(Restrictions.eq("name",name));
 	  if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
+	  crit.add(conjunction);
 	  
 	  List ret = crit.list();
 	  if(ret.size()>0) return (AmpActivity) ret.get(0);

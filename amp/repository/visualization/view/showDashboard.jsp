@@ -2296,7 +2296,7 @@ function refreshAsync(){
 //		console.log("popping one: " + currentMovie.id);
 		try
 		{
-			if (YAHOO.env.ua.gecko <= 1.91) {
+			if (YAHOO.env.ua.gecko <= 1.92 && YAHOO.env.ua.gecko != 0) {
 				currentMovie.scrollIntoView(true)
 			}
 			currentMovie.refreshGraph();

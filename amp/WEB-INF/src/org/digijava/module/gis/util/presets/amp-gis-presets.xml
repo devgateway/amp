@@ -351,7 +351,7 @@
 				</color>
 			</gradient-max>
 		</scheme>	
-		<scheme name="default" display-name="Autumn scheme">
+		<scheme name="default" display-name="Autumn scheme (ORANGE)">
 			<background>
 				<color type="RGBA">
 					<red>163</red>
@@ -361,9 +361,9 @@
 			</background>
 			<terrain>
 				<color type="RGBA">
-					<red>202</red>
-					<green>101</green>
-					<blue>30</blue>
+					<red>93</red>
+					<green>46</green>
+					<blue>27</blue>
 				</color>
 			</terrain>
 			<water>
@@ -420,6 +420,7 @@
 				</color>
 			</gradient-max>
 		</scheme>	
+	
 		
 	</color-schemes>
 </amp-gis-presets>

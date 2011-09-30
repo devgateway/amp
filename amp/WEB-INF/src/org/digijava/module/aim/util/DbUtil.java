@@ -1347,7 +1347,7 @@ public class DbUtil {
             q.setParameter("actId", actId, Hibernate.LONG);
             Iterator itr = q.list().iterator();
             while (itr.hasNext()) {
-                AmpActivity act = (AmpActivity) itr.next();
+            	AmpActivityVersion act = (AmpActivityVersion) itr.next();
                 ans = act.getApprovalStatus();
             }
         } catch (Exception ex) {

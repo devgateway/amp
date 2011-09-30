@@ -81,6 +81,7 @@ public class ActivityUtil {
 			if (a.getAmpActivityId() == null){
 				a.setActivityCreator(ampCurrentMember);
 				a.setCreatedBy(ampCurrentMember);
+				newActivity = true;
 			}
 			
 			if (a.getDraft() == null)
@@ -133,7 +134,7 @@ public class ActivityUtil {
 				session.saveOrUpdate(a);
 			
 			AmpActivityGroup group = null;
-			if (a.getAmpActivityId() != null){
+			if (!newActivity){
 				//existing activity
 				group = a.getAmpActivityGroup();
 				if (group == null){
@@ -148,7 +149,7 @@ public class ActivityUtil {
 			}
 			else{
 				//new activity => create ActivityGroup for it
-				newActivity = true;
+				//newActivity = true;
 				group = new AmpActivityGroup();
 				group.setAmpActivityLastVersion(a);
 				session.save(group);

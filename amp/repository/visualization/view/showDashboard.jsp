@@ -2357,7 +2357,7 @@ function refreshBoxes(o){
 			case "ProjectsList":
 				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
-					inner = inner + (i+1) + ". " + "<a href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a>";
 				var div = document.getElementById("divFullProjects");
@@ -2365,7 +2365,7 @@ function refreshBoxes(o){
 				inner = "";
 				for(var i = 0; i < child.top.length; i++){
 					//inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";  
-					inner = inner + (i+1) + ". " + "<a href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
@@ -2948,7 +2948,6 @@ function refreshBoxes(o){
 		div.innerHTML = inner;
 	}
 }
-
 
 //YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
 //YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren);

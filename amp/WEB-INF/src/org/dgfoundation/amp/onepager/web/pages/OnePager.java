@@ -217,6 +217,10 @@ public class OnePager extends AmpHeaderFooter {
 		listModel = new AbstractReadOnlyModel<List<AmpComponentPanel>>() {
 			private List<AmpComponentPanel> list = null;
 			private AmpComponentPanel initObject(OnepagerSection os, LinkedList<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
+				AmpComponentPanel existing = temp.get(os.getClassName());
+				if (existing != null)
+					return existing;
+				
 				AmpComponentPanel dep = null;
 				if (os.isDependent()){
 					Iterator<OnepagerSection> it = features.iterator();

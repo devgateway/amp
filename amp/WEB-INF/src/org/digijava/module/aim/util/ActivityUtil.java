@@ -110,12 +110,15 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -2926,6 +2929,29 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return col;
   }
 
+  public static AmpActivity getActivityByNameExcludingGroup(String name , AmpActivityGroup g) {
+	  
+		Session session=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+		} catch (DgException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		
+	  Criteria crit = session.createCriteria(AmpActivity.class);
+	  
+	  Conjunction conjunction = Restrictions.conjunction();
+	  conjunction.add(Restrictions.eq("name",name));
+	  if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
+	  
+	  List ret = crit.list();
+	  if(ret.size()>0) return (AmpActivity) ret.get(0);
+				
+	  return null;
+  }
+
+  
   public static AmpActivity getActivityByName(String name , Long actId) {
     AmpActivity activity = null;
     Session session = null;

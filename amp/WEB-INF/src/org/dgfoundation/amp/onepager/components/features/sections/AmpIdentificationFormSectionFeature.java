@@ -28,6 +28,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -65,6 +66,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
 			title.getTextContainer().setRequired(true);
+			//title.getTextContainer().add(new AmpUniqueActivityTitleValidator(am.getObject().getAmpActivityGroup()));
 			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
 			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(

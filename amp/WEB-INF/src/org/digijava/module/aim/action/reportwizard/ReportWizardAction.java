@@ -261,6 +261,10 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setHideActivities( ampReport.getHideActivities() );
 		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
 		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+		myForm.setAmpTeamMember(ampTeamMember);
+		
 		if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("donor");
 		if ( new Long(ArConstants.REGIONAL_TYPE).equals(ampReport.getType()) )

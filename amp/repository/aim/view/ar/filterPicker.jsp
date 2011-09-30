@@ -738,18 +738,18 @@
 	
 </div>
 <div style="background-color: #EEEEEE; ">
-	<br />
 	<table width="100%">
 		<tr>
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()"
+			<input class="dr-menu" id="	" name="apply" type="button" onclick="submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
 			<html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-			</html:button> </td>
+			</html:button> 
+			</td>
 		</tr>
 	</table>
 </div>

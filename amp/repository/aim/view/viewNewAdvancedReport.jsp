@@ -16,6 +16,7 @@
  
   
 <!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 

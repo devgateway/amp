@@ -333,10 +333,10 @@ saveReportEngine	= null;
 		YAHOO.amptab.init();
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
- 	 	element.style.height    = "450px";
+ 	 	element.style.height    = "500px";
 
  	 	myPanel1.setBody(element);
- 	 	myPanel1.cfg.setProperty("height", "482px" );
+ 	 	myPanel1.cfg.setProperty("height", "520px" );
  	 	myPanel1.cfg.setProperty("width", "870px" );
 		myPanel1.center();
 		myPanel1.show();

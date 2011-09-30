@@ -15,7 +15,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * Persister class for Structures
  * @author fferreyra
  */
-public class AmpStructure implements Serializable,Comparable<AmpStructure>, Versionable, Cloneable {
+public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
 	private Long ampStructureId;
 	private String title;
@@ -63,21 +63,51 @@ public class AmpStructure implements Serializable,Comparable<AmpStructure>, Vers
 	/**
 	 * A simple string comparison to sort components by title
 	 */
+
+//	public int compareTo(AmpStructure o) {
+//		try {
+//			if(o.title == null && this.title == null) return 0;
+//			if(o.title == null) return 1;
+//			if(this.title == null) return -1;
+//			if (this.title.compareToIgnoreCase(o.title) > 0) {
+//				return 1;
+//			} else if (this.title.compareToIgnoreCase(o.title) == 0) {
+//				return -0;
+//			}
+//		} catch (Exception e) {
+//			logger.error("Error", e);
+//			return -1;
+//		}
+//		return -1;
+//	}	
 	
-	public int compareTo(AmpStructure o) {
-		try {
-			if (this.title.compareToIgnoreCase(o.title) > 0) {
-				return 1;
-			} else if (this.title.compareToIgnoreCase(o.title) == 0) {
-				return -0;
+	
+	public int compareTo(Object obj) {
+		
+		if (!(obj instanceof AmpStructure)) 
+			throw new ClassCastException();
+		
+		AmpStructure ampStr = (AmpStructure) obj;
+		if (this.title != null) {
+			if (ampStr.title != null) {
+				return (this.title.trim().toLowerCase().
+						compareTo(ampStr.title.trim().toLowerCase()));
+			} else {
+				return (this.title.trim().toLowerCase().
+						compareTo(""));
 			}
-		} catch (Exception e) {
-			logger.error(e);
-			return -1;
+		} else {
+			if (ampStr.title != null) {
+				return ("".compareTo(ampStr.title.trim().toLowerCase()));
+			} else {
+				return 0;
+			}			
 		}
-		return -1;
-	}	
+	}
 	
+	//Do not override equals unless REALLY NEEDED!
+	/*
+	 * 
 	@Override
 	public boolean equals(Object obj) {
 		AmpStructure target=(AmpStructure) obj;
@@ -90,7 +120,7 @@ public class AmpStructure implements Serializable,Comparable<AmpStructure>, Vers
 		return false;
 		
 	}
-	
+	*/
 	public java.sql.Timestamp getCreationdate() {
 		return creationdate;
 	}

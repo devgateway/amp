@@ -149,10 +149,15 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 		AmpDeleteLinkField addbutton = new AmpDeleteLinkField("deleteStructure", "Delete Structure") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
+				try{
 				AmpStructure stru = structureModel.getObject();
 				setModel.getObject().remove(stru);
 				target.addComponent(this.findParent(AmpStructuresFormSectionFeature.class));
-//				list.removeAll();
+				//list.removeAll();
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
 			}
 		};
 		add(addbutton);

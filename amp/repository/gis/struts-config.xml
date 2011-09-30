@@ -7,7 +7,8 @@
 		<form-bean name="gisFoundingDetailsForm" type="org.digijava.module.gis.form.GisFoundingDetailsForm"/>
 		<form-bean name="gisDemoForm" type="org.digijava.module.gis.form.GisDemoForm"/>
 		<form-bean name="gisRegReportForm" type="org.digijava.module.gis.form.GisRegReportForm"/>
-        <form-bean name="gisSettingsForm" type="org.digijava.module.gis.form.GisSettingsForm"/>
+		<form-bean name="additionalGraphicsForm" type="org.digijava.module.gis.form.AdditionalGraphicsForm"/>
+	        <form-bean name="gisSettingsForm" type="org.digijava.module.gis.form.GisSettingsForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -55,5 +56,8 @@
 		<!-- Teasers below this -->
 		<action name="gisSectorByDonorTeaserForm" path="/gis/sectorByDonorTeaser" type="org.digijava.module.gis.action.SectorsByDonorTeaser"/>
 		<action name="gisDashboardForm" path="/gis/dashboardMapTeaser" type="org.digijava.module.gis.action.DashboardMapTeaser"/>
+
+	<action name="additionalGraphicsForm" path="/gis/showAdditionalGraphics" scope="request"  type="org.digijava.module.gis.action.ShowAdditionalGraphics" validate="false"/>
+
 	</action-mappings>
 </struts-config>

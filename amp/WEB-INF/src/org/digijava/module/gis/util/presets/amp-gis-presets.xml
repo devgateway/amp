@@ -407,16 +407,16 @@
 			</captions>
 			<gradient-min>
 				<color type="RGBA">
-					<red>240</red>
-					<green>190</green>
-					<blue>85</blue>
+					<red>200</red>
+					<green>100</green>
+					<blue>28</blue>
 				</color>
 			</gradient-min>
 			<gradient-max>
 				<color type="RGBA">
-					<red>242</red>
-					<green>197</green>
-					<blue>92</blue>
+					<red>238</red>
+					<green>198</green>
+					<blue>88</blue>
 				</color>
 			</gradient-max>
 		</scheme>	

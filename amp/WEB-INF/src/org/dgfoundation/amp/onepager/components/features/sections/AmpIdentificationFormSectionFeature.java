@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetField;
@@ -68,6 +69,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
 			title.getTextContainer().setRequired(true);
 			title.getTextContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
+			title.getTextContainer().add(new StringValidator.MaximumLengthValidator(255));
 			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
 			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(

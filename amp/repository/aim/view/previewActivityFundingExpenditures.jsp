@@ -34,25 +34,25 @@
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName"/></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="transactionDate" />
+									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
 								</module:display>
 							</td>
 
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								
+									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;																								
 								</module:display>
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="currencyCode" />&nbsp;
+									<b><bean:write name="fundingDetail" property="currencyCode"/></b>&nbsp;
 								</module:display>
 								</td>
 							<td align="left" bgcolor="#ffffff"></td>
@@ -67,14 +67,12 @@
 
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key="aim:subtotalActualExpenditures">
-           	  SUBTOTAL PLANNED EXPENDITURES             </digi:trn></td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn key="aim:subtotalActualExpenditures">SUBTOTAL PLANNED EXPENDITURES</digi:trn>
+		</td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedExpenditures}">
-            		${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}
+            	<b>${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}</b>
             </c:if> &nbsp;
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -83,16 +81,14 @@
 		<td colspan="4" height="7px"></td>
 	</tr>
 	<tr bgcolor="#FFFFCC">
-		<td colspan="4" style="text-transform: uppercase"><a
-			title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
-		<digi:trn key="aim:actualexpenditures">ACTUAL EXPENDITURES</digi:trn>
-		</a></td>
+		<td colspan="4" style="text-transform: uppercase">
+			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
+				<digi:trn key="aim:actualexpenditures">ACTUAL EXPENDITURES</digi:trn>
+			</a>
+		</td>
 	</tr>
-	<logic:iterate name="funding" property="fundingDetails"
-		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-
-
-		<!--Actual-->
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+	<!--Actual-->
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 
@@ -101,34 +97,34 @@
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName"/></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="transactionDate" />
+									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
 								</module:display>
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
 										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;
+									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;
 								</module:display>		
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
 										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
-									<bean:write name="fundingDetail" property="currencyCode" />
+									<b><bean:write name="fundingDetail" property="currencyCode"/></b>
 								</module:display>&nbsp;
 							</td>
 							<td align="left" bgcolor="#ffffff"></td>
 
 						</tr>
-						<field:display name="Classification Expenditure"
-							feature="Funding Information">
+						<field:display name="Classification Expenditure" feature="Funding Information">
 							<tr>
-								<td colspan="4"><bean:write name="fundingDetail"
-									property="classification" /></td>
+								<td colspan="4">
+									<b><bean:write name="fundingDetail" property="classification"/></b>
+								</td>
 							</tr>
 						</field:display>
 
@@ -136,14 +132,12 @@
 		</logic:equal>
 	</logic:iterate>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key="aim:subtotalplannedExpenditures">
-       	 	 	SUBTOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn key="aim:subtotalplannedExpenditures">SUBTOTAL ACTUAL EXPENDITURES</digi:trn>
+		</td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalExpenditures}">
- 				${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}
+ 				<b>${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}</b>
  			</c:if> &nbsp;
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>

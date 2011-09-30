@@ -39,30 +39,30 @@
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
 									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-										<bean:write name="fundingDetail" property="adjustmentTypeName" />
+										<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
 									</digi:trn>
 								</module:display>
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Transaction Date"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
-								<bean:write name="fundingDetail" property="transactionDate" />
+									<b><bean:write name="fundingDetail" property="transactionDate" /></b>
 								</module:display>
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Amount"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
-									<bean:write name="fundingDetail" property="transactionAmount" />
+									<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 								</module:display>
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Currency"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
-										<bean:write name="fundingDetail" property="currencyCode" />
+										<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 								</module:display>
 								&nbsp;</td>
 							<td height="18">
 							<!-- Exchange Rate not found -->
 							<field:display name="Exchange Rate" feature="Funding Information">
-								<bean:write name="fundingDetail" property="formattedRate" />
+								<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</field:display>
 							</td>
 						</tr>
@@ -73,14 +73,13 @@
 	
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key='aim:subtotalplanneddisbursement'>
-                                                                                		    SUBTOTAL PLANNED DISBURSEMENT:	                                                                                	</digi:trn>
+			style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn key='aim:subtotalplanneddisbursement'>SUBTOTAL PLANNED DISBURSEMENT:</digi:trn>
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedDisbursements}">
-          		  ${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}
+          		  <b>${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
 			</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -104,7 +103,7 @@
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">	
 										<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-											<bean:write name="fundingDetail" property="adjustmentTypeName" />
+											<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
 										</digi:trn>
 								</module:display>
 							</td>
@@ -112,22 +111,22 @@
 							<td align="right" align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Transaction Date"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">	
-										<bean:write name="fundingDetail" property="transactionDate" />
+										<b><bean:write name="fundingDetail" property="transactionDate" /></b>
 								</module:display>								
 							</td>
 							<td align="right">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Amount"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
-									<bean:write name="fundingDetail" property="transactionAmount" />
+									<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 								</module:display>
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Currency"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
-								<bean:write name="fundingDetail" property="currencyCode" />&nbsp;
+									<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
 								</module:display>
 							</td>
 							<td height="18">
 								<field:display name="Exchange Rate" feature="Funding Information">
-									<bean:write name="fundingDetail" property="formattedRate" />
+									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 								</field:display>
 							</td>
 						</tr>
@@ -144,7 +143,7 @@
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
-                 ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
+                <b>${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    

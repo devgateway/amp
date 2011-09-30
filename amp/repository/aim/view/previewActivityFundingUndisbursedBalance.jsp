@@ -16,12 +16,12 @@
 <tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key="aim:undisbursedBalance">
-           	  UNDISBURSED BALANCE 	             </digi:trn></td>
+			key="aim:undisbursedBalance"> UNDISBURSED BALANCE</digi:trn>
+		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.unDisbursementBalance}">
-				${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
+				<b>${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}</b>
 			</c:if> &nbsp;
 		</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>

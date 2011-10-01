@@ -351,7 +351,7 @@
 				</color>
 			</gradient-max>
 		</scheme>	
-		<scheme name="default" display-name="Autumn scheme (ORANGE)">
+		<scheme name="autumn" display-name="Autumn scheme (ORANGE)">
 			<background>
 				<color type="RGBA">
 					<red>163</red>

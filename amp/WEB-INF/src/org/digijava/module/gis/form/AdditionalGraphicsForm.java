@@ -11,6 +11,23 @@ import org.apache.struts.action.ActionForm;
  */
 public class AdditionalGraphicsForm extends ActionForm {
     private String actionType;
+    int width, height;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public String getActionType() {
         return actionType;

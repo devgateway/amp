@@ -215,7 +215,7 @@
 	
 	<tr>
 		<td colspan="3" align="left">
-			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
+			<digi:img src="/gis/showAdditionalGraphics.do?actionType=legendGradient&width=500&height=20" border="0"/>
 			
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>

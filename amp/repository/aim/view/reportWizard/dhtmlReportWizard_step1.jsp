@@ -65,13 +65,10 @@
 												</c:when>
                            						<c:otherwise>
                                               <c:set var="disablePledgeType">true</c:set>
-                                              	<tr>
-                                              		<td>
+                                              
                                                 		<nested:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
                                                    			${PledgesFunding}
-                                                     	</nested:radio>
-                                                   </td>
-                                                </tr>
+  
                                            </c:otherwise>
                                          </c:choose>
                                          </div>

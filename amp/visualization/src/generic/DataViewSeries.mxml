@@ -73,7 +73,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8080";
+					strDomain = "localhost:8081";
 				}
 				else
 				{
@@ -83,7 +83,14 @@
 				var params:Object;
 				if(idContainer == "AidType"){
 					params = {
-						"typeofaid" : "true"
+						"typeofaid" : "true",
+						"formatNumber" : "true"
+					};
+				}
+				else
+				{
+					params = {
+						"formatNumber" : "true"
 					};
 				}
 
@@ -120,7 +127,7 @@
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
-	<mx:HBox width="634" height="400">
+	<mx:HBox width="634" height="460">
 		<mx:DataGrid id="datagrid_id"
 					 editable="false" enabled="true" width="100%" height="100%">
 		</mx:DataGrid>

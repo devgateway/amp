@@ -50,14 +50,14 @@ public class DashboardUtil {
 	private static Logger logger = Logger.getLogger(DashboardUtil.class);
 	public static final String VISUALIZATION_PROGRESS_SESSION = "visualizationProgressSession";
 
-	public static Map<AmpOrganisation, BigDecimal> getRankDonors(Collection<AmpOrganisation> donorList, DashboardFilter filter, Integer selectedYear) throws DgException{
+	public static Map<AmpOrganisation, BigDecimal> getRankDonors(Collection<AmpOrganisation> donorList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        if (selectedYear!=null) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+        if (startYear !=null && endYear != null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -115,14 +115,14 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegions (Collection<AmpCategoryValueLocations> regionsList, DashboardFilter filter, Integer selectedYear) throws DgException{
+	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegions (Collection<AmpCategoryValueLocations> regionsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        if (selectedYear!=null) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+        if (startYear !=null && endYear != null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -142,14 +142,15 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpSector, BigDecimal> getRankSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer selectedYear) throws DgException{
+	public static Map<AmpSector, BigDecimal> getRankSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
+		logger.info("Starting RANKSECTOR");
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        if (selectedYear!=null) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+        if (startYear !=null && endYear != null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -158,10 +159,12 @@ public class DashboardUtil {
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
 			Long[] ids = {sector.getAmpSectorId()};
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+			//Save sector selection
+			Long[] tempArray = filter.getSelSectorIds();
+			filter.setSelSectorIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			filter.setSelSectorIds(tempArray);
             AmpSector topLevelSector = getTopLevelParent(sector);
             if(map.containsKey(topLevelSector)){
             	BigDecimal currentTotal = map.get(topLevelSector);
@@ -173,17 +176,18 @@ public class DashboardUtil {
             }
 
 		}
+		logger.info("Ending RANKSECTOR");
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpSector, BigDecimal> getRankSubSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer selectedYear) throws DgException{
+	public static Map<AmpSector, BigDecimal> getRankSubSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        if (selectedYear!=null) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+        if (startYear !=null && endYear != null) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -245,10 +249,6 @@ public class DashboardUtil {
 		}
 		
 		
-    	Long startTimeTotal, endTimeTotal;
-        startTimeTotal = System.currentTimeMillis();
-    	Long startTime, endTime;
-        startTime = System.currentTimeMillis();
 		DashboardFilter filter = form.getFilter();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -257,21 +257,11 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-        endTime = System.currentTimeMillis();
-        logger.info("Gathering information:" + (endTime - startTime));
         request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
-        startTime = System.currentTimeMillis();
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
-        endTime = System.currentTimeMillis();
-        logger.info("Getting Sectors:" + (endTime - startTime));
 		filter.setAllSectorList(allSectorList);
-        startTime = System.currentTimeMillis();
 
         Collection activityListReduced = DbUtil.getActivities(filter);
-        endTime = System.currentTimeMillis();
-        logger.info("Getting Activity List Reduced:" + (endTime - startTime));
-
-        startTime = System.currentTimeMillis();
         HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
         Iterator iter = activityListReduced.iterator();
         while (iter.hasNext()) {
@@ -282,39 +272,17 @@ public class DashboardUtil {
             AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
             activityList.put(ampActivityId, activity);
         }
-        endTime = System.currentTimeMillis();
-        logger.info("Going through activity list preparing the Hash:" + (endTime - startTime));
-        
-        startTime = System.currentTimeMillis();
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
-        endTime = System.currentTimeMillis();
-        logger.info("Getting Sectors:" + (endTime - startTime));
-        startTime = System.currentTimeMillis();
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
-        endTime = System.currentTimeMillis();
-        logger.info("Getting Regions:" + (endTime - startTime));
-        startTime = System.currentTimeMillis();
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
-        endTime = System.currentTimeMillis();
-        logger.info("Getting Donors:" + (endTime - startTime));
-        startTime = System.currentTimeMillis();
 		if (activityList.size()>0) {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
-	        startTime = System.currentTimeMillis();
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
-	        endTime = System.currentTimeMillis();
-	        logger.info("Getting Funding Details:" + (endTime - startTime));
 			DecimalWraper fundingCal = null;
-	        startTime = System.currentTimeMillis();
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, Constants.ACTUAL);
-	        endTime = System.currentTimeMillis();
-	        logger.info("First time getting Total Commitments:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-	        startTime = System.currentTimeMillis();
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, Constants.ACTUAL);
-	        endTime = System.currentTimeMillis();
-	        logger.info("First time getting Total Disbursements:" + (endTime - startTime));
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
@@ -322,26 +290,14 @@ public class DashboardUtil {
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
-		        startTime = System.currentTimeMillis();
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
-				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null));
-		        endTime = System.currentTimeMillis();
-		        logger.info("setFullSectors:" + (endTime - startTime));
-		        startTime = System.currentTimeMillis();
+				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
-				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null));
-		        endTime = System.currentTimeMillis();
-		        logger.info("setFullRegions:" + (endTime - startTime));
-		        startTime = System.currentTimeMillis();
+				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
-		        endTime = System.currentTimeMillis();
-		        logger.info("setFullProjects:" + (endTime - startTime));
-		        startTime = System.currentTimeMillis();
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
-				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null));
-		        endTime = System.currentTimeMillis();
-		        logger.info("setFullDonors:" + (endTime - startTime));
+				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -358,10 +314,6 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
 		}
-        endTimeTotal = System.currentTimeMillis();
-        logger.info("Total Execution Time:" + (endTimeTotal - startTimeTotal));
-		
-		
 	}
     public static String getInStatement(Long ids[]) {
         String oql = "";

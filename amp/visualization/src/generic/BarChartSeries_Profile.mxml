@@ -98,23 +98,6 @@
 			{
 				
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
-				if(isNaN(sliderYear.value))
-				{
-					var labelArray:Array = new Array();
-					try {
-						startYear = service.lastResult[profileDataField].startYear;
-						endYear = service.lastResult[profileDataField].endYear;
-						sliderYear.value = endYear;
-						labelArray = service.lastResult[profileDataField].yearsLabels.split(",")
-					} catch (errObject:Error) {
-						startYear = service.lastResult[profileDataField][0].startYear;
-						endYear = service.lastResult[profileDataField][0].endYear;
-						sliderYear.value = endYear;
-						labelArray = service.lastResult[profileDataField][0].yearLabels.split(",")
-					}
-					sliderYear.labels = labelArray;
-				}
-				
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
 				try {
@@ -126,7 +109,7 @@
 					}
 				}
 				//				categories = categoriesLocal; 
-				vScale.maxValue = Math.round(maxValue * 1.05);
+				vScale.maxValue = maxValue * 1.05;
 				vScale.minValue = 0;
 				dataProvider = service.lastResult[profileDataField];
 				if("length" in service.lastResult[profileDataField]) // If it's not empty
@@ -273,6 +256,15 @@
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
 				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -320,12 +312,16 @@
 				dc.visible = false;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"itemId" : itemId
 				};
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				params["divide"] = divide;
 				
 				service.send(params);
@@ -334,36 +330,23 @@
 
 			protected function sliderYear_changeHandler(event:SliderEvent):void
 			{
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				// TODO Auto-generated method stub
-				allYears.selected = false;
 				var params:Object = {};
-				params["year"] = sliderYear.value;
 				params["format"] = "xml";
 				params["typeofaid"] = "true";
 				params["itemId"] = itemId;
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 			}
 			
-			protected function updateAllYears():void
-			{
-				if(allYears.selected){
-					sliderYear.visible = false;
-					var params:Object = {};
-					params["format"] = "xml";
-					params["typeofaid"] = "true";
-					service.send(params);
-					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
-				}
-				else
-				{
-					sliderYear.visible = true;
-					sliderYear_changeHandler(new SliderEvent(mx.events.SliderEvent.CHANGE));
-				}
-			}
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
 				messagePanel.height = h;
@@ -417,9 +400,9 @@
 				var isSprite:Boolean = (obj is AxiisSprite)
 				formatter.precision = decimalsToShow;
 				if(isSprite)	
-					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(ObjectUtils.getProperty(this, obj.data,childDataField));
+					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(Number(ObjectUtils.getProperty(this, obj.data,childDataField)));
 				if(!isNaN(Number(obj.value)) && Number(obj.value) > 0 ){ 
-					return formatter.format(obj.value);
+					return formatter.format(Number(obj.value));
 				}
 				else
 					return " ";
@@ -474,7 +457,7 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="400" 
+			   height="460" 
 			   dragEnter="dragEnterHandler(event);" 
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -483,8 +466,8 @@
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="70"
-		bottom="20"
+	<axiis:DataCanvas top="0"
+		bottom="120"
 		width="{this.width*.9}"
 		id="dc"
 		left="40"
@@ -570,7 +553,7 @@
 				x="25"
 				y="0"
 				showDataTips="false"
-				height="{dc.height-50}"
+				height="{270}"
 				width="{dc.width-25}"
 				percentGap="{percentGap}"
 				dataProvider="{dataProvider}" 
@@ -697,8 +680,7 @@
 		</axiis:layouts>
 	</axiis:DataCanvas>
 		
-		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
-		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="350" x="230" y="4" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" allowThumbOverlap="true" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 		<mx:Label mouseMove="mouseOverHandler(event);" x="100" y="10" id="chartLabel" height="36" fontSize="12"/>
 		
 	</mx:Canvas>

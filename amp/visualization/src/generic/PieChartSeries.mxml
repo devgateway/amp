@@ -232,6 +232,15 @@
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
 				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -286,6 +295,13 @@
 					"format" : "xml",
 					"donut": "true"
 				};
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){
@@ -295,6 +311,8 @@
 						"typeofaid" : "true"
 					};
 				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				if(itemId != null && itemId != "-1"){
 					params["itemId"] = itemId;
 				}
@@ -304,9 +322,12 @@
 			
 			protected function sliderYear_changeHandler(event:SliderEvent):void
 			{
+				var delayer:Delay = new Delay(captureSnapshot,2000,1);
+
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 				// TODO Auto-generated method stub
-				allYears.selected = false;
 				var params:Object = {};
 				params["year"] = sliderYear.value;
 				params["format"] = "xml";
@@ -316,30 +337,10 @@
 				if(idContainer == "AidType"){
 					params["typeofaid"] = "true";
 				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,2000,1);
-			}
-			
-			protected function updateAllYears():void
-			{
-				if(allYears.selected){
-					var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
-					sliderYear.visible = false;
-					var params:Object = {};
-					params["format"] = "xml";
-					//Handle special parameter cases
-					if(idContainer == "AidType"){
-						params["typeofaid"] = "true";
-					}
-					params["donut"] = "true";
-					service.send(params);
-					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
-				}
-				else
-				{
-					sliderYear.visible = true;
-					sliderYear_changeHandler(new SliderEvent(mx.events.SliderEvent.CHANGE));
-				}
 			}
 			
 			private function sizePanel(w:uint, h:uint):void {
@@ -427,7 +428,7 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="400"
+			   height="460"
 			   dragEnter="dragEnterHandler(event);" 
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -543,8 +544,7 @@
 		</axiis:DataCanvas>
 		
 		<mx:Label mouseMove="mouseOverHandler(event);" x="100" y="10" id="chartLabel" height="36" fontSize="12"/>
-		<mx:CheckBox x="10" y="10" id="allYears" label="All years" click="updateAllYears()" selected="true"></mx:CheckBox>
-		<mx:VSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" change="sliderYear_changeHandler(event)" width="17" x="45" y="35" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="false"/>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" allowThumbOverlap="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="410" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 	</mx:Canvas>
 	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
 		<mx:Label id="messageEmpty" fontFamily="Arial" fontWeight="bold" fontSize="14" color="black" text="No data for the selected year"/>

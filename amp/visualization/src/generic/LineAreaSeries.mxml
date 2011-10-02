@@ -61,6 +61,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.IndexChangedEvent;
 			import mx.events.MoveEvent;
+			import mx.events.SliderEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
@@ -312,6 +313,15 @@
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
 				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -360,17 +370,27 @@
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				
 				var params:Object = {};
-				params["format"] = "xml";
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				params["divide"] = divide;
 				params["linechart"] = "true";
 				if(idContainer == "AidType"){
 					params = {
-						"format" : "xml",
 						"typeofaid" : "true",
 						"divide": divide,
 						"linechart" : "true"
 					};
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[1];
 				}
 				if(itemId != null && itemId != "-1"){
 					params["itemId"] = itemId;
@@ -443,6 +463,35 @@
 				sizePanel(300, 200);
 			}
 
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
+				var params:Object = {};
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				params["divide"] = divide;
+				params["linechart"] = "true";
+				if(idContainer == "AidType"){
+					params = {
+						"typeofaid" : "true",
+						"divide": divide,
+						"linechart" : "true"
+					};
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[1];
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1);
+			}
+
 		]]>
 	</mx:Script>
 	
@@ -455,6 +504,8 @@
 		useThousandsSeparator="true"/>
 
 	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
@@ -510,7 +561,7 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="400"
+			   height="460"
 			   dragEnter="dragEnterHandler(event);" 
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -519,7 +570,7 @@
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-		<axiis:DataCanvas top="170"
+		<axiis:DataCanvas top="0"
 						  bottom="0"
 						  width="{this.width}"
 						  id="dc"
@@ -557,6 +608,7 @@
 			-->
 			<axis:VAxis 
 				id="vAxis"
+				y="{myLineGroup.y}"
 				verticalScale="{vScale}"
 				tickStroke="{axisStroke}"
 				width="{dc.width}"
@@ -583,7 +635,7 @@
 				width="{myLineGroup.width}"
 				dataProvider="{hScale.dataProvider}"
 				height="50"
-				y="{myLineGroup.height}"
+				y="{myLineGroup.height+myLineGroup.y}"
 				fontFamily="{fontFamily}"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
@@ -591,9 +643,9 @@
 			<!-- this is the actual x axis line -->
 			<degrafa:Line 
 				x="0"
-				x1="{myLineGroup.x+myLineGroup.width}"
-				y="{myLineGroup.height}"
-				y1="{myLineGroup.height}"
+				x1="{myLineGroup.x + myLineGroup.width}"
+				y="{myLineGroup.y + myLineGroup.height}"
+				y1="{myLineGroup.y + myLineGroup.height}"
 				stroke="{axisStroke}"/>
 		</axiis:backgroundGeometries>
 
@@ -644,9 +696,9 @@
 			-->
 			<groupings:LineSeriesGroup id="myLineGroup"
 				x="12"
-				y="0"
-				height="{dc.height}"
-				width="{dc.width}"
+				y="50"
+				height="{280}"
+				width="{dc.width-25}"
 				tension="{tension.value}"
 				markerColor="{areaPalette.currentColor}"		
 				dataFilterFunction="{filterRows}"
@@ -671,7 +723,7 @@
 				/>
 			<axiis:HBoxLayout id="legendLayout" 
 							  x="-40"
-							  y="{myLineGroup.height+30}"
+							  y="{myLineGroup.height+myLineGroup.y+35}"
 							  width="{mxc1.width}"
 							  height="50"
 							  dataProvider="{categories}"
@@ -702,6 +754,7 @@
 		</axiis:layouts>
 		
 	</axiis:DataCanvas>
+	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="410" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 
 	</mx:Canvas>

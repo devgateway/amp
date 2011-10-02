@@ -186,6 +186,7 @@ public class ShowDashboard extends Action {
 			filter.setEndYear(year);
 			filter.setEndYearQuickFilter(year);
 			filter.setEndYearFilter(year);
+			filter.setYearToCompare(year-1);
 		}
 		filter.setYears(new ArrayList<BeanWrapperImpl>());
 		long yearFrom = Long

@@ -793,12 +793,8 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
-        	Long startTime, endTime;
-            startTime = System.currentTimeMillis();
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            endTime = System.currentTimeMillis();
-            logger.info("Getting descendants:" + (endTime - startTime));
         }
 
         if (filter.getActivityId()!=null) {
@@ -848,14 +844,9 @@ public class DbUtil {
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
-        	Long startTime, endTime;
-            startTime = System.currentTimeMillis();
             fundingDets = query.list();
-            endTime = System.currentTimeMillis();
-            logger.info("Getting Funding:" + (endTime - startTime));
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
-            startTime = System.currentTimeMillis();
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
             /*Depending on what is selected in the filter
@@ -883,8 +874,6 @@ public class DbUtil {
                         total = cal.getTotPlannedComm();
                     }
             }
-            endTime = System.currentTimeMillis();
-            logger.info("Calculating Funding:" + (endTime - startTime));
 
         } catch (Exception e) {
             logger.error(e);
@@ -966,12 +955,8 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
-        	Long startTime, endTime;
-            startTime = System.currentTimeMillis();
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            endTime = System.currentTimeMillis();
-            logger.info("Getting descendants:" + (endTime - startTime));
         }
 
         if (filter.getActivityId()!=null) {
@@ -1067,9 +1052,6 @@ public class DbUtil {
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
             Date endDate, int transactionType,int adjustmentType, int decimalsToShow) throws DgException {
         
-    	Long startTime, endTime;
-        startTime = System.currentTimeMillis();
-    	
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
     	
     	DecimalWraper total = null;
@@ -1089,11 +1071,8 @@ public class DbUtil {
             query.setLong("transactionType", transactionType);
             query.setLong("adjustmentType",adjustmentType);
             fundingDets = query.list();
-            endTime = System.currentTimeMillis();
-            logger.info("Query:" + (endTime - startTime));
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
-            startTime = System.currentTimeMillis();
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
             HashMap<Long, String> hmName = new HashMap<Long, String>();
             Iterator it = fundingDets.iterator();
@@ -1154,10 +1133,6 @@ public class DbUtil {
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
                 map.put(aav, total.getValue().divide(divideByMillionDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
-            
-            endTime = System.currentTimeMillis();
-            logger.info("Calculation:" + (endTime - startTime));
-            
 
         } catch (Exception e) {
             logger.error(e);
@@ -1495,9 +1470,9 @@ public class DbUtil {
 		for(AmpSector as : allSectorList){
 			for(Long i : sectorIds){
 		    	if(!tempSectorIds.contains(i)) tempSectorIds.add(i);
-    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId() == i){
+    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i)){
     	    		tempSectorIds.add(as.getAmpSectorId());
-    			} else if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId() == i){
+    			} else if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i)){
     	    		tempSectorIds.add(as.getAmpSectorId());
     			}
     		}

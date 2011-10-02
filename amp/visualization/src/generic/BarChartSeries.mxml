@@ -53,6 +53,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.MoveEvent;
 			import mx.events.PropertyChangeEvent;
+			import mx.events.SliderEvent;
 			import mx.logging.Log;
 			import mx.managers.DragManager;
 			import mx.rpc.events.FaultEvent;
@@ -277,6 +278,16 @@
 				messageEmpty.text = trnMessageEmpty;
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
+
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 				
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -343,6 +354,15 @@
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+
 				var params:Object = {};
 				params["format"] = "xml";
 				params["divide"] = divide;
@@ -353,6 +373,8 @@
 						"divide": divide
 					};
 				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
 				service.send(params);
 //				start();
 			}
@@ -413,6 +435,30 @@
 				sizePanel(300, 200);
 			}
 
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
+				var params:Object = {};
+				params["format"] = "xml";
+				params["divide"] = divide;
+				if(idContainer == "AidType"){
+					params = {
+						"format" : "xml",
+						"typeofaid" : "true",
+						"divide": divide
+					};
+				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1);
+			}
+
 		]]>
 	</mx:Script>
 
@@ -427,6 +473,8 @@
 	
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>
 	<mx:Number id="categoriesAmount">10</mx:Number>
 	<mx:String id="verticalField"/>
@@ -455,7 +503,7 @@
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634" 
-			   height="400"
+			   height="460"
 			   dragEnter="dragEnterHandler(event);" 
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -464,13 +512,12 @@
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
-	<axiis:DataCanvas top="20"
-		bottom="50"
+	<axiis:DataCanvas top="50"
+		bottom="80"
 		width="{this.width*.9}"
 		id="dc"
 		left="40"
 		right="80"
-		verticalCenter="0"
 		horizontalCenter="0" 
 		showDataTips="true"
 		strokes="{strokes}"
@@ -691,7 +738,9 @@
 			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
+	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="410" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
+	
 	</mx:Canvas>
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 

@@ -159,8 +159,8 @@ function addTeamMember(id) {
 							<tr>
 								<td valign="top">
 									<br />
-                                	<div style="background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;border-width: 0 1px 1px;display: block;padding: 10px;">
-									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%">	
+                                	<div style="background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border: 1px solid #D0D0D0;display: block;padding: 10px;">
+									<table align="center" cellpadding="0" cellspacing="0" width="100%">	
 										<tr>
 											<td valign="top" align="center">
 												<table border="0" cellPadding=3 cellspacing="0" width="100%">
@@ -236,17 +236,17 @@ function addTeamMember(id) {
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
-																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
+																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
 																		<b>
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside"style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;">
 																		<b>
 																			<digi:trn key="aim:role">Role</digi:trn>
 																		</b>
@@ -256,7 +256,7 @@ function addTeamMember(id) {
 																<c:if test="${mem.teamHead == false}">
 																<bean:define id="myMemberRole" type="java.lang.String">${mem.roleName}</bean:define>
 																<tr>
-																	<td width="50%" style="color:black;border-bottom:1px solid #cccccc;">
+																	<td width="50%" style="color:black;border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
 																			<c:out value="${mem.memberId}"/>
@@ -270,10 +270,10 @@ function addTeamMember(id) {
 <!--																		</digi:link>-->
 																		<a href="javascript:showUserProfile(${mem.memberId})" title="${translation}">${mem.memberName}</a>
 																	</td>
-																	<td  style="color:black;border-bottom:1px solid #cccccc;">
+																	<td  style="color:black;border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
 																		<c:out value="${mem.email}"/>
 																	</td>
-																	<td  style="color:black;border-bottom:1px solid #cccccc;">
+																	<td  style="color:black;border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;">
 																		<digi:trn key="<%=org.digijava.module.aim.dbentity.AmpTeamMemberRoles.getAmpTeamMemberKey( myMemberRole )%>">
 																			${mem.roleName}
 																		</digi:trn>

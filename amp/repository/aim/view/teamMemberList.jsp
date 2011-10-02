@@ -241,7 +241,7 @@ function addTeamMember(id) {
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;color:#767676;">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>

@@ -126,7 +126,13 @@ function addTeamMember(id) {
 <jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td width="100%">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780 style=" background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #D0D0D0;
+    border-left: 1px solid #D0D0D0;
+    border-right: 1px solid #D0D0D0;
+    border-width: 0 1px 1px;
+    display: block;
+    padding: 10px;">
 	<tr>
 		<td width=14>&nbsp;</td>
 		<td align=left valign="top" width=750>
@@ -236,17 +242,17 @@ function addTeamMember(id) {
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
-																	<td bgcolor="#999999" style="color:black">
+																	<td class="inside" style="color:black">
 																		<b>
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td bgcolor="#999999" style="color:black">
+																	<td class="inside" style="color:black">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>
 																	</td>
-																	<td bgcolor="#999999" style="color:black">
+																	<td class="inside" style="color:black">
 																		<b>
 																			<digi:trn key="aim:role">Role</digi:trn>
 																		</b>

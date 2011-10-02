@@ -323,7 +323,7 @@ table.report_indicator{margin-bottom:15px}
 .required_fields {font-size:11px;}
 
 .highlight {font-size:12px; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:10px;}
-.crumb {font-size:12px;}
+.crumb {font-size:12px;display:none;}
 .wht {background-color:#FFFFFF; border:1px solid #CCCCCC; padding:10px; font-size:12px; margin:10px;} 
 .dashboard_inner{border:1px solid #dadad6;border-bottom:2px solid #c2c1ba;width: 97%; margin-top: 30px; padding: 20px 10px 10px;}
 .dashboard_tab_opt{margin:10px 0}

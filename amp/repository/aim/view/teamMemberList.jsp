@@ -232,21 +232,21 @@ function addTeamMember(id) {
 													</tr>
 
 													<tr>
-														<td align="center">
+														<td align="center"  style="color:black;border:1px solid #cccccc;">
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
-																	<td class="inside" style="color:black"  background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
 																		<b>
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black  background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black"  background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+																	<td class="inside"style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;">
 																		<b>
 																			<digi:trn key="aim:role">Role</digi:trn>
 																		</b>
@@ -256,7 +256,7 @@ function addTeamMember(id) {
 																<c:if test="${mem.teamHead == false}">
 																<bean:define id="myMemberRole" type="java.lang.String">${mem.roleName}</bean:define>
 																<tr>
-																	<td width="50%">
+																	<td width="50%" style="color:black;border-bottom:1px solid #cccccc;">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
 																			<c:out value="${mem.memberId}"/>
@@ -270,10 +270,10 @@ function addTeamMember(id) {
 <!--																		</digi:link>-->
 																		<a href="javascript:showUserProfile(${mem.memberId})" title="${translation}">${mem.memberName}</a>
 																	</td>
-																	<td>
+																	<td  style="color:black;border-bottom:1px solid #cccccc;">
 																		<c:out value="${mem.email}"/>
 																	</td>
-																	<td>
+																	<td  style="color:black;border-bottom:1px solid #cccccc;">
 																		<digi:trn key="<%=org.digijava.module.aim.dbentity.AmpTeamMemberRoles.getAmpTeamMemberKey( myMemberRole )%>">
 																			${mem.roleName}
 																		</digi:trn>

@@ -187,7 +187,7 @@ function addTeamMember(id) {
 													<tr>
 														<td>
 															<table width="100%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
-															bgcolor="#fff">
+															bgcolor="#fff" style="background:#f2f2f2;border-left: 1px solid #D0D0D0;padding:10px;" >
 																<tr>	
 																	<td  width="100">
 																		<b>
@@ -199,7 +199,7 @@ function addTeamMember(id) {
 																	<td  width="100">
 																		<c:out value="${aimTeamMemberForm.teamName}"/>
 																	</td>
-																	<td  width="100">
+																	<td  width="200">
 																		<b>
 																		<digi:trn key="aim:workspaceManager">
 																			Workspace Manager
@@ -236,17 +236,17 @@ function addTeamMember(id) {
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
-																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
+																	<td class="inside" style="color:black; background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:teamMemberName">Name</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:userId">User Id</digi:trn>
 																		</b>
 																	</td>
-																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;">
+																	<td class="inside" style="color:black;background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x; border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;color:#767676;">
 																		<b>
 																			<digi:trn key="aim:role">Role</digi:trn>
 																		</b>
@@ -273,7 +273,7 @@ function addTeamMember(id) {
 																	<td  style="color:black;border-bottom:1px solid #cccccc;border-left: 1px solid #D0D0D0;">
 																		<c:out value="${mem.email}"/>
 																	</td>
-																	<td  style="color:black;border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;">
+																	<td  style="color:black;border-bottom:1px solid #cccccc;border-right: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;">
 																		<digi:trn key="<%=org.digijava.module.aim.dbentity.AmpTeamMemberRoles.getAmpTeamMemberKey( myMemberRole )%>">
 																			${mem.roleName}
 																		</digi:trn>

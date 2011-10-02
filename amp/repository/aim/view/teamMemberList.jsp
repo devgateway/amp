@@ -186,8 +186,8 @@ function addTeamMember(id) {
 
 													<tr>
 														<td>
-															<table width="100%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
-															bgcolor="#fff" style="background:#f2f2f2;border-left: 1px solid #D0D0D0;padding:10px;" >
+															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
+															bgcolor="#fff" style="background:#f2f2f2;border: 1px solid #D0D0D0;padding:10px;" >
 																<tr>	
 																	<td  width="100">
 																		<b>

@@ -15,7 +15,7 @@
 <style>
 
 .tableEven {
-	background-color:#dbe5f1;
+	background-color:#FFFFFF;
 	font-size:8pt;
 	padding:2px;
 }
@@ -121,12 +121,12 @@ function addTeamMember(id) {
 <html:hidden property="action" />
 --%>
 
-<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" style="background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;border-width: 0 1px 1px;display: block;padding: 10px;">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" >
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td width="100%">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" style="width:780px;background: none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;border-width: 0 1px 1px;display: block;padding: 10px;" >
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" style="width:780px;" >
 	<tr>
 		<td width=14>&nbsp;</td>
 		<td align=left valign="top" width=750>
@@ -159,7 +159,7 @@ function addTeamMember(id) {
 							<tr>
 								<td valign="top">
 									<br />
-                                	<div class="contentbox_border" style="padding: 20px 0px 20px 0px;">
+                                	<div style="background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border-left: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;border-width: 0 1px 1px;display: block;padding: 10px;">
 									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%">	
 										<tr>
 											<td valign="top" align="center">
@@ -187,7 +187,7 @@ function addTeamMember(id) {
 													<tr>
 														<td>
 															<table width="100%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
-															bgcolor="#dddddd">
+															bgcolor="#fff">
 																<tr>	
 																	<td bgcolor="#f4f4f2" width="100">
 																		<b>

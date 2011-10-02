@@ -189,17 +189,17 @@ function addTeamMember(id) {
 															<table width="100%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
 															bgcolor="#fff">
 																<tr>	
-																	<td bgcolor="#f4f4f2" width="100">
+																	<td  width="100">
 																		<b>
                                                                             <digi:trn key="aim:teamname">
                                                                                 Team Name  
                                                                             </digi:trn>
                                                                         </b>
 																	</td>
-																	<td bgcolor="#f4f4f2" width="100">
+																	<td  width="100">
 																		<c:out value="${aimTeamMemberForm.teamName}"/>
 																	</td>
-																	<td bgcolor="#f4f4f2" width="100">
+																	<td  width="100">
 																		<b>
 																		<digi:trn key="aim:workspaceManager">
 																			Workspace Manager
@@ -208,7 +208,7 @@ function addTeamMember(id) {
 																	</td>
 																	<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}" >
 																		<c:if test="${mem.teamHead == true}">
-																		<td bgcolor="#f4f4f2">
+																		<td >
 																			<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams1}" property="id">
 																				<c:out value="${mem.memberId}"/>
@@ -221,7 +221,7 @@ function addTeamMember(id) {
 																				<c:out value="${mem.memberName}"/>
 																			
 																		</td>
-																		<td bgcolor="#f4f4f2">
+																		<td >
 																			<c:out value="${mem.email}"/>
 																		</td>																		
 																		</c:if>
@@ -232,7 +232,7 @@ function addTeamMember(id) {
 													</tr>
 
 													<tr>
-														<td align="center"  style="color:black;border:1px solid #cccccc;">
+														<td align="center"  >
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>

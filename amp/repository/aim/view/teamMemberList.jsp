@@ -185,7 +185,7 @@ function addTeamMember(id) {
 													<logic:notEmpty name="aimTeamMemberForm" property="teamMembers">
 
 													<tr>
-														<td>
+														<td style="padding-left:10px;">
 															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
 															bgcolor="#fff" style="background:#f2f2f2;border: 1px solid #D0D0D0;padding:10px;" >
 																<tr>	

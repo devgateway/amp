@@ -217,9 +217,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
 				logger.info("Failed to apply patch " + ampPatch.getPatchId());
 				ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
 				iterator.remove();
-			} else
+			} else {	
 				logger.debug("Will not apply " + ampPatch.getPatchId()
 						+ " due to conditions not met.");
+				ampPatch.setState(XmlPatcherConstants.PatchStates.OPEN);
+			}
 
 			log.setElapsed(System.currentTimeMillis() - timeStart);
 			if(success || log.getError()) XmlPatcherUtil.addLogToPatch(ampPatch, log);

@@ -357,10 +357,10 @@ window.onload=init;
 <!--			<div class="dhx_cal_date" style=""></div>-->
 <!--			<div class="dhx_cal_next_button" style="">&nbsp;</div>-->
 <!--			<div class="dhx_cal_today_button" style=""></div>-->	
-	 		<div class="dhx_cal_tab" name="year_tab" style="left:0px;"></div>  	 
-			<div class="dhx_cal_tab" name="month_tab" style="left:60px;"></div>
-			<div class="dhx_cal_tab" name="week_tab" style="left:136px;"></div>
-			<div class="dhx_cal_tab" name="day_tab" style="left:203px;"></div>
+	 		<div class="dhx_cal_tab" name="year_tab"></div>  	 
+			<div class="dhx_cal_tab" name="month_tab"></div>
+			<div class="dhx_cal_tab" name="week_tab"></div>
+			<div class="dhx_cal_tab" name="day_tab"></div>
 			
 		</div>
 		<div id="newContainer" style="width: 100%; height: 110%; position: relative; top: 15px; border: 1px #CCCCCC solid;">
@@ -392,7 +392,7 @@ window.onload=init;
 		<feature:display name="Filter" module="Calendar">
 			<div style="padding-top:30px;width:250px;height:28px;white-space: nowrap;">
 				<field:display name="Run Filter Button" feature="Filter">
-					<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
+					<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onClick="changeDonorsAndEventTypesState();"/>
 				</field:display>
 		    	&nbsp;
 		    	<field:display name="Reset Filter Button" feature="Filter">

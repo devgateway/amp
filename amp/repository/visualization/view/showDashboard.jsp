@@ -1010,6 +1010,7 @@ function toggleSettings(){
 
 <!-- MAIN CONTENT PART START -->
 
+<html:hidden property="filter.currencyCode" styleId="currencyCode" />
 <html:hidden property="filter.topLists" styleId="topLists" />
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.startYear" styleId="startYear"/>
@@ -2593,6 +2594,7 @@ function refreshBoxes(o){
 				var div = document.getElementById("divTotalComms");
 				div.innerHTML = inner;
 				inner = "<i><font size='2' color='red'><digi:trn>All amounts in millions</digi:trn> - " + child.curr + "</font></i>";
+				document.getElementById("currencyCode").value = child.curr;
 				var div = document.getElementById("currencyInfo");
 				div.innerHTML = inner;
 				
@@ -3097,11 +3099,13 @@ function changeChart(e, chartType, container, useGeneric){
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
 	var groupSeparator = document.getElementById("groupSeparator").value;
 	var decimalsToShow = document.getElementById("decimalsToShow").value;
+	var currCode = document.getElementById("currencyCode").value;
 	
 	var flashvars = { 
 			decimalSeparator: decimalSeparator, 
 			groupSeparator: groupSeparator,
 			decimalsToShow: decimalsToShow,
+			currCode: currCode,
 			palette: palette, 
 			id: container,
 			start: (startMovie ? "true" : "false")

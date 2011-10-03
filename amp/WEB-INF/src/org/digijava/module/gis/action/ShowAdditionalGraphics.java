@@ -79,7 +79,7 @@ public class ShowAdditionalGraphics extends Action {
             g2d.dispose();
             ImageIO.write(graph, "png", response.getOutputStream());
             graph.flush();
-
+            response.getOutputStream().close();
 
         }
 

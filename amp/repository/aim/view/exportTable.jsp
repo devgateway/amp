@@ -60,17 +60,17 @@
 </c:set>
 <form action="/aim/exportAdminTable.do" method="post" name="exportTableForm" >
     <input type="hidden" name="data" class="reportData"/>
-    <div class="toolbar" align="center">
-        <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+    <div class="toolbar" align="center" style="background:#f2f2f2;">
+        <table border="0" align="center">
             <tr>
                 <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
                     <a target="_blank" onclick="exportXSL(); return false;">
-                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="${translationxls}" />
+                        <digi:img width="17"  hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="${translationxls}" />
                     </a>
                 </td>
 		<td noWrap align=left valign="middle">
                     <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="${translationPrinter}"/>
+                        <digi:img width="17"  hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="${translationPrinter}"/>
                     </digi:link>
                 </td>
             </tr>

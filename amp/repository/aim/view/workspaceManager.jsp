@@ -1110,7 +1110,7 @@
                     <td width="70%" style="padding-top:15px;" align=center>
                         <div class='yui-skin-sam'>
                             <div id="dynamicdata" class="report"></div>
-                            <div id="dt-pag-nav"></div>
+                            <div id="dt-pag-nav" style="text-align: left"></div>
                             <div id="errors"></div>
                             <div id="tooltipsCtx"></div>
                         </div>

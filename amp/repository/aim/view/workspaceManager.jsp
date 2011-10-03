@@ -19,13 +19,13 @@
         border-width: medium 1px 1px medium;
     }
 
-    .yui-skin-sam .yui-dt thead th {
-        border-color: #FFF;
-        background-color: #C7D4DB;
-        color: #000;
-        height: 30px;
-        text-align: center;
-    }
+  .yui-skin-sam .yui-dt  thead th {
+	border-color: #FFF;
+	background: #C7D4DB;
+	color: #000;
+	height: 30px;
+	text-align: center;
+}
 
     .yui-skin-sam .yui-dt th .yui-dt-liner {
         font-size: 12px;
@@ -297,21 +297,34 @@
                 }
             }
             // Create the Paginator 
+            
             var myPaginator = new YAHOO.widget.Paginator({ 
-                rowsPerPage:10,
-                containers : ["dt-pag-nav"], 
-                template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
-                pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>", 
-                rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-                firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
-                previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
-                firstPageLinkClass : "yui-pg-first l_sm",
-                lastPageLinkClass: "yui-pg-last l_sm",
-                nextPageLinkClass: "yui-pg-next l_sm",
-                previousPageLinkClass: "yui-pg-previous l_sm",
-                rowsPerPageDropdownClass:"l_sm",
-                nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-                lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>'
+            	rowsPerPage:10,
+	        	//totalRecords:document.getElementById("totalResults").value,
+	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
+	        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
+	        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>", 
+	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+	        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
+	        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+	        	firstPageLinkClass : "yui-pg-first l_sm",
+	        	lastPageLinkClass: "yui-pg-last l_sm",
+	        	nextPageLinkClass: "yui-pg-next l_sm",
+	        	previousPageLinkClass: "yui-pg-previous l_sm",
+	        	rowsPerPageDropdownClass:"l_sm",
+	        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+	        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
+	        	 // use custom page link labels
+	            pageLabelBuilder: function (page,paginator) {
+	                var curr = paginator.getCurrentPage();
+	                if(curr==page){
+	                	return "<span class='current-page'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</span>|";
+	                }
+	                else{
+	                	return page;
+	                }
+	                
+	            }
             });   
             var myConfigs = {
                 initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data

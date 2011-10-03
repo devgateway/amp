@@ -224,28 +224,28 @@ function update(action) {
   
 function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
-		$("div[id^='management_']").hide();
-		$("div[id^='team_']").show('fast');
+		$("tr[id^='management_']").hide();
+		$("tr[id^='team_']").show('fast');
 		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
 		if(document.aimUpdateWorkspaceForm.computation.checked == true)
-			$("div[id^='computation_']").show('fast');
-		else $("div[id^='computation_']").hide();
+			$("tr[id^='computation_']").show('fast');
+		else $("tr[id^='computation_']").hide();
 	}
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
 		//document.aimUpdateWorkspaceForm.computation.checked = false;
-			$("div[id^='team_']").hide();
-			$("div[id^='management_']").show('fast');
-			$("div[id^='computation_']").hide()
+			$("tr[id^='team_']").hide();
+			$("tr[id^='management_']").show('fast');
+			$("tr[id^='computation_']").hide()
 	}
 
 }
  
 function   computationChange(){
 	if(document.aimUpdateWorkspaceForm.computation.checked == true)
-		$("div[id^='computation_']").show('fast');
-	else $("div[id^='computation_']").hide();
+		$("tr[id^='computation_']").show('fast');
+	else $("tr[id^='computation_']").hide();
 }
   
 function relTeam() { 
@@ -556,9 +556,8 @@ function cancel()
 															
 											
 													
-													<tr style="background: #FFFFFF">
+													<tr id="management_workspace" style="display: none;background: #FFFFFF">
 														<td colspan="4">
-															<div id="management_workspace" style="display: none;">
 																	<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																			<table>
@@ -599,14 +598,13 @@ function cancel()
 																			</table>
 																		
 																	</c:if>
-															</div>
 														</td>
 													</tr>
 													
-													
-													<tr style="background: #FFFFFF">
+
+													<tr id="team_workspace" style="display: none;background: #FFFFFF">
 														<td colspan="4">
-															<div id="team_workspace" style="display: none;">
+															
 															<table>
 																<tr>
 																	<td style="font-size:12px; font-weight:bold;">
@@ -614,13 +612,12 @@ function cancel()
 																	</td>
 																</tr>
 															</table>
-															</div>
+															
 														</td>
 													</tr>
 													
-													<tr style="background: #FFFFFF">
+													<tr  id="computation_addon" style="display: none;background: #FFFFFF">
 														<td colspan="4">
-															<div id="computation_addon" style="display: none;">
 																<table>
 																	<tr>
 																		<td>
@@ -674,7 +671,6 @@ function cancel()
 																		</table>
 																	</c:if>
 																
-															</div>
 														</td>
 													</tr>
 													

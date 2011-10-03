@@ -398,6 +398,7 @@ function resetToDefaults(){
 	unCheckOptions("sub_sector_check");
 	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
+	document.getElementById("topLists_dropdown").selectedIndex = 0;
 	
 	document.getElementById("commitments_visible").checked = true;
 	document.getElementById("disbursements_visible").checked = true;
@@ -606,6 +607,15 @@ function toggleSettings(){
 				    	<td>
 				    		 <html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+	                        </html:select>
+						</td>
+						<td><b><digi:trn>Show in top ranks</digi:trn>:</b></td>
+					    <td>
+							<html:select property="filter.topLists" styleId="topLists_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+	                            <html:option value="5">5</html:option>
+	                            <html:option value="10">10</html:option>
+	                            <html:option value="20">20</html:option>
+	                            <html:option value="50">50</html:option>
 	                        </html:select>
 						</td>
 				 	</tr>
@@ -1000,6 +1010,7 @@ function toggleSettings(){
 
 <!-- MAIN CONTENT PART START -->
 
+<html:hidden property="filter.topLists" styleId="topLists" />
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.startYear" styleId="startYear"/>
 <html:hidden property="filter.endYear" styleId="endYear" />
@@ -2211,6 +2222,7 @@ var callbackUpdateLoadingPanel = {
 function applyFilterPopin(e){
 	
 //var allGraphs = document.getElementsByName("flashContent");
+	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
@@ -2368,7 +2380,7 @@ function refreshBoxes(o){
 	var trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
 	var trnSubRegionProfile="<digi:trn jsFriendly='true'>Zone breakdown</digi:trn>";
-	var trnShowTop5="<digi:trn jsFriendly='true'>Show Top 5</digi:trn>"; 
+	var trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + document.getElementById("topLists").value; 
 	var trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
 	var trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	var trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
@@ -2379,11 +2391,11 @@ function refreshBoxes(o){
 		var child = results.children[j];
 		switch(child.type){
 			case "ProjectsList":
-				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a> <br />";
+				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
 					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
 				}
-				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a>";
+				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 				var div = document.getElementById("divFullProjects");
 				div.innerHTML = inner;
 				inner = "";
@@ -2397,11 +2409,11 @@ function refreshBoxes(o){
 				break;
 			case "DonorsList":
 				if (dashboardType!=1) {
-					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
+					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a>";
+					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullDonors");
 					div.innerHTML = inner;
 					inner = "";
@@ -2415,11 +2427,11 @@ function refreshBoxes(o){
 				break;
 			case "SectorsList":
 				if (dashboardType!=3) {
-					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
+					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a>";
+					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullSectors");
 					div.innerHTML = inner;
 					inner = "";
@@ -2433,11 +2445,11 @@ function refreshBoxes(o){
 				break;
 			case "RegionsList":
 				if (dashboardType!=2) {
-					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a> <br />";
+					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a>";
+					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullRegions");
 					div.innerHTML = inner;
 					inner = "";

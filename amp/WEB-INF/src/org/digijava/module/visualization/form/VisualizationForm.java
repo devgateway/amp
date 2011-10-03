@@ -148,11 +148,6 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullDonors(Map<AmpOrganisation, BigDecimal> fullDonors) {
 			this.fullDonors = fullDonors;
-			if (fullDonors!=null) {
-				this.topDonors = getTop(fullDonors);
-			} else {
-				this.topDonors = null;
-			}
 		}
 		public Map<AmpActivityVersion, BigDecimal> getTopProjects() {
 			return topProjects;
@@ -165,11 +160,6 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullProjects(Map<AmpActivityVersion, BigDecimal> fullProjects) {
 			this.fullProjects = fullProjects;
-			if (fullProjects!=null) {
-				this.topProjects = getTop(fullProjects);
-			} else {
-				this.topProjects = null;
-			}
 		}
 		public Map<AmpCategoryValueLocations, BigDecimal> getTopRegions() {
 			return topRegions;
@@ -183,11 +173,6 @@ public class VisualizationForm extends ActionForm {
 		public void setFullRegions(
 				Map<AmpCategoryValueLocations, BigDecimal> fullRegions) {
 			this.fullRegions = fullRegions;
-			if (fullRegions!=null) {
-				this.topRegions = getTop(fullRegions);
-			} else {
-				this.topRegions = null;
-			}
 		}
 		public Map<AmpSector, BigDecimal> getTopSectors() {
 			return topSectors;
@@ -200,27 +185,6 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullSectors(Map<AmpSector, BigDecimal> fullSectors) {
 			this.fullSectors = fullSectors;
-			if (fullSectors!=null) {
-				this.topSectors = getTop(fullSectors);
-			} else {
-				this.topSectors = null;
-			}
-		}
-		
-		private Map getTop (Map map){
-			int top = Constants.GlobalSettings.TOP_LIMIT;
-		    List list = new LinkedList(map.entrySet());
-			Map result = new LinkedHashMap();
-		    int counter = 0;
-		    for (Iterator it = list.iterator(); it.hasNext();) {
-		        Map.Entry entry = (Map.Entry)it.next();
-		        result.put(entry.getKey(), entry.getValue());
-		        counter++;
-		        if (counter>=top) {
-					break;
-				}
-		    }
-		    return result;
 		}
 	}
 

@@ -232,6 +232,21 @@ public class DashboardUtil {
 	    return result;
 	} 
 	
+	private static Map getTop (Map map, int top){
+		List list = new LinkedList(map.entrySet());
+		Map result = new LinkedHashMap();
+	    int counter = 0;
+	    for (Iterator it = list.iterator(); it.hasNext();) {
+	        Map.Entry entry = (Map.Entry)it.next();
+	        result.put(entry.getKey(), entry.getValue());
+	        counter++;
+	        if (counter>=top) {
+				break;
+			}
+	    }
+	    return result;
+	}
+	
 	public static void getSummaryAndRankInformation (VisualizationForm form, HttpServletRequest request) throws DgException{
 		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7;
 		trnStep1 = trnStep2 = trnStep3 = trnStep4 = trnStep5 = trnStep6 = trnStep7 = "";
@@ -291,13 +306,17 @@ public class DashboardUtil {
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
-				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
+		        form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
+		        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null));
+				form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+				form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
 				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
+				form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

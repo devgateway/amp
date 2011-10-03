@@ -87,7 +87,16 @@ public class DashboardFilter {
     //private List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorWithSubSectors;
     private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
     private ArrayList<AmpSector> allSectorList;
+    private int topLists = 5;
     
+	public int getTopLists() {
+		return topLists;
+	}
+
+	public void setTopLists(int topLists) {
+		this.topLists = topLists;
+	}
+
 	public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
     	

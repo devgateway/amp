@@ -261,7 +261,7 @@ html.chrome #show_login_pop_box{display:none; margin:37px 0px 0px 55px;width:240
 
 .main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
 .main_side_1 {background-color:#EFEFEF; border:1px solid #BDBCB5;}
-.main_side_cont {padding:10px; font-size:12px; line-height:22px;}
+.main_side_cont {padding:10px; font-size:12px; line-height:22px;width:780px;}
 
 
 /* PREVIEW */

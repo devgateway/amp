@@ -19,6 +19,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 	z-index:0;
 	width:750px;
 	color:#2F3A48;
+	position:absolute;
 }
 .dhx_cal_navline div{ 
 	top:1px; 

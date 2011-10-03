@@ -735,9 +735,9 @@ function removeGuest(obj) {
 			           </td>	
                     </tr>
              		<tr>
-			            <td style="font-family: Tahoma;font-size: 12px;">                
+			            <td style="font-family: Arial;font-size: 12px;">                
 			                <div style="background-color: #ffffff; padding: 20px; background-color:#F8F8F8;">
-			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
+			                	<span style="font-family: Arial;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table border="0" align="center" cellpadding="3" cellspacing="3" class="t_mid">
@@ -791,7 +791,7 @@ function removeGuest(obj) {
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">			                                                  </a>			                                                </td>
 			                                                <td>&nbsp;&nbsp;</td>
-			                                                <td  style="font-family: Tahoma;font-size: 11px">
+			                                                <td  style="font-family: Arial;font-size: 11px">
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
@@ -803,7 +803,7 @@ function removeGuest(obj) {
 				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
 				                                                </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-			                                                <td  style="font-family: Tahoma;font-size: 11px">
+			                                                <td  style="font-family: Arial;font-size: 11px">
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
@@ -905,7 +905,7 @@ function removeGuest(obj) {
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">			                                                  </a>			                                                </td>
 			                                                <td>
 &nbsp;&nbsp;			                                                </td>
-			                                                <td  style="font-family: Tahoma;font-size: 11px">
+			                                                <td  style="font-family: Arial;font-size: 11px">
 			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}">
@@ -920,7 +920,7 @@ function removeGuest(obj) {
 			                                                  }
 			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-			                                                <td  style="font-family: Tahoma;font-size: 11px">
+			                                                <td  style="font-family: Arial;font-size: 11px">
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
@@ -1012,7 +1012,7 @@ function removeGuest(obj) {
 											<div style="margin-top:7px;"><html:select multiple="multiple" property="selOrganizations" size="4" style="width: 300px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
+															<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
 														</logic:iterate>
 													</logic:notEmpty>
 				                                 </html:select><div style="float:right;"><table border="0" cellPadding="1" cellSpacing="1">
@@ -1148,9 +1148,9 @@ function removeGuest(obj) {
 			                                          </select>
 			                                        </td>
 			                                        <td colspan="3" style="text-align: center;">
-					                                	<input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:110px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+					                                	<input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:110px;font-family:Arial;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
 					                                  	<br><br>
-					                       			  	<input type="button" class="buttonx" style="width:110px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
+					                       			  	<input type="button" class="buttonx" style="width:110px;font-family:Arial;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
 			                                        </td>
 			                                        <td>
 			                                        	<table width="100%" height="100%">

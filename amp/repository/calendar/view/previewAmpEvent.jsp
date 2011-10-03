@@ -110,7 +110,7 @@ function valid(value){
 	</tr>
 	<tr>				
         <td align="center" nowrap="nowrap" valign="top">
-        	<table class="contentbox_border" width="100%" cellpadding="1" cellspacing="1">
+        	<table style="border: 1px solid #CCCCCC;background:#fff;" width="100%" cellpadding="1" cellspacing="1">
                 <tr>
                 	<td align="center" style="padding: 0px 3px 0px 3px;">
                 		<table width="100%">
@@ -131,28 +131,28 @@ function valid(value){
                 <!-- calendar event always has a title -->
                 <logic:empty name="calendarEventForm" property="eventTitle">
                 	<tr style="height: 50px;">
-                		<td style="text-align: center;font-family: Tahoma;font-size: 15px;font-weight:bold;color: grey;background-color: #F5F5F5;">
+                		<td style="text-align: center;font-family: Arial;font-size: 15px;font-weight:bold;color: grey;background-color: #F5F5F5;">
                 			<digi:trn>The Event Doesn't Exist Any More </digi:trn>
                 		</td>
                 	</tr>
                 </logic:empty>
 				<logic:notEmpty name="calendarEventForm" property="eventTitle">
 					<tr>
-				      <td style="font-family: Tahoma; font-size: 12px;">        
-				        <div style="padding: 20px; background-color: #F5F5F5;">
+				      <td style="font-family: Arial; font-size: 12px;">        
+				        <div style="padding: 20px;">
 				          <table>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>:
 				              </td>
-				              <td style="font-family: Tahoma;font-size: 12px;">
+				              <td style="font-family: Arial;font-size: 11px;">
 				                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
 				                ${calendarEventForm.eventTitle}
 				              </td>
 				            </tr>
 				           <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 				                <digi:trn key="calendar:Description">Description</digi:trn>:
 				              </td>
 				              <td>
@@ -161,10 +161,10 @@ function valid(value){
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 				                <digi:trn key="calendar:cType">Calendar type</digi:trn>:
 				              </td>
-				              <td style="font-family: Tahoma;font-size: 12px;">
+				              <td style="font-family: Arial;font-size: 11px;">
 				                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
 				                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 				                        Gregorian                     
@@ -180,10 +180,10 @@ function valid(value){
 				             <tr height="3px"><td colspan="2"></td></tr>
 				            <feature:display name="Event Type" module="Calendar">
 				            	<tr>
-					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
+					              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="calendar:eventsType">Event type</digi:trn>:
 					              </td>
-					              <td style="font-family: Tahoma;font-size: 12px;">
+					              <td style="font-family: Arial;font-size: 11px;">
 					                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
 					                 <digi:trn>${calendarEventForm.selectedEventTypeName}</digi:trn> 
 					              </td>
@@ -192,22 +192,22 @@ function valid(value){
 				            </feature:display>			            
 				            <feature:display name="Donors" module="Calendar">
 				            	<tr>
-					              <td style="text-align: right;font-family: Tahoma;font-size: 12px; font-weight:bold;"nowrap="nowrap">
+					              <td style="text-align: right;font-family: Arial;font-size: 12px; font-weight:bold;"nowrap="nowrap">
 					                <digi:trn key="cal:organizations">Organizations</digi:trn>:
 					              </td>
 					              <td>
 					                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
-					                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" style="font-family: Tahoma;font-size:11px;"/>
+					                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" style="font-family: Arial;font-size:11px;"/>
 					                </html:select>
 					              </td>
 					            </tr>
 					            <tr height="3px"><td colspan="2"></td></tr>
 				            </feature:display>			            
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 				                <digi:trn key="calendar:StDate">Start date</digi:trn>:
 				              </td>
-				              <td style="font-family: Tahoma;font-size: 12px;">
+				              <td style="font-family: Arial;font-size: 11px;">
 				                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
 				                <html:hidden name="calendarEventForm" property="selectedStartTime" value="${calendarEventForm.selectedStartTime}"/>
 				                ${calendarEventForm.selectedStartDate}&nbsp;${calendarEventForm.selectedStartTime}
@@ -215,10 +215,10 @@ function valid(value){
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 				                <digi:trn key="calendar:EndDate">End Date</digi:trn>:
 				              </td>
-				              <td style="font-family: Tahoma;font-size: 12px;">
+				              <td style="font-family: Arial;font-size: 11px;">
 				                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
 				                <html:hidden name="calendarEventForm" property="selectedEndTime" value="${calendarEventForm.selectedEndTime}"/>
 				                ${calendarEventForm.selectedEndDate}&nbsp;${calendarEventForm.selectedEndTime}
@@ -226,23 +226,23 @@ function valid(value){
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>:
 				              </td>
 				              <td>
 				                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
 				                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-				                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" style="font-family: Tahoma;font-size:11px;"/>
+				                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" style="font-family: Arial;font-size:11px;"/>
 				                  </c:if>
 				                </html:select>
 				              </td>
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
 				            <tr>
-				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 				                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>:
 				              </td>
-				              <td style="font-family: Tahoma;font-size: 12px;">
+				              <td style="font-family: Arial;font-size: 11px;">
 				                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
 				                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
 				                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
@@ -251,10 +251,10 @@ function valid(value){
 				            <c:if test="${not empty calendarEventForm.typeofOccurrence}">
 					            <tr height="3px"><td colspan="2"></td></tr>
 					            <tr>
-					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 					                <digi:trn>Recurring Event</digi:trn>:
 					              </td>
-					              <td style="font-family: Tahoma;font-size: 12px;">
+					              <td style="font-family: Arial;font-size: 12px;">
 					         		<html:hidden name="calendarEventForm" property="typeofOccurrence" value="${calendarEventForm.typeofOccurrence}"/>
 									<html:hidden name="calendarEventForm" property="recurrPeriod" value="${calendarEventForm.recurrPeriod}"/>
 									<html:hidden name="calendarEventForm" property="occurrWeekDays" value="${calendarEventForm.occurrWeekDays}"/>
@@ -276,10 +276,10 @@ function valid(value){
 					            </tr>
 								<tr height="3px"><td colspan="2"></td></tr>
 					            <tr>
-					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					            <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 					                <digi:trn>Recurring Event End Date</digi:trn>:
 					              </td>
-					               <td style="font-family: Tahoma;font-size: 12px;">
+					               <td style="font-family: Arial;font-size: 12px;">
 				                		<html:hidden name="calendarEventForm" property="recurrEndDate" value="${calendarEventForm.recurrEndDate}"/>
 				                		<html:hidden name="calendarEventForm" property="recurrSelectedEndTime" value="${calendarEventForm.recurrSelectedEndTime}"/>
 				                		<c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
@@ -292,9 +292,9 @@ function valid(value){
 					              	<td>
 					              	</td>
 					              	<td>
-					                	<input type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+					                	<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 					                	&nbsp;
-					                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+					                	<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 									</td>
 								</tr>
 								<tr height="3px"><td colspan="2"></td></tr>
@@ -303,9 +303,9 @@ function valid(value){
 					              	<td>
 					              	</td>
 									<td>
-					                	<input type="button" value="<digi:trn>Delete</digi:trn>" style="width: 110px;" onclick="deleteEvent();" />
+					                	<input class="buttonx" type="button" value="<digi:trn>Delete</digi:trn>" style="width: 110px;" onclick="deleteEvent();" />
 										&nbsp;
-										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+										<input class="buttonx" type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
 									</td>
 								</tr>
                                 </c:if>

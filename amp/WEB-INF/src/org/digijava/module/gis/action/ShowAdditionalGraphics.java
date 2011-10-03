@@ -70,10 +70,13 @@ public class ShowAdditionalGraphics extends Action {
             int maxCaptionHeight = (int)maxVector.getVisualBounds().getHeight();
 
 
-            g2d.drawString(minText, 4 , height - (height - minCaptionHeight)/2);
-            g2d.drawString(maxText, width - 4 - maxCaptionWidth, height - (height - maxCaptionHeight)/2);
+            g2d.drawString(minText, 5 , height - (height - minCaptionHeight)/2 + 1);
+            g2d.drawString(maxText, width - 5 - maxCaptionWidth, height - (height - maxCaptionHeight)/2 + 1);
 
-            //g2d.drawString(minText, 0, 20);
+            g2d.setPaint(Color.white);
+            g2d.drawString(minText, 4 , height - (height - minCaptionHeight)/2);
+            g2d.drawString(maxText, width - 6 - maxCaptionWidth, height - (height - maxCaptionHeight)/2);
+
 
 
             g2d.dispose();

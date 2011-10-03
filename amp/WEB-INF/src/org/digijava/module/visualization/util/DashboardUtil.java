@@ -130,20 +130,31 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpCategoryValueLocations> iterator = regionsList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
-			//Long[] oldIds = filter.getSelLocationIds();
 			Long[] ids = {location.getId()};
-			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-            //filter.setSelLocationIds(oldIds);
+			Long[] tempLocationsIds = filter.getSelLocationIds();
+			filter.setSelLocationIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+			filter.setSelLocationIds(tempLocationsIds);
             BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            //Get Top Level Zone/Region
+            AmpCategoryValueLocations topLevelLocation = getTopLevelLocation(location);
+            
+            if(map.containsKey(topLevelLocation)){
+            	BigDecimal currentTotal = map.get(topLevelLocation);
+            	map.put(topLevelLocation, total.add(currentTotal));
+            }
+            else
+            {
+    	        map.put(topLevelLocation, total);
+            }
+            
 	        map.put(location, total);
 		}
 		return sortByValue (map);
 	}
 	
+
 	public static Map<AmpSector, BigDecimal> getRankSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
-		logger.info("Starting RANKSECTOR");
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -176,7 +187,6 @@ public class DashboardUtil {
             }
 
 		}
-		logger.info("Ending RANKSECTOR");
 		return sortByValue (map);
 	}
 	
@@ -276,7 +286,10 @@ public class DashboardUtil {
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
 		filter.setAllSectorList(allSectorList);
 
-        Collection activityListReduced = DbUtil.getActivities(filter);
+        ArrayList<AmpCategoryValueLocations> allLocationsList = DbUtil.getAmpLocations();
+		filter.setAllLocationsList(allLocationsList);
+
+		Collection activityListReduced = DbUtil.getActivities(filter);
         HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
         Iterator iter = activityListReduced.iterator();
         while (iter.hasNext()) {
@@ -554,6 +567,14 @@ public class DashboardUtil {
 			result = headingFY + " " + startYear + "-" + endYear;
 		}
 		return result;
+	}
+	
+	private static AmpCategoryValueLocations getTopLevelLocation(
+			AmpCategoryValueLocations location) {
+		if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
+			location = getTopLevelLocation(location.getParentLocation());
+		}
+		return location;
 	}
 
 }

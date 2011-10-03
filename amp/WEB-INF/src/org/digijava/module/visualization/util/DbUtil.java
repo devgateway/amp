@@ -789,6 +789,9 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
+    		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
+        	locationIds = getAllDescendantsLocation(locationIds, filter.getAllLocationsList());
+    		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
         }
 
@@ -885,7 +888,7 @@ public class DbUtil {
         return total;
     }
 
-    /**
+	/**
      * Returns funding amount
      * @param orgID
      * @param year
@@ -1479,5 +1482,48 @@ public class DbUtil {
     	}
 		return (Long[]) tempSectorIds.toArray(new Long[0]);
 	}
+
+	public static ArrayList<AmpCategoryValueLocations> getAmpLocations() {
+		Session session = null;
+		Query q = null;
+		AmpCategoryValueLocations location = null;
+		ArrayList<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
+		Iterator<AmpCategoryValueLocations> iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
+            " vl where vl.parentLocation  is not null " ;
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				location = (AmpCategoryValueLocations) iter.next();
+				locations.add(location);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Sector names  from database "
+					+ ex.getMessage());
+		}
+		return locations;
+	}
+
+	private static Long[] getAllDescendantsLocation(Long[] locationIds,
+			ArrayList<AmpCategoryValueLocations> allLocationsList) {
+    	List<Long> tempLocationsIds = new ArrayList<Long>();
+		for(AmpCategoryValueLocations as : allLocationsList){
+			for(Long i : locationIds){
+		    	if(!tempLocationsIds.contains(i)) tempLocationsIds.add(i);
+    			if(as.getParentLocation() != null && as.getParentLocation().getId().equals(i)){
+    				tempLocationsIds.add(as.getId());
+    			} else if(as.getParentLocation() != null && as.getParentLocation().getParentLocation() != null && as.getParentLocation().getParentLocation().getId().equals(i)){
+    				tempLocationsIds.add(as.getId());
+    			}
+    		}
+    	}
+		return (Long[]) tempLocationsIds.toArray(new Long[0]);
+	}
+
 
 }

@@ -87,6 +87,7 @@ public class DashboardFilter {
     //private List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorWithSubSectors;
     private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
     private ArrayList<AmpSector> allSectorList;
+    private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
     
 	public int getTopLists() {
@@ -721,6 +722,20 @@ public class DashboardFilter {
 
 	public Long getEndYearFilter() {
 		return endYearFilter;
+	}
+
+
+
+
+	public void setAllLocationsList(ArrayList<AmpCategoryValueLocations> allLocationsList) {
+		this.allLocationsList = allLocationsList;
+	}
+
+
+
+
+	public ArrayList<AmpCategoryValueLocations> getAllLocationsList() {
+		return allLocationsList;
 	}
 
 	

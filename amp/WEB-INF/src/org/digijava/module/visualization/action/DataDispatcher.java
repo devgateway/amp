@@ -2197,6 +2197,7 @@ public class DataDispatcher extends DispatchAction {
 	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 	    			Long[] ids = {loc.getId()};
 	    			newFilter.setSelLocationIds(ids);
+	    			newFilter.setAllLocationsList(filter.getAllLocationsList());
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
 	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -2233,6 +2234,7 @@ public class DataDispatcher extends DispatchAction {
 				index++;
 			}
 	        newFilter.setSelLocationIds(idsArray);
+	        newFilter.setAllLocationsList(filter.getAllLocationsList());
 	        if (ids.size()!=0){
 	        	csvString.append(",");
 	        	csvString.append("Others");

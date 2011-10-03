@@ -317,7 +317,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				replaceStr = "new";
 			else
 				replaceStr = String.valueOf(oldId);
-			target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
+			target.appendJavascript("window.location.replace('/');");
 		//}
 		target.addComponent(feedbackPanel);
 	}

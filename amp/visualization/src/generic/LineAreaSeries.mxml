@@ -80,6 +80,7 @@
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
 			private var decimalsToShow:String = null;
+			private var currCode:String = null;
 			private var palette:Array = new Array();
 
 			
@@ -149,6 +150,7 @@
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
 				decimalsToShow = LoaderInfo(this.root.loaderInfo).parameters.decimalsToShow;
+				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
 				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
 				var palArray:Array = paletteStr.split(",");
 				
@@ -418,7 +420,7 @@
 					return "";
 				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
 				var array:Array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
-				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField);
+				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + formatter.format(Number(ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField))) + " " + currCode;
 				
 			}
 

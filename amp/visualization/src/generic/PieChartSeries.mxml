@@ -53,6 +53,10 @@
 			private var yS:int;
 			
 			
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
+			private var decimalsToShow:String = null;
+			private var currCode:String = null;
 			private var palette:Array = new Array();
 			
 			private var ds:DataSet = new DataSet();
@@ -110,6 +114,10 @@
 				}
 //				dc.setStyle("borderStyle","solid");
 				
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				decimalsToShow = LoaderInfo(this.root.loaderInfo).parameters.decimalsToShow;
+				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
 				var paletteStr:String = null;
 				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
 				var palArray = paletteStr.split(",");
@@ -118,6 +126,17 @@
 					var tmp:Number = palArray[i];
 					palette.push(tmp);
 				}
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
+				
+				//Set formatting for the numbers in the chart
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.precision = decimalsToShow;
+				
 				dc.invalidateDisplayList();
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				//Set the title and the rest of the parameters for legend
@@ -201,9 +220,10 @@
 			public function dataTipFunction(val:Object):String
 			{
 				if (val != null){
-					return val.data.label + "\n" + val.data.value;
+					//return val.data.label + "\n" + val.data.value;
+					return "<b>" + String(val.data.label) + "</b><br/>" + formatter.format(Number(val.data.value)) + " " + currCode;
 				}
-				return "cadena";
+				return "";
 			}
 			
 			
@@ -395,6 +415,12 @@
 
 		]]>
 	</mx:Script>
+	<mx:CurrencyFormatter currencySymbol=""
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
+	
 	<!-- Data Provider -->
 	<mx:Object id="dataProvider"/>
 	
@@ -463,7 +489,7 @@
 									   fontColor="0xFFFFFF"
 									   labelFunction="wrapIt"
 									   itemClick="this.itemClick(event);"
-									   dataTipLabelFunction="dataTipFunction"
+									   dataTipLabelFunction="{dataTipFunction}"
 									   >
 					<!--
 					targets="{[innerWedgeFillStop1,outerWedgeFill, outerWedgeGroup ,outerWedgeGroup.label]}"	

@@ -74,6 +74,7 @@
 			private var ds:DataSet = new DataSet();
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
+			private var currCode:String = null;
 			private var palette:Array = new Array();
 
 			//Variables for the service URL
@@ -145,6 +146,7 @@
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
 				decimalsToShow = LoaderInfo(this.root.loaderInfo).parameters.decimalsToShow;
+				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
 				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
 				var palArray:Array = paletteStr.split(",");
 				
@@ -404,7 +406,7 @@
 				var isSprite:Boolean = (obj is AxiisSprite)
 				formatter.precision = decimalsToShow;
 				if(isSprite)	
-					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(Number(ObjectUtils.getProperty(this, obj.data,childDataField)));
+					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(Number(ObjectUtils.getProperty(this, obj.data,childDataField))) + " " + currCode;
 				if(!isNaN(Number(obj.value)) && Number(obj.value) > 0 ){ 
 					return formatter.format(Number(obj.value));
 				}

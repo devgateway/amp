@@ -301,7 +301,11 @@
 			*/
 			private function axisLabel(obj:Object):String
 			{
-				formatter.precision = 0;
+				if (obj!=null && obj<10 && obj>0){
+					formatter.precision = 2;
+				} else {
+					formatter.precision = 0;
+				}
 				return formatter.format(obj);
 			}
 			

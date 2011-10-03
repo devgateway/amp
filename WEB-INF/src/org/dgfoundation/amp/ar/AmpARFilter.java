@@ -532,7 +532,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
 		activityStatus.add(Constants.STARTED_APPROVED_STATUS);
-		activityStatus.add(Constants.STARTED_STATUS);
+//		activityStatus.add(Constants.STARTED_STATUS);
 		String NO_MANAGEMENT_ACTIVITIES="";
 		if("Management".equals(this.getAccessType()))
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +

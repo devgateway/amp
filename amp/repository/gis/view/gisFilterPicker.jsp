@@ -26,7 +26,7 @@
 		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
 		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;" >
+	<div class="yui-content" style="height: 92%;margin-top: 10px;" >
 		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="gisDashboardForm" property="donorElements" />

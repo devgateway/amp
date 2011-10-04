@@ -451,33 +451,36 @@ function unCheckOptions (obj){
 }
 
 function changeTab (selected){
-	document.getElementById("selGeneral").className = "";
-	document.getElementById("selOrgs").className = "";
-	document.getElementById("selRegions").className = "";
-	document.getElementById("selSectors").className = "";
-
-	document.getElementById("generalTab").style.display = "none";
-	document.getElementById("organizationsTab").style.display = "none";
-	document.getElementById("regionsTab").style.display = "none";
-	document.getElementById("sectorsTab").style.display = "none";
-	clearAllLocalSearchResults();
+	for(var i=0;i<4;i++){
+		if(i!=selected){
+			$("#general_selector_"+i).removeClass("side_opt_sel");	
+		}
+		else{
+			$("#general_selector_"+i).addClass("side_opt_sel");	
+		}
+	}
+	$("#generalInfoId").css("display","none");
+	$("#orgGrpContent").css("display","none");
+	$("#regionDivContent").css("display","none");
+	$("#sectorDivContent").css("display","none");
+	
+	if(selected!=0){
+		clearAllLocalSearchResults();
+	}
+	
 	
 	switch (selected) {
 	case 0:
-		document.getElementById("selGeneral").className = "selected";
-		document.getElementById("generalTab").style.display = "block";
+		$("#generalInfoId").css("display","block");
 		break;
 	case 1:
-		document.getElementById("selOrgs").className = "selected";
-		document.getElementById("organizationsTab").style.display = "block";
+		$("#orgGrpContent").css("display","block");
 		break;
 	case 2:
-		document.getElementById("selRegions").className = "selected";
-		document.getElementById("regionsTab").style.display = "block";
+		$("#regionDivContent").css("display","block");
 		break;
 	case 3:
-		document.getElementById("selSectors").className = "selected";
-		document.getElementById("sectorsTab").style.display = "block";
+		$("#sectorDivContent").css("display","block");
 		break;
 	default:
 		break;
@@ -528,347 +531,394 @@ function toggleSettings(){
 <tr>
 <td>
 <div id="dialog2" class="dialog" title="Advanced Filters">
-<div id="popinContent" class="content">
-	<c:set var="selectorHeaderSize" scope="page" value="11" />
-	<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
-	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
-		<li id="selGeneral" class="selected"><a href="javascript:changeTab(0)"><div><digi:trn>General</digi:trn></div></a></li>
-		<li id="selOrgs"><a href="javascript:changeTab(1)"><div><digi:trn>Organizations</digi:trn></div></a></li>
-		<li id="selRegions"><a href="javascript:changeTab(2)"><div><digi:trn>Regions</digi:trn></div></a></li>
-		<li id="selSectors"><a href="javascript:changeTab(3)"><div><digi:trn>Sectors</digi:trn></div></a></li>
-	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;" >
-		<div id="generalTab" style="height: 91%;">
-			<div class="grayBorder">
-				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20; border: 1px solid #CCCCCC;border-bottom: 0px;">
-						<div class="inside">
-							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
-						</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
-						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
-							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel" id="general_selector">
-									<div class="selector_type_cont">
-										<digi:trn>General</digi:trn>
-									</div>
-								</td>
-								
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 20;border: 1px solid #CCCCCC;border-bottom: 0px;">
-							<div class="inside" style="float: left" >&nbsp;
-								<b class="ins_header">
-									<digi:trn>Options Selector</digi:trn>
-								</b>
-							</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="generalDivList">
-						<c:if test="${!visualizationform.filter.fromPublicView}">
-							<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						</c:if>
-						<hr />
-						<br />
-						<digi:trn>For Time Series Comparison, what data do you want to show</digi:trn>? <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<html:checkbox  property="filter.commitmentsVisible" styleId="commitments_visible"><digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						<html:checkbox  property="filter.disbursementsVisible" styleId="disbursements_visible"><digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						<feature:display module="Funding" name="Expenditures">
-							<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						</feature:display> 
-						<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
-							<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
-						</module:display>
-						<hr />
-						<br />
-						<digi:trn>What data should the dashboard show</digi:trn>?<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-                            <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio><br />
-                            <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio><br />
-                            <feature:display module="Funding" name="Expenditures">
-                            	<html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio><br />
-                            </feature:display>
-						<hr />
-					</div>
-				</div>
-			</div>
-			<div>
-				<table border="0" cellspacing="3" cellpadding="3">
-					<tr>
-					  	<td><b><digi:trn>Currency Type</digi:trn>:</b></td>
-					  	<td>
-					  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
-   								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
-							</html:select> 	
-						</td>
-						<td><b><digi:trn>Start year</digi:trn>:</b></td>
-				    	<td>
-				    		 <html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-						<td><b><digi:trn>Show in top ranks</digi:trn>:</b></td>
-					    <td>
-							<html:select property="filter.topLists" styleId="topLists_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:option value="5">5</html:option>
-	                            <html:option value="10">10</html:option>
-	                            <html:option value="20">20</html:option>
-	                            <html:option value="50">50</html:option>
-	                        </html:select>
-						</td>
-				 	</tr>
-				    <tr>
-				    	<td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
-					    <td>
-					    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
-	                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
-	                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
-	                        </html:select>
-						</td>
-						<td><b><digi:trn>End year</digi:trn>:</b></td>
-				    	<td>
-				    		 <html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-					</tr>
-					<tr>
-						<td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
-					    <td>
-							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:option value="0">0</html:option>
-	                            <html:option value="1">1</html:option>
-	                            <html:option value="2">2</html:option>
-	                            <html:option value="3">3</html:option>
-	                            <html:option value="4">4</html:option>
-	                            <html:option value="5">5</html:option>
-	                        </html:select>
-						</td>
-						<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b></td>
-				    	<td>
-				    		 <html:select property="filter.yearToCompare" styleId="yearToCompare_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-	                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
-	                        </html:select>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div id="organizationsTab" style="height: 91%;">
-			<div class="grayBorder">
-				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
-						<div class="inside">
-							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
-						</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
-						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
-							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel"  id="org_grp_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Organization Groups With Organizations</digi:trn>
-									</div>
-								</td>
-								
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
-							<div class="inside" style="float: left" >&nbsp;
-								<b class="ins_header">
-									<digi:trn>Member Selector</digi:trn>
-								</b>
-							</div>
-								<div style="float: right">
-							<input onkeypress="clearSearch('orgGrpDivList')" id="orgGrpDivList_search" type="text"   class="inputx" />
-									 <input type="button" class="buttonx" onclick="findPrev('orgGrpDivList')"  value='&lt;&lt;' />
-									 <input type="button" onclick="findNext('orgGrpDivList')"  class="buttonx" value="&gt;&gt;"/>
-							</div>
-							
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="orgGrpDivList">
-						<ul style="list-style-type: none">
-						<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-								<input type="radio"  value="-1" id="org_grp_check_all" name="org_grp_check" onClick="uncheckAllRelatedEntities('organization_check')"/> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-								<input type="checkbox" id="org_grp_check_all"  value="-1" name="org_grp_check" onClick="allOptionChecked(this,'org_grp_check','organization_check')"/> 
-							</c:if>
-							<span><digi:trn>All</digi:trn></span>
-						</li>
-						<c:forEach items="${visualizationform.filter.orgGroupWithOrgsList}" var="item">
-						<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-								<input type="radio" name="org_grp_check" title="${item.mainEntity.orgGrpName}" value="${item.mainEntity.ampOrgGrpId}" onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})"/> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-								<input type="checkbox" name="org_grp_check" title="${item.mainEntity.orgGrpName}" value="${item.mainEntity.ampOrgGrpId}" onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})"/> 
-							</c:if>
-								<span><digi:trn>${item.mainEntity.orgGrpName}</digi:trn></span>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="organization">
-							<li><input type="checkbox" class="organization_check_${item.mainEntity.ampOrgGrpId}" name="organization_check" title="${organization.name}" value="${organization.ampOrgId}" onclick="uncheckAllOption('org_grp_check');"/>
-							<span>${organization.name}</span>
-							</li> 
-							</c:forEach>
-							</ul>
-						</li>
-						</c:forEach>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="regionsTab" style="height: 91%;">
-			<div class="grayBorder">
-				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
-						<div class="inside">
-							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
-						</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
-						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
-							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel"  id="region_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Regions With Zones</digi:trn>
-									</div>
-								</td>
-								
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
-							<div class="inside" style="float: left" >&nbsp;
-								<b class="ins_header">
-									<digi:trn>Member Selector</digi:trn>
-								</b>
-									
-							</div>
-							<div class="inside" style="float: right">
-							<input onkeypress="clearSearch('regionDivList')" id="regionDivList_search" type="text"   class="inputx" />
-									 <input type="button" class="buttonx" onclick="findPrev('regionDivList')"  value='&lt;&lt;' />
-									 <input type="button" onclick="findNext('regionDivList')"  class="buttonx" value="&gt;&gt;"/>
-							</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="regionDivList">
-						<ul style="list-style-type: none">
-						<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-								<input type="radio" id="region_check_all" name="region_check" value="-1"  onClick="uncheckAllRelatedEntities('zone_check')"/> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-								<input type="checkbox" id="region_check_all" name="region_check" value="-1" onClick="allOptionChecked(this,'region_check','zone_check')"/> 
-							</c:if>
-							<span><digi:trn>All</digi:trn></span>
-						</li>
-						<c:forEach items="${visualizationform.filter.regionWithZones}" var="item">
-						<li>
-							<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-								<input type="radio" name="region_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})"/> 
-							</c:if>
-							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-								<input type="checkbox" name="region_check" title="${item.mainEntity.name}" value="${item.mainEntity.id}" onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})"> 
-							</c:if>
-							<span>
-								<digi:trn>${item.mainEntity.name}</digi:trn>
-							</span>
-							<br/>
-							<ul style="list-style-type: none">
-							<c:forEach items="${item.subordinateEntityList}" var="zone">
-							<li><input type="checkbox" class="zone_check_${item.mainEntity.id}" name="zone_check" title="${zone.name}" value="${zone.id}" onclick="uncheckAllOption('region_check');"/><span>${zone.name}</span></li> 
-							</c:forEach>
-							</ul>
-						</li>
-						</c:forEach>
-						</ul>
-					</div>
-				
-				</div>
-			</div>
-		</div>
-		<div id="sectorsTab" style="height: 91%;" >
-			<div class="grayBorder">
-				<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32; border: 1px solid #CCCCCC;border-bottom: 0px;">
-						<div class="inside">
-							<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
-						</div>
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; ">		
-						<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
-							<tr style="cursor: pointer;" >
-								<td class="side_opt_sel"  id="sector_selector">
-									<div class="selector_type_cont">
-										<digi:trn>Sectors and Sub Sectors</digi:trn>
-									</div>
-								</td>
-								
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-					<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: 32;border: 1px solid #CCCCCC;border-bottom: 0px;">
-							<div class="inside" style="float: left" >&nbsp;
-								<b class="ins_header">
-									<digi:trn>Member Selector</digi:trn>
-								</b>
-							</div>
-							<div class="inside" style="float: right" >
-								<input onkeypress="clearSearch('sectorDivList')" id="sectorDivList_search" type="text"   class="inputx" />
-									 <input type="button" class="buttonx" onclick="findPrev('sectorDivList')"  value='&lt;&lt;' />
-									 <input type="button" onclick="findNext('sectorDivList')"  class="buttonx" value="&gt;&gt;"/>
-								
-							</div>
-							
-					</div>
-					<div style="height: 180;  border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding:20px; " id="sectorDivList">
-						<ul style="list-style-type: none">
-						<c:forEach items="${visualizationform.filter.configWithSectorAndSubSectors}" var="item" >
-						<c:set var="item" scope="request" value="${item}"/>
-						<c:choose>
-						<c:when test="${item.mainEntity.name=='Primary'}">
-							<field:display name="Primary Sector" feature="Sectors">
-							<jsp:include page="sectorPopinHelper.jsp" flush="true" />
-						</field:display>
-						</c:when>
-						<c:when test="${item.mainEntity.name=='Secondary'}">
-							<field:display name="Secondary Sector" feature="Sectors">
-							<jsp:include page="sectorPopinHelper.jsp" />
-						</field:display>
-						</c:when>
-						<c:when test="${item.mainEntity.name=='Tertiary'}">
-						<field:display name="Tertiary Sector" feature="Sectors">
-							<jsp:include page="sectorPopinHelper.jsp" />
-						</field:display>
-						</c:when>
-						</c:choose>
-						</c:forEach>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
+					<div id="popinContent" class="content">
+						<c:set var="selectorHeaderSize" scope="page" value="11" />
+							<div class="yui-content"
+								style="background-color: #f6faff; height: 92%; margin-top: 10px;">
+								<div id="generalTab" style="height: 91%;">
+										<div class="grouping_selector_wrapper"
+											style="float: left; width: 40%; padding: 0px; height: 98%;">
+											<div
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside">
+													<b class="ins_header"><digi:trn>Grouping Selector</digi:trn>
+													</b>
+												</div>
+											</div>
+											<div
+												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;">
+												<table style="width: 95%; margin-top: 15px;" align="center"
+													class="inside">
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_0">
+															<div class="selector_type_cont" onclick="changeTab(0)">
+																<digi:trn>General</digi:trn>
+															</div></td>
 
-<input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_1" >
+															<div class="selector_type_cont" onclick="changeTab(1)">
+																<digi:trn>Organization Groups With Organizations</digi:trn>
+															</div></td>
+
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_2">
+															<div class="selector_type_cont" onclick="changeTab(2)">
+																<digi:trn>Regions With Zones</digi:trn>
+															</div></td>
+
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_3">
+															<div class="selector_type_cont" onclick="changeTab(3)">
+																<digi:trn>Sectors and Sub Sectors</digi:trn>
+															</div></td>
+
+													</tr>
+												</table>
+											</div>
+										</div>
+										<div class="member_selector_wrapper"
+											style="margin-left: 40%; padding: 0px; height: 98%;" id="generalInfoId">
+											<div
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Options Selector</digi:trn>
+													</b>
+												</div>
+											</div>
+											<div
+												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												id="generalDivList">
+												<c:if test="${!visualizationform.filter.fromPublicView}">
+													<html:checkbox property="filter.workspaceOnly"
+														styleId="workspace_only">
+														<digi:trn>Show Only Data From This Workspace</digi:trn>
+													</html:checkbox>
+													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+													<br />
+												</c:if>
+												<hr />
+												<br />
+												<digi:trn>For Time Series Comparison, what data do you want to show</digi:trn>
+												? <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<html:checkbox property="filter.commitmentsVisible"
+													styleId="commitments_visible">
+													<digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
+												<br />
+												<html:checkbox property="filter.disbursementsVisible"
+													styleId="disbursements_visible">
+													<digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox>
+												<br />
+												<feature:display module="Funding" name="Expenditures">
+													<html:checkbox property="filter.expendituresVisible"
+														styleId="expenditures_visible">
+														<digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox>
+													<br />
+												</feature:display>
+												<module:display name="Pledges"
+													parentModule="PROJECT MANAGEMENT">
+													<html:checkbox property="filter.pledgeVisible"
+														styleId="pledge_visible">
+														<digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox>
+													<br />
+												</module:display>
+												<hr />
+												<br />
+												<digi:trn>What data should the dashboard show</digi:trn>
+												?<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<html:radio property="filter.transactionType"
+													styleId="transaction_type_0" value="0">
+													<digi:trn>Commitments</digi:trn>
+												</html:radio>
+												<br />
+												<html:radio property="filter.transactionType"
+													styleId="transaction_type_1" value="1">
+													<digi:trn>Disbursements</digi:trn>
+												</html:radio>
+												<br />
+												<feature:display module="Funding" name="Expenditures">
+													<html:radio property="filter.transactionType"
+														styleId="transaction_type_2" value="2">
+														<digi:trn>Expenditures</digi:trn>
+													</html:radio>
+													<br />
+												</feature:display>
+												<hr />
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="orgGrpContent"
+											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+												</div>
+												<div style="float: right">
+													<input onkeypress="clearSearch('orgGrpDivList')"
+														id="orgGrpDivList_search" type="text" class="inputx" /> <input
+														type="button" class="buttonx"
+														onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
+														type="button" onclick="findNext('orgGrpDivList')"
+														class="buttonx" value="&gt;&gt;" />
+												</div>
+
+											</div>
+											<div
+												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												id="orgGrpDivList">
+												<ul style="list-style-type: none">
+													<li><c:if
+															test="${visualizationform.filter.dashboardType eq '1' }">
+															<input type="radio" value="-1" id="org_grp_check_all"
+																name="org_grp_check"
+																onClick="uncheckAllRelatedEntities('organization_check')" />
+														</c:if> <c:if
+															test="${visualizationform.filter.dashboardType ne '1' }">
+															<input type="checkbox" id="org_grp_check_all" value="-1"
+																name="org_grp_check"
+																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
+														</c:if> <span><digi:trn>All</digi:trn>
+													</span></li>
+													<c:forEach
+														items="${visualizationform.filter.orgGroupWithOrgsList}"
+														var="item">
+														<li><c:if
+																test="${visualizationform.filter.dashboardType eq '1' }">
+																<input type="radio" name="org_grp_check"
+																	title="${item.mainEntity.orgGrpName}"
+																	value="${item.mainEntity.ampOrgGrpId}"
+																	onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
+															</c:if> <c:if
+																test="${visualizationform.filter.dashboardType ne '1' }">
+																<input type="checkbox" name="org_grp_check"
+																	title="${item.mainEntity.orgGrpName}"
+																	value="${item.mainEntity.ampOrgGrpId}"
+																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
+															</c:if> <span><digi:trn>${item.mainEntity.orgGrpName}</digi:trn>
+														</span> <br />
+															<ul style="list-style-type: none">
+																<c:forEach items="${item.subordinateEntityList}"
+																	var="organization">
+																	<li><input type="checkbox"
+																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
+																		name="organization_check" title="${organization.name}"
+																		value="${organization.ampOrgId}"
+																		onclick="uncheckAllOption('org_grp_check');" /> <span>${organization.name}</span>
+																	</li>
+																</c:forEach>
+															</ul></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="regionDivContent"
+											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+
+												</div>
+												<div class="inside" style="float: right">
+													<input onkeypress="clearSearch('regionDivList')"
+														id="regionDivList_search" type="text" class="inputx" /> <input
+														type="button" class="buttonx"
+														onclick="findPrev('regionDivList')" value='&lt;&lt;' /> <input
+														type="button" onclick="findNext('regionDivList')"
+														class="buttonx" value="&gt;&gt;" />
+												</div>
+											</div>
+											<div
+												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												id="regionDivList">
+												<ul style="list-style-type: none">
+													<li><c:if
+															test="${visualizationform.filter.dashboardType eq '2' }">
+															<input type="radio" id="region_check_all"
+																name="region_check" value="-1"
+																onClick="uncheckAllRelatedEntities('zone_check')" />
+														</c:if> <c:if
+															test="${visualizationform.filter.dashboardType ne '2' }">
+															<input type="checkbox" id="region_check_all"
+																name="region_check" value="-1"
+																onClick="allOptionChecked(this,'region_check','zone_check')" />
+														</c:if> <span><digi:trn>All</digi:trn>
+													</span></li>
+													<c:forEach
+														items="${visualizationform.filter.regionWithZones}"
+														var="item">
+														<li><c:if
+																test="${visualizationform.filter.dashboardType eq '2' }">
+																<input type="radio" name="region_check"
+																	title="${item.mainEntity.name}"
+																	value="${item.mainEntity.id}"
+																	onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})" />
+															</c:if> <c:if
+																test="${visualizationform.filter.dashboardType ne '2' }">
+																<input type="checkbox" name="region_check"
+																	title="${item.mainEntity.name}"
+																	value="${item.mainEntity.id}"
+																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
+															</c:if> <span> <digi:trn>${item.mainEntity.name}</digi:trn>
+														</span> <br />
+															<ul style="list-style-type: none">
+																<c:forEach items="${item.subordinateEntityList}"
+																	var="zone">
+																	<li><input type="checkbox"
+																		class="zone_check_${item.mainEntity.id}"
+																		name="zone_check" title="${zone.name}"
+																		value="${zone.id}"
+																		onclick="uncheckAllOption('region_check');" /><span>${zone.name}</span>
+																	</li>
+																</c:forEach>
+															</ul></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="sectorDivContent"
+												style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+												<div
+													style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+													<div class="inside" style="float: left">
+														&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+														</b>
+													</div>
+													<div class="inside" style="float: right">
+														<input onkeypress="clearSearch('sectorDivList')"
+															id="sectorDivList_search" type="text" class="inputx" />
+														<input type="button" class="buttonx"
+															onclick="findPrev('sectorDivList')" value='&lt;&lt;' />
+														<input type="button" onclick="findNext('sectorDivList')"
+															class="buttonx" value="&gt;&gt;" />
+
+													</div>
+
+												</div>
+												<div
+													style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+													id="sectorDivList">
+													<ul style="list-style-type: none">
+														<c:forEach
+															items="${visualizationform.filter.configWithSectorAndSubSectors}"
+															var="item">
+															<c:set var="item" scope="request" value="${item}" />
+															<c:choose>
+																<c:when test="${item.mainEntity.name=='Primary'}">
+																	<field:display name="Primary Sector" feature="Sectors">
+																		<jsp:include page="sectorPopinHelper.jsp" flush="true" />
+																	</field:display>
+																</c:when>
+																<c:when test="${item.mainEntity.name=='Secondary'}">
+																	<field:display name="Secondary Sector"
+																		feature="Sectors">
+																		<jsp:include page="sectorPopinHelper.jsp" />
+																	</field:display>
+																</c:when>
+																<c:when test="${item.mainEntity.name=='Tertiary'}">
+																	<field:display name="Tertiary Sector" feature="Sectors">
+																		<jsp:include page="sectorPopinHelper.jsp" />
+																	</field:display>
+																</c:when>
+															</c:choose>
+														</c:forEach>
+													</ul>
+												</div>
+											</div>
+									<div>
+										<table border="0" cellspacing="3" cellpadding="3">
+											<tr>
+												<td><b><digi:trn>Currency Type</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.currencyId"
+														styleId="currencies_dropdown_ids" styleClass="dropdwn_sm"
+														style="width:150px;">
+														<html:optionsCollection property="filter.currencies"
+															value="ampCurrencyId" label="currencyName" />
+													</html:select></td>
+												<td><b><digi:trn>Start year</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.startYearFilter"
+														styleId="startYear_dropdown" styleClass="dropdwn_sm"
+														style="width:70px;">
+														<html:optionsCollection property="filter.years"
+															label="wrappedInstance" value="wrappedInstance" />
+													</html:select></td>
+												<td><b><digi:trn>Show in top ranks</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.topLists"
+														styleId="topLists_dropdown" styleClass="dropdwn_sm"
+														style="width:70px;">
+														<html:option value="5">5</html:option>
+														<html:option value="10">10</html:option>
+														<html:option value="20">20</html:option>
+														<html:option value="50">50</html:option>
+													</html:select></td>
+											</tr>
+											<tr>
+												<td><b><digi:trn>Fiscal Calendar</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.fiscalCalendarId"
+														styleId="fiscalCalendar_dropdown_Id"
+														styleClass="dropdwn_sm" style="width:150px;">
+														<html:option value="-1">
+															<digi:trn>None</digi:trn>
+														</html:option>
+														<html:optionsCollection property="filter.fiscalCalendars"
+															label="name" value="ampFiscalCalId" />
+													</html:select></td>
+												<td><b><digi:trn>End year</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.endYearFilter"
+														styleId="endYear_dropdown" styleClass="dropdwn_sm"
+														style="width:70px;">
+														<html:optionsCollection property="filter.years"
+															label="wrappedInstance" value="wrappedInstance" />
+													</html:select></td>
+											</tr>
+											<tr>
+												<td><b><digi:trn>Decimals to show</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.decimalsToShow"
+														styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm"
+														style="width:70px;">
+														<html:option value="0">0</html:option>
+														<html:option value="1">1</html:option>
+														<html:option value="2">2</html:option>
+														<html:option value="3">3</html:option>
+														<html:option value="4">4</html:option>
+														<html:option value="5">5</html:option>
+													</html:select></td>
+												<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
+												</td>
+												<td><html:select property="filter.yearToCompare"
+														styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
+														style="width:70px;">
+														<html:optionsCollection property="filter.years"
+															label="wrappedInstance" value="wrappedInstance" />
+													</html:select></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+
+
+
+							</div>
+			
+
+
+ <input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
 <input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
 
 
+</div>
 </div>
 </td>
 </tr>

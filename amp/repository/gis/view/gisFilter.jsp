@@ -45,9 +45,9 @@ div.filterContainerTabs {
 }
 
 div.groupingSelector {
-	width: 288px;
+	width: 311px;
 	float: left;
-	border: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
 	border-right: none;
 	height: 155px;
 }
@@ -57,7 +57,9 @@ div.groupingSelector {
 div.membersSelector {
 	width: 425px;
 	float: right;
-	border: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
 	height: 155px;
 }
 
@@ -95,8 +97,6 @@ div.membersSelector div.memsearch {
 	margin: 0 auto;
 	margin-bottom: 15px;
 	width: 250px;
-	border-left: 1px solid #d0d0d0;
-	border-bottom: 1px solid #d0d0d0;
 }
 
 .groupingSelector ul li {
@@ -198,14 +198,14 @@ var tabView = new YAHOO.widget.TabView('demo');
 		<div class="filterContainerTabs">
 			<div id="demo" class="yui-navset">
 				<ul class="yui-nav">
-					<li class="selected"><a href="#tab1"><div><digi:trn>Donor Agencies</digi:trn>
+					<li class="selected"><a href="#tab1" style="border-radius:0;"><div><digi:trn>Donor Agencies</digi:trn>
 						</div>
 					</a>
 					</li>
-					<li><a href="#tab2"><div><digi:trn>Sectors</digi:trn></div>
+					<li><a href="#tab2" style="border-radius:0;"><div><digi:trn>Sectors</digi:trn></div>
 					</a>
 					</li>
-					<li><a href="#tab3"><div><digi:trn>Programs</digi:trn></div>
+					<li><a href="#tab3" style="border-radius:0;"><div><digi:trn>Programs</digi:trn></div>
 					</a>
 					</li>
 				</ul>

@@ -1009,31 +1009,44 @@ function removeGuest(obj) {
 			                    			<td colspan="4" valign="top" width=48%>
                                                                 <digi:trn key="cal:organizations"><b><digi:trn>Organizations</digi:trn></b></digi:trn>	
 											<br />
-											<div style="margin-top:7px;"><html:select multiple="multiple" property="selOrganizations" size="4" style="width: 300px;">
-				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
-														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
-														</logic:iterate>
-													</logic:notEmpty>
-				                                 </html:select><div style="float:right;"><table border="0" cellPadding="1" cellSpacing="1">
-				                    				<field:display name="Add Donor Button" feature="Donors">
-				                    					<tr>
-															<td>
-																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="buttonx"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>															</td>
-														</tr>
-				                    				</field:display>
-												
-													<field:display name="Remove Donor Button" feature="Donors">
-														<tr>
-															<td>
-																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
-																	<digi:trn key="btn:remove">Remove</digi:trn>
-																</html:button>															</td> 
-														</tr>
-													</field:display>													
+											<div style="margin-top:7px;">
+												<table border="0" cellpadding="0" cellspacing="3">
+													<tr>
+														<td>
+															<html:select multiple="multiple" property="selOrganizations" size="4" style="width: 300px;">
+							                	<logic:notEmpty name="calendarEventForm" property="organizations">
+																	<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																		<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
+																	</logic:iterate>
+																</logic:notEmpty>
+							                </html:select>
+							              </td><td valign="top">
+							                <div style="float:right;">
+						                  	<table border="0" cellPadding="1" cellSpacing="1">
+						                    	<field:display name="Add Donor Button" feature="Donors">
+																		<tr>
+																			<td>
+																				<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="buttonx"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																			</td>
+																		</tr>
+						                    	</field:display>
+																	<field:display name="Remove Donor Button" feature="Donors">
+																		<tr>
+																			<td>
+																				<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
+																					<digi:trn key="btn:remove">Remove</digi:trn>
+																				</html:button>
+																			</td>
+																		</tr>
+																	</field:display>
+																</table>
+															</div>
+														</td>
+													</tr>
 												</table>
-												</div></div>												
-												<br /><br />
+											</div>
+												
+											<br/><br/>
 												
 												
 												<digi:trn key="calendar:Description"><b>Description</b></digi:trn><span style="font-size:11px;" id="descCharCounter"></span>
@@ -1246,6 +1259,21 @@ function removeGuest(obj) {
 		descProgressBar.css("width", this.value.length/descLength*100 + "%");
 	});
 	//End of char counters	
+	
+	//Team select checkbox handlers
+	$(".group_checkbox").bind("change", function (e) {
+		var srcObj = $(this);
+		srcObj.parents("div.rec_group_container").children("div.msg_grp_mem_name").children("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
+	});
+	
+	//select all handler
+	$("input[type='checkbox'][name='sendToAll']").bind("change", function (e) {
+		var srcObj = $(this);
+		$("div.msg_receivers").find("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
+	});
+	
+	
+	
 </script>
 
 

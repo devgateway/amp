@@ -367,7 +367,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
 				child.put("name", act.getName());
 				child.put("id", act.getAmpActivityId());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				rankProjects.add(child);
 			}
 		}
@@ -379,7 +379,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
 				child.put("name", act.getName());
 				child.put("id", act.getAmpActivityId());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topProjects.add(child);
 			}
 		}
@@ -394,7 +394,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				rankSectors.add(child);
 			}
 		}
@@ -404,7 +404,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topSectors.add(child);
 			}
 		}
@@ -419,7 +419,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				rankDonors.add(child);
 			}
 		}
@@ -429,7 +429,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topDonors.add(child);
 			}
 		}
@@ -444,7 +444,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				rankRegions.add(child);
 			}
 		}
@@ -454,7 +454,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()));
+				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topRegions.add(child);
 			}
 		}

@@ -2444,7 +2444,7 @@ function refreshBoxes(o){
 			case "ProjectsList":
 				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
-					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>($" + child.list[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>" + child.list[i].name + "</a>" + "  <b>(" + child.list[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 				var div = document.getElementById("divFullProjects");
@@ -2452,7 +2452,7 @@ function refreshBoxes(o){
 				inner = "";
 				for(var i = 0; i < child.top.length; i++){
 					//inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";  
-					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>($" + child.top[i].value + ")</b> <hr />";
+					inner = inner + (i+1) + ". " + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
 				}
 				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
@@ -2462,14 +2462,14 @@ function refreshBoxes(o){
 				if (dashboardType!=1) {
 					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullDonors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullDonors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
@@ -2480,14 +2480,14 @@ function refreshBoxes(o){
 				if (dashboardType!=3) {
 					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullSectors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullSectors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
@@ -2498,14 +2498,14 @@ function refreshBoxes(o){
 				if (dashboardType!=2) {
 					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>($" + child.list[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 					var div = document.getElementById("divFullRegions");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>($" + child.top[i].value + ")</b> <hr />";
+						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");

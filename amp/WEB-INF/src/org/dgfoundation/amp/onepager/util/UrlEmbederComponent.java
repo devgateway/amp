@@ -32,7 +32,7 @@ public class UrlEmbederComponent extends Label {
 			@Override
 			public void renderHead(IHeaderResponse response) {
 				super.renderHead(response);
-				response.renderOnLoadJavascript("$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\", function() { " + callBackJs + " });");
+				response.renderOnLoadJavascript("$.ajaxSetup({cache: false});$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\", function() { " + callBackJs + " });$.ajaxSetup({cache: true});");
 			}
 		});
 	}

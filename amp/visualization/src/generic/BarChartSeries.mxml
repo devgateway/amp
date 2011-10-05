@@ -368,6 +368,8 @@
 					labelArray.push(year);
 				} 
 				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 
 				var params:Object = {};
 				params["format"] = "xml";
@@ -379,8 +381,8 @@
 						"divide": divide
 					};
 				}
-				params["startYear"] = sliderYear.values[0];
-				params["endYear"] = sliderYear.values[1];
+				params["startYear"] = startYear;
+				params["endYear"] = endYear;
 				service.send(params);
 //				start();
 			}

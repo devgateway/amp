@@ -97,8 +97,6 @@
 			 */
 			public function start():void
 			{
-				
-				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
 				var maxValue:Number = 0;
 				var fillCategories:Boolean = false;
 				try {
@@ -109,8 +107,8 @@
 						if (maxValue < currentValue) maxValue = currentValue;
 					}
 				}
-				//				categories = categoriesLocal; 
-				vScale.maxValue = maxValue * 1.05;
+				vScale.maxValue = Math.round((maxValue*1.1)/10)*10;
+				
 				vScale.minValue = 0;
 				dataProvider = service.lastResult[profileDataField];
 				if("length" in service.lastResult[profileDataField]) // If it's not empty
@@ -320,14 +318,22 @@
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
+								
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"itemId" : itemId
 				};
-				params["startYear"] = sliderYear.values[0];
-				params["endYear"] = sliderYear.values[1];
+				params["startYear"] = startYear;
+				params["endYear"] = endYear;
 				params["divide"] = divide;
 				
 				service.send(params);
@@ -512,8 +518,8 @@
 				fontColor="0"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				tickGap="20"
 				labelFunction="{axisLabel}"
+				majorTickSpacing="27"
 				showGridArea="true"
 				gridFill="{areaFill}"
 				/>

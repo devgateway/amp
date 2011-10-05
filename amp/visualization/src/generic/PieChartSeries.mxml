@@ -322,6 +322,8 @@
 					labelArray.push(year);
 				} 
 				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){

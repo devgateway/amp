@@ -383,6 +383,8 @@
 					labelArray.push(year);
 				} 
 				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
 				
 				var params:Object = {};
 				params["startYear"] = sliderYear.values[0];

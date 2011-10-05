@@ -533,8 +533,7 @@ function toggleSettings(){
 <div id="dialog2" class="dialog" title="Advanced Filters">
 					<div id="popinContent" class="content">
 						<c:set var="selectorHeaderSize" scope="page" value="11" />
-							<div class="yui-content"
-								style="background-color: #f6faff; height: 92%; margin-top: 10px;">
+							<div class="yui-content" style="height: 92%; margin-top: 10px;">
 								<div id="generalTab" style="height: 91%;">
 										<div class="grouping_selector_wrapper"
 											style="float: left; width: 40%; padding: 0px; height: 98%;">

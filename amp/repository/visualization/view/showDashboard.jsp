@@ -1688,7 +1688,7 @@ function toggleSettings(){
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'ODAGrowth', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 				<br />
 				<br />
-				<div class="flashcontent" name="flashContent" style="height:400px;">
+				<div class="flashcontent" name="flashContent" style="height:460px;">
 					<div id="ODAGrowth">
 						<a href="http://www.adobe.com/go/getflashplayer">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
@@ -3175,7 +3175,7 @@ function changeChart(e, chartType, container, useGeneric){
 			else
 			{
 				if(container == "ODAGrowth"){
-					swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "400", "10.0.0", false, flashvars, params, attributes);
+					swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
 				}
 				else
 					swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);

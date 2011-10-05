@@ -2399,7 +2399,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("\n");
 			odaGrowthData += text +">";
 			
-			for (int i = filter.getStartYear().intValue(); i >= filter.getEndYear().intValue(); i--) {
+			for (int i = filter.getEndYear().intValue(); i >= filter.getStartYear().intValue(); i--) {
 				startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);

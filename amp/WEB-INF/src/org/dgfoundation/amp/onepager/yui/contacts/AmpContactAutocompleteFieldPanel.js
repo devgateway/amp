@@ -1,4 +1,4 @@
-
+var informationPanel=null;
 ///* Function that is executed when mouse over an element */
 function eventFunction(e, bodyText) {
     var x = 0;
@@ -17,6 +17,10 @@ function eventFunction(e, bodyText) {
 
 ///* Updates the panels header, body and position and makes it visible */
 function showPanel(bodyText, posX, posY) {
+	if(informationPanel==null){
+		informationPanel= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:false } );
+		informationPanel.render("additionalDetailsContainer");
+	}
 	informationPanel.setBody(bodyText);
 	informationPanel.moveTo(posX+2, posY+2);
 	informationPanel.show();
@@ -24,7 +28,9 @@ function showPanel(bodyText, posX, posY) {
 
 ///* Just makes the panel invisible */
 function hidePanel() {
-	informationPanel.hide();
+	if(informationPanel!=null){
+		informationPanel.hide();
+	}
 }
 
 

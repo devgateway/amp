@@ -106,6 +106,8 @@ ReportPreviewEngine.prototype.renderTable	= function( parentElId ) {
 	this.tableEl.id	= this.rpSettings.reportTableId;
 	this.tableEl.className 	= this.rpSettings.reportTableClass;
 	this.tableEl.setAttribute("align","center");
+	this.tableBodyEl	= document.createElement("TBODY");
+	
 	
 	for (var i=0; i<this.rdArray.length; i++ ) {
 		var tempRowsArray	= this.rdArray[i].getRowsArray();
@@ -123,9 +125,10 @@ ReportPreviewEngine.prototype.renderTable	= function( parentElId ) {
 					row.rowEl.appendChild(cell.cellEl);
 			}
 			
-			this.tableEl.appendChild( row.rowEl );
+			this.tableBodyEl.appendChild( row.rowEl );
 		}
 	} 
+	this.tableEl.appendChild(this.tableBodyEl);
 	this.parentEl.innerHTML		= "";
 	this.parentEl.appendChild ( this.tableEl );
 };

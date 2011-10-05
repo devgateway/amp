@@ -57,6 +57,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import org.axiis.charts.groupings.BarCluster;
 			import org.axiis.data.DataSet;
 
+			import org.axiis.core.AxiisSprite;
 			import mx.events.MoveEvent;
 			import mx.managers.DragManager;
 			import mx.core.DragSource;
@@ -105,10 +106,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 						if (minValue > currentValue) minValue = currentValue;
 					}
 				}
-				if (totalResults * 30 > 400){
+				if (totalResults * 30 > 460){
 					mxc1.height = totalResults * 30;
 				} else {
-					mxc1.height = 400;
+					mxc1.height = 460;
 				}
 				
 				if (maxValue > 100) maxValue = 100;
@@ -305,6 +306,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				else
 					return "";
 			}
+			
 			public function refreshGraph():void
 			{
 				messageLoadingPanel.visible = true;
@@ -404,7 +406,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			   horizontalCenter="0"
 			   verticalCenter="0"
 			   width="634"
-			   height="400"
+			   height="460"
 			   dragEnter="dragEnterHandler(event);"
 			   dragDrop="dragDropHandler(event);"
 			   >
@@ -426,7 +428,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				fontFamily="{fontFamily}"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				showGridArea="true"
+				showGridArea="false"
 				gridFill="{areaFill}"
 				showZeroLine="true" 
 				/>

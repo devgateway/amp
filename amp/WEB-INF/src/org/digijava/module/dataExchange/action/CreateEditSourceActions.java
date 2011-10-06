@@ -45,7 +45,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		
 		CreateSourceForm myform = (CreateSourceForm) form;
 		modeReset(myform);
-		fillForm(myform);
+		fillForm(myform,request);
 		return mapping.findForward("forward");
 	}
 	
@@ -57,7 +57,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		session.setAttribute("DEfileUploaded", "false");
 		
 		CreateSourceForm myform = (CreateSourceForm) form;
-		fillForm(myform);
+		fillForm(myform, request);
 		
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myform.getSourceId() );
 		myform.setName(ss.getName());
@@ -173,7 +173,7 @@ public class CreateEditSourceActions extends DispatchAction {
     	return mapping.findForward("forward");
 	}
 	
-	private void fillForm (CreateSourceForm myform){
+	private void fillForm (CreateSourceForm myform, HttpServletRequest request){
 		String[] langArray = {"en","fr","es"};
 		if(myform.getLanguages() == null || myform.getLanguages().length < 1) myform.setLanguages(langArray);
 		
@@ -199,7 +199,9 @@ public class CreateEditSourceActions extends DispatchAction {
 		Collection<AmpTeam> teams	= TeamUtil.getAllTeams();
 		myform.setTeamValues(teams);
 		
-		myform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true) );
+		//myform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true) );
+		myform.setActivityTree(ExportHelper.getIATIActivityStruct("Activity","activityTree","Activity",request) );
+		System.out.println(" ");
 	}
 	
 	private void attachFile(CreateSourceForm form) throws FileNotFoundException, IOException {

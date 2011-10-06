@@ -227,7 +227,7 @@ function cancelImportManager() {
 							<br />
 							<fieldset>
 								<legend><span class=legend_label><digi:trn>Filter and Identifier</digi:trn></span></legend>
-								<b><digi:trn>Type unique identifier (title,id,ampid,ptip) separatd by '|'</digi:trn> </b>:
+								<b><digi:trn>Type unique identifier</digi:trn> (<digi:trn>Title</digi:trn>, <digi:trn>Id</digi:trn>,<digi:trn>Amp Id</digi:trn>,<digi:trn>PTIP code</digi:trn>) <digi:trn>separated by</digi:trn> '|' </b>:
 								<html:text property="uniqueIdentifier" styleClass="inputx" style="width:95%; margin-top:5px;"/><br /><br />
 								<b><digi:trn>Select the approval status that the new activities will have</digi:trn>:</b><br />
 								

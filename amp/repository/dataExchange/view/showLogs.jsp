@@ -174,7 +174,7 @@ function page (page){
 							     -->
 							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
-							    		${log.description }
+							    		<digi:trn>${log.description }</digi:trn>
 							    			<%-- 
 							    			Name:	  |   ${log.name}
 							    		Database ID:	 ${log.id}	  

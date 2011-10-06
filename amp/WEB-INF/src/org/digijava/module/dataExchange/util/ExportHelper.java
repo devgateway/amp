@@ -10,13 +10,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
@@ -188,11 +191,11 @@ public class ExportHelper {
 		return retValue.toString();
 	}	
 	
-
-	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean requred) {
+								//getActivityStruct("activity","activityTree","activity",ActivityType.class,true)
+	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean required) {
 		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);
-		retValue.setSelect(requred);
-		retValue.setMandatory(requred);
+		retValue.setSelect(required);
+		retValue.setMandatory(required);
 
 		Field[] fields = clazz.getDeclaredFields();
 		int index = -1;
@@ -222,6 +225,54 @@ public class ExportHelper {
 		}
 
 		return retValue;
+	}
+	//							 getIATIActivityStruct("activity","activityTree","activity")
+	public static AmpColumnEntry getIATIActivityStruct(String name, String key, String path, HttpServletRequest request) {
+		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);
+		retValue.setSelect(true);
+		retValue.setMandatory(true);
+
+		String[] fields = {"Title","Objective","Description","Status","Activity Dates","Funding","Sector","Related Organizations","Location","Regional Funding","Programs","Contacts","Related Documents"};
+		
+//		Field[] fields = clazz.getDeclaredFields();
+		int index = -1;
+		
+		for (String field : fields) {
+			boolean mandatory = false;
+			
+			String newPath = path + PATH_DELIM + field.replace(' ', '_');
+			String newKey = key + ".elements["+ (++index) + "]" ;
+			AmpColumnEntry item = null;
+			try {
+				item = new AmpColumnEntry(newKey + ".select", TranslatorWorker.translateText(field,request), newPath);
+			} catch (WorkerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			item.setMandatory(false);
+			item.setSelect(true);
+			retValue.getList().add(item);
+		}
+
+		return retValue;
+	}
+	
+	public static String translate(String value, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		
+		Site site = RequestUtils.getSite(request);
+		
+		String genKey = TranslatorWorker.generateTrnKey(value);
+		String translatedValue;
+		try {
+			translatedValue = TranslatorWorker.getInstance(genKey).
+									translateFromTree(genKey, site.getId().longValue(), request.getLocale().getLanguage(), 
+											value, TranslatorWorker.TRNTYPE_LOCAL, null);
+			return translatedValue;
+		} catch (WorkerException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public static List<Message> getTranslations(String key, String body, String siteId) throws AmpExportException{

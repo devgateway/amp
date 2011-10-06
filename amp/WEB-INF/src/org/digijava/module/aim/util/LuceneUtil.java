@@ -780,6 +780,10 @@ public class LuceneUtil implements Serializable {
 	}
 	
     
+    public static Hits search(String index, String field, String searchString){
+    	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, "0");
+    }
+    
     public static Hits search(String index, String field, String searchString, String searchMode){
     	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, searchMode);
     }

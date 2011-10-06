@@ -99,7 +99,18 @@
 				<html:option value="3">
 					<digi:trn>Resources</digi:trn>
 				</html:option>
-			</html:select> <html:submit styleClass="buttonx_sm">
+			</html:select> 
+			<digi:trn>Search Mode</digi:trn>:
+			<html:select property="searchMode" styleClass="inputx insidex">
+				<html:option value="0">
+					<digi:trn>Any keyword</digi:trn>
+				</html:option>
+				<html:option value="1">
+					<digi:trn>All keywords</digi:trn>
+				</html:option>
+			</html:select>
+			
+			<html:submit styleClass="buttonx_sm">
 				<digi:trn>Search</digi:trn>
 			</html:submit></div>
 		</digi:form>

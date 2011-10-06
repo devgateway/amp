@@ -6,7 +6,7 @@ function search() {
 	if ($("#querytype").val() == '' || $("#keyword").val()==''){
 		alert(trn);
 	}else{
-		var url = "/search/search.do?desksearch=true&keyword="+$("#keyword").val()+"&type="+$("#querytype").val();    
+		var url = "/search/search.do?desksearch=true&keyword="+$("#keyword").val()+"&type="+$("#querytype").val()+"&searchMode="+$("#searchMode").val();    
 		$(location).attr('href',url);
 	}
 	return true;
@@ -18,7 +18,7 @@ function search() {
 		</div>
 			<div class="right_menu_box">
 				<div class="right_menu_cont">
-				 	<table width="85%" border="0" cellspacing="0" cellpadding="0">
+				 	<table width="85%" border="0" cellspacing="1px" cellpadding="0">
 						<tr>
 								<td class="tbl_spacing" align="left">
 									<div class="search_label"><digi:trn>Keyword</digi:trn>:</div>
@@ -38,6 +38,17 @@ function search() {
 									<option value="1"><digi:trn>Reports</digi:trn></option>
 									<option value="2"><digi:trn>Tabs</digi:trn></option>
 									<option value="3"><digi:trn>Resources</digi:trn></option>
+								</select>
+	  							</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="search_label"><digi:trn>Mode</digi:trn>:</div>
+								</td>
+								<td align="left">
+									<select class="dropdwn_sm" style="width: 90px;" id="searchMode" >
+									<option value="0"><digi:trn>Any keyword</digi:trn></option>
+									<option value="1"><digi:trn>All keywords</digi:trn></option>
 								</select>
 	  							</td>
 							</tr>

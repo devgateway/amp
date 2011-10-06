@@ -118,6 +118,8 @@ public class LuceneUtil implements Serializable {
     public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
 
 	private static final int CHUNK_SIZE = 10000;
+	
+	public final static Integer SEARCH_MODE_AND	= 1;
     
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
 	  	String oql= "select idx from "+AmpLuceneIndexStamp.class.getName()+" idx"+
@@ -778,8 +780,8 @@ public class LuceneUtil implements Serializable {
 	}
 	
     
-    public static Hits search(String index, String field, String searchString){
-    	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true);
+    public static Hits search(String index, String field, String searchString, String searchMode){
+    	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, searchMode);
     }
     
 	/**
@@ -792,8 +794,10 @@ public class LuceneUtil implements Serializable {
 	 * 
 	 * @return a Hits object that contains the results
 	 */
-	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry){
+	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
 		QueryParser parser = new QueryParser(field, analyzer);
+		if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode) ) 
+			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		Query query = null;
 		Hits hits = null;
 		
@@ -813,6 +817,9 @@ public class LuceneUtil implements Serializable {
 			searchString = searchString.replace("{","\\}");
 			searchString = searchString.replace("[","\\[");
 			searchString = searchString.replace("]","\\]");
+			searchString = searchString.replaceAll("\\W\\w{1,2}\\W", " ");
+			searchString = searchString.replaceAll("^\\w{1,2}\\W", " ");
+			searchString = searchString.replaceAll("\\W\\w{1,2}$", " ");
 			
 			query = parser.parse(searchString.trim());
 			BooleanQuery bol = new BooleanQuery();
@@ -827,7 +834,7 @@ public class LuceneUtil implements Serializable {
 				msg		+= "Will retry with " + maxLuceneResults*10;
 			logger.warn ( msg  );
 			if ( retry )
-				return LuceneUtil.search(index, field, origSearchString, maxLuceneResults*10, false);
+				return LuceneUtil.search(index, field, origSearchString, maxLuceneResults*10, false, searchMode);
 			else
 				e1.printStackTrace();
 		}

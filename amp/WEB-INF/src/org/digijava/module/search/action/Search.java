@@ -41,6 +41,7 @@ public class Search extends Action {
 			searchForm.setKeyword("");
 			searchForm.setQueryType(-1);
 			searchForm.setResultsPerPage(-1L);
+			searchForm.setSearchMode(0);
 		} else {
 			// If it's a tab we need to redirect
 			if (request.getParameter("ampReportId") != null) {

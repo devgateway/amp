@@ -10,6 +10,7 @@ public class SearchForm extends ActionForm {
 	private String keyword;
 	private int queryType;
 	private Long resultsPerPage;
+	private int searchMode	= 0;
 	
 
 	public void setKeyword(String keyword) {
@@ -36,4 +37,19 @@ public class SearchForm extends ActionForm {
 		return resultsPerPage;
 	}
 
+	/**
+	 * @return the searchMode
+	 */
+	public int getSearchMode() {
+		return searchMode;
+	}
+
+	/**
+	 * @param searchMode the searchMode to set
+	 */
+	public void setSearchMode(int searchMode) {
+		this.searchMode = searchMode;
+	}
+
+	
 }

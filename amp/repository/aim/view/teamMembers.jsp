@@ -146,8 +146,8 @@ function addTeamMember(id) {
 										<table class="inside members normal" width="100%" cellpadding="0" cellspacing="0">
 											<tr>
 											  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;</td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Name</b></td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">User ID </b></td>
+											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Name</digi:trn></b></td>
+											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>User ID</digi:trn></b></td>
 											    <%--
 											    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Role</b></td>
 											    --%>

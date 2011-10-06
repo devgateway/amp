@@ -244,15 +244,84 @@ function collapseAll() {
 					<b>
 		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
 		                 <bean:write name="aimEditActivityForm" property="currCode" />
-		                </b>		         	</c:if>        
+	            	</b>		         	
+		         </c:if>    
+		         <c:if test="${empty aimEditActivityForm.funding.totalCommitments}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
+			<hr/>
+			<digi:trn>Total Planned Commitment</digi:trn>:<br/>
+				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
+					<b>
+					 <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
+		             <bean:write name="aimEditActivityForm" property="currCode" />
+                	</b>
+                </c:if>
+                <c:if test="${empty aimEditActivityForm.funding.totalPlannedCommitments}">
+                	<b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
 			<hr/>
 			<digi:trn>Total Distributements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
-		                <b>
-		                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
-		                 <bean:write name="aimEditActivityForm" property="currCode" />
-		                </b>		          </c:if>
-			
+	                <b>
+	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
+	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                </b>		          
+		         </c:if>
+		         <c:if test="${empty aimEditActivityForm.funding.totalDisbursements}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
+			<hr/>
+			<digi:trn>Total Planned Distributements</digi:trn>:<br/>
+				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
+	                <b>
+	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
+	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                </b>		          
+		         </c:if>
+		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedDisbursements}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
+			<hr/>
+			<digi:trn>Total Expenditures</digi:trn>:<br/>
+				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
+	                <b>
+	                 <bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
+	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                </b>		          
+		         </c:if>
+		          <c:if test="${empty aimEditActivityForm.funding.totalExpenditures}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
+			<hr/>
+			<digi:trn>Total Planned Expenditures</digi:trn>:<br/>
+				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
+	                <b>
+	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
+	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                </b>		          
+		         </c:if>
+		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedExpenditures}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
 			<hr/>
 			<digi:trn>Duration of project</digi:trn>: <br/>
 			<b>${aimEditActivityForm.planning.projectPeriod }</b>
@@ -265,7 +334,7 @@ function collapseAll() {
 	</fieldset>	
 	<fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
+		<span class=legend_label>Additional info</span>	</legend>
 	<div class="field_text_big">
 	<digi:trn>Activity created by</digi:trn>: <br/>
 		<b> 

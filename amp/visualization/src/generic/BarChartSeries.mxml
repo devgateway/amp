@@ -128,7 +128,17 @@
 				}
 				categories = categoriesLocal;
 				categoriesAmount = categories.length;
-				vScale.maxValue = maxValue * 1.05;
+				var magnitude:Number;
+				magnitude = Math.pow(10,(Math.round(maxValue).toString().length));
+				//for 10.000 to 99.999 it's 100.000, now determine the segment there.
+				//determine in which quarter of the magnitude the value is
+				var newMaxValue:Number = getDeterminedMaxValue(magnitude, maxValue, magnitude/10);
+				//Lets divide further for larger numbers
+				if(maxValue > 10000){
+					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
+				}
+				
+				vScale.maxValue = newMaxValue;
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.year;
 				if("length" in service.lastResult.year) // If it's not empty
@@ -236,6 +246,18 @@
 				dc.visible = true;
 
 			}
+			private function getDeterminedMaxValue(magnitude, maxValue, step){
+				var determinedMaxValue:Number = 0;
+				for(var tenth:Number = magnitude; tenth > 0; tenth = tenth - step)
+				{
+					if(maxValue > tenth){
+						determinedMaxValue = tenth + step;
+						break;
+					}
+				}
+				return determinedMaxValue;
+			}
+
 
 			private function captureSnapshot():void
 			{
@@ -332,7 +354,10 @@
 			private function axisLabel(obj:Object):String
 			{
 				if (obj!=null && obj<10 && obj>0){
-					formatter.precision = 2;
+					if(Math.round(Number(obj)) == Number(obj))
+						formatter.precision = 2;
+					else
+						formatter.precision = 0
 				} else {
 					formatter.precision = 0;
 				}
@@ -561,8 +586,8 @@
 				fontFamily="{fontFamily}"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				tickGap="20"
 				labelFunction="{axisLabel}"
+				majorTickSpacing="26"
 				showGridArea="true"
 				gridFill="{areaFill}"
 				/>

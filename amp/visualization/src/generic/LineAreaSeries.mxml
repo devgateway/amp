@@ -63,11 +63,10 @@
 			import mx.events.MoveEvent;
 			import mx.events.SliderEvent;
 			import mx.managers.DragManager;
+			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-
-			import mx.rpc.events.FaultEvent;
-
+			
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
 			import org.axiis.events.LayoutItemEvent;
@@ -112,6 +111,7 @@
 				//This then makes a column for each unique time entrie and a row for each unique column.
 				ds.pivotTable(0);
 				dataProvider = ds.data.pivot.rows;
+				
 
 				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
 				try {
@@ -138,7 +138,31 @@
 					messagePanel.visible = true;
 					sizePanel(300, 200);
 				}
+				var currentValue:Number;
+				var maxValue:Number = 0;
+				try {
+					for(j = 0; j < dataProvider.length; j++){
+						var arrCol= dataProvider[j].columns;
+						for(var k:Number = 0; k < arrCol.length; k++){
+							currentValue = Number(arrCol[k].value);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
+					}
+				} catch (errObject:Error) {
+				}
+				var magnitude:Number;
+				magnitude = Math.pow(10,(Math.round(maxValue).toString().length));
+				//for 10.000 to 99.999 it's 100.000, now determine the segment there.
+				//determine in which quarter of the magnitude the value is
+				var newMaxValue:Number = getDeterminedMaxValue(magnitude, maxValue, magnitude/10);
+				//Lets divide further for larger numbers
+				if(maxValue > 10000){
+					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
+				}
 				
+				vScale.maxValue = newMaxValue*10;
+				vScale.minValue = 0;
+
 				// Set the intial dp to the intial setting of the %data slider
 				hScale.dataProvider=ds.data.pivot.header.slice(1,dataSlice+1);
 				hAxis.invalidateDataProvider();
@@ -210,6 +234,17 @@
 				sizeLoadingPanel(0, 0);
 				dc.visible = true;
 				
+			}
+			private function getDeterminedMaxValue(magnitude, maxValue, step){
+				var determinedMaxValue:Number = 0;
+				for(var tenth:Number = magnitude; tenth > 0; tenth = tenth - step)
+				{
+					if(maxValue > tenth){
+						determinedMaxValue = tenth + step;
+						break;
+					}
+				}
+				return determinedMaxValue;
 			}
 			private function sizePanel(w:uint, h:uint):void {
 				messagePanel.width = w;
@@ -550,12 +585,7 @@
 	<!--  
 	A scale that deals with linear numeric data.
 	-->
-	<axiis:LinearScale id="vScale"
-		dataProvider="{dataProvider}"
-		minLayout="0"
-		maxLayout="{myLineGroup.height}"
-		/>
-	
+	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{myLineGroup.height}" />
 	<!--
 	A scale that converts categorical (String) data into layout space. The categories are assumed to be sorted alphabetically. 
 	-->
@@ -614,25 +644,40 @@
 			VAxis renders values from bottom to top between a minimum and maximum value, and is intended to be rendered to the left of other layouts to provide a point of reference for those visualizations.
 			VAxis can optionally label each major tick mark or render gridlines aligned to the axis itself. 
 			-->
-			<axis:VAxis 
-				id="vAxis"
-				y="{myLineGroup.y}"
-				verticalScale="{vScale}"
-				tickStroke="{axisStroke}"
-				width="{dc.width}"
-				height="{myLineGroup.height}"
-				showDataTips="false"
-				fontFamily="{fontFamily}"
-				fontSize="{fontSize}"
-				fontWeight="{fontWeight}"
-				fontColor="0"
-				tickGap="5"
-				majorTickSpacing="50"
-				labelFunction="{axisLabel}"
-				showGridArea="true"
-				gridFill="{gridAreaFill}"
-				/>
+			<axis:VAxis verticalScale="{vScale}"
+						tickStroke="{axisStroke}"
+						y="{myLineGroup.y}"
+						width="{dc.width}"
+						height="{myLineGroup.height}"
+						showDataTips="false"
+						fontColor="0"
+						fontFamily="{fontFamily}"
+						fontSize="{fontSize}"
+						fontWeight="{fontWeight}"
+						labelFunction="{axisLabel}"
+						majorTickSpacing="28"
+						showGridArea="true"
+						gridFill="{gridAreaFill}"
+						/>
 			<!--
+			<axis:VAxis 
+			id="vAxis"
+			y="{myLineGroup.y}"
+			verticalScale="{vScale}"
+			tickStroke="{axisStroke}"
+			width="{dc.width}"
+			height="{myLineGroup.height}"
+			showDataTips="false"
+			fontFamily="{fontFamily}"
+			fontSize="{fontSize}"
+			fontWeight="{fontWeight}"
+			fontColor="0"
+			tickGap="20"
+			majorTickSpacing="28"
+			labelFunction="{axisLabel}"
+			showGridArea="true"
+			gridFill="{gridAreaFill}"
+			/>
 			HCategoryAxis renders values from left to right between a indexed collection of string values and is intended to be rendered beneath other layouts to provide a point of reference for those visualizations.
 			HCategory Axis trys to optmize its layout based on the maximum widht/length of all labels in collection 
 			-->

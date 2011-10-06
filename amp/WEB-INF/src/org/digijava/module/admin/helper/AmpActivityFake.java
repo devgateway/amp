@@ -5,12 +5,13 @@ package org.digijava.module.admin.helper;
 
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 
 /**
  * @author dan
  *
  */
-public class AmpActivityAdmin {
+public class AmpActivityFake implements LoggerIdentifiable{
 
 	/**
 	 * 
@@ -20,9 +21,17 @@ public class AmpActivityAdmin {
 	private AmpTeam team;
 	private String ampId;
 	private Long ampActivityId;
+	
+	public AmpActivityFake(String name, String ampId, Long ampActivityId) {
+		super();
+		this.name = name;
+		this.ampId = ampId;
+		this.ampActivityId = ampActivityId;
+	}
+
 	private AmpActivityGroup ampActGroup;
 	
-	public AmpActivityAdmin(String name, AmpTeam team, String ampId, Long ampActivityId, AmpActivityGroup ampActGroup) {
+	public AmpActivityFake(String name, AmpTeam team, String ampId, Long ampActivityId, AmpActivityGroup ampActGroup) {
 		super();
 		this.name = name;
 		this.team = team;
@@ -39,7 +48,7 @@ public class AmpActivityAdmin {
 		this.ampActGroup = ampActGroup;
 	}
 
-	public AmpActivityAdmin(String name, AmpTeam team, String ampId, Long ampActivityId) {
+	public AmpActivityFake(String name, AmpTeam team, String ampId, Long ampActivityId) {
 		super();
 		this.name = name;
 		this.team = team;
@@ -79,8 +88,26 @@ public class AmpActivityAdmin {
 		this.ampActivityId = ampActivityId;
 	}
 
-	public AmpActivityAdmin() {
+	public AmpActivityFake() {
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public Object getIdentifier() {
+		// TODO Auto-generated method stub
+		return this.getAmpActivityId();
+	}
+
+	@Override
+	public Object getObjectType() {
+		// TODO Auto-generated method stub
+		return this.getClass().getName();
+	}
+
+	@Override
+	public String getObjectName() {
+		// TODO Auto-generated method stub
+		return this.getAmpId()+" "+this.getName();
 	}
 
 }

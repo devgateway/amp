@@ -5,16 +5,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.admin.helper.AmpActivityAdmin;
+import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ActivityForm extends ActionForm implements Serializable {
 
 	public final String SortByColumn_ActivityName = "activityName";
 
-	private List<AmpActivityAdmin> activityList;
+	private List<AmpActivityFake> activityList;
 	
-	private List<AmpActivityAdmin> allActivityList;
+	private List<AmpActivityFake> allActivityList;
 
 	private String sortByColumn;
 
@@ -37,7 +37,7 @@ public class ActivityForm extends ActionForm implements Serializable {
 	/**
 	 * @return Returns the activityList.
 	 */
-	public List<AmpActivityAdmin> getActivityList() {
+	public List<AmpActivityFake> getActivityList() {
 		return activityList;
 	}
 
@@ -45,7 +45,7 @@ public class ActivityForm extends ActionForm implements Serializable {
 	 * @param activityList
 	 *            The activityList to set.
 	 */
-	public void setActivityList(List<AmpActivityAdmin> activityList) {
+	public void setActivityList(List<AmpActivityFake> activityList) {
 		this.activityList = activityList;
 	}
 
@@ -83,11 +83,11 @@ public class ActivityForm extends ActionForm implements Serializable {
 		return page;
 	}
 
-	public void setAllActivityList(List<AmpActivityAdmin> allActivityList) {
+	public void setAllActivityList(List<AmpActivityFake> allActivityList) {
 		this.allActivityList = allActivityList;
 	}
 
-	public List<AmpActivityAdmin> getAllActivityList() {
+	public List<AmpActivityFake> getAllActivityList() {
 		return allActivityList;
 	}
 

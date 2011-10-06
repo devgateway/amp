@@ -35,7 +35,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.module.admin.helper.AmpActivityAdmin;
+import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.action.ShowAddComponent;
@@ -4757,10 +4757,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	}
 	
 	
-    public static ArrayList<AmpActivityAdmin> getAllActivitiesAdmin(String actName) {
+    public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String actName) {
         Session session = null;
         Query qry = null;
-        ArrayList<AmpActivityAdmin> result = new  ArrayList<AmpActivityAdmin>();
+        ArrayList<AmpActivityFake> result = new  ArrayList<AmpActivityFake>();
         try {
             session = PersistenceManager.getSession();
             String queryString = "";
@@ -4785,7 +4785,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 String name = (String) item[2];
                 AmpTeam team = (AmpTeam) item[3];
                 AmpActivityGroup ampActGroup = (AmpActivityGroup) item[4];
-                AmpActivityAdmin activity = new AmpActivityAdmin(name,team,ampId,ampActivityId,ampActGroup);
+                AmpActivityFake activity = new AmpActivityFake(name,team,ampId,ampActivityId,ampActGroup);
                 result.add(activity);
             }
 

@@ -10,8 +10,6 @@ import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,24 +17,26 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.time.StopWatch;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.digijava.module.contentrepository.dbentity.*;
 
 public class SearchUtil {
 
@@ -165,12 +165,11 @@ public class SearchUtil {
 
 	}
 
-	public static Collection<LoggerIdentifiable> getActivities(String keyword,
-			HttpServletRequest request, TeamMember tm) {
+	public static Collection<LoggerIdentifiable> getActivities(String keyword, HttpServletRequest request, TeamMember tm) {
 		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
-
+		StopWatch.reset("Search");
 		AmpARFilter filter = new AmpARFilter();
-
+//		StopWatch.next("Search", true,"mycomment 1");
 		filter.setAmpTeams(new TreeSet());
 
 		if (tm != null) {
@@ -194,18 +193,24 @@ public class SearchUtil {
 		List<AmpActivity> col = new ArrayList<AmpActivity>();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			List result = session.createSQLQuery(
-					filter.getGeneratedFilterQuery()).addScalar(
-					"amp_activity_id", org.hibernate.Hibernate.LONG).list();
 
-			Iterator it = result.iterator();
-			while (it.hasNext()) {
-				Long activityId = (Long) it.next();
-
-				AmpActivityVersion act = ActivityUtil.loadActivity(activityId);
-				resultList.add(act);
-
-			}
+			//not a very nice solution, but I kept the old code and idea and just added some speed
+			String newQueryString = "select f.amp_activity_id, f.amp_id,  f.name from amp_activity f where f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
+			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.Hibernate.LONG);
+			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.Hibernate.STRING);
+			newQuery		  = newQuery.addScalar("name", org.hibernate.Hibernate.STRING);
+			
+//			StopWatch.next("Search", true,"mycomment 2");
+			Iterator iter = newQuery.list().iterator();
+            while (iter.hasNext()) {
+                Object[] item = (Object[])iter.next();
+                Long ampActivityId = (Long) item[0];
+                String ampId = (String) item[1];
+                String name = (String) item[2];
+                AmpActivityFake activity = new AmpActivityFake(name,ampId,ampActivityId);
+                resultList.add(activity);
+            }
+//			StopWatch.next("Search", true,"mycomment 3");
 
 		} catch (DgException e) {
 			// TODO Auto-generated catch block

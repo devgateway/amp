@@ -131,7 +131,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
 		
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
 		activityForm.add(saveAndSubmit);
 
@@ -171,7 +171,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		saveAsDraft.getButton().setDefaultFormProcessing(false); //disable global validation of the form
-		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		saveAsDraft.getButton().add(updateEditors);
 		activityForm.add(saveAsDraft);
 
@@ -186,7 +186,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			logframe.add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
 			logframe.setVisible(true);
 		}
-		logframe.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		activityForm.add(logframe);
 		
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
@@ -201,7 +201,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.addComponent(feedbackPanel);
 			}
 		};
-		preview.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		preview.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
 		

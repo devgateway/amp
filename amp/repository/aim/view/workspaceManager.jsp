@@ -998,8 +998,10 @@
     <tr>
         <td align=left vAlign=top width=850>
             <table cellPadding=5 cellSpacing=0 width="100%" border=0>
-                <tr>
-                    <!-- Start Navigation -->
+                 
+				<!--	
+				<tr>
+			
                     <td height=33><span class=crumb>
                             <c:set var="translation">
                                 <digi:trn>Click here to goto Admin Home</digi:trn>
@@ -1010,8 +1012,8 @@
                             <digi:trn>Workspace Manager</digi:trn>
                             <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/workspacemanager.jpg"/></div>
                     </td>
-                    <!-- End navigation -->
-                </tr>
+                </tr> 
+				-->
                 <!--<tr>
 					<td height="16" vAlign="center" width="571">
                     	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>

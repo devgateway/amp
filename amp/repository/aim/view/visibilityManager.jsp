@@ -30,13 +30,13 @@
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left valign="top" width=750>
 	
 			<table cellPadding=5 cellspacing="0" width="100%" border="0" style="font-size:12px;">
-				<tr>
-					<!-- Start Navigation -->
-					<td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>
-						<c:set var="translation">
+				<!-- <tr>
+					Start Navigation -->
+					<!-- <td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>
+						<!--<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
@@ -48,8 +48,8 @@
 							Feature Manager
 						</digi:trn>
 					</td>
-					<!-- End navigation -->
-				</tr>
+					<!-- End navigation 
+				</tr>-->
 				<tr>
 					<td height=16 valign="center" width=571 colspan=2 align="center">
 						<span class=subtitle-blue>

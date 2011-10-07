@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <style type="text/css">
 <!--
@@ -481,13 +483,15 @@ var tabView = new YAHOO.widget.TabView('demo');
 								</p>
 							</div>
 							<div style="width: 60%; float: left;">
-								<p>
-									<label><digi:trn>Source Of Data</digi:trn> </label>
-									<select id="mapModeFin" name="mapModeFin" value="commitment">
-						            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
-						            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
-						        	</select>
-								</p>
+								<field:display name="Source of Data" feature="GIS DASHBOARD">
+									<p>
+										<label><digi:trn>Source Of Data</digi:trn> </label>
+										<select id="mapModeFin" name="mapModeFin" value="commitment">
+							            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
+							            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
+							        	</select>
+									</p>
+								</field:display>
 								<p>
 									<label><digi:trn>Funding type</digi:trn> </label>
 									<select id="fundingType" name="fundingType" value="commitment" styleId="fundType">

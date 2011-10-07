@@ -74,13 +74,6 @@ function page (page){
 		<!-- BREADCRUMP START -->
 		<tr>
 			<td height="33">
-				<div class="breadcrump_1"> 
-					<span class="sec_name"><digi:trn>Data Import Manager</digi:trn></span>
-					<span class="breadcrump_sep">|</span> <a href="/admin.do" class="l_sm"><digi:trn>Admin Home</digi:trn></a>				
-					<span class="breadcrump_sep"><b>»</b></span>
-					<span class="bread_sel"><digi:trn>Data Import Manager</digi:trn></span>
-				</div>
-				<br>
 				<digi:errors/>
 			</td>
 		</tr>
@@ -180,12 +173,12 @@ function page (page){
 				    <td bgcolor="#FFFFFF" class="inside">${source.source}</td>
 				    <td bgcolor="#FFFFFF" class="inside">${source.importWorkspace.name }</td>
 				    <td bgcolor="#FFFFFF" class="inside" align="center" nowrap="nowrap">
-				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${source.id}_plus" onclick="toggleGroup('${source.id}')" style="cursor: pointer;"/>
+				    	<img src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif" id="${source.id}_plus" onClick="toggleGroup('${source.id}')" style="cursor: pointer;"/>
 				    	<div id="source_${source.id}" style="display: none;height: 355px;width:500px; overflow: auto;">				    		
 				    		<table border="0">
 				    		<tr>
 				    			<td style="border: none;vertical-align: text-top;" colspan="2" rowspan="8" class="inside">				    				
-				    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${source.id}_minus" style="display: none;cursor: pointer; " onclick="toggleGroup('${source.id}')"/>	
+				    				<img src="/TEMPLATE/ampTemplate/img_2/ico_blue_minus.gif"  id="${source.id}_minus" style="display: none;cursor: pointer; " onClick="toggleGroup('${source.id}')"/>	
 				    			</td>
 				    			<td style="border: none;vertical-align: text-top;" class="inside" nowrap="nowrap">				    				
 				    				<strong><digi:trn>Name</digi:trn>:</strong>
@@ -269,9 +262,9 @@ function page (page){
 				    </td>
 				    <td bgcolor="#FFFFFF" class="inside" align="center">
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
-				    	 <img src="/TEMPLATE/ampTemplate/img_2/execute_icon.gif" onclick="execute(${source.id});" style="cursor:pointer;" title="<digi:trn>Execute</digi:trn>"/>
-				    	 <img src="/TEMPLATE/ampTemplate/img_2/view_log_icon.gif" onclick="viewLog(${source.id});" style="cursor:pointer;" title="<digi:trn>View Log</digi:trn>"/>
-				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onclick="deleteSource(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/execute_icon.gif" onClick="execute(${source.id});" style="cursor:pointer;" title="<digi:trn>Execute</digi:trn>"/>
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/view_log_icon.gif" onClick="viewLog(${source.id});" style="cursor:pointer;" title="<digi:trn>View Log</digi:trn>"/>
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onClick="deleteSource(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>
 				    	
 				    </td>
 				</tr>		

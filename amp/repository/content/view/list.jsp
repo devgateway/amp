@@ -98,7 +98,7 @@ $(document).ready(function(){
   <tr>
     <td width=14>&nbsp;</td>
     <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="1000">
-        <tr>
+       <!-- <tr>
           <td height=33 colspan="2">
           	<span class=crumb>
 	            <c:set var="translation">
@@ -111,7 +111,7 @@ $(document).ready(function(){
 	            <digi:trn>Public View Content</digi:trn>
             </span>
           </td>
-        </tr>
+        </tr> -->
         <!--<tr>
           <td height=16 valign="center" colspan="2"><span class=subtitle-blue>
             <digi:trn>List of Public View Content</digi:trn>

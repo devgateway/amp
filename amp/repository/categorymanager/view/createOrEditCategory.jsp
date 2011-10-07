@@ -153,9 +153,9 @@
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="1" width="100%" border="0">
-				<tr>
+				<!-- <tr> -->
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<!--<td height=33><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -176,9 +176,9 @@
 						<digi:trn key="aim:categoryManagerCreator">
 							Category Manager Creator
 						</digi:trn>
-					</td>
+					</td> -->
 					<!-- End navigation -->
-				</tr>
+				<!-- </tr> -->
 				<tr>
 					<td height=16 valign="center" bgcolor=#c7d4db align="center">
 						<span class=subtitle-blue style="font-size:12px; font-weight:bold;">

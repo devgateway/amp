@@ -145,9 +145,9 @@
 								<tr>
 									<td width="100%" valign="top">
 										<table width="100%" cellspacing="0" cellpadding="0">
-											<tr>
+											<!-- <tr> -->
 												<!-- Start Navigation -->
-												<td height=33><span class=crumb>
+												<!--<td height=33><span class=crumb>
 													<c:set var="translation">
 														<digi:trn>Click here to goto Admin Home</digi:trn>
 													</c:set>
@@ -161,14 +161,9 @@
 														<digi:trn>Templates Manager</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;													
 													<digi:trn>Add/Edit Template</digi:trn>													
-												</td>
+												</td>-->
 												<!-- End navigation -->
-											</tr>											
-											<tr>
-								               <td height=16 valign="center" width=571 align-center>
-									              
-								               </td>
-							                </tr>
+											<!-- </tr> -->
 											
 											<tr>
 												<td width="100%">

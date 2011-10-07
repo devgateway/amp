@@ -53,9 +53,9 @@
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" style="font-size:12px;">
-				<tr>
+				<!--<tr> -->
 					<!-- Start Navigation -->
-					<td height=33 colspan="7" width="867"><span class=crumb>
+					<!-- <td height=33 colspan="7" width="867"><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -64,9 +64,9 @@
 						<digi:trn key="aim:orgGroupManager"> Organization Group Manager
 						</digi:trn>
                       </span>
-					</td>
+					</td>-->
 					<!-- End navigation -->
-				</tr>
+				<!--</tr> -->
 				<!--<tr>
 					<td height=16 valign="center" width=571 colspan="7"><span class=subtitle-blue>
 						<digi:trn key="aim:orgGroupManager"></span><span class=crumb>Organization Group

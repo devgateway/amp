@@ -272,7 +272,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 
 <digi:form action="/tempDocManager.do?actType=saveTemplateDocument" method="post">
 <table border="0" cellpadding="0" align="center" width=1000>
-	<tr>
+	<!--<tr>
 		<td colspan="2" style="padding-bottom:15px;">
 			<span class="crumb">
               <c:set var="translation">
@@ -287,7 +287,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
               <digi:trn>Template Document form</digi:trn>		
 			</span>
 		</td>
-	</tr>
+	</tr>-->
 	<tr><td colspan="2"><digi:errors/></td></tr>
 	<tr>
 		<td colspan="2" bgcolor=#c7d4db height=25 align=center>

@@ -45,7 +45,7 @@
 <digi:form action="/indicatorchartwidgets.do~actType=save">
 
 <table width="1000" border="0" cellpadding="0" align=center>
-	<tr>
+	<!--<tr>
 		<td height=40 bgcolor="#f2f2f2">
 			<span class="crumb">
               <c:set var="translation">
@@ -59,7 +59,7 @@
                 <digi:trn key="admin:Navigation:indicatorchartWidgetsCreateEdit"><b>Input widget fields</b></digi:trn>
 			</span>
 		</td>
-	</tr>
+	</tr>-->
 	<tr>
 		<td style="padding-top:10px; padding-bottom:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetCreateEdit:pageHeader">Edit widget data</digi:trn></span>

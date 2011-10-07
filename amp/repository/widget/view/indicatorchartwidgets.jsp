@@ -26,7 +26,7 @@
 
 
 <table width="1000" border="0" cellpadding="0" align=center style="font-size:12px;">
-	<tr>
+	<!--<tr>
 		<td bgcolor=#f2f2f2 height=40 style="padding-left:10px;">
 			<span class="crumb">
               <c:set var="translation">
@@ -38,7 +38,7 @@
                 <digi:trn key="admin:Navigation:indicatorchartWidgets"><b>Indicator chart widgets</b></digi:trn>
 			</span>
 		</td>
-	</tr>
+	</tr>-->
 	<tr>
 		<td style="padding-top:10px; padding-bottom:10px;">
 			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetManager:pageHeader">Indicator chart widget Manager</digi:trn></span>

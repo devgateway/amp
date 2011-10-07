@@ -19,7 +19,7 @@
 
 
     <table width="1000" border="0" cellpadding="0" align=center style="font-size:12px;">
-        <tr>
+       <!-- <tr>
             <td height=40 bgcolor=#f2f2f2 style="padding-top:10px; padding-bottom:10px; padding-left:10px;">
                 <span class="crumb">
                     <c:set var="translation">
@@ -31,12 +31,13 @@
                     <digi:trn><b>Sector Table Manager</b></digi:trn>
                 </span>
             </td>
+			</tr>
+			-->
             <tr>
                 <td>
                     <digi:errors/>
                 </td>
             </tr>
-        </tr>
         <tr>
             <td style="padding-top:10px; padding-bottom:10px;">
                 <span class="subtitle-blue"><digi:trn>Sector Table Manager</digi:trn></span>

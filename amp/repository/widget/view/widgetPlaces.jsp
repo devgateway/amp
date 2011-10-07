@@ -10,7 +10,7 @@
 <digi:form action="/widgetplaces.do">
 
 <table width="60%" border="0" cellpadding="15">
-	<tr>
+	<!--<tr>
 		<td>
 			<span class="crumb">
               <c:set var="translation">
@@ -22,7 +22,7 @@
                 <digi:trn key="admin:Navigation:WidgetPlaces">Widgets Places</digi:trn>
 			</span>
 		</td>
-	</tr>
+	</tr>-->
 	<tr>
 		<td>
 			<span class="subtitle-blue"><digi:trn key="gis:widgetPlaceMan:pageHeader">Widget Place Manager</digi:trn></span>

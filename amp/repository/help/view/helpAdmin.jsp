@@ -303,9 +303,9 @@ function IsEmpty(){
 <center>
 <digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
 <table bgColor="#ffffff" cellPadding="2" cellSpacing="2" width="772" border="0" align="left">
-	<tr>
+	<!--<tr> -->
 	<!-- Start Navigation -->
-		<td  height=33 colspan="2" ><span class=crumb>
+		<!-- <td  height=33 colspan="2" ><span class=crumb>
 			<c:set var="translation">
 				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 			</c:set>
@@ -317,9 +317,9 @@ function IsEmpty(){
 			<digi:trn key="aim:helptopicsadmin">
 				Help Topics Admin
 			</digi:trn>
-		</td>
+		</td>-->
 	<!-- End navigation -->
-	</tr>
+	<!--</tr>-->
 		<tr>
 			<td colspan="2" >
 				 <span class=subtitle-blue>

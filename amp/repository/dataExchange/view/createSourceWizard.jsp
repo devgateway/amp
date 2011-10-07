@@ -168,7 +168,7 @@ function cancelImportManager() {
 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center >
 	<!-- BREADCRUMP START -->
-	<tr>
+	<!--<tr>
 		<td height="33">
 			<div class="breadcrump_cont"> 
 				<span class="sec_name"><digi:trn>Data Import Manager</digi:trn></span>
@@ -179,7 +179,7 @@ function cancelImportManager() {
 			</div>
 			<br>
 		</td>
-	</tr>
+	</tr>-->
 	<!-- BREADCRUMP END -->
 	<tr>
     	<td class="main_side_1">
@@ -283,8 +283,8 @@ function cancelImportManager() {
 				</table>
 				<br />
 				<center>
-					<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx" onclick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
-					<input type="button" value="<digi:trn>Cancel</digi:trn>" class="buttonx" onclick="cancelImportManager()"/>
+					<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx" onClick="return importActivities('${createSourceForm.sourceId}')"/> &nbsp;&nbsp;
+					<input type="button" value="<digi:trn>Cancel</digi:trn>" class="buttonx" onClick="cancelImportManager()"/>
 				</center>
 			</div>	
 		</td>

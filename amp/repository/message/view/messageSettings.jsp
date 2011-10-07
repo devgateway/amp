@@ -94,7 +94,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 				<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 						<TR><TD bgColor="#ffffff" class="box-border" align="left">
 							<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%">
-								<tr><%-- Start Navigation --%>
+								<!--<tr><%-- Start Navigation --%>
 									<td height=33 colspan=5><span class=crumb>
 										<c:set var="translation">
 											<digi:trn>Click here to goto Admin Home</digi:trn>
@@ -106,7 +106,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 										</digi:link>&nbsp;&gt;&nbsp;
 										<digi:trn>Message Manager</digi:trn>
 									</td>
-								</tr><%-- End navigation --%>
+								</tr>--><%-- End navigation --%>
 								<TR>
 									<TD width=750>
 										<TABLE border="0" cellPadding="3" cellSpacing="3" width="100%" rules="all" class="inside" style="font-size:12px;">											

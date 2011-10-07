@@ -22,9 +22,9 @@
 	<tr>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="0" cellSpacing="0" width="100%" border="0">
-				<tr>
+				<!--<tr> -->
 					<!-- Start Navigation -->
-					<td height="33">
+					<!--<td height="33">
 						<span class="crumb">
 							<c:set var="translation">
 								<digi:trn>Click here to goto Admin Home</digi:trn>
@@ -34,9 +34,9 @@
 							</digi:link>&nbsp;&gt;&nbsp;						
 							<digi:trn>Template Docuements Manager</digi:trn>
 						</span>
-					</td>
+					</td>-->
 					<!-- End navigation -->
-				</tr>
+				<!--</tr> -->
 				<!--<tr>
 					<td height="16" vAlign="center" width="571">
                         <span class="subtitle-blue">

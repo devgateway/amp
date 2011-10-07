@@ -19,7 +19,7 @@
 
 
     <table width="60%" border="0" cellpadding="15">
-        <tr>
+        <!--<tr>
             <td>
                 <span class="crumb">
                     <c:set var="translation">
@@ -31,12 +31,12 @@
                     <digi:trn>Paris Indicator Table Manager</digi:trn>
                 </span>
             </td>
+			</tr>-->
             <tr>
                 <td>
                     <digi:errors/>
                 </td>
             </tr>
-        </tr>
         <tr>
             <td>
                 <span class="subtitle-blue"><digi:trn>Paris Indicator Table Manager</digi:trn></span>

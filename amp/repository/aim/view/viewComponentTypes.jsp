@@ -55,9 +55,9 @@ if (onDelete()){
     <tr>
       <td align=left class=r-dotted-lg valign="top" width=750>
         <table cellPadding=5 cellspacing="0" width="100%" border="0">
-          <tr>
+          <!-- <tr> -->
             <!-- Start Navigation -->
-            <td height=33 colspan="5"><span class="crumb">
+            <!-- <td height=33 colspan="5"><span class="crumb">
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>
@@ -69,9 +69,9 @@ if (onDelete()){
               <digi:trn key="aim:componentTypeManager">
               Component Type Manager
               </digi:trn>
-            </td>
+            </td> -->
             <!-- End navigation -->
-          </tr>
+         <!--  </tr> -->
           <tr>
            <c:set var="title">
            <digi:trn key="aim:componentTypesTitle">Component Types Manager</digi:trn>

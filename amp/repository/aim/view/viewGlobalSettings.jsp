@@ -231,7 +231,7 @@ function setIndex(index){
 	<tr>
 		<td align=left valign="top" width=750px>
 		<table cellPadding=5 cellspacing="0" width="100%" border="0">
-			<tr>
+			<!-- <tr>
 				<td height=33>
 					<span class=crumb> 
 					<c:set var="clickToViewAdmin">
@@ -244,7 +244,7 @@ function setIndex(index){
 					<digi:trn key="aim:globalSettingsManager">Global Settings Manager</digi:trn> 
 					</span>
 				</td>
-			</tr>
+			</tr> -->
 				
 			<tr>
           		<td height=16 valign="center">

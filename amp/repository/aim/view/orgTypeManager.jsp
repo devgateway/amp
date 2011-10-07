@@ -18,9 +18,9 @@
 	<tr>
 		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
-				<tr>
+				<!-- <tr> -->
 					<!-- Start Navigation -->
-					<td height=33 colspan=5><span class=crumb>
+					<!-- <td height=33 colspan=5><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -29,9 +29,9 @@
 						<digi:trn key="aim:orgTypeManager"> Organization Type Manager
 						</digi:trn>
                       </span>
-					</td>
+					</td> -->
 					<!-- End navigation -->
-				</tr>
+				<!-- </tr> -->
 				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:orgTypeManager"></span><span class=crumb>Organization Type

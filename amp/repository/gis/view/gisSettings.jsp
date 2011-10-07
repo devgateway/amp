@@ -13,9 +13,9 @@
 	
 	
 	<table cellPadding=5 cellSpacing=0 width="1000" border=0 align=center>
-		<tr>
+		<!--<tr>-->
 			<!-- Start Navigation -->
-			<td height=33><span class=crumb>
+			<!--<td height=33><span class=crumb>
 				<c:set var="translation">
 					<digi:trn>Click here to goto Admin Home</digi:trn>
 				</c:set>
@@ -23,9 +23,9 @@
 				<digi:trn>Admin Home</digi:trn>
 				</digi:link>&nbsp;&gt;&nbsp;
 				<digi:trn>Result Matrix/GIS Settings</digi:trn>
-			</td>
+			</td>-->
 			<!-- End navigation -->
-		</tr>
+		<!--</tr>-->
 		<!--<tr>
 			<td>
 				<span class="subtitle-blue"><digi:trn>Result Matrix/GIS settings</digi:trn></span>

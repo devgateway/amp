@@ -44,9 +44,9 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center style="font-size:12px;">
-<tr>
+<!-- <tr> -->
 	<!-- Start Navigation -->
-	<td height=33><span class=crumb>
+	<!-- <td height=33><span class=crumb>
 		<c:set var="translation">
 			<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 		</c:set>
@@ -58,9 +58,9 @@
 		<digi:trn key="aim:multiProgramConf">
 			Multi Program Configuration
 		</digi:trn>
-	</td>
+	</td>-->
 	<!-- End navigation -->
-</tr>
+<!-- </tr> -->
 
 
 <tr>

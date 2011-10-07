@@ -911,9 +911,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         <tr>
             <td align=left valign="top" width="100%">
                 <table bgcolor="#ffffff" cellPadding=5 cellspacing="0" width="100%">
-                    <tr>
+                 <!--   <tr> -->
                         <!-- Start Navigation -->
-                        <td height="33px">
+                       <!-- <td height="33px">
                             <span class=crumb>
                                 <digi:link href="/admin.do" styleClass="comment">
                                     <digi:trn>Admin Home</digi:trn>
@@ -930,9 +930,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                                     <digi:trn>Edit Organization</digi:trn>
                                 </c:if>
-                            </span></td>
+                            </span></td> -->
                         <!-- End navigation -->
-                    </tr>
+                    <!-- </tr> -->
                     <!-- <tr>
                         <td height="16px" valign="center" width="700px">
                             <span class="subtitle-blue"> <digi:trn>Organization Manager </digi:trn> </span> <br/>

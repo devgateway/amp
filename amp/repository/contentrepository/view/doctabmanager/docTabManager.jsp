@@ -150,9 +150,9 @@ border-right: 1px solid rgb(208, 208, 208);
 	<tr>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
-				<tr>
+				<!--<tr>-->
 					<!-- Start Navigation -->
-					<td height="33"><span class="crumb">
+					<!--<td height="33"><span class="crumb">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -166,9 +166,9 @@ border-right: 1px solid rgb(208, 208, 208);
 						<digi:trn>
 							Public Document Manager
 						</digi:trn>
-					</td>
+					</td>-->
 					<!-- End navigation -->
-				</tr>
+				<!--</tr> -->
 				<tr>
 					<td height="25" width="1000" align=center bgcolor="#c7d4db">
 						

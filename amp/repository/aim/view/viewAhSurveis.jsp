@@ -17,7 +17,7 @@
     <td class=r-dotted-lg width=14>&nbsp;</td>
     <td align=left class=r-dotted-lg valign="top" width=750>
       <table cellPadding=5 cellspacing="0" width="100%">
-        <tr>
+        <!--<tr>
           <td valign="bottom" class="crumb" >
             <c:set var="translation">
               <digi:trn key="aim:clickToViewMyDesktop">Click here to view admin home page</digi:trn>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <td>&nbsp;</td>
-        </tr>
+        </tr>-->
         <tr>
           <td height=16 align="center" vAlign="middle">
             <span class=subtitle-blue>

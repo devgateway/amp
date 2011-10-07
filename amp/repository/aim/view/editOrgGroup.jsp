@@ -77,9 +77,9 @@
 	<tr>
 		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
-				<tr>
+				<!--<tr>-->
 					<!-- Start Navigation -->
-					<td height=33 colspan=5><span class=crumb>
+					<!--<td height=33 colspan=5><span class=crumb>
 
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
@@ -98,9 +98,9 @@
 							<digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn>
 						</logic:equal>
                       </span>
-					</td>
+					</td>-->
 					<!-- End navigation -->
-				</tr>
+				<!--</tr>-->
 				<!--<tr>
 					<td height=16 valign="center" width=57 colspan=51><span class=subtitle-blue>
 						<digi:trn key="aim:orgGroupManager">

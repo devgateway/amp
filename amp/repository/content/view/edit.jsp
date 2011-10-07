@@ -184,9 +184,9 @@ div.fakefile2 input {
 <table bgColor=#ffffff cellPadding=5 cellspacing="1" width="1000" align=center>
   <tr>
     <td align=left valign="top" width="1000"><table cellPadding=5 cellspacing="0" width="100%">
-        <tr>
+      <!--  <tr> -->
           <!-- Start Navigation -->
-          <td height=33><span class=crumb>
+          <!-- <td height=33><span class=crumb>
             <c:set	var="translation">
               <digi:trn>Click here to goto Admin Home</digi:trn>
             </c:set>
@@ -202,9 +202,9 @@ div.fakefile2 input {
             </digi:link>
             &nbsp;&gt;&nbsp;
             <digi:trn>Edit content</digi:trn>
-            </span> </td>
+            </span> </td>-->
           <!-- End navigation -->
-        </tr>
+        <!-- </tr> -->
         <tr>
           <td colspan="2" align=center><span class=subtitle-blue>
             <digi:trn><b style="font-size:12px;">Add/Edit content</b></digi:trn>

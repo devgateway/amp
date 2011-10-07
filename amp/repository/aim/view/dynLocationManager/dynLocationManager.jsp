@@ -188,9 +188,9 @@
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
-				<tr>
+				<!--<tr> -->
 					<!-- Start Navigation -->
-					<td height="33"><span class="crumb">
+					<!-- <td height="33"><span class="crumb">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -204,9 +204,9 @@
 						<digi:trn key="aim:regionManager">
 							Region Manager
 						</digi:trn>
-					</td>
+					</td> -->
 					<!-- End navigation -->
-				</tr>
+				<!-- </tr> -->
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<span class="subtitle-blue">

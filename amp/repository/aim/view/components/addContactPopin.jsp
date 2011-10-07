@@ -45,7 +45,7 @@
 			<center><c:if test="${aimAddContactForm.action=='search'}">
 			<c:if test="${not empty aimAddContactForm.contacts}"></center>
 				<hr />
-				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
+				<center><b style="font-size:12px;"><digi:trn>Contact with same First/Last Names</digi:trn></b></center>
 				<div>
 				<table width="100%" cellPadding="0" cellspacing="0" border="0" class="inside">
 				<tr>

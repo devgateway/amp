@@ -1342,6 +1342,7 @@ public class DataDispatcher extends DispatchAction {
 					xmlString.append("<year name=\"" + yearName + "\">\n");
 					aidTypeData += "<" + yearName;
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
+					boolean hasValues = false;
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
 						BigDecimal totalCategory = hm.get(value);
@@ -1352,6 +1353,7 @@ public class DataDispatcher extends DispatchAction {
 			                } else {
 			                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 			                }
+			                hasValues = true;
 							xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
 							aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
@@ -1359,6 +1361,9 @@ public class DataDispatcher extends DispatchAction {
 						{
 							aidTypeData += ">" + value.getValue() + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
+					}
+					if (!hasValues){
+						xmlString.append("<aidtype category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
 					}
 					xmlString.append("</year>\n");
 				}

@@ -790,7 +790,7 @@ public class DbUtil {
         }
         if (locationCondition) {
     		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
-        	locationIds = getAllDescendantsLocation(locationIds, filter.getAllLocationsList());
+        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
     		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
         }

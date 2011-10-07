@@ -27,9 +27,9 @@ function confirmDelete() {
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
-				<tr>
+				<!--<tr>-->
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2F2><span class=crumb>
+					<!--<td height=33 bgcolor=#F2F2F2><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -43,9 +43,9 @@ function confirmDelete() {
 						<digi:trn key="aim:categoryManager">
 							<b>Category Manager</b>
 						</digi:trn>
-					</td>
+					</td>-->
 					<!-- End navigation -->
-				</tr>
+				<!--</tr>-->
 				<tr>
 					<td valign="center" align=center style="padding-top:10px;">
 						<span class=subtitle-blue>

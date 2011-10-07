@@ -29,9 +29,9 @@
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
-				<tr>
+				<!-- <tr> -->
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<!-- <td height=33><span class=crumb>
 					<c:set var="clickToViewAdmin">
 					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set>
@@ -43,9 +43,9 @@
 						<digi:trn key="aim:sectorManager">
 						Sector Manager
 						</digi:trn>
-					</td>
+					</td> -->
 					<!-- End navigation -->
-				</tr>
+				<!-- </tr> -->
 				<!--<tr>
 					<td height=25 valign="center" align=center width=1000 bgcolor="#c7d4db"><digi:trn key="aim:sectorManager"><b style="font-size:12px;">Sector Manager</b></digi:trn>
 					</td>

@@ -171,14 +171,11 @@ function deleteFlag(id) {
 
       <table cellPadding=5 cellspacing="0" width="100%" border="0">
 
-        <tr>
+        <!-- <tr> -->
 
           <!-- Start Navigation -->
-
-          <td height=33 bgcolor=#F2F2F2><span class=crumb>
-
+         <!-- <td height=33 bgcolor=#F2F2F2><span class=crumb>
             <c:set var="trnViewAdmin">
-
               <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 
             </c:set>
@@ -202,7 +199,7 @@ function deleteFlag(id) {
 
           <!-- End navigation -->
 
-        </tr>
+        <!-- </tr>-->
 
         <tr>
 

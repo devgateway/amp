@@ -108,12 +108,12 @@ public class ActivityUtil {
 					a.setAmpActivityGroup(tmpGroup);
 					a.setMember(new HashSet());
 					a.setAmpActivityId(null);
+					if (oldA.getAmpActivityId() != null)
+						session.evict(oldA);
 				} catch (CloneNotSupportedException e) {
 					logger.error("Can't clone current Activity: ", e);
 				}
 			}
-			if (oldA.getAmpActivityId() != null)
-				session.evict(oldA);
 			
 			if (a.getDraft() && a.getAmpActivityGroup() == null){
 				//we need to create a group for this activity
@@ -133,27 +133,16 @@ public class ActivityUtil {
 			else
 				session.saveOrUpdate(a);
 			
-			AmpActivityGroup group = null;
+			AmpActivityGroup group = a.getAmpActivityGroup();
+			if (group == null){
+				throw new RuntimeException("Non-existent group should have been added by now!");
+			}
 			if (!newActivity){
 				//existing activity
-				group = a.getAmpActivityGroup();
-				if (group == null){
-					throw new RuntimeException("Non-existent group should have been added at activity load");
-				}
-				
-				//setting lastVersion in group and
 				//previousVersion for current activity
 				a.setAmpActivityPreviousVersion(group.getAmpActivityLastVersion());
-				group.setAmpActivityLastVersion(a);
-				session.update(group);
 			}
-			else{
-				//new activity => create ActivityGroup for it
-				//newActivity = true;
-				group = new AmpActivityGroup();
-				group.setAmpActivityLastVersion(a);
-				session.save(group);
-			}
+
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);

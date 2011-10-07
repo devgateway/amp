@@ -318,7 +318,10 @@ public final class ARUtil {
 			while ( iter.hasNext() ) {
 				Categorizable elem	= (Categorizable)iter.next();
 				MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
-				periods.add( minfo.getValue() );
+				Comparable c 		= minfo.getValue();
+				if ( c.compareTo( periods.first() ) > 0 &&
+						c.compareTo( periods.last() ) < 0 )
+					periods.add( minfo.getValue() );
 			}
 	
 			if (periods!=null && periods.size()>0) {
@@ -448,8 +451,8 @@ public final class ARUtil {
 			periods.add("Q5");
 		}
 		if ( ArConstants.MONTH.equals(type) ) {
-			periods.add( new ComparableMonth(-1, "") );
-			periods.add( new ComparableMonth(12, "") );
+			periods.add( new ComparableMonth(-1, "Before 1st month") );
+			periods.add( new ComparableMonth(12, "After last month") );
 		}
 	}
 	

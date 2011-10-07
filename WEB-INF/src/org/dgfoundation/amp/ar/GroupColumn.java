@@ -176,6 +176,22 @@ public class GroupColumn extends Column {
             }
         }
         
+        FiscalPeriodHelper fiscalYearHelper		= null;
+        if ( yearMapping.size() > 0 )
+			try {
+				fiscalYearHelper	= new FiscalPeriodHelper(yearMapping);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        FiscalPeriodHelper fiscalMonthHelper	= null;
+   
+    	try {
+			fiscalMonthHelper		= new FiscalPeriodHelper(monthMapping, 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+      
+        
         //TODO: ugly stuff... i have no choice
         //manually add all quarters
 //       if(category.equals(ArConstants.QUARTER)) {
@@ -251,9 +267,26 @@ public class GroupColumn extends Column {
             else
                {
             	if(category.equalsIgnoreCase(ArConstants.YEAR)){
-            		cc = new AmountCellColumn( yearMapping.get(element.getValue().toString()) );
+            		String fYear	= yearMapping.get(element.getValue().toString());
+            		if (fYear == null && fiscalYearHelper != null) {
+            			try {
+							fYear		= fiscalYearHelper.getFiscalYear( element.getValue().toString() );
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+            		}
+            		cc = new AmountCellColumn( fYear );
             	}else if(category.equalsIgnoreCase(ArConstants.MONTH)){
-            		cc = new AmountCellColumn( monthMapping.get(element.getValue().toString()) );
+            		String fMonth	= monthMapping.get(element.getValue().toString());
+            		if (fMonth == null && fiscalMonthHelper != null) {
+            			try {
+							fMonth		= fiscalMonthHelper.getFiscalMonth( element.getValue().toString() );
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            		}
+            		cc = new AmountCellColumn( fMonth );
                 	}
             	else{
             	cc = new AmountCellColumn( element.getValue().toString());

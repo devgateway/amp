@@ -448,7 +448,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 						
 					</div>
 					<div class="otherCriteriaFoofet">
-						<div id="calendarForm">
+						<div id="calendarForm" style="width:100%">
 						
 						<div style="width: 40%; float: left;">
 								<p>
@@ -471,6 +471,13 @@ var tabView = new YAHOO.widget.TabView('demo');
 												label="currencyName" />
 										</logic:notEmpty>
 									</html:select>
+								</p>
+								<p>
+									<label><digi:trn>Map Level</digi:trn> </label>
+									<select id="mapLevel" name="mapLevel">
+						            	<option value="2"><digi:trn>Regional</digi:trn></option>
+						            	<option value="3"><digi:trn>District</digi:trn></option>
+						        	</select>
 								</p>
 							</div>
 							<div style="width: 60%; float: left;">
@@ -495,16 +502,11 @@ var tabView = new YAHOO.widget.TabView('demo');
 							            </field:display>
 						        	</select>
 								</p>
-							</div>				 
-							<div style="width: 60%; float: left;">
 								<p>
-									<label><digi:trn>Map Level</digi:trn> </label>
-									<select id="mapLevel" name="mapLevel">
-						            	<option value="2"><digi:trn>Regional</digi:trn></option>
-						            	<option value="3"><digi:trn>District</digi:trn></option>
-						        	</select>
+									<label style="width:230px">Show data for sel. workspace only</label>
+									&nbsp;&nbsp;<input type="checkbox" name="curWorkspaceOnly">
 								</p>
-							</div>
+							</div>				 
 							
 							<div class="clear"></div>
 							<div class="tabSubmit">

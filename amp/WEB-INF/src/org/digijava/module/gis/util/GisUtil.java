@@ -13,6 +13,9 @@ import java.util.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gis.dbentity.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -776,6 +779,15 @@ public class GisUtil {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        if (retVal.isCurWorkspaceOnly()) {
+            TeamMember tm = (TeamMember)request.getSession().getAttribute("currentMember");
+            if (tm != null) {
+                AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                retVal.setCurWorkspace(team);
+            }
+        }
+
         return retVal;
     }
 

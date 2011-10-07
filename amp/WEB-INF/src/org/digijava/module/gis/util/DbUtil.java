@@ -1768,6 +1768,11 @@ public class DbUtil {
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
         String donorTypeIdsWhereclause = generateWhereclause(donorTypeIds, new GenericIdGetter());
 
+        String workspaceIdsWhereclause = null;
+        if (workspaces != null && !workspaces.isEmpty()) {
+            workspaceIdsWhereclause = generateWhereclause(workspaces, new WorkspaceIdGetter());
+        }
+
         Set<Long> allActivityIdsSet = new HashSet<Long>();
 
         //If no locations selected no data will be returned
@@ -1823,6 +1828,11 @@ public class DbUtil {
                 if (donorTypeIdsWhereclause != null) {
                     queryStr.append(" and fd.ampFundingId.ampDonorOrgId.orgGrpId.orgType.ampOrgTypeId in ");
                     queryStr.append(donorTypeIdsWhereclause);
+                }
+
+                if (workspaceIdsWhereclause != null) {
+                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.ampTeamId in ");
+                    queryStr.append(workspaceIdsWhereclause);
                 }
 
                 Query q = sess.createQuery(queryStr.toString());
@@ -1885,6 +1895,11 @@ public class DbUtil {
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
         String donorTypeIdsWhereclause = generateWhereclause(donorTypeIds, new GenericIdGetter());
 
+        String workspaceIdsWhereclause = null;
+        if (workspaces != null && !workspaces.isEmpty()) {
+            workspaceIdsWhereclause = generateWhereclause(workspaces, new WorkspaceIdGetter());
+        }
+
         Set<Long> allActivityIdsSet = null;
         String locationWhereclause = null;
         //If no locations selected no data will be returned
@@ -1926,6 +1941,11 @@ public class DbUtil {
                 if (donorTypeIdsWhereclause != null) {
                     queryStr.append(" and rf.reportingOrganization.orgGrpId.orgType.ampOrgTypeId in ");
                     queryStr.append(donorTypeIdsWhereclause);
+                }
+
+                if (workspaceIdsWhereclause != null) {
+                    queryStr.append(" and rf.activity.team.ampTeamId in ");
+                    queryStr.append(workspaceIdsWhereclause);
                 }
 
 
@@ -2297,6 +2317,16 @@ public class DbUtil {
             Long retVal = null;
             if (obj != null && obj instanceof AmpOrganisation) {
                 retVal = ((AmpOrganisation) obj).getAmpOrgId();
+            }
+            return retVal;
+        }
+    }
+
+    public static class WorkspaceIdGetter implements IdGetter {
+        public Long getId (Object obj) {
+            Long retVal = null;
+            if (obj != null && obj instanceof AmpTeam) {
+                retVal = ((AmpTeam) obj).getAmpTeamId();
             }
             return retVal;
         }

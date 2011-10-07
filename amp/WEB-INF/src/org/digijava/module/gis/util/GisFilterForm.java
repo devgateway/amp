@@ -1,5 +1,7 @@
 package org.digijava.module.gis.util;
 
+import org.digijava.module.aim.dbentity.AmpTeam;
+
 /**
   * User: flyer
  * Date: 6/9/11
@@ -23,6 +25,24 @@ public class GisFilterForm {
     private String filterStartYear;
     private String filterEndYear;
     private boolean filterAllSectors;
+    private boolean curWorkspaceOnly;
+    private AmpTeam curWorkspace;
+
+    public boolean isCurWorkspaceOnly() {
+        return curWorkspaceOnly;
+    }
+
+    public void setCurWorkspaceOnly(boolean curWorkspaceOnly) {
+        this.curWorkspaceOnly = curWorkspaceOnly;
+    }
+
+    public AmpTeam getCurWorkspace() {
+        return curWorkspace;
+    }
+
+    public void setCurWorkspace(AmpTeam curWorkspace) {
+        this.curWorkspace = curWorkspace;
+    }
 
     public boolean isFilterAllSectors() {
         return filterAllSectors;

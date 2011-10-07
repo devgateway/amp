@@ -61,20 +61,27 @@ public class RMMapCalculationUtil {
         String currencyCode = filter.getSelectedCurrency();
 
 
+        List <AmpTeam> workspaces = null;
+
+        if (filter.isCurWorkspaceOnly() && filter.getCurWorkspace() != null) {
+           workspaces = new ArrayList();
+           workspaces.add(filter.getCurWorkspace());
+        }
+
         Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
                                                                donorTypeIds,
                                                                locations,
-                                                               null, fStartDate.getTime(), fEndDate.getTime());
+                                                               workspaces, fStartDate.getTime(), fEndDate.getTime());
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
                                                                                donorTypeIds,
                                                                                locations,
-                                                                               null, fStartDate.getTime(), fEndDate.getTime());
+                                                                               workspaces, fStartDate.getTime(), fEndDate.getTime());
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, currencyCode, false);
 
 

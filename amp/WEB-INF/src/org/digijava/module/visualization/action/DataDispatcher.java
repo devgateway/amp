@@ -464,12 +464,12 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootRegions);
 		
 		rootTotComms.put("type", "TotalComms");
-		rootTotComms.put("value", FormatHelper.formatNumber(visualizationForm.getSummaryInformation().getTotalCommitments()));
+		rootTotComms.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getTotalCommitments().doubleValue()));
 		rootTotComms.put("curr", visualizationForm.getFilter().getCurrencyCode());
 		children.add(rootTotComms);
 		
 		rootTotDisbs.put("type", "TotalDisbs");
-		rootTotDisbs.put("value", FormatHelper.formatNumber(visualizationForm.getSummaryInformation().getTotalDisbursements()));
+		rootTotDisbs.put("value", FormatHelper.formatNumberNotRounded(visualizationForm.getSummaryInformation().getTotalDisbursements().doubleValue()));
 		children.add(rootTotDisbs);
 		
 		rootNumOfProjs.put("type", "NumberOfProjs");

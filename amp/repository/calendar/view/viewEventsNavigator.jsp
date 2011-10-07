@@ -31,7 +31,7 @@ function selectCalendarType(view, type) {
                 	<td nowrap="nowrap">
 	                	<div class="right_menu" style="margin-bottom: 0px;">
 							<div class="right_menu_header_big">
-								<div class="right_menu_header_cont">Calendar Type</div>
+                                                            <div class="right_menu_header_cont"><digi:trn>Calendar Type</digi:trn></div>
 							</div>
 							<div class="right_menu_box_big">
 								<div class="right_menu_cont">

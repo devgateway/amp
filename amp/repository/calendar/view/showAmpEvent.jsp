@@ -761,7 +761,7 @@ function removeGuest(obj) {
 				                                        	<html:option value="${type.value}">${type.label}</html:option>
 		                                           </c:forEach>
 			                                     </c:if>
-			                                 </html:select><br /><br /><digi:trn key="calendar:eventsType"><div style="margin-bottom:5px;"><b>Event type</b></div></digi:trn>
+                                                         </html:select><br /><br /><div style="margin-bottom:5px;"><b><digi:trn key="calendar:eventsType">Event type</digi:trn></b></div>
 											 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
 				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
@@ -770,7 +770,7 @@ function removeGuest(obj) {
 				                                 	</c:if>
 				                                 </html:select>
 											<br /><br />
-											<digi:trn key="calendar:StDate"><div style="margin-bottom:5px;"><b>Start date</b></div></digi:trn>
+                                                         <div style="margin-bottom:5px;"><b><digi:trn>Start date</digi:trn></b></div>
 											<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
 			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
@@ -886,7 +886,7 @@ function removeGuest(obj) {
 			                                            </table>
 			                                          </c:if>
 													  <br />
-													  <digi:trn key="calendar:EndDate"><div style="margin-bottom:5px;"><b>End Date</b></div></digi:trn>											  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+                                                                                                          <div style="margin-bottom:5px;"><b><digi:trn>End Date</digi:trn></b></div>											  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
@@ -1123,7 +1123,7 @@ function removeGuest(obj) {
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
+                                <input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">

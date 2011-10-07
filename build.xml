@@ -119,28 +119,8 @@
   <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
     <classpath refid="xjc.classpath" />
   </taskdef>
-	
-  <taskdef name="start" classname="org.apache.catalina.ant.StartTask">
-		<classpath location="${external-lib}/catalina-ant.jar"/> 
-  </taskdef>
-  
-  <taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
-		<classpath path="${external-lib}/catalina-ant.jar"/> 
-  </taskdef>
 
-	<target name="start" description="Start Tomcat application">
-	        <start url="${amp.url}/manager"
-	            username="${tomcat.username}"
-	            password="${tomcat.password}"
-	            path="/"/>
-	</target>
-	
-	<target name="stop" description="Stop Tomcat application">
-	        <stop url="${amp.url}/manager"
-	            username="${tomcat.username}"
-	            password="${tomcat.password}"
-	            path="/"/>
-	</target>
+
 	
     <!-- Check timestamp on files -->
     <target name="prepare" depends="check-jvm">

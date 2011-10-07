@@ -50,8 +50,7 @@ function banUser(txt) {
     <tr>
       <td align=left valign="top">
         <table cellPadding=5 cellspacing="0" width="100%" >
-          <tr>
-            <!-- Start Navigation -->
+   <!--       <tr>
             <td height=33 colspan=8>
               <span class=crumb>
                 <c:set var="translation">
@@ -68,8 +67,7 @@ function banUser(txt) {
                 </digi:trn>
               </span>
             </td>
-            <!-- End navigation -->
-          </tr>
+          </tr> -->
           <tr>
             <td bgcolor=#c7d4db align=center colspan=8 style=" background-color: #F2F2F2;
     border: 1px solid #D0D0D0;

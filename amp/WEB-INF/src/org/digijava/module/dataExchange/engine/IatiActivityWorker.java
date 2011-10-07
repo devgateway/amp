@@ -315,7 +315,7 @@ public class IatiActivityWorker {
 		ArrayList<Sector> iatiSectorList = new ArrayList<Sector>();
 		ArrayList<Transaction> iatiTransactionList = new ArrayList<Transaction>();
 		ArrayList<Description> iatiDescriptionList = new ArrayList<Description>();
-		IatiIdentifier iatiID = null;
+		ArrayList<IatiIdentifier> iatiID = new ArrayList<IatiIdentifier>();
 		ArrayList<OtherIdentifier> iatiOtherIdList = new ArrayList<OtherIdentifier>();
 		ArrayList<ActivityDate> iatiActDateList = new ArrayList<ActivityDate>();
 		ArrayList<ContactInfo> iatiContactList = new ArrayList<ContactInfo>();
@@ -323,8 +323,8 @@ public class IatiActivityWorker {
 		
 		ArrayList<AmpClassificationConfiguration> allClassificationConfiguration = (ArrayList<AmpClassificationConfiguration>) getAllClassificationConfiguration();
 		
-		JAXBElement<CodeReqType> iatiDefaultFinanceType = null;
-		JAXBElement<CodeReqType> iatiDefaultAidType = null;
+		ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType = new ArrayList<JAXBElement<CodeReqType>>();
+		ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType = new ArrayList<JAXBElement<CodeReqType>>();
 				
 		
 		
@@ -480,15 +480,16 @@ public class IatiActivityWorker {
 
 	
 	
-	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,	JAXBElement<CodeReqType> iatiDefaultFinanceType,
-			JAXBElement<CodeReqType> iatiDefaultAidType, String iatiDefaultCurrency) {
+	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,	ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency) {
 		
 		if(iatiTransactionList.isEmpty()) return;
-		
-		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefaultFinanceType, DataExchangeConstants.IATI_FINANCE_TYPE,
+		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
-		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefaultFinanceType, DataExchangeConstants.IATI_AID_TYPE,
-				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCIAL_INSTRUMENT_NAME,null,null,"active");
+		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
+				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
@@ -819,18 +820,18 @@ public class IatiActivityWorker {
 		}
 	}
 
-	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList, ArrayList<Description> iatiDescriptionList, IatiIdentifier iatiIDList) {
+	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList) {
 		processStatus(a,iatiStatusList);
 		processDescriptions(a,iatiDescriptionList);
 		processIatiID(a,iatiIDList);
 		
 	}
 
-	private void processIatiID(AmpActivityVersion a, IatiIdentifier iatiIDList) {
+	private void processIatiID(AmpActivityVersion a, ArrayList<IatiIdentifier> iatiIDList) {
 		//TODO process the iati-id
 		if(iatiIDList!=null )
 			{
-				a.setProjectCode(iatiIDList.getContent());
+				a.setProjectCode(iatiIDList.iterator().next().getContent());
 				this.iatiID = a.getProjectCode();
 			}
 	}
@@ -938,8 +939,8 @@ public class IatiActivityWorker {
 			ArrayList<OtherIdentifier> iatiOtherIdList,
 			ArrayList<ActivityDate> iatiActDateList,
 			ArrayList<ContactInfo> iatiContactList,
-			ArrayList<Location> iatiLocationList, JAXBElement<CodeReqType> iatiDefaultFinanceType, 
-	JAXBElement<CodeReqType> iatiDefaultAidType, IatiIdentifier iatiID) {
+			ArrayList<Location> iatiLocationList, ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType, 
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, ArrayList<IatiIdentifier> iatiID) {
 		
 		
 		
@@ -964,13 +965,15 @@ public class IatiActivityWorker {
 				//default-finance-type == type of assistance
 				if(i.getName().equals(new QName("default-finance-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					iatiDefaultFinanceType = item;
+					if(iatiDefaultFinanceType == null) iatiDefaultFinanceType=new ArrayList<JAXBElement<CodeReqType>>(); 
+					iatiDefaultFinanceType.add(item);
 				}
 
 				//default-aid-type == financing instrument
 				if(i.getName().equals(new QName("default-aid-type"))){
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					iatiDefaultAidType = item;
+					if(iatiDefaultAidType == null) iatiDefaultAidType=new ArrayList<JAXBElement<CodeReqType>>(); 
+					iatiDefaultAidType.add(item);
 				}
 				
 			}
@@ -981,7 +984,8 @@ public class IatiActivityWorker {
 			
 			if(contentItem instanceof IatiIdentifier){
 				IatiIdentifier item = (IatiIdentifier)contentItem;
-				iatiID = item;
+				if(iatiID == null) iatiID=new ArrayList<IatiIdentifier>(); 
+				iatiID.add(item);
 			}
 			
 			if(contentItem instanceof ActivityDate){

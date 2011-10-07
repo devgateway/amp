@@ -229,7 +229,7 @@ public final class FMUtil {
 	}
 	
 	public static AmpModulesVisibility getModuleByNameFromRoot(Collection<AmpModulesVisibility> list, String moduleName) {
-		if (list == null)
+		if (list == null || list.size()<1)
 			return null;
 		
 		Iterator<AmpModulesVisibility> it = list.iterator();

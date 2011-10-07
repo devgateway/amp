@@ -539,7 +539,7 @@
 									</c:choose>
 								</c:set>
 								<html:hidden property="contactId"/>
-								<div class="required_fields t_mid"><digi:trn>All fields marked with <b style="color:#ff0000">*</b> are required</digi:trn></div>
+								<div class="required_fields t_mid"><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></div>
 								<hr />
 								<div style="background-color:#F8F8F8; border:1px solid #CCCCCC;">
 									<table cellspacing="0" cellpadding="0" width="96%" id="config_table" style="margin:10px;">

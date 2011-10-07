@@ -22,7 +22,7 @@
 	action="/addAmpContactInfo.do" method="post">
 	<c:choose>
 		<c:when test="${aimAddContactForm.action=='search'||aimAddContactForm.action=='checkDuplicationContacts'}">
-		<digi:trn><div style="font-size:12px; margin-bottom:5px;"><digi:trn>Please search a contact before adding a new one to avoid contact duplications in database</digi:trn></div></digi:trn>
+		<div style="font-size:12px; margin-bottom:5px;"><digi:trn>Please search a contact before adding a new one to avoid contact duplications in database</digi:trn></div>
 			<table style="margin-bottom:10px;">
 				<tr>
 					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong></td>

@@ -181,13 +181,13 @@ public class TranslationManager {
                 if (siteDomain != null) {
                     ti.setReferUrl(SiteUtils.getSiteURL(siteDomain,
                         sitePath, request.getScheme(),
-                        request.getServerPort(), request.getContextPath()) +
-                                   relativeUrl);
+                        request.getServerPort(), request.getContextPath())/* +
+                                   relativeUrl*/);
                 }
                 else {
                     ti.setReferUrl(
                                    "/translation/switchLanguage.do?code=" +
-                                   langCode + "&rfr=" + relativeUrlEncode);
+                                   langCode + "&rfr="/* + relativeUrlEncode*/);
                 }
 
                 if (currLangCode.equals(ti.getLangCode())) {

@@ -38,7 +38,7 @@
 function 
 SwitchLanguageMenu(value) {
         if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
-                document.location.href = value;
+                document.location.href = value + document.location.href;
             }
     }
 </script>

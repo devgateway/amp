@@ -15,7 +15,11 @@ import org.apache.wicket.model.IModel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -33,7 +37,7 @@ public class AmpLocationSearchModel extends
 	public static final String PARENT_DELIMITER="\\] \\[";
 	
 	public enum PARAM implements AmpAutoCompleteModelParam {
-		LAYER
+		LAYER, LEVEL
 	};
 
 	public AmpLocationSearchModel(String input,
@@ -47,9 +51,33 @@ public class AmpLocationSearchModel extends
 	protected Collection<AmpCategoryValueLocations> load() {
 		List<AmpCategoryValueLocations> ret = new ArrayList<AmpCategoryValueLocations>();
 		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
-		if (layerModel == null || layerModel.getObject().size() < 1)
+		IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
+		if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
 			return ret;
 		AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
+		AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
+		
+		if (!CategoryManagerUtil.equalsCategoryValue(cvLevel,
+				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL)
+				&& CategoryManagerUtil.equalsCategoryValue(cvLayer,
+						CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)) {
+			// then we can only return the current default country of the system
+			try {
+				AmpCategoryValueLocations defCountry = DynLocationManagerUtil
+						.getLocationByIso(
+								FeaturesUtil.getDefaultCountryIso(),
+								CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+				ret = new ArrayList<AmpCategoryValueLocations>();
+				ret.add(defCountry);
+				return ret;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+		
 		Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 
 		Session dbSession = null;

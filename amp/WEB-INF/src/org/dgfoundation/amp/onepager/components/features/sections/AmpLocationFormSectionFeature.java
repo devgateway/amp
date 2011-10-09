@@ -71,7 +71,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 		add(implementationLocation);
 
 		final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
-				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, implementationLocation);
+				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, implementationLocation, implementationLevel);
 
 		
 		// add behavior to update implementation location when implementation

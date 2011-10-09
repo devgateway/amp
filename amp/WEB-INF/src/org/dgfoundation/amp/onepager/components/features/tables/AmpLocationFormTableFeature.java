@@ -67,12 +67,13 @@ public class AmpLocationFormTableFeature extends
 	 * @param id
 	 * @param fmName
 	 * @param regionalFundingFeature
+	 * @param implementationLevel 
 	 * @throws Exception
 	 */
 	public AmpLocationFormTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am,
 			final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
-			final AmpCategorySelectFieldPanel implementationLocation)
+			final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel)
 			throws Exception {
 		super(id, am, fmName);
 		setTitleHeaderColSpan(4);
@@ -227,6 +228,10 @@ public class AmpLocationFormTableFeature extends
 
 		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
 				implementationLocation.getChoiceModel());
+	
+		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LEVEL,
+				implementationLevel.getChoiceModel());
+		
 		
 		add(searchLocations);
 	}

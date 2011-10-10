@@ -61,6 +61,7 @@ public class AmpSectorsFormTableFeature extends
 				// remove sectors with other classification
 				ArrayList<AmpActivitySector> ret = new ArrayList<AmpActivitySector>();
 
+				if(setModel.getObject()!=null)
 				for (AmpActivitySector ampActivitySector : setModel.getObject()) {
 					if (ampActivitySector.getClassificationConfig().getId()
 							.equals(sectorClassification.getId()))

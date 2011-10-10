@@ -9,11 +9,10 @@ import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 
 import bsh.This;
 
@@ -26,9 +25,7 @@ import bsh.This;
  * validation, you might want to use Float
  */
 public abstract class AmpCollectionValidatorField<T,H> extends
-		AmpHiddenFieldPanel<H> implements IAjaxIndicatorAware {
-
-	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+		AmpSemanticValidatorField<H> implements IAjaxIndicatorAware {
 
 	
 	/**
@@ -50,21 +47,16 @@ public abstract class AmpCollectionValidatorField<T,H> extends
 	 * @param fmName
 	 */
 	public AmpCollectionValidatorField(String id, final IModel<? extends Collection<T>> collectionModel,
-			String fmName) {
-		super(id, fmName);
+			String fmName, AmpSemanticValidator<H> semanticValidator) {
+		super(id, fmName,semanticValidator);
 		
 		hiddenContainer.setModel(getHiddenContainerModel(collectionModel));
 		
 		
-		add(indicatorAppender);
+		
 	}
 	
 	public abstract AbstractReadOnlyModel getHiddenContainerModel(IModel<? extends Collection<T>> collectionModel);
-
-	@Override
-	public String getAjaxIndicatorMarkupId() {
-		return indicatorAppender.getMarkupId();
-	}
 
 	
 }

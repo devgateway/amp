@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.MinimumValidator;
+import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 
 /**
  * @author mihai
@@ -22,8 +23,8 @@ public abstract class AmpSizeCollectionValidationField<T> extends
 	 * @param fmName
 	 */
 	public AmpSizeCollectionValidationField(String id,
-			IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName);
+			IModel<? extends Collection<T>> collectionModel, String fmName,AmpSemanticValidator<Integer> semanticValidator) {
+		super(id, collectionModel, fmName,semanticValidator);
 		hiddenContainer.setType(Integer.class);
 	}
 

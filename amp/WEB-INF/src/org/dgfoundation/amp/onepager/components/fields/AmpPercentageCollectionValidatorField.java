@@ -31,10 +31,9 @@ public abstract class AmpPercentageCollectionValidatorField<T> extends
 	 */
 	public AmpPercentageCollectionValidatorField(String id,
 			IModel<? extends Collection<T>> setModel, String fmName) {
-		super(id, setModel, fmName);
+		super(id, setModel, fmName,new AmpPercentageCollectionValidator());
 		
 		hiddenContainer.setType(Double.class);
-		hiddenContainer.add(new AmpPercentageCollectionValidator());
 	
 	}
 
@@ -43,7 +42,7 @@ public abstract class AmpPercentageCollectionValidatorField<T> extends
 	public AbstractReadOnlyModel getHiddenContainerModel(final IModel<? extends Collection<T>> collectionModel) {
 		AbstractReadOnlyModel<Double> model=new AbstractReadOnlyModel<Double>() {
 			@Override
-			public Double getObject() {
+			public Double getObject() {		
 				if(collectionModel.getObject().size()==0) return 100d;
 				double total=0;
 				for( T item : collectionModel.getObject()) 

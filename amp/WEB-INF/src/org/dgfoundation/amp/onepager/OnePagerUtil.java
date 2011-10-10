@@ -74,6 +74,7 @@ public final class OnePagerUtil {
 
 			@Override
 			public List<T> getObject() {
+				if(setModel.getObject()==null) return new ArrayList<T>();
 				return new ArrayList<T>(setModel.getObject());
 			}
 		};

@@ -47,6 +47,11 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 
 	private static final long serialVersionUID = 8568986144567957699L;
 	private AmpTextFieldPanel<String> title;
+	private AmpCategorySelectFieldPanel status;
+
+	public AmpCategorySelectFieldPanel getStatus() {
+		return status;
+	}
 
 	public AmpTextFieldPanel<String> getTitle() {
 		return title;
@@ -72,7 +77,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			title.getTextContainer().add(new StringValidator.MaximumLengthValidator(255));
 			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
-			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
+			status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),

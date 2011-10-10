@@ -26,9 +26,8 @@ public abstract class AmpUniqueCollectionValidatorField<T> extends
 	 */
 	public AmpUniqueCollectionValidatorField(String id,
 			IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName);
+		super(id, collectionModel, fmName,new AmpUniqueCollectionValidator());
 		hiddenContainer.setType(String.class);
-		hiddenContainer.add(new AmpUniqueCollectionValidator());
 	}
 
 	/* (non-Javadoc)

@@ -25,8 +25,7 @@ public class AmpMinSizeCollectionValidationField<T> extends
 	 */
 	public AmpMinSizeCollectionValidationField(String id,
 			IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName);
-		hiddenContainer.add(new AmpMinSizeCollectionValidator(1));
+		super(id, collectionModel, fmName,new AmpMinSizeCollectionValidator(1));
 	}
 
 }

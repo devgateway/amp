@@ -26,9 +26,8 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 	 */
 	public AmpTreeCollectionValidatorField(String id,
 			IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName);
+		super(id, collectionModel, fmName,new AmpTreeCollectionValidator());
 		hiddenContainer.setType(String.class);
-		hiddenContainer.add(new AmpTreeCollectionValidator());
 	}
 
 	/* (non-Javadoc)

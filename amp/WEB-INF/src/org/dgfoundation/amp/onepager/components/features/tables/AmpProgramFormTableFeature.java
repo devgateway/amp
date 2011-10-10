@@ -64,7 +64,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				Set<AmpActivityProgram> allProgs = setModel.getObject();
 				Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
 				
-				if (programSettings.getObject() != null){
+				if (programSettings.getObject() != null && allProgs!=null){
 					Iterator<AmpActivityProgram> it = allProgs.iterator();
 					while (it.hasNext()) {
 						AmpActivityProgram prog = (AmpActivityProgram) it.next();

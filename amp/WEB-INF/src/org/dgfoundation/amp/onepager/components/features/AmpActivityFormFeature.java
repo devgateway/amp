@@ -18,8 +18,8 @@ import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -35,12 +35,14 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -49,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
@@ -76,6 +79,50 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 	public ListView<AmpComponentPanel> getFeatureList() {
 		return featureList;
+	}
+	
+	
+	/**
+	 * Toggles the validation of semantic validators. 
+	 * @param enabled whether these validators are enabled
+	 * @param form the form to set the validators
+	 * @param target 
+	 * @see AmpSemanticValidatorField
+	 * @see AmpSemanticValidator
+	 */
+	public void toggleSemanticValidation(final boolean enabled, Form<?> form,
+			final AjaxRequestTarget target) {
+
+		// visit all the semantic validator fields and enable/disable them
+		form.visitChildren(AmpSemanticValidatorField.class,
+				new Component.IVisitor<AmpSemanticValidatorField<?>>() {
+					@Override
+					public Object component(AmpSemanticValidatorField<?> ifs) {
+						ifs.getSemanticValidator().setEnabled(enabled);
+						target.addComponent(ifs);
+						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+					}
+
+				});
+
+		// put status to not required
+		form.visitChildren(AmpIdentificationFormSectionFeature.class,
+				new Component.IVisitor<AmpIdentificationFormSectionFeature>() {
+
+					@Override
+					public Object component(
+							AmpIdentificationFormSectionFeature ifs) {
+						AbstractChoice<?, AmpCategoryValue> statusField = ifs
+								.getStatus().getChoiceContainer();
+						String js = String.format("$('#%s').change();",
+								statusField.getMarkupId());
+						statusField.setRequired(enabled);
+						target.appendJavascript(js);
+						target.addComponent(ifs.getStatus());
+						return Component.IVisitor.STOP_TRAVERSAL;
+					}
+
+				});
 	}
 
 	private ListView<AmpComponentPanel> featureList;
@@ -119,7 +166,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
-				saveMethod(target, am, feedbackPanel, false);
+				toggleSemanticValidation(true, form,target);
+				
+				// process the form for this request
+				form.process(this.getButton());
+				
+				if(!form.hasError()) saveMethod(target, am, feedbackPanel, false);
 			}
 			
 			@Override
@@ -133,6 +185,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
+		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		activityForm.add(saveAndSubmit);
 
 		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -142,27 +195,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				am.setObject(am.getObject());
 				
 
-				/*
-				 * search for the identification section and get the title field
-				 * the title field needs to be required even if saving as draft.
-				 * Therefore we force validation using .validate() and refresh the field.
-				 */
-				form.visitChildren(AmpIdentificationFormSectionFeature.class,
-						new Component.IVisitor<AmpIdentificationFormSectionFeature>() {
-							@Override
-							public Object component(AmpIdentificationFormSectionFeature ifs) {
-								titleField= ifs.getTitle().getTextContainer();
-								return Component.IVisitor.STOP_TRAVERSAL;
-							}
-					
-				});
-				String js=String.format("$('#%s').click();",titleField.getMarkupId());		
-				target.appendJavascript(js);
-				target.addComponent(titleField);
-				titleField.validate();//the default form processing is false, so we need to enforce validation on the component(s) we need validated (in our case only title)
-				
+				toggleSemanticValidation(false, form,target);
+
+
+				// process the form for this request
+				form.process(this.getButton());
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
-				if(titleField.isValid()) saveMethod(target, am, feedbackPanel, true);				
+				if(!form.hasError())  saveMethod(target, am, feedbackPanel, true);
+				
+				
 			}
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {

@@ -12,7 +12,7 @@ import org.apache.wicket.validation.ValidationError;
  * @author mihai
  *
  */
-public class AmpMinSizeCollectionValidator implements IValidator<Integer>{
+public class AmpMinSizeCollectionValidator extends AmpSemanticValidator<Integer>{
 
 	private Integer minimum;
 	
@@ -24,7 +24,7 @@ public class AmpMinSizeCollectionValidator implements IValidator<Integer>{
 	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
 	 */
 	@Override
-	public void validate(IValidatable<Integer> validatable) {
+	public void semanticValidate(IValidatable<Integer> validatable) {
 		Integer value = validatable.getValue();
 		if (value.compareTo(minimum) < 0)
 		{

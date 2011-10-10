@@ -11,7 +11,7 @@ import org.apache.wicket.validation.ValidationError;
  * @author mihai
  * Checks if the given value is 100 (used for validating collection percentages)
  */
-public class AmpPercentageCollectionValidator implements IValidator<Double> {
+public class AmpPercentageCollectionValidator extends AmpSemanticValidator<Double>{
 
 	/**
 	 * @param component
@@ -24,7 +24,7 @@ public class AmpPercentageCollectionValidator implements IValidator<Double> {
 	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
 	 */
 	@Override
-	public void validate(IValidatable<Double> validatable) {
+	public void semanticValidate(IValidatable<Double> validatable) {
 		Double value = validatable.getValue();
 		if(value.doubleValue()!=100)
 		{

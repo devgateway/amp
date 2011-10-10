@@ -11,7 +11,7 @@ import org.apache.wicket.validation.ValidationError;
  * @author mihai
  *
  */
-public class AmpTreeCollectionValidator implements IValidator<String> {
+public class AmpTreeCollectionValidator extends AmpSemanticValidator<String> {
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class AmpTreeCollectionValidator implements IValidator<String> {
 	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
 	 */
 	@Override
-	public void validate(IValidatable<String> validatable) {
+	public void semanticValidate(IValidatable<String> validatable) {
 		String value = validatable.getValue();
 		if(value.length()>0)
 		{

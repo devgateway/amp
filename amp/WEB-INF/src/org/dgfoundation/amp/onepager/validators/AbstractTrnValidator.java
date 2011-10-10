@@ -19,7 +19,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
  * Access AMP validation translation messages
  * @deprecated use i18n from wicket !!
  */
-public abstract class AbstractTrnValidator<T> implements IValidator<T> {
+public abstract class AbstractTrnValidator<T> extends AmpSemanticValidator<T> {
 
 	private Component component;
 	private static final Logger logger = Logger

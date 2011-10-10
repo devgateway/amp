@@ -205,6 +205,8 @@
 
 
 <digi:instance property="calendarEventForm"/>
+
+<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 <style  type="text/css">
 <!--
 
@@ -222,7 +224,15 @@
 <script language="JavaScript" type="text/javascript">
   <jsp:include page="../../aim/view/scripts/calendar.js.jsp"  />
   
-
+	
+function cancel() { 
+	setMethod("");
+	selectAtts();
+	var eventForm = document.getElementById("showAmpEventFormID");
+	eventForm.action="${contextPath}/calendar/showCalendarView.do?filterInUse=false";
+	eventForm.target = "_self";
+	eventForm.submit();	
+}
 function removeSelOrgs() {
 	setMethod("removeOrg");
 	selectAtts();
@@ -1199,7 +1209,10 @@ function removeGuest(obj) {
 			                            	<input type="submit" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 &nbsp;			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>			                            </feature:display>			                          </td>
+			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
+&nbsp;			                          	</feature:display>
+			                            <input type="button" class="buttonx" style="min-width: 110px" onclick="cancel();" value="<digi:trn>Cancel</digi:trn>"/>
+			                          </td>
 			                        </tr>
 		                      </table>
 			                </div>

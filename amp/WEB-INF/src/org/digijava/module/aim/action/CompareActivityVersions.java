@@ -188,6 +188,9 @@ public class CompareActivityVersions extends DispatchAction {
 				if (!(auxResult1 == null && auxResult2 == null)) {
 					if ((auxResult1 != null && auxResult2 == null) || (auxResult1 == null && auxResult2 != null)
 							|| (!auxResult1.equals(auxResult2))) {
+						output.setFieldOutput(fields[i]);
+						output.setBlockSingleChangeOutput(false);
+						output.setMandatoryForSingleChangeOutput(false);
 
 						output.setDescriptionOutput(auxAnnotation.fieldTitle());
 						String site = RequestUtils.getSite(request).getSiteId();
@@ -198,6 +201,7 @@ public class CompareActivityVersions extends DispatchAction {
 						auxBody2 = auxBody2 != null ? auxBody2 : "";
 						if (!auxBody1.trim().equals(auxBody2.trim())) {
 							output.setStringOutput(new String[] { auxBody1, auxBody2 });
+							output.setOriginalValueOutput(new String[] { auxResult1, auxResult2 });
 							vForm.getOutputCollection().add(output);
 						}
 					}
@@ -458,7 +462,7 @@ public class CompareActivityVersions extends DispatchAction {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			session.connection().setAutoCommit(false);
+			//session.connection().setAutoCommit(false);
 //beginTransaction();
 
 			TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
@@ -468,10 +472,6 @@ public class CompareActivityVersions extends DispatchAction {
 					.getOldActivity().getAmpActivityId());
 			AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
 			auxActivity.setAmpActivityId(null);
-			session.save(auxActivity);
-			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
-			auxActivity.setAmpId(ampId);
-			session.update(auxActivity);
 
 			// Code related to versioning.
 			AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, vForm
@@ -486,8 +486,10 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setMergedActivity(true);
 			auxActivity.setMergeSource1(vForm.getActivityOne());
 			auxActivity.setMergeSource2(vForm.getActivityTwo());
-			session.update(auxActivity);
-
+			session.save(auxActivity);
+			
+			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
+			auxActivity.setAmpId(ampId);
 			// Insert fields selected by user into AmpActity properties.
 			Iterator<CompareOutput> iter = auxData.iterator();
 			while (iter.hasNext()) {
@@ -519,7 +521,7 @@ public class CompareActivityVersions extends DispatchAction {
 				}
 			}
 			
-			session.save(auxActivity);
+			session.update(auxActivity);
 //session.flush();
 			//tx.commit();
 			logger.warn("Activity Saved.");

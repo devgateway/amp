@@ -60,8 +60,6 @@ window.onload = function(){
 			selectDonorsStr = escape(selectDonors.options[idx].text);
 	}
 
-
-
 	if (showDevinfo) {
 			var sectorId =  document.getElementById("sectorsMapCombo").value;
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
@@ -69,11 +67,6 @@ window.onload = function(){
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
 			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&indYear=" + timeInterval, 780, 500);
 		} else {
-			/*
-			var sectorId =  document.getElementById("sectorsMapComboFin").value;
-			var fundingType = document.getElementById("fundingType").value;	
-			var donorId = document.getElementById("donorsCombo").value;
-			*/
 			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
 			
 			

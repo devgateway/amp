@@ -1,12 +1,8 @@
 package org.digijava.module.gis.util;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.font.GlyphVector;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
 
@@ -17,21 +13,22 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gis.dbentity.*;
+import org.springframework.security.ui.session.HttpSessionDestroyedEvent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-import java.awt.TexturePaint;
-import java.awt.Rectangle;
+import java.util.List;
 
 
 /**
@@ -923,6 +920,63 @@ public class GisUtil {
 
         return retVal;
     }
-    
+
+    public static byte[] getGradienTegendBytes(MapColorScheme colorScheme, int width, int height) throws IOException{
+        byte[] retVal = null;
+            BufferedImage graph = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D g2d = graph.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            GradientPaint gradient = new GradientPaint(0,0,colorScheme.getGradientMinColor().getAsAWTColor(),
+                                                                   width - 1,height - 1,colorScheme.getGradientMaxColor().getAsAWTColor(),true);
+
+
+
+            g2d.setPaint(gradient);
+            g2d.fillRect(0, 0, width, height);
+
+            g2d.setPaint(Color.black);
+            g2d.drawRect(0, 0, width - 1, height - 1);
+
+            java.awt.Font f = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
+            g2d.setFont(f);
+
+            String minText = "MIN";
+            GlyphVector minVector = g2d.getFont().createGlyphVector(g2d.
+                    getFontRenderContext(), minText);
+            int minCaptionWidth = (int)minVector.getVisualBounds().getWidth();
+            int minCaptionHeight = (int)minVector.getVisualBounds().getHeight();
+
+            String maxText = "MAX";
+            GlyphVector maxVector = g2d.getFont().createGlyphVector(g2d.
+                    getFontRenderContext(), maxText);
+            int maxCaptionWidth = (int)maxVector.getVisualBounds().getWidth();
+            int maxCaptionHeight = (int)maxVector.getVisualBounds().getHeight();
+
+
+            g2d.drawString(minText, 5 , height - (height - minCaptionHeight)/2 + 1);
+            g2d.drawString(maxText, width - 5 - maxCaptionWidth, height - (height - maxCaptionHeight)/2 + 1);
+
+            g2d.setPaint(Color.white);
+            g2d.drawString(minText, 4 , height - (height - minCaptionHeight)/2);
+            g2d.drawString(maxText, width - 6 - maxCaptionWidth, height - (height - maxCaptionHeight)/2);
+
+
+
+            g2d.dispose();
+            ByteArrayOutputStream outStr = new ByteArrayOutputStream();
+            ImageIO.write(graph, "png", outStr);
+            retVal = outStr.toByteArray();
+            outStr.close();
+
+        return retVal;
+    }
+
+    public static byte[] getDefaultGradienTegendBytes(HttpServletRequest request, int width, int height) throws IOException  {
+        MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
+        byte[] retVal = getGradienTegendBytes(colorScheme, width, height);
+        return retVal;
+    }
+
 
 }

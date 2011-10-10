@@ -275,15 +275,30 @@
 	<feature:display name="Show DevInfo data" module="GIS DASHBOARD">
 	  <tr>
 	    <td width="200" nowrap style="font-size:12px">
-	      <b><digi:trn>Map Mode</digi:trn>:</b>
+	      <digi:trn>Map Mode</digi:trn>:
 	    </td>
+	    
+	    
+	    
 			<td width="90%">
-				<html:form action="gis/index.do">
-					<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
-						<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
-						<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
-					</html:select> 
-				</html:form>
+				<c:choose>
+			    <c:when test="${empty param.public}">
+		        <html:form action="gis/index.do">
+							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+							</html:select> 
+						</html:form>
+			    </c:when>
+			    <c:otherwise>
+		        <html:form action="gis/showPublicGis.do?public=true">
+							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+							</html:select> 
+						</html:form>
+			    </c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 	</feature:display>
@@ -396,12 +411,24 @@
 	      <b><digi:trn>Map Mode</digi:trn>:</b>
 	    </td>
 			<td colspan="2">
-				<html:form action="gis/index.do">
-					<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
-						<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
-						<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
-					</html:select> 
-				</html:form> 
+				<c:choose>
+			    <c:when test="${empty param.public}">
+		        <html:form action="gis/index.do">
+							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+							</html:select> 
+						</html:form>
+			    </c:when>
+			    <c:otherwise>
+		        <html:form action="gis/showPublicGis.do?public=true">
+							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
+								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
+								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
+							</html:select> 
+						</html:form>
+			    </c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 	</feature:display>

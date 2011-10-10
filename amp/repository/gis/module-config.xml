@@ -9,6 +9,7 @@
 		<action login-required="false" pattern="/ShowRegionReport" />
 		<action login-required="false" pattern="/pdfExport" />
 		<action login-required="true" pattern="/showGisSettings" />
+		<action login-required="false" pattern="/showAdditionalGraphics" />
 	</security>
 	
 	<hibernate-classes required="false">

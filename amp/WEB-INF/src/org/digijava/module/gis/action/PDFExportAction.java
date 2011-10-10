@@ -368,7 +368,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
 		if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
-			imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName,
+			imagesTable.addCell(getImageMap(request, imgMap, sectorName, indicatorName,
 					subGroupName, timeInterval));
 		} else {
 			Long donorId = request.getParameter("donorId") != null ? Long.parseLong(request.getParameter("donorId")):new Long(-1);
@@ -382,7 +382,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			}
 			imagesTable.addCell(getImageMap(imgMap, sectorName, null, null,
 					null, donorName, request.getParameter("fundingType"),
-					request.getParameter("mapMode")));
+					request.getParameter("mapMode"), request));
 			String fundingType = request.getParameter("fundingType");
 		}
 
@@ -929,16 +929,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageMap(Image imgMap, String sectorName,
+	private PdfPTable getImageMap(HttpServletRequest request, Image imgMap, String sectorName,
 			String indicatorName, String subGroup, String timeInterval)
 			throws WorkerException {
 		return getImageMap(imgMap, sectorName, indicatorName, subGroup,
-				timeInterval, null, null, null);
+				timeInterval, null, null, null, request);
 	}
 
 	private PdfPTable getImageMap(Image imgMap, String sectorName,
 			String indicatorName, String subGroup, String timeInterval,
-			String donorName, String FundingType, String renderMode)
+			String donorName, String FundingType, String renderMode, HttpServletRequest request)
 			throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
@@ -1044,11 +1044,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
-			Image image = Image.getInstance(this
-					.getServlet()
-					.getServletContext()
-					.getRealPath(
-							"/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png"));
+            byte[] gradientLegendBytes = null;
+            gradientLegendBytes = GisUtil.getDefaultGradienTegendBytes(request, 500, 20);
+			Image image = Image.getInstance(gradientLegendBytes);
 			// image.scaleAbsoluteWidth(320f);
 			image.setAlignment(Image.ALIGN_RIGHT);
 			// image.scaleAbsoluteHeight(20f);

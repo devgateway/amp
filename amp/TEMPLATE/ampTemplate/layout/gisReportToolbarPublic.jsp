@@ -37,7 +37,7 @@
 					<digi:img src="img_2/ico_pdf.gif" align="left" style="margin-right:5px;"/>
 				</td>
 				<td>
-					<a class="l_sm" href="#" target="_blank" onclick="exportPDF(); return false;">Export to PDF</a>
+					<a class="l_sm" style="cursor:pointer;" onclick="exportPDF(); return false;"><digi:trn>Export to PDF</digi:trn></a>
 				</td>
 				<td width=10></td>
 				<td>
@@ -95,11 +95,52 @@
 		  
 			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval, 780, 500);
 		} else {
+			
+			/*
 			var sectorId =  document.getElementById("sectorsMapComboFin").value;
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
 		  
 			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId , 780, 500);
+			*/
+			
+			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
+			
+			
+			var popup = window.open("about:blank", "regReportWnd", "height=500,width=780,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+			var filterForm = $("#gisFilterForm");
+			
+			
+			
+			filterForm.attr("method", "post");
+			filterForm.attr("action", "/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear);
+			filterForm.attr("target", "regReportWnd");
+			
+			var allSectors = false;
+			if ($("input[name='selectedSectors']:checked").length + 
+					$("input[name='selectedSecondarySectors']:checked").length + 
+					$("input[name='selectedTertiarySectors']:checked").length == 0) {
+				$("input[name='selectedSectors']").attr("checked", "true");
+				$("input[name='selectedSecondarySectors']").attr("checked", "true");
+				$("input[name='selectedTertiarySectors']").attr("checked", "true");
+				allSectors = true;
+			}
+			
+			$("#filterAllSectors").val(allSectors);
+			
+			filterForm[0].submit();
+			
+	    if (allSectors) {
+	    	$("input[name='selectedSectors']").removeAttr("checked");
+				$("input[name='selectedSecondarySectors']").removeAttr("checked");
+				$("input[name='selectedTertiarySectors']").removeAttr("checked");
+	    }
+
+		
+		
+		
+			popup.focus();
+			return null;
 
 		}
   }

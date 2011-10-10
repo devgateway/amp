@@ -37,7 +37,7 @@
 					<digi:img src="img_2/ico_pdf.gif" align="left" style="margin-right:5px;"/>
 				</td>
 				<td>
-					<a class="l_sm" style="cursor:pointer;" onclick="exportPDF(); return false;"><digi:trn>Export to PDF</digi:trn></a>
+					<a class="l_sm" style="cursor:pointer;text-decoration:underline;" onclick="exportPDF(); return false;"><digi:trn>Export to PDF</digi:trn></a>
 				</td>
 				<td width=10></td>
 				<td>

@@ -194,6 +194,23 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
+
+<logic:present scope="request" parameter="editError">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	     <tr>
+		     <td align="center">
+		        <font color="red" size="3">
+		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is beeing edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+		        </font>
+		     </td>
+	     </tr>           
+	     <tr>
+	         <td>
+	             &nbsp;
+	         </td>
+	     </tr>
+	</table>
+</logic:present>
 <div class="activity_preview_header">
   <table width="990" border="0" cellpadding="0" cellspacing="0">
   <tr>

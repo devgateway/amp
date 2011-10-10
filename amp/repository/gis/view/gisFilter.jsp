@@ -507,7 +507,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 						        	</select>
 								</p>
 								<p>
-									<label style="width:230px">Show data for sel. workspace only</label>
+									<label style="width:230px"><digi:trn>Show data for sel. workspace only</digi:trn></label>
 									&nbsp;&nbsp;<input type="checkbox" name="curWorkspaceOnly">
 								</p>
 							</div>				 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -96,6 +97,9 @@ public class AssignUsersToWorkspace extends Action {
 		tmForm.setTeamLeaderExists(null);
 		tmForm.setWorkspaceManagerRoleId(null);
 		tmForm.setTeamHead(null);
+                HttpSession session = request.getSession();
+                session.setAttribute("fromPage", tmForm.getFromPage());
+                session.setAttribute("selectedRow", tmForm.getSelectedRow());
 		
 		return mapping.findForward(redirectWhere);
 

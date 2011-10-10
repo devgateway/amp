@@ -17,6 +17,25 @@ public class WorkspaceForm extends ActionForm {
 	private int numPerPage=-1;
 	
 	private String keyword;
+        
+        private Integer currentRow;
+        private Integer currentPage;
+
+        public Integer getCurrentPage() {
+            return currentPage;
+        }
+
+        public void setCurrentPage(Integer currentPage) {
+            this.currentPage = currentPage;
+        }
+
+        public Integer getCurrentRow() {
+            return currentRow;
+        }
+
+        public void setCurrentRow(Integer currentRow) {
+            this.currentRow = currentRow;
+        }
 
 	public String getKeyword() {
 		return keyword;

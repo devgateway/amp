@@ -63,7 +63,7 @@ public class ShowAddTeamMember extends Action {
 					}
 				}
 				
-				if (frmPage == 1) {	
+				if (upMemForm.getSelectedRow() != null) {	
 					String redirectWhere=(String)request.getSession().getAttribute("redirectTo");
 					if(redirectWhere!=null){
 						request.getSession().removeAttribute(redirectWhere);

@@ -31,8 +31,15 @@ public class TeamMemberForm extends ActionForm {
 	private String teamLeaderExists; //TL exists or not
 	private Long workspaceManagerRoleId;  // Holds the "Team Head" role's id (amp_team_member_roles)
 	private String[] userIdsWithRoles;    // userId_RoleId
-	
+        private Integer selectedRow;
+      
+        public Integer getSelectedRow() {
+            return selectedRow;
+        }
 
+        public void setSelectedRow(Integer selectedRow) {
+            this.selectedRow = selectedRow;
+        }
 	
 	/**
 	 * @return Returns the action.

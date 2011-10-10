@@ -45,6 +45,14 @@ public class WorkspaceManager extends Action {
 			wsForm.setWorkspaceType("all");
 			wsForm.setNumPerPage(-1);
 		}
+                if(session.getAttribute("fromPage")!=null){
+                    wsForm.setCurrentPage((Integer)session.getAttribute("fromPage"));
+                    session.removeAttribute("fromPage");
+                }
+                if(session.getAttribute("selectedRow")!=null){
+                    wsForm.setCurrentRow((Integer)session.getAttribute("selectedRow"));
+                    session.removeAttribute("selectedRow");
+                }
 		
 		String keyword = wsForm.getKeyword();
 		Collection<String> keywords=new ArrayList<String>();

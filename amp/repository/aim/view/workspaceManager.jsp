@@ -164,6 +164,7 @@
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<digi:instance property="aimWorkspaceForm" />
 <script type="text/javascript">
 
 
@@ -202,7 +203,9 @@
 <script language="JavaScript">
     var tooltipPanel;
     var viewTeamDetails='';
-   
+    var myPaginator;
+    var added='${param.added}';
+
 
     
 
@@ -298,7 +301,7 @@
             }
             // Create the Paginator 
             
-            var myPaginator = new YAHOO.widget.Paginator({ 
+            myPaginator = new YAHOO.widget.Paginator({ 
             	rowsPerPage:10,
 	        	//totalRecords:document.getElementById("totalResults").value,
 	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
@@ -345,9 +348,24 @@
                 hideToolTip();
             });
         
-            this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+            //this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
             // Programmatically bring focus to the instance so arrow selection works immediately 
             this.myDataTable.focus(); 
+            var second=false;
+            this.myDataTable.subscribe('postRenderEvent',function(oArgs){
+            
+if(second){
+    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
+second=false;
+}
+            
+            if(added=="true"){
+               myPaginator.setPage(${aimWorkspaceForm.currentPage});
+               second=true;
+               added="false";
+            }
+            });
+
 
             // Update totalRecords on the fly with value from server
             this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
@@ -828,8 +846,11 @@
     };
 
     function assignNewMember(){
-            <digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
-        document.aimWorkspaceForm.action="${exportUrl}?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
+        <digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
+        var fromPage=myPaginator.getCurrentPage();
+        var recordID = YAHOO.example.XHR_JSON.myDataTable.getSelectedRows()[0];
+        var selectedRow= YAHOO.example.XHR_JSON.myDataTable.getTrIndex(recordID);
+        document.aimWorkspaceForm.action="${exportUrl}?fromPage="+fromPage+"&teamId="+document.getElementsByName('teamId')[0].value+"&selectedRow="+selectedRow;
         document.aimWorkspaceForm.target="_self";
         document.aimWorkspaceForm.submit();	
     }
@@ -989,7 +1010,7 @@
 
 <DIV id="TipLayer"	style="absolute;z-index:1000;"></DIV>
 
-<digi:instance property="aimWorkspaceForm" />
+
 <digi:context name="digiContext" property="context" />
 
 

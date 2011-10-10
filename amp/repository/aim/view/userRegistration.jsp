@@ -328,10 +328,19 @@
                 </html:select>              </td>
             </tr>
             <tr>
-              <td colspan="54" align=center style="padding-top:20px;"><c:set var="btnSubmit">
+            	<td width="3%">&nbsp;</td>
+            	<td width="3%">&nbsp;</td>
+              <td align="right" style="padding-top:20px;"><c:set var="btnSubmit">
                 <digi:trn key="btn:submit">Submit</digi:trn>
               </c:set>
-                <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();"/>              </td>
+                <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();"/>
+             </td>
+              <td align="left" style="padding-top:20px;">
+              <c:set var="btnReset">
+                <digi:trn key="btn:reset">Reset</digi:trn>
+              </c:set>
+                <html:reset value="${btnReset}" styleClass="buttonx" onclick=""/>
+             </td>
               </tr>
             <tr>
               <td colspan=6>&nbsp;</td>

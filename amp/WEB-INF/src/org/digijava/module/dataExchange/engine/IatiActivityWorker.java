@@ -311,6 +311,7 @@ public class IatiActivityWorker {
 		ArrayList<JAXBElement<TextType>> iatiTitleList = new ArrayList<JAXBElement<TextType>>();
 		ArrayList<JAXBElement<CodeType>> iatiStatusList = new ArrayList<JAXBElement<CodeType>>();
 		ArrayList<ParticipatingOrg> iatiPartOrgList = new ArrayList<ParticipatingOrg>();
+		ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList = new ArrayList<ParticipatingOrg>();
 		ArrayList<ReportingOrg> iatiRepOrgList = new ArrayList<ReportingOrg>();
 		ArrayList<Sector> iatiSectorList = new ArrayList<Sector>();
 		ArrayList<Transaction> iatiTransactionList = new ArrayList<Transaction>();
@@ -348,7 +349,7 @@ public class IatiActivityWorker {
 		//workspace settings + team lead owner
 		
 		//populate the lists with IATI values of the activity
-		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,
+		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,iatiDefaultFundingOrgList,
 				iatiRepOrgList, iatiSectorList, iatiTransactionList,
 				iatiDescriptionList, iatiOtherIdList, iatiActDateList,
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
@@ -359,7 +360,7 @@ public class IatiActivityWorker {
 		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
 		processRelOrgsStep(a,iatiPartOrgList);
 		processActInternalIdsStep(a,iatiOtherIdList);
-		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
+		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList);
 		processLocationStep(a,iatiLocationList);
 		processContactsStep(a,iatiContactList);
 		return logs;
@@ -481,7 +482,7 @@ public class IatiActivityWorker {
 	
 	
 	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,	ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
-			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency) {
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
 		
 		if(iatiTransactionList.isEmpty()) return;
 		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
@@ -493,7 +494,7 @@ public class IatiActivityWorker {
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings);
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiDefaultFundingOrgList);
 			if(f!=null)
 				fundings.add(f);
 		}
@@ -508,7 +509,7 @@ public class IatiActivityWorker {
 
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
-			String iatiDefaultCurrency, Set<AmpFunding> fundings) {
+			String iatiDefaultCurrency, Set<AmpFunding> fundings, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
 
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -601,8 +602,15 @@ public class IatiActivityWorker {
 		
 		//we can not import funding with Donor null
 		if(ampOrg == null) 
-			return null;
-		//TODO add a default donor like default currency ;)
+			{
+				//return null;
+				ParticipatingOrg defaultFundingOrg = iatiDefaultFundingOrgList.iterator().next();
+				ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+				if(ampOrg==null)
+					//there is no participating organization with funding role and the 
+					//the transaction has to source organization - donor
+					return null;
+			}
 		
 		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
@@ -932,7 +940,7 @@ public class IatiActivityWorker {
 	private void extractIATIEntities(ArrayList<JAXBElement<TextType>> iatiTitleList,
 			ArrayList<JAXBElement<CodeType>> iatiStatusList,
 			ArrayList<ParticipatingOrg> iatiPartOrgList,
-			ArrayList<ReportingOrg> iatiRepOrgList,
+			ArrayList<ParticipatingOrg> iatiFundOrgList, ArrayList<ReportingOrg> iatiRepOrgList,
 			ArrayList<Sector> iatiSectorList,
 			ArrayList<Transaction> iatiTransactionList,
 			ArrayList<Description> iatiDescriptionList,
@@ -1016,6 +1024,8 @@ public class IatiActivityWorker {
 			if(contentItem instanceof ParticipatingOrg){
 				ParticipatingOrg item = (ParticipatingOrg)contentItem;
 				iatiPartOrgList.add(item);
+				if(item.getRole()!=null && "funding".compareTo(item.getRole().toLowerCase())==0)
+					iatiFundOrgList.add(item);
 			}
 			
 			if(contentItem instanceof Sector){

@@ -375,7 +375,7 @@
 			
 			document.write('<tr><td colspan="2"><font color="red">');
 			document.write(msgText);
-			document.write('</font></td></tr>');
+			document.write('</font></td></tr>'); 
 		}
 	</script>
 	

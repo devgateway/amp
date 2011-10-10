@@ -141,6 +141,8 @@ public class ActivityUtil {
 				//existing activity
 				//previousVersion for current activity
 				a.setAmpActivityPreviousVersion(group.getAmpActivityLastVersion());
+				group.setAmpActivityLastVersion(a);
+				session.update(group);
 			}
 
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);

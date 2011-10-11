@@ -34,8 +34,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		final IModel<TemporaryDocument> td = new Model(new TemporaryDocument());
 		
 		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title");
-		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false);
-		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false);
+		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
+		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
 		AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("docType", CategoryConstants.DOCUMENT_TYPE_KEY, new PropertyModel<AmpCategoryValue>(td, "type"), "Type", true, true);
 		FileUploadField file = new FileUploadField("file", new PropertyModel<FileUpload>(td, "file"));
 		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, true);

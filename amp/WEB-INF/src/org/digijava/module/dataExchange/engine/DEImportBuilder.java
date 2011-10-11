@@ -79,6 +79,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
+import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
@@ -2144,6 +2145,13 @@ public class DEImportBuilder {
 								AmpTeam team = getAssignedWorkspace();
 								ampActivity.setApprovalStatus(getApprovalStatus());
 								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
+								
+								//update the AmpId of the DEMappingField.
+								AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(),iWorker.getIatiID(), iWorker.getLang());
+								DEMappingFields item = checkedActivity.getItem();
+								item.setAmpId(ampActivity.getAmpActivityId());
+								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
+								DataExchangeUtils.addObjectoToAmp(item);
 							}
 							else continue;
 						}

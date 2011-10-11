@@ -203,8 +203,8 @@ public class IatiActivityWorker {
 		return false;
 	}
 	
-	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		// TODO Auto-generated method stub
+	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		try{
 			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
@@ -1063,7 +1063,7 @@ public class IatiActivityWorker {
 		return log;
 	}
 	
-	private AmpMappedField checkActivity(String title, String iatiID, String lang) {
+	public AmpMappedField checkActivity(String title, String iatiID, String lang) {
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY,toIATIValues("activityName","iatiID"),toIATIValues(title,iatiID),
 				lang,null,DataExchangeConstants.IATI_ACTIVITY,null,null,"inactive");
 		AmpMappedField log = new AmpMappedField(checkMappedField);
@@ -1359,19 +1359,19 @@ public class IatiActivityWorker {
 		return result;
 	}
 	
-	private String toIATIValues(String a, String b){
+	public String toIATIValues(String a, String b){
 		return a+"|||"+b;
 	}
 
-	private String toIATIValues(String a, String b, String c){
+	public String toIATIValues(String a, String b, String c){
 		return a+"|||"+b+"|||"+c;
 	}
 
-	private String toIATIValues(String a, String b, String c, String d, String e){
+	public String toIATIValues(String a, String b, String c, String d, String e){
 		return toIATIValues(a,b)+"|||"+toIATIValues(c,d,e);
 	}
 	
-	private String toIATIValues(String a, String b, String c, String d, String e, String f){
+	public String toIATIValues(String a, String b, String c, String d, String e, String f){
 		return toIATIValues(a,b,c)+"|||"+toIATIValues(d,e,f);
 	}
 

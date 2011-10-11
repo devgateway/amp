@@ -794,12 +794,13 @@ function adminHelp(){
 		                                        </li>
                                             </digi:secure>
                                         </logic:notEmpty> 
-                                                                               
+                                        <module:display name="/Activity Form/FM Mode" parentModule="/Activity Form">                                       
                                         <li id="switchFMMode" class="yuiampmenuitem_drop" style="display: none;">
                                         	<a class="yuiampmenuitemlabel" href="javascript:wicketSwitchFMMode()"  onclick="return canExit()">
                                         		<digi:trn key="aim:search">FM Mode</digi:trn>
                                        		 </a>
                                         </li>
+                                        </module:display>
                                         <li class="yuiampmenuitem_drop">
                                         	<a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
                                         		<digi:trn key="aim:search">Search</digi:trn>

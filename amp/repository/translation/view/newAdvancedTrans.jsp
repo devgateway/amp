@@ -130,11 +130,19 @@
 			<div class="clearfix">
 				<div style="float:left">
 					<div><digi:trn>Search for</digi:trn>:</div>
-					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput"/>
+					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput"/>&nbsp;
+				</div>
+				<div style="float:left">
+				<div><digi:trn>Search language</digi:trn>:</div>
+					<html:select property="selectedLocale">
+						<c:forEach var="lng" items="${newAdvancedTrnForm.languages}">
+							<html:option value="${lng.code}"><digi:trn>${lng.name}</digi:trn></html:option>
+						</c:forEach>
+					</html:select>
 				</div>
 				<div style="float:left">
 					<div>&nbsp;</div>
-                                        <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch"/>
+                    <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch"/>
 				</div>
 			</div>
 		</div>

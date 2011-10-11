@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -42,11 +43,14 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.UrlTouchService;
+import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
+import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
@@ -1751,14 +1755,14 @@ public class TranslatorWorker {
     }
 
     public String translateFromTree(String key, long siteId, String langCode,
-                                    String defaultTrn, int translationType, String keyWords) throws
+                                    String defaultTrn, int translationType, String keyWords,ServletContext context) throws
         WorkerException {
         return translateFromTree(key, siteId, new String[] {langCode},
-                                 defaultTrn, langCode, translationType, keyWords);
+                                 defaultTrn, langCode, translationType, keyWords,context);
     }
 
     public String translateFromTree(String key, long siteId, String[] langCodes,
-                                    String defaultTrn, String defaultLocale, int translationType, String keyWords) throws
+                                    String defaultTrn, String defaultLocale, int translationType, String keyWords,ServletContext context) throws
         WorkerException {
         SiteCache siteCache = SiteCache.getInstance();
         Site site = siteCache.getSite(new Long(siteId));
@@ -1827,12 +1831,22 @@ public class TranslatorWorker {
                     message.setKeyWords(keyWords);
                     
                     save(message);
-
+                    if(context!=null){
+                    	  String suffix =  message.getLocale();
+      					try {
+      						LuceneWorker.addItemToIndex(message, context,suffix);
+      					} catch (DgException e) {
+      						logger.debug("unable to add translation to lucene");
+      					}
+                    }
+                  
                 }
             }
         }
         return defaultTrn;
     }
+
+	
 
     protected void setUpAlerts() {
         Object configBean = DigiConfigManager.getConfigBean("translateAlert");

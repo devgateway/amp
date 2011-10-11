@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import javax.servlet.ServletContext;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,6 +21,7 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.LabelTranslatorBehaviour;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -136,10 +139,11 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		String genKey = TranslatorWorker.generateTrnKey(buttonCaption==null?fmName:buttonCaption);
 		String translatedValue;
 		button.add(new AttributeModifier("value", new Model(buttonCaption==null?fmName:buttonCaption)));
+		ServletContext servletContext = WebApplication.get().getServletContext();
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											buttonCaption==null?fmName:buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null);
+											buttonCaption==null?fmName:buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
 			button.add(new AttributeModifier("value", new Model(translatedValue)));
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import javax.servlet.ServletContext;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -10,6 +12,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.LabelTranslatorBehaviour;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -62,9 +65,10 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 		String translatedValue;
 		button.add(new AttributeModifier("value", new Model(buttonCaption)));
 		try {
+			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null);
+											buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null, servletContext);
 			button.add(new AttributeModifier("value", new Model(translatedValue)));
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

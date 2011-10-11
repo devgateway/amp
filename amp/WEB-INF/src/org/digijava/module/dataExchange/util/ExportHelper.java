@@ -267,7 +267,7 @@ public class ExportHelper {
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), request.getLocale().getLanguage(), 
-											value, TranslatorWorker.TRNTYPE_LOCAL, null);
+											value, TranslatorWorker.TRNTYPE_LOCAL, null,session.getServletContext());
 			return translatedValue;
 		} catch (WorkerException e) {
 			e.printStackTrace();

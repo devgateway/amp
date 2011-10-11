@@ -4,8 +4,11 @@
 */
 package org.dgfoundation.amp.onepager.translation;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -33,9 +36,10 @@ public final class TranslatorUtil {
 		AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
 		Site site = session.getSite();
 		try {
+			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null);
+											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);
 			return strTrn;

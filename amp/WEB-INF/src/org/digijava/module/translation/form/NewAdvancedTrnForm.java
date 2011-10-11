@@ -1,9 +1,11 @@
 package org.digijava.module.translation.form;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.util.ListChangesBuffer.ChangedItem;
 
@@ -32,7 +34,25 @@ public class NewAdvancedTrnForm extends ActionForm {
 	private String updateKey;
 	private String updateLocale;
 	private String updateMessage;
+	private String selectedLocale;
+	private List<org.digijava.kernel.entity.Locale> languages;
 	
+	public List<org.digijava.kernel.entity.Locale> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<org.digijava.kernel.entity.Locale> languages) {
+		this.languages = languages;
+	}
+
+	public String getSelectedLocale() {
+		return selectedLocale;
+	}
+
+	public void setSelectedLocale(String selectedLocale) {
+		this.selectedLocale = selectedLocale;
+	}
+
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
 	}

@@ -32,6 +32,7 @@ import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.form.NewAdvancedTrnForm;
 import org.digijava.module.translation.lucene.LucTranslationModule;
 import org.digijava.module.translation.util.ListChangesBuffer;
+import org.digijava.module.translation.util.TranslationManager;
 
 /**
  * New Advanced translation mode action. AMP-4911
@@ -59,6 +60,9 @@ public class ShowNewAdvancedTranslations extends Action{
 		//TODO check site
 
 		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
+		List<org.digijava.kernel.entity.Locale> sortedLanguages = TranslationManager.getTreeLanguagesToDisplay(
+				site, null, false);
+		trnForm.setLanguages(sortedLanguages);
 		
 		int totalPages = 0;
 
@@ -87,7 +91,8 @@ public class ShowNewAdvancedTranslations extends Action{
 		
 		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")){
 
-			String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+			//String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+			String langCode=trnForm.getSelectedLocale();
 			
 			//Search by key which is generated from input text. this will show exact match only.
 			String searchKey = TranslatorWorker.generateTrnKey(trnForm.getSearchTerm());

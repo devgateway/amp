@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -16,6 +18,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
@@ -80,9 +83,10 @@ public class TrnLabel extends Label {
 		String genKey = TranslatorWorker.generateTrnKey(value);
 		String translatedValue;
 		try {
+			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											value, TranslatorWorker.TRNTYPE_LOCAL, null);
+											value, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
 			return translatedValue;
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

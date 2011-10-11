@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.security.auth.Subject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
@@ -350,10 +351,11 @@ public class TrnTag
     }
 
     private void translate(String key, Site site, String langCode, int trnType, String keyWords) throws WorkerException {
+    	ServletContext context = pageContext.getServletContext();
         HashSet<String> checked = new HashSet<String>();
         String genKey = getGeneratedKey();
         String value = TranslatorWorker.getInstance(genKey).
-            translateFromTree(genKey, site.getId().longValue(),langCode, null, trnType,keyWords);
+            translateFromTree(genKey, site.getId().longValue(),langCode, null, trnType,keyWords,context);
         if (value != null) {
             writeData(value, getMessageEdit());
             return;
@@ -364,7 +366,7 @@ public class TrnTag
         if (!defLang.getCode().equals(langCode)) {
             value = TranslatorWorker.getInstance(genKey).
                 translateFromTree(genKey, site.getId().longValue(),
-                                  defLang.getCode(), null, trnType,keyWords);
+                                  defLang.getCode(), null, trnType,keyWords,context);
             if (value != null) {
                 writeData(value, getMessageTranslate());
                 return;
@@ -382,7 +384,7 @@ public class TrnTag
 
         value = TranslatorWorker.getInstance(genKey).
             translateFromTree(genKey, site.getId().longValue(),
-                              "en", defaultTrn, trnType,keyWords);
+                              "en", defaultTrn, trnType,keyWords,context);
         if (value != null) {
             writeData(value, getMessageTranslate());
             return;
@@ -402,7 +404,7 @@ public class TrnTag
             }
             value = TranslatorWorker.getInstance(genKey).
                 translateFromTree(genKey, site.getId().longValue(),
-                                  langs, null, null, trnType,keyWords);
+                                  langs, null, null, trnType,keyWords,context);
             if (value != null) {
                 writeData(value, getMessageTranslate());
                 return;

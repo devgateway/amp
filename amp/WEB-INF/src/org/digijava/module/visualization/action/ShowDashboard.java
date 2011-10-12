@@ -180,9 +180,9 @@ public class ShowDashboard extends Action {
 			} catch (NumberFormatException ex) {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}
-			filter.setStartYear(year-5);
-			filter.setStartYearQuickFilter(year-5);
-			filter.setStartYearFilter(year-5);
+			filter.setStartYear(year-3);
+			filter.setStartYearQuickFilter(year-3);
+			filter.setStartYearFilter(year-3);
 			filter.setEndYear(year);
 			filter.setEndYearQuickFilter(year);
 			filter.setEndYearFilter(year);

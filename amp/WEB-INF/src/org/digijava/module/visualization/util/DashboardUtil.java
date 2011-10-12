@@ -577,4 +577,30 @@ public class DashboardUtil {
 		return location;
 	}
 
+	public static BigDecimal getDividingDenominator(Boolean divideThousands, Boolean isProfile) {
+		BigDecimal divideByDenominator;
+		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
+			return new BigDecimal(1);
+		}
+		else
+		{
+	        if(divideThousands == null) divideThousands = false;
+			if ("true"
+					.equals(FeaturesUtil
+							.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+				if (divideThousands)
+					divideByDenominator = new BigDecimal(1000000);
+				else
+					divideByDenominator = new BigDecimal(1000);
+			}
+			else {
+		        if (divideThousands)
+		        	divideByDenominator=new BigDecimal(1000000000);
+		        else
+		        	divideByDenominator=new BigDecimal(1000000);
+			}
+		}
+		return divideByDenominator;
+	}
+
 }

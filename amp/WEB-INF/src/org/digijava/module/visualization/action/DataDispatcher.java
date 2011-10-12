@@ -186,19 +186,14 @@ public class DataDispatcher extends DispatchAction {
 
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
-		
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();
-		JSONArray rankProjects = new JSONArray();
 		JSONArray topProjects = new JSONArray();
 		JSONObject rootProjects = new JSONObject();
-		JSONArray rankSectors = new JSONArray();
 		JSONArray topSectors = new JSONArray();
 		JSONObject rootSectors = new JSONObject();
-		JSONArray rankDonors = new JSONArray();
 		JSONArray topDonors = new JSONArray();
 		JSONObject rootDonors = new JSONObject();
-		JSONArray rankRegions = new JSONArray();
 		JSONArray topRegions = new JSONArray();
 		JSONObject rootRegions = new JSONObject();
 		JSONObject child = new JSONObject();
@@ -358,20 +353,8 @@ public class DataDispatcher extends DispatchAction {
 		rootSelSubSectors.put("list", selSubSectors);
 		children.add(rootSelSubSectors);
 		
-		Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
 		List list = null;
-		if (projectsList!=null) {
-			list = new LinkedList(projectsList.entrySet());
-			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				Map.Entry entry = (Map.Entry) iterator.next();
-				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
-				child.put("name", act.getName());
-				child.put("id", act.getAmpActivityId());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
-				rankProjects.add(child);
-			}
-		}
-		projectsList = visualizationForm.getRanksInformation().getTopProjects();
+		Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getTopProjects();
 		if (projectsList!=null) {
 			list = new LinkedList(projectsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -384,21 +367,10 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		rootProjects.put("type", "ProjectsList");
-		rootProjects.put("list", rankProjects);
 		rootProjects.put("top", topProjects);
 		children.add(rootProjects);
 
-		Map<AmpSector, BigDecimal> sectorsList = visualizationForm.getRanksInformation().getFullSectors();
-		if (sectorsList!=null) {
-			list = new LinkedList(sectorsList.entrySet());
-			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				Map.Entry entry = (Map.Entry) iterator.next();
-				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
-				rankSectors.add(child);
-			}
-		}
-		sectorsList = visualizationForm.getRanksInformation().getTopSectors();
+		Map<AmpSector, BigDecimal> sectorsList = visualizationForm.getRanksInformation().getTopSectors();
 		if (sectorsList!=null) {
 			list = new LinkedList(sectorsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -409,21 +381,10 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		rootSectors.put("type", "SectorsList");
-		rootSectors.put("list", rankSectors);
 		rootSectors.put("top", topSectors);
 		children.add(rootSectors);
 		
-		Map<AmpOrganisation, BigDecimal> donorsList = visualizationForm.getRanksInformation().getFullDonors();
-		if (donorsList!=null) {
-			list = new LinkedList(donorsList.entrySet());
-			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				Map.Entry entry = (Map.Entry) iterator.next();
-				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
-				rankDonors.add(child);
-			}
-		}
-		donorsList = visualizationForm.getRanksInformation().getTopDonors();
+		Map<AmpOrganisation, BigDecimal> donorsList = visualizationForm.getRanksInformation().getTopDonors();
 		if (donorsList!=null) {
 			list = new LinkedList(donorsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -434,21 +395,10 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		rootDonors.put("type", "DonorsList");
-		rootDonors.put("list", rankDonors);
 		rootDonors.put("top", topDonors);
 		children.add(rootDonors);
 		
-		Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getFullRegions();
-		if (regionsList!=null) {
-			list = new LinkedList(regionsList.entrySet());
-			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-				Map.Entry entry = (Map.Entry) iterator.next();
-				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
-				rankRegions.add(child);
-			}
-		}
-		regionsList = visualizationForm.getRanksInformation().getTopRegions();
+		Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getTopRegions();
 		if (regionsList!=null) {
 			list = new LinkedList(regionsList.entrySet());
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -459,7 +409,6 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		rootRegions.put("type", "RegionsList");
-		rootRegions.put("list", rankRegions);
 		rootRegions.put("top", topRegions);
 		children.add(rootRegions);
 		
@@ -538,20 +487,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		BigDecimal divideByDenominator;
-
-		if (filter.getDivideThousands())
-			divideByDenominator = new BigDecimal(1000);
-		else
-			divideByDenominator = new BigDecimal(1);
-        
-		if ("true"
-				.equals(FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-			if (filter.getDivideThousands())
-				divideByDenominator = new BigDecimal(1000000);
-			else
-				divideByDenominator = new BigDecimal(1000);
-		}
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), true); //IsProfile determines if the amounts were already divided
 
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
@@ -898,12 +834,8 @@ public class DataDispatcher extends DispatchAction {
 			filter.setDivideThousands(true);
 		}
 		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), true);
 
-		if (filter.getDivideThousands())
-			divideByDenominator = new BigDecimal(1000);
-		else
-			divideByDenominator = new BigDecimal(1);
-        
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
@@ -920,15 +852,6 @@ public class DataDispatcher extends DispatchAction {
 		
 		String othersTitle = "Other";
         
-		if ("true"
-				.equals(FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-			if (filter.getDivideThousands())
-				divideByDenominator = new BigDecimal(1000000);
-			else
-				divideByDenominator = new BigDecimal(1000);
-		}
-		
 		BigDecimal donorTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -1253,19 +1176,8 @@ public class DataDispatcher extends DispatchAction {
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
 
-        if (filter.getDivideThousands())
-        	divideByDenominator=new BigDecimal(1000000000);
-        else
-        	divideByDenominator=new BigDecimal(1000000);
-        
-
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            if (filter.getDivideThousands())
-            	divideByDenominator=new BigDecimal(1000000);
-            else
-            	divideByDenominator=new BigDecimal(1000);
-        }
         Date startDate = null;
         Date endDate = null;
 
@@ -1473,19 +1385,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		BigDecimal divideByDenominator;
-
-        if (filter.getDivideThousands())
-        	divideByDenominator=new BigDecimal(1000000000);
-        else
-        	divideByDenominator=new BigDecimal(1000000);
-        
-
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            if (filter.getDivideThousands())
-            	divideByDenominator=new BigDecimal(1000000);
-            else
-            	divideByDenominator=new BigDecimal(1000);
-        }
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
 
 		Long currId = filter.getCurrencyId();
 		String currCode;
@@ -1611,25 +1511,12 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
-		BigDecimal divideByDenominator;
-		//Set it here, and unset it at the end. This should go to the Advanced Filters
 		if(divide){
 			filter.setDivideThousands(true);
 		}
 
-		if (filter.getDivideThousands())
-			divideByDenominator = new BigDecimal(1000000000);
-		else
-			divideByDenominator = new BigDecimal(1000000);
-
-		if ("true"
-				.equals(FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-			if (filter.getDivideThousands())
-				divideByDenominator = new BigDecimal(1000000);
-			else
-				divideByDenominator = new BigDecimal(1000);
-		}
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
 
 		Long currId = filter.getCurrencyId();
 		String currCode;
@@ -2017,20 +1904,8 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), true);
 
-		if (filter.getDivideThousands())
-			divideByDenominator = new BigDecimal(1000);
-		else
-			divideByDenominator = new BigDecimal(1);
-        
-		if ("true"
-				.equals(FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-			if (filter.getDivideThousands())
-				divideByDenominator = new BigDecimal(1000000);
-			else
-				divideByDenominator = new BigDecimal(1000);
-		}
 		String othersTitle = "Other";
         
         BigDecimal regionTotal = BigDecimal.ZERO;
@@ -2649,6 +2524,98 @@ public class DataDispatcher extends DispatchAction {
 	        }
         } catch (Exception e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+	public ActionForward getFullList(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+		
+		VisualizationForm visualizationForm = (VisualizationForm)form;
+		
+		String objectType = request.getParameter("objectType");
+		JSONObject child = new JSONObject();
+		JSONArray rankObjects = new JSONArray();
+		JSONObject rootObjects = new JSONObject();
+		if(objectType != null && objectType.equalsIgnoreCase("projects")){
+			Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
+			List list = null;
+			if (projectsList!=null) {
+				list = new LinkedList(projectsList.entrySet());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					Map.Entry entry = (Map.Entry) iterator.next();
+					AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
+					child.put("name", act.getName());
+					child.put("id", act.getAmpActivityId());
+					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					rankObjects.add(child);
+				}
+				rootObjects.put("type", "ProjectsList");
+				rootObjects.put("list", rankObjects);
+			}
+		}
+		else if (objectType != null && objectType.equalsIgnoreCase("sectors")){
+			Map<AmpSector, BigDecimal> sectorsList = visualizationForm.getRanksInformation().getFullSectors();
+			List list = null;
+			if (sectorsList!=null) {
+				list = new LinkedList(sectorsList.entrySet());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					Map.Entry entry = (Map.Entry) iterator.next();
+					child.put("name", entry.getKey().toString());
+					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					rankObjects.add(child);
+				}
+				rootObjects.put("type", "SectorsList");
+				rootObjects.put("list", rankObjects);
+			}
+			
+		}
+		else if (objectType != null && objectType.equalsIgnoreCase("regions")){
+			Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getFullRegions();
+			List list = null;
+			if (regionsList!=null) {
+				list = new LinkedList(regionsList.entrySet());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					Map.Entry entry = (Map.Entry) iterator.next();
+					child.put("name", entry.getKey().toString());
+					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					rankObjects.add(child);
+				}
+				rootObjects.put("type", "RegionsList");
+				rootObjects.put("list", rankObjects);
+			}
+		}
+		else if (objectType != null && objectType.equalsIgnoreCase("donors")){
+			Map<AmpOrganisation, BigDecimal> donorsList = visualizationForm.getRanksInformation().getFullDonors();
+			List list = null;
+			if (donorsList!=null) {
+				list = new LinkedList(donorsList.entrySet());
+				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					Map.Entry entry = (Map.Entry) iterator.next();
+					child.put("name", entry.getKey().toString());
+					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					rankObjects.add(child);
+				}
+				rootObjects.put("type", "DonorsList");
+				rootObjects.put("list", rankObjects);
+			}
+		}
+		
+		JSONArray children = new JSONArray();
+		children.add(rootObjects);
+		JSONObject root = new JSONObject();
+		root.put("objectType", "lists");
+		root.put("children", children);
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
 		}
 		return null;
 	}

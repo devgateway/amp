@@ -87,8 +87,8 @@
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
-							<tr bgColor=#ffffff>
+						<table cellpadding="1" border="0" cellspacing="1" width="100%" valign="top">
+							<tr bgcolor="#F2F2F2">
 								<td vAlign="top" width="100%">
 									
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
@@ -99,7 +99,7 @@
 													<tr>
 														<td>
 														<digi:trn key="aim:sectorManagerLevel">
-															Sector Name : this one
+															Sector Name :
 														</digi:trn>	
 														</td>
 														<td>
@@ -142,7 +142,7 @@
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-                                                                                                        <input  type="button" name="addBtn" value="<digi:trn>Save</digi:trn>" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
+                                                                                                        <input class="buttonx" type="button" name="addBtn" value="<digi:trn>Save</digi:trn>" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
 														<td>
 													</tr>
 											</table>
@@ -228,85 +228,53 @@
 					</td>
 					
 					<td noWrap width="100%" vAlign="top">
-						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
-							<tr>
-								<td>
-									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+						<table align="center" cellpadding="0" cellspacing="0" width="90%"
+								border="0">
+								<tr>
+									<td><!-- Other Links -->
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
-												<digi:trn key="aim:otherLinks">
-												Other links
-												</digi:trn>
-											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
-											</td>
+											<td bgColor=#c9c9c7 class=box-title><digi:trn
+												key="aim:otherLinks">
+												<b style="font-size:12px; padding-left:5px;">Other links</b>
+												</digi:trn></td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
-								</td>
-							</tr>
-							
-							<tr>
-								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
-									<field:display name="Add Sector Level 3 Link" feature="Sectors">
-										<c:if test="${aimAddSectorForm.jspFlag == false}">
-										 <tr>
-											<td>
-												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
-												<c:set target="${urlParams5}" property="ampSecSchemeId">
-													<bean:write name="aimAddSectorForm" property="sectorId" />
-												</c:set>
-												<c:set target="${urlParams5}" property="parent" value="sector3"/>
-												<c:set target="${urlParams5}" property="level" value="three"/>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
-												</c:set>
-												
-												<digi:link href="/addSector.do" name="urlParams5" title="${translation}" >
-												<digi:trn key="aim:addSector">
-												Add Sector
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
-										</c:if>
-										</field:display>
+									</td>
+								</tr>
+
+								<tr>
+									<td bgColor=#ffffff class=box-border>
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<field:display name="View Schemes Link" feature="Sectors">
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
+											<tr>
+												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+													width="15" height="10" /> <c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
-												</c:set>
-												<digi:link href="/getSectorSchemes.do" title="${translation}" >
-												<digi:trn key="aim:viewSchemes">
+												</c:set> <digi:link href="/getSectorSchemes.do"
+													title="${translation}">
+													<digi:trn key="aim:viewSchemes">
 												View Schemes
 												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+												</digi:link></td>
+											</tr>
 										</field:display>
 										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</c:set>
-												<digi:link href="/admin.do" title="${translation}" >
+											<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
+												width="15" height="10" /> <c:set var="translation">
+												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+											</c:set> <digi:link href="/admin.do" title="${translation}">
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>
-												</digi:link>
-											</td>
+											</digi:link></td>
 										</tr>
 										<!-- end of other links -->
 									</table>
-								</td>
-							</tr>
-						</table>
+									</td>
+								</tr>
+							</table>
 					</td></tr>
 					</table>
 					</td>

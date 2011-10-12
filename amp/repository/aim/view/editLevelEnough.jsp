@@ -99,8 +99,8 @@
 													<tr>
 														<td>
 														<digi:trn key="aim:sectorManagerLevel">
-															Sector Name :
-														</digi:trn>	
+															Sector Name
+														</digi:trn><font color="red">*</font> :	
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -109,8 +109,8 @@
 													<tr>
 														<td>
 														<digi:trn key="aim:sectorCode">
-															Sector Code :
-														</digi:trn>
+															Sector Code
+														</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="sectorCodeOfficial" size="5"/> 

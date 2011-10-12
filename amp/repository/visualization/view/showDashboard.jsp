@@ -198,8 +198,6 @@ function initializeTranslations(){
 }
 function initializeGlobalVariables(){
 	//Other global variables
-	loadingPanel;
-	myTabs;
 	<digi:context name="url1" property="/visualization/pdfExport.do"/>
 	urlPdfExport = "${url1}";
 	<digi:context name="url2" property="/visualization/wordExport.do"/>

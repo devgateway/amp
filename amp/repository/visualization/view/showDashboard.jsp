@@ -121,6 +121,14 @@ var trnSavingInformation = "";
 var trnSavedInformation = "";
 var trnFailedSave = "";
 
+
+var loadingPanel;
+var urlPdfExport = "";
+var urlWordExport = "";
+var urlExcelExport = "";
+var urlSaveAdditional = "";
+var urlShowList = "";
+
 //Section for all translation as global so included javascript can use them
 function initializeTranslations(){
 	trnPrimary = "<digi:trn jsFriendly='true'>Primary</digi:trn>";

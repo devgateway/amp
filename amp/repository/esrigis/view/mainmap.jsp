@@ -196,6 +196,24 @@
  		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
+       
+        <div class="usaidlogo">
+        	<table>
+        		<tr>
+        			<td align="right" style="font-size: 11px;color: white;">
+        				<b>
+        					<digi:trn>Funding Provided By</digi:trn>
+        				</b> 
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<img alt="USAID" src="/TEMPLATE/ampTemplate/img_2/gis/usaid_horizontal_150.png" border="0">
+        			</td>
+        		</tr>
+        	</table>
+        </div>
+        
         <!-- Filter -->
         <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
         	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>

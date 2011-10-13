@@ -977,7 +977,8 @@ function collapseAll() {
 								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>');
 							</c:forEach>
 							</script>
-							<jsp:include page="previewmap.jsp"/>						</td>
+							<jsp:include page="previewmap.jsp"/>						
+						</td>
 					</tr>
 					</field:display>
 				</table>

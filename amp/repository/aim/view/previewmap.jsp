@@ -104,7 +104,7 @@
     		dojo.connect(map, 'onLoad', function(map) {
     			for ( var i = 0; i < coordinates.length; i++) {
     		 		coord = coordinates[i].split(";");
-    		 		addPoints(coord[0],coord[1])
+    		 		addPoints(coord[1],coord[0]);
     			 }
     			 map.infoWindow.resize(200, 100);
         	});	
@@ -117,7 +117,7 @@
      function addPoints(xloc,yloc){
     	 var pt = new esri.geometry.Point(xloc,yloc,new esri.SpatialReference({"wkid":4326}));
     	 var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE).setColor(new dojo.Color([255,0,0,0.5]));
-     	 var attr = {"Temp":"Temporal Attribute"};
+     	 var attr = {};
      	 var infoTemplate = new esri.InfoTemplate("Activity Information");   
      	 var transpt = esri.geometry.geographicToWebMercator(pt);
      	 var graphic = new esri.Graphic(transpt,sms,attr,infoTemplate);

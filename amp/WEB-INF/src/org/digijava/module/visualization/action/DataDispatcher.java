@@ -1299,7 +1299,9 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-		csvString.append("\"Year\"");
+        String text = TranslatorWorker.translateText("Year",locale, siteId);
+
+		csvString.append("\"" + text + "\"");
 		csvString.append(",");
 		Iterator<AmpCategoryValue> it = categoryValues.iterator();
 		while (it.hasNext()){
@@ -1438,7 +1440,9 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-		csvString.append("\"Year\"");
+        String text = TranslatorWorker.translateText("Year",locale, siteId);
+
+		csvString.append("\"" + text + "\"");
 		csvString.append(",");
 		csvString.append("\"" +plannedTitle);
 		csvString.append("#");
@@ -1546,7 +1550,9 @@ public class DataDispatcher extends DispatchAction {
 		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext);
 
 		StringBuffer csvString = new StringBuffer();
-		csvString.append("\"Year\"");
+        String text = TranslatorWorker.translateText("Year",locale, siteId);
+
+		csvString.append("\"" + text + "\"");
 		if (filter.isCommitmentsVisible()) {
 			csvString.append(",");
 			csvString.append("\"" + comTranslatedTitle);

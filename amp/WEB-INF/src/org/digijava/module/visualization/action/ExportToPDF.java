@@ -73,6 +73,15 @@ public class ExportToPDF extends Action {
         try {
         	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
+			String filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
+			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
+			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
+			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
+			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
+			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
+			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
+			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
@@ -157,13 +166,13 @@ public class ExportToPDF extends Action {
             filterTitleCell.setColspan(1);
             filtersTbl.addCell(filterTitleCell);
             
-            cell = new PdfPCell(new Paragraph("All amounts in millions"));
+            cell = new PdfPCell(new Paragraph(filtersAmountsInTrn));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
+            cell = new PdfPCell(new Paragraph(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode()));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph("Start Year: " + vForm.getFilter().getStartYear()));
+            cell = new PdfPCell(new Paragraph(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear()));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph("End Year: " + vForm.getFilter().getEndYear()));
+            cell = new PdfPCell(new Paragraph(filtersEndYearTrn + ": " + vForm.getFilter().getEndYear()));
             filtersTbl.addCell(cell);
             String itemList = "";
             Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
@@ -172,9 +181,9 @@ public class ExportToPDF extends Action {
 					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph("Organization Groups: " + itemList));
+            cell = new PdfPCell(new Paragraph(filtersOrgGroupTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] orgIds = vForm.getFilter().getOrgIds();
@@ -183,9 +192,9 @@ public class ExportToPDF extends Action {
 					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph("Organizations: " + itemList));
+            cell = new PdfPCell(new Paragraph(filtersOrganizationsTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] sectorIds = vForm.getFilter().getSelSectorIds();
@@ -194,9 +203,9 @@ public class ExportToPDF extends Action {
 					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph("Sectors: " + itemList));
+            cell = new PdfPCell(new Paragraph(filtersSectorsTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] locationIds = vForm.getFilter().getSelLocationIds();
@@ -205,9 +214,9 @@ public class ExportToPDF extends Action {
 					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph("Locations: " + itemList));
+            cell = new PdfPCell(new Paragraph(filtersLocationsTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             
 		    doc.add(filtersTbl);

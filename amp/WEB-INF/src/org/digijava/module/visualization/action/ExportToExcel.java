@@ -66,6 +66,15 @@ public class ExportToExcel extends Action {
     	try {
 			String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 			String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
+			String filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
+			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
+			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
+			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
+			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
+			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
+			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
+			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
 			String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
 	        String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
@@ -251,25 +260,25 @@ public class ExportToExcel extends Action {
           //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("All amounts in millions");
+            headerText = new HSSFRichTextString(filtersAmountsInTrn);
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
           //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Currency Type: " + vForm.getFilter().getCurrencyCode());
+            headerText = new HSSFRichTextString(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode());
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Start Year: " + vForm.getFilter().getStartYear());
+            headerText = new HSSFRichTextString(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear());
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("End Year: " + vForm.getFilter().getEndYear());
+            headerText = new HSSFRichTextString(filtersEndYearTrn + ": " + vForm.getFilter().getEndYear());
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             String itemList = "";
@@ -279,12 +288,12 @@ public class ExportToExcel extends Action {
 					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Organization Groups: " + itemList);
+            headerText = new HSSFRichTextString(filtersOrgGroupTrn + ": " + itemList);
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             itemList = "";
@@ -294,12 +303,12 @@ public class ExportToExcel extends Action {
 					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Organizations : " + itemList);
+            headerText = new HSSFRichTextString(filtersOrganizationsTrn + ": " + itemList);
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             itemList = "";
@@ -309,12 +318,12 @@ public class ExportToExcel extends Action {
 					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Sectors : " + itemList);
+            headerText = new HSSFRichTextString(filtersSectorsTrn + ": " + itemList);
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             itemList = "";
@@ -324,12 +333,12 @@ public class ExportToExcel extends Action {
 					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString("Locations : " + itemList);
+            headerText = new HSSFRichTextString(filtersLocationsTrn + ": " + itemList);
             cell.setCellValue(headerText);
             cell.setCellStyle(lastCellStyleLeft);
             //cell.getCellStyle().setAlignment(HSSFCellStyle.ALIGN_LEFT);

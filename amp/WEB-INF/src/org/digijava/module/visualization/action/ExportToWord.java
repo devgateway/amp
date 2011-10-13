@@ -83,6 +83,15 @@ public class ExportToWord extends Action {
         try {
         	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
+			String filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
+			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
+			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
+			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
+			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
+			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
+			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
+			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
@@ -171,14 +180,14 @@ public class ExportToWord extends Action {
             filterTitleCell.setBackgroundColor(TITLECOLOR);
             filtersTbl.addCell(filterTitleCell);
             
-            cell = new RtfCell(new Paragraph("All amounts in millions"));
+            cell = new RtfCell(new Paragraph(filtersAmountsInTrn));
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph("Currency Type: " + vForm.getFilter().getCurrencyCode()));
+            cell = new RtfCell(new Paragraph(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode()));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph("Start Year: " + vForm.getFilter().getStartYear()));
+            cell = new RtfCell(new Paragraph(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear()));
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph("End Year: " + vForm.getFilter().getEndYear()));
+            cell = new RtfCell(new Paragraph(filtersEndYearTrn + ": " + vForm.getFilter().getEndYear()));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             String itemList = "";
@@ -188,9 +197,9 @@ public class ExportToWord extends Action {
 					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new RtfCell(new Paragraph("Organization Groups: " + itemList));
+            cell = new RtfCell(new Paragraph(filtersOrgGroupTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] orgIds = vForm.getFilter().getOrgIds();
@@ -199,9 +208,9 @@ public class ExportToWord extends Action {
 					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new RtfCell(new Paragraph("Organizations: " + itemList));
+            cell = new RtfCell(new Paragraph(filtersOrganizationsTrn + ": " + itemList));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             itemList = "";
@@ -211,9 +220,9 @@ public class ExportToWord extends Action {
 					itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new RtfCell(new Paragraph("Sectors: " + itemList));
+            cell = new RtfCell(new Paragraph(filtersSectorsTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] locationIds = vForm.getFilter().getSelLocationIds();
@@ -222,9 +231,9 @@ public class ExportToWord extends Action {
 					itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
 				}
 			} else {
-				itemList = "All";
+				itemList = filtersAllTrn;
 			}
-            cell = new RtfCell(new Paragraph("Locations: " + itemList));
+            cell = new RtfCell(new Paragraph(filtersLocationsTrn + ": " + itemList));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             

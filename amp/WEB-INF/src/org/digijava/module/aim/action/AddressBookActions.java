@@ -165,7 +165,7 @@ public class AddressBookActions extends DispatchAction {
 							if(phones.length()==0){
 								phones+="<ul style=\"padding:10px;\">";
 							}
-							phones+="<li>"+property.getValueAsFormatedPhoneNum() +" </li>";
+							phones+="<li>"+TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber() +" </li>";
 						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
 							if(faxes.length()==0){
 								faxes+="<ul style=\"padding:10px;\">";

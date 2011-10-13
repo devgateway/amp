@@ -91,28 +91,20 @@
 	<c:set var="isDevInfoMode">false</c:set>
 </c:if>
 
-<%--
-<c:set var="isDevInfoMode">
-		<feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
+<c:set var="validatedRegPercentage">
+		<field:display name="Validate Mandatory Regional Percentage" feature="Location">true</field:display>
 </c:set>
-
-
-<c:if test="${isDevInfoMode==''}">
-<c:set var="isDevInfoMode">false</c:set>
+<c:if test="${validatedRegPercentage==''}">
+	<c:set var="validatedRegPercentage">false</c:set>
 </c:if>
---%>
 
-<script language="JavaScript">
-	var validatedRegPercentage = false;
-	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
-		validatedRegPercentage = true;
-	</field:display>
-	
-	var displayeRegPercentage = false;
-	<field:display name="Regional Percentage" feature="Location">
-		displayeRegPercentage = true;
-	</field:display>
-</script>
+<c:set var="displayeRegPercentage">
+		<field:display name="Regional Percentage" feature="Location">true</field:display>
+</c:set>
+<c:if test="${displayeRegPercentage==''}">
+	<c:set var="displayeRegPercentage">false</c:set>
+</c:if>
+
 
 <script language="JavaScript">
     var showDevinfo = false;
@@ -368,16 +360,16 @@
 		</td>
 	</tr>
 	
-	<script language="JavaScript">
-		if (!validatedRegPercentage || !displayeRegPercentage) {
-			
-			var msgText = '<digi:trn key="gis:funding_msg">(*) Project funding is not disaggregated by region or district, and therefore reflect activity totals.</digi:trn>'
-			
-			document.write('<tr><td colspan="2"><font color="red">');
-			document.write(msgText);
-			document.write('</font></td></tr>'); 
-		}
-	</script>
+	<c:if test="${validatedRegPercentage == false || displayeRegPercentage == false}">
+			<tr>
+				<td colspan="2">
+					<font color="red">
+						<digi:trn key="gis:funding_msg">(*) Project funding is not disaggregated by region or district, and therefore reflect activity totals.</digi:trn>
+					</font>
+				</td>
+			</tr>
+
+	</c:if>
 	
 </c:if>
     

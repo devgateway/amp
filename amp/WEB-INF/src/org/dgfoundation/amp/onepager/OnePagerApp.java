@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresF
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
@@ -88,6 +89,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 //			 jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
+			 jslist.add(new ResourceSpec(ActivityUtil.class, "onepagerSpecific.js"));
 			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
 			 
 			 mount.clone()

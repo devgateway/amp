@@ -1054,6 +1054,21 @@
 			var newCapt = "("+selectedCurrency+") " + fromYear + " - " + toYear;
 			document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
 			
+			if (!showDevinfo) {
+				var selectedDonorCheckboxes = $("input[type=checkbox][name=selectedDonnorAgency]:checked");
+				var donorTxt;
+				
+				if (selectedDonorCheckboxes.length == 0) {
+					donorTxt = allTrn;
+				} else if (selectedDonorCheckboxes.length == 1) {
+					donorTxt = jQuery.trim(selectedDonorCheckboxes.parent().next().find("span").html());
+					
+				} else {
+					donorTxt = multyTrn;
+				}
+				
+				$("#tooltipDonorContainer").html(donorTxt);
+			}
 		}
 	}
     

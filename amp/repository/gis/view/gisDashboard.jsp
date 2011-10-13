@@ -131,6 +131,9 @@
 <script language="JavaScript">
 	var sectorTitleTrn = "<digi:trn>Sector</digi:trn>";
 	var programTitleTrn = "<digi:trn>Program</digi:trn>";
+	
+	var allTrn = "<digi:trn>All</digi:trn>";
+	var multyTrn = "<digi:trn>Multiple</digi:trn>";
 </script>
 
 

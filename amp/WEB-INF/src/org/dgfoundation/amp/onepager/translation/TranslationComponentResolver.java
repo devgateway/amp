@@ -54,6 +54,12 @@ public class TranslationComponentResolver implements IComponentResolver {
 			// get the label's initial value, stored inside the tag
 			String value = markupStream.get(markupStream.getCurrentIndex() + 1).toString();
 			TrnLabel label = new TrnLabel(id, value);
+
+			String jsFriendly = tag.getAttributes().getString("jsFriendly");
+			if ((jsFriendly != null) && (jsFriendly.compareTo("true") == 0)) {
+				label.setRenderBodyOnly(true);
+			}
+
 			container.autoAdd(label, markupStream);
 			
 			// Yes, we handled the tag

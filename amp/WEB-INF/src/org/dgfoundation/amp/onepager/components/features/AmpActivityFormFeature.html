@@ -14,7 +14,7 @@
 				<form wicket:id="activityForm">
 				<div id="mainContent" class="main_side_cont">
 				<div style="float: right;"></div>
-					<span wicket:id="featureList">
+					<span name="section" wicket:id="featureList">
 						<span wicket:id="featureItem"/>
 					</span>
 					<div wicket:id="feedbackPanel" />
@@ -36,6 +36,18 @@
 							<div class="right_menu" style="margin-top:10px;">
 								<div class="right_menu_header">
 								<div class="right_menu_header_cont"><wicket:trn>Actions</wicket:trn></div>
+									<div style="display: none;">
+										<div id="imgOnepagerModeTitle"><wicket:trn jsFriendly="true">Press here to switch to one page view</wicket:trn></div>
+										<div id="imgGroupModeTitle"><wicket:trn jsFriendly="true">Press here to switch to multiple pages view</wicket:trn></div>
+									</div>
+									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif" 
+										title=""
+										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										onclick="switchOnepagerMode(); return true;"/>
+									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif" 
+										title=""
+										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										onclick="switchOnepagerMode(); return true;"/>	
 								</div>
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
 									<div style="padding: 2px;" wicket:id="saveAndSubmit" />
@@ -49,12 +61,11 @@
 				</td>
 				<td>
 				    &nbsp;
-				    <div id="wicketRightMenu" />
+				    <div id="wicketRightMenu"/>
 				</td>
 			</tr>
 		</tbody>
 	</table>			
-
 	
 	<div id="myPLogframe" style="display: none">
 		<div id="myPLogframeContent" class="content">

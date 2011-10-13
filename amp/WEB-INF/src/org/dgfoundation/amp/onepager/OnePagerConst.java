@@ -68,4 +68,7 @@ public final class OnePagerConst {
 	final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
 	final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
 	final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
+	
+	//TEMPORARY SOLUTION
+	public final static boolean ONEPAGER_MODE=false;
 }

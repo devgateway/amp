@@ -11,6 +11,8 @@ function getAmpAjaxCallBackUrl(){
 	return "${callBackUrl}";
 }
 
+onepagerMode = ${onepagerMode};
+
 //////////////////////////////////////////////////////////////
 //
 // functions for trn label
@@ -108,6 +110,33 @@ function wicketSwitchTranslationMode(){
 function wicketSwitchFMMode(){
 	var params = '&method=switchfmmode';
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
+}
+
+function showSection(itemId){
+	if (onepagerMode){
+		$('#' + itemId).parent().parent().siblings('div:first').show();
+		$('html, body').animate({scrollTop: $('#' + itemId).offset().top}, 1200);
+	}
+	else{
+		$('span[name=section]').hide();
+		$('#'+itemId).parents('span[name=section]').show();
+	}
+}
+
+function switchOnepagerMode(){
+	if (onepagerMode){
+		onepagerMode = false;
+		$('span[name=section]').hide();
+		$('span[name=section]').eq(0).show();
+		$('#imgGroupMode').hide();
+		$('#imgOnepagerMode').show();
+	}
+	else{
+		onepagerMode = true;
+		$('span[name=section]').show();
+		$('#imgOnepagerMode').hide();
+		$('#imgGroupMode').show();
+	}
 }
 
 //////////////////////////////////////////////////////////////

@@ -20,6 +20,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -56,6 +57,7 @@ public class AmpHeaderFooter extends WebPage {
 				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
 						2);
 				variables.put("callBackUrl", callBackUrl);
+				variables.put("onepagerMode", String.valueOf(OnePagerConst.ONEPAGER_MODE));
 				return variables;
 			}
 		};

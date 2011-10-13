@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
@@ -259,6 +260,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					tmp.add(new SimpleAttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
 					item.add(tmp);
 				}
+				if (!OnePagerConst.ONEPAGER_MODE){
+					if (item.getIndex() > 0){
+						item.add(new SimpleAttributeModifier("style", "display: none;"));
+					}
+				}
 					
 			}
 		};
@@ -371,7 +377,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if (item.getModelObject() != null){
 					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
 					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
-					label.add(new SimpleAttributeModifier("onclick", "$('#" + itemId + "').parent().parent().siblings('div:first').show();$('html, body').animate({scrollTop: $('#" + itemId + "').offset().top}, 1200); return false;"));
+					label.add(new SimpleAttributeModifier("onclick", "showSection('"+itemId +"'); return false;"));
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);
 					item.add(label);

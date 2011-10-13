@@ -290,7 +290,6 @@ function closeWindow(){
 
 
 <jsp:include page="teamPagesHeader.jsp"  />
-<body >
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 border="0" align="center">
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
@@ -453,13 +452,16 @@ function closeWindow(){
 								<digi:trn key="aim:noIndicatorsPresent">No Indicators present</digi:trn></b></td>
 						</tr>
 				</logic:empty>
+				
 				<tr>
 				<td align="center" colspan="6" bgcolor="white" style="padding-top:15px;">
 				<input type="button" class="dr-menu" onClick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
 				<input class="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
 				</td>
 				</tr>
+				</table>
+				</td>
+				</tt>
 		</table>
 
-</body>
 </digi:form> 

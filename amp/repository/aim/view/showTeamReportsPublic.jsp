@@ -431,7 +431,7 @@ function popup(mylink, windowname)
 																						<c:set target="${urlParams}" property="event"
 																							value="edit" />
 																						<c:set var="translation">
-																							<digi:trn>Get report in Excel format&nbsp;</digi:trn>
+																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
 																						<digi:link
 																							href="/xlsExport.do?ampReportId=${report.ampReportId}"
@@ -443,7 +443,7 @@ function popup(mylink, windowname)
 																						</digi:link>
 																						&nbsp;
 																						<c:set var="translation">
-																							<digi:trn>Get report in PDF format&nbsp;</digi:trn>
+																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
 																						<digi:link
 																							href="/pdfExport.do?ampReportId=${report.ampReportId}"
@@ -458,7 +458,7 @@ function popup(mylink, windowname)
 																							module="Public Reports">
                          																	&nbsp;
                          																	<c:set var="translation">
-																								<digi:trn>Get report in printer friendly version&nbsp;</digi:trn>
+																								<digi:trn>Get report in printer friendly version</digi:trn>&nbsp;
 																							</c:set>
 																							<digi:link
 																								href="/viewNewAdvancedReport.do?viewFormat=print&widget=false"

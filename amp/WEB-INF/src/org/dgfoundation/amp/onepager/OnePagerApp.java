@@ -89,7 +89,6 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 //			 jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
-			 jslist.add(new ResourceSpec(ActivityUtil.class, "onepagerSpecific.js"));
 			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
 			 
 			 mount.clone()

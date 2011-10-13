@@ -210,9 +210,9 @@ function closeWindow() {
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
   <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 
-  <table width="100%" align="center" border="0" class=box-border-nopadding>
-    <tr bgcolor="#006699" class=r-dotted-lg >
-      <td colspan="1" align="center" class="textalb">
+  <table bgcolor="#F8F8F8" cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+    <tr bgcolor="#4A687A" >
+      <td colspan="1" align="center" style="color: #FFF">
       <b><digi:trn key="aim:vieweditindicator">View/Edit Indicator</digi:trn></b>
       </td>
     </tr>
@@ -221,7 +221,7 @@ function closeWindow() {
             <digi:errors/>
         </td>
     </tr>
-    <tr align="center" bgcolor="#ECF3FD">
+    <tr align="center" bgcolor="#F8F8F8">
       <td>
         <table border="0">
           <tr id="trName">
@@ -318,25 +318,20 @@ function closeWindow() {
         </table>
       </td>
     </tr>
-    <tr align="center" bgcolor="#ECF3FD">
+    <tr align="center" bgcolor="#F8F8F8">
       <td>
       <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
       <html:hidden property="selectedActivityId"  value="${act.value}"/>
       </c:forEach>
-      <html:button  styleClass="dr-menu" property="submitButton"  onclick="saveIndicator();">
+      <html:button  styleClass="buttonx" property="submitButton"  onclick="saveIndicator();">
 			<digi:trn key="btn:Save">Save</digi:trn> 
 	     </html:button>
-         <html:reset  styleClass="dr-menu" property="submitButton">
+         <html:reset  styleClass="buttonx" property="submitButton">
 		   <digi:trn key="btn:clear">Clear</digi:trn> 
 	     </html:reset>											
- 	     <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+ 	     <html:button  styleClass="buttonx" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 
 	     </html:button>
-      </td>
-    </tr>
-    <tr>
-      <td bgcolor="#006699">
-       
       </td>
     </tr>
   </table>

@@ -32,7 +32,7 @@
 		
 	
 	</TITLE>
-	
+	<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
 </head>
 <body bgcolor="#ffffff">
 <digi:insert attribute="body" />

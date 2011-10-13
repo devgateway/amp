@@ -12,19 +12,16 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript">
-
-</script>
 
  <digi:instance property="aimNewIndicatorForm" />
-                                   <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
+                                   <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#F8F8F8">
 											<tr>
-                                              <td bgcolor="#ECF3FD" width="100%">
+                                              <td bgcolor="#F8F8F8" width="100%">
                                                 <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <c:if test="${empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
-                                                      <td bgcolor="#ECF3FD">
-                                                        <input type="button" class="dr-menu" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                      <td bgcolor="#F8F8F8">
+                                                        <input type="button" class="buttonx" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -36,7 +33,7 @@
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
-                                                                  <tr bgcolor="#ECF3FD">
+                                                                  <tr bgcolor="#F8F8F8">
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySector">
 	                                                                     <c:if test="${activitySectors.subsectorLevel1Id == -1}">
@@ -66,7 +63,7 @@
                                                               </td>
                                                             </tr>
                                                           </c:forEach>
-                                                          <tr bgcolor="#ECF3FD">
+                                                          <tr bgcolor="#F8F8F8">
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>

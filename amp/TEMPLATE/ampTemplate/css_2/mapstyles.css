@@ -126,6 +126,15 @@ div#mainGisMenu ul li#add{background:url(/TEMPLATE/ampTemplate/img_2/gis/addacti
 div#mainGisMenu ul li#structures{background:url(/TEMPLATE/ampTemplate/img_2/gis/structures.png) no-repeat right;background-position:135px 8px;}
 div#mainGisMenu ul li#povmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/povertymap.png) no-repeat right;background-position:135px 8px;}
 div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/censusmap.png) no-repeat right;background-position:135px 8px;}
+
+.usaidlogo{
+    position:absolute;
+	z-Index:100;
+	display: block;
+	bottom:5px;
+	left: 5px;
+}
+
 .legendContent {
     background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	position:absolute;

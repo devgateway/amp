@@ -91,6 +91,7 @@
 	<c:set var="isDevInfoMode">false</c:set>
 </c:if>
 
+
 <c:set var="validatedRegPercentage">
 		<field:display name="Validate Mandatory Regional Percentage" feature="Location">true</field:display>
 </c:set>
@@ -104,6 +105,19 @@
 <c:if test="${displayeRegPercentage==''}">
 	<c:set var="displayeRegPercentage">false</c:set>
 </c:if>
+
+
+<script language="JavaScript">
+	var validatedRegPercentage = false;
+	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
+		validatedRegPercentage = true;
+	</field:display>
+	
+	var displayeRegPercentage = false;
+	<field:display name="Regional Percentage" feature="Location">
+		displayeRegPercentage = true;
+	</field:display>
+</script>
 
 
 <script language="JavaScript">

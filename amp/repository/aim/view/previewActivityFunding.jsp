@@ -37,7 +37,7 @@
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
 												<module:display name="/Activity Form/Donor Funding/Funding Item/Funding Classification" 
-													parentModule="/Activity Form/Donor Funding/Funding Item/">
+													parentModule="/Activity Form/Donor Funding/Funding Item">
 												<tr>
 													<td>
 													<table cellspacing="1" cellpadding="0" border="0" width="100%">

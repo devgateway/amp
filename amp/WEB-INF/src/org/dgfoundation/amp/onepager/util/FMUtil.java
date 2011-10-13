@@ -231,7 +231,7 @@ public final class FMUtil {
 	public static AmpModulesVisibility getModuleByNameFromRoot(Collection<AmpModulesVisibility> list, String moduleName) {
 		if (list == null || list.size()<1)
 			return null;
-		
+		//logger.error("Searching for:" + moduleName);
 		Iterator<AmpModulesVisibility> it = list.iterator();
 		while (it.hasNext()) {
 			AmpModulesVisibility module;
@@ -252,6 +252,7 @@ public final class FMUtil {
 				module = (AmpModulesVisibility) ((AmpTreeVisibility)obj).getRoot();
 			else
 				module = (AmpModulesVisibility) obj;
+		//	logger.error("Going into: " + module.getName());
 			AmpModulesVisibility ret = getModuleByNameFromRoot(module.getSubmodules(), moduleName);
 			if (ret != null)
 				return ret;

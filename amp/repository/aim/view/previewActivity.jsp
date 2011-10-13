@@ -949,7 +949,7 @@ function collapseAll() {
 							</td>
 						</tr>
 					</c:forEach>
-					<module:display name="Gis Dashboard" parentModule="Gis Dashboard">
+					<module:display name="GIS DASHBOARD">
 					<tr>
 						<td colspan="2">
 						<br>

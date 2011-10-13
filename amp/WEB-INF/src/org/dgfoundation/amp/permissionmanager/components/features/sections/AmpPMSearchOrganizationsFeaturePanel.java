@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
@@ -78,23 +79,29 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getAcronymAndName();
+				//return choice.getAcronymAndName();
+				return choice.getName();
 			}
 
 			@Override
 			public void onSelect(AjaxRequestTarget target,AmpOrganisation choice) {
 				boolean choiceNotExist = PMUtil.addOrganizationToUser(userModel.getObject(), choice);
-//				Set<AmpOrganisation> set = userModel.getObject().getAssignedOrgs();
-//				set.add(choice);
-				if(!choiceNotExist) return;
+				if(!choiceNotExist) 
+					return;
 				idsList.removeAll();
 				target.addComponent(idsList.getParent());
+				target.addComponent(AmpPMSearchOrganizationsFeaturePanel.this);
 				try {
 					DbUtil.updateUser(userModel.getObject());
 				} catch (AdminException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				
+				
+				
+				
 			}
 
 			@Override
@@ -103,8 +110,8 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 				return null;
 			}
 		};
-		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(35));
-		autoComplete.add(sizeModifier);
+//		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(35));
+//		autoComplete.add(sizeModifier);
 		add(autoComplete);
 	//	final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
 		

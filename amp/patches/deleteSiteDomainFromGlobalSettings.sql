@@ -1,1 +1,0 @@
-delete from amp_global_settings where settingsName='Site Domain';

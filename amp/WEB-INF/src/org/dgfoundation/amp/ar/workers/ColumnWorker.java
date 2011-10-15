@@ -130,7 +130,6 @@ public abstract class ColumnWorker {
 		CellColumn cc=null;
 		try {
 			conn=PersistenceManager.getJdbcConnection();
-			conn.setAutoCommit(false);
 			
 		} catch (HibernateException e) {
 			logger.error(e);
@@ -184,8 +183,6 @@ public abstract class ColumnWorker {
 			rs.beforeFirst();
 			
 			CachedRowSetImpl crs=new CachedRowSetImpl();
-			
-			
 			
 			crs.populate(rs);
 			

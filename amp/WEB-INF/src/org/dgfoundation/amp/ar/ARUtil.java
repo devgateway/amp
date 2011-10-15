@@ -116,7 +116,7 @@ public final class ARUtil {
 
 	protected static Logger logger = Logger.getLogger(ARUtil.class);
 
-	public static Constructor getConstrByParamNo(Class c, int paramNo) {
+	public synchronized static Constructor getConstrByParamNo(Class c, int paramNo) {
 		Constructor[] clist = c.getConstructors();
 		for (int j = 0; j < clist.length; j++) {
 			if (clist[j].getParameterTypes().length == paramNo)

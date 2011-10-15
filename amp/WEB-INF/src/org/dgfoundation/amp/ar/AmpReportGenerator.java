@@ -30,8 +30,6 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -41,7 +39,6 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.hibernate.HibernateException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -175,6 +172,119 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 	}
 
+	
+	public class ColumnCreatorThread extends Thread {
+
+		
+		
+		private final AmpReportColumn rcol;
+
+		public ColumnCreatorThread(String threadName, AmpReportColumn rcol) {
+			super(threadName);
+			this.rcol = rcol;
+			
+		}
+		
+		@Override
+		public void run() {
+			try{
+			AmpColumns col = rcol.getColumn();
+			logger.info("Extracting column " + col.getColumnName()
+					+ " with view " + col.getExtractorView());
+			String cellTypeName = col.getCellType();
+			String extractorView = col.getExtractorView();
+			String columnName = col.getColumnName();
+			String relatedContentPersisterClass = col
+					.getRelatedContentPersisterClass();
+
+			logger.debug("Seeking class " + cellTypeName);
+
+			Class cellType = Class.forName(cellTypeName);
+
+			Constructor cellc = ARUtil.getConstrByParamNo(cellType, 0);
+
+			// create an instance of the cell that is of type described
+			Cell cell = (Cell) cellc.newInstance(new Object[] {});
+
+			// column worker is a class returned by getWorker method of each
+			// Cell
+			Class ceClass = cell.getWorker();
+
+			// create an instance of the column worker
+
+			ColumnWorker ce = null;
+
+			// get the column bound condition:
+			String columnFilterSQLClause = "";
+			
+			if(!filter.isJustSearch()) {
+			columnFilterSQLClause=ColumnFilterGenerator
+					.generateColumnFilterSQLClause(filter, col, true);
+			}
+
+			if (columnFilterSQLClause.length() > 0)
+				logger.info("Column " + col.getColumnName()
+						+ " appendable SQL filter: ..."
+						+ columnFilterSQLClause);
+
+			if (extractorView != null) {
+
+				Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
+				ce = (ColumnWorker) ceCons.newInstance(new Object[] {
+						filter.getGeneratedFilterQuery(), extractorView,
+						columnName, AmpReportGenerator.this });
+			} else {
+				Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
+				ce = (ColumnWorker) ceCons.newInstance(new Object[] {
+						columnName, rawColumns, AmpReportGenerator.this });
+			}
+
+			ce.setRelatedColumn(col);
+			ce.setInternalCondition(columnFilterSQLClause);
+			
+			
+			ce.setDebugMode(debugMode);
+			ce.setPledge(pledgereport);
+			
+			Column column = ce.populateCellColumn();
+
+			if (relatedContentPersisterClass != null) {
+				column.setRelatedContentPersisterClass(Class
+						.forName(relatedContentPersisterClass));
+				// instantiate a relatedContentPersister bean to get the
+				// ARDimension and store it for later use
+				Constructor contentPersisterCons = ARUtil
+						.getConstrByParamNo(column
+								.getRelatedContentPersisterClass(), 0);
+				ARDimensionable cp = (ARDimensionable) contentPersisterCons
+						.newInstance();
+				column.setDimensionClass(cp.getDimensionClass());
+			}
+			logger.info("Adding column "+column.getName());
+			
+			synchronized(rawColumns) {		
+				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
+				if(older!=null) {
+				    for ( Object o : column.getItems() ) 
+					older.addCell(o);
+				    
+				} else {
+					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
+					synchronized(rawColumnsByName) {
+						rawColumnsByName.put(column.getName(), (CellColumn) column);
+					}
+				}
+			}
+		
+			} catch (Exception e) {
+				// TODO: handle exception
+				logger.error(e);
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
 	/**
 	 * creates the data structures for the list of columns.
 	 * 
@@ -183,98 +293,25 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 
 		Iterator<AmpReportColumn> i = extractable.iterator();
-		try {
-
+		
+			ArrayList<Thread> threads = new ArrayList<Thread>();
 			while (i.hasNext()) {
 				AmpReportColumn rcol = (AmpReportColumn) i.next();
-				AmpColumns col = rcol.getColumn();
-				logger.info("Extracting column " + col.getColumnName()
-						+ " with view " + col.getExtractorView());
-				String cellTypeName = col.getCellType();
-				String extractorView = col.getExtractorView();
-				String columnName = col.getColumnName();
-				String relatedContentPersisterClass = col
-						.getRelatedContentPersisterClass();
-
-				logger.debug("Seeking class " + cellTypeName);
-
-				Class cellType = Class.forName(cellTypeName);
-
-				Constructor cellc = ARUtil.getConstrByParamNo(cellType, 0);
-
-				// create an instance of the cell that is of type described
-				Cell cell = (Cell) cellc.newInstance(new Object[] {});
-
-				// column worker is a class returned by getWorker method of each
-				// Cell
-				Class ceClass = cell.getWorker();
-
-				// create an instance of the column worker
-
-				ColumnWorker ce = null;
-
-				// get the column bound condition:
-				String columnFilterSQLClause = "";
-				
-				if(!filter.isJustSearch()) {
-				columnFilterSQLClause=ColumnFilterGenerator
-						.generateColumnFilterSQLClause(filter, col, true);
-				}
-
-				if (columnFilterSQLClause.length() > 0)
-					logger.info("Column " + col.getColumnName()
-							+ " appendable SQL filter: ..."
-							+ columnFilterSQLClause);
-
-				if (extractorView != null) {
-
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
-					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							filter.getGeneratedFilterQuery(), extractorView,
-							columnName, this });
-				} else {
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
-					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							columnName, rawColumns, this });
-				}
-
-				ce.setRelatedColumn(col);
-				ce.setInternalCondition(columnFilterSQLClause);
-				
-				
-				ce.setDebugMode(debugMode);
-				ce.setPledge(pledgereport);
-				
-				Column column = ce.populateCellColumn();
-
-				if (relatedContentPersisterClass != null) {
-					column.setRelatedContentPersisterClass(Class
-							.forName(relatedContentPersisterClass));
-					// instantiate a relatedContentPersister bean to get the
-					// ARDimension and store it for later use
-					Constructor contentPersisterCons = ARUtil
-							.getConstrByParamNo(column
-									.getRelatedContentPersisterClass(), 0);
-					ARDimensionable cp = (ARDimensionable) contentPersisterCons
-							.newInstance();
-					column.setDimensionClass(cp.getDimensionClass());
-				}
-				logger.info("Adding column "+column.getName());
-				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
-				if(older!=null) {
-				    for ( Object o : column.getItems() ) 
-					older.addCell(o);
-				    
-				} else {
-					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
-				    rawColumnsByName.put(column.getName(), (CellColumn) column);
+				ColumnCreatorThread cct=new ColumnCreatorThread("-Thread-"+rcol.getColumn().getColumnName(), rcol);
+				threads.add(cct);
+				cct.start();
+			}
+			
+			for (Thread thread : threads) {
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					logger.error(e);
+					e.printStackTrace();
 				}
 			}
 
-		} catch (Exception e) {
-			logger.error("Exception: ", e);
-		}
-
+		
 	}
 
 	/**

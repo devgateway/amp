@@ -36,10 +36,9 @@ public final class TranslatorUtil {
 		AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
 		Site site = session.getSite();
 		try {
-			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null);
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);
 			return strTrn;

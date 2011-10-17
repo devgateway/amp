@@ -39,12 +39,11 @@ public abstract class AbstractTrnValidator<T> extends AmpSemanticValidator<T> {
 		String genKey = TranslatorWorker.generateTrnKey(errorString);
 		AmpAuthWebSession session = (AmpAuthWebSession) component.getSession();
 		Site site = session.getSite();
-		ServletContext servletContext = WebApplication.get().getServletContext();
 		try {
 			String translatedValue = TranslatorWorker.getInstance(genKey)
 					.translateFromTree(genKey, site.getId().longValue(),
 							session.getLocale().getLanguage(), errorString,
-							TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+							TranslatorWorker.TRNTYPE_LOCAL, null);
 
 			error.setMessage(translatedValue);
 		} catch (WorkerException e) {

@@ -40,6 +40,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -1753,20 +1754,53 @@ public class TranslatorWorker {
         String attrib = mode ? "true" : "false";
         request.getSession(true).setAttribute("mode", attrib);
     }
+    /**
+     * Should be called from wicket part
+     * @param key
+     * @param siteId
+     * @param langCode
+     * @param defaultTrn
+     * @param translationType
+     * @param keyWords
+     * @return
+     * @throws WorkerException
+     */
 
-    public String translateFromTree(String key, long siteId, String langCode,
-                                    String defaultTrn, int translationType, String keyWords,ServletContext context) throws
-        WorkerException {
-        return translateFromTree(key, siteId, new String[] {langCode},
-                                 defaultTrn, langCode, translationType, keyWords,context);
-    }
+	public String translateFromTree(String key, long siteId, String langCode,
+			String defaultTrn, int translationType, String keyWords)
+			throws WorkerException {
+		ServletContext context = WebApplication.get().getServletContext();
+		return translateFromTree(key, siteId, new String[] { langCode },
+				defaultTrn, langCode, translationType, keyWords, context);
+	}
+	/**
+	 * Should be called from none wicket part to avoid WicketRuntimeException:
+	 * There is no application attached to current thread
+	 * @param key
+	 * @param siteId
+	 * @param langCode
+	 * @param defaultTrn
+	 * @param translationType
+	 * @param keyWords
+	 * @param context
+	 * @return
+	 * @throws WorkerException
+	 */
+
+	public String translateFromTree(String key, long siteId, String langCode,
+			String defaultTrn, int translationType, String keyWords,
+			ServletContext context) throws WorkerException {
+		return translateFromTree(key, siteId, new String[] { langCode },
+				defaultTrn, langCode, translationType, keyWords, context);
+	}
+
 
     public String translateFromTree(String key, long siteId, String[] langCodes,
                                     String defaultTrn, String defaultLocale, int translationType, String keyWords,ServletContext context) throws
         WorkerException {
         SiteCache siteCache = SiteCache.getInstance();
         Site site = siteCache.getSite(new Long(siteId));
-
+       
         Long regId = null;
         if (site == null) {
             return null;

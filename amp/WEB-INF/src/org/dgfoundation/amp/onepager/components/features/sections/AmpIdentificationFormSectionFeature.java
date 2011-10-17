@@ -210,15 +210,14 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			Site site = session.getSite();
 
 			String txtValue = "OV Indicators";
-			ServletContext servletContext = WebApplication.get().getServletContext();
 			String genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cOvIndicators = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+			String cOvIndicators = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
 			txtValue = "Assumption";
 			genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cAssumption = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+			String cAssumption = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
 			txtValue = "Verification";
 			genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cVerification = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+			String cVerification = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
 			
 			List<ITab> objectiveTabs = new ArrayList<ITab>();
 			objectiveTabs.add(new AmpCommentTab(cOvIndicators , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));

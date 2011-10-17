@@ -65,10 +65,9 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 		String translatedValue;
 		button.add(new AttributeModifier("value", new Model(buttonCaption)));
 		try {
-			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null, servletContext);
+											buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null);
 			button.add(new AttributeModifier("value", new Model(translatedValue)));
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

@@ -83,10 +83,9 @@ public class TrnLabel extends Label {
 		String genKey = TranslatorWorker.generateTrnKey(value);
 		String translatedValue;
 		try {
-			ServletContext servletContext = WebApplication.get().getServletContext();
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
-											value, TranslatorWorker.TRNTYPE_LOCAL, null,servletContext);
+											value, TranslatorWorker.TRNTYPE_LOCAL, null);
 			return translatedValue;
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

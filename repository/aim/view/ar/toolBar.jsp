@@ -174,6 +174,7 @@ addLoadEvent(addpanel);
 %>
 <script type="text/javascript">
 	function toggleActionForm(type) {
+		var options = false;
 		if (type == null) return false;
 		if (type == "xls") {
 			document.getElementsByName("exportOptionsForm")[0].action = "/aim"+"<%=viewParamXLS%>";
@@ -181,9 +182,16 @@ addLoadEvent(addpanel);
 			document.getElementsByName("exportOptionsForm")[0].action = "/aim"+"<%=viewParamPDF%>";
 		}
 		<feature:display name="Show Options on Export" module="Report and Tab Options">
+			options = true;
+		</feature:display>
+		
+		if (options){
 			showMyPanel(0, 'logoStatement');
 			return false;
-		</feature:display>
+		}else{
+			document.getElementsByName("exportOptionsForm")[0].submit();
+		}
+		
 	}
 </script>
 <div class="toolbar" align="center">

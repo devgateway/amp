@@ -110,7 +110,7 @@ html.chrome .bd_drop{margin-top:-15px;}
 .menu_item_cont a {text-decoration:none; color:#376091;}
 .menu_arr {margin-left:5px; margin-bottom:2px;}
 #usr_menu_logged {width:300px;float:right;text-align:right;}
-
+html.ie .bd_drop li#yui-gen3{width:100px;}
 
 
 /* BREADCRUMP */

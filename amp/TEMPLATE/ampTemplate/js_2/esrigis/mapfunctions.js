@@ -1018,32 +1018,34 @@ function showAddActivityInfoWindow (results) {
 	var geoId = results.features[0].attributes["GEO_ID"];
 	var content = "<table border='0' width='100%'>" 
 		+ "<tr>" 
-		+ "<td align='center' width='200px'>Name</td>" 
+		+ "<td align='center' width='200px'><digi:trn>Name</digi:trn></td>" 
 		+ "<td align='center' width='100px'><input id=\"activityName\" type=\"text\"></td>" 
 		+ "</tr>"
 		+ "<tr>" 
-		+ "<td align='center' width='200px'>Location</td>" 
+		+ "<td align='center' width='200px'><digi:trn>Location</digi:trn></td>" 
 		+ "<td align='center' width='100px'><input type=\"text\" READONLY value=\"" + county + ", " + district + "\"></td>" 
 		+ "</tr>"
 		+ "<tr>" 
-		+ "<td align='center' width='200px'>Geo Id</td>" 
+		+ "<td align='center' width='200px'><digi:trn>Geo Id</digi:trn></td>" 
 		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"geoId\" value=\"" + geoId + "\"></td>" 
 		+ "</tr>"
 		+ "<tr>" 
-		+ "<td align='center' width='200px'>Latitude</td>" 
+		+ "<td align='center' width='200px'><digi:trn>Latitude</digi:trn></td>" 
 		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"lat\" value=\"" + esri.geometry.webMercatorToGeographic(searchpoint.mapPoint).y + "\"></td>" 
 		+ "</tr>"
 		+ "<tr>" 
-		+ "<td align='center' width='200px'>Longitude</td>" 
+		+ "<td align='center' width='200px'><digi:trn>Longitude</digi:trn></td>" 
 		+ "<td align='center' width='100px'><input type=\"text\" READONLY id=\"lon\" value=\"" + esri.geometry.webMercatorToGeographic(searchpoint.mapPoint).x+ "\"></td>" 
 		+ "</tr>"
 		+ "<tr>" 
-		+ "<td align='center' width='300px' colspan=\"2\"><input type=\"button\" value=\"Create new activity\" onclick=\"submitActivity()\"></td>" 
+		+ "<td align='right' width='300px'>" 
+		+"<input type=\"button\" value=\"Create new activity\" onclick=\"submitActivity()\"></td>" 
+		+ "<td align='left' width='300px'><input type=\"button\" value=\"Cancel\" onclick=\"map.infoWindow.hide()\"></td>" 
 		+ "</tr>";
 	if (map.infoWindow.isShowing) {
 		map.infoWindow.hide();
 	}
-	map.infoWindow.setTitle("Add new activity");
+	map.infoWindow.setTitle("<digi:trn>Add new activity</digi:trn>");
 	content = content + "</table>";
 	map.infoWindow.setContent(content);
 	map.infoWindow.resize(400, 200);

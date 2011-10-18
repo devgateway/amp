@@ -1088,14 +1088,16 @@ function submitActivity(){
 
 function showLegendClusterDonor(pointSymbolBank){
 	var htmlDiv = "";
-	htmlDiv += "<div onclick=\"$('#pointsLegend').hide('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/TEMPLATE/ampTemplate/img_2/gis/close.gif'></div>";
+	htmlDiv += "<div onclick=\"$('#legendcontainer').toggle('slow');\" style='color:white;float:right;cursor:pointer;'><img src='/TEMPLATE/ampTemplate/img_2/gis/minimize.gif'></div>";
 	htmlDiv += "<div class='legendHeader'>Point color reference<br/><hr/></div>";
+	htmlDiv += "<div id='legendcontainer'>";
 	for (var i=0; i < donorArray.length; i++) {
 		htmlDiv += "<div class='legendContentContainer'>"
 				+ "<div class='legendContentValue' style='background-color:rgba(" + pointSymbolBank[donorArray[i].donorCode].color.toRgba() + ");' ></div>"
 				+"</div>"
 				+ "<div class='legendContentLabel'>" + donorArray[i].donorname + " </div><br/>";
 	}
+	htmlDiv += "</div>";
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');
 	var dnd = new dojo.dnd.Moveable(dojo.byId("pointsLegend"));

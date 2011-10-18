@@ -114,6 +114,12 @@
      		$('#basemapGallery').toggle();
      	});
 	});
+	$(function(){
+  		$('#minmenu').click(function(){
+  			$('#divmenucontent').toggle('slow');
+     	});
+	});
+	
 	var currentFormat = "<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %>";
 </script>
 
@@ -169,23 +175,26 @@
 						</field:display>
 					</tr>
 			</table>
-		<div id="mainGisMenu">
-			<div class="gisBoxHeader">
-				<h3>Main Menu</h3><a href="#"></a>
-            </div>
-            <ul>
-              	<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
-				<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
-				<li id="hlightz" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
-				<li id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
-				<!-- 
-				<li onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></li>
-				-->
-				<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
-				<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
-				<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
-				<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
-		     </ul>
+			<div id="mainGisMenu">
+				<img src='/TEMPLATE/ampTemplate/img_2/gis/minimize.gif' id="minmenu" style="margin-right:5px;cursor: pointer;">
+				<div class="gisBoxHeader">
+					<h3 style="line-height:1em;">Main Menu</h3>
+	            </div>
+	            <div id="divmenucontent">
+		            <ul>
+		              	<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
+						<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
+						<li id="hlightz" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
+						<li id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
+						<!-- 
+						<li onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></li>
+						-->
+						<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+						<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
+						<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+						<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
+				     </ul>
+			     </div>
 		    </div>
         	<div style="background:url(/TEMPLATE/ampTemplate/img_2/gis/shade.png) no-repeat center top;height:10px;width:100%;border-top:1px solid #fff;"></div>
 		</div>

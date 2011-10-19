@@ -430,8 +430,8 @@ public class DocumentManagerUtil {
 
 	
 	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
-		int maxFileSizeInBytes		= Integer.MAX_VALUE;
-		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
+		long maxFileSizeInBytes		= Long.MAX_VALUE;
+		long maxFileSizeInMBytes	= Long.MAX_VALUE;
 		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
 		if (maxFileSizeGS != null) {
 				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );

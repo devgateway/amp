@@ -133,7 +133,7 @@ addLoadEvent(addpanel);
 <style>
 <!--
 .toolbar{
-	width: 90px;
+	width: 115px;
 	background: #f2f2f2; 
 	background-color: #f2f2f2f; 
 	padding: 3px 3px 3px 3px; 
@@ -206,6 +206,14 @@ addLoadEvent(addpanel);
 			</digi:link>
 		</td>
 		
+		<feature:display name="Show Printer Friendly option" module="Public Reports">
+			<td noWrap align=left valign="center">
+				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
+					<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+				</digi:link>
+			</td>
+		</feature:display>
+					
 		<module:display name="Map Module" parentModule="MAP MODULE">
 			<td noWrap align=left valign="center">
 				<a href="/esrigis/mainmap.do?exportreport=true" target="_blank">

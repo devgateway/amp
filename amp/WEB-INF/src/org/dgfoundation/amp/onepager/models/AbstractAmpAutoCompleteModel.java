@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.hibernate.criterion.Criterion;
@@ -155,9 +157,9 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		Boolean b = (Boolean) params.get(PARAM.EXACT_MATCH);
 		if (b != null && b)
 			return l;
-		Collection<AmpAutoCompleteDisplayable> ret = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
+		Collection<AmpAutoCompleteDisplayable> ret = new ArrayList<AmpAutoCompleteDisplayable>();
 		
-		Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>();
+		Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
 		for (Object o : l)
 			addToRootTree(root, (AmpAutoCompleteDisplayable) o, true);
 		for (Object o : root)

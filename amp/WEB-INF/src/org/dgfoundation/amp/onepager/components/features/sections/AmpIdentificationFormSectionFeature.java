@@ -75,7 +75,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			title.getTextAreaContainer().setRequired(true);
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
 			title.getTextAreaContainer().add(new StringValidator.MaximumLengthValidator(255));
-			title.getTextAreaContainer().add(new SimpleAttributeModifier("cols", "100"));
+			title.getTextAreaContainer().add(new SimpleAttributeModifier("style", "width: 710px"));
 			add(title);
 			status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,

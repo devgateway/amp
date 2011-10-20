@@ -25,6 +25,8 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresF
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.wicketstuff.jquery.JQueryBehavior;
 
 /**
@@ -57,7 +59,9 @@ public class AmpHeaderFooter extends WebPage {
 				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
 						2);
 				variables.put("callBackUrl", callBackUrl);
-				variables.put("onepagerMode", String.valueOf(OnePagerConst.ONEPAGER_MODE));
+				String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+						GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
+				variables.put("onepagerMode", activityFormOnePager);
 				return variables;
 			}
 		};

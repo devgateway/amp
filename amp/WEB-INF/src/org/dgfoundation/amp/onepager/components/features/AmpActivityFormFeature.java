@@ -50,8 +50,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
@@ -260,7 +262,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					tmp.add(new SimpleAttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
 					item.add(tmp);
 				}
-				if (!OnePagerConst.ONEPAGER_MODE){
+				
+				String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+						GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
+				if ("false".equals(activityFormOnePager)){
 					if (item.getIndex() > 0){
 						item.add(new SimpleAttributeModifier("style", "display: none;"));
 					}

@@ -19,6 +19,8 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -84,12 +86,17 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						target.addComponent(implementationLocation);
-						Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-						if(set.size()>0) {
-							locationsTable.getSetModel().getObject().clear();
-							locationsTable.getList().removeAll();
-							target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-							target.addComponent(locationsTable);
+						
+						String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
+						if ("false".equals(activityFormOnePager)){
+							Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+							if(set.size()>0) {
+								locationsTable.getSetModel().getObject().clear();
+								locationsTable.getList().removeAll();
+								target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+								target.addComponent(locationsTable);
+							}
 						}
 					}
 				});
@@ -102,11 +109,15 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 							@Override
 							protected void onUpdate(AjaxRequestTarget target) {
 								Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-								if(set.size()>0) {
-									locationsTable.getSetModel().getObject().clear();
-									locationsTable.getList().removeAll();
-									target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-									target.addComponent(locationsTable);
+								String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
+										GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
+								if ("false".equals(mixedImplementationLocation)){
+									if(set.size()>0) {
+										locationsTable.getSetModel().getObject().clear();
+										locationsTable.getList().removeAll();
+										target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+										target.addComponent(locationsTable);
+									}
 								}
 							}
 						});

@@ -83,4 +83,7 @@ public class GlobalSettingsConstants {
     
     public static final String EXCHANGE_RATE_SEPARATOR = "Default Exchange Rate Separator";
     
+	public static final String MIXED_IMPLEMENTATION_LOCATION = "Mixed Implementation Location";
+    
+	public static final String ACTIVITY_FORM_ONE_PAGER = "Activity Form - One Pager";	
 }

@@ -8,15 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
@@ -49,14 +45,14 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 	private static final long serialVersionUID = 8568986144567957699L;
-	private AmpTextFieldPanel<String> title;
+	private AmpTextAreaFieldPanel title;
 	private AmpCategorySelectFieldPanel status;
 
 	public AmpCategorySelectFieldPanel getStatus() {
 		return status;
 	}
 
-	public AmpTextFieldPanel<String> getTitle() {
+	public AmpTextAreaFieldPanel<String> getTitle() {
 		return title;
 	}
 
@@ -72,13 +68,14 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			this.fmType = AmpFMTypes.MODULE;
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
-			title = new AmpTextFieldPanel<String>(
-					"title", m, "Project Title", AmpFMTypes.MODULE);
+			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false);
+			//title = new AmpTextFieldPanel<String>(
+			//		"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
-			title.getTextContainer().setRequired(true);
-			title.getTextContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
-			title.getTextContainer().add(new StringValidator.MaximumLengthValidator(255));
-			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
+			title.getTextAreaContainer().setRequired(true);
+			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
+			title.getTextAreaContainer().add(new StringValidator.MaximumLengthValidator(255));
+			title.getTextAreaContainer().add(new SimpleAttributeModifier("cols", "100"));
 			add(title);
 			status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,

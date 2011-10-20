@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -34,6 +35,8 @@ import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -123,7 +126,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				
 				item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
 				item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
-				item.add(new AmpLabelFieldPanel<Date>("date", new PropertyModel<Date>(item.getModel(), "date.time"), "Document Date", true));
+				
+				PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
+				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+				pattern = pattern.replace('m', 'M');
+				SimpleDateFormat formater = new SimpleDateFormat(pattern);
+				String formatedDate = formater.format(dateModel.getObject());
+		
+				item.add(new AmpLabelFieldPanel<String>("date", new Model<String>(formatedDate), "Document Date", true));
 				item.add(new AmpLabelFieldPanel<String>("year", new PropertyModel<String>(item.getModel(), "year"), "Document Year", true));
 				item.add(new AmpLabelFieldPanel<Double>("size", new PropertyModel<Double>(item.getModel(), "fileSize"), "Document Size", true));
 				item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<String>(item.getModel(), "type.label"), "Document Type", true));

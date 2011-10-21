@@ -738,7 +738,10 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		    Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
 		    while(orgIter.hasNext()){
 		        AmpOrgRecipient organisation=orgIter.next();
-		        currentRecord= BULLETCHAR+organisation.getOrganization().getName()+" ("+organisation.getDescription()+")";
+		        currentRecord= BULLETCHAR+organisation.getOrganization().getName();
+		        if(organisation.getDescription()!=null&&!organisation.getDescription().trim().equals("")){
+		        	currentRecord+=" ("+organisation.getDescription()+")";
+		        }
 		        if(currentRecord.length() > longestOrgRecord.length()){
 		        	longestOrgRecord = currentRecord;
 		        }

@@ -193,16 +193,16 @@
 																	<tr>
 																		<td colspan="2" width="60%"  align="center" style="padding-top:15px;">
 																			
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
+																						<html:button  styleClass="buttonx_sm" property="submitButton"  onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					
 																						
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
+																						<html:button  styleClass="buttonx_sm" property="submitButton"  onclick="move()">
 																							<digi:trn key="btn:cancel">Cancel</digi:trn>
 																						</html:button>
                                                                                         	<logic:equal name="aimAddOrgGroupForm" property="flag" value="delete" >
-																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
+																				<html:button  styleClass="buttonx_sm" property="submitButton"  onclick="msg()">
 																					<digi:trn key="btn:deleteThisGroup">Delete this Group</digi:trn>
 																				</html:button>
 																		

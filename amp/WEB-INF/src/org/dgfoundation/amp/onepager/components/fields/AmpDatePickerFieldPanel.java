@@ -5,15 +5,15 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Date;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
@@ -49,7 +49,9 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		dateWrapper.setOutputMarkupId(true);
 		add(dateWrapper);
 
-		date = new DateTextField("date", model);
+		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		pattern = pattern.replace('m', 'M');
+		date = new DateTextField("date", model, pattern);
 		date.setOutputMarkupId(true);
 		DatePicker dp = new DatePicker() {
 			private static final long serialVersionUID = 1L;

@@ -55,26 +55,15 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		
 		if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0 || 
 				levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservation") == 0 ){
-			final DateTextField date;
+			final AmpDatePickerFieldPanel date;
 			
 			if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0)
-				date = new DateTextField("date", new PropertyModel(objModel,"issueDate"));
+				date = new AmpDatePickerFieldPanel("date", new PropertyModel(objModel,"issueDate"), "Date", true);
 			else 
-				date = new DateTextField("date", new PropertyModel(objModel,"observationDate"));
+				date = new AmpDatePickerFieldPanel("date", new PropertyModel(objModel,"observationDate"), "Date", true);
 					
 			date.setOutputMarkupId(true);
-			
-			DatePicker dp = new DatePicker() {
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				protected boolean enableMonthYearSelection() {
-					return true;
-				}
-			};
-			dp.setShowOnFieldClick(true);
-			date.add(dp);
-			addFormComponent(date);
+			add(date);
 		}
 		else{
 			WebMarkupContainer wmc = new WebMarkupContainer("date");

@@ -164,7 +164,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",true,Constants.CONTACT_PROPERTY_NAME_FAX);  
                     item.add(detailFax);
 
-                    item.add(new AmpTextAreaFieldPanel<String>("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false));
+                    item.add(new AmpTextAreaFieldPanel<String>("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, false));
                 } catch (Exception ex) {
 
                 }

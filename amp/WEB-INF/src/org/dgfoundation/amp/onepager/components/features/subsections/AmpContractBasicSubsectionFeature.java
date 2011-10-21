@@ -46,7 +46,7 @@ public class AmpContractBasicSubsectionFeature extends
 		});
 		add(name);
 
-		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(model, "description"), "Contract Description", false);
+		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(model, "description"), "Contract Description", false, false, false);
 		add(description);
 		
 		AmpCategorySelectFieldPanel category;

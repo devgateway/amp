@@ -227,17 +227,17 @@ function submitPages(){
 													onclick="sortSubmit(1)"
 													onMouseOver="this.className='colHeaderOver'"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
-													key="aim:currCode">Code</digi:trn></b></td>
+													key="aim:currCode">Code</digi:trn></b><c:if test="${aimCurrencyForm.order==1}">	<img src="/repository/aim/images/up.gif" alt="up"/></c:if></td>
 												<td align="left" class="inside" width="35%" style="cursor: pointer;"
 													onclick="sortSubmit(2)"
 													onMouseOver="this.className='colHeaderOver'"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
-													key="aim:currencyName">Currency Name</digi:trn></b></td>
+													key="aim:currencyName">Currency Name</digi:trn></b><c:if test="${aimCurrencyForm.order==2}"><img src="/repository/aim/images/up.gif" alt="up"/></c:if></td>
 												<td colspan="2" align="left" class="inside" style="cursor: pointer;"
 													onMouseOver="this.className='colHeaderOver'"
 													onclick="sortSubmit(3)"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
-													key="aim:countryName">Country</digi:trn></b></td>
+													key="aim:countryName">Country</digi:trn></b><c:if test="${aimCurrencyForm.order==3}"><img src="/repository/aim/images/up.gif" alt="up"/></c:if></td>
 											</tr>
 											</thead>
 											<!--  to export table we are adding class "yui-dt-data" to its tbody-->

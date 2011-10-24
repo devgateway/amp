@@ -96,10 +96,7 @@ a.itr:hover {
 	}
 </script>
 <div id="viewIndicatorsContainer">
-<digi:instance property="aimViewIndicatorsForm" />
 
-<digi:form action="/viewIndicators.do" method="post">
-  <html:hidden property="sortBy" styleId="sortBy"/>
   <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="800" border="0">
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
@@ -129,6 +126,13 @@ a.itr:hover {
               </span>
             </td>
           </tr>
+            <tr>
+            <td  vAlign="center" width="100%">
+             <!--  please note that this page contains form and you can not nested it inside other form -->
+				<jsp:include
+					page="/repository/aim/view/exportTable.jsp" />
+            </td>
+          </tr>
           <tr>
             <td height=16 vAlign="center" width="100%">
               <span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
@@ -151,6 +155,10 @@ a.itr:hover {
                     <table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">
+                        <digi:instance property="aimViewIndicatorsForm" />
+
+				<digi:form action="/viewIndicators.do" method="post">
+				  <html:hidden property="sortBy" styleId="sortBy"/>
                           <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
                             <tr>
                               <td>
@@ -188,10 +196,11 @@ a.itr:hover {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td colspan="6" width="100%" align="center">
-                                      <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;" id="dataTable" bgcolor="#dddddd" cellpadding="5" >
+                                    <td colspan="6" width="100%" align="center" class="report">
+                                      <table  cellpadding="0" cellspacing="0" width="100%" class="inside" id="dataTable" >
+                                      <thead>
                                         <tr>
-                                          <td width="80%" bgcolor="#999999" style="color: black">
+                                          <td width="80%" class="inside" bgcolor="#c7d4db">
                                             <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
                                             	 <a href="javascript:sortByVal('nameDesc')">
 	                                                <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/repository/aim/images/up.gif" border="0"/>
@@ -206,7 +215,7 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td width="18%" align="center" bgcolor="#999999" style="color: black">
+                                          <td width="18%" class="inside" bgcolor="#c7d4db">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
                                               <a href="javascript:sortByVal('sectDesc')">
                                                 <b><digi:trn>Sector</digi:trn></b><img  src="/repository/aim/images/up.gif" border="0"/>
@@ -221,25 +230,27 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td width="2%" bgcolor="#999999" style="color: black">&nbsp;
+                                          <td  class="inside ignore" bgcolor="#c7d4db">&nbsp;
                                           
                                           </td>
                                         </tr>
+                                         </thead>
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
+                                        <tbody class="yui-dt-data">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
                                             <tr>
-                                              <td width="80%">
+                                              <td width="80%" class="inside">
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
                                                 ${indItr.name}</a>
                                                </td>
-                                               <td width="18%" nowrap="nowrap">
+                                               <td width="18%" class="inside" nowrap="nowrap">
 	                                                <c:if test="${!empty indItr.sectorNames}">
 	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
 	                                            	   ${indsectname}<br>
 	                                            	</c:forEach>
 	                                            	</c:if>
 	                                          </td>
-                                              <td align="right" width="2%">
+                                              <td align="right" width="2%" class="inside ignore">
                                               <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams}" property="indicatorId">
 																${indItr.id}
@@ -256,6 +267,7 @@ a.itr:hover {
 											</td>
 				                           </tr>
                                           </c:forEach>
+                                          </tbody>
                                         </c:if>
                                        
                                       </table>
@@ -264,7 +276,7 @@ a.itr:hover {
                                   <tr>
                                       <td colspan="6" align="center">
                                   <field:display name="Add New Indicator" feature="Admin">
-                                      <input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                      <input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" class="buttonx"/>
                                   </field:display>
                                 </td>
                                 </tr>
@@ -272,6 +284,7 @@ a.itr:hover {
                               </td>
                             </tr>
                           </table>
+                          </digi:form>
                         </td>
                       </tr>
                     </table>
@@ -284,64 +297,7 @@ a.itr:hover {
       </td>
     </tr>
   </table>
-</digi:form>
+
 </div>
-<style>
-
-.tableEven {
-	background-color:#dbe5f1;
-	font-size:8pt;
-	padding:2px;
-}
-
-.tableOdd {
-	background-color:#FFFFFF;
-	font-size:8pt;!important
-	padding:2px;
-}
- 
-.Hovered {
-	background-color:#a5bcf2;
-}
-
-</style>
-<script language="javascript">
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
-	}
-	rows = null;
-}
-function setHoveredTable(tableId, hasHeaders) {
-
-	var tableElement = document.getElementById(tableId);
-	if(tableElement){
-    var className = 'Hovered',
-        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-        rows      = tableElement.getElementsByTagName('tr');
-
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			rows[i].onmouseover = function() {
-				this.className += ' ' + className;
-			};
-			rows[i].onmouseout = function() {
-				this.className = this.className.replace(pattern, ' ');
-
-			};
-		}
-		rows = null;
-	}
-	
 
 
-}
-</script>
-<script language="javascript">
-setStripsTable("dataTable", "tableEven", "tableOdd");
-setHoveredTable("dataTable", true);
-</script>

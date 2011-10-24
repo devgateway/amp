@@ -154,17 +154,17 @@ function checkNumeric(objName,comma,period,hyphen)
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+		<table bgcolor="#F8F8F8" cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left valign="top">
-					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
+					<table bgcolor="#F8F8F8" cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
+						<tr bgcolor="#4A687A">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:selectSectors">
 								Select Sectors</digi:trn>
 							</td></tr>
 						<tr>
-							<td align="center" bgcolor=#ECF3FD>
+							<td align="center" >
 								<table cellSpacing=2 cellPadding=2>
 									<tr>
 										<td>

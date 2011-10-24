@@ -190,9 +190,9 @@ function closeWindow() {
   <html:hidden property="category" value="-1"/> 
   <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 
-  <table width="100%" align="center" class=box-border-nopadding>
-    <tr bgcolor="#006699" class=r-dotted-lg>
-      <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+  <table  bgcolor="#F8F8F8" cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+    <tr  bgcolor="#4A687A">
+      <td vAlign="center" width="100%" align ="center"  style="color: #FFF">
       <b><digi:trn key="aim:addnewindicator">Add New Indicator</digi:trn></b>
       </td>
     </tr>
@@ -201,7 +201,7 @@ function closeWindow() {
             <digi:errors/>
         </td>
     </tr>
-    <tr align="center" bgcolor="#ECF3FD">
+    <tr align="center"  bgcolor="#F8F8F8">
        
       <td>
         <table border="0">
@@ -334,23 +334,23 @@ function closeWindow() {
         </table>
       </td>
     </tr>
-    <tr  align="center" bgcolor="#ECF3FD">
+    <tr  align="center" bgcolor="#F8F8F8">
       <td>
       <field:display name="Add New Indicator" feature="Admin">
-      <html:button  styleClass="dr-menu" property="submitButton"  onclick="addNewIndicator()">
+      <html:button  styleClass="buttonx" property="submitButton"  onclick="addNewIndicator()">
 		<digi:trn key="btn:add">Add</digi:trn> 													
  	 </html:button>
  	 </field:display>
- 	 <html:reset  styleClass="dr-menu" property="submitButton">
+ 	 <html:reset  styleClass="buttonx" property="submitButton">
 		<digi:trn key="btn:clear">Clear</digi:trn> 
 	</html:reset>											
- 	 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+ 	 <html:button  styleClass="buttonx" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 
 	 </html:button>
       </td>
     </tr>
     <tr>
-      <td bgcolor="#006699">
+      <td bgcolor="#F8F8F8">
        
       </td>
     </tr>

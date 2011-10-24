@@ -256,7 +256,7 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-			<digi:trn>Total Commitment</digi:trn>:<br/> 
+			<digi:trn>Total Actual Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
 		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
@@ -284,7 +284,7 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
-			<digi:trn>Total Distributements</digi:trn>:<br/>
+			<digi:trn>Total Actual Distributements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 

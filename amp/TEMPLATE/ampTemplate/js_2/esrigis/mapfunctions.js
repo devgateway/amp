@@ -535,7 +535,7 @@ function showResults(results) {
     //find results return an array of findResult.
     dojo.forEach(results, function(result) {
       var graphic = result.feature;
-      console.log("Found : " + result.layerName + "," + result.foundFieldName + "," + result.value);
+      //console.log("Found : " + result.layerName + "," + result.foundFieldName + "," + result.value);
       var point =  graphic.geometry.getExtent().getCenter();
       var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
       var attr = {"Location":result.value};
@@ -658,7 +658,6 @@ function drawpoints(){
 	}
 }
 
-//--------------------------------------FFerreyra Functions
 var locations = new Array();
 var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"},
                            {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}

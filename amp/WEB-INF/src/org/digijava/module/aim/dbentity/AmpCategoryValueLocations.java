@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -15,7 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author medea
  */
 public class AmpCategoryValueLocations implements Identifiable,
-		HierarchyListable, ARDimensionable, Serializable {
+		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable {
 
 	private Long id;
 	private String name;
@@ -171,10 +172,23 @@ public class AmpCategoryValueLocations implements Identifiable,
 		}
 		return ret;
 	}
-
 	@Override
 	public String getLabel() {
 		return this.name;
+	}
+	@Override
+	public String getAutoCompleteLabel() {
+		return getFormattedLocationName(this);
+	}
+	protected String getFormattedLocationName(AmpCategoryValueLocations l) {
+		return getFormattedLocationName(new StringBuffer(), l).toString();
+	}
+
+	protected StringBuffer getFormattedLocationName(StringBuffer output,
+			AmpCategoryValueLocations l) {
+		if (l.getParentLocation() != null)
+			getFormattedLocationName(output, l.getParentLocation());
+		return output.append("[").append(l.getName()).append("] ");
 	}
 
 	@Override
@@ -195,5 +209,23 @@ public class AmpCategoryValueLocations implements Identifiable,
 	@Override
 	public Class getDimensionClass() {
 		return LocationsDimension.class;
+	}
+
+	@Override
+	public AmpAutoCompleteDisplayable getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

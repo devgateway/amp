@@ -10,11 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.model.IModel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -27,6 +29,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
@@ -49,7 +53,7 @@ public class AmpLocationSearchModel extends
 
 	@Override
 	protected Collection<AmpCategoryValueLocations> load() {
-		List<AmpCategoryValueLocations> ret = new ArrayList<AmpCategoryValueLocations>();
+		Collection<AmpCategoryValueLocations> ret = new TreeSet<AmpCategoryValueLocations>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
 		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
 		IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
 		if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
@@ -113,8 +117,8 @@ public class AmpLocationSearchModel extends
 			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
-			ret = crit.list();
-
+			List tempList = crit.list();
+			ret.addAll(tempList);
 		} catch (DgException e) {
 			// TODO Auto-genrated catch block
 			e.printStackTrace();

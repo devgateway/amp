@@ -52,17 +52,6 @@ public class AmpLocationFormTableFeature extends
 		return setModel;
 	}
 
-	protected String getFormattedLocationName(AmpCategoryValueLocations l) {
-		return getFormattedLocationName(new StringBuffer(), l).toString();
-	}
-
-	protected StringBuffer getFormattedLocationName(StringBuffer output,
-			AmpCategoryValueLocations l) {
-		if (l.getParentLocation() != null)
-			getFormattedLocationName(output, l.getParentLocation());
-		return output.append("[").append(l.getName()).append("] ");
-	}
-
 	/**
 	 * @param id
 	 * @param fmName
@@ -114,7 +103,7 @@ public class AmpLocationFormTableFeature extends
 				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"locationPercentage");
 				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField);				
 				item.add(percentageField);
-				item.add(new Label("locationLabel",getFormattedLocationName(item.getModelObject().getLocation().getLocation())));
+				item.add(new Label("locationLabel", item.getModelObject().getLocation().getLocation().getAutoCompleteLabel()));
 				
 				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", new PropertyModel<String>
 						(item.getModel(), "latitude"),"Latitude",false);
@@ -173,11 +162,6 @@ public class AmpLocationFormTableFeature extends
 		
 		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
 			@Override
-			protected String getChoiceValue(AmpCategoryValueLocations choice) {
-				return getFormattedLocationName(choice);
-			}
-
-			@Override
 			public void onSelect(AjaxRequestTarget target,
 					AmpCategoryValueLocations choice) {
 				AmpActivityLocation activityLocation = new AmpActivityLocation();
@@ -224,6 +208,11 @@ public class AmpLocationFormTableFeature extends
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			protected String getChoiceValue(AmpCategoryValueLocations choice) {
+				return choice.getAutoCompleteLabel();
+			}
 		};
 
 		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
@@ -235,5 +224,4 @@ public class AmpLocationFormTableFeature extends
 		
 		add(searchLocations);
 	}
-
 }

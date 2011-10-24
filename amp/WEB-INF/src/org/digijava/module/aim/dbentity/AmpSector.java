@@ -263,6 +263,11 @@ public void setAmpOrgId(AmpOrganisation org) {
 	}
 
 	@Override
+	public String getAutoCompleteLabel() {
+		return this.name;
+	}
+
+	@Override
 	public String getUniqueId() {
 		return this.ampSectorId.toString();
 	}

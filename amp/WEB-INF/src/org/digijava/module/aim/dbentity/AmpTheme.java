@@ -412,6 +412,11 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		}
 
 		@Override
+		public String getAutoCompleteLabel() {
+			return this.name;
+		}
+
+		@Override
 		public String getUniqueId() {
 			return this.ampThemeId + "";
 		}

@@ -18,7 +18,7 @@ public interface AmpAutoCompleteDisplayable {
 		@Override
 		public int compare(AmpAutoCompleteDisplayable o1,
 				AmpAutoCompleteDisplayable o2) {
-			return o1.getLabel().compareTo(o2.getLabel());
+			return o1.getAutoCompleteLabel().compareTo(o2.getAutoCompleteLabel());
 		}
 		
 	};
@@ -26,5 +26,5 @@ public interface AmpAutoCompleteDisplayable {
 	public AmpAutoCompleteDisplayable getParent();
 	public <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings();
 	public <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings();
-	public String getLabel();
+	public String getAutoCompleteLabel();
 }

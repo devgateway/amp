@@ -4,6 +4,7 @@
 */
 package org.digijava.module.aim.util;
 
+import java.text.Collator;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -15,10 +16,16 @@ import java.util.Comparator;
 public interface AmpAutoCompleteDisplayable {
 	
 	public static class AmpAutoCompleteComparator implements Comparator<AmpAutoCompleteDisplayable> {
+		Collator collator;
+		public AmpAutoCompleteComparator() {
+			collator=Collator.getInstance();
+			collator.setStrength(Collator.PRIMARY);
+		}
+		
 		@Override
 		public int compare(AmpAutoCompleteDisplayable o1,
 				AmpAutoCompleteDisplayable o2) {
-			return o1.getAutoCompleteLabel().compareTo(o2.getAutoCompleteLabel());
+			return collator.compare(o1.getAutoCompleteLabel(),o2.getAutoCompleteLabel());
 		}
 		
 	};

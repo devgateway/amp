@@ -598,8 +598,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Exchange Rate" feature="Funding Information"></field:display> 
 <field:display name="Executing Agency Add Button" feature="Executing Agency"></field:display> 
-<field:display name="Executing Agency Groups" feature="Executing Agency"></field:display> 
-<field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
+<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>  
+ <field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency Department/Division"  feature="Executing Agency"></field:display>
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
@@ -629,7 +630,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 
-<field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
+<field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 

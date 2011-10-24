@@ -33,6 +33,10 @@
 	
 	</TITLE>
 	<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+	<style type="text/css">
+	html{background:none;width:100%;}
+	body{background:none;}
+	</style>
 </head>
 <body bgcolor="#ffffff">
 <digi:insert attribute="body" />

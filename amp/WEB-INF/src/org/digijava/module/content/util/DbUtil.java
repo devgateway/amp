@@ -3,13 +3,10 @@ package org.digijava.module.content.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
 import org.hibernate.Hibernate;
@@ -64,10 +61,8 @@ public class DbUtil {
 		AmpContentItem ampContentItem = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select aci.* from amp_content_item aci "
-					+ "where aci.pageCode = :pageCode";
-			Query qry = session.createSQLQuery(queryString).addEntity(
-					AmpContentItem.class);
+			String queryString = "from " + AmpContentItem.class.getName() + " as aci where aci.pageCode = :pageCode";
+			Query qry = session.createQuery(queryString);
 			qry.setParameter("pageCode", pageCode, new StringType());
 			Iterator<AmpContentItem> itr = qry.list().iterator();
 			if (itr.hasNext()) {

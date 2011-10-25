@@ -8,16 +8,17 @@
 
 <script language="javascript" type="text/javascript">
     function downloadFile(index, pageCode) {
-        if (index != '0') {
+//        if (index != '0') {
             window.location='/content/downloadFile.do?index='+index+'&pageCode=' + pageCode;
 //            window.location='/aim/downloadFileFromHome.do?index='+index;
-        }
+//        }
     }
 
 	var labelText = [];
 	
     function attachFuncToThumbnail(index, pageCode) {
 		var idThumbnail = "displayThumbnail_" + index;
+		
         var lastTimeStamp = new Date().getTime();
         var url = '/content/displayThumbnail.do?index='+index+'&pageCode='+pageCode+'&labelText=true&timestamp='+lastTimeStamp;
         $.get(url, function(data) {
@@ -34,6 +35,7 @@
             }
             else
 			{
+				
                 $("#"+idThumbnail).click(function() {
                     downloadFile(index, pageCode);
                 });

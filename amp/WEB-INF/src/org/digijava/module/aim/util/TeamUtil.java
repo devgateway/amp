@@ -782,13 +782,13 @@ public class TeamUtil {
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
             // Remove reference from activity
-            qryStr = "select act from " + AmpActivity.class.getName() + " act"
+            qryStr = "select act from " + AmpActivityVersion.class.getName() + " act"
                 + " where (act.team=:teamId)";
             qry = session.createQuery(qryStr);
             qry.setLong("teamId", teamId);
             Iterator itr = qry.list().iterator();
             while(itr.hasNext()) {
-                AmpActivity act = (AmpActivity) itr.next();
+            	AmpActivityVersion act = (AmpActivityVersion) itr.next();
                 act.setTeam(null);
                 session.update(act);
             }

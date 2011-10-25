@@ -1860,7 +1860,7 @@ public class TeamMemberUtil {
     		}
     		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			//if we are deleting the team leader we shouldn't set him as TL
-    			if ((teamHead!=null) && (!atm.equals(teamHead))){
+    			if ((teamHead!=null) && (!atm.getAmpTeamMemId().equals(teamHead.getAmpTeamMemId()))){
     				act.setApprovedBy(teamHead);
     			}else{
     				act.setApprovedBy(null);

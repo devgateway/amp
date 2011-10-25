@@ -18,6 +18,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -56,6 +57,7 @@ public class AmpSectorSearchModel extends
 			if (input.trim().length() > 0)
 				junction.add(getTextCriterion("name", input));
 			crit.add(junction);
+			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
 				crit.setMaxResults(maxResults);
 			List<AmpSector> list = crit.list();

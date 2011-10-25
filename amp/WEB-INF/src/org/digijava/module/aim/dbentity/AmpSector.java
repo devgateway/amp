@@ -1,4 +1,4 @@
-package org.digijava.module.aim.dbentity ;
+package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,26 +13,26 @@ import org.digijava.module.aim.util.Identifiable;
 
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
-
-public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable, Cloneable
-{
-	private Long ampSectorId ;
-	private AmpSector parentSectorId ;
-	private String sectorCode ;
-	private String name ;
-	private String type; 
+public class AmpSector implements Serializable, Comparable, Identifiable,
+		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
+		Cloneable {
+	private Long ampSectorId;
+	private AmpSector parentSectorId;
+	private String sectorCode;
+	private String name;
+	private String type;
 	private AmpOrganisation ampOrgId;
 	private AmpSectorScheme ampSecSchemeId;
-	private String description ;
-	private String language ;
-	private String version ;
-	private Set aidlist ;
-    private Set indicators;
-    private Set<AmpSector> sectors;
-    
-    private boolean translateable	= true;
-    
-    public Set<AmpSector> getSectors() {
+	private String description;
+	private String language;
+	private String version;
+	private Set aidlist;
+	private Set indicators;
+	private Set<AmpSector> sectors;
+
+	private boolean translateable = true;
+
+	public Set<AmpSector> getSectors() {
 		return sectors;
 	}
 
@@ -41,10 +41,10 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	}
 
 	private String sectorCodeOfficial;
-	
+
 	private String segmentCode;
 	private transient Collection<AmpSector> transientChildren;
-	
+
 	public String getSegmentCode() {
 		return segmentCode;
 	}
@@ -63,9 +63,9 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	/**
 	 * @return
 	 */
-/*	public Long getAmpDacSectorId() {
-		return ampDacSectorId;
-	}*/
+	/*
+	 * public Long getAmpDacSectorId() { return ampDacSectorId; }
+	 */
 
 	/**
 	 * @return
@@ -133,9 +133,9 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	/**
 	 * @param long1
 	 */
-/*	public void setAmpDacSectorId(Long long1) {
-		ampDacSectorId = long1;
-	} */
+	/*
+	 * public void setAmpDacSectorId(Long long1) { ampDacSectorId = long1; }
+	 */
 
 	/**
 	 * @param long1
@@ -192,11 +192,12 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	public void setVersion(String string) {
 		version = string;
 	}
-public AmpOrganisation getAmpOrgId() {
+
+	public AmpOrganisation getAmpOrgId() {
 		return ampOrgId;
 	}
 
-public void setAmpOrgId(AmpOrganisation org) {
+	public void setAmpOrgId(AmpOrganisation org) {
 		this.ampOrgId = org;
 	}
 
@@ -214,11 +215,10 @@ public void setAmpOrgId(AmpOrganisation org) {
 		ampSecSchemeId = scheme;
 	}
 
-
 	public int compareTo(Object o) {
-		return ampSectorId.compareTo(((AmpSector)o).getAmpSectorId());
+		return ampSectorId.compareTo(((AmpSector) o).getAmpSectorId());
 	}
-	
+
 	public String toString() {
 		return name;
 	}
@@ -236,7 +236,7 @@ public void setAmpOrgId(AmpOrganisation org) {
 	}
 
 	public Class getDimensionClass() {
-	    return SectorDimension.class;
+		return SectorDimension.class;
 	}
 
 	public String getSectorCodeOfficial() {
@@ -250,8 +250,8 @@ public void setAmpOrgId(AmpOrganisation org) {
 	@Override
 	public int getCountDescendants() {
 		int ret = 1;
-		if ( this.getChildren() != null ) {
-			for ( HierarchyListable hl: this.getChildren() )
+		if (this.getChildren() != null) {
+			for (HierarchyListable hl : this.getChildren())
 				ret += hl.getCountDescendants();
 		}
 		return ret;
@@ -275,9 +275,10 @@ public void setAmpOrgId(AmpOrganisation org) {
 	@Override
 	public Collection<AmpSector> getChildren() {
 		if (transientChildren == null)
-			transientChildren	= new TreeSet( new HierarchyListableComparator() );
+			transientChildren = new TreeSet(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
 		return transientChildren;
 	}
+
 	@Override
 	public boolean getTranslateable() {
 		return this.translateable;
@@ -285,9 +286,9 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	@Override
 	public void setTranslateable(boolean translateable) {
-		this.translateable	= translateable;
-		
-	}	
+		this.translateable = translateable;
+
+	}
 
 	@Override
 	public AmpAutoCompleteDisplayable getParent() {

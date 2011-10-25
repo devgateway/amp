@@ -311,7 +311,7 @@ public class ContentManager extends DispatchAction {
 		contentItem.setLayout(contentForm.getLayout());
 		contentItem.setDescription(contentForm.getDescription());
 		contentItem.setTitle(contentForm.getTitle());
-		contentItem.setPageCode(contentForm.getPageCode());
+		contentItem.setPageCode(contentForm.getPageCode().trim());
 		contentItem.setHtmlblock_1(contentForm.getHtmlblock_1());
 		contentItem.setHtmlblock_2(contentForm.getHtmlblock_2());
 		if(contentItem.getContentThumbnails()==null){

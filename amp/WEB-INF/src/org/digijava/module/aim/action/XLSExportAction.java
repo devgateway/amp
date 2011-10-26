@@ -6,10 +6,11 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -18,6 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.vfs.FileContent;
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -41,7 +46,6 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -142,13 +146,11 @@ public class XLSExportAction extends Action {
 				// do nothing 
 			} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
 				if (reportForm.getLogoPositionOptions().equals("0")) {//header
-					int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
-					String urlPrefix = request.getRequestURL().substring(0, end);
-					//								
-					InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
-				    byte[] bytes = IOUtils.toByteArray(is);
+					String path = getServlet().getServletContext().getRealPath("/");
+					InputStream is = new FileInputStream(path + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
+					byte[] bytes = IOUtils.toByteArray(is);
 				    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
-				    is.close();
+				   
 				    // ajout de l'image sur l'ancre ( lig, col )  
 				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
 				    ancreImg.setCol1(colId.shortValue());
@@ -286,13 +288,11 @@ public class XLSExportAction extends Action {
 				if (reportForm.getLogoPositionOptions().equals("0")) {//header
 					// see startPage
 				} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
-					int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
-					String urlPrefix = request.getRequestURL().substring(0, end);
-					//								
-					InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
-				    byte[] bytes = IOUtils.toByteArray(is);
+					String path = getServlet().getServletContext().getRealPath("/");
+					InputStream is = new FileInputStream(path + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
+					byte[] bytes = IOUtils.toByteArray(is);
 				    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
-				    is.close();
+				    
 				    // ajout de l'image sur l'ancre ( lig, col )  
 				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
 				    ancreImg.setCol1(colId.shortValue());

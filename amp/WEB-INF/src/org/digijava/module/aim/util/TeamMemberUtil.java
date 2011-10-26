@@ -1615,6 +1615,19 @@ public class TeamMemberUtil {
 							
 						}
                     }
+					Set<AmpDesktopTabSelection> desktopTabSelections = ampMember
+							.getDesktopTabSelections();
+					if (desktopTabSelections != null) {
+						for (Iterator<AmpDesktopTabSelection> iter = desktopTabSelections
+								.iterator(); iter.hasNext();) {
+							AmpDesktopTabSelection desktopTabSelection = iter
+									.next();
+							AmpReports report= desktopTabSelection.getReport();
+							report.getDesktopTabSelections().remove(desktopTabSelection);
+							iter.remove();
+							session.delete(desktopTabSelection);
+						}
+					}
 
                     //Remove refferences to AMP_CONTACT (creator_id field)
                     StringBuilder queryStr = new StringBuilder("update ");

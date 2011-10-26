@@ -539,7 +539,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					"amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") )";
+				+ Util.toCSString(ampTeams) + ") ) AND draft<>true ";
 		else{
 			
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
@@ -563,10 +563,10 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 				
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  )";
+						Util.toCSString(activityStatus)	+")  ) AND draft<>true ";
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  )";
+						Util.toCSString(activityStatus)	+")  ) AND draft<>true ";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 //					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("

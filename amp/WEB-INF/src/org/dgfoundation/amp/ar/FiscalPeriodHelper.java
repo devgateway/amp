@@ -66,6 +66,8 @@ public class FiscalPeriodHelper {
 				if (matcher.find()) {
 					this.nameModel		= matcher.replaceFirst(FiscalPeriodHelper.LAST_YEAR_REPLACEMENT); 
 				}
+				else 
+					this.nameModel		= newString;
 				
 			}
 		}

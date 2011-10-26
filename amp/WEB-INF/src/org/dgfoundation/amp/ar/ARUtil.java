@@ -320,7 +320,7 @@ public final class ARUtil {
 				MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
 				Comparable c 		= minfo.getValue();
 				if ( c.compareTo( periods.first() ) > 0 &&
-						c.compareTo( periods.last() ) < 0 )
+						c.compareTo( periods.last() ) < 0 && elem.isShow() )
 					periods.add( minfo.getValue() );
 			}
 	

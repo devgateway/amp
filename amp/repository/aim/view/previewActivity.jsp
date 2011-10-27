@@ -214,7 +214,7 @@ function collapseAll() {
 <div class="activity_preview_header">
   <table width="990" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td width=710>
+    <td width="710">
     	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
     </td>
     <td width=130>

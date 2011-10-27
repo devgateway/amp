@@ -377,6 +377,12 @@ LoggerIdentifiable, Cloneable {
 	 * Fields for activity versioning.
 	 */
 	protected AmpActivityGroup ampActivityGroup;
+	
+	/**
+	 * @deprecated
+	 * Using the field has no benefit yet, but it's high maintenance
+	 * so it's deprecated for now!
+	 */
 	protected AmpActivityVersion ampActivityPreviousVersion;
 	protected Date modifiedDate;
 	protected AmpTeamMember modifiedBy;
@@ -1841,10 +1847,20 @@ contactName = string;
 		this.ampActivityGroup = ampActivityGroup;
 	}
 
+	/**
+	 * @deprecated
+	 * Using the field has no benefit yet, but it's high maintenance
+	 * so it's deprecated for now!
+	 */
 	public AmpActivityVersion getAmpActivityPreviousVersion() {
 		return ampActivityPreviousVersion;
 	}
 
+	/**
+	 * @deprecated
+	 * Using the field has no benefit yet, but it's high maintenance
+	 * so it's deprecated for now!
+	 */
 	public void setAmpActivityPreviousVersion(AmpActivityVersion ampActivityPreviousVersion) {
 		this.ampActivityPreviousVersion = ampActivityPreviousVersion;
 	}

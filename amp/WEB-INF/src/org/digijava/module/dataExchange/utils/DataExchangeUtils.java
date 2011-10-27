@@ -1427,7 +1427,6 @@ public class DataExchangeUtils {
 					ampActGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
 					
 					AmpActivityVersion oldVersion = ampActGroup.getAmpActivityLastVersion();
-					ampActivity.setAmpActivityPreviousVersion(oldVersion);
 					ampActivity.setTeam(oldVersion.getTeam());
 					ampActivity.setActivityCreator(oldVersion.getActivityCreator());
 					ampActivity.setCreatedDate(oldVersion.getCreatedDate());

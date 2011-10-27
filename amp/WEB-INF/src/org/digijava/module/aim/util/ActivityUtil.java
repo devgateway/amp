@@ -779,7 +779,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					activity.setAmpActivityGroup(auxActivityGroup);
 					activity.setModifiedDate(Calendar.getInstance().getTime());
 					activity.setModifiedBy(member);
-					activity.setAmpActivityPreviousVersion(oldActivity);
 					session.update(activity);
 				} else if (oldActivity != null && oldActivity.getAmpActivityGroup() == null) {
 					// Edited activity with no version group info (activity
@@ -790,7 +789,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					activity.setAmpActivityGroup(newActivityGroup);
 					activity.setModifiedDate(Calendar.getInstance().getTime());
 					activity.setModifiedBy(member);
-					activity.setAmpActivityPreviousVersion(oldActivity);
 					session.update(activity);
 					// Add version info to old un-versioned activity.
 					oldActivity.setAmpActivityGroup(newActivityGroup);

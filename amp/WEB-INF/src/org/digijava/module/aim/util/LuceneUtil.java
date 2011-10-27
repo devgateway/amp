@@ -721,20 +721,24 @@ public class LuceneUtil implements Serializable {
 			e.printStackTrace();
 		}
 	}
+    
+    public static void deleteActivity(ServletContext sc, Long activityId){
+    	deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
+    }
 	
-    public static void addUpdateActivity(ServletContext sc, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion act){
+    public static void addUpdateActivity(ServletContext sc, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
 		try {
 			if (update) {
-				deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(act.getAmpActivityPreviousVersion().getAmpActivityId()));
+				deleteActivity(sc, previousActivity.getAmpActivityId());
 			}
 			IndexWriter indexWriter = null;
 			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 			Document doc = null;
-			String projectid = act.getAmpId();
+			String projectid = newActivity.getAmpId();
 			ArrayList<String> componentsCode = new ArrayList<String>();
-			Collection<AmpComponent> componentsList = act.getComponents();
+			Collection<AmpComponent> componentsList = newActivity.getComponents();
 			if (componentsList != null) {
 				for (AmpComponent c : componentsList) {
 					componentsCode.add(c.getCode());
@@ -743,13 +747,13 @@ public class LuceneUtil implements Serializable {
 			
 			String language = navigationLanguage.getLanguage();
 			String siteId = site.getSiteId();
-			doc = activity2Document(String.valueOf(act.getAmpActivityId()), projectid, String.valueOf(act.getName()),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getDescription(), language), 
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getObjective(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getPurpose(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getResults(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, act.getContactName(), language),
-					componentsCode, act.getCrisNumber(), act.getBudgetCodeProjectID());
+			doc = activity2Document(String.valueOf(newActivity.getAmpActivityId()), projectid, String.valueOf(newActivity.getName()),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getDescription(), language), 
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getObjective(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getPurpose(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getResults(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getContactName(), language),
+					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID());
 
 			if (doc != null) {
 				try {

@@ -90,6 +90,7 @@
 	function setVersion(activityId)
 	{
 		document.getElementById("action").value = "setVersion";
+		document.getElementById("method").value = "compare";
 		document.getElementById("activityCurrentVersion").value = activityId;
 		document.aimCompareActivityVersionsForm.submit();
 	}

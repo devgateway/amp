@@ -231,7 +231,6 @@ public class ActivityVersionUtil {
 		
 		out.setActivityCreator(member);
 		out.setAmpActivityGroup(null);
-		out.setAmpActivityPreviousVersion(null);
 		out.setAuthor(null);
 		out.setTeam(member.getAmpTeam());
 		out.setThemeId(null);

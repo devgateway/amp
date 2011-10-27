@@ -20,7 +20,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
@@ -36,6 +38,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -57,20 +61,25 @@ public class CompareActivityVersions extends DispatchAction {
 
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
-			//beginTransaction();
 
 			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
 			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 			AmpActivityGroup group = activity.getAmpActivityGroup();
-			//tx.begin();
+			
+			AmpActivityVersion prevVer = group.getAmpActivityLastVersion();
 
 			// Update the modified date of the selected activity to send it last
 			// to the list
 			activity.setModifiedDate(Calendar.getInstance().getTime());
 			group.setAmpActivityLastVersion(activity);
-			session.save(group);
-			//tx.commit();
+			session.update(group);
+			session.update(activity);
 
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
+			LuceneUtil.addUpdateActivity(request.getSession().getServletContext(), true, site, locale, activity, prevVer);
+			
 			return new ActionForward(mapping.findForward("reload").getPath() + "&ampActivityId=" + activityId);
 		}
 
@@ -481,7 +490,6 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setAmpActivityGroup(auxActivityGroup);
 			auxActivity.setModifiedDate(Calendar.getInstance().getTime());
 			auxActivity.setModifiedBy(member);
-			auxActivity.setAmpActivityPreviousVersion(vForm.getOldActivity());
 			
 			auxActivity.setMergedActivity(true);
 			auxActivity.setMergeSource1(vForm.getActivityOne());
@@ -577,22 +585,16 @@ public class CompareActivityVersions extends DispatchAction {
 	private void setAdvancemode(CompareActivityVersionsForm vForm, HttpServletRequest request){
 		boolean ispartofamanagetmentworkspace = false;
 		boolean iscurrentworkspacemanager = false;
-		Long currentworkspaceid = (Long) request.getSession().getAttribute("TID");
 		
-		ArrayList userworkspaces = new ArrayList();
-		userworkspaces = (ArrayList) request.getSession().getAttribute(Constants.USER_WORKSPACES);
-		for (Iterator iterator = userworkspaces.iterator(); iterator.hasNext();) {
-			AmpTeamMember teammember = (AmpTeamMember) iterator.next();
-			if (teammember.getAmpTeam().getIdentifier() == currentworkspaceid){
-				if(teammember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)){
-					ispartofamanagetmentworkspace = true;
-				}
-				if (teammember.getAmpMemberRole().getTeamHead()){
-					iscurrentworkspacemanager = true;
-				}
-			}
-		}
+		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
+		AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		
+		if (ampCurrentMember.getAmpMemberRole().getTeamHead())
+			iscurrentworkspacemanager = true;
+		if (ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT))
+			ispartofamanagetmentworkspace = true;
+		
 		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
-		vForm.setAdvancemode((!ispartofamanagetmentworkspace & iscurrentworkspacemanager));
+		vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
 	}
 }

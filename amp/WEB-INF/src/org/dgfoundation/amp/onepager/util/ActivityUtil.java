@@ -140,7 +140,6 @@ public class ActivityUtil {
 			if (!newActivity){
 				//existing activity
 				//previousVersion for current activity
-				a.setAmpActivityPreviousVersion(group.getAmpActivityLastVersion());
 				group.setAmpActivityLastVersion(a);
 				session.update(group);
 			}
@@ -177,7 +176,7 @@ public class ActivityUtil {
 				ServletContext sc = wicketSession.getHttpSession().getServletContext();
 				Site site = wicketSession.getSite();
 				Locale locale = wicketSession.getLocale();
-				LuceneUtil.addUpdateActivity(sc, !newActivity, site, locale, am.getObject());
+				LuceneUtil.addUpdateActivity(sc, !newActivity, site, locale, am.getObject(), oldA);
 			} catch (Exception e) {
 				logger.error("error while trying to update lucene logs:", e);
 			}

@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -80,21 +81,14 @@ public class ViewActivityHistory extends Action {
 		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
 		boolean ispartofamanagetmentworkspace = false;
 		boolean iscurrentworkspacemanager = false;
-		Long currentworkspaceid = (Long) request.getSession().getAttribute("TID");
 		
-		ArrayList userworkspaces = new ArrayList();
-		userworkspaces = (ArrayList) request.getSession().getAttribute(Constants.USER_WORKSPACES);
-		for (Iterator iterator = userworkspaces.iterator(); iterator.hasNext();) {
-			AmpTeamMember teammember = (AmpTeamMember) iterator.next();
-			if(teammember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)){
-				ispartofamanagetmentworkspace = true;
-			}
-			if (teammember.getAmpTeam().getIdentifier() == currentworkspaceid){
-				if (teammember.getAmpMemberRole().getTeamHead()){
-					iscurrentworkspacemanager = true;
-				}
-			}
-		}
+		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
+		AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		
+		if (ampCurrentMember.getAmpMemberRole().getTeamHead())
+			iscurrentworkspacemanager = true;
+		if (ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT))
+			ispartofamanagetmentworkspace = true;
 		
 		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
 		hForm.setEnableadvanceoptions(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);

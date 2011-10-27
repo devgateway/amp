@@ -400,8 +400,10 @@ window.onload=init;
 		    	</field:display>
 		    	&nbsp;
 		      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
+		      	<c:if test="${not empty sessionScope.currentMember}">
 		      	&nbsp;
 		      	<input type="button" class="buttonx" value="<digi:trn>Add New Event</digi:trn>"  onclick="addEvent();" />
+		      	</c:if>
 			</div>
 		</feature:display>
 	</div>

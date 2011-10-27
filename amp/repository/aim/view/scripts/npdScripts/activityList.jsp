@@ -116,16 +116,14 @@ function getActivities(){
 		for (var i=0; i< actList.length; i++) {
 			if (actList[i].tagName=='activity'){
 				var actTR = document.createElement('TR');
-                if(i%2==1){
-                    actTR.bgColor='#CCCCCC';
-                }
+                
                 
 				//name
 				var actTDname = document.createElement('TD');
 				actTDname.className="inside";
 				var actAname = document.createElement('a');
 				actAname.innerHTML=actList[i].getAttribute('name');
-				var actURL = addActionToURL('aim/showPrinterFriendlyPage.do~edit=true~activityid=');
+				var actURL = addActionToURL('showPrinterFriendlyPage.do~edit=true~activityid=');
 				actURL+=actList[i].getAttribute('id');
 				actAname.href=actURL;
 				actAname.target='_blank';

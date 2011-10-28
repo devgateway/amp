@@ -147,6 +147,12 @@ public class ViewComment extends Action {
 																	editForm.getComments().setFieldName("Purpose Objectively Verifiable Indicators");
 																	field = DbUtil.getAmpFieldByName("Purpose Objectively Verifiable Indicators");
 																}
+																else{
+                                                                    if (comment.equals("pcd")||comment.equals("viewpcd")) {
+                                                                        editForm.getComments().setFieldName("Proposed Completion Date");
+                                                                        field = DbUtil.getAmpFieldByName("Proposed Completion Date");
+                                                                    }
+                                                                }
 						editForm.getComments().setField(field);
 							if (request.getParameter("previus")!=null && request.getParameter("previus").equalsIgnoreCase("vco")){
 								editForm.getComments().setField(field);
@@ -218,7 +224,7 @@ public class ViewComment extends Action {
 						if (editForm.getComments().getCommentText() != null)	// Clearing the commentText property
 							editForm.getComments().setCommentText(null);
 						//editForm.setSerializeFlag(false);  //To make sure comment(s) not added to database without user's knowledge
-						if (comment.equals("ccd")||comment.equals("fdd")||comment.equals("objAssumption")||comment.equals("objVerification")||comment.equals("purpAssumption")
+						if (comment.equals("pcd")||comment.equals("ccd")||comment.equals("fdd")||comment.equals("objAssumption")||comment.equals("objVerification")||comment.equals("purpAssumption")
 								||comment.equals("purpVerification")||comment.equals("resAssumption")||comment.equals("resVerification"))
 							editForm.getComments().setCommentFlag(true);
 						logger.debug("CommentFlag[forwarding] : " + editForm.getComments().isCommentFlag());

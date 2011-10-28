@@ -316,9 +316,9 @@ function valid(value){
 					              	</td>
 									<td>
 					               		<feature:display name="Event Approve" module="Calendar">
-		 	 	 	 						<input type="button" value="<digi:trn>Approved</digi:trn>" style="width: 110px;" onclick="valid(true);" />
+		 	 	 	 						<input type="button" value="<digi:trn>Approved</digi:trn>" class="buttonx" style="width: 110px;" onclick="valid(true);" />
 		 	 	 	 						&nbsp;
-											<input type="button" value="<digi:trn>Not Approved</digi:trn>" style="width: 110px;" onclick="valid(false);" />
+											<input type="button" value="<digi:trn>Not Approved</digi:trn>" class="buttonx" style="width: 110px;" onclick="valid(false);" />
  	 	 	 							</feature:display>
  	 	 	 						</td>
 								</tr>

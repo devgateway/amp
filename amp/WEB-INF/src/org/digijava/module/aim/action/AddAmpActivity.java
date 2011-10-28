@@ -1306,7 +1306,11 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	          /* END - Setting documents for preview */
 	          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
-	          return mapping.findForward("preview");
+	          if (request.getParameter("previewPopin") != null || logframepr.compareTo("true") == 0) {
+	        	  return mapping.findForward("previewPopin");
+	          } else {
+	        	  return mapping.findForward("preview");
+	          }
 	        }
 }
 

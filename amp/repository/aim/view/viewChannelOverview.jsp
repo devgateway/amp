@@ -2101,7 +2101,9 @@ function commentWin(val, commentId) {
 																		<tr>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:proposedCompletionDate">
-																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /></TD>
+																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /><a
+																				href="javascript:commentWin('<c:out value="${activity.ampActivityId}" />', 'pcd')">
+																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</tr>
 																	</field:display>
 																		

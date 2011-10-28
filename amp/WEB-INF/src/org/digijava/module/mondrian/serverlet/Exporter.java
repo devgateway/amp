@@ -185,8 +185,8 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							
 							NodeList rowslist = document.getElementsByTagName("row");
 							
-							String textamount = null;
-							String textcurrency = null;
+							String textamount = "";
+							String textcurrency = "";
 							String currencytext = null;
 							//for translation purposes
 							Site site = QueryThread.getSite();
@@ -202,7 +202,11 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							
 								if(currency!= null) {
 									AmpCurrency currobj = CurrencyUtil.getCurrencyByCode(currency);
-									textcurrency=TranslatorWorker.translateText(currobj.getCountryName(),locale,siteId);
+									if (currobj.getCountryName()!=null){
+										textcurrency=TranslatorWorker.translateText(currobj.getCountryName(),locale,siteId);
+									} else {
+										textcurrency = currobj.getCurrencyName();
+									}
 									currencytext = TranslatorWorker.translateText("Currency",locale,siteId);
 								}
 							

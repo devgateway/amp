@@ -66,7 +66,7 @@ public class RelatedOrgGate extends Gate {
          */
     @Override
     public boolean logic() throws Exception {
-	Session session = PersistenceManager.getSession();
+	
 	AmpActivity ampa = null;
 //	Activity a = null;
 
@@ -84,7 +84,7 @@ public class RelatedOrgGate extends Gate {
 	if (tm==null) return false; 
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	PersistenceManager.releaseSession(session);
+	
 	User user = atm.getUser();
 
 	

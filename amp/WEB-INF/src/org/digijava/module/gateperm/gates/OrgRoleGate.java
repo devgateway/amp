@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Queue;
 
 import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -18,7 +17,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.hibernate.Session;
 
 /**
  * Implements logic for organization roles user access filtering. users are assigned to organizations through the um
@@ -75,7 +73,6 @@ public class OrgRoleGate extends Gate {
          */
     @Override
     public boolean logic() throws Exception {
-	Session session = PersistenceManager.getSession();
 	AmpActivity ampa = null;
 //	Activity a = null;
 
@@ -94,7 +91,7 @@ public class OrgRoleGate extends Gate {
 	
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	PersistenceManager.releaseSession(session);
+	
 	User user = atm.getUser();
 
 	String paramRoleCode = parameters.poll().trim();

@@ -68,9 +68,25 @@ public class GroupReportData extends ReportData {
 			boolean ascending="ascending".equals(sorterType)?true:false;
 			ReportData c1=(ReportData) o1;
 			ReportData c2=(ReportData) o2;
-			if(ArConstants.HIERARCHY_SORTER_TITLE.equals(sorterName))
+			if(ArConstants.HIERARCHY_SORTER_TITLE.equals(sorterName)){
 					return ascending?c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()):c2.getName().toLowerCase().compareTo(c1.getName().toLowerCase());
-			else return ascending?c.compare(c1.findTrailCell(sorterName),c2.findTrailCell(sorterName)):c.compare(c2.findTrailCell(sorterName),c1.findTrailCell(sorterName));
+			}else{ 
+				if (ascending){
+					int result = c.compare(c1.findTrailCell(sorterName),c2.findTrailCell(sorterName));
+					if (result == 0){
+						return c1.getName().compareTo(c2.getName());
+					}else{
+						return result;
+					}
+				}else{
+					int result = c.compare(c2.findTrailCell(sorterName),c1.findTrailCell(sorterName)); 
+					if(result == 0){
+						return c2.getName().compareTo(c1.getName());
+					}else{
+						return result;
+					}
+				}
+			}
 		}
 	}
 	
@@ -331,7 +347,7 @@ public class GroupReportData extends ReportData {
 	}
 
 	public String getAbsoluteReportName() {
-		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.name;
+		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.getName();
 		else return this.name;
 	}
 

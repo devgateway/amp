@@ -29,7 +29,6 @@
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <digi:instance property="aimTeamReportsForm" />
-<digi:form action="/viewTeamReports.do" method="post">
 <html:hidden property="action"/>
 
 <c:if test="${aimTeamReportsForm.showTabs}">
@@ -37,7 +36,9 @@
 		<digi:trn key="aim:confirmDeleteTab">Are you sure you want to delete the selected desktop tab?</digi:trn>
 	</c:set>
 	<c:set var="pageTitle">
-		<digi:trn key="aim:teamTabs">Team Tabs</digi:trn>
+		<digi:trn key="aim:teamTabs">
+			Team Tabs
+		</digi:trn>
 	</c:set>
 	<c:set var="breadCrumb">
 		<digi:trn key="aim:AllTabs">All Tabs</digi:trn>
@@ -51,6 +52,7 @@
 	
 	<jsp:include page="tabManager/tabManager.jsp" />
 </c:if>
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
 	<c:set var="translation">

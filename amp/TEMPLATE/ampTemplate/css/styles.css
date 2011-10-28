@@ -626,6 +626,16 @@ A.sub-nav2:hover
 	COLOR: #313131
 }
 
+
+.dr-menu-special 
+{
+	TEXT-DECORATION: none;
+	FONT-SIZE: 11px; 
+	COLOR: #313131;
+	font-weight:bold;
+}
+
+
 .dr-dialogmenu 
 {
 	FONT-SIZE: 11px;

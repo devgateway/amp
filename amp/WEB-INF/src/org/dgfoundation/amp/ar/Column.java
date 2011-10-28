@@ -431,8 +431,12 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	@Override
 	public boolean equals(Object o) {
-	    Column c=(Column) o;
-	    return this.getName().equals(c.getName());
+		if (o!=null && this.getName()!=null) {
+		    Column c=(Column) o;
+		    return this.getName().equals(c.getName());
+		} else {
+			return false;
+		}
 	}
 
 	public String getExpression() {

@@ -277,7 +277,7 @@ public abstract class ReportData extends Viewable {
 	 * @return Returns the name.
 	 */
 	public String getName() {
-		return name;
+		return name.replaceAll("\"", "'");
 	}
 
 	/**

@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -695,8 +696,12 @@ public class CurrencyUtil {
 		Currency curr = null;
 		AmpCurrency ampCurrency = null;
 
-		try {
-			sess = PersistenceManager.getRequestDBSession();
+			try {
+				sess = PersistenceManager.getRequestDBSession();
+			} catch (DgException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 			String queryString = "select c from " + AmpCurrency.class.getName()	+ " c where (c.ampCurrencyId=:id)";
 			qry1 = sess.createQuery(queryString);
 			qry1.setParameter("id", id, Hibernate.LONG);
@@ -718,21 +723,8 @@ public class CurrencyUtil {
 			}else{
 				curr.setExchangeRate(new Double(1));
 			}
-
-		} catch (Exception e) {
-			logger.debug("Exception from getCurrency()");
-			logger.debug(e.toString());
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
-		logger.debug("out");
+	
+		
 		return curr;
 	}
 

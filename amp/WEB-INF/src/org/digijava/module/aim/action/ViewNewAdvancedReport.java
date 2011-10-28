@@ -294,7 +294,7 @@ public class ViewNewAdvancedReport extends Action {
 				List<AmountCell> trailCells = rd.getTrailCells();
 				for (AmountCell cell : trailCells) {
 					if (cell!=null){
-					if (sortBy.equals(cell.getColumn().getName())) {
+					if (sortBy.equals(cell.getColumn().getNamePath())) {
 						Set<AmpReportHierarchy> hierarchies = ar.getHierarchies();
 						for (AmpReportHierarchy hierarchy : hierarchies) {
 							sorters.put(hierarchy.getLevelId(), new MetaInfo(

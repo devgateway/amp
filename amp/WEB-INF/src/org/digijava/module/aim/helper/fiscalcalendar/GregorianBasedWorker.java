@@ -131,7 +131,11 @@ public class GregorianBasedWorker implements ICalendarWorker {
 
 	public String getFiscalYear() throws Exception {
 		if (this.fiscalCalendar.getIsFiscal()) {
-			return "Fiscal Year " + (this.getYear()) + " - " + (this.getYear()+1);
+			if (fiscalCalendar.getStartMonthNum()==1){
+				return "Fiscal Year " + (this.getYear());
+			} else {
+				return "Fiscal Year " + (this.getYear()) + " - " + (this.getYear()+1);
+			}
 		}
 		return this.getYear().toString();
 	}

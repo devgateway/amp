@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.cell.DateCell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -320,7 +321,10 @@ public final class ARUtil {
 			while ( iter.hasNext() ) {
 				Categorizable elem	= (Categorizable)iter.next();
 				MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
-				periods.add( minfo.getValue() );
+				Comparable c 		= minfo.getValue();
+				if ( c.compareTo( periods.first() ) > 0 &&
+						c.compareTo( periods.last() ) < 0 && elem.isShow() )
+					periods.add( minfo.getValue() );
 			}
 	
 			if (periods!=null && periods.size()>0) {
@@ -450,8 +454,8 @@ public final class ARUtil {
 			periods.add("Q5");
 		}
 		if ( ArConstants.MONTH.equals(type) ) {
-			periods.add( new ComparableMonth(-1, "") );
-			periods.add( new ComparableMonth(12, "") );
+			periods.add( new ComparableMonth(-1, "Before 1st month") );
+			periods.add( new ComparableMonth(12, "After last month") );
 		}
 	}
 	
@@ -496,9 +500,19 @@ public final class ARUtil {
 	}
 
 	private static void cleanListCell(ListCell cell) {
-		List<TextCell> listCells = (List)cell.getValue();
-		for (TextCell tCell : listCells) {
-			ARUtil.cleanTextCell(tCell);
+		/* Donor commitment date some times is a ListCell of DateCell 
+		 * in such case it should not not execute the clean */
+		boolean process = false;
+		for (Object o : (List)cell.getValue()) {
+		    if (o.getClass().equals(TextCell.class)){
+		    	process = true;
+		    }
+		}
+		if (process){
+			List<TextCell> listCells = (List)cell.getValue();
+			for (TextCell tCell : listCells) {
+				ARUtil.cleanTextCell(tCell);
+			}
 		}
 	}
 

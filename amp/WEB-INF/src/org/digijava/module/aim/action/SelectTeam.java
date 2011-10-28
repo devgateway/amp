@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
@@ -37,6 +38,16 @@ public class SelectTeam extends Action {
             throws java.lang.Exception {
 
         HttpSession session = request.getSession();
+        //Removing attributes from previous session (East Timor. Aug.2011)
+        session.removeAttribute("reportMeta");
+        session.removeAttribute("report");
+        session.removeAttribute("reportSorters");
+        session.removeAttribute("ampReportId");
+        session.removeAttribute(ArConstants.REPORTS_FILTER);
+
+
+
+
         LoginForm lForm = (LoginForm) form;
         
         //This is for the auto login.

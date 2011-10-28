@@ -284,6 +284,7 @@
 	<page page="addChildWorkspaces" name="aim_addChildWorkspaces" title="AMP - Select Child Workspaces" />
 	<page page="viewUserProfile" name="aim_viewUserProfile" title="AMP - User Profile" />
 	<page name="previewActivity" title=" - Preview Activity" />
+	<page name="previewActivityPopin" title=" - Preview Activity" />
 	<page name="previewLogframe" title=" - Preview Logframe Activity" />
 	<page page="previewActivity" name="aim_publicActivityPreview" title=" - Public Activity Preview" />
 	<page name="viewRelatedLinks" title=" - Related Documents and Links" />

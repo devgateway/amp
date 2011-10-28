@@ -721,6 +721,7 @@
 				<page>aim_filterPicker2</page>
 				<page>selectPledgeLocation</page>
 				<page>selectPledgeProgram</page>
+				<page>previewActivityPopin</page>
 			</module>
             <module name="orgProfile">
                 <page>orgSummary</page>

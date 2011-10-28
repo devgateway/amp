@@ -16,6 +16,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
+import org.digijava.module.aim.helper.Constants;
 
 public class Search extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -68,6 +69,9 @@ public class Search extends Action {
 			Collection<LoggerIdentifiable> resultReports = new ArrayList<LoggerIdentifiable>();
 			Collection<LoggerIdentifiable> resultTabs = new ArrayList<LoggerIdentifiable>();
 			Collection<LoggerIdentifiable> resultResources = new ArrayList<LoggerIdentifiable>();
+			Collection<LoggerIdentifiable> resultActivitiesWithRespOrgs = new ArrayList<LoggerIdentifiable>();
+			Collection<LoggerIdentifiable> resultActivitiesWithExeOrgs = new ArrayList<LoggerIdentifiable>();
+			Collection<LoggerIdentifiable> resultActivitiesWithImpOrgs = new ArrayList<LoggerIdentifiable>();
 
 			switch (searchForm.getQueryType()) {
 			case SearchUtil.QUERY_ALL:
@@ -78,6 +82,15 @@ public class Search extends Action {
 				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
 				resultResources = SearchUtil.getResources(searchForm
 						.getKeyword(), request, tm);
+				resultActivitiesWithRespOrgs.addAll(SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_RESPONSIBLE_ORG));
+				resultActivitiesWithExeOrgs.addAll(SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_EXECUTING_AGENCY));
+				resultActivitiesWithImpOrgs.addAll(SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
 				break;
 			case SearchUtil.ACTIVITIES:
 				resultActivities = SearchUtil.getActivities(searchForm
@@ -94,6 +107,21 @@ public class Search extends Action {
 				resultResources = SearchUtil.getResources(searchForm
 						.getKeyword(), request, tm);
 				break;
+			case SearchUtil.RESPONSIBLE_ORGANIZATION:
+				resultActivitiesWithRespOrgs = SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_RESPONSIBLE_ORG);
+				break;
+			case SearchUtil.EXECUTING_AGENCY:
+				resultActivitiesWithExeOrgs = SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_EXECUTING_AGENCY);
+				break;
+			case SearchUtil.IMPLEMENTING_AGENCY:
+				resultActivitiesWithImpOrgs = SearchUtil
+						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+								tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+				break; 
 			}
 
 			if (searchForm.getKeyword() != "") {
@@ -101,6 +129,9 @@ public class Search extends Action {
 				resultList.addAll(resultReports);
 				resultList.addAll(resultTabs);
 				resultList.addAll(resultResources);
+				resultList.addAll(resultActivitiesWithRespOrgs);
+				resultList.addAll(resultActivitiesWithExeOrgs);
+				resultList.addAll(resultActivitiesWithImpOrgs);
 			}
 
 			if (resultList.size() > 0
@@ -118,6 +149,18 @@ public class Search extends Action {
 			if (resultResources.size() > 0
 					|| searchForm.getQueryType() == SearchUtil.RESOURCES)
 				request.setAttribute("resultResources", resultResources);
+			if (resultActivitiesWithRespOrgs.size() > 0
+					|| searchForm.getQueryType() == SearchUtil.RESPONSIBLE_ORGANIZATION)
+				request.setAttribute("resultActivitiesWithRespOrgs",
+						resultActivitiesWithRespOrgs);
+			if (resultActivitiesWithExeOrgs.size() > 0
+					|| searchForm.getQueryType() == SearchUtil.EXECUTING_AGENCY)
+				request.setAttribute("resultActivitiesWithExeOrgs",
+						resultActivitiesWithExeOrgs);
+			if (resultActivitiesWithImpOrgs.size() > 0
+					|| searchForm.getQueryType() == SearchUtil.IMPLEMENTING_AGENCY)
+				request.setAttribute("resultActivitiesWithImpOrgs",
+						resultActivitiesWithImpOrgs);
 		}
 		// TODO: searching documents
 

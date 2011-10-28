@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <style>
 .contentbox_border{
@@ -190,6 +191,15 @@ $(document).ready(function(){
                                                     <html:option value="1"><digi:trn>Reports</digi:trn></html:option>
                                                     <html:option value="2"><digi:trn>Tabs</digi:trn></html:option>
                                                     <html:option value="3"><digi:trn>Resources</digi:trn></html:option>
+                                                     <feature:display name="Responsible Organization" module="Organizations">
+                                                        <html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
+                                                    </feature:display>
+                                                    <feature:display name="Executing Agency" module="Organizations">
+                                                        <html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
+                                                    </feature:display>
+                                                    <feature:display name="Implementing Agency" module="Organizations">
+                                                        <html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
+                                                    </feature:display>
                                                 </html:select>
                                             </td>
 <!--                                            <td valign="top">
@@ -328,6 +338,26 @@ $(document).ready(function(){
     	                                                            </td>
                                                                 </tr>
                                                                 </logic:present>
+                                                                  <feature:display name="Responsible Organization" module="Organizations">
+                                                                    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithRespOrgs}"/>
+                                                                    <c:set var="relatedOrgIndex" scope="request" value="1"/>
+                                                                    <c:set var="relatedOrgType" scope="request" value="Responsible Organization"/>
+                                                                    <jsp:include page="relatedOrgs.jsp"/>
+                                                                    </feature:display>
+                                                                        
+                                                                        <feature:display name="Executing Agency" module="Organizations">
+                                                                            <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithExeOrgs}"/>
+                                                                            <c:set var="relatedOrgIndex" scope="request" value="2"/>
+                                                                            <c:set var="relatedOrgType" scope="request" value="Executing Agency"/>
+                                                                            <jsp:include page="relatedOrgs.jsp"/>
+                                                                        </feature:display>
+                                                                            
+                                                                        <feature:display name="Implementing Agency" module="Organizations">
+                                                                            <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithImpOrgs}"/>
+                                                                            <c:set var="relatedOrgIndex" scope="request" value="3"/>
+                                                                             <c:set var="relatedOrgType" scope="request" value="Implementing Agency"/>
+                                                                            <jsp:include page="relatedOrgs.jsp"/>
+                                                                        </feature:display>
                                                                 </table>
 														</td>
 													</tr>

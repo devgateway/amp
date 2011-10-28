@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+    <form-beans>
+
+        <form-bean name="orgProfOrgProfileFilterForm" type="org.digijava.module.orgProfile.form.OrgProfileFilterForm" />
+        <form-bean name="orgProfLargestProjectsForm" type="org.digijava.module.orgProfile.form.LargestProjectsForm" />
+        <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.widget.form.WidgetTeaserForm"/>
+        <form-bean name="orgProfilePIForm" type="org.digijava.module.orgProfile.form.OrgProfilePIForm"/>
+        <form-bean name="orgProfileNameValueYearForm" type="org.digijava.module.orgProfile.form.OrgProfileNameValueYearForm"/>
+        <form-bean name="orgSummaryForm" type="org.digijava.module.orgProfile.form.OrganizationSummaryForm"/>
+        <form-bean name="orgProfileExportOptionsForm" type="org.digijava.module.orgProfile.form.OrgProfileExportOptionsForm"/>
+    </form-beans>
+
+    <action-mappings>
+        <action name="orgProfOrgProfileFilterForm" path="/orgProfile/showOrgProfile" type="org.digijava.module.orgProfile.action.OrgProfileFilterAction" validate="false">
+            <forward name="forward" path="/showLayout.do?layout=orgProfileLayout"/>
+        </action>
+
+            <action name="orgProfOrgProfileFilterForm" path="/orgProfile/getOrganizations" scope="request" type="org.digijava.module.orgProfile.action.GetOrganizations" validate="false" />
+            <action name="orgProfOrgProfileFilterForm" path="/orgProfile/getZones" scope="request" type="org.digijava.module.orgProfile.action.GetZones" validate="false" />
+            <action name="orgProfLargestProjectsForm" path="/orgProfile/showLargestProjects" type="org.digijava.module.orgProfile.action.ShowLargestProjects" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=largestProjects"/>
+            </action>
+            <action name="orgProfLargestProjectsForm" path="/orgProfile/printLargestProjects" type="org.digijava.module.orgProfile.action.ShowLargestProjects" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=largestProjectsPrinterFriendly"/>
+            </action>
+            <action name="orgProfilePIForm" path="/orgProfile/showParisIndicator" type="org.digijava.module.orgProfile.action.OrgProfileParisIndicatorAction" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=parisIndicators"/>
+            </action>
+             <action name="orgProfileNameValueYearForm" path="/orgProfile/showOrgProfileTables" scope="request" type="org.digijava.module.orgProfile.action.ShowOrgProfileTables" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=showOrgProfileTables"/>
+            </action>
+             <action name="orgSummaryForm" path="/orgProfile/showOrgSummary" scope="request" type="org.digijava.module.orgProfile.action.OrgSummaryAction" parameter="action" validate="false">
+                <forward name="forward" path="/showLayout.do?layout=orgSummary"/>
+                <forward name="saved"  path="/showLayout.do?layout=orgProfileLayout"/>
+            </action>
+            <action name="orgProfileExportOptionsForm" path="/orgProfile/showExportOptions" type="org.digijava.module.orgProfile.action.ExportOptionsAction" validate="false" parameter="actionType">
+                <forward name="forward" path="/showLayout.do?layout=exportOptions"/>
+                <forward name="exportToWord" path="/orgProfile/wordExport.do"/>
+                <forward name="exportToPDF"  path="/orgProfile/pdfExport.do"/>
+            </action>
+
+
+		<!-- Teasers below this -->
+
+            <action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>
+            <action name="orgProfOrgProfileFilterForm" path="/orgProfile/pdfExport" type="org.digijava.module.orgProfile.action.ExportToPDF"/>
+            <action name="orgProfOrgProfileFilterForm" path="/orgProfile/wordExport" type="org.digijava.module.orgProfile.action.ExportToWord"/>
+
+
+        </action-mappings>
+    </struts-config>

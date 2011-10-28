@@ -1,0 +1,3 @@
+CREATE or replace VIEW `v_on_off_budget` AS select `a`.`amp_activity_id` AS `amp_activity_id`,IF(`a`.`budget`=1,"yes",IF(`a`.`budget`=0,"no",IF(`a`.`budget`=2,"treasure","unallocated"))) AS `budget` from `amp_activity` `a` order by `a`.`amp_activity_id`;
+Update amp_columns set columnName="On/Off/Treasure Budget" where columnName="On/Off Budget";
+Update amp_fields_visibility set name="On/Off/Treasure Budget" where name="On/Off Budget";

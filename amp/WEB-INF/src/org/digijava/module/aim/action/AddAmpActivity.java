@@ -419,6 +419,12 @@ public class AddAmpActivity extends Action {
       eaForm.setStep("9");
       eaForm.setPageId(1);
     }
+    
+    if (request.getParameter("previewPopin") != null && request.getParameter("previewPopin").compareTo("true") == 0) {
+       eaForm.setStep("9");
+       eaForm.setPageId(1);
+    }
+      
     //===============Sectors END=============================
 
 

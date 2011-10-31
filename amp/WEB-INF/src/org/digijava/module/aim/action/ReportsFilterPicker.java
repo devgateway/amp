@@ -685,6 +685,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setComputedYearsRange(new ArrayList<BeanWrapperImpl>());
+		filterForm.setActualAppYearsRange(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setApprovalStatusSelectedCollection(new ArrayList());
 		
@@ -698,6 +699,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		for (long i = curYear-10; i < curYear; i ++) {
 			filterForm.getComputedYearsRange().add(new BeanWrapperImpl(new Long(i)));
+			filterForm.getActualAppYearsRange().add(new BeanWrapperImpl(new Long(i)));
 		}
 		
 		for (long i = 10; i <= 100; i += 10) {
@@ -1016,6 +1018,9 @@ public class ReportsFilterPicker extends MultiAction {
 			else
 				arf.setComputedYear(null);
 					
+		}
+		if (filterForm.getActualAppYear()!=-1){
+			arf.setActualAppYear(filterForm.getActualAppYear());
 		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency;

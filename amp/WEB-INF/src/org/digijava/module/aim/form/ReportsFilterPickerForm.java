@@ -52,6 +52,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> toMonths;
 	private Collection<BeanWrapperImpl> countYears;
 	private Collection<BeanWrapperImpl> computedYearsRange;
+	private Collection<BeanWrapperImpl> actualAppYearsRange;
 	
 	//private Collection actRankCollection;
 	private Collection pageSizes; // A0,A1,A2,A3,A4
@@ -160,6 +161,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String budgetNumber;
 	
 	private Integer computedYear=-1;
+	private Integer actualAppYear=-1;
 	
 	private Long[] selectedProjectImplUnit;
 
@@ -170,6 +172,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
+	}
+	
+	public Integer getActualAppYear() {
+		return actualAppYear;
+	}
+
+	public void setActualAppYear(Integer actualAppYear) {
+		this.actualAppYear = actualAppYear;
 	}
 	
 	public String getResetFormat() {
@@ -411,6 +421,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	public void setComputedYearsRange(Collection<BeanWrapperImpl> computedYearsRange) {
 		this.computedYearsRange = computedYearsRange;
+	}
+
+	public Collection<BeanWrapperImpl> getActualAppYearsRange() {
+		return actualAppYearsRange;
+	}
+	
+	public void setActualAppYearsRange(Collection<BeanWrapperImpl> actualAppYearsRange) {
+		this.actualAppYearsRange = actualAppYearsRange;
 	}
 
 	public Collection<BeanWrapperImpl> getCountYears() {

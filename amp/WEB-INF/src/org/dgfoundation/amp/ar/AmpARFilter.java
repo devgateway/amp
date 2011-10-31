@@ -92,6 +92,9 @@ public class AmpARFilter extends PropertyListable {
 	private Integer computedYear;
 	
 	@PropertyListableIgnore
+	private Integer actualAppYear;
+	
+	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
 	
@@ -657,6 +660,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			}
 		}
 		
+		String ACTUAL_APPROVAL_YEAR_FILTER = "";
+		if (actualAppYear!=null && actualAppYear!=-1) {
+			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE YEAR(actual_approval_date) = " + actualAppYear + " ";
+		}
+		
 		if (locationSelected!=null) {
 			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
 			allSelectedLocations.addAll(locationSelected);
@@ -993,6 +1001,10 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		if (responsibleorg!=null && responsibleorg.size() >0){
 			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
+		}
+		
+		if (actualAppYear!=null && actualAppYear!=-1) {
+			queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
 		}
 		
 		if (governmentApprovalProcedures != null) {
@@ -1694,6 +1706,14 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
+	}
+
+	public Integer getActualAppYear() {
+		return actualAppYear;
+	}
+
+	public void setActualAppYear(Integer actualAppYear) {
+		this.actualAppYear = actualAppYear;
 	}
 
 	/**

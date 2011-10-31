@@ -102,8 +102,8 @@ function showDescriptionToolbox(id){
 <input type="submit" class="buttonx" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
 <input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
 
-<input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
-<input type="button" id="nextSearchButton" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
+<input type="button" id="prevSearchButton" class="buttonx" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
+<input type="button" id="nextSearchButton" class="buttonx" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
 <span id="spanSearchMessage" style="color:red;font-weight:bold;"></span>
 </div></form>
 

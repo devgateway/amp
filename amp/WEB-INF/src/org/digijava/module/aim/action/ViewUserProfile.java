@@ -32,12 +32,15 @@ public class ViewUserProfile
 
         UserDetailForm formBean = (UserDetailForm) form;
         HttpSession httpSession = request.getSession();
-        TeamMember teamMember = (TeamMember) httpSession.getAttribute(
-                "currentMember");
+        
         User user = null;
         Long userid = null;
         String email = "";
+        
+        TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");       
         AmpTeamMember member = null;
+        List<TeamMember> memberInformationn = new ArrayList<TeamMember>();
+        
         if (request.getParameter("id") != null) {
             long id = Long.parseLong(request.getParameter("id"));
             userid = new Long(id);
@@ -47,32 +50,41 @@ public class ViewUserProfile
             user= DbUtil.getUser(email);
             userid = user.getId();
         }
-
-        List<TeamMember> memberInformationn = new ArrayList<TeamMember>();
-        if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
-        else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
         
-        if (member == null && request.getParameter("id") != null) {
-            if (userid.equals(teamMember.getMemberId())) {
-                user = DbUtil.getUser(teamMember.getMemberId());
-                memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
-            } else {
-                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
-                saveErrors(request, errors);
-                return mapping.getInputForward();
-            }
-        } else if (member != null) {
-//        	user = DbUtil.getUser(member.getUser().getId()); 
-//        	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
-//                AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-//                if(organization != null){
-//                	user.setOrganizationName( organization.getName() );
+        if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
+            
+            if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
+            else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
+            
+            if (member == null && request.getParameter("id") != null) {
+                if (userid.equals(teamMember.getMemberId())) {
+                    user = DbUtil.getUser(teamMember.getMemberId());
+                    memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
+                } else {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
+                    saveErrors(request, errors);
+                    return mapping.getInputForward();
+                }
+            } else if (member != null) {
+//            	user = DbUtil.getUser(member.getUser().getId()); 
+//            	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
+//                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
+//                    if(organization != null){
+//                    	user.setOrganizationName( organization.getName() );
+//                    }
+    //
 //                }
-//
-//            }
-        	user = DbUtil.getUser(member.getUser().getId());    
-            if(user!=null) 
-            	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+            	user = DbUtil.getUser(member.getUser().getId());    
+                if(user!=null) 
+                	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+            }
+        }else {
+        	if(user == null){
+        		if (userid!=null) {
+        			user= DbUtil.getUser(userid);
+        			memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+        		}
+        	}
         }
 
 

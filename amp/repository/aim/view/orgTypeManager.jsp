@@ -117,16 +117,72 @@
 											<!-- page logic for pagination -->
 											<logic:notEmpty name="aimOrgTypeManagerForm" property="pages">
 											<tr>
-												<td colspan="4">
+											<td colspan="4">
 													<digi:trn key="aim:organizationPages">
 													Pages :</digi:trn>
-													<logic:iterate name="aimOrgTypeManagerForm" 	property="pages" id="pages" type="java.lang.Integer">
-													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParams1}" property="page"><%=pages%>
-													</c:set>
-													<digi:link href="/orgTypeManager.do" name="urlParams1">
-														<%=pages%>
-													</digi:link> |&nbsp; </logic:iterate>
+													<c:if test="${aimOrgTypeManagerForm.currentPage > 1}">
+														<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParamsFirst}" property="page" value="1"/>
+														<c:set target="${urlParamsFirst}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+															<digi:trn key="aim:firstpage">First Page</digi:trn>
+														</c:set>
+														
+														<digi:link href="/orgTypeManager.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+															&lt;&lt;
+														</digi:link>
+													
+														<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParamsPrevious}" property="page" value="${aimOrgTypeManagerForm.currentPage -1}"/>
+														<c:set target="${urlParamsPrevious}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+															<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+														</c:set>
+														<digi:link href="/orgTypeManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+															&lt;
+														</digi:link>
+														</c:if>
+														
+														<logic:iterate name="aimOrgTypeManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParams1}" property="page"><%=pages%>
+														</c:set>
+														<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+														<c:if test="${aimOrgTypeManagerForm.currentPage == pages}">
+															<font color="#FF0000"><%=pages%></font>
+														</c:if>
+														<c:if test="${aimOrgTypeManagerForm.currentPage != pages}">
+															<c:set var="translation">
+															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+															</c:set>
+															<digi:link href="/orgTypeManager.do" name="urlParams1" title="${translation}" >
+																<%=pages%>
+															</digi:link>
+														</c:if>
+														|&nbsp;
+														</logic:iterate>
+														
+														<c:if test="${aimOrgTypeManagerForm.currentPage != aimOrgTypeManagerForm.pagesSize}">
+															<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParamsNext}" property="page" value="${aimOrgTypeManagerForm.currentPage+1}"/>
+															<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+															<c:set var="translation">
+																<digi:trn key="aim:nextpage">Next Page</digi:trn>
+															</c:set>
+															<digi:link href="/orgTypeManager.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+																&gt;
+															</digi:link>
+															<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+																<c:set target="${urlParamsLast}" property="page" value="${aimOrgTypeManagerForm.pagesSize}"/>
+															<c:set var="translation">
+															<digi:trn key="aim:lastpage">Last Page</digi:trn>
+															</c:set>
+															<digi:link href="/orgTypeManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+																&gt;&gt;  
+															</digi:link>
+															&nbsp;&nbsp;
+														</c:if>
+														<c:out value="${aimOrgTypeManagerForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimOrgTypeManagerForm.pagesSize}"></c:out>
 												</td>
 											</tr>
 											</logic:notEmpty>

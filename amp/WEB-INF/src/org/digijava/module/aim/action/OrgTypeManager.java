@@ -42,15 +42,16 @@ public class OrgTypeManager extends Action {
 					 int page = 0;
 					 
 					 logger.debug("In organisation type manager action");
+					
 					 
 					 if (request.getParameter("page") == null) {
 								page = 1;
 					 } else {
-								/*
-								 * check whether the page is a valid integer
-								 */
-								page = Integer.parseInt(request.getParameter("page"));
+							
+						page = Integer.parseInt(request.getParameter("page"));
 					 }
+					 orgForm.setCurrentPage(page);
+					 
 
 					 Collection orgTypeColl = (Collection) session.getAttribute("ampOrgType");
 					 if (orgTypeColl == null) {
@@ -60,6 +61,7 @@ public class OrgTypeManager extends Action {
 					 
 					 int numPages = orgTypeColl.size() / NUM_RECORDS;
 					 numPages += (orgTypeColl.size() % NUM_RECORDS != 0) ? 1 : 0;
+					 
 
 					 /*
 					  * check whether the numPages is less than the page . if yes return error.
@@ -90,6 +92,8 @@ public class OrgTypeManager extends Action {
 					 
 					 orgForm.setOrganisation(org);
 					 orgForm.setPages(pages);
+					 orgForm.setPagesSize(numPages);
+					 
 					
 					 logger.debug("Organisation Type manager returning");
 					 return mapping.findForward("forward");

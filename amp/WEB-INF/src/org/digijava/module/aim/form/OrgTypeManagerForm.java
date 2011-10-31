@@ -8,7 +8,25 @@ public class OrgTypeManagerForm extends ActionForm {
 
 	private Collection organisation;
 	private Collection pages;
+	private Integer currentPage;
+	private Integer pagesSize;
 	
+	public Integer getPagesSize() {
+		return pagesSize;
+	}
+
+	public void setPagesSize(Integer pagesSize) {
+		this.pagesSize = pagesSize;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
 	public Collection getOrganisation() {
 		 return organisation;
 	}

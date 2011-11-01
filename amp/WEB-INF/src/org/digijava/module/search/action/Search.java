@@ -57,16 +57,16 @@ public class Search extends Action {
 				}
 			}
 
-			if (request.getParameter("ampActivityId") != null) {
+			/*if (request.getParameter("ampActivityId") != null) {
 				Long ampActivityId = Long.parseLong(request
 						.getParameter("ampActivityId"));
 				
 				if (ampActivityId != null) {
 					ActionForward forward = mapping.findForward("redirectActivity");
 					session.setAttribute("returnSearch", true);
-					return new ActionForward(forward.getPath() + "?ampActivityId=" + ampActivityId);
+					return new ActionForward(forward.getPath() + "?public=true~pageId=2~activityId=" + ampActivityId,true);
 				}
-			}
+			}*/
 
 			session.removeAttribute("returnSearch");
 

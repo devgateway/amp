@@ -145,8 +145,8 @@
 								 ${resultFound} <span class="button_green"><digi:trn>Activities</digi:trn></span>
 								<ul>
 									<c:forEach items="${resultActivities}" var="activity">
-										<li><digi:link module="search"
-											href="/search.do?ampActivityId=${activity.ampActivityId}">${activity.objectName}</digi:link>
+										<li><digi:link module="aim"
+											href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectName}</digi:link>
 									</c:forEach>
 								</ul>
 								</div>

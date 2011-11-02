@@ -573,6 +573,14 @@
 									</digi:trn>
 								</font>
 								</span>
+								<br>
+								<span id="incompatiblehierarchies" style="visibility: hidden;">
+								<font color="red">* 
+									<digi:trn key="rep:wizard:hint:notmorehierarchies">
+										You cannot Select Primary and Secondary Sectors as hierarchies
+									</digi:trn>
+								</font>
+								</span>
 							</td>
 						</tr>
 					</table>

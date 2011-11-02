@@ -91,6 +91,13 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		, 'Pledges Type Of Assistance'
 		
 	);
+
+YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
+		 'Primary Sector', 
+		 'Secondary Sector'
+		
+	);
+
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
@@ -107,6 +114,18 @@ function checkIfColIsHierarchy(id) {
 			fgArray	= YAHOO.amp.reportwizard.fundingGroups[ radios[i].value ];
 		}
 	}
+	if (fgArray == null) return false;
+	
+	for (j=0; j<fgArray.length; j++) {
+		if ( fgArray[j]==colName ) 
+			return true;
+	}
+	return false;
+}
+
+function checkincompatiblehierarchies(id){
+	var fgArray	= YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"];
+	var colName	= YAHOO.amp.reportwizard.colIdToName[id];
 	if (fgArray == null) return false;
 	
 	for (j=0; j<fgArray.length; j++) {
@@ -139,6 +158,7 @@ function checkSelectedHierarchies() {
 		}
 			
 	}
+	
 	for ( var i=0; i<srcHiers.length; i++ ) {
 		var isInSelectedColumns = false;
 		for ( var j=0; j<cols.length; j++ ) {
@@ -151,9 +171,7 @@ function checkSelectedHierarchies() {
 			srcHierEl.removeChild( srcHiers[i] );
 			i=i-1;
 		}
-			
 	}
-	
 }
 
 function getColDbId( liEl ) {
@@ -167,6 +185,7 @@ function generateHierarchies(e) {
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var hierUlEl		= document.getElementById("source_hierarchies_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
+
 	for (var i=0; i<items.length; i++ ) {
 		colId	= (items[i].getElementsByTagName("input")[0]).value;
 		if ( checkIfColIsHierarchy(colId) && (document.getElementById('hier_li_'+colId)==null) ) {

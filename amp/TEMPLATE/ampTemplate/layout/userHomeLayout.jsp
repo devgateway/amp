@@ -81,7 +81,7 @@
 		<div class="centering">
 			<div class="breadcrump_cont">
 
-				<%if (arf.isPublicView()==true){%>
+				<%if (arf != null && arf.isPublicView()==true){%>
 				<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 					<tr>
     					<td width="740" valign="top">	
@@ -147,14 +147,14 @@
 				</td>
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">
-						<%if (arf.isPublicView()==false){%>
+						<%if (arf != null && arf.isPublicView()==false){%>
 							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px">
 						<%}%>
 					</a>
 				</td>
 				<td valign="top" width="1px">
 					<%
-               	 	if (arf.isPublicView()==false){%>
+               	 	if (arf != null && arf.isPublicView()==false){%>
 					<div id="rightpanel">
 						<feature:display name="Desktop Search form" module="Tools">
 							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>

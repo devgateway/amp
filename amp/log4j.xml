@@ -19,7 +19,7 @@
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
       <param name="Target" value="System.out"/>
-      <param name="Threshold" value="INFO"/> <!-- set it to TRACE to see hibernate query parameters, INFO is default -->
+      <param name="Threshold" value="DEBUG"/> <!-- set it to TRACE to see hibernate query parameters, INFO is default -->
 
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
@@ -41,7 +41,7 @@
    </category>
 
    <category name="org.digijava"> <!-- DEBUG default -->
-      <priority value="DEBUG"/>
+      <priority value="INFO"/>
    </category>
 
    <category name="org.dgfoundation"> <!-- DEBUG default -->

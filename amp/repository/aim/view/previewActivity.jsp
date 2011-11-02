@@ -512,9 +512,9 @@ function collapseAll() {
 				<digi:trn>Lessons Learned</digi:trn>:&nbsp;<br />
 				<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
 					<bean:define id="lessonsLearnedKey">
-						<b><c:out value="${aimEditActivityForm.identification.lessonsLearned}"/></b>
+						<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
 					</bean:define>
-					<digi:edit key="<%=lessonsLearnedKey%>" />
+					<b><digi:edit key="${lessonsLearnedKey}"></digi:edit></b>
 					<hr />
 				</c:if>
 			</module:display>

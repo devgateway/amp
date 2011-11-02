@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -178,9 +179,27 @@ function deleteEvent(){
 				                <digi:trn key="calendar:Attendee">Attendee</digi:trn>
 				              </td>
 				              <td style="font-family: Arial;font-size:11px;">
-                                  <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
-                                      ${attendee.label}<br/>
-                                  </c:forEach>
+                                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+                                                      <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                                                          <c:if test="${fn:startsWith(attendee.value, 'g:')==false}">
+                                                              ${attendee.label}<br/>
+                                                          </c:if>
+                                                      </c:forEach>      
+				                  </c:if>
+				              </td>
+				            </tr>
+                                            <tr>
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				                <digi:trn>Additional Receivers</digi:trn>:
+				              </td>
+				              <td style="font-family: Arial;font-size:11px;"> 
+				                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+                                                      <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                                                          <c:if test="${fn:startsWith(attendee.value, 'g:')}">
+                                                              ${attendee.label}<br/>
+                                                          </c:if>
+                                                      </c:forEach>      
+				                  </c:if>
 				              </td>
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>

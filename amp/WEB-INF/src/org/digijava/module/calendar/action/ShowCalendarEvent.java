@@ -597,11 +597,11 @@ public class ShowCalendarEvent extends Action {
     					}
     				}
     			}
-                if(!guests.isEmpty()){
+               /* if(!guests.isEmpty()){
                     String guest="---"+TranslatorWorker.translateText("Guest", langCode, site)+"---";
                     selectedAttsCol.add(new LabelValueBean(guest, "guest"));
                     selAtts.add("guest");
-                }
+                }*/
                 for(String guest: guests){
                 	if(guest.indexOf("g:")!=-1){
                 		guest=guest.substring(guest.lastIndexOf("g:")+2);

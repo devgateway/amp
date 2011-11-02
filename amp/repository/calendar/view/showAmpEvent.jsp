@@ -649,7 +649,7 @@ function addContact(contact){
 			guestListItemMarkup.push('<div class="msg_added_cont">');
 			guestListItemMarkup.push('<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
 			guestListItemMarkup.push(filteredGusetId);
-			guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="c:');
+			guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="g:');
 			guestListItemMarkup.push(filteredGusetId);
 			guestListItemMarkup.push('">');
 			guestListItemMarkup.push('</div>');

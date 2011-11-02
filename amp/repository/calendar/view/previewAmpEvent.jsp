@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -232,9 +233,31 @@ function valid(value){
 				              <td>
 				                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
 				                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-				                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" style="font-family: Arial;font-size:11px;"/>
+                                                      <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                                                          <c:if test="${fn:startsWith(attendee.value, 'g:')==false}">
+                                                          <html:option value="${attendee.value}">${attendee.label}</html:option>
+                                                          </c:if>
+                                                      </c:forEach>
+				                    
 				                  </c:if>
 				                </html:select>
+				              </td>
+				            </tr>
+                                             <tr>
+				              <td style="text-align: right;font-family: Arial;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				                <digi:trn>Additional Receivers</digi:trn>:
+				              </td>
+				              <td> 
+				                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+                                                      <div class="msg_added_cont">
+                                                      <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                                                          <c:if test="${fn:startsWith(attendee.value, 'g:')}">${attendee.label}
+                                                            <input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="g:${attendee.value}"><br/>
+                                                          </c:if>
+                                                      </c:forEach>
+                                                      </div>
+				                    
+				                  </c:if>
 				              </td>
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>

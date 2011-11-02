@@ -108,6 +108,27 @@ NormalReportManager.prototype.checkMeasures	= function () {
 NormalReportManager.prototype.checkHierarchies	= function () {
 	var ulEl			= document.getElementById("dest_hierarchies_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
+	var incompatible = false;
+	var imcomplist = new Array();
+	
+	for ( var int = 0; int < items.length; int++) {
+		if (checkincompatiblehierarchies(getColDbId(items[int]))){
+			imcomplist.push(items[int]);
+		}
+		if(imcomplist.length > 1){
+			incompatible = true;
+		}
+	}
+	if (incompatible){
+		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
+		hierarchiesMustEl.style.visibility	= "";
+		this.disableTab(3);
+		return false;
+	}else {
+		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
+		hierarchiesMustEl.style.visibility	= "hidden";
+		this.enableTab(3);
+	}
 	
 	if ( items.length > 3 ) {
 		hierarchiesMustEl					= document.getElementById("hierarchiesMust");
@@ -121,6 +142,7 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 		this.enableTab(3);
 		return true;
 	}
+	
 }
 
 NormalReportManager.prototype.checkColumns	= function () {

@@ -10,13 +10,13 @@
 	</smtp>
 
 	
-    <logon-site id="dglogin" host="amp-login.code.ro">http://94.24.121.110:8080/login</logon-site>
-    <site-domain id="dgDomain" host="http://amp-burkina.local:8080">http://94.24.121.110:8080/</site-domain>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://localhost:8080/login</logon-site>
+    <site-domain id="dgDomain" host="http://amp-burkina.local:8080">http://localhost:8080/</site-domain>
  
     <server-type caseSensitiveTranslatioKeys="false"/>
     
 	<server-type prefix="">development</server-type>
-
+	<track-sessions>false</track-sessions>
 
 	<forward-emails enabled="false">
 		<email>lasha@gateway.ge</email>

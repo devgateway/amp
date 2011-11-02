@@ -24,6 +24,7 @@ import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -103,7 +104,8 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		name.add(nameOnChange);
 		add(name);
 
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("deleteComponent", "Delete Component", "Delete Component") {
+		AmpDeleteLinkField delbutton = new AmpDeleteLinkField(
+				"deleteComponent", "Delete Component") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = componentModel.getObject();
@@ -122,7 +124,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 				target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));
 			}
 		};
-		add(addbutton);
+		add(delbutton);
 		
 		feedbackContainer = new WebMarkupContainer("feedbackContainer");
 		feedbackLabel = new Label("feedbackLabel", new Model(defaultMsg));

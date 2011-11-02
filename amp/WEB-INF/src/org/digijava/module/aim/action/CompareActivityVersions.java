@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -422,7 +423,7 @@ public class CompareActivityVersions extends DispatchAction {
 		// Get data from jsp.
 		ActionErrors errors = new ActionErrors();
 		boolean hasErrors = false;
-		
+			
 		setAdvancemode(vForm, request);
 		
 		List<CompareOutput> auxData = new ArrayList<CompareOutput>();
@@ -432,14 +433,14 @@ public class CompareActivityVersions extends DispatchAction {
 			newOutput.setFieldOutput(auxOutput.getFieldOutput());
 			newOutput.setMandatoryForSingleChangeOutput(auxOutput.getMandatoryForSingleChangeOutput());
 			if (vForm.getMergedValues()[i].equals("L")) {
-				newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1], null });
+				newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1], auxOutput.getOriginalValueOutput()[0] }); //add the left value, remove the one from the right
 			} else if (vForm.getMergedValues()[i].equals("R")) {
-				newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[0], null });
+				newOutput.setOriginalValueOutput(new Object[] { null, null }); //value is in place
 			} else {
 				// The user didn't select a value, then is empty (this is
 				// important because the merged activity is a copy of one of the
 				// compared versions).
-				newOutput.setOriginalValueOutput(new Object[] { null, null });
+				newOutput.setOriginalValueOutput(new Object[] { null, auxOutput.getOriginalValueOutput()[0] }); //remove the one from right 
 
 				// Raise error if mandatory fields have no values.
 				if (newOutput.getMandatoryForSingleChangeOutput()) {
@@ -456,7 +457,8 @@ public class CompareActivityVersions extends DispatchAction {
 			vForm.setMethod("enableMerge");
 			return mapping.findForward("forward");
 		}
-
+		
+		
 		// The main idea is: once we have the collection with fields selected by
 		// the user we need to COPY one of the AmpActivity objects and call the
 		// getters from these fields and push those values into the matching
@@ -479,9 +481,83 @@ public class CompareActivityVersions extends DispatchAction {
 
 			AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
 					.getOldActivity().getAmpActivityId());
+			
+			
+			
+			// Insert fields selected by user into AmpActity properties.
+			Iterator<CompareOutput> iter = auxData.iterator();
+			while (iter.hasNext()) {
+				CompareOutput co = iter.next();
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
+						AmpActivityFields.class, "set");
+				// Get value as object.
+				Object addOriginalValueObject = co.getOriginalValueOutput()[0];
+				Object remOriginalValueObject = co.getOriginalValueOutput()[1];
+				// Check if implements Versionable and call prepareMerge.
+				if (addOriginalValueObject != null) {
+					/* cloning of whole activity is done later
+					if (ActivityVersionUtil.implementsVersionable(addOriginalValueObject.getClass().getInterfaces())) {
+						Versionable auxVersionableValueObject = (Versionable) addOriginalValueObject;
+						addOriginalValueObject = auxVersionableValueObject.prepareMerge(auxActivity);
+					}
+					*/
+					Class[] params = auxMethod.getParameterTypes();
+					if (params != null && params[0].getName().contains("java.util.Set")) {
+						Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
+								AmpActivityVersion.class, "get");
+						Set auxSet = (Set) auxGetMethod.invoke(oldActivity);
+						if (auxSet == null) {
+							auxSet = new HashSet();
+						}
+						auxSet.add(addOriginalValueObject);
+						auxMethod.invoke(oldActivity, auxSet);
+					} else {
+						auxMethod.invoke(oldActivity, addOriginalValueObject);
+					}
+					//session.update(auxActivity);
+				}
+				
+				if (remOriginalValueObject != null){
+					Class[] params = auxMethod.getParameterTypes();
+					if (params != null && params[0].getName().contains("java.util.Set")) {
+						Class clazz = remOriginalValueObject.getClass();
+						String idProperty = session.getSessionFactory().getClassMetadata(clazz)
+						.getIdentifierPropertyName();
+						
+						Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
+						Long remId = (Long) method.invoke(remOriginalValueObject);
+
+						Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
+								AmpActivityVersion.class, "get");
+						Set auxSet = (Set) auxGetMethod.invoke(oldActivity);
+						if (auxSet != null) {
+							Iterator it = auxSet.iterator();
+							while (it.hasNext()) {
+								Object tmp = (Object) it.next();
+								Long tmpId = (Long) method.invoke(tmp);
+								
+								if (tmpId.compareTo(remId) == 0){
+									it.remove();
+									break;
+								}
+							}
+						}
+						auxMethod.invoke(oldActivity, auxSet);
+					}
+					else{
+						if (addOriginalValueObject == null){
+							// this is the case where no value was selected;
+							auxMethod.invoke(oldActivity, (Object)null);
+						}
+					}
+				}
+			}
+			
 			AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
 			auxActivity.setAmpActivityId(null);
 
+			session.evict(oldActivity);
+			
 			// Code related to versioning.
 			AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, vForm
 					.getOldActivity().getAmpActivityGroup().getAmpActivityGroupId());
@@ -495,43 +571,12 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setMergeSource1(vForm.getActivityOne());
 			auxActivity.setMergeSource2(vForm.getActivityTwo());
 			session.save(auxActivity);
-			
+
 			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
 			auxActivity.setAmpId(ampId);
-			// Insert fields selected by user into AmpActity properties.
-			Iterator<CompareOutput> iter = auxData.iterator();
-			while (iter.hasNext()) {
-				CompareOutput co = iter.next();
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
-						AmpActivityFields.class, "set");
-				// Get value as object.
-				Object auxOriginalValueObject = co.getOriginalValueOutput()[0];
-				// Check if implements Versionable and call prepareMerge.
-				if (auxOriginalValueObject != null) {
-					if (ActivityVersionUtil.implementsVersionable(auxOriginalValueObject.getClass().getInterfaces())) {
-						Versionable auxVersionableValueObject = (Versionable) auxOriginalValueObject;
-						auxOriginalValueObject = auxVersionableValueObject.prepareMerge(auxActivity);
-					}
-					Class[] params = auxMethod.getParameterTypes();
-					if (params != null && params[0].getName().contains("java.util.Set")) {
-						Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
-								AmpActivityVersion.class, "get");
-						Set auxSet = (Set) auxGetMethod.invoke(auxActivity);
-						if (auxSet == null) {
-							auxSet = new HashSet();
-						}
-						auxSet.add(auxOriginalValueObject);
-						auxMethod.invoke(auxActivity, auxSet);
-					} else {
-						auxMethod.invoke(auxActivity, auxOriginalValueObject);
-					}
-					session.update(auxActivity);
-				}
-			}
-			
 			session.update(auxActivity);
-//session.flush();
-			//tx.commit();
+			
+					
 			logger.warn("Activity Saved.");
 		} catch (Exception e) {
 			logger.error(e);

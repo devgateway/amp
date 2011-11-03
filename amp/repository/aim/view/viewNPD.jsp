@@ -167,6 +167,7 @@ background-color:#FFFFFF;
 	<!-- MAIN CONTENT PART START -->
 
 	<table cellspacing="0" cellpadding="0" border="0" align="center" width="1000">
+            <tr>
 		<td valign="top" align="left">
 		<div id="content" class="yui-skin-sam">
 		<div id="demo" class="yui-navset">
@@ -323,7 +324,7 @@ background-color:#FFFFFF;
 					</div>
 					</td>
 				</tr>
-		</table>
+		</table>                          
 		</fieldset>
 		</div>
 		<!-- MAIN CONTENT PART END --> <input type="hidden" id="hdYears"
@@ -334,4 +335,7 @@ background-color:#FFFFFF;
 			id="npdChartMap">
 		</map> </span></div>
 		</div>
+                </td>
+                </tr>
+        </table>
 		</digi:form>

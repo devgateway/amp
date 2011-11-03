@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -136,6 +137,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 					tmp = "<font color=\"red\">*</font>" + tmp;
 					titleLabel.setEscapeModelStrings(false);
 					titleLabel.setDefaultModelObject(tmp);
+					titleLabel.add(new AttributeAppender("style", new Model("margin-left:-5px"), ";"));
 				}
 			};
 		};

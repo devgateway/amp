@@ -192,7 +192,7 @@ function closeWindow() {
 
   <table  bgcolor="#F8F8F8" cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr  bgcolor="#4A687A">
-      <td vAlign="center" width="100%" align ="center"  style="color: #FFF">
+      <td vAlign="center" width="100%" align ="center"  style="color: #FFF;font-family:verdana;font-size:12px;">
       <b><digi:trn key="aim:addnewindicator">Add New Indicator</digi:trn></b>
       </td>
     </tr>
@@ -204,7 +204,7 @@ function closeWindow() {
     <tr align="center"  bgcolor="#F8F8F8">
        
       <td>
-        <table border="0">
+          <table border="0" class="inside">
         <field:display name="Admin Indicator name" feature="Admin"></field:display>
           <tr id="trName">
             <td>

@@ -32,7 +32,7 @@
                                                           <c:forEach var="activitySectors" items="${aimNewIndicatorForm.activitySectors}">
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
+                                                                  <table width="100%" cellspacing="1" border="0" cellpadding="1" vAlign="top" align="left" class="inside">
                                                                   <tr bgcolor="#F8F8F8">
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySector">

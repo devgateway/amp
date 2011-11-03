@@ -32,10 +32,10 @@
 		
 	
 	</TITLE>
-	<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+
 	<style type="text/css">
-	html{background:none;width:100%;}
-	body{background:none;}
+           table.inside {border-color: #CCC; border-style: solid; font-size:11px;}
+	.buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 	</style>
 </head>
 <body bgcolor="#ffffff">

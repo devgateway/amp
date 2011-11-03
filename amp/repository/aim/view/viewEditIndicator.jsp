@@ -212,7 +212,7 @@ function closeWindow() {
 
   <table bgcolor="#F8F8F8" cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr bgcolor="#4A687A" >
-      <td colspan="1" align="center" style="color: #FFF">
+      <td colspan="1" align="center" style="color: #FFF;font-family:verdana;font-size:12px;">
       <b><digi:trn key="aim:vieweditindicator">View/Edit Indicator</digi:trn></b>
       </td>
     </tr>
@@ -223,7 +223,7 @@ function closeWindow() {
     </tr>
     <tr align="center" bgcolor="#F8F8F8">
       <td>
-        <table border="0">
+          <table border="0" class="inside">
           <tr id="trName">
             <td>
             <b style="color: red;">*</b> <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>

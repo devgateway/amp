@@ -126,7 +126,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		
 		setOutputMarkupId(true);
 		this.fmName = fmName;
-		titleLabel = new TrnLabel("fieldLabel", fmName);
+		
+		titleLabel = new TrnLabel("fieldLabel", fmName){
+			@Override
+			protected void onBeforeRender() {
+				super.onBeforeRender();
+				if (formComponent!=null && formComponent.isRequired()){
+					String tmp = (String) titleLabel.getDefaultModelObject();
+					tmp = "<font color=\"red\">*</font>" + tmp;
+					titleLabel.setEscapeModelStrings(false);
+					titleLabel.setDefaultModelObject(tmp);
+				}
+			};
+		};
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");

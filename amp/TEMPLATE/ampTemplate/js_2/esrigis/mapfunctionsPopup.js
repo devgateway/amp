@@ -32,7 +32,7 @@ function init() {
 	loading.hidden = true;
 	
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
-	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
+	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map/MapServer";
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
 

@@ -46,7 +46,7 @@ function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer";
-	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
+	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map/MapServer";
 	var povertyratesurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
 	var population = "http://4.79.228.117:8399/arcgis/rest/services/LiberiaPopulaitionDensity/MapServer";
 	
@@ -162,6 +162,7 @@ function createMapAddLayers(myService1, myService2) {
  * 
  * @param id
  */
+var indicatoractive = false;
 function toggleindicatormap(id) {
 	  var layer = map.getLayer(id);
 	  var functionalayer = map.getLayer('liberia');
@@ -169,10 +170,12 @@ function toggleindicatormap(id) {
 	    layer.hide();
 	    $('#legendDiv').hide('slow');
 	    functionalayer.show();
-	  } else {
+	    indicatoractive = false;
+	  } else if (!indicatoractive) {
 	    layer.show();
 	    $('#legendDiv').show('slow');
 	    functionalayer.hide();
+	    indicatoractive = true;
 	  }
 	}
 
@@ -690,7 +693,7 @@ function getHighlights(level) {
 var currentLevel;
 function MapFindLocation(level){
 	showLoading();
-	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
+	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map/MapServer/" + level.mapId);
     var query = new esri.tasks.Query();
     query.where = level.mapField + " <> ''";
     query.outSpatialReference = {wkid:map.spatialReference.wkid};
@@ -1061,7 +1064,7 @@ function showAddActivityInfoWindow (results) {
 function MapFindPoint(level, evt){
 	searchpoint = evt;
 	showLoading();
-	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
+	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map/MapServer/" + level.mapId);
     var query = new esri.tasks.Query();
     query.geometry = evt.mapPoint;
     query.outSpatialReference = {wkid:map.spatialReference.wkid};

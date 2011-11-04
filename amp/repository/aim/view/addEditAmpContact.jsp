@@ -314,7 +314,7 @@
 				property.name=collectionName+"["+index+"].value";
 	       		if(dataName=='phone'){
 	       			var select=document.createElement("select");
-					select.className="nputx insidex address-title";
+					select.className="inputx insidex address-title";
 					select.id="phoneType_"+index;
 					select.name="phones["+index+"].phoneTypeId";
 					var optionNone=document.createElement("option");
@@ -368,7 +368,9 @@
 				addAddLink=true;
 			}
 			var place=div.parentNode;
+			$("#"+dataName+"Btn").die();
 			place.removeChild(div); 
+			
 			var count=$("input[name^='"+collectionName+"[']").each(function(index) { 
 				     this.parentNode.id="div_"+dataName+"_"+index;
 				     this.nextSibling.href="javascript:removeData('"+dataName+"',"+index+")";
@@ -380,12 +382,11 @@
 				     }
 				     else{
 				    	  this.id=dataName+"_"+index; 
-				     }
-				     if(addAddLink){
-				    	var newLink=createAddLink(dataName);
+				     } 
+				     if(index==0&&addAddLink){
+				    	 var newLink=createAddLink(dataName);
 						this.parentNode.appendChild(newLink);
 				     }
-				     
 				  });
 			if(count.length==0){
 				$("#"+dataName+"BtnEmpty").show(); 
@@ -625,9 +626,9 @@
 												<td valign="top" class="t_mid"><b style="padding-left:5px;"><digi:trn>Lastname</digi:trn></b><b style="color: rgb(255, 0, 0);">*</b>:<br />
 											  		<html:text property="lastname" styleId="lastname" size="33"	styleClass="inputx insidex" readonly="${readonly}"/>
 											  	</td>
-											  	<td valign="top" class="t_mid" id="faxesPlace" style="padding-left:5px;"><b><digi:trn>Fax</digi:trn>:</b><br />
-											  	<a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b" style="display:none"> ${trnadd}</a>
+											  	<td valign="top" class="t_mid" id="faxesPlace" style="padding-left:5px;"><b><digi:trn>Fax</digi:trn>:</b><br />  
 											  		<logic:notEmpty name="addressbookForm" property="faxes">
+											  			<a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b" style="display:none"> ${trnadd}</a>
 														<logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 															<div id="div_fax_${ctr}">
 																<html:text name="addressbookForm" property="faxes[${ctr}].value" size="33" styleClass="inputx insidex" styleId="fax_${ctr}"/>																												                    																												                    

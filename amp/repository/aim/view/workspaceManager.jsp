@@ -353,15 +353,20 @@
             this.myDataTable.focus(); 
             var second=false;
             this.myDataTable.subscribe('postRenderEvent',function(oArgs){
-            
-if(second){
-    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
-second=false;
-}
+			if(second){
+			    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
+				second=false;
+			}
             
             if(added=="true"){
-               myPaginator.setPage(${aimWorkspaceForm.currentPage});
-               second=true;
+				if(${aimWorkspaceForm.currentPage}!=1){
+					myPaginator.setPage(${aimWorkspaceForm.currentPage});
+					second=true;
+				}
+				else{
+					this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
+					second=false;
+				} 
                added="false";
             }
             });

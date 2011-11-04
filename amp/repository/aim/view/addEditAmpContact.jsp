@@ -381,7 +381,7 @@
 				     else{
 				    	  this.id=dataName+"_"+index; 
 				     }
-				     if(index==0&&addAddLink){
+				     if(addAddLink){
 				    	var newLink=createAddLink(dataName);
 						this.parentNode.appendChild(newLink);
 				     }
@@ -587,6 +587,10 @@
 												</td>
 												<td valign="top" class="t_mid" id="phonesPlace" style="padding-left:5px;"><b><digi:trn>Phone Number</digi:trn>:</b><br />
 													<logic:notEmpty name="addressbookForm" property="phones">
+														<c:set var="trnadd">
+															<digi:trn>Add</digi:trn>
+														</c:set>
+														<a id="phoneBtnEmpty" href="#" onclick="addNewData('phone');return false;" class="l_mid_b" style="display:none">${trnadd}</a>
 														<logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 															<div id="div_phone_${ctr}">
 																<c:set var="translationNone">
@@ -622,6 +626,7 @@
 											  		<html:text property="lastname" styleId="lastname" size="33"	styleClass="inputx insidex" readonly="${readonly}"/>
 											  	</td>
 											  	<td valign="top" class="t_mid" id="faxesPlace" style="padding-left:5px;"><b><digi:trn>Fax</digi:trn>:</b><br />
+											  	<a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b" style="display:none"> ${trnadd}</a>
 											  		<logic:notEmpty name="addressbookForm" property="faxes">
 														<logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 															<div id="div_fax_${ctr}">
@@ -647,6 +652,7 @@
 											<tr>
 												<td valign="top" class="t_mid" id="emailsPlace"><b style="padding-left:5px;"><digi:trn>Email</digi:trn></b>:<br />
 											    	<logic:notEmpty name="addressbookForm" property="emails">
+											    	<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b" style="display:none">${trnadd}</a>
 														<logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
 															<div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
 															 	<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 

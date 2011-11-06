@@ -690,7 +690,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
 					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft is true) ");break;
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
-					actStatusValue.append(" (approval_status='started' and draft<>1)");break;
+					actStatusValue.append(" (approval_status='started' and draft <> true)");break;
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
 					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft is true ) ");break;
 				case 4://Validated Activities 

@@ -1,1 +1,0 @@
-update amp_columns set description='Cumulative Disb/Cumulative Commit * 100 / Number of Activities' where columnName='Average Disbursement Rate';

@@ -1,1 +1,0 @@
-update amp_columns set extractorView=null where extractorView='';

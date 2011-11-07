@@ -264,11 +264,12 @@ public class GetFoundingDetails extends Action {
 
                                 BigDecimal selValue = null;
 
-                                if (filterForm.getFundingType().equals("commitment")) {
+                                String fundingType = filterForm.getFundingType() != null ? filterForm.getFundingType() : "commitment";
+                                if (fundingType.equals("commitment")) {
                                     selValue = fData.getCommitment();
-                                } else if (filterForm.getFundingType().equals("disbursement")) {
+                                } else if (fundingType.equals("disbursement")) {
                                     selValue = fData.getDisbursement();
-                                } else if (filterForm.getFundingType().equals("expenditure")) {
+                                } else if (fundingType.equals("expenditure")) {
                                     selValue = fData.getExpenditure();
                                 }else{
                                     selValue = new BigDecimal("0");

@@ -12,12 +12,9 @@
 
 
 <field:display feature="${largeTextFeature}" name="${largeTextLabel}">
-	<tr>
-		<td class="prv_left" align=right><digi:trn
-			key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn></td>
-		<td class="prv_right"><c:if
-			test="${largeTextKey!=null}">
-			<digi:edit key="${largeTextKey}"></digi:edit>
-		</c:if>&nbsp;</td>
-	</tr>
+	<digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn>
+	<c:if test="${largeTextKey!=null}">
+		<digi:edit key="${largeTextKey}"></digi:edit>
+	</c:if>
+	<hr />
 </field:display>

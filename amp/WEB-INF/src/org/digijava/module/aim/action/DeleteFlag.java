@@ -35,13 +35,13 @@ public class DeleteFlag extends Action {
                 AmpSiteFlag siteFlag = null;
                 siteFlag = FeaturesUtil.getAmpSiteFlag(cId);
                 if (siteFlag != null) {
-                    siteFlag = new AmpSiteFlag();
-                    byte[] image = FeaturesUtil.getFlag(fuForm.getCountryId());
-
-                    siteFlag.setFlag(image);
-
-                    siteFlag.setCountryId(cId);
-                    siteFlag.setDefaultFlag(false);
+//                    siteFlag = new AmpSiteFlag();
+//                    byte[] image = FeaturesUtil.getFlag(fuForm.getCountryId());
+//
+//                    siteFlag.setFlag(image);
+//
+//                    siteFlag.setCountryId(cId);
+//                    siteFlag.setDefaultFlag(false);
                     DbUtil.delete(siteFlag);
                 }
             } else {

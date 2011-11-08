@@ -1010,9 +1010,12 @@ function removeGuest(obj) {
 			                                          </c:if>
 													  <br />
 													  <html:hidden name="calendarEventForm" property="privateEvent"/>
-			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" /> 
+			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" />
 				                                          <c:if test="${!calendarEventForm.privateEvent }">
-				                                          	CHECKED				                                          </c:if>                                          
+				                                          	<script language="Javascript">
+				                                          		document.getElementsByName("privateEventCheckbox")[0].checked = true
+				                                          	</script>
+				                                          </c:if>                                          
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>											</td>
 			                    		<td width="2%">&nbsp;</td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			

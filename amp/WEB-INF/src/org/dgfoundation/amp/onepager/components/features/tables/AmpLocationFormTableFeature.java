@@ -89,7 +89,7 @@ public class AmpLocationFormTableFeature extends
 				"uniqueLocationsValidator", listModel, "uniqueLocationsValidator") {
 			@Override
 		 	public Object getIdentifier(AmpActivityLocation t) {
-				return t.getLocation().getName();
+				return t.getLocation().getLocation().getName();
 		 	}	
 		};
 

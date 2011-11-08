@@ -34,15 +34,27 @@ function changeState() {
 	}
 	document.getElementById('filterForm').submit();
 } 
-
+function getElementsByName_iefix(tag, name) {
+    var elem = document.getElementsByTagName(tag);
+    var arr = new Array();
+    for(i = 0,iarr = 0; i < elem.length; i++) {
+         att = elem[i].getAttribute("name");
+         if(att == name) {
+              arr[iarr] = elem[i];
+              iarr++;
+         }
+    }
+    return arr;
+}
 function changeDonorsAndEventTypesState(){
 	changeDonorsState();
 	changeEventTypesState();
 	var form = document.getElementById('filterForm');
-	var yearlyView = document.getElementsByName('year_tab')[0];
-	var monthlyView = document.getElementsByName('month_tab')[0];
-	var weeklyView = document.getElementsByName('week_tab')[0];
-	var daylyView = document.getElementsByName('day_tab')[0];
+	
+	var yearlyView = getElementsByName_iefix('div', 'year_tab')[0];
+	var monthlyView = getElementsByName_iefix('div', 'month_tab')[0];
+	var weeklyView = getElementsByName_iefix('div', 'week_tab')[0];
+	var daylyView = getElementsByName_iefix('div', 'day_tab')[0];
 	var view='';
 	if (yearlyView.className.indexOf('active')!=-1){
 		view='yearly';

@@ -186,11 +186,11 @@ public class ContactInfoUtil {
 			queryString="select cont from " + AmpContact.class.getName() +" cont ";
 			//filter
 			if(keyword!=null && alpha!=null){
-				queryString+=" where cont.name like '"+alpha+"%' and concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+				queryString+=" where lower(cont.name) like lower('"+alpha+"%') and concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
 			}else if(keyword!=null && alpha == null){
 				queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
 			}else if (keyword==null && alpha!=null){
-				queryString+=" where cont.name like '"+alpha+"%'";
+				queryString+=" where lower(cont.name) like lower('"+alpha+"%')";
 			}
 			//sort
 			if(sortBy!=null && sortDir!=null){

@@ -53,8 +53,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityProgram>());
 		
-		
-		final IModel<AmpActivityProgramSettings> programSettings = PersistentObjectModel.getModel(ProgramUtil.getAmpActivityProgramSettings(programSettingsString));
+		AmpActivityProgramSettings setting=ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
+		final IModel<AmpActivityProgramSettings> programSettings = (setting!=null)?PersistentObjectModel.getModel(setting):null;
 
 		AbstractReadOnlyModel<List<AmpActivityProgram>> listModel = new AbstractReadOnlyModel<List<AmpActivityProgram>>() {
 			private static final long serialVersionUID = 1L;
@@ -64,7 +64,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				Set<AmpActivityProgram> allProgs = setModel.getObject();
 				Set<AmpActivityProgram> specificProgs = new HashSet<AmpActivityProgram>();
 				
-				if (programSettings.getObject() != null && allProgs!=null){
+				if (programSettings!=null&&programSettings.getObject() != null && allProgs!=null){
 					Iterator<AmpActivityProgram> it = allProgs.iterator();
 					while (it.hasNext()) {
 						AmpActivityProgram prog = (AmpActivityProgram) it.next();

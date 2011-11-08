@@ -351,9 +351,9 @@ function valid(value){
 					              	<td>
 					              	</td>
 					              	<td>
-				                		<input type="submit" style="width: 110px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
+				                		<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
 				                		&nbsp;
-										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
+										<input class="buttonx" type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
 									</td>
 								</tr>
 				            </c:if>

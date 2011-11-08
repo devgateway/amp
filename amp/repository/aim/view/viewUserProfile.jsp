@@ -23,7 +23,7 @@ function unload() {
 </script>
 
 <style>
-body table {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+table {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
 table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:12px;}
 table.inside1, td.inside1 {border: 0; font-size:12px;}
 table.inside, td.inside_zebra {}
@@ -45,7 +45,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 <digi:errors/>
 
 
-					<body bgcolor="#FFFFFF"><table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
 							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
@@ -119,18 +119,24 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 								<digi:trn key="aim:teamsAssociatedWith" ><b>Teams Associated with</b></digi:trn>
 							</td>
 						</tr>
+						
 						<tr>
-							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+						<td colspan="2">
+						<div style="overflow: auto; height: 250px">
+						<table width="100%" class="inside">
+						<tr>
+							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="width:60%">
 								<digi:trn key="aim:teamName">Team Name</digi:trn>
 							</td>
 							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:role">Role</digi:trn>
 							</td>
 						</tr>
+						
 						<c:forEach var="teamMemberDetail" items="${aimUserDetailForm.teamMemberTeamHelpers}">
 							
 							<tr>
-                                                            <td class="inside">
+                                                            <td class="inside" style="width:60%">
                                                                 ${teamMemberDetail.teamName}
                                                             </td>
 							<td class="inside">
@@ -140,6 +146,10 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 								
 						
 						</c:forEach>
+						</table>
+						</div>
+						</td>
+						</tr>
 						</table>
 
 <br>					

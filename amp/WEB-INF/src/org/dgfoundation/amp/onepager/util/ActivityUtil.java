@@ -184,11 +184,14 @@ public class ActivityUtil {
 	}
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity) {
-		String validation = org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(ampCurrentMember.getAmpTeam().getAmpTeamId()).getValidation();
+		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
+		Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
+		
+		String validation=org.digijava.module.aim.util.DbUtil.getTeamAppSettingsMemberNotNull(activityTeamId).getValidation();
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
 		boolean teamLeadFlag    = (role.getTeamHead()!=null && role.getTeamHead())||role.isApprover() ;
-		if(teamLeadFlag){
+		if(teamLeadFlag && activityTeamId.equals(teamMemberTeamId)){
 			if(draft){
 				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}
@@ -239,8 +242,8 @@ public class ActivityUtil {
 					}
 					
 				}
-			
-		}		
+		}
+				
 	}
 
 	/**

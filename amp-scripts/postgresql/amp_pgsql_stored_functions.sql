@@ -34,9 +34,13 @@ CREATE FUNCTION getexchange(currency character, cdate timestamp without time zon
     LANGUAGE plpgsql
     AS $$
 declare r double precision;
-BEGIN
-if currency='USD' then return 1;
-end if;
+declare base_curr char(3);
+ BEGIN
+ select settingsValue into base_curr from amp_global_settings where settingsName='Base Currency';
+ if base_curr is null then 
+ 	base_curr := 'USD';
+ end if;
+ if currency=base_curr then return 1;
 select exchange_rate into r from amp_currency_rate where to_currency_code=currency and exchange_rate_date=cdate;
 if r is not null then return r;
 end if;

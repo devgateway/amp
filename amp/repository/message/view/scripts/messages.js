@@ -580,7 +580,7 @@
 					}			
 				//messages end
 				
-				//pagination start			
+				//pagination start
 				if(paginationTag!=null){
 					var paginationParams=paginationTag.childNodes[0];
 					var doMsgsExist=paginationParams.getAttribute('messagesExist');	
@@ -589,6 +589,11 @@
 						var allPages=paginationParams.getAttribute('allPages');
 						var lastPage=paginationParams.getAttribute('lastPage');
 						setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
+					}else{
+						var paginationTR=document.getElementById('paginationPlace');
+						while(paginationTR.firstChild != null){
+							paginationTR.removeChild(paginationTR.firstChild);
+						}
 					}				
 				}
 				//pagination end

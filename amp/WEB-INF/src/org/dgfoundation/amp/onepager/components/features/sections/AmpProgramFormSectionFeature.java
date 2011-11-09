@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpProgramFormTableFeature;
@@ -28,24 +29,24 @@ public class AmpProgramFormSectionFeature extends
 		AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
 		AmpProgramFormTableFeature npdTable = new AmpProgramFormTableFeature(
 				"npoTable", "National Plan Objective", am, ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
-		add(npdTable);
-		if(npd==null){
-			npdTable.setVisible(false);
-		}
+		if(npd==null)
+			add(new EmptyPanel("npoTable"));
+		else
+			add(npdTable);
 		AmpActivityProgramSettings pp=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpProgramFormTableFeature ppTable = new AmpProgramFormTableFeature(
 				"ppTable", "Primary Programs", am, ProgramUtil.PRIMARY_PROGRAM);
-		add(ppTable);
-		if(pp==null){
-			ppTable.setVisible(false);
-		}
-		AmpActivityProgramSettings  sp=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+		if(pp==null)
+			add(new EmptyPanel("ppTable"));
+		else
+			add(ppTable);
+		AmpActivityProgramSettings  sp=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
 		AmpProgramFormTableFeature spTable = new AmpProgramFormTableFeature(
 				"spTable", "Secondary Programs", am, ProgramUtil.SECONDARY_PROGRAM);
-		add(spTable);
-		if(sp==null){
-			spTable.setVisible(false);
-		}
+		if(sp==null)
+			add(new EmptyPanel("spTable"));
+		else
+			add(spTable);
 		add(new AmpTextAreaFieldPanel<String>("description",
 				new PropertyModel<String>(am, "programDescription"),
 				"Program Description", true, AmpFMTypes.MODULE));

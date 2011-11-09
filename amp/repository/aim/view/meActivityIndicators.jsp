@@ -414,8 +414,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 											</logic:notEmpty>
 
                                  
-						</td>
-					</tr>
+                                                                        </table>						
 </div>
                                 </div>
 										<tr>

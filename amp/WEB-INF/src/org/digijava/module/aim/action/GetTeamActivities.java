@@ -104,7 +104,7 @@ public class GetTeamActivities
                 }
 
                 page = (page < 0) ? 1 : page;
-                taForm.setPage(page);
+               // taForm.setPage(page);
 
                 AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
                 taForm.setTeamId(id);
@@ -175,10 +175,17 @@ public class GetTeamActivities
                 if(numRecords== -1 ){
                 	numRecords = totActivities;
                 }
+                int numPages = totActivities / numRecords;
+                numPages += (totActivities % numRecords != 0) ? 1 : 0;
+                if(numPages<page){
+                    page--;
+                }
+                
                 int stIndex = ((page - 1) * numRecords) + 1;
                 int edIndex = 1;
                 if(page != 0) edIndex = page * numRecords;
                 else edIndex = numRecords;
+                          
                 edIndex = (edIndex > totActivities) ? totActivities : edIndex;
                 if (stIndex<1) stIndex=1;
                 Vector vect = new Vector();
@@ -189,9 +196,7 @@ public class GetTeamActivities
                     taForm.getActivities().add(vect.get(i));
                 }
 
-                int numPages = totActivities / numRecords;
-                numPages += (totActivities % numRecords != 0) ? 1 : 0;
-
+               
                 Collection pages = null;
                 if(numPages > 1) {
                     pages = new ArrayList();

@@ -571,19 +571,47 @@ function addOrganisation(orgId, orgName){
 		  		list.options[i].selected = true;
 		  	}
 		}
-			  
-		document.getElementById('hdnMethod').value = 'save';
-		<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
-//		document.calendarEventForm.action = "<%=sendEvent %>";
-//		document.calendarEventForm.target = "_self";
-//		document.calendarEventForm.submit();
-		
-		var eventForm = document.getElementById("showAmpEventFormID");
-		eventForm.action = "<%=sendEvent %>"; 
-		eventForm.target = "_self";
-		eventForm.submit();	
-		
+
+		if (validateDates()){ 
+			document.getElementById('hdnMethod').value = 'save';
+			<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
+	//		document.calendarEventForm.action = "<%=sendEvent %>";
+	//		document.calendarEventForm.target = "_self";
+	//		document.calendarEventForm.submit();
+			
+			var eventForm = document.getElementById("showAmpEventFormID");
+			eventForm.action = "<%=sendEvent %>"; 
+			eventForm.target = "_self";
+			eventForm.submit();	
+		}
   }	  
+
+function validateDates(){
+	var startDate = document.getElementById("selectedStartDate").value;
+   	var endDate = document.getElementById("selectedEndDate").value; 
+   	var startHour = 1*(document.getElementById("selectedStartHour").value);
+   	var endHour = 1*(document.getElementById("selectedEndHour").value); 
+   	var startMin = 1*(document.getElementById("selectedStartMinute").value);
+   	var endMin = 1*(document.getElementById("selectedEndMinute").value); 
+   	//alert ("startDate: " + startDate + " -- "+"startHour: " + startHour + " -- "+"startMin: " + startMin + " -- "+"endDate: " + endDate + " -- "+"endHour: " + endHour + " -- "+"endMin: " + endMin + " -- ");
+	if (compareDates(startDate, endDate, false)==1){
+		alert ('<digi:trn jsFriendly="true">End Date Should Be Greater Than Start Date</digi:trn>');
+        return false;
+	}
+	if (compareDates(startDate, endDate, false)==0){
+		if (endHour < startHour){
+			alert ('<digi:trn jsFriendly="true">End Date Should Be Greater Than Start Date</digi:trn>');
+	        return false;
+		}
+		if (endHour == startHour){
+			if ((endMin < startMin) || (endMin == startMin)){
+				alert ('<digi:trn jsFriendly="true">End Date Should Be Greater Than Start Date</digi:trn>');
+		        return false;
+			}
+		}
+	}
+	return true;
+}
 	
   function setMethod(mth){
     var h=document.getElementById("hdnMethod");
@@ -615,6 +643,30 @@ function submitForm(thisform){
 //	document.calendarEventForm.submit();
 }
 
+function compareDates(date1, date2, diffDate)
+{
+    var dt1  = parseInt(date1.substring(0,2),10);
+    var mon1 = parseInt(date1.substring(3,5),10);
+    var yr1  = parseInt(date1.substring(6,10),10);
+    var dt2  = parseInt(date2.substring(0,2),10);
+    var mon2 = parseInt(date2.substring(3,5),10);
+    var yr2  = parseInt(date2.substring(6,10),10);
+    var date1 = new Date(yr1, mon1, dt1);
+    var date2 = new Date(yr2, mon2, dt2);
+    if (diffDate){
+		return Math.abs(date1-date2);
+    } else {
+    	if(date2-0 < date1-0)
+	    {
+	        return 1;
+	    } else if (date2-0 > date1-0) {
+	        return -1;
+	    } else if (date2-0 == date1-0) {
+	        return 0;
+	    }
+	    return null;
+    }
+}
 
 </script>
 
@@ -1209,7 +1261,7 @@ function removeGuest(obj) {
 			                          		<input type="submit" class="buttonx" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 &nbsp;			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
-			                            	<input type="submit" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 &nbsp;			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
 			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>

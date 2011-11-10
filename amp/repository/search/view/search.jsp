@@ -169,7 +169,8 @@
 							<ul>
 								<c:forEach items="${resultReports}" var="report">
 									<li><a
-										title="<digi:trn>Click here to view the tab</digi:trn>"
+										title="<digi:trn>Click here to view the report</digi:trn>"
+										onclick="return popup(this,'');"
 										href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectName}</a>
 								</c:forEach>
 							</ul>

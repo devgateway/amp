@@ -51,9 +51,15 @@ public class Search extends Action {
 				if (ampReportId != null) {
 
 					AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
-					//Using the filter facility to show the tab in the desktop
 					session.setAttribute("filterCurrentReport", rep);
-					return mapping.findForward("redirectTab");
+					if (rep.getDrilldownTab())
+					{
+						return mapping.findForward("redirectTab");
+					}
+					else
+					{
+						return mapping.findForward("redirectReport");
+					}
 				}
 			}
 

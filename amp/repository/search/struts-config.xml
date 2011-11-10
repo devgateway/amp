@@ -11,6 +11,7 @@
 			type="org.digijava.module.search.action.Search">
 			<forward name="forward" path="/showLayout.do?layout=search" />
 			<forward name="redirectTab" path="/aim/viewMyDesktop.do" />
+			<forward name="redirectReport" path="/aim/viewNewAdvancedReport.do" />
 			<forward name="redirectActivity" path="/aim/selectActivityTabs.do" redirect="true" />
 		</action>
 	</action-mappings>

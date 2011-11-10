@@ -29,7 +29,6 @@
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <digi:instance property="aimTeamReportsForm" />
-<html:hidden property="action"/>
 
 <c:if test="${aimTeamReportsForm.showTabs}">
 	<c:set var="translation">
@@ -53,6 +52,7 @@
 	<jsp:include page="tabManager/tabManager.jsp" />
 </c:if>
 <digi:form action="/viewTeamReports.do" method="post">
+<html:hidden property="action"/>
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
 	<c:set var="translation">

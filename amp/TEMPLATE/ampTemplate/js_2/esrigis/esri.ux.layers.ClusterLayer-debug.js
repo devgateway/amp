@@ -6,7 +6,16 @@ dojo.require("dojox.lang.functional.fold");
 dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
     constructor: function(options) {
+    	//Object.create is not supported on old browsers
+    	if (typeof Object.create === 'undefined') {
+    	    Object.create = function (o) { 
+    	        function F() {} 
+    	        F.prototype = o; 
+    	        return new F(); 
+    	    };
+    	}
 
+    	
         //basic esri.layers.GraphicsLayer option(s)
         this.displayOnPan = options.displayOnPan || false;
 

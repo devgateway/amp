@@ -655,7 +655,7 @@
             for (i = 0, l = members.length; i < l; ++i) {
                 item = members[i];
                 html[j++] = '<tr><td width="300" class="inside">';
-                html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'<digi:trn jsFriendly="true">Click to View Member Detais</digi:trn>\'>'+item.name+'</a>';
+                html[j++] = '<a href=\'javascript:showTeamMemberProfile("'+item.email+'")\' title=\'<digi:trn jsFriendly="true">Click to View Member Detais</digi:trn>\'>'+item.name+'</a>';
                 html[j++] = '</td><td align=\'center\' width="100" class="inside">';
                 html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn jsFriendly="true">Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
                 html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
@@ -931,8 +931,8 @@
 
 </script>
 <script language=javascript>
-    function showMemberProfile(id){
-        var param = "~edit=true~id="+id;
+    function showTeamMemberProfile(email){
+        var param = "~edit=true~email="+email;
         previewWorkspaceframe('/aim/default/userProfile.do',param);
 	
     }

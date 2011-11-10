@@ -79,12 +79,10 @@ public class ViewUserProfile
                 	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
             }
         }else {
-        	if(user == null){
         		if (userid!=null) {
         			user= DbUtil.getUser(userid);
         			memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         		}
-        	}
         }
 
 

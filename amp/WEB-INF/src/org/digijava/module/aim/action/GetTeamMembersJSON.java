@@ -95,6 +95,7 @@ public class GetTeamMembersJSON extends Action {
 				else{
 					jteam.put("name", team.getMemberName());
 				}
+                                jteam.put("email", team.getEmail());
 				jsonArray.add(jteam);
 
 			}

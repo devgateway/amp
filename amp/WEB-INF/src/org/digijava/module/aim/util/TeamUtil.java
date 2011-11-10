@@ -462,7 +462,9 @@ public class TeamUtil {
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 AmpTeam team = (AmpTeam) itr.next();
-                team.getOrganizations().size(); //lazy init;
+                if(team.getOrganizations()!=null){
+                	 team.getOrganizations().size(); //lazy init;
+                }               
                 workspace = new Workspace();
                 workspace.setDescription(team.getDescription().trim());
                 workspace.setId(team.getAmpTeamId().toString());

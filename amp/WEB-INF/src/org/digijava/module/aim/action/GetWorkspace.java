@@ -109,11 +109,15 @@ public class GetWorkspace extends Action {
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			TreeSet orgs=new TreeSet();
-			orgs.addAll(workspace.getChildOrgs());
+			if(workspace.getChildOrgs()!=null){
+				orgs.addAll(workspace.getChildOrgs());
+			}
+			
 			if (uwForm.getOrganizations()==null) {
 				uwForm.setOrganizations(new ArrayList());
 			}
-			uwForm.getOrganizations().addAll(orgs);
+			//uwForm.getOrganizations().addAll(orgs);
+			uwForm.setOrganizations(orgs);
 			uwForm.setAddActivity(workspace.getAddActivity());
 			uwForm.setComputation(workspace.getComputation());
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());

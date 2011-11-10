@@ -33,7 +33,7 @@ public final class GatePermConst {
 	 * All Permissibles must extend the Permissible class
 	 */
 	public static final Class[] availablePermissibles = new Class[] {AmpActivity.class,
-		//AmpModulesVisibility.class,
+		AmpModulesVisibility.class,
 		AmpFeaturesVisibility.class, 
 		AmpFieldsVisibility.class };
 

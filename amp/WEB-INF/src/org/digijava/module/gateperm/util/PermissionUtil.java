@@ -440,11 +440,13 @@ public final class PermissionUtil {
     }
 
 
-    public static PermissionMap getGlobalPermissionMapForPermissibleClass(Class permClass) {
-    	Session session = null;
+    public static PermissionMap getGlobalPermissionMapForPermissibleClass(Class permClass, Session session) {
+    	Session sessionAux = null;
     	  try {
-    	    session = PersistenceManager.getRequestDBSession();
-    	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+    	    if(session==null)
+    	    	sessionAux = PersistenceManager.getRequestDBSession();
+    	    else sessionAux = session;
+    	    Query query = sessionAux.createQuery("SELECT p from " + PermissionMap.class.getName()
     		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
     	    query.setParameter("categoryName", permClass.getSimpleName());
     	    List col = query.list();
@@ -459,7 +461,7 @@ public final class PermissionUtil {
     		   throw new RuntimeException( "DgException Exception encountered", e);
     	} finally { 
     	    try {
-    	    	PersistenceManager.releaseSession(session);
+    	    	PersistenceManager.releaseSession(sessionAux);
     	    } catch (HibernateException e) {
     		// TODO Auto-generated catch block
     		throw new RuntimeException( "HibernateException Exception encountered", e);

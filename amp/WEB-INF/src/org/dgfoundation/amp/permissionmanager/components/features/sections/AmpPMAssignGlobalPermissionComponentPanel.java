@@ -42,8 +42,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		super(id, globalPermissionsModel, fmName, AmpFMTypes.MODULE);
 
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
-		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(availablePermissibleCategories.get(0));
-		
+		final IModel<Class> globalPermissibleClassModel=new Model(availablePermissibleCategories.get(0));
 		
 		final Form form = new Form("ampGlobalPMForm")
 		{
@@ -53,20 +52,17 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.setOutputMarkupId(true);
 
-		final IModel<String> infoGlobalPermModel = new Model(" ");
+		//displaying information about permission
+		final IModel<String> infoGlobalPermModel = new Model<String>(" ");
 		Label infoGlobalPermLabel = new Label("infoGlobalPerm",infoGlobalPermModel);
 		infoGlobalPermLabel.setOutputMarkupId(true);
 		form.add(infoGlobalPermLabel);
 		
-		
-		final IModel<PermissionMap> pmAuxModel = new Model(null);
+		//gates list 
+		final IModel<PermissionMap> pmAuxModel = new Model<PermissionMap>(null);
 		Set<AmpPMReadEditWrapper> gatesSet = null;
-		try {
-			gatesSet =	populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel, infoGlobalPermModel);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		gatesSet 			= new TreeSet<AmpPMReadEditWrapper>();
+		populateGatesSet(gatesSet, globalPermissibleClassModel, infoGlobalPermModel);
 		
 		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", true);
@@ -74,18 +70,14 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		permGatesFormTable.setOutputMarkupId(true);
 		form.add(permGatesFormTable);
 		
-		DropDownChoice dropDownPermCategories = new DropDownChoice("globalPermCategories", globalPermissionMapForPermissibleClassModel ,availablePermissibleCategories, new AmpPMPermissibleCategoryChoiceRenderer("simpleName"));
+		//drop down with global permission categories
+		DropDownChoice dropDownPermCategories = new DropDownChoice("globalPermCategories", globalPermissibleClassModel ,availablePermissibleCategories, new AmpPMPermissibleCategoryChoiceRenderer("simpleName"));
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				Set<AmpPMReadEditWrapper> aa = null;
-				try {
-					aa = populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel, infoGlobalPermModel);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				gatesSetModel.setObject(aa);
+				Set<AmpPMReadEditWrapper> gatesSetAux = new TreeSet<AmpPMReadEditWrapper>();
+				populateGatesSet(gatesSetAux, globalPermissibleClassModel, infoGlobalPermModel);
+				gatesSetModel.setObject(gatesSetAux);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
 		});
@@ -103,9 +95,8 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveGlobalPermissionButton", "Save Global Permission", "Save", true, true){
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form){
-					System.out.println("saveGlobalPermissionButton  submit pressed");
-					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject(), globalPermissionMapForPermissibleClassModel.getObject());
-					System.out.println("PM global permission assigned");
+					PMUtil.assignGlobalPermission(gatesSetModel.getObject(), globalPermissibleClassModel.getObject());
+					infoGlobalPermModel.setObject("Permission saved");
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
@@ -113,10 +104,31 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		add(form);
 	}
 
+	private void populateGatesSet(Set<AmpPMReadEditWrapper> gatesSet, IModel<Class> globalPermissionMapForPermissibleClassModel, IModel<String> infoGlobalPermModel) {
+		
+		PermissionMap pm = PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject(), null);
+		
+		if(pm == null || pm.getPermission()==null){
+			//there is no permission for current selected class model
+			infoGlobalPermModel.setObject("There is no permission assigned to this category");
+			PMUtil.generateDefaultGatesList(gatesSet);
+		}
+		else 
+			if (!(pm.getPermission() instanceof CompositePermission)){
+				//permission is not Composite type
+				infoGlobalPermModel.setObject("Permission assigned can not be displayed in this form. Please use advanced Permission Manager to view it");
+				PMUtil.generateDefaultGatesList(gatesSet);
+			}
+			else {
+				infoGlobalPermModel.setObject(" ");
+				PMUtil.generateGatesList((CompositePermission)pm.getPermission(),gatesSet);
+			}
+	}
+/*
 	private Set<AmpPMReadEditWrapper> populateGatesSet(final IModel<Class> globalPermissionMapForPermissibleClassModel,final IModel<PermissionMap> pmAuxModel, IModel<String> infoGlobalPermModel) throws Exception{
 		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
 		PermissionMap pmAux = null;
-		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
+		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject(), null);
 		//0 is ok, 1 permission map doesn't exist, 2 permission map contains a GatePermission or other type different to CompositePermission
 		int flag = 0; 
 		if(pmAux==null || pmAux.getPermission()==null){
@@ -137,7 +149,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
 		return gatesSet;
 	}
-
+*/
 	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName, AmpFMTypes fmType) {
 		super(id, fmName, fmType);
 	}

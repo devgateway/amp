@@ -192,10 +192,63 @@ public final class PMUtil {
 //session.flush();		
 		}
 	}
+	public static void deleteGatePermission(GatePermission gp, Session session, boolean delGatePermission) {
+		// TODO Auto-generated method stub
+		if(delGatePermission){
+			Object object = session.load(Permission.class, gp.getId());
+			session.delete(object);
+		}
+	}
 
+	public static void assignGlobalPermission(Set<AmpPMReadEditWrapper> gatesSet,	Class globalPermissibleClass) {
+		// TODO Auto-generated method stub
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
+		PermissionMap pm = PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissibleClass, session);
+		
+		if(pm!=null && session!=null) {
+		    Permission p=pm.getPermission();
+		    if (p!=null) {
+		    	if(p instanceof CompositePermission){
+					CompositePermission cp = (CompositePermission)p;
+					PMUtil.deleteCompositePermission(cp, session,true);
+		    	}
+		    }
+		}
+		
+		//remove all duplicates and old perm map
+		List<PermissionMap> permMaps = getGlobalPermissionMapListForPermissibleClass(globalPermissibleClass);
+		if(permMaps!=null)
+			for (Iterator it = permMaps.iterator(); it.hasNext();) {
+				PermissionMap pmAux = (PermissionMap) it.next();
+				PMUtil.deletePermissionMap(pmAux, session);						
+			}
+		
+		pm=new PermissionMap(); 
+	    pm.setObjectIdentifier(null);
+	    pm.setPermissibleCategory(globalPermissibleClass.getSimpleName());
 
-
-
+	    CompositePermission cp=new CompositePermission(true);
+		cp.setDescription("This permission was created using the PM UI by admin user");
+		cp.setName(globalPermissibleClass.getSimpleName() + " - Composite Permission");
+		
+		for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet) {
+			initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
+		}
+		session.save(cp);
+		pm.setPermission(cp);	
+		session.save(pm);
+		
+		
+		
+	}
+	
+	
+/*
 	public static void assignGlobalPermission(PermissionMap pm, Set<AmpPMReadEditWrapper> gatesSet, Class globalPermissionMapForPermissibleClass) {
 		Session session = null;
 			try {
@@ -203,6 +256,9 @@ public final class PMUtil {
 			} catch (DgException e) {
 				e.printStackTrace();
 			}
+			
+		
+			
 		String permCategory = pm.getPermissibleCategory();
 		if(pm!=null && session!=null) {
 		    Permission p=pm.getPermission();
@@ -247,7 +303,7 @@ public final class PMUtil {
 //session.flush();
 		}
 	}
-	
+	*/
 	
 	public static CompositePermission createCompositePermissionForFM(String name, Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspacesSet){
 		Session session = null;
@@ -534,7 +590,7 @@ public final class PMUtil {
 //			List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
 			
 			Calendar cal = Calendar.getInstance();
-			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission Multiple Assigned " + cal.getTimeInMillis(), gatesSetModel.getObject(), workspacesSetModel.getObject());
+			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission Multiple Assigned " + cal.getTimeInMillis(), gatesSetModel!=null?gatesSetModel.getObject():null, workspacesSetModel!=null?workspacesSetModel.getObject():null);
 			session.save(cp);
 			PMUtil.saveFieldsPermission(session, root, cp);
 			
@@ -654,5 +710,10 @@ public final class PMUtil {
 			  permGatesFieldsFormTable.setEnabled(true);
 		  }
 	}
+
+
+
+
+
 	
 }

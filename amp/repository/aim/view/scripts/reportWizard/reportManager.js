@@ -77,7 +77,7 @@ function togglePreview () {
 	
 	if ( divEl.style.display	== "none" ) {
 		divElWrapper.style.height	= "220px";
-		fakeDivEl.style.height		= "230px";
+		fakeDivEl.style.height		= "50px";
 		divEl.style.display			= "";
 		headerImgEl.src				= "/TEMPLATE/ampTemplate/images/preview_open.gif";
 	}

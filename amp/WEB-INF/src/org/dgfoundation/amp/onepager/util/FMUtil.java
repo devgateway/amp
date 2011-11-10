@@ -18,6 +18,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -31,6 +32,7 @@ public final class FMUtil {
 	private static boolean fmRootChecked = false;
 	public static final String fmRootActivityForm="/Activity Form";
 	public static final String fmRootPermissionManager="/Permission Manager";
+	private static AmpTeamMember ampCurrentMember;
 
 	private static final class PathException extends Exception{
 		private static final long serialVersionUID = 1L;
@@ -124,6 +126,10 @@ public final class FMUtil {
 			String fmPathString = getFmPathString(fmInfoPath);
 			AmpFMConfigurable fmc = (AmpFMConfigurable) c;
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
+
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+			//for admin user fields will be visible
+			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
 			
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
 			if(ampTreeVisibility!=null){
@@ -146,6 +152,7 @@ public final class FMUtil {
 		//Error case: component disabled, but should be viewable
 		return true;
 	}
+	
 	private static boolean checkIsVisible(AmpTreeVisibility atv, String name, AmpFMTypes type){
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Map scope=PermissionUtil.getScope(session.getHttpSession());
@@ -157,12 +164,17 @@ public final class FMUtil {
 				colection = currentTemplate.getItems();
 			else
 				colection = currentTemplate.getFeatures();
-				
+			
+			//for admin user fields will be visible
+			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
+			
 			if(colection != null){
 				Iterator it = colection.iterator();
 				while (it.hasNext()) {
 					AmpObjectVisibility object = (AmpObjectVisibility) it.next();
 					if (object.getName().compareTo(name) == 0){
+
+
 						return object.canDo(GatePermConst.Actions.VIEW, scope);
 						//return true;
 					}
@@ -184,7 +196,10 @@ public final class FMUtil {
 				colection = currentTemplate.getItems();
 			else
 				colection = currentTemplate.getFeatures();
-				
+			
+			//for admin user fields will be visible
+			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
+			
 			if(colection != null){
 				Iterator it = colection.iterator();
 				while (it.hasNext()) {

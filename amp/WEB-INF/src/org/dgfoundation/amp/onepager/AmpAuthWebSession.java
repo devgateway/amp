@@ -43,8 +43,20 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private AmpTeamMember ampCurrentMember;
 	private HttpSession httpSession;
 	private Site site;
+	private String isAdmin;
 	
 	
+	public String getIsAdmin() {
+		if (isAdmin == null){
+			isAdmin = (String)httpSession.getAttribute("ampAdmin");
+		}
+		return isAdmin;
+	}
+
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	public AmpAuthWebSession(final Request request) {
 		super(request);
 		fmMode = false;
@@ -53,6 +65,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		ServletWebRequest wRequest = (ServletWebRequest) request;
 		httpSession = wRequest.getHttpServletRequest().getSession();
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+		isAdmin = (String)httpSession.getAttribute("ampAdmin");
 		if (currentMember != null)
 			ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		else
@@ -66,6 +79,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 
 	public void reset(){
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+		isAdmin = (String)httpSession.getAttribute("ampAdmin");
 		if (currentMember != null)
 			ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		else

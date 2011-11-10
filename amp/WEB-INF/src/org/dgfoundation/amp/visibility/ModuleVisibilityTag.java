@@ -166,8 +166,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                                Map scope=PermissionUtil.getScope(pageContext.getSession());
                                AmpModulesVisibility ampModulesFromTree=ampTreeVisibility.getModuleByNameFromRoot(getName());
                                TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+                               String isAdmin = (String) session.getAttribute("ampAdmin");
 
-   				if (teamMember!=null && !teamMember.getTeamHead()){
+   				if (isAdmin==null && teamMember!=null && !teamMember.getTeamHead()){
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);

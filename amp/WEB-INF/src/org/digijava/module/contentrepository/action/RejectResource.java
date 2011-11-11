@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
+import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
@@ -20,7 +21,7 @@ import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 public class RejectResource extends DispatchAction {
 	
 	 public ActionForward rejectShare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		 
+		 DocumentManagerForm myForm = (DocumentManagerForm) form;
 		 HttpSession	httpSession		= request.getSession();
 		 TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		 String nodeBaseUUID=request.getParameter("uuid");
@@ -31,6 +32,7 @@ public class RejectResource extends DispatchAction {
 		 Node node=DocumentManagerUtil.getReadNode(sharedPrivateResourceVersionUUID, request);
 		 new RejectResourceSharetrigger(node);
 		 DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		 request.getSession().setAttribute("resourcesTab", request.getParameter("type"));
 		 return null;
 	}
 }

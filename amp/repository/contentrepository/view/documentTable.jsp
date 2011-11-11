@@ -270,7 +270,7 @@
 													
 													<span style="color: blue"><strong>|</strong></span>
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
-													onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare');" title="<digi:trn>Click here to Reject this document</digi:trn>">
+													onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare','${tabTypeLocal}');" title="<digi:trn>Click here to Reject this document</digi:trn>">
 														<digi:trn>Reject</digi:trn> 
 													</a>
 												</logic:equal>

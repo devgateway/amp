@@ -1235,7 +1235,7 @@ function rejectVersion(versionId, baseNodeUUID){
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 
-function rejectDoc (uuid,actType){
+function rejectDoc (uuid,actType,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
 							window.location.replace( window.location.href );
@@ -1245,7 +1245,7 @@ function rejectDoc (uuid,actType){
 						};
 	//var panel		= YAHOO.amp.orgPanels[uuid]; 
 	//panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
-	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid, callback);
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid+"&type="+tabType, callback);
 }
 
 function setAttributeOnNode(action, uuid, doReload,tabType) {

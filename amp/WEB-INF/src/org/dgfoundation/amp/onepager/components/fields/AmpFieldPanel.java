@@ -132,6 +132,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
+				/*
 				if (formComponent!=null && formComponent.isRequired()){
 					String tmp = (String) titleLabel.getDefaultModelObject();
 					tmp = "<font color=\"red\">*</font>" + tmp;
@@ -139,6 +140,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 					titleLabel.setDefaultModelObject(tmp);
 					titleLabel.add(new AttributeAppender("style", new Model("margin-left:-5px"), ";"));
 				}
+				*/
 			};
 		};
 		titleLabel.setVisible(!hideLabel);

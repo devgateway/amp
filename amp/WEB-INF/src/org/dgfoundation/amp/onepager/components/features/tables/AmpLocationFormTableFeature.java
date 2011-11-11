@@ -17,6 +17,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -104,14 +106,41 @@ public class AmpLocationFormTableFeature extends
 				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField);				
 				item.add(percentageField);
 				item.add(new Label("locationLabel", item.getModelObject().getLocation().getLocation().getAutoCompleteLabel()));
-				
+
+				String expressionLatitude = "(^\\+?([1-8])?\\d(\\.\\d+)?$)|(^-90$)|(^-(([1-8])?\\d(\\.\\d+)?$))";
+            	PatternValidator latitudeValidator = new PatternValidator(expressionLatitude) {
+            		@Override
+            		protected void onValidate(IValidatable<String> validatable)
+            		{
+            			// Check value against pattern
+            			if (!getPattern().matcher(validatable.getValue()).matches())
+            			{
+            				error(validatable, "CoordinatesValidator");
+            			}
+            		}
+           		};
+            	
 				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", new PropertyModel<String>
 						(item.getModel(), "latitude"),"Latitude",false);
+				latitude.getTextContainer().add(latitudeValidator);
 				item.add(latitude);
-				
+
+				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
+            	PatternValidator longitudeValidator = new PatternValidator(expressionLongitude) {
+            		@Override
+            		protected void onValidate(IValidatable<String> validatable)
+            		{
+            			if (!getPattern().matcher(validatable.getValue()).matches())
+            			{
+            				error(validatable, "CoordinatesValidator");
+            			}
+            		}            	
+            		};
 				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>
 				("longitudeid", new PropertyModel<String>(item.getModel(), "Longitude"),"Longitude",false);
+				longitude.getTextContainer().add(longitudeValidator);
 				item.add(longitude);
+				
 				
 				String translatedText = TranslatorUtil.getTranslation("Delete this location and any related funding elements, if any?");
 				AmpDeleteLinkField delLocation = new AmpDeleteLinkField("delLocation","Delete Location",new Model<String>(translatedText)) {

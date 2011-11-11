@@ -176,7 +176,7 @@ addLoadEvent(addpanel);
 			showMyPanel(0, 'logoStatement');
 			return false;
 		}else{
-			document.getElementsByName("exportOptionsForm")[0].submit();
+			form.submit();
 		}
 		
 		form.submit();

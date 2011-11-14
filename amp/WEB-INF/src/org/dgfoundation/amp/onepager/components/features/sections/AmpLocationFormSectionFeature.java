@@ -87,10 +87,21 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 					protected void onUpdate(AjaxRequestTarget target) {
 						target.addComponent(implementationLocation);
 						
-						String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+						String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
 								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
-						if ("false".equals(activityFormOnePager)){
+						if ("false".equals(mixedImplementationLocation)){
 							Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+							if(set.size()>0) {
+								locationsTable.getSetModel().getObject().clear();
+								locationsTable.getList().removeAll();
+								target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+								target.addComponent(locationsTable);
+							}
+						}
+						
+						Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+					
+						if ("false".equals(mixedImplementationLocation)){
 							if(set.size()>0) {
 								locationsTable.getSetModel().getObject().clear();
 								locationsTable.getList().removeAll();
@@ -101,29 +112,6 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 					}
 				});
 
-		//when changing implementation location, remove all locations
-		implementationLocation.getChoiceContainer().add(
-						new AjaxFormComponentUpdatingBehavior("onchange") {
-							private static final long serialVersionUID = -8419230552388122030L;
-							
-							@Override
-							protected void onUpdate(AjaxRequestTarget target) {
-								Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-								String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
-										GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
-								if ("false".equals(mixedImplementationLocation)){
-									if(set.size()>0) {
-										locationsTable.getSetModel().getObject().clear();
-										locationsTable.getList().removeAll();
-										target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-										target.addComponent(locationsTable);
-									}
-								}
-							}
-						});
-		
-		
-		
 		// add location table
 		
 		add(locationsTable);

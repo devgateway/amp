@@ -82,6 +82,7 @@ public class OrgRoleGate extends Gate {
 	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 	if (oo instanceof AmpActivity)
 	    ampa = (AmpActivity) oo;
+	logger.debug("Object is:"+o.toString());
 //	if (oo instanceof Activity)
 //	    a = (Activity) oo;
 
@@ -90,9 +91,15 @@ public class OrgRoleGate extends Gate {
 	if (tm==null) return false; 
 	
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+	User user = TeamMemberUtil.users.get(tm.getMemberId());
+	if(user == null)
+		{
+			AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+			user = atm.getUser();
+			TeamMemberUtil.users.put(tm.getMemberId(), user);
+			//User user = atm.getUser();
+		}
 	
-	User user = atm.getUser();
 
 	String paramRoleCode = parameters.poll().trim();
 

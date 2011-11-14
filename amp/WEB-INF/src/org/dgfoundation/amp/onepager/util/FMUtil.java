@@ -84,7 +84,8 @@ public final class FMUtil {
 					return false;
 				}
 				
-				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
+				AmpObjectVisibility visObj = getObjVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType());
+				if (visObj==null){
 					try {/*
 						if (fmc.getFMType() == AmpFMTypes.FEATURE)
 							addFeatureFM(context, ampTreeVisibility, fmPathString, fmParentPathString);
@@ -99,7 +100,10 @@ public final class FMUtil {
 					}
 				}
 
-				return checkIsEnabled(ampTreeVisibility, fmPathString, fmc.getFMType());
+				
+
+				return checkIsEnable(visObj);
+				//return checkIsEnabled(ampTreeVisibility, fmPathString, fmc.getFMType());
 				//return true; //for now
 			}
 			else{
@@ -133,13 +137,17 @@ public final class FMUtil {
 			
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
 			if(ampTreeVisibility!=null){
-				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
+//				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
 					//Feature is disabled on purpose we should show it
+				AmpObjectVisibility visObj = getObjVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType());
+				if(visObj == null)
+				{
 					logger.info("Not found in tree: " + fmPathString);
 					return true;
 				}
 				else{
-					return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					//return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					return checkIsVisible(visObj); 
 				}
 			}
 			else{
@@ -183,6 +191,14 @@ public final class FMUtil {
 		}
 		return false;
 	}
+	
+	
+	private static boolean checkIsVisible(AmpObjectVisibility object){
+		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		Map scope=PermissionUtil.getScope(session.getHttpSession());
+		if(object == null) return false;
+		return object.canDo(GatePermConst.Actions.VIEW, scope);
+	}
 
 	private static boolean checkIsEnabled(AmpTreeVisibility atv, String name, AmpFMTypes type){
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -212,6 +228,14 @@ public final class FMUtil {
 			}
 		}
 		return false;
+	}
+	
+	private static boolean checkIsEnable(AmpObjectVisibility object){
+		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		Map scope=PermissionUtil.getScope(session.getHttpSession());
+		if(object == null) return false;
+		boolean canDo = object.canDo(GatePermConst.Actions.EDIT, scope);
+		return canDo;
 	}
 	
 	public static synchronized void addFeatureFM(ServletContext context, AmpTreeVisibility ampTreeVisibility, String componentPath, String componentParentPath) throws Exception{
@@ -434,6 +458,12 @@ public final class FMUtil {
 			return false;
 		return true;
 	}
+	
+	public static AmpObjectVisibility getObjVisibilityTree(AmpTreeVisibility atv, String name, AmpFMTypes type)
+	{
+		return getFromVisibilityTree(atv, name, type);
+	}
+
 	
 	/**
 	 * Retreive visibility object from tree.

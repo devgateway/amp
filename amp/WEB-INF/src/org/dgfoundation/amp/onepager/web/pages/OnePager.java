@@ -104,6 +104,8 @@ public class OnePager extends AmpHeaderFooter {
 
 	public OnePager(PageParameters parameters) {
 		super();
+		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		session.reset();
 		
 		String activityId = (String) parameters.get("activity");
 		boolean newActivity = false;
@@ -111,6 +113,8 @@ public class OnePager extends AmpHeaderFooter {
 			am = new AmpActivityModel();
 			newActivity = true;
 			
+			am.getObject().setActivityCreator(session.getAmpCurrentMember());
+			am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
 			
 			if(parameters.get("lat") != null && parameters.get("lat") != null && parameters.get("geoId") != null && parameters.get("name") != null){
 				String activityName = (String)parameters.get("name");
@@ -133,8 +137,7 @@ public class OnePager extends AmpHeaderFooter {
 			am = new AmpActivityModel(Long.valueOf(activityId), key);
 		}
 		
-		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		session.reset();
+		
 		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 

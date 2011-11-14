@@ -122,11 +122,14 @@
 							</module:display> &nbsp;
 							</td>
 							<!--Exchange Rate not found-->
+							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-								<field:display name="Exchange Rate" feature="Funding Information">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Exchange Rate"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</field:display>
+							</module:display>
 							</td>
+							</c:if>
 						</tr>
 			</logic:equal>
 		</logic:equal>

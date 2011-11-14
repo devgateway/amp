@@ -5,6 +5,7 @@
     <author>Dan</author>
     <description>it is a small hack becaue we can run select setval and we need the update row</description> 
     <trigger type="all">
+        <condition  type="tableOrViewExists">util_global_settings_possible_values</condition>
         <condition  type="entryInTableMissing" tablename="amp_global_settings" columnname="settingsName" columnvalue="Projects Validation"/>
     </trigger> 
     <apply>

@@ -215,6 +215,25 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {
+            boolean hasTeamLead = true;
+            if (currentTeam != null) {
+                AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());
+                if (teamHead == null) {
+                    hasTeamLead = false;
+                }
+            }
+            eaForm.setWarningMessges(new ArrayList<String>());
+            if (activity.getDraft() != null && activity.getDraft()) {
+                eaForm.getWarningMessges().add("This is a draft activity");
+            } else {
+                if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
+                    if (hasTeamLead) {
+                        eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                    } else {
+                        eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
+                    }
+                }
+            }
         	Map scope=new HashMap();
         	scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
         	gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);

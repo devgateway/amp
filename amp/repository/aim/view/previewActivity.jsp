@@ -412,6 +412,15 @@ function collapseAll() {
 			</feature:display>
 		</module:display>    </td>
   </tr>
+  <tr>
+      <td colspan="2" style="color:red;text-align: center">
+          <c:forEach var="element" items="${aimEditActivityForm.warningMessges}">
+              <digi:trn>
+                 ${element}
+              </digi:trn>
+          </c:forEach>
+      </td>
+  </tr>
 </table>
 		
 <!-- IDENTIFICATION SECTION -->

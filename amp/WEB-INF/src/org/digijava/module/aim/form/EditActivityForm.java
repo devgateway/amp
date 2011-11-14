@@ -122,6 +122,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
      */
     private Collection<SurveyFunding> surveyFundings = null;
     private int draftRedirectedPage;
+    private List<String> warningMessges;
+
+    public List<String> getWarningMessges() {
+        return warningMessges;
+    }
+
+    public void setWarningMessges(List<String> warningMessges) {
+        this.warningMessges = warningMessges;
+    }
 
     public int getDraftRedirectedPage() {
         return draftRedirectedPage;

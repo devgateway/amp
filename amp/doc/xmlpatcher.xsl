@@ -68,8 +68,8 @@
 			</xsl:attribute>
 			</xsl:if>
  			<script returnVar="count">
-				<lang type="mysql">
-				SELECT count(table_name) from information_schema.tables where table_schema=database() AND table_name='<xsl:value-of select="."/>';
+				<lang type="postgres">
+                                     SELECT count(relname) FROM pg_class WHERE relname ='<xsl:value-of select="."/>';
 				</lang>
 			</script>
  			<test>count.intValue()==1</test>

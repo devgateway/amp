@@ -27,6 +27,9 @@ public class AmpRelatedOrganizationsFormSectionFeature extends
 				"responsibleOrganization", "Responsible Organization", am, Constants.RESPONSIBLE_ORGANISATION));
 		
 		add(new AmpRelatedOrganizationsFormTableFeature(
+				"executingAgency", "Executing Agency", am, Constants.EXECUTING_AGENCY));
+
+		add(new AmpRelatedOrganizationsFormTableFeature(
 				"implementingAgency", "Implementing Agency", am, Constants.IMPLEMENTING_AGENCY));
 
 		add(new AmpRelatedOrganizationsFormTableFeature(

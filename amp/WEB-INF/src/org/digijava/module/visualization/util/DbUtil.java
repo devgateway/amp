@@ -245,11 +245,7 @@ public class DbUtil {
 
         oql += "  where fd.adjustmentType = 1 and config.id=:config";
         oql += " inner join act.ampActivityGroup actGroup ";
-        //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-            oql += " and fd.transactionType =:transactionType  ";
-        //} else {
-        //    oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
-        //}
+        oql += " and fd.transactionType =:transactionType  ";
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -278,9 +274,7 @@ public class DbUtil {
         //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
         //    query.setLong("orgGroupId", orgGroupId);
         //}
-        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-            query.setLong("transactionType", transactionType);
-        }
+        query.setLong("transactionType", transactionType);
         List<AmpFundingDetail> fundingDets = query.list();
         return fundingDets;
 
@@ -350,11 +344,7 @@ public class DbUtil {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
 	            oql += "  where fd.adjustmentType = 1 and config.id=:config";
-	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                oql += " and fd.transactionType =:transactionType  ";
-	            //} else {
-	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            //}
+                oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -385,12 +375,7 @@ public class DbUtil {
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
 	            query.setLong("config", filter.getSelSectorConfigId());
-	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-	            //    query.setLong("orgGroupId", orgGroupId);
-	            //}
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                query.setLong("transactionType", transactionType);
-	            }
+                query.setLong("transactionType", transactionType);
 	            locations = query.list();
 	        }
 	        catch (Exception e) {
@@ -481,9 +466,7 @@ public class DbUtil {
 	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
 	            //    query.setLong("orgGroupId", orgGroupId);
 	            //}
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                query.setLong("transactionType", transactionType);
-	            }
+                query.setLong("transactionType", transactionType);
 	            query.setLong("configId", filter.getSelSectorConfigId());
 	
 	            sectors = query.list();
@@ -537,11 +520,7 @@ public class DbUtil {
                 oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
             }
             oql += "  where fd.adjustmentType = 1 and config.id=:config";
-            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                oql += " and fd.transactionType =:transactionType  ";
-            //} else {
-            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-            //}
+            oql += " and fd.transactionType =:transactionType  ";
             if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
                 if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                     oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -579,9 +558,7 @@ public class DbUtil {
             //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                query.setLong("transactionType", transactionType);
-            }
+            query.setLong("transactionType", transactionType);
 //            query.setCacheable(true);
             activities = query.list();
         }
@@ -667,11 +644,7 @@ public class DbUtil {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
 	            oql += "  where fd.adjustmentType = 1 and config.id=:config";
-	            //if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                oql += " and fd.transactionType =:transactionType  ";
-	            //} else {
-	            //    oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-	            //}
+                oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -702,12 +675,7 @@ public class DbUtil {
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
 	            query.setLong("config", filter.getSelSectorConfigId());
-	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-	            //    query.setLong("orgGroupId", orgGroupId);
-	            //}
-	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-	                query.setLong("transactionType", transactionType);
-	            }
+                query.setLong("transactionType", transactionType);
 	            
 	            donors = query.list();
 	        }

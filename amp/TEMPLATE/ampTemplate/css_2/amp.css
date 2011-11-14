@@ -42,7 +42,7 @@ table.inside1, td.inside1 {border: 0; font-size:12px;}
 table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
-td.report_inside { border-width: 1px 1px 0 0;}
+td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
 .ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
@@ -175,7 +175,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .show_legend {float:right; font-size:11px; padding-top:9px;} 
 .desktop_project_name {font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left:10px;}
 .desktop_project_name_op {font-size:11px; color:#FF6000;  font-family: Arial, Helvetica, sans-serif;background-color: #FDF5F0}
-.desktop_project_name_op_level1 {background-color: #FBE8DD}
+.desktop_project_name_op_level1 {background-color: #FBE8DD; margin-right: 10px;margin-bottom: 3px}
 .desktop_project_name_op_levels {background-color: #FDF5F0}
 .desktop_project_name_sel {/*background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px;*/ font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-top:3px; padding-bottom:3px; padding-left:5px;}
 .desktop_project_count {font-size:11px;text-align:right; font-family:Arial, Helvetica, sans-serif; font-weight:bold; padding-bottom:5px; padding-top:5px; padding-right:5px;}

@@ -2765,7 +2765,7 @@ function collapseAll() {
 		  });
 	});
 	$("#collapseall").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow', function() {
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow');
 			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
@@ -2773,19 +2773,17 @@ function collapseAll() {
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 		  	  }
-		  });
 	});
 	
 	$("#collapseall_1").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow', function() {
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow');
 			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
-			  		$("collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
-			  		$("collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
 		  	  }else{
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
 		  	  }
-		  });
 	});
 	
 	

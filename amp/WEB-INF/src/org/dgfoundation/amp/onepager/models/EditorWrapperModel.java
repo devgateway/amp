@@ -29,8 +29,19 @@ public class EditorWrapperModel extends Model<String> {
 	public EditorWrapperModel(IModel<String> m, String id) {
 		super();
 		this.keyModel = m;
+		
+		boolean valueStoredInActivity = false;
+		String valueStoredInActivityVal = "";
 
 		AmpAuthWebSession session = ((AmpAuthWebSession)Session.get()); 
+		
+		if(m.getObject() != null && !m.getObject().startsWith("aim-")){
+			//all editor keys start with "aim-" so it should be fine to 
+			//assume value was stored inside AmpActivity instead of the key
+			valueStoredInActivityVal = m.getObject();
+			valueStoredInActivity = true;
+			m.setObject(null); // to generate a proper editor ket for it
+		}
 		
 		//if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 || !m.getObject().startsWith(KEY_PREFIX)){
 		if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 ){
@@ -51,6 +62,9 @@ public class EditorWrapperModel extends Model<String> {
 				this.setObject("");
 			}
 		}
+		
+		if (valueStoredInActivity)
+			setObject(valueStoredInActivityVal);
 
 		if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
 			Session.get().setMetaData(OnePagerConst.EDITOR_ITEMS, new HashMap());

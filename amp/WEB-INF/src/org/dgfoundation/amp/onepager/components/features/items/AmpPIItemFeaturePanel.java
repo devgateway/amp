@@ -72,13 +72,12 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 
 		if (survey.getObject().getPointOfDeliveryDonor() == null)
 			survey.getObject().setPointOfDeliveryDonor(survey.getObject().getAmpDonorOrgId());
-		Label indicatorNameLabel = new Label("orgName", new PropertyModel<String>(surveyOrg, "name"));
+		Label indicatorNameLabel = new Label("orgName", surveyOrg);
 		add(indicatorNameLabel);
 	
-		final Label pod= new Label("PoD", new PropertyModel(survey, "pointOfDeliveryDonor"));
+		final Label pod = new Label("PoD", PersistentObjectModel.getModel(survey.getObject().getPointOfDeliveryDonor()));
 		pod.setOutputMarkupId(true);
 		add(pod);
-		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("orgSearch","Search Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {

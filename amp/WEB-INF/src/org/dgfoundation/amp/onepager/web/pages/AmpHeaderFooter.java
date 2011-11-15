@@ -59,8 +59,11 @@ public class AmpHeaderFooter extends WebPage {
 				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
 						2);
 				variables.put("callBackUrl", callBackUrl);
-				String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
-						GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
+				String activityFormOnePager = "false";
+				try {
+					activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+							GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
+				} catch (Exception ignored) {}
 				variables.put("onepagerMode", activityFormOnePager);
 				return variables;
 			}

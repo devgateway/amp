@@ -11,7 +11,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -39,9 +38,15 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 	 * @return
 	 */
 	public static IModel getModel(Serializable object){
+		return getModel(object, true);
+	}
+	public static IModel getModel(Serializable object, boolean readOnlyModel){
 		IModel ret = null;
 		
 		Class clazz;
+		
+		if (object == null)
+			return new Model();
 		
 		if (object instanceof HibernateProxy)
 			clazz = ((HibernateProxy)object).getHibernateLazyInitializer().getImplementation().getClass();
@@ -59,8 +64,13 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 			
 			if (result != null)
 				ret = new PersistentObjectModel(object);
-			else
-				ret = new Model(object);
+			else{
+				if (readOnlyModel){
+					ret = new AmpReadOnlyModel(object);
+				}
+				else
+					ret = new Model(object);
+			}
 		} catch (Exception e) {
 			logger.error(e);
 		}

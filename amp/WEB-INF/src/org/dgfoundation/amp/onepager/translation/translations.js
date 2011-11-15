@@ -11,7 +11,7 @@ function getAmpAjaxCallBackUrl(){
 	return "${callBackUrl}";
 }
 
-onepagerMode = ${onepagerMode};
+onepagerMode = "${onepagerMode}";
 
 //////////////////////////////////////////////////////////////
 //

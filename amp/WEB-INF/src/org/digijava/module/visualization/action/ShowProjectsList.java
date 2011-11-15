@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,6 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -35,8 +38,27 @@ public class ShowProjectsList extends Action {
 		DashboardFilter filter = visualizationForm.getFilter();
 		String type = request.getParameter("type");
 		String id = request.getParameter("id");
-		String year = request.getParameter("year");
+		String startYear = request.getParameter("startYear");
+		String endYear = request.getParameter("endYear");
+		
+		int startYearInt = 0;
+		if (startYear.contains("-")) {
+			startYearInt = Integer.parseInt(startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+3))+2000-1;
+		} else {
+			startYearInt = Integer.parseInt(startYear);
+		}
 
+		int endYearInt = 0;
+		if (endYear == null || endYear.equals("null")){
+			endYearInt = startYearInt;
+		} else {
+			if (endYear.contains("-")) {
+				endYearInt = Integer.parseInt(endYear.substring(endYear.lastIndexOf("-")+1,endYear.lastIndexOf("-")+3))+2000-2;
+			} else {
+				endYearInt = Integer.parseInt(endYear);
+			}
+		}
+		
 		if (id==null || id.length()==0) {
 			return null;
 		}
@@ -47,9 +69,9 @@ public class ShowProjectsList extends Action {
 	    Date startDate = null;
         Date endDate = null;
         Long fiscalCalendarId = filter.getFiscalCalendarId();
-        if (year!=null && !year.equals("0") && year.length()!=0) {
-        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, Integer.parseInt(year));
-            endDate = DashboardUtil.getEndDate(fiscalCalendarId, Integer.parseInt(year));
+        if (startYearInt!=0) {
+        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYearInt);
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYearInt);
     	} else {
     		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
@@ -64,12 +86,12 @@ public class ShowProjectsList extends Action {
         
         if (type.equals("RegionProfile")){
 	    	Long[] ids = {Long.parseLong(id)};
-			newFilter.setSelLocationIds(ids);
+        	newFilter.setSelLocationIds(ids);
 			activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	    }
 		if (type.equals("SectorProfile")){
 	    	Long[] ids = {Long.parseLong(id)};
-			newFilter.setSelSectorIds(ids);
+	    	newFilter.setSelSectorIds(ids);
 			activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 		}
 		if (type.equals("DonorProfile")){
@@ -92,6 +114,7 @@ public class ShowProjectsList extends Action {
 		if(activities.size() > 0){
 	        Iterator<AmpActivityVersion> it = activities.iterator();
 	        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new HashMap<AmpActivityVersion, BigDecimal>();
+	        BigDecimal totalSum = BigDecimal.ZERO;
 	        while(it.hasNext()){
 	        	AmpActivityVersion act = it.next();
 				newFilter.setActivityId(act.getAmpActivityId());
@@ -104,6 +127,7 @@ public class ShowProjectsList extends Action {
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	        	}
 	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        	totalSum = totalSum.add(total);
 	        	itemProjectsList.put(act, total);
 			}
 	        visualizationForm.setItemProjectsList(itemProjectsList);
@@ -112,3 +136,4 @@ public class ShowProjectsList extends Action {
 
 	}
 }
+

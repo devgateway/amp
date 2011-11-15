@@ -1658,9 +1658,9 @@ function reloadGraphs(){
 	changeChart('start', 'bar_profile', 'RegionProfile', true);
 }
 
-function itemClick(id, type, year){
+function itemClick(id, type, startYear, endYear){
 	  openNewWindow(600, 400);
-	  var urlItemClick= urlShowList + "&id=" + id + "&type=" + type + "&year=" + year;
+	  var urlItemClick= urlShowList + "&id=" + id + "&type=" + type + "&startYear=" + startYear + "&endYear=" + endYear;
 	  document.visualizationform.action = urlItemClick;
 	  document.visualizationform.target = popupPointer.name;
 	  document.visualizationform.submit();

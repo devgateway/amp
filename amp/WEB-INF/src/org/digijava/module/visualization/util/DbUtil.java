@@ -1233,10 +1233,12 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
+        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
         }
 
         if (sectorCondition) {
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -1252,9 +1254,9 @@ public class DbUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
 
-        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
+        //if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+		//	oql += ActivityUtil.getApprovedActivityQueryString("act");
+		//}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
         }

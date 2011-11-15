@@ -551,7 +551,7 @@ public class ActivityUtil {
 			}
 		}
 	}
-	private static void saveContacts(AmpActivityVersion a, Session session) throws Exception {
+	public static void saveContacts(AmpActivityVersion a, Session session) throws Exception {
 		Set<AmpActivityContact> activityContacts=a.getActivityContacts();
 	      // if activity contains contact,which is not in contact list, we should remove it
 		Long oldActivityId = a.getAmpActivityId();

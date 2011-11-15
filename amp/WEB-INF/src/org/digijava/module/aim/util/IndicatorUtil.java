@@ -3,35 +3,12 @@ package org.digijava.module.aim.util;
 import java.text.Collator;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion ;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-import org.digijava.module.aim.dbentity.AmpZone;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.dbentity.IndicatorConnection;
-import org.digijava.module.aim.dbentity.IndicatorSector;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
@@ -43,8 +20,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.*;
 		
 		
 		/**
@@ -836,7 +813,7 @@ public class IndicatorUtil {
 		return result;
 	}
 
-    public static void saveActivityIndicatorConnection(ActivityIndicator actInd) throws DgException {
+    public static void saveActivityIndicatorConnection(ActivityIndicator actInd,AmpTeamMember member) throws DgException {
         IndicatorActivity indAct = null;
         Session session = null;
         Transaction tx = null;
@@ -928,18 +905,56 @@ public class IndicatorUtil {
                 }
 
             }
+            if (ActivityVersionUtil.isVersioningEnabled()) {
+                AmpActivityVersion act = (AmpActivityVersion) session.get(AmpActivityVersion.class, actInd.getActivityId());
+                Hibernate.initialize(act.getActivityContacts());
+                AmpActivityGroup tmpGroup = act.getAmpActivityGroup();
+                act = ActivityVersionUtil.cloneActivity(act,member);
+                act.setAmpActivityId(null);
+								
+                if (tmpGroup == null) {
+                    //we need to create a group for this activity
+                    tmpGroup = new AmpActivityGroup();
+                    
+                }
+                tmpGroup.setAmpActivityLastVersion(act);
+                session.saveOrUpdate(tmpGroup);
+                act.setAmpActivityGroup(tmpGroup);
+                Date updatedDate = Calendar.getInstance().getTime();
+                act.setUpdatedDate(updatedDate);
+                act.setModifiedDate(updatedDate);
+                act.setModifiedBy(member);
+                
+                org.dgfoundation.amp.onepager.util.ActivityUtil.saveContacts(act, session);
+                Set<IndicatorActivity> indicators=act.getIndicators();
+                session.save(act);
+                Set<AmpIndicatorValue> newValues;
+                for (IndicatorActivity indicator : indicators) {
+                    if (indAct.getIndicator().getIndicatorId().equals(indicator.getIndicator().getIndicatorId())) {
+                        newValues=indAct.getValues();
+                    }
+                    else{
+                        newValues=new HashSet<AmpIndicatorValue>(indicator.getValues());
+                    }
+                    indicator.getValues().clear();
+                    for (AmpIndicatorValue value : newValues) {
+                        AmpIndicatorValue newValue = (AmpIndicatorValue) value.clone();
+                        newValue.setIndicatorConnection(indicator);
+                        newValue.setIndValId(null);
+                        indicator.getValues().add(newValue);
+                    }
 
-            session.saveOrUpdate(indAct);
+                    session.saveOrUpdate(indicator);
+                }
+                
+                
+            } else {
+                session.saveOrUpdate(indAct);
+            }
+           session.flush();
             //tx.commit();
         } catch (Exception e) {
             logger.error("error", e);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Rollback failed", rbf);
-                }
-            }
 
         }
     }

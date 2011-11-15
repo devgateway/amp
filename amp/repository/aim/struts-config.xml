@@ -849,7 +849,7 @@
        <forward name = "index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimUpdateIndicatorValuesForm" path="/aim/saveMEIndicatorValues" scope="session" type="org.digijava.module.aim.action.UpdateMEIndicatorValues" validate="false">
-      <forward name="forward" path="/aim/getActivityIndicators.do" />
+      <forward name="forward" path="/aim/getTeamActivities.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimUpdateIndicatorValuesForm" path="/aim/deleteIndicatorValue" scope="session" type="org.digijava.module.aim.action.UpdateMEIndicatorValues" validate="false">

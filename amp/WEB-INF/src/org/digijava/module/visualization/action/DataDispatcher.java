@@ -659,6 +659,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
 			sectorData += "<Year>";
 	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
+	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
 	        while(it.hasNext() && index <= 4){
 	            //Long[] key = it.next();
 	            Map.Entry entry = (Map.Entry)it.next();
@@ -996,6 +997,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
             donorData += "<Year>";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
+            divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
             while(it.hasNext() && index <= 4){
                 //Long[] key = it.next();
                 Map.Entry entry = (Map.Entry)it.next();
@@ -2070,6 +2072,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
 			regionData += "<Year>";
 	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
+	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), false);
 	        while(it.hasNext() && index <= 4){
 	            //Long[] key = it.next();
 	            Map.Entry entry = (Map.Entry)it.next();

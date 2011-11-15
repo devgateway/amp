@@ -393,14 +393,16 @@
 			}
 			public function itemClick(evt:LayoutItemEvent):void{
 				//Alert.show(evt.item.data.percentage);
-				var year:Number = null;
+				var startYear:Number = null;
+				var endYear:Number = null;
 				if (sliderYear.visible == true){
-					year = sliderYear.value;
+					startYear = sliderYear.values[0];
+					endYear = sliderYear.values[1];
 				}
 				var idStr:String = "" + evt.item.data.id;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				if (idStr != "undefined"){
-					ExternalInterface.call("itemClick",evt.item.data.id,idContainer,year);
+					ExternalInterface.call("itemClick",evt.item.data.id,idContainer,startYear,endYear);
 				}
 			}
 			//

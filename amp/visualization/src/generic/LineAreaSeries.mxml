@@ -447,7 +447,7 @@
 				var array:Array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				if (array[1]!=null){
-					ExternalInterface.call("itemClick", array[1], idContainer, data.name);
+					ExternalInterface.call("itemClick", array[1], idContainer, data.name,null);
 				}
 			}
 			

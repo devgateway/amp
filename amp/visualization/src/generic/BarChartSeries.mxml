@@ -415,7 +415,7 @@
 			}
 			public function itemClick(evt:LayoutItemEvent):void{
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
-				ExternalInterface.call("itemClick",evt.item.data.id,idContainer,evt.item.data.year);
+				ExternalInterface.call("itemClick",evt.item.data.id,idContainer,evt.item.data.year,null);
 			}
 			//
 			private function mouseOverHandler(event:MouseEvent):void 

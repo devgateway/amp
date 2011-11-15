@@ -25,7 +25,7 @@ ActionsMenu.prototype.render=function (){
 		  visible:false,
 		  width:"150px",
 		  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-		  close: false } );
+		  close: true } );
 	
 	this.overlay.setHeader('<span>' + this.trnObj.addResource + '</span>');
 	

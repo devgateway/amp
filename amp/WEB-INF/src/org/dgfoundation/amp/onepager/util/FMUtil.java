@@ -102,8 +102,8 @@ public final class FMUtil {
 
 				
 
-				return checkIsEnable(visObj);
-				//return checkIsEnabled(ampTreeVisibility, fmPathString, fmc.getFMType());
+				//return checkIsEnable(visObj);
+				return checkIsEnabled(ampTreeVisibility, fmPathString, fmc.getFMType());
 				//return true; //for now
 			}
 			else{
@@ -146,8 +146,8 @@ public final class FMUtil {
 					return true;
 				}
 				else{
-					//return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
-					return checkIsVisible(visObj); 
+					return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					//return checkIsVisible(visObj); 
 				}
 			}
 			else{

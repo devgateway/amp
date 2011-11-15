@@ -10,6 +10,7 @@ import java.util.Queue;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -105,6 +106,8 @@ public class OrgRoleGate extends Gate {
 
 	//check if the scope has a funding organisation, if it does use that directly
 	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
+	if ( o instanceof AmpModulesVisibility && ((AmpModulesVisibility)o).getName().contains("Title") )
+			logger.debug( ((AmpModulesVisibility)o).getName()+ "  :::org:" + org + "  :::paramrolcode: " +paramRoleCode);
 	if(org!=null && "DN".equals(paramRoleCode) ) {
 		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");

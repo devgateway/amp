@@ -90,7 +90,8 @@ public class UserLevelGate extends Gate {
 		
 		//if im not even a team member 
 		if(tm==null) 
-			if(PARAM_EVERYONE.equals(param)) return true; else return false;
+			if(PARAM_EVERYONE.equals(param)) return true; 
+				else return false;
 		
 		//if i am a guest and not the owner of the current object i will have guest access
 		//if(!owner && PARAM_GUEST.equals(param)) return true;

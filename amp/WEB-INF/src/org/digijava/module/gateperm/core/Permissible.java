@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -127,6 +128,12 @@ public abstract class Permissible implements Identifiable {
 			logger.debug("Actions allowed for object "+ permissionMapForPermissible.getObjectLabel() + " (id="+permissionMapForPermissible.getObjectIdentifier()
 					+ ") of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
 					+ actions); }
+			Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+			if ( o instanceof AmpModulesVisibility )
+			{
+				logger.debug("---------------PERMISSIBLE " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
+				
+			}
 		return actions;
 	}
 	

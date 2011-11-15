@@ -741,8 +741,8 @@ function addResultsToMap(featureSet) {
     var renderer = new esri.renderer.ClassBreaksRenderer(symbol, "COUNT");
     for (var i=0; i<numRanges; i++) {
     	rangeColors.push([parseFloat(min + (i*breaks)), parseFloat(min + ((i+1)*breaks))]);
-        renderer.addBreak(parseFloat(minLog + (i*breaksLog)),
-                parseFloat(minLog + ((i+1)*breaksLog)),
+        renderer.addBreak(parseFloat(min + (i*breaks)),
+                parseFloat(min + ((i+1)*breaks)),
                 new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
       }
     
@@ -810,8 +810,8 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode){
 		htmlDiv += "<div class='legendContentContainer'>"
 				+ "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");'></div>"
 				+"</div>"
-				+ "<div class='legendContentLabel'>" + df.format(Math.ceil(rangeColors[i][0])) + " " + currencyString + " - " + df.format(Math.floor(rangeColors[i][1])) + " " + currencyString + " </div><br/>"
-				;
+				+ "<div class='legendContentLabel'>" + df.format(Math.ceil(rangeColors[i][0])) + " " 
+				+ currencyString + " - " + df.format(Math.floor(rangeColors[i][1])) + " " + currencyString + " </div><br/>";
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
 			+ "<div class='legendContentValue' style='background-color:rgba(201,195,197,0.8);'></div>"
@@ -839,7 +839,7 @@ function updateLocationAttributes(graphicLayer, typeFunding){
     	  var currentLocation = locations[j];
           if(g.attributes["GEO_ID"] == currentLocation.geoId){
         	  
-        	  g.attributes["COUNT"] = Math.log(currentLocation[typeFunding]);
+        	  g.attributes["COUNT"] = currentLocation[typeFunding];
         	  g.attributes["COMMITMENTSFMT"] = df.format(currentLocation.commitments) + " " + currentLocation.amountsCurrencyCode;
         	  g.attributes["DISBURSEMENTSFMT"] = df.format(currentLocation.disbursements) + " " + currentLocation.amountsCurrencyCode;
         	  g.attributes["EXPENDITURESFMT"] = df.format(currentLocation.expenditures) + " " + currentLocation.amountsCurrencyCode;
@@ -957,6 +957,7 @@ function MapFindStructure(activity, structureGraphicLayer){
 }
 
 function ExportStructures() {
+	//alert ("/esrigis/excelexporter.do?structures=" + structurestorequest());
 	window.open("/esrigis/excelexporter.do?structures=" + structurestorequest());
 	/*
 	var xhrArgs = {

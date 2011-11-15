@@ -624,7 +624,6 @@ var callbackChildrenCall = {
 
 
 YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
-YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren)
 YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
 YAHOO.util.Event.addListener("imp_org_group_dropdown_ids", "change", callbackChildren);

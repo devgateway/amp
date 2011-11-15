@@ -15,7 +15,7 @@
 <html>
   
   <head>
-  
+  	<title><digi:trn>Aid Management Platform - Advanced GIS</digi:trn></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=7" /> 
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
@@ -178,7 +178,7 @@
 			<div id="mainGisMenu">
 				<img src='/TEMPLATE/ampTemplate/img_2/gis/minimize.gif' id="minmenu" style="margin-right:5px;cursor: pointer;">
 				<div class="gisBoxHeader">
-					<h3 style="line-height:1em;">Main Menu</h3>
+					<h3 style="line-height:1em;"><digi:trn>Tools</digi:trn></h3>
 	            </div>
 	            <div id="divmenucontent">
 		            <ul>

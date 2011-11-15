@@ -663,7 +663,7 @@ function adminHelp(){
                                         </li>
                                         </module:display>
                                         
-                                        <module:display name="Map Module" parentModule="MAP MODULE">
+                                        <module:display name="Map Module">
                                         <li class="yuiampmenuitem_drop">
                                         	<a class="yuiampmenuitemlabel" href="/esrigis/mainmap.do" target="_blank">
 			                                	<digi:trn>Map Module</digi:trn>

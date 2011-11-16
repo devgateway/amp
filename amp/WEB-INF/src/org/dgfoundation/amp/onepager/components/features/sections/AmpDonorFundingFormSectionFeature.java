@@ -82,42 +82,6 @@ public class AmpDonorFundingFormSectionFeature extends
 				am, "Amount", "funAmount", "Currency",
 				"currencyCode", "Date", "funDate");
 		add(funding);
-		/*
-		add(new Label("proposedAmount", "tset"));
-		add(new AmpTextFieldPanel("proposedCurrency", new Model("asda"), "Curr"));
-		add(new Label("proposedDate", "tset"));
-		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount",
-				new PropertyModel<Double>(am, "funAmount"), "Amount",true) {
-			public IConverter getInternalConverter(java.lang.Class<?> type) {
-				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
-				
-//				formatter.setMinimumFractionDigits(0);
-				converter.setNumberFormat(getLocale(), formatter);
-				return converter; 
-			}
-		};
-		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
-		add(amount);
-		*/
-		
-		/*
-		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
-			@Override
-			public List<AmpCurrency> getObject() {
-				return (List<AmpCurrency>) CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
-			}
-		};
-		
-		AmpSelectFieldPanel<AmpCurrency> currency = new AmpSelectFieldPanel<AmpCurrency>("proposedCurrency",
-				new PropertyModel<AmpCurrency>(am, "currencyCode"),
-				currencyList,
-				"Currency", true, false);
-		add(currency);
-		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", new PropertyModel<Date>(
-				am, "funDate"), "Date",true);
-		add(date);
-		*/
 		listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 

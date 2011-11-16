@@ -476,10 +476,6 @@ function MapFind(activity){
     		var attr = {"Temp":"Temporal Attribute"};
     		var infoTemplate = new esri.InfoTemplate("");   
     		var pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
-    		var exit = false;
-    		var primarysector;
-    		var primarysectorschema;
-    		var primarypercentage;
     		
     		dojo.forEach(activity.sectors,function(sector) {
     			primarysector = sector.sectorName;
@@ -869,6 +865,7 @@ function getStructures(clear) {
 			structureGraphicLayer.hide();
 		}else{
 			structureGraphicLayer.show();
+			map.infoWindow.resize(300,190);
 		}
 	}else{
 	    structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "structuresMap", visible: false});
@@ -903,18 +900,22 @@ function MapFindStructure(activity, structureGraphicLayer){
 	dojo.forEach(activity.structures,function(structure) {
 		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
 		var pgraphic;
+		var stinfoTemplate = new esri.InfoTemplate("Structure Details", "<table style='font-size: 11px;'>" +
+				"<tr><td><b>Name<b></td><td><b> ${Structure Name}</b></td></tr>" +
+				"<tr><td nowrap><b>Activity<b></td><td>${Activity}</td></tr>" +
+				"<tr><td nowrap><b>Structure Type<b></td><td>${Structure Type}</td></tr>" +
+				"<tr><td nowrap><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
 		if(structure.shape == ""){
 			var pt = new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);
 			var transpt = esri.geometry.geographicToWebMercator(pt);
-			var infoTemplate = new esri.InfoTemplate("");   
 			var attr = {"Temp":"Temporal Attribute"};
-			pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
+			pgraphic = new esri.Graphic(transpt,sms,attr,stinfoTemplate);
 			
 			pgraphic.setAttributes( {
 				  "Structure Name":structure.name,
 				  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
 				  "Structure Type":structure.type,
-				  "Coordinates":pt.x + " " + pt.y
+				  "Coordinates":pt.x + " , " + pt.y
 				  });
 			structures.push(pgraphic);
 		}
@@ -927,9 +928,9 @@ function MapFindStructure(activity, structureGraphicLayer){
 					  "Structure Name":structure.name,
 					  "Structure Type":structure.type,
 					  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
-					  "Coordinates":pgraphic.geometry.x + " " + pgraphic.geometry.y 
+					  "Coordinates":pgraphic.geometry.x + " , " + pgraphic.geometry.y 
 					  });
-				pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
+				pgraphic.setInfoTemplate(stinfoTemplate);
 				if(jsonObject.symbol.style == "esriSMSCircle") //If it's a point, put the appropriate icon
 				{
 					pgraphic.setSymbol(sms);
@@ -939,14 +940,14 @@ function MapFindStructure(activity, structureGraphicLayer){
 			else
 			{
 				pt = new esri.geometry.Point(jsonObject);
-				var infoTemplate = new esri.InfoTemplate("");   
+				var infoTemplate = stinfoTemplate;   
 				var attr = {"Temp":"Temporal Attribute"};
 				pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
 				pgraphic.setAttributes( {
 					  "Structure Name":structure.name,
 					  "Structure Type":structure.type,
 					  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
-					  "Coordinates":pgraphic.geometry.x + " " + pgraphic.geometry.y
+					  "Coordinates":pgraphic.geometry.x + " , " + pgraphic.geometry.y
 					  });
 				
 			}

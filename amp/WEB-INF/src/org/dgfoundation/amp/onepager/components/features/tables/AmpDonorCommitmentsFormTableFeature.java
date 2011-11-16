@@ -45,7 +45,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 	 */
 	public AmpDonorCommitmentsFormTableFeature(String id,
 			final IModel<AmpFunding> model, String fmName) throws Exception {
-		super(id, model, fmName, Constants.COMMITMENT, 6);
+		super(id, model, fmName, Constants.COMMITMENT, 7);
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());

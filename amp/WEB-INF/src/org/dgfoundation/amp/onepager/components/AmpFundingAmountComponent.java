@@ -78,6 +78,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 				model, propertyDate), fmDate,true);
 		date.getDate().setRequired(true);
 		add(date);
+		setRenderBodyOnly(true);
 	}
 
 	public AmpTextFieldPanel<Double> getAmount() {

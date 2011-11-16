@@ -4949,6 +4949,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		 Transaction tx = null;
 		 try{
 			 session = PersistenceManager.getSession();
+			 tx = session.beginTransaction();
 //beginTransaction();
 
 		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
@@ -4968,13 +4969,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		    	  ampActivityVersion.setDeleted(true);
 		    	  session.update(ampActivityVersion);
 		     
-		      //tx.commit();
+		    	  tx.commit();
 //session.flush();
 		 }
 		
 		 catch (Exception e) {
 			// TODO: handle exception
 			 e.printStackTrace();
+			 tx.rollback();
 		}
 	}
 	

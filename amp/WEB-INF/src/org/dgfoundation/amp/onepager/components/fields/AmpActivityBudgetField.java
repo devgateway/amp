@@ -48,12 +48,12 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 			currentSelection = new Integer(-1);
 			model.setObject(currentSelection);
 		}
-		if (currentSelection == 0) //"On" is selected
+		if (currentSelection == 1) //"On" is selected
 			toggleExtraFields(true);
 		else
 			toggleExtraFields(false);
 
-		final String[] budgetElements = new String[] {"No answer", "On", "Off", "Treasury"};
+		final String[] budgetElements = new String[] {"No answer", "Off", "On", "Treasury"};
 		DropDownChoice budgetDD = new DropDownChoice("choice", new ActivityBudgetModel(model, budgetElements), Arrays.asList(budgetElements), new TranslatedChoiceRenderer<String>()); 
 		budgetDD.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override

@@ -685,7 +685,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 							.isApprover())
 							&& tm.getTeamId().equals(
 									activity.getTeam().getAmpTeamId()) ){
-              AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+              AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
 			  eaForm.getIdentification().setApprovedBy(teamMember);
 			  eaForm.getIdentification().setApprovalDate(new Date());
 			  //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);

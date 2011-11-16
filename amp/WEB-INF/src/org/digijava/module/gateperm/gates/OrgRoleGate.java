@@ -10,7 +10,6 @@ import java.util.Queue;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -91,23 +90,15 @@ public class OrgRoleGate extends Gate {
 	//TODO AMP-2579 this IF was added to fix null pointer temporary.
 	if (tm==null) return false; 
 	
-	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-	User user = TeamMemberUtil.users.get(tm.getMemberId());
-	if(user == null)
-		{
-			AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-			user = atm.getUser();
-			TeamMemberUtil.users.put(tm.getMemberId(), user);
-			//User user = atm.getUser();
-		}
+	//AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+	
+	User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());//atm.getUser();
 	
 
 	String paramRoleCode = parameters.poll().trim();
 
 	//check if the scope has a funding organisation, if it does use that directly
 	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
-	if ( o instanceof AmpModulesVisibility && ((AmpModulesVisibility)o).getName().contains("Title") )
-			logger.debug( ((AmpModulesVisibility)o).getName()+ "  :::org:" + org + "  :::paramrolcode: " +paramRoleCode);
 	if(org!=null && "DN".equals(paramRoleCode) ) {
 		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");

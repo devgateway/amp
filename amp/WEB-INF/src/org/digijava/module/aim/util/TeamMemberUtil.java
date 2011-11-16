@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -57,7 +58,19 @@ public class TeamMemberUtil {
 
 	private static Logger logger = Logger.getLogger(TeamMemberUtil.class);
 	
-	public static HashMap<Long,User> users = new HashMap<Long,User>();
+	public static Hashtable<Long,User> users = new Hashtable<Long,User>();
+	public static Hashtable<Long,AmpTeamMember> atmUsers = new Hashtable<Long,AmpTeamMember>();
+	
+	public static User getUserEntityByTMId(Long teamMemberId) {
+		User u	= users.get( teamMemberId );
+		if ( u == null ) {
+			AmpTeamMember atm	= getAmpTeamMemberCached(teamMemberId);
+			u					= atm.getUser();
+			users.put(teamMemberId, u);
+		}
+		return u;
+			
+	}
 
 	public static Long getFundOrgOfUser(Long id) {
 		Long orgId = null;
@@ -151,10 +164,22 @@ public class TeamMemberUtil {
 			return members;
 	}
 
+	public static AmpTeamMember getAmpTeamMemberCached(Long id) {
+		AmpTeamMember ampMember		= TeamMemberUtil.atmUsers.get(id);
+		if ( ampMember != null )
+			return ampMember;
+		
+		else {
+			ampMember				= getAmpTeamMember(id);
+			atmUsers.put(id, ampMember);
+			return ampMember;
+		}
+	}
+	
 	public static AmpTeamMember getAmpTeamMember(Long id) {
 		AmpTeamMember ampMember = null;
 		Session session = null;
-
+		
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			// modified by Priyajith
@@ -174,6 +199,9 @@ public class TeamMemberUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get team member ", ex);
 		} 
+		
+		
+		
 		return ampMember;
 	}
 

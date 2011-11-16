@@ -83,9 +83,9 @@ public class RelatedOrgGate extends Gate {
 	//TODO AMP-2579 this IF was added to fix null pointer temporary.
 	if (tm==null) return false; 
 	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+	//AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 	
-	User user = atm.getUser();
+	User user =  TeamMemberUtil.getUserEntityByTMId(tm.getMemberId() ); //atm.getUser();
 
 	
 	

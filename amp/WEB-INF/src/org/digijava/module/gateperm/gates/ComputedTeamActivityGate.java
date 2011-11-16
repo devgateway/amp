@@ -94,9 +94,9 @@ public class ComputedTeamActivityGate extends Gate {
 		//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm
 		//		.getMemberId());
 		
-		AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+		//AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 		PersistenceManager.releaseSession(session);
-		User user = atm.getUser();
+		User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());//atm.getUser();
 
 		Set relatedTeamsForMember = TeamUtil.getRelatedTeamsForMember(tm);
 		Set computedOrgs = TeamUtil.getComputedOrgs(relatedTeamsForMember);

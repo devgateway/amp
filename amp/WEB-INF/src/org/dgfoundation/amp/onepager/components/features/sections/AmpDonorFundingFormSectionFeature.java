@@ -5,8 +5,10 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,11 +79,44 @@ public class AmpDonorFundingFormSectionFeature extends
 				am, "funding");
 		if (setModel.getObject() == null)
 			setModel.setObject(new LinkedHashSet<AmpFunding>());
-
-		AmpFundingAmountComponent<AmpActivityVersion> funding = new AmpFundingAmountComponent<AmpActivityVersion>("proposedAmount",
-				am, "Amount", "funAmount", "Currency",
-				"currencyCode", "Date", "funDate");
-		add(funding);
+		
+		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount",
+				new PropertyModel<Double>(am, "funAmount"), "Amount",false) {
+			public IConverter getInternalConverter(java.lang.Class<?> type) {
+				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
+				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
+				converter.setNumberFormat(getLocale(), formatter);
+				return converter; 
+			}
+		};
+		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
+		add(amount);
+		
+		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
+			@Override
+			public List<String> getObject() {
+				List<AmpCurrency> tmp = (List<AmpCurrency>) CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
+				ArrayList<String> ret = new ArrayList<String>(); 
+				
+				Iterator<AmpCurrency> it = tmp.iterator();
+				while (it.hasNext()) {
+					AmpCurrency c = (AmpCurrency) it.next();
+					ret.add(c.getCurrencyCode());
+				}
+				return ret;
+			}
+		};
+		
+		AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("proposedCurrency",
+				new PropertyModel<String>(am, "currencyCode"),
+				currencyList,
+				"Currency", false, false);
+		add(currency);
+		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", new PropertyModel<Date>(
+				am, "funDate"), "Date", false);
+		add(date);
+		
+		
 		listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 

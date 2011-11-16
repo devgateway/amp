@@ -102,7 +102,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					@Override
 					public Object component(AmpSemanticValidatorField<?> ifs) {
 						ifs.getSemanticValidator().setEnabled(enabled);
-						target.addComponent(ifs);
+						if (ifs.isVisibleInHierarchy())
+							target.addComponent(ifs);
 						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 					}
 

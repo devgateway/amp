@@ -300,7 +300,7 @@ public class DbUtil {
             if (mapLevel == 2) {
                 mapLevelParam = "Region";
             } else if (mapLevel == 3) {
-                mapLevelParam = "District";
+                mapLevelParam = "Zone";
             } else {
                 throw new DgException("Incorrect map level parameter");
             }
@@ -486,7 +486,7 @@ public class DbUtil {
             StringBuffer qs = new StringBuffer();
             qs.append("select distinct actLoc.activity.ampActivityId from ");
             qs.append(AmpActivityLocation.class.getName());
-            qs.append(" actLoc where actLoc.location.regionLocation != null and (actLoc.location.regionLocation.parentCategoryValue.value = 'Region' or actLoc.location.regionLocation.parentCategoryValue.value = 'Zone')");
+            qs.append(" actLoc where actLoc.location.location != null and (actLoc.location.location.parentCategoryValue.value = 'Region' or actLoc.location.location.parentCategoryValue.value = 'Zone')");
             q = session.createQuery(qs.toString());
             retVal = q.list();
         } catch (Exception ex) {
@@ -718,8 +718,8 @@ public class DbUtil {
            querySrc.append(IndicatorConnection.class.getName());
            querySrc.append(" ds");
            querySrc.append(" where ds.sector.ampSectorId=:sectorId and");
-           querySrc.append(" (ds.location.regionLocation.parentCategoryValue.value='Region' or");
-           querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
+           querySrc.append(" (ds.location.location.parentCategoryValue.value='Region' or");
+           querySrc.append(" ds.location.location.parentCategoryValue.value='District')");
            querySrc.append(" order by ds.indicator.name");
            Query q = session.createQuery(querySrc.toString());
            q.setLong("sectorId", sectorId);
@@ -732,9 +732,9 @@ public class DbUtil {
            querySrc1.append(" ds where ds.indicatorConnection.sector.ampSectorId=:sectorId and");
 
            if (mapLevel == 2) {
-               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='Region'");
+               querySrc1.append(" ds.indicatorConnection.location.location.parentCategoryValue.value='Region'");
            } else if (mapLevel == 3) {
-               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='District'");
+               querySrc1.append(" ds.indicatorConnection.location.location.parentCategoryValue.value='District'");
            }
            Query q1 = session.createQuery(querySrc1.toString());
            q1.setLong("sectorId", sectorId);
@@ -812,7 +812,7 @@ public class DbUtil {
               StringBuffer queryString = new StringBuffer();
 
 //              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal, indConn.location.regionLocation.name from ");
+                  queryString.append("select indVal, indConn.location.location.name from ");
                   /*
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
                   queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source from ");
@@ -2060,11 +2060,11 @@ public class DbUtil {
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.regionLocation.id, actLoc.locationPercentage from ");
+            StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.location.id, actLoc.locationPercentage from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as actLoc where actLoc.locationPercentage is not null and actLoc.locationPercentage > 0");
             if (locationWhereclause != null) {
-                queryStr.append(" and actLoc.location.regionLocation.id in ");
+                queryStr.append(" and actLoc.location.location.id in ");
                 queryStr.append(locationWhereclause);
             }
             Query q = sess.createQuery(queryStr.toString());
@@ -2405,7 +2405,7 @@ public class DbUtil {
             if (mapLevel == GisMap.MAP_LEVEL_REGION) {
                 queryStr.append(" as loc where loc.parentCategoryValue.value='Region' and  loc.parentLocation.iso = :COUNTRY_ISO");
             } else if (mapLevel == GisMap.MAP_LEVEL_DISTRICT) {
-                queryStr.append(" as loc where loc.parentCategoryValue.value='District' and parentLocation.parentLocation.iso = :COUNTRY_ISO");
+                queryStr.append(" as loc where loc.parentCategoryValue.value='Zone' and parentLocation.parentLocation.iso = :COUNTRY_ISO");
             }
 
             Query q = sess.createQuery(queryStr.toString());
@@ -2507,7 +2507,7 @@ public class DbUtil {
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, loc.location.regionLocation.name from ");
+            StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, loc.location.location.name from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as loc where loc.activity.ampActivityId in ");
             queryStr.append(actIdWhereclause);

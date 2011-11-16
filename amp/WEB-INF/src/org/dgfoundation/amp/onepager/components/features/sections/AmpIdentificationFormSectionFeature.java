@@ -98,6 +98,11 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					"donorProjectCode", new PropertyModel<String>(am,
 							"projectCode"), "Donor Project Code", AmpFMTypes.MODULE);
 			add(donorProjectCode);
+			
+			AmpTextFieldPanel<String> govAgreementNum = new AmpTextFieldPanel<String>(
+					"govAgreementNum", new PropertyModel<String>(am,
+							"govAgreementNumber"), "Government Agreement Number", AmpFMTypes.MODULE);
+			add(govAgreementNum);
 	
 			AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
 					"crisNumber", new PropertyModel<String>(am,

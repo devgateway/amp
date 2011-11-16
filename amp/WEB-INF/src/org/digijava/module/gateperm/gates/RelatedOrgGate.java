@@ -12,7 +12,8 @@ import org.hibernate.Session;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.RelOrganization;
@@ -67,15 +68,22 @@ public class RelatedOrgGate extends Gate {
     @Override
     public boolean logic() throws Exception {
 	
-	AmpActivity ampa = null;
+    AmpActivityVersion ampa = null;
 //	Activity a = null;
+	Object o1 = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+	if ( o1 instanceof AmpModulesVisibility )
+	{
+		if( ((AmpModulesVisibility)o1).getName().contains("Project Title") )
+			System.out.println("---------------CompositePermission " + ((AmpModulesVisibility)o1).getName());
+		
+	}
 
 	Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-	if (o instanceof AmpActivity)
-	    ampa = (AmpActivity) o;
+	if (o instanceof AmpActivityVersion)
+	    ampa = (AmpActivityVersion) o;
 	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-	if (oo instanceof AmpActivity)
-	    ampa = (AmpActivity) oo;
+	if (oo instanceof AmpActivityVersion)
+	    ampa = (AmpActivityVersion) oo;
 //	if (oo instanceof Activity)
 //	    a = (Activity) oo;
 
@@ -91,7 +99,7 @@ public class RelatedOrgGate extends Gate {
 	
 	
 	// iterate the assigned orgs:
-	if (ampa != null) {	    
+	if (ampa != null) {
 	    if (ampa.getOrgrole() == null)
 		return false;
 	    Iterator i = ampa.getOrgrole().iterator();

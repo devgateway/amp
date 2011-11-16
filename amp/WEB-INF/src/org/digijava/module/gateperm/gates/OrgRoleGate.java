@@ -9,9 +9,8 @@ import java.util.Queue;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -73,16 +72,16 @@ public class OrgRoleGate extends Gate {
          */
     @Override
     public boolean logic() throws Exception {
-	AmpActivity ampa = null;
+	AmpActivityVersion ampa = null;
 //	Activity a = null;
 
 	Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-	if (o instanceof AmpActivity)
-	    ampa = (AmpActivity) o;
+	if (o instanceof AmpActivityVersion)
+	    ampa = (AmpActivityVersion) o;
 	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-	if (oo instanceof AmpActivity)
-	    ampa = (AmpActivity) oo;
-	logger.debug("Object is:"+o.toString());
+	if (oo instanceof AmpActivityVersion)
+	    ampa = (AmpActivityVersion) oo;
+	logger.info("Object is:"+o.toString());
 //	if (oo instanceof Activity)
 //	    a = (Activity) oo;
 

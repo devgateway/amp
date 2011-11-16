@@ -128,12 +128,13 @@ public abstract class Permissible implements Identifiable {
 			logger.debug("Actions allowed for object "+ permissionMapForPermissible.getObjectLabel() + " (id="+permissionMapForPermissible.getObjectIdentifier()
 					+ ") of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
 					+ actions); }
-			Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-			if ( o instanceof AmpModulesVisibility )
-			{
-				logger.debug("---------------PERMISSIBLE " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
-				
-			}
+//			Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+//			if ( o instanceof AmpModulesVisibility )
+//			{
+//				//if( ((AmpModulesVisibility)o).getName().contains("Project Title") )
+//					logger.debug("---------------PERMISSIBLE " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
+//				
+//			}
 		return actions;
 	}
 	

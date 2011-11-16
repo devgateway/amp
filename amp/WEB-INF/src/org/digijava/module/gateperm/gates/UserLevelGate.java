@@ -75,7 +75,7 @@ public class UserLevelGate extends Gate {
 		Permissible permissible=(Permissible) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		if(act==null && permissible instanceof AmpActivityVersion) act=(AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		boolean owner=false;
-		logger.debug("Object is:"+permissible.toString());
+		logger.info("Object is:"+permissible.toString());
 		if (act!=null && act.getActivityCreator()==null){
 			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());
 			owner=false;

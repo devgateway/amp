@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -38,8 +39,8 @@ public class DisplayFlag extends Action {
 		} else {
 			ServletContext ampContext = getServlet().getServletContext();
 			Boolean defFalgExist = (Boolean) ampContext.getAttribute(Constants.DEF_FLAG_EXIST);
-			if (defFalgExist.booleanValue() == true) {
-				ServletOutputStream os = response.getOutputStream();
+			ServletOutputStream os = response.getOutputStream();
+			if (defFalgExist != null && defFalgExist.booleanValue() == true) {				
 				byte[] defaultFlag = FeaturesUtil.getDefaultFlag();
 				if(defaultFlag != null)
 				{
@@ -47,10 +48,15 @@ public class DisplayFlag extends Action {
 				}
 				else
 				{
-		            BufferedImage bufferedImage = new BufferedImage(30, 30, BufferedImage.TRANSLUCENT);
-		            ImageIO.write(bufferedImage, "png", os);
+					BufferedImage bufferedImage = ImageIO.read(new File(getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/img_2/amp_logo.gif")));
+		            //BufferedImage bufferedImage = new BufferedImage(30, 30, BufferedImage.TRANSLUCENT);
+		            ImageIO.write(bufferedImage, "gif", os);
 				}
 				os.flush();									
+			} else {
+				BufferedImage bufferedImage = ImageIO.read(new File(getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/img_2/amp_logo.gif")));
+	            //BufferedImage bufferedImage = new BufferedImage(30, 30, BufferedImage.TRANSLUCENT);
+	            ImageIO.write(bufferedImage, "gif", os);
 			}
 		}
 		

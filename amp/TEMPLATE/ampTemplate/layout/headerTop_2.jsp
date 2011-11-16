@@ -110,7 +110,7 @@ table tr td {font-size:11px;}
 	<div class="centering">
 		<div class="logo">
 			<a href="/" style="text-decoration: none">
-			<img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left border=0>
+			<img src="/aim/default/displayFlag.do" align="left" border="0" width="50px" height="34px">
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 			</a>
 		</div>

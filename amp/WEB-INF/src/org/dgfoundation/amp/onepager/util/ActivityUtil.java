@@ -81,6 +81,7 @@ public class ActivityUtil {
 			if (a.getAmpActivityId() == null){
 				a.setActivityCreator(ampCurrentMember);
 				a.setCreatedBy(ampCurrentMember);
+				a.setTeam(ampCurrentMember.getAmpTeam());
 				newActivity = true;
 			}
 			
@@ -153,7 +154,6 @@ public class ActivityUtil {
 			a.setUpdatedDate(updatedDate);
 			a.setModifiedDate(updatedDate);
 			a.setModifiedBy(ampCurrentMember);
-			a.setTeam(ampCurrentMember.getAmpTeam());
 			
 			
 			saveResources(a); 

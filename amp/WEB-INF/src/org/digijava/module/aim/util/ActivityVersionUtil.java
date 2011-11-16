@@ -229,10 +229,10 @@ public class ActivityVersionUtil {
 		}
 		
 		
-		out.setActivityCreator(member);
+		//out.setActivityCreator(member);
 		out.setAmpActivityGroup(null);
 		out.setAuthor(null);
-		out.setTeam(member.getAmpTeam());
+		//out.setTeam(member.getAmpTeam());
 		out.setThemeId(null);
 		out.setModality(null);
 		out.setModifiedBy(member);

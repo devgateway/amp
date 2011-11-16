@@ -444,9 +444,9 @@ function resetToDefaults(){
 	}
 	
 	
-	document.getElementById("transaction_type_0").value = true;
-	document.getElementById("transaction_type_1").value = false;
-	document.getElementById("transaction_type_2").value = false;
+	document.getElementById("transaction_type_0").checked = true;
+	document.getElementById("transaction_type_1").checked = false;
+	document.getElementById("transaction_type_2").checked = false;
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;

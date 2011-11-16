@@ -80,6 +80,7 @@
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module"></module:display>
 
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

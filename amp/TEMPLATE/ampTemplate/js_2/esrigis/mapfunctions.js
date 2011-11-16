@@ -865,7 +865,7 @@ function getStructures(clear) {
 			structureGraphicLayer.hide();
 		}else{
 			structureGraphicLayer.show();
-			map.infoWindow.resize(300,190);
+			map.infoWindow.resize(400,250);
 		}
 	}else{
 	    structureGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: false, id: "structuresMap", visible: false});
@@ -901,10 +901,11 @@ function MapFindStructure(activity, structureGraphicLayer){
 		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
 		var pgraphic;
 		var stinfoTemplate = new esri.InfoTemplate("Structure Details", "<table style='font-size: 11px;'>" +
-				"<tr><td><b>Name<b></td><td><b> ${Structure Name}</b></td></tr>" +
-				"<tr><td nowrap><b>Activity<b></td><td>${Activity}</td></tr>" +
-				"<tr><td nowrap><b>Structure Type<b></td><td>${Structure Type}</td></tr>" +
-				"<tr><td nowrap><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
+				"<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>" +
+				"<tr><td nowrap style='padding-right:20px;'><b>Activity<b></td><td style='margin-right:5px;'>${Activity}</td></tr>" +
+				"<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>" +
+				"<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>" +
+				"<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
 		if(structure.shape == ""){
 			var pt = new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);
 			var transpt = esri.geometry.geographicToWebMercator(pt);
@@ -915,6 +916,7 @@ function MapFindStructure(activity, structureGraphicLayer){
 				  "Structure Name":structure.name,
 				  "Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activity.ampactivityid+'~isPreview=1" target="_blank">'+activity.activityname+'</a>',
 				  "Structure Type":structure.type,
+				  "Structure Description":structure.description,
 				  "Coordinates":pt.x + " , " + pt.y
 				  });
 			structures.push(pgraphic);
@@ -1052,7 +1054,7 @@ function showAddActivityInfoWindow (results) {
 	map.infoWindow.setTitle("<digi:trn>Add new activity</digi:trn>");
 	content = content + "</table>";
 	map.infoWindow.setContent(content);
-	map.infoWindow.resize(400, 200);
+	map.infoWindow.resize(400, 300);
 	map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));
 //	dojo.connect(map.infoWindow, "onHide", clearbuffer);
 	hideLoading();

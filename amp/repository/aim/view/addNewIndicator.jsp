@@ -63,13 +63,19 @@ function addNewIndicator(){
 	alert("${translation}");
     return false;
   }
-   if(document.aimNewIndicatorForm.type.value!="A"&&document.aimNewIndicatorForm.type.value!="D"){
-       <c:set var="translation">
-                <digi:trn key="admin:selectIndicatorType">Please Select Indicator Type</digi:trn>
-        </c:set>
+  
+  <field:display name="Indicator Type" feature="Admin">
+  
+  if(document.aimNewIndicatorForm.type.value!="A"&&document.aimNewIndicatorForm.type.value!="D"){
+      <c:set var="translation">
+               <digi:trn key="admin:selectIndicatorType">Please Select Indicator Type</digi:trn>
+       </c:set>
 	alert("${translation}");
-    return false;
-  }
+   return false;
+ }
+  
+  </field:display>
+  
 <%-- 
 	if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
 	   alert("Please select indicator type(s).!");

@@ -116,7 +116,7 @@ public class ActivityUtil {
 				}
 			}
 			
-			if (a.getDraft() && a.getAmpActivityGroup() == null){
+			if (a.getAmpActivityGroup() == null){
 				//we need to create a group for this activity
 				AmpActivityGroup tmpGroup = new AmpActivityGroup();
 				tmpGroup.setAmpActivityLastVersion(a);

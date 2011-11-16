@@ -66,7 +66,8 @@ public class TeamMemberUtil {
 		if ( u == null ) {
 			AmpTeamMember atm	= getAmpTeamMemberCached(teamMemberId);
 			u					= atm.getUser();
-			users.put(teamMemberId, u);
+			if (teamMemberId != null && u != null)
+				users.put(teamMemberId, u);
 		}
 		return u;
 			
@@ -171,7 +172,8 @@ public class TeamMemberUtil {
 		
 		else {
 			ampMember				= getAmpTeamMember(id);
-			atmUsers.put(id, ampMember);
+			if (id != null && ampMember != null)
+				atmUsers.put(id, ampMember);
 			return ampMember;
 		}
 	}

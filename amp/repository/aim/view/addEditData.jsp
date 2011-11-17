@@ -115,7 +115,7 @@ function validation(){
 <table  width=572 cellPadding=4 cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
   <tr>
     <td bgColor=#c7d4db class=box-title height="25" align="center" colspan="7">
-    <digi:trn key="aim:addIndicator:add"><b>Add/Edit data</b></digi:trn><b>: ${aimThemeForm.indicatorName}</b>
+    <digi:trn key="aim:addIndicator:add"><b><digi:trn>Add/Edit data</digi:trn></b></digi:trn><b>: ${aimThemeForm.indicatorName}</b>
     </td>
   </tr>
   <tr bgcolor="#F2F2F2" class="textalb">

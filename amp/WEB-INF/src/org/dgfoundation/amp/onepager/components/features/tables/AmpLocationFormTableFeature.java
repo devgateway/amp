@@ -21,14 +21,17 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -187,7 +190,21 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+			@Override
+			public void setPercentage(AmpActivityLocation loc, int val) {
+				loc.setLocationPercentage((float) val);
+			}
+			@Override
+			public int getPercentage(AmpActivityLocation loc) {
+				return (int)((float)(loc.getLocationPercentage()));
+			}
+			@Override
+			public boolean itemInCollection(AmpActivityLocation item) {
+				return true; //all items displayed in the same list
+			}
+			
+		});
 		
 		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
 			@Override

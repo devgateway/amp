@@ -25,7 +25,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidato
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
+import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -143,6 +145,28 @@ public class AmpSectorsFormTableFeature extends
 		};
 		list.setReuseItems(true);
 		add(list);
+		
+		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+			@Override
+			public void setPercentage(AmpActivitySector loc, int val) {
+				loc.setSectorPercentage((float) val);
+			}
+
+			@Override
+			public int getPercentage(AmpActivitySector loc) {
+				return (int)((float)loc.getSectorPercentage());
+			}
+
+			@Override
+			public boolean itemInCollection(AmpActivitySector item) {
+				if (item.getClassificationConfig().getId()
+						.equals(sectorClassification.getId()))
+					return true;
+				else
+					return false;
+			}
+
+		});
 
 		final AmpAutocompleteFieldPanel<AmpSector> searchSectors = new AmpAutocompleteFieldPanel<AmpSector>(
 				"searchSectors", "Search " + fmName, AmpSectorSearchModel.class) {

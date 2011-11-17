@@ -137,6 +137,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 					this.add(new AttributeAppender("style", new Model("margin-left: -5px"), ";"));
 					this.setEscapeModelStrings(false);
 				} 
+				else
+					this.add(new AttributeAppender("style", new Model("display: none"), ";"));
 			}
 		};
 		add(requiredStar);

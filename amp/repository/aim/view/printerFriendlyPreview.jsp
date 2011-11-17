@@ -48,7 +48,12 @@
 		actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 	}
 %>
-
+<link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+<style>
+html {background:none;}
+body {background:none;}
+.prnt_tbl td {border-collapse:collapse; border-color:#CCCCCC;}
+</style>
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="650" vAlign="top" align="left" border="0">
@@ -67,7 +72,7 @@
 								<table width="98%" cellspacing="1" cellPadding="2">
 								<field:display feature="Identification" name="Project Title">
 									<tr>
-										<td class="head2-name" width="100%" align="left" bgcolor="#ffffff">
+										<td class="head2-name" width="100%" align="center" bgcolor="#ffffff">
                                 			<c:if test="${aimEditActivityForm.identification.title!=null}">${aimEditActivityForm.identification.title}</c:if>
 										</td>
 									</tr>	
@@ -80,9 +85,9 @@
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
                               <td align="center" vAlign="top">
-								<table width="98%" cellspacing="0" cellpadding=4 style="border-collapse: collapse" border="1">
+								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
 									<tr bgcolor="#f4f4f2">
-										<td  align="center" colspan="2">
+										<td  align="center" colspan="2" bgcolor=#C7D4DB>
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>										
 										</td>
 									</tr>								

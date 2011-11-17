@@ -254,7 +254,7 @@
                         <div class="right_menu">
 						<div class="right_menu_header">
 						<div class="right_menu_header_cont">
-						Other links
+						<digi:trn>Other links</digi:trn>
 						</div>
 
 						</div>

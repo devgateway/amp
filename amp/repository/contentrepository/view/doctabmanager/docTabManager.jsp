@@ -54,6 +54,12 @@ border-right: 1px solid rgb(208, 208, 208);
 
 </style>
 <script type="text/javascript">
+var trnObj		= {
+		labels: "<digi:trn>Labels</digi:trn>",
+		filters: "<digi:trn>Filters</digi:trn>",
+		apply: "<digi:trn>Apply</digi:trn>",
+		close: "<digi:trn>Close</digi:trn>"
+};
 	var labelFilterCallbackObj	= {
 		click: function(e, label) {
 			publicListObj.addRemoveLabel(label);
@@ -70,11 +76,11 @@ border-right: 1px solid rgb(208, 208, 208);
 		}
 	}
 	var titlePanelObj	= null;
-	var fPanel	= new FilterAsYouTypePanel("publicLabelButtonId", labelFilterCallbackObj, "publicLabels");
+	var fPanel	= new FilterAsYouTypePanel("publicLabelButtonId", labelFilterCallbackObj, "publicLabels",trnObj);
 	fPanel.initLabelArray(false);
 	
 	function afterPageLoad(e) {
-		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId");
+		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId",trnObj);
 		publicListObj.filterInfoDivId	= "publicFilterInfoDiv";
 		publicListObj.sendRequest();
 	}

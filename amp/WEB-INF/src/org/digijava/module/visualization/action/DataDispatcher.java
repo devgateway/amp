@@ -588,18 +588,21 @@ public class DataDispatcher extends DispatchAction {
 	 				}
 	 	            //Accumulate the rest in Others.
 	 	            BigDecimal othersValue = new BigDecimal(0);
+	 	            String idsArrayStr = "";
 	 	            while(it.hasNext()){
 	 	            	Map.Entry entry = (Map.Entry)it.next();
 	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	 	                AmpSector sec = (AmpSector) entry.getKey();
+	 	                idsArrayStr = idsArrayStr + String.valueOf(sec.getAmpSectorId()) + "-";
 	 	            }
 	 	            BigDecimal percentage = getPercentage(othersValue, sectorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	              		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	              		xmlString.append("<sector name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<sector name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
     	                }
 	                }
@@ -621,15 +624,15 @@ public class DataDispatcher extends DispatchAction {
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5
-	            while(it.hasNext() && index <= 4){
+	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey());
+	        		csvString.append(entry.getKey().toString().replace(',', ';'));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
 	        		index++;
 	            }
-	            while(it.hasNext()){
+	            /*while(it.hasNext()){
 	            	Map.Entry entry = (Map.Entry)it.next();
 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
 	            }
@@ -638,7 +641,7 @@ public class DataDispatcher extends DispatchAction {
 	        		csvString.append(",");
 	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        		csvString.append("\n");
-	            }
+	            }*/
 	    		if(divide){
 	    			filter.setDivideThousands(false);
 	    		}
@@ -702,17 +705,21 @@ public class DataDispatcher extends DispatchAction {
 				ids.add(sec.getAmpSectorId());
 	        }
 	        Long[] idsArray = new Long[ids.size()];
+	        String idsArrayStr = "";
 	        index = 0;
 	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
 				index++;
 			}
 	        newFilter.setSelSectorIds(idsArray);
 	        if (ids.size()!=0){
 	        	csvString.append(",");
 	        	csvString.append("Others");
-		        sectorData += "Others";
+	        	csvString.append("#");
+	            csvString.append(idsArrayStr);
+	            sectorData += "Others";
 	        }
 	        csvString.append("\n");
 	        for (Long i = startYear; i <= endYear.intValue(); i++) {
@@ -925,18 +932,21 @@ public class DataDispatcher extends DispatchAction {
      				}
      	            //Accumulate the rest in Others.
      	            BigDecimal othersValue = new BigDecimal(0);
+     	            String idsArrayStr = "";
      	            while(it.hasNext()){
      	            	Map.Entry entry = (Map.Entry)it.next();
      	                othersValue = othersValue.add((BigDecimal) entry.getValue());
-     	            }
+     	                AmpOrganisation org = (AmpOrganisation) entry.getKey();
+	 	                idsArrayStr = idsArrayStr + String.valueOf(org.getAmpOrgId()) + "-";
+	 	            }
      	           	BigDecimal percentage = getPercentage(othersValue, donorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<donor name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -962,25 +972,16 @@ public class DataDispatcher extends DispatchAction {
         		csvString.append("\"Amount\"");
         		csvString.append("\n");
                 BigDecimal othersValue = BigDecimal.ZERO;
-                // Take the top 5
-                while(it.hasNext() && index <= 4){
+
+                while(it.hasNext()){
                     Map.Entry entry = (Map.Entry)it.next();
-            		csvString.append(entry.getKey());
+            		csvString.append(entry.getKey().toString().replace(',', ';'));
             		csvString.append(",");
             		csvString.append(entry.getValue());
             		csvString.append("\n");
             		index++;
                 }
-                while(it.hasNext()){
-                	Map.Entry entry = (Map.Entry)it.next();
-                    othersValue = othersValue.add((BigDecimal) entry.getValue());
-                }
-                if (!othersValue.equals(BigDecimal.ZERO)) {
-            		csvString.append(othersTitle);
-            		csvString.append(",");
-            		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-            		csvString.append("\n");
-                }
+               
                 PrintWriter out = new PrintWriter(new OutputStreamWriter(
             			response.getOutputStream(), "UTF-8"), true);
         		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -1040,17 +1041,21 @@ public class DataDispatcher extends DispatchAction {
     			ids.add(org.getAmpOrgId());
             }
             Long[] idsArray = new Long[ids.size()];
-            index = 0;
+            String idsArrayStr = "";
+	        index = 0;
             for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
 				index++;
 			}
             newFilter.setOrgIds(idsArray);
             if (ids.size()!=0){
             	csvString.append(",");
 	        	csvString.append("Others");
-		        donorData += "Others";
+	        	csvString.append("#");
+	            csvString.append(idsArrayStr);
+	            donorData += "Others";
 	        }
             csvString.append("\n");
             for (Long i = startYear; i <= endYear; i++) {
@@ -2000,18 +2005,21 @@ public class DataDispatcher extends DispatchAction {
 	 				}
 	 	            //Accumulate the rest in Others.
 	 	            BigDecimal othersValue = new BigDecimal(0);
+	 	            String idsArrayStr = "";
 	 	            while(it.hasNext()){
 	 	            	Map.Entry entry = (Map.Entry)it.next();
 	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
+	 	                AmpCategoryValueLocations acvl = (AmpCategoryValueLocations) entry.getKey();
+	 	                idsArrayStr = idsArrayStr + String.valueOf(acvl.getId()) + "-";
 	 	            }
 	 	            BigDecimal percentage = getPercentage(othersValue, regionTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<region name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<region name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -2032,25 +2040,16 @@ public class DataDispatcher extends DispatchAction {
 	    		csvString.append("\"Amount\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
-	            // Take the top 5
-	            while(it.hasNext() && index <= 4){
+	            
+	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey());
+	        		csvString.append(entry.getKey().toString().replace(',', ';'));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
 	        		index++;
 	            }
-	            while(it.hasNext()){
-	            	Map.Entry entry = (Map.Entry)it.next();
-	                othersValue = othersValue.add((BigDecimal) entry.getValue());
-	            }
-	            if (!othersValue.equals(BigDecimal.ZERO)) {
-	        		csvString.append(othersTitle);
-	        		csvString.append(",");
-	        		csvString.append(othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-	        		csvString.append("\n");
-	            }
+	            
 	    		if(divide){
 	    			filter.setDivideThousands(false);
 	    		}
@@ -2116,10 +2115,12 @@ public class DataDispatcher extends DispatchAction {
 				ids.add(loc.getId());
 	        }
 	        Long[] idsArray = new Long[ids.size()];
+	        String idsArrayStr = "";
 	        index = 0;
 	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
 				index++;
 			}
 	        newFilter.setSelLocationIds(idsArray);
@@ -2127,7 +2128,9 @@ public class DataDispatcher extends DispatchAction {
 	        if (ids.size()!=0){
 	        	csvString.append(",");
 	        	csvString.append("Others");
-		        regionData += "Others";
+	        	csvString.append("#");
+	            csvString.append(idsArrayStr);
+	            regionData += "Others";
 	        }
 	        csvString.append("\n");
             for (Long i = startYear; i <= endYear; i++) {

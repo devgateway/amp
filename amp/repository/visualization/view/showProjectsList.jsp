@@ -36,14 +36,18 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 	<tr>	
 		<td vAlign="top">
 		
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside" style="margin-bottom:15px;">
-  <tr bgcolor=#C7D4DB>
-    <td class="inside" align=center><b>N</b></td>
-    <td class="inside"><b><digi:trn>Title</digi:trn></b></td>
-    <td class="inside" align=center><b><digi:trn>Amount</digi:trn></b></td>
-  </tr>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside" style="margin-bottom:15px;">
+		<c:forEach items="${visualizationform.itemProjectsList}" var="item"> 
+			<tr bgcolor=#555555>
+		    <td class="inside" align=center colspan="3"><font color=#C7D4DB><b>${item.key}</b></font></td>
+		  </tr>
+		  <tr bgcolor=#C7D4DB>
+		    <td class="inside" align=center><b>N</b></td>
+		    <td class="inside"><b><digi:trn>Title</digi:trn></b></td>
+		    <td class="inside" align=center><b><digi:trn>Amount</digi:trn></b></td>
+		  </tr>
 			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.itemProjectsList}" var="projectItem">
+			<c:forEach items="${item.value}" var="projectItem">
 			<c:set var="index" value="${index+1}"/>
 			<tr>
 			<td class="inside" align=center><c:out value="${index}"/>.</td>
@@ -51,8 +55,12 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 			<td class="inside" align=center width="90"><b>(<c:out value="${projectItem.value}"/> <c:out value="${visualizationform.filter.currencyCode}"/>)</b></td>
 			</tr>
 			</c:forEach>
-			</table>
-		<center><input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"></center>
+			<tr>
+		    <td class="inside" align=center colspan="3"></td>
+		  </tr>
+		</c:forEach>
+	</table>
+	<center><input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"></center>
 	</td>
 	</tr>
 </table>

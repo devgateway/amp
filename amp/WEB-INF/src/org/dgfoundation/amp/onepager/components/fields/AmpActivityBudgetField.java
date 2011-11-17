@@ -60,7 +60,7 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				Integer obj = (Integer) model.getObject();
 				boolean previousValue = budgetExtras.isVisible();
-				if (obj == 0) // "On" was selected
+				if (obj == 1) // "On" was selected
 					toggleExtraFields(true);
 				else
 					toggleExtraFields(false);

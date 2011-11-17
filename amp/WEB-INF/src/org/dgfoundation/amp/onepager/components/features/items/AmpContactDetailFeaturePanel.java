@@ -49,6 +49,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	 * @throws Exception
 	 */
 	
+	final String  EXPRESSION = "^\\+?\\s?\\d+[\\s\\d]*";
 	
 	public AmpContactDetailFeaturePanel(String id, String fmName)
 			throws Exception {
@@ -143,8 +144,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         }
                         else{
                         	TextField<String> detailTextField=detailField.getTextContainer();
-                        	String expression = "^\\+?\\s?\\d+[\\s\\d]*";
-                        	detailTextField.add(new PatternValidator(expression));
+     
+                        	detailTextField.add(new PatternValidator(EXPRESSION));
                         	detailTextField.setRequired(true);
                         }
                         frg1.add(detailField);
@@ -158,8 +159,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true);
                             TextField<String> detailTextField=phn.getTextContainer();
                         	detailTextField.setRequired(true);
-                        	String expression = "^\\+?\\s?\\d+[\\s\\d]*";
-                        	detailTextField.add(new PatternValidator(expression));
+                        	detailTextField.add(new PatternValidator(EXPRESSION));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();

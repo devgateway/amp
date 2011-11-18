@@ -33,6 +33,7 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -465,9 +466,10 @@ function setHoveredTable(tableId, hasHeaders) {
 							</td>
 							<td>
 				                <div class="fileinputs"> 
-									<input id="fileData" name="fileData" type="file" class="file buton">
+									<input id="fileData" name="fileData" type="file" class="file">
 			                	</div>
-			               </td>
+			                	
+			                	</td>
 						</tr>
 						<tr style="display: none" id="tr_url">
 							<td>

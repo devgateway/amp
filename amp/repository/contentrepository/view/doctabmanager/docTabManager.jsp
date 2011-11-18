@@ -72,14 +72,15 @@ var trnObj		= {
 			if (labelArray.length == 0) {
 				publicListObj.emptyLabels();
 			}
-			privateListObj.sendRequest();
+			publicListObj.sendRequest();
 		}
 	}
 	var titlePanelObj	= null;
-	var fPanel	= new FilterAsYouTypePanel("publicLabelButtonId", labelFilterCallbackObj, "publicLabels",trnObj);
-	fPanel.initLabelArray(false);
+	var fPanel=null;
 	
 	function afterPageLoad(e) {
+		fPanel	= new FilterAsYouTypePanel("publicLabelButtonId", labelFilterCallbackObj, "publicLabels",trnObj);
+		fPanel.initLabelArray(false);
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId",trnObj);
 		publicListObj.filterInfoDivId	= "publicFilterInfoDiv";
 		publicListObj.sendRequest();

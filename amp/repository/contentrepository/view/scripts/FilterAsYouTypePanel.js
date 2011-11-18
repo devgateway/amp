@@ -124,8 +124,8 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		//applySpanEl.style.padding		= "1px";		
 		applySpanEl.style.cursor		= "pointer";
 		applySpanEl.style.fontSize		= "11px";
-		applySpanEl.style.fontWeight = "strong";
-		applySpanEl.setAttribute("class", "buttonx_sm");
+		applySpanEl.style.fontWeight ="bold";
+		applySpanEl.className="buttonx_sm";
 		YAHOO.util.Event.addListener(applySpanEl, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
 		
 		buttonsDiv.appendChild(applySpanEl);
@@ -141,8 +141,8 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		//cancelSpanEl.style.padding		= "1px";
 		cancelSpanEl.style.cursor		= "pointer";
 		cancelSpanEl.style.fontSize		= "11px";
-		cancelSpanEl.style.fontWeight = "strong";
-		cancelSpanEl.setAttribute("class", "buttonx_sm");
+		cancelSpanEl.style.fontWeight = "bold";
+		cancelSpanEl.className="buttonx_sm";
 		buttonsDiv.appendChild(cancelSpanEl);
 		
 		retArray.push(buttonsDiv);	

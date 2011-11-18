@@ -13,6 +13,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -1755,4 +1756,19 @@ public class SectorUtil {
         }
         return sectors;
     }
+    
+    public static List<AmpActivityVersion> getActivitiesForSector(Long id) {
+		Session session = null;
+		List<AmpActivityVersion> activities = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select aps from " + AmpActivitySector.class.getName() + " aps where aps.sectorId.ampSectorId=:id";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("id", id);
+			activities = qry.list();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return activities;
+	}
 }

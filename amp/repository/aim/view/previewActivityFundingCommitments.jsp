@@ -121,10 +121,9 @@
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 							</module:display> &nbsp;
 							</td>
-							<!--Exchange Rate not found-->
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Exchange Rate"
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/exchangeRate"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>
@@ -166,32 +165,40 @@
                 id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                 <logic:equal name="fundingDetail" property="transactionType" value="0">
                         <logic:equal name="fundingDetail" property="adjustmentType" value="2">
-                                                <tr bgcolor="#ffffff">
-                                                        <td width="40%" align="right"  bgcolor="#FFFFFF">
-                                                                <field:display name="Adjustment Type Commitment" feature="Commitments">
-                                                                 <digi:trn>
-                                                                 	<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
-                                                                 </digi:trn>
-                                                                </field:display>
-                                                        </td>
-                                                        <td height="18" align="right"><field:display name="Date Commitment"
-                                                                feature="Commitments">
-                                                                <b><bean:write name="fundingDetail" property="transactionDate"/></b>
-                                                        	</field:display>
-                                                        </td>
-                                                        <td height="18" align="right"><field:display
-                                                                name="Amount Commitment" feature="Commitments">
-                                                                <!-- <font color="blue">*</font>-->
-                                                            <b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-                                                        </field:display> <field:display name="Currency Commitment"
-                                                                feature="Commitments">
-                                                                <b><bean:write name="fundingDetail" property="currencyCode" /></b>
-                                                        </field:display>&nbsp;</td>
-                                                        <td height="18"><field:display name="Exchange Rate"
-                                                                feature="Funding Information">
-                                                                <b><bean:write name="fundingDetail" property="formattedRate" /></b>
-                                                        </field:display></td>
-                                                </tr>
+						<tr bgcolor="#ffffff">
+							<td width="40%" align="right"  bgcolor="#FFFFFF">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+								</digi:trn>
+							</module:display>
+							</td>
+							<td height="18" align="right">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+									<b><bean:write name="fundingDetail" property="transactionDate" /></b>
+								</module:display>
+							</td>
+							<td height="18" align="right">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Amount" 
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
+							</module:display>
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Currency"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
+							</module:display> &nbsp;
+							</td>
+							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+							<td height="18">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/exchangeRate"
+								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
+									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
+							</module:display>
+							</td>
+							</c:if>
+						</tr>
                         </logic:equal>
                 </logic:equal>
         </logic:iterate>

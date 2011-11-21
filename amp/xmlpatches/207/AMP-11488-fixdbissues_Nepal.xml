@@ -54,7 +54,7 @@
 					for(AmpActivityLocation location : locations){
 						if(location.getLocationPercentage() == null || location.getLocationPercentage() == 0)
 						{
-						    System.out.println("Activity con 0 en location #: " +  activity.getAmpActivityId());
+						    System.out.println("Activity with 0 in location for activity #: " +  activity.getAmpActivityId());
 						    activitiesToCorrect.add(activity);
 						}
 					}

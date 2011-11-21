@@ -96,6 +96,10 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	 * @throws Exception
 	 */
 	public AmpFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine)  {
+		this(id, model, fmName, hideLeadingNewLine, false);
+	}
+	
+	public AmpFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine, boolean showRequiredStar)  {
 		super(id, model, fmName);
 		this.model = model;
 		WebMarkupContainer leadingNewLine = new WebMarkupContainer("leadingNewLine");
@@ -107,6 +111,9 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		titleHeader = new WebMarkupContainer("titleHeader");
 		remove(labelContainer);
 		titleHeader.add(labelContainer);
+		WebMarkupContainer reqStar = new WebMarkupContainer("requiredStar");
+		reqStar.setVisible(showRequiredStar);
+		titleHeader.add(reqStar);
 		add(titleHeader);
 		
 		tableId = new TransparentWebMarkupContainer("tableId");

@@ -34,7 +34,7 @@ public final class FMUtil {
 	public static final String fmRootPermissionManager="/Permission Manager";
 	private static AmpTeamMember ampCurrentMember;
 
-	private static final class PathException extends Exception{
+	public static final class PathException extends Exception{
 		private static final long serialVersionUID = 1L;
 
 		public PathException(String string) {
@@ -161,7 +161,7 @@ public final class FMUtil {
 		return true;
 	}
 	
-	private static boolean checkIsVisible(AmpTreeVisibility atv, String name, AmpFMTypes type){
+	public static boolean checkIsVisible(AmpTreeVisibility atv, String name, AmpFMTypes type){
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Map scope=PermissionUtil.getScope(session.getHttpSession());
 
@@ -580,7 +580,7 @@ public final class FMUtil {
 		return fmInfoPath;
 	}
 	
-	private static String getFmPathString(LinkedList<FMInfo> path){
+	public static String getFmPathString(LinkedList<FMInfo> path){
 		String ret = "";
 		Iterator<FMInfo> it = path.iterator();
 		while (it.hasNext()) {

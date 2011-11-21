@@ -14,8 +14,6 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.extensions.yui.YuiLib;
-import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
@@ -23,8 +21,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresF
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
-import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
@@ -124,6 +121,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //request.getHttpServletRequest().getSession().setMaxInactiveInterval(2 * 60 * 60); //2hours
 		 
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
+		 getPageSettings().addComponentResolver(new FMComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());
 		 mountBookmarkablePage("onepager", OnePager.class);
 		 mountBookmarkablePage("permmanager", PermissionManager.class);

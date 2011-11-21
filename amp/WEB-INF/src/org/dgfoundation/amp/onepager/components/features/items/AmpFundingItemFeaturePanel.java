@@ -120,10 +120,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		add(expenditures);
-	
-		
-	
-	
 	}
 
 	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {

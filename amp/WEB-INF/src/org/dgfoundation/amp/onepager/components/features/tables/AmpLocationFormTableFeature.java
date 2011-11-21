@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -123,9 +124,10 @@ public class AmpLocationFormTableFeature extends
             		}
            		};
             	
-				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", new PropertyModel<String>
-						(item.getModel(), "latitude"),"Latitude",false);
+				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", 
+						new PropertyModel<String>(item.getModel(), "latitude"), "Latitude", true, true);
 				latitude.getTextContainer().add(latitudeValidator);
+				latitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
 				item.add(latitude);
 
 				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
@@ -139,9 +141,10 @@ public class AmpLocationFormTableFeature extends
             			}
             		}            	
             		};
-				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>
-				("longitudeid", new PropertyModel<String>(item.getModel(), "Longitude"),"Longitude",false);
+				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 
+						new PropertyModel<String>(item.getModel(), "Longitude"), "Longitude", true, true);
 				longitude.getTextContainer().add(longitudeValidator);
+				longitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
 				item.add(longitude);
 				
 				

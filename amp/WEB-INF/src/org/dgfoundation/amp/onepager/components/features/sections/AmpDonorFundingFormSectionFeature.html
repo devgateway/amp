@@ -1,41 +1,39 @@
 <wicket:extend>
-	<tr><td colspan="2">
-		<table width="100%" border="0" cellspacing="2" cellpadding="2" class="inside">
-			<tr>
-				<td colspan="3" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
-					<b class="ins_header"><wicket:trn key="addNewDocument">Proposed Project Cost</wicket:trn></b>
-				</td>
-			</tr>	
-			<tr>
-				<td><span wicket:id="proposedAmount"></span></td>
-				<td><span wicket:id="proposedCurrency"></span></td>
-				<td><span wicket:id="proposedDate"></span></td>
-			</tr>
-		</table>
-	</td></tr>
-	<tr><td colspan="2" align="center"><p/>
-	
-	<div wicket:id="listFunding">
-		<div class="organization_box">
-			<div class="organization_box_content">
-			<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr>
-				<td valign="top">
-					<span wicket:id="fundingItem"/>		
-					
-				</td>
-				<td valign="top" align="right">
-					<span wicket:id="delFunding"/>
-				</td>
-			</tr>
+	<wicket:fm fmNames="Amount;Date;Currency">
+		<tr><td colspan="2">
+			<table width="100%" border="0" cellspacing="2" cellpadding="2" class="inside">
+				<tr>
+					<td colspan="3" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
+						<b class="ins_header"><wicket:trn key="addNewDocument">Proposed Project Cost</wicket:trn></b>
+					</td>
+				</tr>	
+				<tr>
+					<td><span wicket:id="proposedAmount"></span></td>
+					<td><span wicket:id="proposedCurrency"></span></td>
+					<td><span wicket:id="proposedDate"></span></td>
+				</tr>
 			</table>
+		</td></tr>
+	</wicket:fm>
+	<tr><td colspan="2" align="center"><p/>
+		<div wicket:id="listFunding">
+			<div class="organization_box">
+				<div class="organization_box_content">
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<td valign="top">
+						<span wicket:id="fundingItem"/>		
+						
+					</td>
+					<td valign="top" align="right">
+						<span wicket:id="delFunding"/>
+					</td>
+				</tr>
+				</table>
+				</div>
 			</div>
 		</div>
-	</div>
-	<p/>
-	
-	<span wicket:id="searchFundingOrgs"/>
-	
-	
+		<p/>
+		<span wicket:id="searchFundingOrgs"/>
 	</td></tr>
 </wicket:extend>

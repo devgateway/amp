@@ -66,7 +66,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						new PropertyModel<String>(item.getModel(),
 								"disbOrderId")
 								,disbOrderIdModel,
-						"Pledges", true, true));
+						"Disbursement Order Id", true, true));
 				
 				ArrayList<IPAContract> contractList;
 				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)

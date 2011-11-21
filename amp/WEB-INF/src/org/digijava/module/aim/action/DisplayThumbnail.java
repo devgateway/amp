@@ -33,13 +33,15 @@ public class DisplayThumbnail extends Action {
             if (action != null) {
                 response.setContentType("text/plain");
                 Boolean hasRelDocs = (Boolean) session.getAttribute("homeThumbnailOptfile" + placeholder);
-                try {
-                	AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(Integer.parseInt(placeholder));
-                	String resp = hasRelDocs.toString()+"*";
-                	resp += test.getThumbnailLabel()+"*";
-                	response.getWriter().print(resp);
-                } catch (IOException e) {
-                      logger.error("Trying to parse " + placeholder + " to int",e);
+                if (hasRelDocs != null && hasRelDocs){
+		            try {
+		            	AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(Integer.parseInt(placeholder));
+		            	String resp = hasRelDocs.toString()+"*";
+		            	resp += test.getThumbnailLabel()+"*";
+		            	response.getWriter().print(resp);
+		            } catch (IOException e) {
+		                  logger.error("Trying to parse " + placeholder + " to int",e);
+		            }
                 }
             } else {
 

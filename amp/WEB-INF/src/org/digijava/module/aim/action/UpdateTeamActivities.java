@@ -183,7 +183,7 @@ public class UpdateTeamActivities extends Action {
 
 			Collection col = null;
 			if (session.getAttribute("unassignedActivityList") == null) {
-				col = TeamUtil.getAllTeamAmpActivities(null,false,null);
+				col = TeamUtil.getAllTeamAmpActivities(null,true,null);
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;

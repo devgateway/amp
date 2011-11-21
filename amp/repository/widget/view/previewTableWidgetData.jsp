@@ -34,83 +34,29 @@
 			<br/>
 			<br/>
 			<span class="subtitle-blue">Preview table widget data</span>
-	
-	
-	<div id="content" class="yui-skin-sam" style="width:90%;padding: 20px;">
-	 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-	   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-	   <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
-	   <div class="longTab">
-	      ${dform.tableName}
-	   </div>
-	   <div class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-	    <div id="tableWidgetContainer_${dform.widgetId}" style="margin-left:20px; margin-top: 20px;" class="tableContainer">
-		  
-	   </div>
-	  </div>
+<fieldset>
+	<legend>
+		<span class="legend_label">${dform.tableName}</span>
+	</legend>
+	<div id="tableWidgetContainer_${dform.widgetId}"
+		style="margin-left: 20px; margin-top: 20px;" class="tableContainer">
+
 	</div>
-	</div>
-	<br/>
-	<input type="button" value="Back" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=showEdit~widgetId=${dform.widgetId}'"/>
+</fieldset>
+<br/>
+	<input type="button" value="<digi:trn>Back</digi:trn>" class="buttonx" onclick="javascript:location.href='/widget/tableWidgetData.do~actType=showEdit~widgetId=${dform.widgetId}'"/>
 	
-         
-
-
-
 	<script language="JavaScript">
 
 	function applyStyle(table){
-		table.className += " tableElement";
-		setStripsTable(table.id, "tableEven", "tableOdd");
-		setHoveredTable(table.id, true);
-
-	}
-	function setStripsTable(tableId, classOdd, classEven) {
-		var tableElement = document.getElementById(tableId);
-		if(tableElement)
-		{
-			tableElement.setAttribute("border","0");
-			tableElement.setAttribute("cellPadding","2");
-			tableElement.setAttribute("cellSpacing","2");
-			rows = tableElement.getElementsByTagName('tr');
-			for(var i = 0, n = rows.length; i < n; ++i) {
-				if(i%2 == 0)
-					rows[i].className = classEven;
-				else
-					rows[i].className = classOdd;
-			}
-			rows = null;
-		}
-	}
-	function setHoveredTable(tableId, hasHeaders) {
-		var tableElement = document.getElementById(tableId);
-		if(tableElement){
-		    var className = 'Hovered',
-	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-	        rows      = tableElement.getElementsByTagName('tr');
-
-			var i = 0;
-			if(hasHeaders){
-				rows[0].className += " tableHeader";
-				i = 1;
-				
-			}
+		$("#"+table.id).addClass("inside");
+		$("#"+table.id+" >tbody>tr:first-child").css("background-color","#c7d4db");
+		$("#"+table.id+" >tbody>tr>td").addClass("inside");
 		
-			for(i, n = rows.length; i < n; ++i) {
-				rows[i].onmouseover = function() {
-					this.className += ' ' + className;
-				};
-				rows[i].onmouseout = function() {
-					this.className = this.className.replace(pattern, ' ');
-
-				};
-			}
-			rows = null;
-		}
-	
 	}
-		
 	
+
+		
 		function requestTable_${dform.widgetId}(columnId,itemId){
 			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
 			var url = '${tableRendererUrl}~tableId=${dform.widgetId}~preview=true';

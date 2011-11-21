@@ -143,55 +143,8 @@ function resizeDivs(){
 	}
 }    
 function applyStyle(table){
-	table.className += " tableElement";
-	setStripsTable(table.id, "tableEven", "tableOdd");
-	setHoveredTable(table.id, true);
-
-}
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	if(tableElement)
-	{
-		tableElement.setAttribute("border","0");
-		tableElement.setAttribute("cellPadding","2");
-		tableElement.setAttribute("cellSpacing","2");
-		rows = tableElement.getElementsByTagName('tr');
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			if(i%2 == 0)
-				rows[i].className = classEven;
-			else
-				rows[i].className = classOdd;
-		}
-		rows = null;
-	}
-}
-function setHoveredTable(tableId, hasHeaders) {
-	var tableElement = document.getElementById(tableId);
-	if(tableElement){
-	    var className = 'Hovered',
-        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-        rows      = tableElement.getElementsByTagName('tr');
-
-		var i = 0;
-		if(hasHeaders){
-			rows[0].className += " tableHeader";
-			i = 1;
-			
-		}
-	
-		for(i, n = rows.length; i < n; ++i) {
-			rows[i].onmouseover = function() {
-				this.className += ' ' + className;
-			};
-			rows[i].onmouseout = function() {
-				this.className = this.className.replace(pattern, ' ');
-
-			};
-		}
-		rows = null;
-	}
-	
-
-
+	$("#"+table.id).addClass("inside");
+	$("#"+table.id+" >tbody>tr:first-child").css("background-color","#c7d4db");
+	$("#"+table.id+" >tbody>tr>td").addClass("inside");	
 }
 </script>

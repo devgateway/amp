@@ -636,6 +636,19 @@ function adminHelp(){
 						  	if(FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext())) {
 						  		showDashboard = true;
 						  	}
+						  	if(FeaturesUtil.isVisibleModule("Map Module", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						  	if(FeaturesUtil.isVisibleModule("Org. Dashboard", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						  	if(FeaturesUtil.isVisibleModule("Sector Dashboard", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						  	if(FeaturesUtil.isVisibleModule("Region Dashboard", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						  							  	
 						%>
 						<%if (showDashboard) {%>
                           <li class="yuiampmenuitem" style="float:left;">

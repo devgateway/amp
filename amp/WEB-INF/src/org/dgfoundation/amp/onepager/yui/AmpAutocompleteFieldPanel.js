@@ -6,6 +6,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     }
     this.autoComplete = new YAHOO.widget.AutoComplete(inputId, containerId, this.dataSource);
     this.autoComplete.prehighlightClassName = "yui-ac-prehighlight";
+    this.autoComplete.highlightClassName = ""; 
     this.autoComplete.useShadow = true;
     this.autoComplete.animVert=.01;
     this.autoComplete.animHoriz=.01;

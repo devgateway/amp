@@ -1753,6 +1753,7 @@ public class DbUtil {
                                                 Collection<Long> donorIds,
                                                 Collection<Long> donorGroupIds,
                                                 Collection<Long> donorTypeIds,
+                                                boolean includeCildLocations,
                                                 Collection<AmpCategoryValueLocations> locations,
                                                 List <AmpTeam> workspaces,
                                                 java.util.Date startDate,
@@ -1762,7 +1763,7 @@ public class DbUtil {
 
         Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
         Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
-        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations) : null;
+        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
 
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
@@ -1881,6 +1882,7 @@ public class DbUtil {
                                                         Collection<Long> donorIds,
                                                         Collection<Long> donorGroupIds,
                                                         Collection<Long> donorTypeIds,
+                                                        boolean includeCildLocations,
                                                         Collection<AmpCategoryValueLocations> locations,
                                                         List <AmpTeam> workspaces,
                                                         java.util.Date startDate,
@@ -2052,12 +2054,33 @@ public class DbUtil {
         return retVal;
     }
 
+    private static Collection<AmpCategoryValueLocations> appenChildLocations (Collection<AmpCategoryValueLocations> locations) {
+        Collection<AmpCategoryValueLocations> retVal = new ArrayList<AmpCategoryValueLocations>();
+
+        for (AmpCategoryValueLocations loc: locations) {
+            retVal.add(loc);
+            if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                for (AmpCategoryValueLocations childLoc: loc.getChildLocations()) {
+                    retVal.add(childLoc);
+                }
+            }
+        }
 
 
-    private static Map <Long, Map> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations) {
+        return retVal;
+    }
+
+
+    private static Map <Long, Map> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations, boolean inculedChildLocations) {
+
+        if (inculedChildLocations) {
+            locations = appenChildLocations(locations);
+        }
+
         String locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
         Map <Long, Map> retVal = null;
         Session sess = null;
+
         try {
             sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.location.id, actLoc.locationPercentage from ");

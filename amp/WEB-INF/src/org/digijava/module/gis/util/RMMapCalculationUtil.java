@@ -68,11 +68,14 @@ public class RMMapCalculationUtil {
            workspaces.add(filter.getCurWorkspace());
         }
 
+        boolean includeCildLocations = filter.getMapLevel() == 3;
+
         Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
                                                                donorTypeIds,
+                                                               includeCildLocations,
                                                                locations,
                                                                workspaces, fStartDate.getTime(), fEndDate.getTime());
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
@@ -80,9 +83,15 @@ public class RMMapCalculationUtil {
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
                                                                                donorTypeIds,
+                                                                               includeCildLocations,
                                                                                locations,
                                                                                workspaces, fStartDate.getTime(), fEndDate.getTime());
-        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, currencyCode, false);
+        Object[] fundingList = getAllFundingsByLocations(activityFundings,
+                                                         activityRegionalFundings,
+                                                         includeCildLocations,
+                                                         locations,
+                                                         currencyCode,
+                                                         false);
 
 
         return fundingList;
@@ -137,12 +146,14 @@ public class RMMapCalculationUtil {
 
         String currencyCode = filter.getSelectedCurrency();
 
+        boolean includeCildLocations = filter.getMapLevel() == 3;
 
         Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
                                                                donorTypeIds,
+                                                               includeCildLocations,
                                                                locations,
                                                                null, fStartDate.getTime(), fEndDate.getTime());
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
@@ -150,9 +161,10 @@ public class RMMapCalculationUtil {
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
                                                                                donorTypeIds,
+                                                                               includeCildLocations,
                                                                                locations,
                                                                                null, fStartDate.getTime(), fEndDate.getTime());
-        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, locations, currencyCode, true);
+        Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 
 
         return fundingList;
@@ -172,15 +184,33 @@ public class RMMapCalculationUtil {
 
     public static Object[] getAllFundingsByLocations (Object[] activityFundingData,
                                                    Object[] activityRegionalFundingData,
+                                                   boolean includeCildLocations,
                                                    Collection<AmpCategoryValueLocations> locations,
                                                    String currencyCode,
                                                    boolean detailedActData){
-        Object[] activityFundings = getFundingsByLocations (activityFundingData, locations, currencyCode, detailedActData);
+        Object[] activityFundings = getFundingsByLocations (activityFundingData, locations, currencyCode, detailedActData, includeCildLocations);
         Object[] regionalFundings = getFundingsByLocationsForRegFnds (activityRegionalFundingData, locations, currencyCode, detailedActData);
         return combineResults (activityFundings, regionalFundings);
     }
 
-    private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData){
+    //Returns location parent map for level 3. Level 2 locations have the same value in key and val
+    private static Map<Long, Long> getLocParentMapforLevelThree (Collection<AmpCategoryValueLocations> locations, boolean goToLevelThree) {
+        Map<Long, Long> retVal = new HashMap <Long, Long>();
+
+        for (AmpCategoryValueLocations loc: locations) {
+            retVal.put(loc.getId(), loc.getId());
+            if (goToLevelThree && loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                for (AmpCategoryValueLocations childLoc: loc.getChildLocations()) {
+                    retVal.put(childLoc.getId(), loc.getId());
+                }
+            }
+        }
+
+        return retVal;
+
+    }
+
+    private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData, boolean inculedChildLocations){
         Object[] retVal = null;
 
         if (data != null && data instanceof Object[] && data.length > 0) {
@@ -200,7 +230,7 @@ public class RMMapCalculationUtil {
 
             Map<Long, String> locationIdNameMap = getLocationIdNameMap (locations);
 
-            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap);
+            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMapforLevelThree(locations, inculedChildLocations));
 
             retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
         } else {
@@ -313,7 +343,7 @@ public class RMMapCalculationUtil {
 
 
 
-    private static Map<String, Set> groupFundingsByLocationAndApplyPercentages (List fundings, Map <Long, Map> locationPercentageMap, Map<Long, String> locationIdNameMap) {
+    private static Map<String, Set> groupFundingsByLocationAndApplyPercentages (List fundings, Map <Long, Map> locationPercentageMap, Map<Long, String> locationIdNameMap, Map<Long, Long> locationParentMap) {
         Map <String, Set> retVal = new HashMap <String, Set> ();
         Map<String, AmpCurrency> currencyCodeObjectMap = getCurrencyCodeObjectMap();
 
@@ -329,8 +359,10 @@ public class RMMapCalculationUtil {
             if (locationPercentageMapItem != null) {
             Set <Long> locKeySet = locationPercentageMapItem.keySet();
                 for (Long locKey : locKeySet) {
-                    if (!retVal.containsKey(locationIdNameMap.get(locKey))) {
-                        retVal.put(locationIdNameMap.get(locKey), new HashSet());
+                    //For L2+L3 location summing
+                    Long parentKey = locationParentMap.get(locKey);
+                    if (!retVal.containsKey(locationIdNameMap.get(parentKey))) {
+                        retVal.put(locationIdNameMap.get(parentKey), new HashSet());
                     }
 
                     AmpFundingDetail forCalculations = new AmpFundingDetail();
@@ -344,7 +376,7 @@ public class RMMapCalculationUtil {
                     //using ampFundDetailId to store appropreate activity id.
                     forCalculations.setAmpFundDetailId(activityId);
 
-                    retVal.get(locationIdNameMap.get(locKey)).add(forCalculations);
+                    retVal.get(locationIdNameMap.get(parentKey)).add(forCalculations);
 
 
                 }

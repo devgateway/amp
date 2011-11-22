@@ -21,7 +21,7 @@
       <td valign="top" width="60%"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
       <td width="5%"/>
-      <td valign="top" width="70%" bgcolor="#dbe5f1">
+      <td valign="top" width="70%" bgcolor="#f2f2f2">
       <c:if test="${thumbnailCount > 0}">
           <table width="100%" height="400" cellpadding="3" cellspacing="0">
             <c:forEach var='index' begin='0' end='${thumbnailCount-1}'>

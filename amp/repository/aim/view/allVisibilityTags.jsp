@@ -1005,6 +1005,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Calendar" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>
 
 <feature:display name="Show Printer Friendly option" module="Public Reports"></feature:display>
 <!--  -->

@@ -63,11 +63,13 @@ ${fn:replace(message,quote,escapedQuote)}
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   
       	 <ul class="first-of-type">
-            <li class="yuiampmenuitem">
-                <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
-                	<digi:trn>Home Page</digi:trn>
-	            </a>
-            </li>
+      	 	<module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW">
+	            <li class="yuiampmenuitem">
+	                <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
+	                	<digi:trn>Home Page</digi:trn>
+		            </a>
+	            </li>
+            </module:display>
             
             <module:display name="Public Site" parentModule="PUBLIC VIEW">
                <li class="yuiampmenuitem" style="float:left;">

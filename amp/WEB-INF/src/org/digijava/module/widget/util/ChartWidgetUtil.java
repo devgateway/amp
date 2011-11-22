@@ -1778,7 +1778,7 @@ public class ChartWidgetUtil {
     }
     //from field indicates whether we are taking years for "From Year" dropdown
 
-    public static List<LabelValueBean> getYears(boolean from) {
+    public static List<LabelValueBean> getYears(boolean from, String fiscalYear) {
         //get default calendar
         Long defaultCalendarId = new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
         AmpFiscalCalendar defaultCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
@@ -1793,16 +1793,16 @@ public class ChartWidgetUtil {
         if (!from) {
             toYear++;
         }
-        return getYears(fromYear.intValue(), toYear.intValue(), defaultCalendar.getIsFiscal());
+        return getYears(fromYear.intValue(), toYear.intValue(), defaultCalendar.getIsFiscal(), fiscalYear);
     }
 
-    public static List<LabelValueBean> getYears(int fromYear, int toYear, boolean isCalendarFiscal) {
+    public static List<LabelValueBean> getYears(int fromYear, int toYear, boolean isCalendarFiscal, String fiscalYear) {
         List<LabelValueBean> years = new ArrayList<LabelValueBean>();
         for (int year = fromYear; year <= toYear; year++) {
             String label = null;
             if (isCalendarFiscal) {
                 String nextYear = new Integer(year + 1).toString();
-                label = "FY";
+                label = fiscalYear;
                 label += " " + year + "/" + nextYear.substring(2);
             } else {
                 label = "" + year;

@@ -11,6 +11,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -41,10 +43,13 @@ public class SectorsByDonorTeaser extends TilesAction {
         tForm.setSelectedCurrency(baseCurr);
 		Collection<AmpOrganisation> donors = DbUtil.getDonors();
 		tForm.setDonors(donors);
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		String site = RequestUtils.getSite(request).getId().toString();
+		String fiscalYear = TranslatorWorker.translateText("FY", locale, site);		
 		//fill from years' drop-down
-		tForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		tForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down
-		tForm.setYearsTo(ChartWidgetUtil.getYears(false));
+		tForm.setYearsTo(ChartWidgetUtil.getYears(false, fiscalYear));
 		return null;
 	}
 

@@ -16,6 +16,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -216,9 +218,12 @@ public class ShowGisDashboard extends Action {
 		gisForm.setSelectedFromYear(new Integer(year-1).toString());
 		gisForm.setSelectedToYear(year.toString());
 		//fill from years' drop-down
-		gisForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		String site = RequestUtils.getSite(request).getId().toString();
+		String fiscalYear = TranslatorWorker.translateText("FY", locale, site);
+		gisForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down
-		gisForm.setYearsTo(ChartWidgetUtil.getYears(false));
+		gisForm.setYearsTo(ChartWidgetUtil.getYears(false, fiscalYear));
 
 		
 			

@@ -76,10 +76,11 @@ public class ShowSectorByDonorChart extends Action {
         //write image in response
 		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info, true, 0);
 
+		String fiscalYear = TranslatorWorker.translateText("FY", locale, site.getId().toString());
 		//fill from years' drop-down
-		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		cForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down
-		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
+		cForm.setYearsTo(ChartWidgetUtil.getYears(false, fiscalYear));
         //generate map for this graph
         String map = ChartUtilities.getImageMap("sectorByDonorChartImageMap", info);
         

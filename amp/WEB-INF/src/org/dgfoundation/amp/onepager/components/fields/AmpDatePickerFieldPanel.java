@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Date;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
@@ -12,8 +13,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
@@ -49,13 +48,16 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		dateWrapper.setOutputMarkupId(true);
 		add(dateWrapper);
 
-		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-		pattern = pattern.replace('m', 'M');
-		date = new DateTextField("date", model, pattern);
+
+		//datepicker MMM bug in Wicket 1.4.x: https://issues.apache.org/jira/browse/WICKET-3598
+		//DO NOT use DatePicker pattern constructors in Wicket 1.4! this problem has Fix Version Wicket 1.5-RC4!!
+		date = new DateTextField("date", model);
+		
 		date.setOutputMarkupId(true);
 		DatePicker dp = new DatePicker() {
 			private static final long serialVersionUID = 1L;
-
+	
+			
 			@Override
 			protected boolean enableMonthYearSelection() {
 				return true;
@@ -122,4 +124,5 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	public AmpDatePickerFieldPanel(String id, IModel<Date> model,String fmName,boolean hideLabel) {
 		this(id,  model, fmName,null, hideLabel);
 	}
+	
 }

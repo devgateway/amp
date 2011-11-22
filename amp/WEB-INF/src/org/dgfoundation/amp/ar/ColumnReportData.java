@@ -49,6 +49,10 @@ public class ColumnReportData extends ReportData {
     	    Iterator i=items.iterator();
     	    while (i.hasNext()) {
 				Column element = (Column) i.next();
+				//TODO same check should be done for all related colums (sectors, programs)
+				if ( ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(), ArConstants.COLUMN_REGION) && 
+						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) )
+					continue;
 				int visCol=element.getVisibleRows();
 				if(visCol>ret) ret=visCol;
 		    }

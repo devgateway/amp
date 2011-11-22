@@ -238,8 +238,10 @@ public final class ARUtil {
 	 * @return true if the hierarchy exists
 	 */
 	public static boolean hasHierarchy(Collection<AmpReportHierarchy> hierarchies,String hierarchyName) {
-		for (AmpReportHierarchy h : hierarchies) {
-			if(h.getColumn().getColumnName().equals(hierarchyName)) return true;
+		if (hierarchies != null) {
+			for (AmpReportHierarchy h : hierarchies) {
+				if(h.getColumn().getColumnName().equals(hierarchyName)) return true;
+			}
 		}
 		return false;
 	}

@@ -72,6 +72,8 @@
 	</c:set>
 </c:if>
 
+
+
 <!-- BREADCRUMP START -->
 <div class="breadcrump">
 	<div class="centering">
@@ -439,11 +441,11 @@ $(document).ready(function() {
 																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
 																									alt="up" />
 																							</c:if> </b></td>
-																					<%--
-																					<td align="center" class="inside_header">
+																					<c:if test="${!aimTeamReportsForm.tabs}">
+																						<td align="center" class="inside_header">
 					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
 					                            							</td>
-					                            		--%>
+					                            		</c:if>
 					                            							<td align="center" class="inside_header">
 					                              								<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
 					                            							</td>
@@ -549,7 +551,7 @@ $(document).ready(function() {
 					                                  									</logic:present>
 					                                								</p>
 					                              								</td>
-					                              								<%--
+					                              								<c:if test="${!aimTeamReportsForm.tabs}">
 					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
 					                                  									<li>
@@ -612,7 +614,7 @@ $(document).ready(function() {
 					                                								</p>
 					                              								</td>
 					                              								
-					                              								--%>
+					                              							</c:if>
 					                              								
 					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 					                                								<logic:iterate name="report" property="hierarchies" id="hierarchy" >

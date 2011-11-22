@@ -439,10 +439,11 @@ $(document).ready(function() {
 																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
 																									alt="up" />
 																							</c:if> </b></td>
-
+																					<%--
 																					<td align="center" class="inside_header">
 					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
 					                            							</td>
+					                            		--%>
 					                            							<td align="center" class="inside_header">
 					                              								<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
 					                            							</td>
@@ -548,6 +549,7 @@ $(document).ready(function() {
 					                                  									</logic:present>
 					                                								</p>
 					                              								</td>
+					                              								<%--
 					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
 					                                  									<li>
@@ -609,6 +611,9 @@ $(document).ready(function() {
 					                                  									</logic:equal>
 					                                								</p>
 					                              								</td>
+					                              								
+					                              								--%>
+					                              								
 					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 					                                								<logic:iterate name="report" property="hierarchies" id="hierarchy" >
 					                                  									<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>

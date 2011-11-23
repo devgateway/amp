@@ -460,7 +460,7 @@ function resetToDefaults(){
 	document.getElementById("filterSectors").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	//applyFilterPopin();
+	applyFilterPopin();
 }
 
 function removeOptionsDropdown(object){

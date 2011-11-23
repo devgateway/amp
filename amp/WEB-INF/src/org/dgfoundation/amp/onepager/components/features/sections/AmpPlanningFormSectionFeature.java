@@ -75,7 +75,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 		AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
 				"actualStartDate", new PropertyModel<Date>(actModel,
-						"actualStartDate"), dateOfActualCompletion,
+						"actualStartDate"), proposedStartDate,
 				"Actual Start Date");
 		add(dateOfEffectiveAgreement);
 

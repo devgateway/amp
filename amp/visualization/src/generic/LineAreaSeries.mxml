@@ -262,7 +262,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -290,8 +290,19 @@
 			 */
 			private function axisLabel(obj:Object):String
 			{
-				if (obj!=null && obj<5 && obj>0){
-					formatter.precision = 2;
+				if (obj!=null && obj<10 && obj>0){
+					if(Math.round(Number(obj)) == Number(obj))
+						formatter.precision = 0;
+					else{
+						if(vScale.maxValue < 1) //Add precision for small numbers
+						{
+							formatter.precision = 3;
+						}
+						else
+						{
+							formatter.precision = 2;
+						}
+					}
 				} else {
 					formatter.precision = 0;
 				}
@@ -368,7 +379,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -447,7 +458,7 @@
 				var array:Array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				if (array[1]!=null){
-					ExternalInterface.call("itemClick", array[1], idContainer, data.name,null);
+					ExternalInterface.call("itemClick", array[1], idContainer, data.name);
 				}
 			}
 			

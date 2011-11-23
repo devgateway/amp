@@ -117,7 +117,12 @@
 					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
 				}
 				
+				if(newMaxValue == 0) //Special case for small numbers
+				{
+					newMaxValue = maxValue;
+				}
 				vScale.maxValue = newMaxValue;
+				vScale.minValue = 0;
 				
 				vScale.minValue = 0;
 				dataProvider = service.lastResult[profileDataField];
@@ -214,7 +219,7 @@
 
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
-				//dc.visible = true;
+				dc.visible = true;
 				
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -237,7 +242,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -291,7 +296,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -325,8 +330,16 @@
 				if (obj!=null && obj<10 && obj>0){
 					if(Math.round(Number(obj)) == Number(obj))
 						formatter.precision = 0;
-					else
-						formatter.precision = 2;
+					else{
+						if(vScale.maxValue < 1) //Add precision for small numbers
+						{
+							formatter.precision = 3;
+						}
+						else
+						{
+							formatter.precision = 2;
+						}
+					}
 				} else {
 					formatter.precision = 0;
 				}
@@ -393,16 +406,14 @@
 			}
 			public function itemClick(evt:LayoutItemEvent):void{
 				//Alert.show(evt.item.data.percentage);
-				var startYear:Number = null;
-				var endYear:Number = null;
+				var year:Number = null;
 				if (sliderYear.visible == true){
-					startYear = sliderYear.values[0];
-					endYear = sliderYear.values[1];
+					year = sliderYear.value;
 				}
 				var idStr:String = "" + evt.item.data.id;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				if (idStr != "undefined"){
-					ExternalInterface.call("itemClick",evt.item.data.id,idContainer,startYear,endYear);
+					ExternalInterface.call("itemClick",evt.item.data.id,idContainer,year);
 				}
 			}
 			//

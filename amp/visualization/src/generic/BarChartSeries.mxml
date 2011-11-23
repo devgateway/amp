@@ -138,6 +138,10 @@
 					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
 				}
 				
+				if(newMaxValue == 0) //Special case for small numbers
+				{
+					newMaxValue = maxValue;
+				}
 				vScale.maxValue = newMaxValue;
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.year;
@@ -261,7 +265,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -311,7 +315,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -349,9 +353,17 @@
 			{
 				if (obj!=null && obj<10 && obj>0){
 					if(Math.round(Number(obj)) == Number(obj))
-						formatter.precision = 2;
-					else
-						formatter.precision = 0
+						formatter.precision = 0;
+					else{
+						if(vScale.maxValue < 1) //Add precision for small numbers
+						{
+							formatter.precision = 3;
+						}
+						else
+						{
+							formatter.precision = 2;
+						}
+					}
 				} else {
 					formatter.precision = 0;
 				}

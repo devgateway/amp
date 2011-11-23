@@ -165,16 +165,16 @@ public class ActivityVersionUtil {
 	}
 
 	public static int numberOfVersions() {
-		int ret = 0;
 		int aux = 5; // Default value after apply patch if no redeployed.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
-			aux = Integer.valueOf(gsValue).intValue();
+			try {
+				aux = Integer.valueOf(gsValue).intValue();
+			} catch (NumberFormatException e) {
+				logger.error(e);
+			}
 		}
-		if (aux >= 0) {
-			ret = aux;
-		}
-		return ret;
+		return aux;
 	}
 	
 	public static boolean isVersioningEnabled(){

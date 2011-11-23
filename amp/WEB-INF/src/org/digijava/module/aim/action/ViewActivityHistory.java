@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -74,9 +75,11 @@ public class ViewActivityHistory extends Action {
 		auxList = qry.list();
 		Collections.sort(auxList, compareVersions);
 		Iterator<AmpActivityVersion> iter = auxList.iterator();
-		while (iter.hasNext()) {
+		int i = 0;
+		while (iter.hasNext() && i < ActivityVersionUtil.numberOfVersions()) {
 			AmpActivityVersion auxActivity = iter.next();
 			hForm.getActivities().add(auxActivity);
+			i++;
 		}
 		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
 		boolean ispartofamanagetmentworkspace = false;

@@ -4728,6 +4728,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		query = " AND " + label + ".draft = false AND " + label + ".approvalStatus LIKE 'approved' ";
 		return query;
 	}
+
+	public static String getNonDraftActivityQueryString(String label) {
+		String query = null;
+		query = " AND " + label + ".draft = false ";
+		return query;
+	}
 	
 	/**
 	 * Insert into table 'amp_activity_access' a new record to keep track of users access to activities.

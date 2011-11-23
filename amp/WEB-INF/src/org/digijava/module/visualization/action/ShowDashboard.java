@@ -107,6 +107,8 @@ public class ShowDashboard extends Action {
 			initializeFilter(filter);
 		}
 		filter.setFromPublicView(fromPublicView);
+		
+		filter.setShowOnlyNonDraftActivities(true);
 
 		// Get Summary Information
 		//DashboardUtil.getSummaryAndRankInformation(visualizationForm);

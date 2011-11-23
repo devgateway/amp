@@ -264,6 +264,10 @@ public class DbUtil {
         }
         
         oql += " and actloc is NULL ";
+
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
         
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -366,6 +370,10 @@ public class DbUtil {
 	            }
 	
 	            oql += "  and parcv.value = 'Region'";// get only regions
+
+	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
 	            oql+=" order by loc.parentCategoryValue";
@@ -457,6 +465,9 @@ public class DbUtil {
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
 	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
 	            
+	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
 	            Session session = PersistenceManager.getRequestDBSession();
@@ -544,8 +555,8 @@ public class DbUtil {
                 oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
             }
 
-            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
+            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+				oql += ActivityUtil.getNonDraftActivityQueryString("act");
 			}
             
             oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
@@ -668,6 +679,9 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	           
+	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
 	            Session session = PersistenceManager.getRequestDBSession();
@@ -757,9 +771,7 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
-    		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
         	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-    		logger.info("Getting descendants from " + DashboardUtil.getInStatement(locationIds));
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
         }
 
@@ -788,6 +800,10 @@ public class DbUtil {
         {
             oql += DashboardUtil.getTeamQuery(tm);
         }
+
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
 
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -950,6 +966,10 @@ public class DbUtil {
         {
             oql += DashboardUtil.getTeamQuery(tm);
         }
+
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
 
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
@@ -1254,9 +1274,6 @@ public class DbUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
 
-        //if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-		//	oql += ActivityUtil.getApprovedActivityQueryString("act");
-		//}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
         }
@@ -1265,6 +1282,9 @@ public class DbUtil {
             oql += DashboardUtil.getTeamQuery(tm);
         }
 
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
         Session session = PersistenceManager.getRequestDBSession();

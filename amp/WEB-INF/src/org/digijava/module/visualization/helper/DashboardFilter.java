@@ -77,6 +77,7 @@ public class DashboardFilter {
     private Boolean expendituresVisible= true;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
+    private Boolean showOnlyNonDraftActivities;
 
     private Long activityId;
     private int decimalsToShow;
@@ -109,6 +110,7 @@ public class DashboardFilter {
     	newFilter.setSelSectorIds(this.getSelSectorIds());
     	newFilter.setActivityId(this.getActivityId());
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
+    	newFilter.setShowOnlyNonDraftActivities(this.getShowOnlyNonDraftActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
     	newFilter.setAllSectorList(this.getAllSectorList());
@@ -736,6 +738,14 @@ public class DashboardFilter {
 
 	public ArrayList<AmpCategoryValueLocations> getAllLocationsList() {
 		return allLocationsList;
+	}
+
+	public void setShowOnlyNonDraftActivities(Boolean showOnlyNonDraftActivities) {
+		this.showOnlyNonDraftActivities = showOnlyNonDraftActivities;
+	}
+
+	public Boolean getShowOnlyNonDraftActivities() {
+		return showOnlyNonDraftActivities;
 	}
 
 	

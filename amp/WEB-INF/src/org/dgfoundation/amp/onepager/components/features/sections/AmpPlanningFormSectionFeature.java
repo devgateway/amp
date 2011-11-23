@@ -51,15 +51,20 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
                 
 		
 		AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(
-				"dateOfActualCompletion", new PropertyModel<Date>(actModel,
+				"actualCompletionDate", new PropertyModel<Date>(actModel,
 						"actualCompletionDate"), null,
-				"Date of Actual Completion");
+				"Actual Completion Date");
 		add(dateOfActualCompletion);
 
+		AmpDatePickerFieldPanel proposedApprovalDate = new AmpDatePickerFieldPanel(
+				"proposedApprovalDate", new PropertyModel<Date>(actModel,
+				"proposedApprovalDate"), null, "Proposed Approval Date");
+		add(proposedApprovalDate);
+
 		AmpDatePickerFieldPanel dateOfSignedAgreement = new AmpDatePickerFieldPanel(
-				"dateOfSignedAgreement", new PropertyModel<Date>(actModel,
-						"actualApprovalDate"), dateOfActualCompletion,
-				"Date of Signed Agreement");
+				"actualApprovalDate", new PropertyModel<Date>(actModel,
+						"actualApprovalDate"), proposedApprovalDate,
+				"Actual Approval Date");
 		add(dateOfSignedAgreement);
 
 		AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
@@ -67,15 +72,11 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 						"proposedStartDate"), null, "Proposed Start Date");
 		add(proposedStartDate);
                 
-                AmpDatePickerFieldPanel proposedApprovalDate = new AmpDatePickerFieldPanel(
-				"proposedApprovalDate", new PropertyModel<Date>(actModel,
-						"proposedApprovalDate"), null, "Proposed Approval Date");
-		add(proposedApprovalDate);
 
 		AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
-				"dateOfEffectiveAgreement", new PropertyModel<Date>(actModel,
+				"actualStartDate", new PropertyModel<Date>(actModel,
 						"actualStartDate"), dateOfActualCompletion,
-				"Date of Effective Agreement");
+				"Actual Start Date");
 		add(dateOfEffectiveAgreement);
 
 		AmpDatePickerFieldPanel finalDateForContracting = new AmpDatePickerFieldPanel(
@@ -94,8 +95,8 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		add(acsw);
 
 		AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
-				"dateOfPlannedCompletion", new PropertyModel<Date>(actModel,
-						"originalCompDate"), null, "Date of Planned Completion");
+				"originalCompDate", new PropertyModel<Date>(actModel,
+						"originalCompDate"), null, "Original Completion Date");
 		add(dateOfPlannedCompletion);
 
                 // why we use same actualCompletionDate  twice?

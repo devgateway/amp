@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -143,6 +145,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		};
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName);
+		if (((AmpAuthWebSession)getSession()).isFmMode()){
+			titleLabel.add(new SimpleAttributeModifier("title", "Original field name: " + fmName));
+		}
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");

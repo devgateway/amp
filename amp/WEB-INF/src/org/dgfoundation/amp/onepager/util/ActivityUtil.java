@@ -35,8 +35,11 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -126,6 +129,7 @@ public class ActivityUtil {
 			
 			saveContacts(a, session);
 			saveIndicators(a, session);
+			saveFundingOrganizationRole(a);
 
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
@@ -180,6 +184,25 @@ public class ActivityUtil {
 			} catch (Exception e) {
 				logger.error("error while trying to update lucene logs:", e);
 			}
+		}
+	}
+
+	private static void saveFundingOrganizationRole(AmpActivityVersion activity) {
+		//Added for AMP-11544, taken from SaveActivity.java, line 1046-1064. 
+		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
+		activity.getOrgrole().clear();
+		if (activity.getFunding() != null && activity.getFunding().size() > 0) {
+			AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
+			Iterator<AmpFunding> itr = activity.getFunding().iterator();
+			while (itr.hasNext()) {
+				AmpFunding funding = itr.next();
+				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(activity);
+				ampOrgRole.setRole(role);
+				ampOrgRole.setOrganisation(funding.getAmpDonorOrgId());
+				orgRole.add(ampOrgRole);
+			}
+			activity.setOrgrole(orgRole);
 		}
 	}
 

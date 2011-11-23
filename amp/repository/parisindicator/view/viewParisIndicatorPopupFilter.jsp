@@ -230,7 +230,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<c:forEach var="element"
 										items="${parisIndicatorForm.financingInstrumentsElements}">
 										<li><a href="#" onclick="showFilterDiv('${element.htmlDivId}','financingsInsTab_search');return false;"><digi:trn>${element.name}</digi:trn>
-												(${element.rootHierarchyListable.countDescendants}) </a></li>
+												(${element.rootHierarchyListable.countDescendants-1}) </a></li>
 									</c:forEach>
 								</ul>
 							</div>
@@ -359,7 +359,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<c:forEach var="element"
 										items="${parisIndicatorForm.donorElements}">
 										<li><a  href="#" onclick="showFilterDiv('${element.htmlDivId}','donorTab_search');return false;"><digi:trn>${element.name}</digi:trn>
-												(${element.rootHierarchyListable.countDescendants}) </a>
+												(${element.rootHierarchyListable.countDescendants-1}) </a>
 										</li>
 									</c:forEach>
 								</ul>
@@ -422,7 +422,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<c:forEach var="element"
 										items="${parisIndicatorForm.sectorStatusesElements}">
 										<li><a href="#" onclick="showFilterDiv('${element.htmlDivId}','status_sector_search');return false;"><digi:trn>${element.name}</digi:trn>
-												(${element.rootHierarchyListable.countDescendants}) </a>
+												(${element.rootHierarchyListable.countDescendants-1}) </a>
 										</li>
 									</c:forEach>
 								</ul>

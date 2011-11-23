@@ -226,7 +226,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<ul class="groupingSelectors">
 										<c:forEach var="element" items="${gisDashboardForm.donorElements}">
 											<li><a href="#" onclick="showFilterDiv('${element.htmlDivId}','donorTab_search');return false;"><digi:trn>${element.name}</digi:trn>
-													(${element.rootHierarchyListable.countDescendants}) </a></li>
+													(${element.rootHierarchyListable.countDescendants-1}) </a></li>
 										</c:forEach>
 									</ul>
 								</div>
@@ -352,7 +352,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									<ul class="groupingSelectors">
 										<c:forEach var="element" items="${gisDashboardForm.sectorElements}">
 											<li><a  href="#" onclick="showFilterDiv('${element.htmlDivId}','sectorTab_search');return false;"><digi:trn>${element.name}</digi:trn>
-													(${element.rootHierarchyListable.countDescendants}) </a>
+													(${element.rootHierarchyListable.countDescendants-1}) </a>
 											</li>
 										</c:forEach>
 									</ul>
@@ -410,7 +410,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 										<c:forEach var="element"
 											items="${gisDashboardForm.programElements}">
 											<li><a href="#" onclick="showFilterDiv('${element.htmlDivId}','programTab_search');return false;"><digi:trn>${element.name}</digi:trn>
-													(${element.rootHierarchyListable.countDescendants}) </a>
+													(${element.rootHierarchyListable.countDescendants-1}) </a>
 											</li>
 										</c:forEach>
 									</ul>

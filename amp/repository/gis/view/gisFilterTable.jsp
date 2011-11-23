@@ -39,7 +39,7 @@
 								<div class="selector_type_cont">
 									<digi:trn>${element.name}</digi:trn>
 									<span style="float: right;">
-										(${element.rootHierarchyListable.countDescendants})
+										(${element.rootHierarchyListable.countDescendants-1})
 										<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
 										style="display: none;">Fake</button>
 									</span>

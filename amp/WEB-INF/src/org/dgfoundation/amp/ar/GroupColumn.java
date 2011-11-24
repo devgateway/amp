@@ -7,7 +7,6 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -322,14 +322,16 @@ public class GroupColumn extends Column {
         
         // Start AMP-2724
         if(category.equals(ArConstants.FUNDING_TYPE)) {
+        	
+        	int index=0;
+        	List theItems = ret.getItems();
 			if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
 	
 				TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
 						ArConstants.TOTAL_COMMITMENTS);
 				
-	            List theItems = ret.getItems();
-	            
-	            int index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
+	           
+	            index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
 	            
 	            theItems.add(index <  0  || index > theItems.size() ?  theItems.size() : index, tac);
 	            
@@ -343,7 +345,38 @@ public class GroupColumn extends Column {
 					tac.addCell(element);
 				}
 	
-			}  
+			}
+			if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
+					reportMetadata.getMeasures())) {
+
+				TotalComputedMeasureColumn tcmc = new TotalComputedMeasureColumn(
+
+				ArConstants.UNDISBURSED_BALANCE);
+
+				index = reportMetadata
+						.getMeasureOrder(ArConstants.UNDISBURSED_BALANCE) - 1;
+
+				theItems.add(
+						index < 0 || index > theItems.size() ? theItems.size()
+								: index, tcmc);
+
+				tcmc.setParent(ret);
+
+				tcmc.setContentCategory(category);
+
+				tcmc.setExpression(MathExpressionRepository.UNDISBURSED_BALANCE);
+
+				Iterator<Cell> it = src.iterator();
+
+				while (it.hasNext()) {
+
+					AmountCell element = (AmountCell) it.next();
+
+					tcmc.addCell(element);
+
+				}
+
+			}
         }
         // End AMP-2724
         

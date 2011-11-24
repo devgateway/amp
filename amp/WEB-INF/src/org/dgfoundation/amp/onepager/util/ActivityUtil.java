@@ -190,7 +190,9 @@ public class ActivityUtil {
 	private static void saveFundingOrganizationRole(AmpActivityVersion activity) {
 		//Added for AMP-11544, taken from SaveActivity.java, line 1046-1064. 
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
-		activity.getOrgrole().clear();
+		if(activity.getOrgrole() != null) {
+			activity.getOrgrole().clear();
+		}		
 		if (activity.getFunding() != null && activity.getFunding().size() > 0) {
 			AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
 			Iterator<AmpFunding> itr = activity.getFunding().iterator();

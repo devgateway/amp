@@ -69,7 +69,7 @@
 											<td width=50% align=right style="padding-bottom:15px;">
 												<strong><digi:trn>Team Name</digi:trn>:</strong>&nbsp; <bean:write name="aimTeamMemberForm" property="teamName" />									
 											</td>
-											<td width=50% style="padding-bottom:15px;">
+											<td width=50% style="padding-bottom:15px; padding-left: 7px;">
 												<strong><digi:trn>Workspace Manager</digi:trn>:</strong>&nbsp; 
 												<c:if test="${not empty aimTeamMemberForm.teamHead}">
 													${aimTeamMemberForm.teamHead.user.firstNames}&nbsp;${aimTeamMemberForm.teamHead.user.lastName} - &lt; ${aimTeamMemberForm.teamHead.user.email} &gt;

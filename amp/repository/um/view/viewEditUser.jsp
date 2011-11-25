@@ -318,7 +318,8 @@ function isInvalid(field){
 																	<tr>
 																		<td width="169" align="right" height="30">&nbsp;</td>
 																		<td class="addUserButContainer">
-		 	 	 	 		                                                <input type="button" value="Add Organisation" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
+																		  <bean:define id="addOrganization"><digi:trn>Add Organization</digi:trn></bean:define>
+		 	 	 	 		                                                <input type="button" value="${addOrganization}" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
 	 	                                                                </td>
 																	</tr>
 																	
@@ -347,7 +348,8 @@ function isInvalid(field){
 																		<td width="169" align="right" height="30">&nbsp;</td>
  	 	 	 															<td class="addUserButContainer">
 																			<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
-																				<input type="button" value="Remove Organisations" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
+																			    <bean:define id="removeOrganization"><digi:trn>Remove Organizations</digi:trn></bean:define>
+																				<input type="button" value="${removeOrganization}" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																			</logic:notEmpty>                                                                                                                                                       
  	 	 	 															</td>
 																	</tr>

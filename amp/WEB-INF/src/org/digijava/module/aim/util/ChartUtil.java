@@ -111,6 +111,14 @@ public class ChartUtil {
     domainAxis.setCategoryLabelPositions(
         CategoryLabelPositions.createUpRotationLabelPositions(
             Math.PI / 6.0));
+		if (dataset != null) {
+			for (int i = 0; i < dataset.getColumnCount(); i++) {
+				String categoryName = (String) dataset.getColumnKey(i);
+				domainAxis.addCategoryLabelToolTip(categoryName, categoryName);
+			}
+
+		}
+ 
     // OPTIONAL CUSTOMISATION COMPLETED.
 
     return chart;

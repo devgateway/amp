@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -95,6 +96,7 @@ public class UpdateWorkspace extends Action {
                 newTeam.setAddActivity(uwForm.getAddActivity());
                 newTeam.setComputation(uwForm.getComputation());
                 newTeam.setHideDraftActivities(uwForm.getHideDraftActivities() );
+                newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
 
                 // newTeam.setType(typeCategoryValue);
                 if(uwForm.getOrganizations()!=null) 
@@ -125,6 +127,7 @@ public class UpdateWorkspace extends Action {
                 uwForm.setTypeId(new Long(0));
                 uwForm.setDescription("");
                 uwForm.setWorkspaceType("");
+                uwForm.setWorkspaceGroup(new Long(0));
                 uwForm.setRelatedTeamFlag("no");
                 uwForm.setRelatedTeamName("");
                 uwForm.setAddActivity(null);
@@ -199,6 +202,9 @@ public class UpdateWorkspace extends Action {
                 	s.addAll(uwForm.getOrganizations());
                 	newTeam.setOrganizations(s);
                 	}
+                    if(uwForm.getWorkspaceGroup() != null){
+                    	newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
+                    }
         
                     boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm
                         .getChildWorkspaces());

@@ -48,5 +48,7 @@
 		<one-to-one name="npdSettings" class="org.digijava.module.aim.dbentity.NpdSettings"
 			property-ref="team" cascade="delete" />
 
+		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+
 	</class>
 </hibernate-mapping>

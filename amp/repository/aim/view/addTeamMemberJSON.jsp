@@ -230,7 +230,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 			}			
 		}
 		if(teamHeadCount>1){
-			alert('Wokrspace can not have more then one Manager');
+			alert('Workspace can not have more than one Manager');
 			return false;
 		}
 		
@@ -258,12 +258,13 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 						</b></td>
 					</tr>
 				</logic:empty>
+				<bean:define id="addSelectedMembers"><digi:trn>Add Selected Members</digi:trn></bean:define>
 				<logic:notEmpty name="aimTeamMemberForm" property="allUser">
 					<tr>
 						<td align=center>
 							<div class='yui-skin-sam'>
                             	<div id="dynamicdata" class="report"></div>
-                            	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="Add Selected Memebers" onclick="addUsersToWorkspace()"></html:button> </div>
+                            	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="${addSelectedMembers}" onclick="addUsersToWorkspace()"></html:button> </div>
 								<div id="dt-pag-nav"></div>
 								<div id="errors"></div>
 							</div>

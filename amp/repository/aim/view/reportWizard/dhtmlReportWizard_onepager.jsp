@@ -279,7 +279,7 @@ body {
 	<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv"></div>
 	
 	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
-		<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<table width="1000" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="1000">
 					<div class="step_head">

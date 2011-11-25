@@ -39,6 +39,9 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -98,6 +101,9 @@ public class ViewAmp
         LoginForm lForm = (LoginForm) form; // login form instance
        
         lForm.setMembers(members);
+
+        Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.WORKSPACE_GROUP_KEY);
+        lForm.setWorkspaceGroups(workspaceGroups);
 
        
         //response.sendRedirect("showSelectTeam.do");

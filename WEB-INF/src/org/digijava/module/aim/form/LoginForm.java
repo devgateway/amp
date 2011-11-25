@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class LoginForm extends ValidatorForm {
 
@@ -14,6 +15,7 @@ public class LoginForm extends ValidatorForm {
 	private String password = null;
 	private boolean login = false;
 	private Collection members;
+	private Collection<AmpCategoryValue> workspaceGroups;
 
 	public boolean getLogin() {
 		return login;
@@ -59,5 +61,13 @@ public class LoginForm extends ValidatorForm {
 	 */
 	public void setMembers(Collection members) {
 		this.members = members;
+	}
+
+	public void setWorkspaceGroups(Collection<AmpCategoryValue> workspaceGroups) {
+		this.workspaceGroups = workspaceGroups;
+	}
+
+	public Collection<AmpCategoryValue> getWorkspaceGroups() {
+		return workspaceGroups;
 	}
 }

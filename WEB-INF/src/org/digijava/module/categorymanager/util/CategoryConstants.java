@@ -166,6 +166,8 @@ public class CategoryConstants {
 
 	public static final String RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY = "Country Analytic Report (Paris Indicator)";
 
+	public static final String WORKSPACE_GROUP_KEY	= "workspace_group";
+
 	
 	public static class HardCodedCategoryValue {
 		private String valueKey;

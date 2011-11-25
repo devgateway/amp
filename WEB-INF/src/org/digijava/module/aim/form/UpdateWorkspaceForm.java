@@ -93,6 +93,8 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private int numResults;
 	private boolean orgPopupReset;
 	
+    private Long workspaceGroup;
+	
 	
 	
 	public Collection getAllChildren() {
@@ -682,6 +684,14 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	 */
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
+	}
+
+	public void setWorkspaceGroup(Long workspaceGroup) {
+		this.workspaceGroup = workspaceGroup;
+	}
+
+	public Long getWorkspaceGroup() {
+		return workspaceGroup;
 	}
 
 

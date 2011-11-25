@@ -43,6 +43,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private Set organizations;		// activities assigned to donor team
 	private NpdSettings npdSettings;
+	
+	private AmpCategoryValue workspaceGroup;
+	
 
 	public NpdSettings getNpdSettings() {
 		return npdSettings;
@@ -261,6 +264,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	 */
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
+	}
+
+	public void setWorkspaceGroup(AmpCategoryValue workspaceGroup) {
+		this.workspaceGroup = workspaceGroup;
+	}
+
+	public AmpCategoryValue getWorkspaceGroup() {
+		return workspaceGroup;
 	}
 
 

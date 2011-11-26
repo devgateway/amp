@@ -135,7 +135,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
 			
 			if (!existingSurveyOrgs.contains(org)){
 				AmpAhsurvey as = new AmpAhsurvey();
-				//as.setAmpActivityId(am.getObject());
+				as.setAmpActivityId(am.getObject());
 				as.setAmpDonorOrgId(org);
 				surveys.getObject().add(as);
 			}

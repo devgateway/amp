@@ -381,7 +381,9 @@
 	
 	function getMsgParamsComplited(data, textStatus) {
 		var msgCount = data.getElementsByTagName('message-info')[0].attributes.getNamedItem("total").value;
+		var hiddenMsgCount = data.getElementsByTagName('message-info')[0].attributes.getNamedItem("totalHidden").value;
 		$("#totalMsgCountContainer").html(msgCount);
+		$("#totalHiddenMsgCountContainer").html(hiddenMsgCount);
 	}
 	
 	function getMessages(){

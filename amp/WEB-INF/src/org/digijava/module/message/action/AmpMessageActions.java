@@ -186,71 +186,71 @@ public class AmpMessageActions extends DispatchAction {
                 }
 			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
 			messageForm.setEmailMsgsCurrent(settings.getEmailMsgs());
-                 int tabIndex = 0;
-                if (request.getParameter("tabIndex") != null) {
-                    tabIndex = Integer.parseInt(request.getParameter("tabIndex"));
-                } else {
-                    tabIndex = messageForm.getTabIndex();
-                }
-                messageForm.setTabIndex(tabIndex);
-
-                String childTab = null;
-                if (request.getParameter("childTab") != null) {
-                    childTab = request.getParameter("childTab");
-                } else {
-                    childTab = messageForm.getChildTab();
-                }
-                if (childTab == null) {
-                    childTab = "inbox";
-                }
-            int count = 0;
-            int hiddenCount = 0;
-            messageForm.setChildTab(childTab);
-            if (tabIndex == 1) { //<-----messages
-                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false,maxStorage);
-                    hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true,maxStorage);
-                } else if (childTab.equalsIgnoreCase("sent")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
-                     hiddenCount = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
-
-                } else if (childTab.equalsIgnoreCase("draft")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,false);
-                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,true);
-
-                }
-            } else if (tabIndex == 2) {// <--alerts
-                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false,maxStorage);
-                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
-
-                } else if (childTab.equalsIgnoreCase("sent")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
-                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
-
-                } else if (childTab.equalsIgnoreCase("draft")) {
-                    //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,false);
-                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,true);
-
-                } else {
-                    messageForm.setMsgRefreshTimeCurr(new Long(-1));
-                }
-
-            }else if(tabIndex == 3){ //<--approvals
-            	count = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,false,maxStorage);
-                hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true,maxStorage);
-            }else if(tabIndex == 4){//<--calendar events
-            	count = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,false,maxStorage);
-                hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true,maxStorage);
-            }
-            messageForm.setAllmsg(count);
-            messageForm.setHiddenMsgCount(hiddenCount);
+//                 int tabIndex = 0;
+//                if (request.getParameter("tabIndex") != null) {
+//                    tabIndex = Integer.parseInt(request.getParameter("tabIndex"));
+//                } else {
+//                    tabIndex = messageForm.getTabIndex();
+//                }
+//                messageForm.setTabIndex(tabIndex);
+//
+//                String childTab = null;
+//                if (request.getParameter("childTab") != null) {
+//                    childTab = request.getParameter("childTab");
+//                } else {
+//                    childTab = messageForm.getChildTab();
+//                }
+//                if (childTab == null) {
+//                    childTab = "inbox";
+//                }
+//            int count = 0;
+//            int hiddenCount = 0;
+//            messageForm.setChildTab(childTab);
+//            if (tabIndex == 1) { //<-----messages
+//                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false,maxStorage);
+//                    hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true,maxStorage);
+//                } else if (childTab.equalsIgnoreCase("sent")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
+//                     hiddenCount = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
+//
+//                } else if (childTab.equalsIgnoreCase("draft")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,false);
+//                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,true);
+//
+//                }
+//            } else if (tabIndex == 2) {// <--alerts
+//                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false,maxStorage);
+//                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
+//
+//                } else if (childTab.equalsIgnoreCase("sent")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
+//                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
+//
+//                } else if (childTab.equalsIgnoreCase("draft")) {
+//                    //how many messages are in db. used for pagination
+//                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,false);
+//                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,true);
+//
+//                } else {
+//                    messageForm.setMsgRefreshTimeCurr(new Long(-1));
+//                }
+//
+//            }else if(tabIndex == 3){ //<--approvals
+//            	count = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,false,maxStorage);
+//                hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true,maxStorage);
+//            }else if(tabIndex == 4){//<--calendar events
+//            	count = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,false,maxStorage);
+//                hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true,maxStorage);
+//            }
+//            messageForm.setAllmsg(count);
+//            messageForm.setHiddenMsgCount(hiddenCount);
         }
 
         String forwardPath = null;
@@ -277,32 +277,41 @@ public class AmpMessageActions extends DispatchAction {
 
 
         int count=0;
-
+        int hiddenCount =0;
     	if(tabIndex==1){
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
+    			hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true,maxStorage);
     		}else if(childTab.equalsIgnoreCase("sent")){
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
+    			 hiddenCount = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
     		}else if(childTab.equalsIgnoreCase("draft")){
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),true,false);
+    			hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,true);
     		}
     	}else if(tabIndex==2){
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
+    			hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
     		}else if(childTab.equalsIgnoreCase("sent")){
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
+    			hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
     		}else if(childTab.equalsIgnoreCase("draft")){
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),true,false);
+    			hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,true);
     		}
     	}else if(tabIndex==3){
 			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false,maxStorage);
+			hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true,maxStorage);
     	}else if(tabIndex==4){
 			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false,maxStorage);
+			hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true,maxStorage);
     	}
 
         XMLDocument msgInfo = new XMLDocument();
         XML root = new XML("message-info");
         root.addAttribute("total", count);
+        root.addAttribute("totalHidden", hiddenCount);
 
         msgInfo.addElement(root);
         msgInfo.output(response.getOutputStream());
@@ -350,11 +359,12 @@ public class AmpMessageActions extends DispatchAction {
 
     	int howManyPages=0;
     	int count=0;
-
+    	int hiddenCount = 0;
+    	
     	if(tabIndex==1){ //<-----messages
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
+    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);    			 
     			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
@@ -368,7 +378,7 @@ public class AmpMessageActions extends DispatchAction {
     	}else if(tabIndex==2){// <--alerts
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
+    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);    			
     			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
@@ -399,6 +409,8 @@ public class AmpMessageActions extends DispatchAction {
     	messageForm.setAllmsg(count);
 
     	messageForm.setTabIndex(tabIndex);
+    	
+    	messageForm.setHiddenMsgCount(hiddenCount);
 
     	if(childTab==null){
     		childTab="inbox";
@@ -418,7 +430,7 @@ public class AmpMessageActions extends DispatchAction {
     			if(page[0]==1){
     				if(count<messages.size()){
     					messageForm.setMessagesForTm(messages.subList(0,count));
-    				}
+    				}hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
     			}else if(page[0]>1){
     				int toIndex=count-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE;
     				if(toIndex<messages.size()){

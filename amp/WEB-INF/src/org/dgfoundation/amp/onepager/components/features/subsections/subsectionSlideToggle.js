@@ -34,6 +34,10 @@ $(document).ready(function(){
 	$('#rightMenu').css('left', mainContentLeft + "px");
 	$('#rightMenu').css('display', 'block');
 	enableComputateVisibleSections = true;
+	if (onepagerMode)
+		computateVisibleSections();
+	else
+		highlightQItem($("#qListItems").find('a:first'));
 });
 
 $(window).resize(function() {

@@ -143,7 +143,7 @@ function switchOnepagerMode(){
 		$('#imgOnepagerMode').hide();
 		$('#imgGroupMode').show();
 	}
-	highlightQItem($("#qListItems").find('a').get(0));
+	highlightQItem($("#qListItems").find('a:first'));
 }
 
 //////////////////////////////////////////////////////////////

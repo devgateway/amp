@@ -29,7 +29,7 @@
             if (hasRelDoc != 'true')
 			{
                 $("#"+idThumbnail).click(function() {
-                    var msg="<digi:trn>No related documents to download!</digi:trn>"
+                    var msg="<digi:trn jsFriendly='true'>No related documents to download!</digi:trn>";
                     alert(msg);
                 });
             }
@@ -53,6 +53,7 @@
 				}
             }
         });
+        $("#"+idThumbnail).attr("style", "  ");	
     }
 
 </script>

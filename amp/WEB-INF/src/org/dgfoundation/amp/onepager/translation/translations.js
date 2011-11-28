@@ -112,6 +112,11 @@ function wicketSwitchFMMode(){
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
 
+function highlightQItem(currentItem){
+	$('#qListItems').find('li').removeClass('quickListHighlight');
+	$(currentItem).parent().parent().addClass('quickListHighlight');
+}
+
 function showSection(itemId){
 	if (onepagerMode){
 		$('#' + itemId).parent().parent().siblings('div:first').show();
@@ -121,6 +126,7 @@ function showSection(itemId){
 		$('span[name=section]').hide();
 		$('#'+itemId).parents('span[name=section]').show();
 	}
+	highlightQItem($("#qItem"+itemId));
 }
 
 function switchOnepagerMode(){
@@ -137,6 +143,7 @@ function switchOnepagerMode(){
 		$('#imgOnepagerMode').hide();
 		$('#imgGroupMode').show();
 	}
+	highlightQItem($("#qListItems").find('a').get(0));
 }
 
 //////////////////////////////////////////////////////////////

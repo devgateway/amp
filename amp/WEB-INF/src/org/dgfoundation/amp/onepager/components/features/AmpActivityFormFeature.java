@@ -383,6 +383,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if (item.getModelObject() != null){
 					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
 					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
+					label.add(new SimpleAttributeModifier("id", "qItem"+itemId));
 					label.add(new SimpleAttributeModifier("onclick", "showSection('"+itemId +"'); return false;"));
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);

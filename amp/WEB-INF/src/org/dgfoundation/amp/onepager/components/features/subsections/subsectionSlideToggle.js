@@ -1,3 +1,28 @@
+enableComputateVisibleSections = false;
+
+function isScrolledIntoView(docViewTop, docViewBottom, elem){
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return (((elemBottom >= docViewTop) && (elemBottom <= docViewBottom)) 
+      || ((elemTop <= docViewBottom) && (elemTop >= docViewTop)) 
+      || ((elemTop <= docViewTop) && (elemBottom >= docViewBottom)));
+}
+
+
+function computateVisibleSections(){
+	var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+	if (enableComputateVisibleSections){
+		$('#qListItems').find('li').removeClass('quickListHighlight');
+		$('span[name=section]').each(function (){
+			if (isScrolledIntoView(docViewTop, docViewBottom, this))
+				$('#qItem'+$(this).find('a:first').attr('id')).parent().parent().addClass('quickListHighlight');
+		});
+	}
+}
+
 $(document).ready(function(){
 	$("a.slider").click(function(){
 		$(this).siblings("div:first").slideToggle();
@@ -8,6 +33,7 @@ $(document).ready(function(){
 	$('#rightMenu').css('top', mainContentTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 	$('#rightMenu').css('display', 'block');
+	enableComputateVisibleSections = true;
 });
 
 $(window).resize(function() {
@@ -28,4 +54,6 @@ $(window).scroll(function() {
 		currentScrollTop = 2;
 	$('#rightMenu').css('top', currentScrollTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
+	if (onepagerMode)
+		computateVisibleSections();
 });

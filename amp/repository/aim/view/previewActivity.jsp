@@ -969,11 +969,26 @@ function collapseAll() {
 							</c:forEach>
 							</bean:define>
 						</logic:notEmpty>
+						
 						<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-							<a href="javascript:showZoomedMap(true)"> 
-								<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>
-							<div id="zoomMapContainer" style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;" z-index="9999"><a href="javascript:showZoomedMap(false)">
-								<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>							</div>
+							<a href="javascript:showZoomedMap(true)">
+								<c:if test="${aimEditActivityForm.location.levelIdx==1}">
+									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+								</c:if>
+								<c:if test="${aimEditActivityForm.location.levelIdx>1}">
+									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=3&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+								</c:if>
+							</a>
+							<div id="zoomMapContainer" style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;" z-index="9999">
+								<a href="javascript:showZoomedMap(false)">
+									<c:if test="${aimEditActivityForm.location.levelIdx==1}">
+										<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+									</c:if>
+									<c:if test="${aimEditActivityForm.location.levelIdx>1}">
+										<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=3&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+									</c:if>
+								</a>
+							</div>
 						</logic:notEmpty>						
 						</td>
 					</tr>

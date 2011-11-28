@@ -363,7 +363,7 @@
 				return false;
 			}
 			
-		SelColsDragAndDropObject.prototype				= new ColumnsDragAndDropObject();
+		SelColsDragAndDropObject.prototype				= new ColumnsDragAndDropObject('source_col_div','dest_col_ul');
 		SelColsDragAndDropObject.prototype.parent		= ColumnsDragAndDropObject;
 		SelColsDragAndDropObject.prototype.constructor	= SelColsDragAndDropObject;
 		function SelColsDragAndDropObject() {

@@ -59,9 +59,9 @@
 					</b>
 				</div>
 				<div class="memberSelectorInputWrapper" style="float: right">
-					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" style="margin-top:3px; width: ${searchFieldWidth};" class="inputx" />&nbsp;
-					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" class="buton" type="button">&lt;&lt;</button>
-					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" class="buton" type="button">&gt;&gt;</button>
+					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" style="margin-top:0px; width: ${searchFieldWidth};" class="inputx" />&nbsp;
+					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" style="padding: 0px;" type="button">&lt;&lt;</button>
+					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" style="padding: 0px;" type="button">&gt;&gt;</button>
 				</div>
 		</div>
 					<c:set var="displayProperty"> </c:set>

@@ -99,7 +99,7 @@ function addTeamMember(id) {
 													<jsp:include page="teamSetupMenu.jsp" flush="true" />
 										
 										
-											<div class="breadcrump_cont">
+											<div style="padding: 10px;">
 												<table border="0" cellpadding="0" cellspacing="0">
 													<tr>
 														<td nowrap>

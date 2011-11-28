@@ -607,8 +607,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
-            if (ampCategoryValue != null)
-              eaForm.getLocation().setImplemLocationLevel(new Long(ampCategoryValue.getId()));
+            if (ampCategoryValue != null) {
+                eaForm.getLocation().setImplemLocationLevel(new Long(ampCategoryValue.getId()));
+                eaForm.getLocation().setLevelIdx(ampCategoryValue.getIndex());
+            }
             
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                     CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
@@ -1060,6 +1062,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 	                location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
 					location.setLocationName(loc.getLocation().getName());
 					location.setLocId( loc.getLocation().getId() );
+                    location.setLevelIdx(loc.getLocation().getParentCategoryValue().getIndex());
                 }
                 AmpCategoryValueLocations ampCVRegion	= 
         			DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);

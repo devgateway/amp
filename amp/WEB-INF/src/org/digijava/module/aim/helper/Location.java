@@ -38,7 +38,8 @@ public class Location implements Serializable
 	private AmpCategoryValueLocations ampCVLocation;
 	
 	private boolean percentageBlocked	= false;
-	
+	private int levelIdx;
+
 	public Location() {
 		locId = new Long(-1);
 		countryId = new Long(-1);
@@ -50,8 +51,17 @@ public class Location implements Serializable
 		woredaId = new Long(-1);
 		woreda = "";
 	}
-	
-	/**
+
+
+    public int getLevelIdx() {
+        return levelIdx;
+    }
+
+    public void setLevelIdx(int levelIdx) {
+        this.levelIdx = levelIdx;
+    }
+
+    /**
 	 * @return Returns the country.
 	 */
 	public String getCountry() {

@@ -1413,15 +1413,23 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private String country;
 		private Long levelId = null;
+        private int levelIdx;
 		private Long implemLocationLevel = null;
 		private Collection<org.digijava.module.aim.helper.Location> selectedLocs = null;
 		private boolean defaultCountryIsSet;
 		private int pagesSize;
 		
 		private boolean noMoreRecords=false;
-		
-		
-		public boolean isNoMoreRecords() {
+
+        public int getLevelIdx() {
+            return levelIdx;
+        }
+
+        public void setLevelIdx(int levelIdx) {
+            this.levelIdx = levelIdx;
+        }
+
+        public boolean isNoMoreRecords() {
 			return noMoreRecords;
 		}
 

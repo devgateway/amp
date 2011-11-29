@@ -142,15 +142,19 @@ public class ActivityUtil {
 			if (group == null){
 				throw new RuntimeException("Non-existent group should have been added by now!");
 			}
+			
 			if (!newActivity){
 				//existing activity
 				//previousVersion for current activity
 				group.setAmpActivityLastVersion(a);
 				session.update(group);
 			}
+			else{
+				//set Amp ID
+				a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
+			}
 
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
-            a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
 			a.setAmpActivityGroup(group);
 			Date updatedDate = Calendar.getInstance().getTime();
 			if (a.getCreatedDate() == null)

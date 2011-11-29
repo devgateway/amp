@@ -390,6 +390,8 @@ LoggerIdentifiable, Cloneable {
 	 */
 	protected AmpActivityVersion ampActivityPreviousVersion;
 	protected Date modifiedDate;
+
+	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	
 	protected Boolean mergedActivity;

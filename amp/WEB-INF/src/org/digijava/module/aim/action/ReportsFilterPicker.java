@@ -1455,6 +1455,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToMonth(-1);
 		filterForm.setFromDate(null);
 		filterForm.setToDate(null);
+		
+		filterForm.setAmpReportId(null);
 
 		filterForm.setLineMinRanks(null);
 		filterForm.setPlanMinRanks(null);

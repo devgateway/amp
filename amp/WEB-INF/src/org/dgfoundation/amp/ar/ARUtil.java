@@ -167,13 +167,13 @@ public final class ARUtil {
 				.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
 			af = new AmpARFilter();
+		af.readRequestData(request);
 		Object initFilter	= request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB);
 		if ( initFilter!=null && "true".equals(initFilter) ) {
-			FilterUtil.populateFilter(r, af);
 			FilterUtil.prepare(request, af);
+			FilterUtil.populateFilter(r, af);
 			httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
 		}
-		af.readRequestData(request);
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, af, request);

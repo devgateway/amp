@@ -85,6 +85,17 @@ public class ViewNewAdvancedReport extends Action {
 		
 		ReportsFilterPicker rfp		= new ReportsFilterPicker();
 		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+		
+		
+		String lastReportId	= (String)request.getSession().getAttribute("LAST_REPORT_ID") ; 
+		String ampReportId 	= request.getParameter("ampReportId");
+		
+		if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
+			 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
+		
+		if ( ampReportId != null )
+			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
+		
 		if (rfpForm == null || "reset".equals(request.getParameter("view")) ) {
 			// if ampReportId parameter is in the request we need to reset the settings cause a new report was opened
 			rfpForm		= new ReportsFilterPickerForm();
@@ -139,7 +150,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
 		Map sorters=(Map) httpSession.getAttribute("reportSorters");
-		String ampReportId = request.getParameter("ampReportId");
+		//String ampReportId = request.getParameter("ampReportId");
 		
 		GroupReportData rd=(GroupReportData) httpSession.getAttribute("report");
 		AmpReports ar=(AmpReports) httpSession.getAttribute("reportMeta");

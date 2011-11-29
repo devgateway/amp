@@ -26,6 +26,9 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
@@ -54,7 +57,8 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		add(label);
 		
 		if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0 || 
-				levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservation") == 0 ){
+			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservation") == 0 || 
+			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservation") == 0){
 			final AmpDatePickerFieldPanel date;
 			
 			if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0)
@@ -118,6 +122,20 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservationActor") == 0){
 						AmpRegionalObservationActor a = new AmpRegionalObservationActor();
 						a.setMeasure((AmpRegionalObservationMeasure) objModel.getObject());
+						a.setName(new String(""));
+						children.add(a);
+					}
+					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure") == 0){
+						AmpLineMinistryObservationMeasure a = new AmpLineMinistryObservationMeasure();
+						a.setActors(new HashSet());
+						a.setName(new String(""));
+						a.setLineMinistryObservation((AmpLineMinistryObservation)objModel.getObject());
+						a.setName(new String(""));
+						children.add(a);
+					}
+					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor") == 0){
+						AmpLineMinistryObservationActor a = new AmpLineMinistryObservationActor();
+						a.setMeasure((AmpLineMinistryObservationMeasure) objModel.getObject());
 						a.setName(new String(""));
 						children.add(a);
 					}

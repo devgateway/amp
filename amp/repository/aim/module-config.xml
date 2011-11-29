@@ -98,6 +98,9 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservationActor</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservation</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFunding</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance</hibernate-class>

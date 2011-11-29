@@ -1,0 +1,97 @@
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ *
+ */
+package org.dgfoundation.amp.onepager.components.features.sections;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
+
+/**
+ * @author aartimon@dginternational.org 
+ * @since Nov 9, 2010
+ */
+public class AmpLineMinistryObservationsFormSectionFeature extends
+		AmpFormSectionFeaturePanel {
+
+	private static final long serialVersionUID = -6654390083784446344L;
+
+	public AmpLineMinistryObservationsFormSectionFeature(String id, String fmName,
+			final IModel<AmpActivityVersion> am) throws Exception {
+		super(id, fmName, am);
+		final PropertyModel<Set<AmpLineMinistryObservation>> setModel=new PropertyModel<Set<AmpLineMinistryObservation>>(am,"lineMinistryObservations");
+		final ListView<AmpLineMinistryObservation> list;
+		if (setModel.getObject() == null)
+			setModel.setObject(new HashSet<AmpLineMinistryObservation>());
+		
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AmpLineMinistryObservation issues = new AmpLineMinistryObservation();
+				issues.setName(new String(""));
+				issues.setObservationDate(new Date());
+				issues.setLineMinistryObservationMeasures(new HashSet());
+				issues.setActivity(am.getObject());
+				setModel.getObject().add(issues);
+				target.addComponent(this.getParent());
+			}
+		};
+		add(addbutton);
+
+		IModel<List<AmpLineMinistryObservation>> listModel = new AbstractReadOnlyModel<List<AmpLineMinistryObservation>>() {
+			private static final long serialVersionUID = 3706184421459839210L;
+
+			@Override
+			public List<AmpLineMinistryObservation> getObject() {
+				return new ArrayList<AmpLineMinistryObservation>(setModel.getObject());
+			}
+		};
+	
+		final List<Class> classTree = new ArrayList<Class>();
+		final Map<Class, String> setName = new HashMap<Class, String>();
+		classTree.add(AmpLineMinistryObservation.class);
+		classTree.add(AmpLineMinistryObservationMeasure.class);
+		classTree.add(AmpLineMinistryObservationActor.class);
+		setName.put(AmpLineMinistryObservation.class, "lineMinistryObservationMeasures");
+		setName.put(AmpLineMinistryObservationMeasure.class, "actors");
+		final Map<Class, String> labelName = new HashMap<Class, String>();
+		labelName.put(AmpLineMinistryObservation.class, "Observation");
+		labelName.put(AmpLineMinistryObservationMeasure.class, "Measure");
+		labelName.put(AmpLineMinistryObservationActor.class, "Actor");
+
+		list = new ListView<AmpLineMinistryObservation>("list", listModel) {
+			private static final long serialVersionUID = 7218457979728871528L;
+			@Override
+			protected void populateItem(final ListItem<AmpLineMinistryObservation> item) {
+				try {
+					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpLineMinistryObservation.class, 0, "Regional Obsevation Field");
+					aitp.setOutputMarkupId(true);
+					item.add(aitp);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		list.setReuseItems(true);
+		add(list);
+	}
+
+}

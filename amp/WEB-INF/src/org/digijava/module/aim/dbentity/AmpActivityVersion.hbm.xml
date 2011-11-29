@@ -261,6 +261,12 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalObservation" />
 		</set>
 
+		<set name="lineMinistryObservations" cascade="all-delete-orphan" order-by="amp_line_ministry_observation_id asc" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLineMinistryObservation" />
+		</set>
+
 		<set name="regionalFundings" cascade="all-delete-orphan" inverse="true" lazy="false">
 			<cache usage="read-write" />
 			<key column="activity_id" />

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
+
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -146,6 +148,9 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableCollection(fieldTitle = "Regional Observations")
 	protected Set<AmpRegionalObservation> regionalObservations;
+
+	@VersionableCollection(fieldTitle = "Line Ministry Observations")
+	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
@@ -1971,6 +1976,15 @@ contactName = string;
 
 	public void setContactName(String contactName) {
 		this.contactName = contactName;
+	}
+	
+	public Set<AmpLineMinistryObservation> getLineMinistryObservations() {
+		return lineMinistryObservations;
+	}
+
+	public void setLineMinistryObservations(
+			Set<AmpLineMinistryObservation> lineMinistryObservations) {
+		this.lineMinistryObservations = lineMinistryObservations;
 	}
 
 	@Override

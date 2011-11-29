@@ -123,7 +123,9 @@
 		
 		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
-		YAHOO.util.Event.addListener("filterPickerSubmitButton", "click", submitQuery);
+		YAHOO.util.Event.addListener("filterPickerSubmitButton", "click", submitQuery);		
+		
+		YAHOO.util.Event.addListener("filterPickerResetButton", "click", buildLabels);		
 		
 		buildLabels();
 	}

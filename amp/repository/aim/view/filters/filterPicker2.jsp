@@ -166,7 +166,7 @@ StopWatch.next("Filters", true);
 				<html:hidden property="defaultCurrency" />
 				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
 				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
-				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset">
+				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
 					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 				</html:button> </div>
 

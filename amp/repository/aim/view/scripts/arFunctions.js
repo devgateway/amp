@@ -128,11 +128,11 @@ function toggleRows(caller,hideId){
 				YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');	
 			}
 			
-			if (amountdiv_1.nodeName!='FONT'){
+			if (amountdiv_1 != null && amountdiv_1.nodeName!='FONT'){
 				YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
 				YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
 			}
-			if (first.nodeName!='FONT'){
+			if (first != null && first.nodeName!='FONT'){
 				YAHOO.util.Dom.removeClass(first, 'desktop_project_count');
 				YAHOO.util.Dom.addClass(first, 'desktop_project_name_sel');
 			}

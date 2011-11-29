@@ -18,9 +18,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
@@ -56,15 +58,8 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
 		};
 		add(addbutton);
 
-		IModel<List<AmpLineMinistryObservation>> listModel = new AbstractReadOnlyModel<List<AmpLineMinistryObservation>>() {
-			private static final long serialVersionUID = 3706184421459839210L;
-
-			@Override
-			public List<AmpLineMinistryObservation> getObject() {
-				return new ArrayList<AmpLineMinistryObservation>(setModel.getObject());
-			}
-		};
-	
+		IModel<List<AmpLineMinistryObservation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel,new AmpLineMinistryObservation.LineMinistryObservationComparator());
+		
 		final List<Class> classTree = new ArrayList<Class>();
 		final Map<Class, String> setName = new HashMap<Class, String>();
 		classTree.add(AmpLineMinistryObservation.class);

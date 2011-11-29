@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -169,5 +170,28 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+
+	public static class LineMinistryObservationComparator implements Comparator<AmpLineMinistryObservation>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpLineMinistryObservation arg0, AmpLineMinistryObservation arg1) {
+			if(arg0.getObservationDate()!=null && arg1.getObservationDate()!=null) 
+				return arg0.getObservationDate().compareTo(arg1.getObservationDate());
+			if(arg0.getAmpLineMinistryObservationId()!=null && arg1.getAmpLineMinistryObservationId()!=null) 
+				return arg0.getAmpLineMinistryObservationId().compareTo(arg1.getAmpLineMinistryObservationId());
+			if(arg0.getAmpLineMinistryObservationId()!=null && arg1.getAmpLineMinistryObservationId()==null) 
+				return -1;
+			if(arg0.getAmpLineMinistryObservationId()==null && arg1.getAmpLineMinistryObservationId()!=null) 
+				return 1;
+			return arg0.hashCode()-arg1.hashCode();
+		}
+		
 	}
 }

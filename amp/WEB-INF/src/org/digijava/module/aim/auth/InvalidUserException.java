@@ -1,9 +1,9 @@
 package org.digijava.module.aim.auth;
 
-import org.springframework.security.AccessDeniedException;
+import org.springframework.security.AuthenticationException;
 
 public class InvalidUserException
-    extends AccessDeniedException {
+    extends AuthenticationException {
 
     public InvalidUserException(String email) {
         super("User " + email + " is invalid");

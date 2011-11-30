@@ -852,7 +852,7 @@ function refreshAsync(){
 		try
 		{
 			if (YAHOO.env.ua.gecko <= 1.92 && YAHOO.env.ua.gecko != 0) {
-				currentMovie.scrollIntoView(true)
+				currentMovie.scrollIntoView(true);
 			}
 			currentMovie.refreshGraph();
 //			console.log("success: " + currentMovie.id);
@@ -1479,6 +1479,10 @@ function  saveAdditionalInfo(orgId){
     };
 
 function getValueToFlash(idContainer, field){
+	
+	if (field == 'Currency'){
+		return document.getElementById("currencyCode").value;
+	}
 	var inputObject = document.getElementById(idContainer + field);
 	var returnValue;
 	

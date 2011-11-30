@@ -27,6 +27,7 @@ public class DashboardFilter {
     private Long startYearFilter;
     private Long endYearFilter;
     private Long currencyId;
+    private Long currencyIdQuickFilter;
     private Boolean workspaceOnly;
     private Boolean showMonochrome;
     private TeamMember teamMember;
@@ -64,6 +65,8 @@ public class DashboardFilter {
    
     private Collection<BeanWrapperImpl> years;
     private int transactionType = 1;
+    private int transactionTypeQuickFilter = 1;
+    private int transactionTypeFilter = 1;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
     private Integer largestProjectNumber;
@@ -151,14 +154,10 @@ public class DashboardFilter {
 	}
 
 
-
-
 	public void setConfigWithSectorAndSubSectors(
 			List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors) {
 		this.configWithSectorAndSubSectors = configWithSectorAndSubSectors;
 	}
-
-
 
 
 	public List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> getRegionWithZones() {
@@ -290,7 +289,14 @@ public class DashboardFilter {
     public void setOrgGroups(List<AmpOrgGroup> orgGroups) {
         this.orgGroups = orgGroups;
     }
+    
+    public int getTransactionTypeQuickFilter() {
+        return transactionTypeQuickFilter;
+    }
 
+    public void setTransactionTypeQuickFilter(int transactionTypeQuickFilter) {
+        this.transactionTypeQuickFilter = transactionTypeQuickFilter;
+    }
     public int getTransactionType() {
         return transactionType;
     }
@@ -299,6 +305,12 @@ public class DashboardFilter {
         this.transactionType = transactionType;
     }
     
+    public void setTransactionTypeFilter(int transactionTypeFilter) {
+        this.transactionTypeFilter = transactionTypeFilter;
+    }
+    public int getTransactionTypeFilter() {
+        return transactionTypeFilter;
+    }
 
     public List<AmpCurrency> getCurrencies() {
         return currencies;
@@ -319,7 +331,16 @@ public class DashboardFilter {
         this.currencyId = currency;
     }
 
-  
+    public void setCurrencyIdQuickFilter(Long currency) {
+        this.currencyIdQuickFilter = currency;
+    }
+
+    public Long getCurrencyIdQuickFilter() {
+    	if (currencyIdQuickFilter == null) {
+    		currencyIdQuickFilter = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
+		}
+        return currencyIdQuickFilter;
+    }
 
     public List<AmpOrganisation> getOrganizations() {
         return organizations;

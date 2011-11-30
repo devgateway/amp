@@ -325,18 +325,18 @@ function initializeGlobalVariables(){
 												<br />
 												<digi:trn>What data should the dashboard show</digi:trn>
 												?<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-												<html:radio property="filter.transactionType"
+												<html:radio property="filter.transactionTypeFilter"
 													styleId="transaction_type_0" value="0">
 													<digi:trn>Commitments</digi:trn>
 												</html:radio>
 												<br />
-												<html:radio property="filter.transactionType"
+												<html:radio property="filter.transactionTypeFilter"
 													styleId="transaction_type_1" value="1">
 													<digi:trn>Disbursements</digi:trn>
 												</html:radio>
 												<br />
 												<feature:display module="Funding" name="Expenditures">
-													<html:radio property="filter.transactionType"
+													<html:radio property="filter.transactionTypeFilter"
 														styleId="transaction_type_2" value="2">
 														<digi:trn>Expenditures</digi:trn>
 													</html:radio>
@@ -842,6 +842,26 @@ function initializeGlobalVariables(){
 	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%">
+		<tr>
+			<td><digi:trn>Type of Funding</digi:trn>:
+		 	</td>
+			<td align="right">
+				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
+					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
+					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+				</html:select>
+		 	</td>
+		</tr>
+		<tr>
+			<td><digi:trn>Currency Type</digi:trn>:
+		 	</td>
+			<td align="right">
+				<html:select property="filter.currencyIdQuickFilter" styleId="currencyQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
+				</html:select>
+		 	</td>
+		</tr>
 		<tr>
 			<td><digi:trn>Start Year</digi:trn>:
 		 	</td>

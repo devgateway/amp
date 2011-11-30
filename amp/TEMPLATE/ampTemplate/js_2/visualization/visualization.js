@@ -444,8 +444,8 @@ function resetToDefaults(){
 	}
 	
 	
-	document.getElementById("transaction_type_0").checked = true;
-	document.getElementById("transaction_type_1").checked = false;
+	document.getElementById("transaction_type_0").checked = false;
+	document.getElementById("transaction_type_1").checked = true;
 	document.getElementById("transaction_type_2").checked = false;
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
@@ -684,10 +684,14 @@ var callbackApplyFilterCall = {
 
 function callbackApplyFilter(e){
 	panelLoaded = false;
+	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
+	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
+	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
+	
 	loadingPanel.show();
 
 	YAHOO.util.Connect.setForm('visualizationform');
@@ -751,6 +755,7 @@ function applyFilterPopin(e){
 
 	document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
 	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
@@ -776,6 +781,8 @@ function applyFilterPopin(e){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
+	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;
+	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
 	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
@@ -1278,15 +1285,15 @@ function refreshBoxes(o){
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	
-	var type = "" + getOptionChecked("transaction_type_");
+	var type = document.getElementById("transactionType").value;
 	var fundType = "";
-	if (type=="0") {
+	if (type==0) {
 		fundType = trnCommitments;
 	}
-	if (type=="1") {
+	if (type==1) {
 		fundType = trnDisbursements;
 	}
-	if (type=="2") {
+	if (type==2) {
 		fundType = trnExpenditures;
 	}
 	try

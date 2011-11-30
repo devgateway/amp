@@ -200,6 +200,7 @@
 				//Set the title and the rest of the parameters for legend
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				currCode = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Currency')}"));
 				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
 				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
 				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));

@@ -18,6 +18,8 @@ public class WorkspaceForm extends ActionForm {
 	
 	private String keyword;
 
+	private Long workspaceGroup;
+	
 	public String getKeyword() {
 		return keyword;
 	}
@@ -82,6 +84,15 @@ public class WorkspaceForm extends ActionForm {
 	 */
 	public void setWorkspaces(Collection workspaces) {
 		this.workspaces = workspaces;
+	}
+
+	public void setWorkspaceGroup(Long workspaceGroup) {
+		this.workspaceGroup = workspaceGroup;
+	}
+
+	public Long getWorkspaceGroup() {
+		return workspaceGroup;
+		
 	}
 	
 }

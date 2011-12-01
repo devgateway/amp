@@ -655,7 +655,7 @@ public class ActivityUtil {
 							newProperty.setContact(formProperty.getContact());
 							newProperty.setName(formProperty.getName());
 							newProperty.setValue(formProperty.getValue());
-							session.save(newProperty);
+							ampContact.getProperties().add(newProperty);
 
 						}
 					}

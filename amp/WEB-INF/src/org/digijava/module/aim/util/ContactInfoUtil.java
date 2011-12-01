@@ -348,6 +348,24 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
+	public static List<Long> getActivityContactIds(Long activityId) throws Exception{
+		if (activityId==null) return null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<Long> retValue=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select a.id from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id";
+			query=session.createQuery(queryString);
+			query.setParameter("id", activityId);
+			retValue=(List<Long>)query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load Message" + ex.getMessage());	
+			ex.printStackTrace();
+		}
+		return retValue;
+	}
 	public static List<AmpActivityContact> getActivityContactsForType(Long activityId,String contactType) throws Exception{
 		if (activityId==null) return null;
 		Session session=null;

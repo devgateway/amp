@@ -24,7 +24,10 @@
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpContactProperty" />
 	</set>
-	
+	<set name="activityContacts" inverse="true" cascade="delete" lazy="false" sort="natural">
+		<key column="contact_id" />
+		<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
+	</set>
 	<set name="organizationContacts" inverse="true" cascade="all-delete-orphan" lazy="false">
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />

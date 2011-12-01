@@ -54,6 +54,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -127,7 +128,7 @@ public class ActivityUtil {
 				session.save(tmpGroup);
 			}
 			
-			saveContacts(a, session);
+			saveContacts(a, session,(draft != draftChange));
 			saveIndicators(a, session);
 			saveFundingOrganizationRole(a);
 
@@ -135,8 +136,10 @@ public class ActivityUtil {
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
 			}
-			else
-				session.update(a);
+			else{
+				session.saveOrUpdate(a);
+			}
+				
 			
 			AmpActivityGroup group = a.getAmpActivityGroup();
 			if (group == null){
@@ -336,6 +339,7 @@ public class ActivityUtil {
 			act.getContracts().size();
 		if (act.getIndicators() != null)
 			act.getIndicators().size();
+		
 		
 		
 		return act;
@@ -581,106 +585,110 @@ public class ActivityUtil {
 			}
 		}
 	}
-	public static void saveContacts(AmpActivityVersion a, Session session) throws Exception {
+	public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
 		Set<AmpActivityContact> activityContacts=a.getActivityContacts();
-		// if activity contains contact,which is not in contact list, we should remove it
+	      // if activity contains contact,which is not in contact list, we should remove it
 		Long oldActivityId = a.getAmpActivityId();
-		if(oldActivityId != null&&!ActivityVersionUtil.isVersioningEnabled()){
-			List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
-			if(activityDbContacts!=null && activityDbContacts.size()>0){
-				Iterator<AmpActivityContact> iter=activityDbContacts.iterator();
-				while(iter.hasNext()){
-					AmpActivityContact actContact=iter.next();
-					int count=0;
-					if(activityContacts!=null){
-						for (AmpActivityContact activityContact : activityContacts) {
-							if(activityContact.getId()!=null && activityContact.getId().equals(actContact.getId())){
-								count++;
-								break;
+		if(oldActivityId != null){
+			if(checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()){
+				//List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
+				List<Long> activityDbContactsIds=ContactInfoUtil.getActivityContactIds(oldActivityId); 
+				if(activityDbContactsIds!=null && activityDbContactsIds.size()>0){
+					Iterator<Long> iter=activityDbContactsIds.iterator();
+			    	  while(iter.hasNext()){
+			    		  Long actContactId=iter.next();
+			    		  int count=0;
+			    		  if(activityContacts!=null){
+			    			  for (AmpActivityContact activityContact : activityContacts) {
+								if(activityContact.getId()!=null && activityContact.getId().equals(actContactId)){
+									count++;
+									break;
+								}
 							}
-						}
-					}
-					if(count==0){ //if activity contains contact,which is not in contact list, we should remove it
-						AmpActivityContact activityCont=(AmpActivityContact)session.get(AmpActivityContact.class, actContact.getId());
-						AmpContact cont=activityCont.getContact();
-						session.delete(activityCont);
-						cont.getActivityContacts().remove(activityCont);
-						session.update(cont);    			  		  
-					}
+			    		  }
+			    		  if(count==0){ //if activity contains contact,which is not in contact list, we should remove it
+			    			  Query qry = session.createQuery("delete from "+AmpActivityContact.class.getName()+" a where a.id="+actContactId);
+			    			  qry.executeUpdate();
+			    		  }
+			    	  }
 				}
+			
 			}
-		}
-
-		//add or edit activity contact and amp contact
-		if(activityContacts!=null && activityContacts.size()>0){
-			for (AmpActivityContact activityContact : activityContacts) {
-
-				//save or update contact
-				AmpContact contact=activityContact.getContact();
-				AmpContact ampContact=null;
-				if(contact.getId()!=null){ //contact already exists.
-					ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
-					ampContact.setName(contact.getName());
-					ampContact.setLastname(contact.getLastname());
-					ampContact.setTitle(contact.getTitle());
-					ampContact.setOrganisationName(contact.getOrganisationName());
-					ampContact.setCreator(contact.getCreator());
-					ampContact.setShared(true);
-					ampContact.setOfficeaddress(contact.getOfficeaddress());
-					ampContact.setFunction(contact.getFunction());
-					if(ampContact.getProperties()!=null){
-						ampContact.getProperties().clear();
-					}
-					if(ampContact.getOrganizationContacts()!=null){
-						ampContact.getOrganizationContacts().clear();
-					}
-
-					//remove old organization contacts
-					Set<AmpOrganisationContact> dbOrgConts=ampContact.getOrganizationContacts();
-					if(dbOrgConts!=null){
-						for (AmpOrganisationContact orgCont :dbOrgConts) {
-							AmpOrganisation organization = orgCont.getOrganisation();
+			}
+			 
+	     
+	      //add or edit activity contact and amp contact
+	      if(activityContacts!=null && activityContacts.size()>0){
+	    	  for (AmpActivityContact activityContact : activityContacts) {
+	    		
+	    	   	//save or update contact
+	    		AmpContact contact=activityContact.getContact();
+	    		AmpContact ampContact=null;
+	    		if(contact.getId()!=null){ //contact already exists.
+	    			ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());	    			
+	    			ampContact.setName(contact.getName());
+	    			ampContact.setLastname(contact.getLastname());
+	    			ampContact.setTitle(contact.getTitle());
+	    			ampContact.setOrganisationName(contact.getOrganisationName());
+	    			ampContact.setCreator(contact.getCreator());
+	    			ampContact.setShared(true);
+	    			ampContact.setOfficeaddress(contact.getOfficeaddress());
+	    			ampContact.setFunction(contact.getFunction());
+	    			if(ampContact.getProperties()!=null){
+	    				ampContact.getProperties().clear();
+	    			}
+	    			if(ampContact.getOrganizationContacts()!=null){
+	    				ampContact.getOrganizationContacts().clear();
+	    			}
+	    			 			
+	    			//remove old organization contacts
+	    			Set<AmpOrganisationContact> dbOrgConts=ampContact.getOrganizationContacts();
+	    			if(dbOrgConts!=null){
+	    				for (AmpOrganisationContact orgCont :dbOrgConts) {
+	    					AmpOrganisation organization = orgCont.getOrganisation();
 							organization.getOrganizationContacts().remove(orgCont);
 							session.update(organization);
 						}
-					}
-					if (contact.getProperties() != null) {
-						for (AmpContactProperty formProperty : contact.getProperties()) {
-							formProperty.setContact(ampContact);
+	    			}
+                               if (contact.getProperties() != null) {
+                                for (AmpContactProperty formProperty : contact.getProperties()) {
+                                    formProperty.setContact(ampContact);
 
-							if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
-								formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
-							}
-							AmpContactProperty newProperty = new AmpContactProperty();
-							newProperty.setContact(formProperty.getContact());
-							newProperty.setName(formProperty.getName());
-							newProperty.setValue(formProperty.getValue());
-							ampContact.getProperties().add(newProperty);
+                                    if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
+                                        formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
+                                    }
+                                    AmpContactProperty newProperty = new AmpContactProperty();
+                                    newProperty.setContact(formProperty.getContact());
+                                    newProperty.setName(formProperty.getName());
+                                    newProperty.setValue(formProperty.getValue());
+                                    //session.save(newProperty);
+                                    ampContact.getProperties().add(newProperty);
 
-						}
-					}
-					session.update(ampContact);    			    			
-				}else{
-					if (contact.getProperties() != null) {
-						for (AmpContactProperty formProperty : contact.getProperties()) {
-							if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
-								formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
-							}
-							formProperty.setContact(contact);
-						}
-						session.save(contact);
-					}
-				}
-				//save cont. organizations
-				if(contact.getOrganizationContacts()!=null){
-					for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
+                                }
+                            }
+                            session.update(ampContact);    			    			
+	    		}else{
+                            if (contact.getProperties() != null) {
+                                for (AmpContactProperty formProperty : contact.getProperties()) {
+                                    if (formProperty.getActualValue() != null && formProperty.getCategoryValue() != null) {
+                                        formProperty.setValue(formProperty.getCategoryValue().getId() + " " + formProperty.getActualValue());
+                                    }
+                                    formProperty.setContact(contact);
+                                }
+                                session.save(contact);
+                            }
+	    		}
+	    		
+	    		//save cont. organizations
+	    		if(contact.getOrganizationContacts()!=null){
+	    			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
 						if(ampContact!=null){
 							orgCont.setContact(ampContact);
 						}else{
 							orgCont.setContact(contact);
 						}
 						AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
-						AmpOrganisation organization =(AmpOrganisation)session.load(AmpOrganisation.class, orgCont.getOrganisation().getAmpOrgId());
+						AmpOrganisation organization =(AmpOrganisation)session.get(AmpOrganisation.class, orgCont.getOrganisation().getAmpOrgId());
 						if(organization.getOrganizationContacts()==null){
 							organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
 						}
@@ -688,16 +696,22 @@ public class ActivityUtil {
 						newOrgCont.setContact(orgCont.getContact());
 						newOrgCont.setPrimaryContact(orgCont.getPrimaryContact());
 						organization.getOrganizationContacts().add(newOrgCont);
-						session.save(newOrgCont);
+                        session.save(newOrgCont);
 						session.update(organization);
 					}
-				}
-
-				//session.saveOrUpdate(activityContact);
-
-			}
-		}
-
+	    		}
+	    		if(activityContact.getId() != null){
+	    			activityContact =(AmpActivityContact) session.merge(activityContact);
+	    			//session.saveOrUpdate(activityContact);
+	    			session.flush();
+	    			session.clear();
+	    		}else{
+	    			session.saveOrUpdate(activityContact);
+	    		}	    		
+	    		
+	    	  }
+	      }
+	
 	}
 
 }

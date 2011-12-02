@@ -137,7 +137,7 @@
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	  			alert('enter correct number');	   			
+	  			alert('<digi:trn>enter correct number</digi:trn>');	   			
 	   			return false;
 	  		}
 	 	}	 
@@ -147,7 +147,7 @@
 	function checkPhoneNumberType(type){
 	 	var regex='^[a-zA-Z]*$';
 	  	if (!type.match(regex)){
-	  		alert('only letters are allowed for phone type');	   			
+	  		alert('<digi:trn>only letters are allowed for phone type</digi:trn>');	   			
 	   		return false;
 	  	}	 		 
 	 	return true;
@@ -194,12 +194,15 @@
 	}
 
 	function validateInfo(){
-		if(document.getElementById('name').value==null || document.getElementById('name').value==''){
-			alert('Please Enter Name');
+		var msg='';
+		if(document.getElementById('name').value==null || document.getElementById('name').value.trim()==''){
+			msg='<digi:trn>Please Enter Name</digi:trn>'
+			alert(msg);
 			return false;
 		}
-		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value==''){
-			alert('Please Enter lastname');
+		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value.trim()==''){
+			msg='<digi:trn>Please Enter lastname</digi:trn>'
+			alert(msg);
 			return false;
 		}
 		//check emails. At least one email should exist
@@ -207,7 +210,8 @@
     	if(emails!=null){
         	for(var i=0;i < emails.length; i++){
                 if(emails[i].value==null || emails[i].value==''){
-                    alert('Please enter email');
+                	msg='<digi:trn>Please Enter email</digi:trn>';
+            		alert(msg);
                     return false;
                 }
                 else{
@@ -225,13 +229,16 @@
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
         		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
-            		alert('Please enter phone');
+        			msg='<digi:trn>Please Enter phone</digi:trn>';
+            		alert(msg);
             		return false;
         		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
-        			alert('Please select phone type');
+        			msg='<digi:trn>Please select phone type</digi:trn>';
+            		alert(msg);
         			return false;
         		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
-        			alert('Please enter phone number');
+        			msg='<digi:trn>Please enter phone number</digi:trn>';
+            		alert(msg);
         			return false;
         		}
     		}
@@ -254,7 +261,8 @@
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
         		if(faxes[i].value==''){
-        			alert('Please enter fax');
+        			msg='<digi:trn>Please enter fax</digi:trn>';
+            		alert(msg);
         			return false;
         		}else if(checkNumber(faxes[i].value)==false){
             		return false;

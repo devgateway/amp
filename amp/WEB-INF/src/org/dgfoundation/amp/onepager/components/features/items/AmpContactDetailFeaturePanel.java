@@ -49,7 +49,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	 * @throws Exception
 	 */
 	
-	final String  EXPRESSION = "^\\+?\\s?\\d+[\\s\\d]*";
+	final String  EXPRESSION = "^\\+?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
 	
 	public AmpContactDetailFeaturePanel(String id, String fmName)
 			throws Exception {

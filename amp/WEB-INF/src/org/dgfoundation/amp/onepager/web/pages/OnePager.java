@@ -145,7 +145,15 @@ public class OnePager extends AmpHeaderFooter {
 		try {
 			initializeFormComponents(am);
 			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity, listModel);
+
+            String actNameStr = am.getObject().getName();
+            if (actNameStr != null && !actNameStr.trim().isEmpty()) {
+                actNameStr = "(" + actNameStr + ")";
+            }
+            Label activityName = new Label("activityName", actNameStr);
+            formFeature.add(activityName);
 			add(formFeature);
+
 
 		} catch (Exception e) {
 			logger.error(e);

@@ -88,8 +88,15 @@ public class ShowNewAdvancedTranslations extends Action{
 				}
 			}
 		}*/
+		if(trnForm.getItemsPerPage()==0){
+			trnForm.setItemsPerPage(20);
+		}
+		int currentPage = (trnForm.getPageNumber()==null || trnForm.getPageNumber().intValue()==0) ? 0 : trnForm.getPageNumber().intValue()-1;
+		int itemsPerPage =trnForm.getItemsPerPage();
+		int startItemNo = itemsPerPage * currentPage;
+		int stopItemNo = startItemNo + itemsPerPage;
 		
-		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")){
+		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")&&trnForm.getAction().equals("search")){
 
 			//String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 			String langCode=trnForm.getSelectedLocale();
@@ -110,8 +117,7 @@ public class ShowNewAdvancedTranslations extends Action{
 			Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, langCode);
 			logger.debug("Lucen found "+hits.length()+" records");
 			if (hits !=null && hits.length()>0){
-				int currentPage = (trnForm.getPageNumber()==null || trnForm.getPageNumber().intValue()==0) ? 0 : trnForm.getPageNumber().intValue()-1;
-				int itemsPerPage = getItemsPerPage().intValue();
+				
 				
 				//compensate list additions and deletions
 //				List<Message> addedMessages 	=  buffer.elements(Operation.ADD);
@@ -123,8 +129,7 @@ public class ShowNewAdvancedTranslations extends Action{
 //					itemsPerPage += deletedMessages.size();
 //				}
 
-				int startItemNo = itemsPerPage * currentPage;
-				int stopItemNo = startItemNo + itemsPerPage;
+				
 				
 				if(stopItemNo>hits.length()){
 					stopItemNo=hits.length();
@@ -183,7 +188,17 @@ public class ShowNewAdvancedTranslations extends Action{
 				trnForm.setResultList(sortedGroups);
 			}
 		}else{
-			logger.debug("Nothing to search for");
+				List<String> keys=TranslatorWorker.getAllTranslationsKeys(site.getId().toString());
+				stopItemNo=(keys.size()<stopItemNo)?keys.size()-1:stopItemNo;
+				List<String> currentPageKeys=keys.subList(startItemNo,stopItemNo);
+				Collection<Message> results=new ArrayList<Message>();
+				for(String key :currentPageKeys){
+					results.addAll(TranslatorWorker.getAllTranslationsOfKey(key, site.getId().toString()));
+				}
+				Collection<MessageGroup> groups = TrnUtil.groupByKey(results);
+				List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);
+				trnForm.setResultList(groupsList);
+				totalPages = (int) Math.ceil(keys.size() / itemsPerPage);
 		}
 		if(trnForm.getPageNumber()==null){
 			trnForm.setPageNumber(new Integer(1));
@@ -215,9 +230,6 @@ public class ShowNewAdvancedTranslations extends Action{
 		return result;
 	}
 
-	private Integer getItemsPerPage(){
-		//TODO this should come from settings.
-		return new Integer(20);
-	}
+	
 	
 }

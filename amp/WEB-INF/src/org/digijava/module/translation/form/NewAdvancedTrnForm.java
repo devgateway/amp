@@ -36,7 +36,25 @@ public class NewAdvancedTrnForm extends ActionForm {
 	private String updateMessage;
 	private String selectedLocale;
 	private List<org.digijava.kernel.entity.Locale> languages;
-	
+	private String action;
+	private int itemsPerPage;
+
+	public int getItemsPerPage() {
+		return itemsPerPage;
+	}
+
+	public void setItemsPerPage(int itemsPerPage) {
+		this.itemsPerPage = itemsPerPage;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
 	public List<org.digijava.kernel.entity.Locale> getLanguages() {
 		return languages;
 	}

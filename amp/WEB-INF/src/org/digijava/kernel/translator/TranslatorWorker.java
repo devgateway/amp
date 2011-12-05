@@ -1719,7 +1719,7 @@ public class TranslatorWorker {
     /**
      * Returns all translations for specified key on specified site.
      * If any some translation has been translated in 3 languages, then this will find all 3 records for the key.
-     * @param key
+     * @param key   
      * @param siteId
      * @return
      * @throws WorkerException
@@ -1737,16 +1737,25 @@ public class TranslatorWorker {
 			result = query.list();
 		} catch (Exception e) {
 			throw new WorkerException(e);
-		}finally{
-			if (null != session){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e1) {
-					throw new WorkerException(e1);
-				}
-			}
 		}
     	return result;
+    }
+ 
+    
+    @SuppressWarnings("unchecked")
+	public static List<String> getAllTranslationsKeys(String siteId) throws WorkerException{
+    	Session session = null;
+    	List<String> keys = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String oql = "select distinct m.key from "+Message.class.getName()+" as m where m.siteId = :siteId order by  m.key";
+			Query query =session.createQuery(oql);
+			query.setString("siteId", siteId);
+			keys = query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}
+    	return keys;
     }
 
     /**

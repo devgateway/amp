@@ -10,112 +10,142 @@
 
 
 <style>
-<!--
-	/** Clearfix */
-	.clearfix:after {
-		clear: both;
-	    content: ".";
-	    display: block;
-	    height: 0;
-	    line-height: 0;
-	    visibility: hidden;
-	}
-	.clearfix {
-	    display: inline-block;
-	}
-	html[xmlns] .clearfix {
-	    display: block;
-	}
-	* html .clearfix {
-	    height: 1%;
-	}
-	/** End Clearfix */
+<!-- /** Clearfix */
+.clearfix:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	line-height: 0;
+	visibility: hidden;
+}
 
+.clearfix {
+	display: inline-block;
+}
 
-	.pageTitle {
-		margin: 20px;
-	}
-	.controlPanel{
-		margin: 50px;
-	}
-	.searchTermInput{
-		width: 150px;
-	}
-	
-	.showhide{
-		float:right;
-		font-weight: bold;
-		width: 30px;
-		text-align: center;
-		cursor: pointer;
-	}
-	.expandColapse{
-		width: 150px;
-	}
-	.ResultsSeparator {
-		margin-bottom: 20px;
-	}
-	.listsBorder{
-		margin: 50px;
-	}
-	.listPanels{
-		width: 100%;
-	}
-	.searchResults{
-		width: 70%;
-		float:left;
-	}
-	.changesPanel{
-		float:right;
-		width: 30%;
-	}
-	
-	.chgangesTable{
-		width: 100%;
-	}
-	.chgangesTable * td {
-		border-bottom : 1px black solid;
-	} 
-	th {
-		font: bold;
-		font-size: 12px;
-		font-family: serif;
-	}
-	.initiallyHidden{
-		display: none;
-	}
-	.msgGroupTitle {
-		margin: 0px;
-		padding: 0px;
-		background-color: #d7eafd;
-		font-weight: bold;
-	}
-	.msgGroupBodyOpened {
-		padding: 0px;
-		display: none;
-	}
-	.msgGroupBodyClosed {
-		padding: 0px;
-		display: block;
-	}
-	.msgGroupFooter {
-		padding-left: 100px;
-		background-color : #f0f0f0 ;
-	}
-	.msgGroupFooter table tr td{
-		padding-right:10px; 
-	}
-	.trnLanguage {
-		width: 30px;
-		font-weight: bold;
-	}
-	.trnText input{
-		width : 500px; 
-	}
-	.pagination{
-		margin: 50px;
-	}	
-	
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+/** End Clearfix */
+.pageTitle {
+	margin: 20px;
+}
+
+.controlPanel {
+	margin: 50px;
+}
+
+.searchTermInput {
+	width: 150px;
+}
+
+.showhide {
+	float: right;
+	font-weight: bold;
+	width: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.expandColapse {
+	width: 150px;
+	background-color: #5E8AD1;
+	border-top: 1px solid #99BAF1;
+	border-left: 1px solid #99BAF1;
+	border-right: 1px solid #225099;
+	border-bottom: 1px solid #225099;
+	font-size: 11px;
+	color: #FFFFFF;
+	font-weight: bold;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.ResultsSeparator {
+	margin-bottom: 20px;
+}
+
+.listsBorder {
+	margin: 50px;
+}
+
+.listPanels {
+	width: 100%;
+}
+
+.searchResults {
+	width: 70%;
+	float: left;
+}
+
+.changesPanel {
+	float: right;
+	width: 30%;
+}
+
+.chgangesTable {
+	width: 100%;
+}
+
+.chgangesTable * td {
+	border-bottom: 1px black solid;
+}
+
+th {
+	font: bold;
+	font-size: 12px;
+	font-family: serif;
+}
+
+.initiallyHidden {
+	display: none;
+}
+
+.msgGroupTitle {
+	margin: 0px;
+	padding: 0px;
+	background-color: #d7eafd;
+	font-weight: bold;
+}
+
+.msgGroupBodyOpened {
+	padding: 0px;
+	display: none;
+}
+
+.msgGroupBodyClosed {
+	padding: 0px;
+	display: block;
+}
+
+.msgGroupFooter {
+	padding-left: 100px;
+	background-color: #f0f0f0;
+}
+
+.msgGroupFooter table tr td {
+	padding-right: 10px;
+}
+
+.trnLanguage {
+	width: 30px;
+	font-weight: bold;
+}
+
+.trnText input {
+	width: 500px;
+}
+
+.pagination {
+	margin: 50px;
+}
 -->
 </style>
 
@@ -123,26 +153,44 @@
 	<digi:form styleId="frmNewAdvancedTrns" action="/showNewAdvancedTranslation.do" method="post">
 		<html:hidden styleId="hiddenPageNumber" name ="newAdvancedTrnForm" property="pageNumber"/>
 		<html:hidden styleId="hiidenChangesOpened" name ="newAdvancedTrnForm" property="changesOpened"/>
+		<html:hidden styleId="submitAction" name ="newAdvancedTrnForm" property="action"/>
 		<div class="pageTitle">
 			<span class="subtitle-blue"><digi:trn>Search Translations</digi:trn></span>
 		</div>
 		<div class="controlPanel">
 			<div class="clearfix">
-				<div style="float:left">
+				<div style="float:left;padding: 1px">
 					<div><digi:trn>Search for</digi:trn>:</div>
-					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput"/>&nbsp;
+					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput" styleId="searchTerm"/>&nbsp;
 				</div>
-				<div style="float:left">
+				<div style="float:left;padding: 5px">
 				<div><digi:trn>Search language</digi:trn>:</div>
 					<html:select property="selectedLocale">
 						<c:forEach var="lng" items="${newAdvancedTrnForm.languages}">
 							<html:option value="${lng.code}"><digi:trn>${lng.name}</digi:trn></html:option>
 						</c:forEach>
 					</html:select>
+					
+				</div>
+				
+				<div style="float:left;padding: 5px">
+				<div><digi:trn>Result</digi:trn>:</div>
+					<html:select property="itemsPerPage">
+							<html:option value="10">10</html:option>
+							<html:option value="20">20</html:option>
+							<html:option value="25">25</html:option>
+							<html:option value="50">50</html:option>
+							<html:option value="100">100</html:option>
+					</html:select>
 				</div>
 				<div style="float:left">
-					<div>&nbsp;</div>
-                    <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch"/>
+					<div>&nbsp;</div>&nbsp;
+                    <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch" class="buttonx"/>
+				</div>
+				<div style="float: left">
+					<div>&nbsp;</div>&nbsp;
+					<input type="submit" value="<digi:trn>View All</digi:trn>"
+						id="btnViewAll" class="buttonx"  title="<digi:trn>Click here to view all translations in database</digi:trn>"/>
 				</div>
 			</div>
 		</div>
@@ -152,7 +200,7 @@
 					<c:if test="${empty newAdvancedTrnForm.resultList}"><digi:trn>Nothing found</digi:trn></c:if>
 					<c:if test="${!empty newAdvancedTrnForm.resultList}">
 						<div class="searchResulToolBar">
-                                                    <input class="expandColapse" type="button" value="<digi:trn>Expand All</digi:trn>">
+                                                    <input class="expandColapse" type="button"  value="<digi:trn>Expand All</digi:trn>">
 							<div class="showhide" title="Show unsaved chnages">
 								&gt;&gt;
 							</div>
@@ -262,7 +310,22 @@
 	</c:forEach>
 
 	$(document).ready(function () {
-	
+		
+		$('#btnViewAll').click(function() {
+			$('#hiddenPageNumber').val(1);
+			 $('#searchTerm').val('');
+			  $('#submitAction').val("viewAll");
+			  	return true;
+		});
+		$('#btnDoSearch').click(function() {
+			if($('#searchTerm').val()==''){
+				alert("<digi:trn>Please provide search criteria</digi:trn>");
+				return false;
+			}
+			  $('#submitAction').val("search");
+			  $('#hiddenPageNumber').val(1);
+			  	return true;
+		});
 
 		$('.expandColapse').toggle(
 				function(){
@@ -432,6 +495,7 @@
 	function showPopin(but,key,locales){
 		$(but).attr('disabled','disabled');
 		$('#btnDoSearch').attr('disabled','disabled');
+		$('#btnViewAll').attr('disabled');
 		var containers = $(but).parents('div.msgGroupBodyOpened').find('div.trnContainers');
 		var newDivHtml='<div class="trnContainer">';
 		newDivHtml+='	<input type="hidden" name="locale" value="">';
@@ -476,6 +540,7 @@
 		container.find('td.tdSave').remove();
 		container.parents('div.msgGroup').find('.addTranslations').removeAttr('disabled');
 		$('#btnDoSearch').removeAttr('disabled');
+		$('#btnViewAll').removeAttr('disabled');
 	}
 
 	function sendAddTranslation(locale,message, key){
@@ -496,6 +561,7 @@
 		$(but).parents('div.msgGroupBodyOpened').find('input.addTranslations').removeAttr('disabled');
 		$(but).parents('div.trnContainer').remove();
 		$('#btnDoSearch').removeAttr('disabled');
+		$('#btnViewAll').removeAttr('disabled');
 	}
 
 	
@@ -523,5 +589,6 @@
 		myForm.submit();
 	}
 
+	
 
 </script>

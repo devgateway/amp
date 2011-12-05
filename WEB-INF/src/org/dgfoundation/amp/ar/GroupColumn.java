@@ -6,7 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,11 +18,15 @@ import java.util.TreeSet;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Column that is built
@@ -165,6 +171,21 @@ public class GroupColumn extends Column {
         	    
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
                 	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
+                	
+                	//Replace the year in pledges report for unspecified dates funding
+                	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
+	                	SimpleDateFormat pledgesfakeyear = new SimpleDateFormat("yyyy");
+	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
+	                	
+	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
+	                		try {
+								minfo2.setValue(TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId()));
+							} catch (WorkerException e) {
+								e.printStackTrace();
+							}
+	                	}
+                	}
+                	
                 	yearMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
                 	
                }

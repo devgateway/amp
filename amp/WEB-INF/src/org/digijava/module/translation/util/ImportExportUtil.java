@@ -199,10 +199,14 @@ public class ImportExportUtil {
 		} else {
 			Timestamp timeOfExisting = existingMessage.getCreated();
 			Timestamp timeOfNew = message.getCreated();
-			if (timeOfNew.compareTo(timeOfExisting) > 0){
-				session.update(message);
-				affected.add(message);
-			}
+                    if (timeOfNew.compareTo(timeOfExisting) > 0) {
+                        existingMessage.setCreated(message.getCreated());
+                        existingMessage.setKeyWords(message.getKeyWords());
+                        existingMessage.setLastAccessed(message.getLastAccessed());
+                        existingMessage.setMessage(message.getMessage());
+                        session.update(existingMessage);
+                        affected.add(existingMessage);
+                    }
 		}
 	}
 	

@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.poi.hssf.util.HSSFColor.SKY_BLUE;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -30,8 +28,6 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
-import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -351,6 +347,10 @@ public class CategAmountColWorker extends ColumnWorker {
 			acc.getMetaData().add(adjMs);			
 		}	
 		
+		//Group all pledges without funding year under the same fake year 
+		if (td==null && trStr.equals(ArConstants.PLEDGE)){
+			td= ArConstants.PLEDGE_FAKE_YEAR;
+		}
 		
 		if (td==null) 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);

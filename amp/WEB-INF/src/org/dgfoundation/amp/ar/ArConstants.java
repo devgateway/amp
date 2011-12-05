@@ -102,7 +102,7 @@ public final class ArConstants {
 	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
 	public final static String PLEDGE="Pledge";
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
-	
+	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
     
 	//Computed Field Constants
     //

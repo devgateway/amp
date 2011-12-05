@@ -46,7 +46,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
 //				fd.setTransactionAmount(0d);
-//				fd.setReportingDate(new Date(System.currentTimeMillis()));
+				fd.setReportingDate(new Date(System.currentTimeMillis()));
 				//fd.setAdjustmentType(Constants.ACTUAL);
 //				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpFundingId(model.getObject());

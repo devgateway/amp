@@ -153,6 +153,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		activityForm.setOutputMarkupId(true);
 		
+		String actNameStr = am.getObject().getName();
+        if (actNameStr != null && !actNameStr.trim().isEmpty()) {
+            actNameStr = "(" + actNameStr + ")";
+        }
+        Label activityName = new Label("activityName", actNameStr);
+        add(activityName);
+		
 		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 		feedbackPanel.setOutputMarkupId(true);

@@ -23,7 +23,7 @@ public class ContactEmailValidator extends EmailAddressValidator {
 	@Override
 	protected void onValidate(IValidatable<String> validatable) {
 		super.onValidate(validatable);
-		final String email = validatable.getValue();
+		/*final String email = validatable.getValue();
 			int contactWithSameEmail=0;
 			try {
 				contactWithSameEmail = ContactInfoUtil.getContactsCount(email,contcatId);
@@ -33,6 +33,6 @@ public class ContactEmailValidator extends EmailAddressValidator {
 			}
 			if(contactWithSameEmail>0){
 				error(validatable, "not_unique");
-			}	
+			}*/	
 		}	
 }

@@ -421,62 +421,62 @@ public class AddressBookActions extends DispatchAction {
 		Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
 		Set<ContactPropertyHelper> emailsToLookFor=new HashSet<ContactPropertyHelper>();
 		
-       if (myForm.getEmails() != null) {
-           if (myForm.getContactId() != null&&myForm.getContactId()!=0) {
-               //get contact emails
-               List<AmpContactProperty> properties = ContactInfoUtil.getContactProperties(myForm.getContactId());
-               Set<AmpContactProperty> emails = null;
-               for (AmpContactProperty property : properties) {
-                   if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
-                       if (emails == null) {
-                           emails = new HashSet<AmpContactProperty>();
-                       }
-                       emails.add(property);
-                   }
-               }
-               //if user changed any contact email, we should check that this email doesn't exist in db
-                   List<ContactPropertyHelper> contactEmails = AmpContactsWorker.buildHelperContactProperties(emails);
-                  if (contactEmails != null) {
-                   for (ContactPropertyHelper property : myForm.getEmails()) {
-                       if (!contactEmails.contains(property)) {
-                           validateData = true;
-                           emailsToLookFor.add(property);
-                       }
-                   }
-               }
-           } else {
-               validateData = true;
-               emailsToLookFor.addAll(Arrays.asList(myForm.getEmails()));
-           }
-       }
-				
-		
-		//check unique email 
-		if(validateData){
-			ActionMessages errors= new ActionMessages();
-			int contactWithSameEmail=0;
-			for (ContactPropertyHelper email : emailsToLookFor) {
-				contactWithSameEmail=ContactInfoUtil.getContactsCount(email.getValue().trim(),null);
-				if(contactWithSameEmail!=0){
-					break;
-				}
-			}
-			
-			if(contactWithSameEmail!=0){
-				Site site = RequestUtils.getSite(request);
-				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-						
-				Long siteId = site.getId();
-				String locale = navigationLanguage.getCode();
-				errors.add("email not unique", new ActionMessage("aim.contact.emailExists","Contact with the given email already exists"));
-				
-				if (errors.size() > 0){
-					//we have all the errors for this step saved and we must throw the amp error
-					saveErrors(request, errors);
-					return mapping.findForward("addOrEditContact");
-				}
-			}
-		}
+//       if (myForm.getEmails() != null) {
+//           if (myForm.getContactId() != null&&myForm.getContactId()!=0) {
+//               //get contact emails
+//               List<AmpContactProperty> properties = ContactInfoUtil.getContactProperties(myForm.getContactId());
+//               Set<AmpContactProperty> emails = null;
+//               for (AmpContactProperty property : properties) {
+//                   if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+//                       if (emails == null) {
+//                           emails = new HashSet<AmpContactProperty>();
+//                       }
+//                       emails.add(property);
+//                   }
+//               }
+//               //if user changed any contact email, we should check that this email doesn't exist in db
+//                   List<ContactPropertyHelper> contactEmails = AmpContactsWorker.buildHelperContactProperties(emails);
+//                  if (contactEmails != null) {
+//                   for (ContactPropertyHelper property : myForm.getEmails()) {
+//                       if (!contactEmails.contains(property)) {
+//                           validateData = true;
+//                           emailsToLookFor.add(property);
+//                       }
+//                   }
+//               }
+//           } else {
+//               validateData = true;
+//               emailsToLookFor.addAll(Arrays.asList(myForm.getEmails()));
+//           }
+//       }
+//				
+//		
+//		//check unique email 
+//		if(validateData){
+//			ActionMessages errors= new ActionMessages();
+//			int contactWithSameEmail=0;
+//			for (ContactPropertyHelper email : emailsToLookFor) {
+//				contactWithSameEmail=ContactInfoUtil.getContactsCount(email.getValue().trim(),null);
+//				if(contactWithSameEmail!=0){
+//					break;
+//				}
+//			}
+//			
+//			if(contactWithSameEmail!=0){
+//				Site site = RequestUtils.getSite(request);
+//				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+//						
+//				Long siteId = site.getId();
+//				String locale = navigationLanguage.getCode();
+//				errors.add("email not unique", new ActionMessage("aim.contact.emailExists","Contact with the given email already exists"));
+//				
+//				if (errors.size() > 0){
+//					//we have all the errors for this step saved and we must throw the amp error
+//					saveErrors(request, errors);
+//					return mapping.findForward("addOrEditContact");
+//				}
+//			}
+//		}
 		
 		//remove old contact and properties and organization contacts
 		List<AmpOrganisation> orgsForWhichContactWasPrimary=new ArrayList<AmpOrganisation>();

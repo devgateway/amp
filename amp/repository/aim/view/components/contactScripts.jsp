@@ -149,8 +149,9 @@ YAHOO.namespace("YAHOO.amp");
     
     function saveContact(){
         if(validateInfo()){
-            //ajax check for duplicate email
-            checkForduplicateEmail();
+            //ajax check for duplicate email - disabled for now
+            //checkForduplicateEmail();
+        	addContact();
         }
     }
 

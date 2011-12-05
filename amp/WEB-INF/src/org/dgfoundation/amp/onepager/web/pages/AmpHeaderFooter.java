@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresF
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.wicketstuff.jquery.JQueryBehavior;
@@ -38,15 +39,19 @@ public class AmpHeaderFooter extends WebPage {
 		
 		Cookie[] cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
 		if (cookies != null) {
+			boolean localeSet = false;
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals("digi_language")) {
                 	String languageCode = cookies[i].getValue();
                 	Session.get().setLocale(new Locale(languageCode));
                     if (languageCode != null) {
+                    	localeSet = true;
                         break;
                     }
                 }
             }
+            if (!localeSet)
+            	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
         }
 		
 		add(new JQueryBehavior());

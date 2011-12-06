@@ -23,13 +23,13 @@ function toggleRows(caller,hideId){
 	//Get the project name tr
 	var parentTR =$("tr[id='"+hideId+"']")[0];
 	//Get the project name div
-	var parentdiv =$("tr[id='"+hideId+"'] td:eq(0) div:eq(1)")[0];
+	var parentdiv =$("tr[id='"+hideId+"'] td:eq(1) div:eq(1)")[0];
 	var title=parentTR.title;
 	
-	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[1].children[0];
+	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[2].children[0];
 	var amountcell_2;
-	if(caller.parentNode.parentNode.parentNode.children[2]!=null){
-		amountcell_2 = caller.parentNode.parentNode.parentNode.children[2].children[0];
+	if(caller.parentNode.parentNode.parentNode.children[3]!=null){
+		amountcell_2 = caller.parentNode.parentNode.parentNode.children[3].children[0];
 	}
 	var len = tb.rows.length;
 	var found=false;
@@ -120,10 +120,10 @@ function toggleRows(caller,hideId){
 		//alert("Found=" + found + " RowDepth=" + rowDepth + " HideDepth=" + hideDepth + " Arty=" + notLevelTooGreat);
 		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) ){
 			tb.rows[i].style.display = display;
-			var first=tb.rows[i].children[0].children[0].children[0];
-			var amountdiv_1=tb.rows[i].children[1].children[0];
-			if(tb.rows[i].children[2]!=null){
-				var amountdiv_2=tb.rows[i].children[2].children[0];
+			var first=tb.rows[i].children[1].children[0].children[0];
+			var amountdiv_1=tb.rows[i].children[2].children[0];
+			if(tb.rows[i].children[3]!=null){
+				var amountdiv_2=tb.rows[i].children[3].children[0];
 				YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
 				YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');	
 			}

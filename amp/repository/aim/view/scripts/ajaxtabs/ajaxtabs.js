@@ -60,9 +60,11 @@ document.getElementById(containerid).innerHTML=page_request.responseText;
 	//Remove yellow shadow from trails cells
 	tb = document.getElementById('reportTable');
 	var len = tb.rows.length;
+	//firstContentCellIndex is added because it's not the first cell anymore now that we have the commands per row
+	var firstContentCellIndex = 2;
 	for(i=0 ; i< len; i++){
 		if (tb.rows[i].getAttribute("id")){
-			for(x=1 ; x< tb.rows[i].children.length; x++){
+			for(x=firstContentCellIndex ; x< tb.rows[i].children.length; x++){
 				var div = tb.rows[i].children[x].children[0];
 				YAHOO.util.Dom.removeClass(div,'desktop_project_count_sel');
 				YAHOO.util.Dom.addClass(div,'desktop_project_count');

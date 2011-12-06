@@ -17,7 +17,9 @@
     <bean:write name="reportData" property="name"/>
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>
-<td>&nbsp;</td>
+<td class="report_inside" width="25">
+&nbsp;
+</td>
 <% if (reportData.getLevelDepth() < 3) { %>		
 		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% } else { %>	

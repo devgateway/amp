@@ -44,13 +44,11 @@
 	<c:if test="${addFakeColumn}">
 		<td class="desktop_project_name" ></td>
 	</c:if>
-	<logic:present name="currentMember" scope="session">
-		<td align="center" class="report_inside">
-			<div id="div_img_<%=rowIdx%>">
-				<img style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0">
-			</div>
+		<td align="center" class="report_inside" width="25">
+			<logic:present name="currentMember" scope="session">
+				<img style="cursor:hand" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" height="16" width="16"><br/>
+			</logic:present>
 		</td>
-	</logic:present>
 	
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -68,13 +66,11 @@
 					<div class="desktop_project_name_sel"></div>
 				</td>
 		</c:if>
-		<logic:present name="currentMember" scope="session">
-			<td align="center" class="report_inside">
-				<div id="div_img_<%=rowIdx%>">
-					<img style="cursor:hand" id="img_<%=rowIdx%>" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0">
-				</div>
+			<td align="center" class="report_inside" width="25">
+				<logic:present name="currentMember" scope="session">
+					<img style="cursor:hand" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" height="16" width="16"><br/>
+				</logic:present>
 			</td>
-		</logic:present>
 		
 		<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

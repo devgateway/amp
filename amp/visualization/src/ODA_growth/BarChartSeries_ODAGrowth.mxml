@@ -46,22 +46,23 @@ OTHER DEALINGS IN THE SOFTWARE.
 		<![CDATA[
 			import com.exportUtil.*;
 			
+			import flash.events.MouseEvent;
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.events.MoveEvent;
 			import mx.events.SliderEvent;
-			import mx.rpc.events.ResultEvent;
+			import mx.managers.DragManager;
 			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
 			
 			import org.axiis.charts.groupings.BarCluster;
 			import org.axiis.data.DataSet;
-
 			import org.axiis.core.AxiisSprite;
-			import mx.events.MoveEvent;
-			import mx.managers.DragManager;
-			import mx.core.DragSource;
-			import mx.events.DragEvent;
 			import flash.events.MouseEvent;
 
 			private var xS:int; 
@@ -71,6 +72,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
 			private var palette:Array = new Array();
+			private var yearsArray:Array = new Array();
+			private var yearsToCompareArray:Array = new Array();
 
 			//Variables for translated messages
 			private var trnMessagePanel:String = "";
@@ -157,6 +160,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
 				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
 				var rotateDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'RotateDataLabel')}"));
+				var dropdownCurrentTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DropdownCurrentTitle')}"));
+				var dropdownPreviousTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DropdownPreviousTitle')}"));
 				
 				//Get Global setting for the fonts
 				var globalFontFamily:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontFamily')}"));				
@@ -171,6 +176,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 				chartLabel.setStyle("fontSize", fontSize);
 				chartLabel.setStyle("fontFamily", globalFontFamily);
 				
+				currentComboLabel.text = dropdownCurrentTitle;
+				currentComboLabel.setStyle("fontSize", fontSize);
+				currentComboLabel.setStyle("fontFamily", globalFontFamily);
+				
+				previousComboLabel.text = dropdownPreviousTitle;
+				previousComboLabel.setStyle("fontSize", fontSize);
+				previousComboLabel.setStyle("fontFamily", globalFontFamily);
+				
 				if(boldTitle == "true")
 					chartLabel.setStyle("fontWeight", "bold");
 				else
@@ -182,6 +195,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				else
 					myCluster.showDataLabel = false;
 				
+
 				/*if(showLegend == "true") 
 					legendLayout.visible = true;
 				else
@@ -201,7 +215,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 				messageLoadingPanel.width = w;
 				messageLoadingPanel.height = h;
 			}			
-		
+			
+			private function showImage():void
+			{
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				dc.visible = true;
+			}
+			
 			private function captureSnapshot():void
 			{
 				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
@@ -257,10 +278,25 @@ OTHER DEALINGS IN THE SOFTWARE.
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				var params = {
+				
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				startYear = endYear-20; //it will show in the dropdown the 20 previous years to current end year.
+				for(var year:int = endYear; year > startYear; year--){
+					yearsArray.push(year);
+				}
+				startYear = endYear-10; //it will show in the dropdown the 10 previous years to selected year.
+				for(var year:int = endYear-1; year > startYear; year--){
+					yearsToCompareArray.push(year);
+				}
+				previousYear.selectedIndex = 0;
+				currentYear.selectedIndex = 0;
+				
+				var params:Object = {
 					"format" : "xml",
-					"typeofaid" : "true"
-				};
+					"typeofaid" : "true"};
+				params["previousYear"] = previousYear.selectedLabel;
+				params["currentYear"] = currentYear.selectedLabel;
+				
 				if(start == "true")
 					service.send(params);
 				try {
@@ -306,7 +342,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 				else
 					return "";
 			}
-			
 			public function refreshGraph():void
 			{
 				messageLoadingPanel.visible = true;
@@ -367,6 +402,31 @@ OTHER DEALINGS IN THE SOFTWARE.
 				sizePanel(300, 200);
 			}
 
+			protected function combo_change(cmb:Number):void
+			{
+				if (cmb==2){
+					//endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+					endYear = Number(currentYear.selectedLabel);//this fill the combo of current year with all posible values
+					while(yearsToCompareArray.length > 0) {
+						yearsToCompareArray.pop();//remove the last item:
+					}
+					for(var year:int = endYear-1; year > endYear-10; year--){
+						yearsToCompareArray.push(year);
+					}
+					previousYear.selectedIndex = 0;
+				}
+				var params:Object = {
+					"format" : "xml",
+					"typeofaid" : "true"};
+				params["previousYear"] = previousYear.selectedLabel;
+				params["currentYear"] = currentYear.selectedLabel;
+				service.send(params);
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+				var delayer2:Delay = new Delay(showImage,4500,1);
+				var delayer:Delay = new Delay(captureSnapshot,5000,1);
+			}
 		]]>
 	</mx:Script>
 	
@@ -382,6 +442,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<!--  GLOBAL VARIABLES -->
 	<mx:Number id="startYear"></mx:Number>
 	<mx:Number id="endYear"></mx:Number>
+	<mx:Number id="prevYear"></mx:Number>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:String id="dataField">value</mx:String>
@@ -404,19 +465,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Canvas id="mxc1" 
 			   backgroundColor="white"
 			   horizontalCenter="0"
-			   verticalCenter="0"
 			   width="634"
-			   height="460"
+			   height="500"
 			   dragEnter="dragEnterHandler(event);"
 			   dragDrop="dragDropHandler(event);"
 			   >
 	<axiis:DataCanvas top="50"
-					  bottom="20"
+					  bottom="70"
 					  width="{this.width}"
 					  id="dc"
 					  left="40"
 					  right="120"
-					  verticalCenter="0" horizontalCenter="0">
+					 horizontalCenter="0">
 		<axiis:backgroundGeometries>
 			<axiis:HAxis
 				id="haxis"
@@ -428,7 +488,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				fontFamily="{fontFamily}"
 				fontSize="{fontSize}"
 				fontWeight="{fontWeight}"
-				showGridArea="false"
+				showGridArea="true"
 				gridFill="{areaFill}"
 				showZeroLine="true" 
 				/>
@@ -493,7 +553,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 		</axiis:layouts>
 		
 	</axiis:DataCanvas>
+	<mx:ComboBox dataProvider="{yearsToCompareArray}" id="previousYear" width="90" x="480" y="420" change="combo_change(1)"> 
+	</mx:ComboBox>
+	<mx:ComboBox dataProvider="{yearsArray}" id="currentYear" width="90" x="130" y="420" change="combo_change(2)"> 
+	</mx:ComboBox>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
+	<mx:Label x="300" y="420" id="previousComboLabel" height="36" fontSize="12"/>
+	<mx:Label x="50" y="420" id="currentComboLabel" height="36" fontSize="12"/>
 	</mx:Canvas>
 	
 	<axiis:LayoutPalette layout="{hLayout}" colors="{palette}" id="outerPalette"/> 

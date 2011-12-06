@@ -429,4 +429,32 @@ public class ImportExportUtil {
 		}
 		return result;
 	}
+
+	/**
+	 * Loads message for specified languages.
+	 * @param languagesToLoad set of language codes. If null then all messages will be grouped.
+	 * @return list of message 
+	 * @throws AimException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Message> loadMessages(Set<String> languagesToLoad) throws AimException{
+		List<Message> messages = null;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			String oql = "from "+Message.class.getName();
+			if (languagesToLoad!=null){
+				oql += " as m where m.locale in (:LANG_CODES) order by m.key";
+			}
+			Query query = session.createQuery(oql);
+			if (languagesToLoad != null){
+				query.setParameterList("LANG_CODES", languagesToLoad);
+			}
+			messages = (List<Message>) query.list();
+			
+		} catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot load messages for expot.",e);
+		}
+		return messages;
+	}
 }

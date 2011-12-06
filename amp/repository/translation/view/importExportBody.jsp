@@ -275,6 +275,15 @@ div.fakefile2 input{
  								</td>
 	 						</tr>
 						 </c:forEach>
+						 <tr>
+								<td align="center">
+									<digi:trn>Select export format</digi:trn>:
+										<html:select property="exportFormat">
+											<html:option value="1">XML</html:option>
+											<html:option value="2"><digi:trn>Excel</digi:trn></html:option>
+										</html:select>
+ 								</td>
+	 						</tr>
 							 <tr>
 							 	<td align="center">
                                   <c:set var="translation">
@@ -311,7 +320,7 @@ div.fakefile2 input{
                                   <c:set var="translation">
                                     <digi:trn >Import</digi:trn>
                                   </c:set>
-                                  <html:submit style="dr-menu" value="${translation}" property="import"/></td>
+                                  <html:submit style="dr-menu" value="${translation}" property="import"/><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" alt="" title='<digi:trn>Provide xml files only</digi:trn>'/></td>
 							 </tr>
 					</digi:form>
 

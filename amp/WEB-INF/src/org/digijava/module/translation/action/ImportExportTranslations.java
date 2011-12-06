@@ -16,6 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -24,19 +33,22 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.apache.xerces.parsers.DOMParser;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.lucene.LangSupport;
-import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.form.ImportExportForm;
 import org.digijava.module.translation.importexport.ImportExportOption;
 import org.digijava.module.translation.importexport.ImportType;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
-import org.digijava.module.translation.lucene.LucTranslationModule;
 import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ImportExportUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * Handles all steps of translation import and export wizard in AMP admin menu.
@@ -50,6 +62,8 @@ public class ImportExportTranslations extends Action {
 	
 	public static final String SESSION_FILE = "dgfoundation.amp.translation.import.fileUploaded";
 	public static final String SESSION_ROOT = "dgfoundation.amp.translation.import.xmlRoot";
+	public static final int XML_FORMAT=1;
+	public static final int EXCEL_FORMAT=2;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -139,21 +153,58 @@ public class ImportExportTranslations extends Action {
 		if (request.getParameter("export") != null) {
 			if (ioForm != null && ioForm.getSelectedLanguages() != null && ioForm.getSelectedLanguages().length > 0) {
 				long startTime = System.currentTimeMillis();
-				response.setContentType("text/xml");
-                response.setCharacterEncoding("UTF-8");
-				response.setHeader("content-disposition", "attachment; filename=exportLanguage.xml");
-
-				Marshaller marshaller = ImportExportUtil.getMarshaller();
-				ObjectFactory objFactory = new ObjectFactory();
-				Translations translations = objFactory.createTranslations();
-				
+				response.setCharacterEncoding("UTF-8");
 				Set<String> languagesToExport = new HashSet<String>(Arrays.asList(ioForm.getSelectedLanguages()));
-				
-				//Do work - export data in Translations instance
-				ImportExportUtil.exportTranslations(translations, languagesToExport);
-				
-				marshaller.marshal(translations, response.getOutputStream());
-				
+				if(ioForm.getExportFormat()==XML_FORMAT){
+					response.setContentType("text/xml");
+					response.setHeader("content-disposition", "attachment; filename=exportLanguage.xml");
+					Marshaller marshaller = ImportExportUtil.getMarshaller();
+					ObjectFactory objFactory = new ObjectFactory();
+					Translations translations = objFactory.createTranslations();
+					//Do work - export data in Translations instance
+					ImportExportUtil.exportTranslations(translations, languagesToExport);
+					
+					marshaller.marshal(translations, response.getOutputStream());
+				}
+				else{
+					response.setContentType("application/vnd.ms-excel");
+					response.setHeader("Content-disposition",
+							"inline; filename=translations.xls");
+					List<Message> messages = ImportExportUtil
+							.loadMessages(languagesToExport);
+					HSSFWorkbook wb = new HSSFWorkbook();
+					HSSFSheet sheet = wb.createSheet();
+					int rownum=0,column=0;
+					HSSFRow row=sheet.createRow(rownum++);
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Message", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Language", request));
+					if(messages!=null){
+						for(Message message: messages){
+							column=0;
+							if(rownum==65536){
+								 sheet = wb.createSheet();
+								 rownum=0;
+							}
+							row=sheet.createRow(rownum++);
+							if(rownum==1){
+								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
+								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Message", request));
+								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Language", request));
+							}
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getKey());
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getMessage());
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getLocale());
+						}
+					}
+					for (int i = 0; i < 3; i++) {
+						sheet.autoSizeColumn(i); // adjust width of the first
+													// column
+					}
+
+					wb.write(response.getOutputStream());
+					return null;
+				}
 				form = null;
 				request.getSession().removeAttribute("aimTranslatorManagerForm"); //???
 				long endTime = System.currentTimeMillis();

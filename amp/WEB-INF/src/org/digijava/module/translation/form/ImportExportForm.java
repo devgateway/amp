@@ -17,6 +17,7 @@ import org.apache.struts.upload.FormFile;
  *
  */
 public class ImportExportForm extends ActionForm {
+	
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,8 +29,15 @@ public class ImportExportForm extends ActionForm {
 	private FormFile fileUploaded;
 	private String[] keywords;
 	private String skipOrUpdateTrnsWithKeywords;
+	private int exportFormat;
 
 	
+	public int getExportFormat() {
+		return exportFormat;
+	}
+	public void setExportFormat(int exportFormat) {
+		this.exportFormat = exportFormat;
+	}
 	public List<String> getLanguages() {
 		return languages;
 	}

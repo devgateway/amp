@@ -16,7 +16,7 @@ function scrollableTable(tableId,height){
 
 		var isIE=navigator.appName.indexOf("Microsoft")!=-1;
 		try{
-			//this.table.style.visibility="hidden";
+			this.table.style.visibility="hidden";
 			//find header rows
 			for (i=0;i< this.table.childNodes.length;i++){
 				var node=this.table.childNodes[i];
@@ -44,6 +44,8 @@ function scrollableTable(tableId,height){
 			
 			
 			this.setHeaderWidth=function(){
+			
+
 				cellWidths = []
 				counter = 0;
 				for (i=0;i < this.theader.rows.length;i++){
@@ -87,40 +89,6 @@ function scrollableTable(tableId,height){
 						}
 						counter++;
 					}
-					
-					switch (cellWidths.length) {
-					case 6:
-						this.tbody.rows[0].cells[0].width=cellWidths[0];
-						this.tbody.rows[0].cells[1].width=cellWidths[1];
-						break;
-					case 7:
-						this.tbody.rows[0].cells[0].width=cellWidths[0];
-						if (cellWidths[4]!=null){
-							this.tbody.rows[0].cells[1].width=cellWidths[4];
-						}else{
-							this.tbody.rows[0].cells[1].width=cellWidths[1];
-						}
-						this.tbody.rows[0].cells[2].width=cellWidths[5];
-						break;
-					case 8:
-						this.tbody.rows[0].cells[0].width=cellWidths[0];
-						this.tbody.rows[0].cells[1].width=cellWidths[1];
-						this.tbody.rows[0].cells[2].width=cellWidths[5];
-						this.tbody.rows[0].cells[3].width=cellWidths[6];
-						break;
-					case 9:
-						this.tbody.rows[0].cells[0].width=cellWidths[0];
-						this.tbody.rows[0].cells[1].width=cellWidths[1];
-						this.tbody.rows[0].cells[2].width=cellWidths[2];
-						this.tbody.rows[0].cells[3].width=cellWidths[6];
-						this.tbody.rows[0].cells[4].width=cellWidths[7];
-						break;
-
-					default:
-						break;
-					}
-					
-
 			}	
 				
 			//this function should be used only in the case that the rows are using display = none
@@ -182,29 +150,28 @@ function scrollableTable(tableId,height){
 							var border=0;
 							var perBorder=0;
 							var perPadding=0;
-							var thisCell = this.tbody.rows[i].cells[j]
 							if(!isIE){
 								//calculate padding
-								var str=thisCell.style.paddingLeft.substr(0,this.tbody.rows[i].cells[j].style.paddingLeft.length-2);
+								var str=this.tbody.rows[i].cells[j].style.paddingLeft.substr(0,this.tbody.rows[i].cells[j].style.paddingLeft.length-2);
 								if (str==""){str="0"};
 								var padding=parseInt(str);
-								str=thisCell.style.paddingRight.substr(0,this.tbody.rows[i].cells[j].style.paddingRight.length-2);
+								str=this.tbody.rows[i].cells[j].style.paddingRight.substr(0,this.tbody.rows[i].cells[j].style.paddingRight.length-2);
 								if (str==""){str="0"};
 								padding+=parseInt(str);
 								var perPadding=(padding*100)/this.table.offsetWidth;
 							
 								//calculate border
-								str=thisCell.style.borderRightWidth.substr(0,this.tbody.rows[i].cells[j].style.borderRightWidth.length-2);
+								str=this.tbody.rows[i].cells[j].style.borderRightWidth.substr(0,this.tbody.rows[i].cells[j].style.borderRightWidth.length-2);
 								if (str==""){str="0"};	
 								var border=parseInt(str);
-								str=thisCell.style.borderLeftWidth.substr(0,this.tbody.rows[i].cells[j].style.borderLeftWidth.length-2);
+								str=this.tbody.rows[i].cells[j].style.borderLeftWidth.substr(0,this.tbody.rows[i].cells[j].style.borderLeftWidth.length-2);
 								if (str==""){str="0"};	
 								border+=parseInt(str);
 								var perBorder=(border*100)/this.table.offsetWidth;
 							}
 								
-							var perValue=((thisCell.offsetWidth*100)/this.table.offsetWidth) - perPadding -perBorder;
-							var pxValue=thisCell.offsetWidth - padding -border;
+							var perValue=((this.tbody.rows[i].cells[j].offsetWidth*100)/this.table.offsetWidth) - perPadding -perBorder;
+							var pxValue=this.tbody.rows[i].cells[j].offsetWidth - padding -border;
 							cellWidths[counter] =  this.usePercentage ? (perValue+"%") : pxValue;
 							counter++;
 						
@@ -239,7 +206,7 @@ function scrollableTable(tableId,height){
 								}
 							}				
 						
-							
+							this.tbody.rows[i].cells[j].style.overflow="hidden";
 						}
 						//Stop this process in the longest cell, that should be inside a hierarchy
 						if(longestCellCount == this.tbody.rows[i].cells.length) {
@@ -251,12 +218,17 @@ function scrollableTable(tableId,height){
 				
 			}		
 		//end function	
-		/*if(this.useFixForDisplayNoneRows){
+		
+			
+		
+		
+			
+		if(this.useFixForDisplayNoneRows){
 			this.setBodyForIE();
-		}*/
+		}
 		
 		this.setHeaderWidth();
-		//this.setBodyWidth();
+		this.setBodyWidth();
 		
 		
 		//remove the table header 
@@ -267,7 +239,7 @@ function scrollableTable(tableId,height){
 		
 			//set container properties
 		if (this.debug)
-		divContent.style.border="1px solid red";
+			divContent.style.border="1px solid red";
 		divContent.style.overflow="scroll";
 		divContent.style.overflowX="hidden";
 		divContent.style.height=height+"px";

@@ -838,7 +838,33 @@ function validateFormat(){
 		aimReportsFilterPickerForm3.customGroupSize.value = 3;
 		initFormatPopup();
 	}
-		
+
+	
+	var currentRMenu=null;
+	function reportOptions(element,id){
+		//cargar opciones
+		if (currentRMenu!=null){
+			currentRMenu.destroy();
+			}
+		var itemsUrl='/aim/reportMenuAction.do?action=getOptions&id='+id;
+
+		var oMenu = new YAHOO.widget.Menu("reportMenu", { shadow:false, fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
+		$.get(itemsUrl,'',function(data){
+		for (var i=0; i < data.childNodes[0].childNodes.length;i++){
+			var node=data.childNodes[0].childNodes[i]
+			var strUrl=node.getAttribute('url')+id;
+			var text=data.childNodes[0].childNodes[i].childNodes[0].nodeValue
+			var oItem = oMenu.addItem(new YAHOO.widget.MenuItem(text));
+
+			oItem.cfg.setProperty("url",strUrl);
+			oMenu.addItem(oItem);
+		}
+		oMenu.render(document.body);
+		oMenu.show();
+		currentRMenu=oMenu;
+		}); 
+	}
+	
 </script>
 <style type="text/css">
 .mask {
@@ -847,24 +873,31 @@ function validateFormat(){
   filter: alpha(opacity=80);
   background-color:#2f2f2f;
 }
+
+#reportMenu {
+	width:70px;
+	background-color:#ffffff;
+	border:1px solid #376091;
+}
+
+#reportMenu ul li a {
+	width:70px;
+	font-size:9px;
+	padding:3px !important;
+	text-transform:uppercase;
+	text-decoration:none
+}
+
+#reportMenu li {
+	width:70px;
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#reportMenu ul {
+	width:70px;
+    margin: 0;
+    padding: 0;
+}
+
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

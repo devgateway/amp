@@ -288,6 +288,7 @@
 	<action name="aimReportsFilterPickerForm" path="/aim/queryEngine" scope="session" type="org.digijava.module.aim.action.query.QueryEngine" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=aim_queryEngine" />	
 	</action>
+    <action  path="/aim/reportMenuAction" scope="session" type="org.digijava.module.aim.action.ReportMenuAction" validate="false" parameter="action"/>
 	
   <action name="aimFieldPermissionsForm"
     path="/aim/assignFieldPermissions" scope="request"

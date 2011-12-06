@@ -28,7 +28,95 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 
+<!-- Individual YUI CSS files -->
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
+
+<style>
+<!--
+.ui-autocomplete {
+	font-size:12px;
+	border: 1px solid silver;
+	max-height: 150px;
+	overflow-y: scroll;
+	background: white;
+}
+
+-->
+</style>
+
+<style  type="text/css">
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+#statesAutoComplete ul,
+{
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#contactsAutocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesAutoComplete div{
+	padding: 0px;
+	margin: 0px; 
+}
+
+#contactsAutocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+#statesAutoComplete,
+#contactsAutocomplete {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#statesAutoComplete,contactsAutocomplete {
+    z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+    font-size: 12px;
+}
+
+#statesInput,
+#contactInput {
+    font-size: 12px;
+}
+.charcounter {
+    display: block;
+    font-size: 11px;
+}
+
+#statesAutoComplete {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
+}
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
+
+span.extContactDropdownEmail {
+	color:grey;
+}
+
+-->
+</style>
+
 
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
@@ -68,6 +156,9 @@
 	}
 	//this is called from editActivityMenu.jsp
 	addLoadEvent(initOrganizationsScript);
+	
+	// don't remove or change this line!!
+	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 -->	
 </script>
 <style type="text/css">
@@ -1157,30 +1248,6 @@ function removeGuest(obj) {
 			</c:forEach>		
 		</logic:notEmpty>
 	
-	
-	<%--
-	<div class="rec_group_container">
-		
-			<div class="msg_grp_name" style="font-size:11px">
-				<input type="checkbox" style="float: left;" value="t:10" class="group_checkbox">
-				<div class="msg_lbl">---Team Name---</div>
-			</div>
-			
-			<div class="msg_grp_mem_name" style="font-size:11px;">
-				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-			</div>
-			<div class="msg_grp_mem_name" style="font-size:11px;">
-				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-			</div><div class="msg_grp_mem_name" style="font-size:11px;">
-				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-			</div><div class="msg_grp_mem_name" style="font-size:11px;">
-				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-			</div><div class="msg_grp_mem_name" style="font-size:11px;">
-				<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
-			</div>
-		</div>
-	 --%>
-		
 	</div>
 	<br />
 				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
@@ -1188,7 +1255,8 @@ function removeGuest(obj) {
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-                                <input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
+				<div id="extContactAutocom"></div>
+				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">
@@ -1332,6 +1400,7 @@ function removeGuest(obj) {
 	$(".group_checkbox").bind("change", function (e) {
 		var srcObj = $(this);
 		srcObj.parents("div.rec_group_container").children("div.msg_grp_mem_name").children("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
+				
 	});
 	
 	//select all handler
@@ -1340,7 +1409,33 @@ function removeGuest(obj) {
 		$("div.msg_receivers").find("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
 	});
 	
+	//External contact autocomplite
+	var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
+	extContactDataSource.scriptQueryAppend = "actionType=searchExternalContacts";
+	//extContactDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+	extContactDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+	extContactDataSource.queryMatchContains = true;
+  extContactDataSource.scriptQueryParam  = "srchStr";
+	var extContactAutoComp = new YAHOO.widget.AutoComplete("contactInput","extContactAutocom", extContactDataSource);
 	
+	extContactAutoComp.formatResult = function( oResultData , sQuery , sResultMatch ) {
+		var retVal;
+		//Hilight email separately
+		
+		if (oResultData[0].indexOf('<') > -1 && oResultData[0].indexOf('>') > -1) {
+			var contactEmail = oResultData[0].substring (oResultData[0].indexOf('<') + 1, oResultData[0].indexOf('>'));
+			var contactName = oResultData[0].substring (0, oResultData[0].indexOf('<'));
+			var markup = [contactName, '<span class="extContactDropdownEmail">(', contactEmail, ')<span>'];
+			retVal = markup.join("");
+		} else {
+			retVal = oResultData;
+		}
+		
+		return retVal;
+	}
+	
+	extContactAutoComp.queryDelay = 0.5;
+	$("#contactInput").css("position", "static");
 	
 </script>
 

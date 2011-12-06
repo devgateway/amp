@@ -2250,10 +2250,12 @@ public class DataDispatcher extends DispatchAction {
         Date startDate = null;
         Date endDate = null;
         
-        Long year = filter.getEndYear();
-        if (year == null || year == -1) {
-        	year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
+        Long year = request.getParameter("currentYear") == null? filter.getStartYear() : Long.parseLong(request.getParameter("currentYear"));
+        Long previousYear = request.getParameter("previousYear") == null? filter.getStartYear()-1 : Long.parseLong(request.getParameter("previousYear"));
+        //Long year = filter.getEndYear();
+        //if (year == null || year == -1) {
+        //	year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        //}
         
         if (filter.getYearToCompare()==null || filter.getYearToCompare().intValue()==0 || filter.getYearToCompare().intValue()>= filter.getEndYear()){
         	filter.setYearToCompare(filter.getEndYear()-1);
@@ -2291,7 +2293,8 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("\n");
 			odaGrowthData += text +">";
 			
-			for (int i = filter.getEndYear().intValue(); i >= filter.getStartYear().intValue(); i--) {
+			//for (int i = filter.getEndYear().intValue(); i >= filter.getStartYear().intValue(); i--) {
+			for (int i = year.intValue(); i >= previousYear.intValue(); i--) {
 				startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
@@ -2367,9 +2370,9 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append(",");
 			odaGrowthData += "<"+ text +">";
 			text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
-			csvString.append("\"" + text + " " + filter.getYearToCompare() + "\"");
+			csvString.append("\"" + text + " " + previousYear + "\"");
 			csvString.append(",");
-			odaGrowthData += text + " " + filter.getYearToCompare() + ">";
+			odaGrowthData += text + " " + previousYear + ">";
 			csvString.append("\"" + text + " " + year + "\"");
 			csvString.append(",");
 			odaGrowthData += text + " " + year + ">";
@@ -2387,8 +2390,10 @@ public class DataDispatcher extends DispatchAction {
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, year.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
-	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYearToCompare().intValue());
+	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, previousYear.intValue());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, previousYear.intValue());
+	            //startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYearToCompare().intValue());
+	            //endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYearToCompare().intValue());
 	            fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 	            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){

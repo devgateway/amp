@@ -590,7 +590,7 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
+												<!--<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
 												</td>
 												<td><html:select property="filter.yearToCompare"
 														styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
@@ -598,7 +598,7 @@ function initializeGlobalVariables(){
 														<html:optionsCollection property="filter.years"
 															label="wrappedInstance" value="wrappedInstance" />
 													</html:select></td>
-											</tr>
+											--></tr>
 										</table>
 									</div>
 								</div>
@@ -1397,8 +1397,17 @@ function initializeGlobalVariables(){
 					&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold"><digi:trn>Bold</digi:trn></label><br/>
 					&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
 					&nbsp;<input type="checkbox" id="ODAGrowthIgnore" checked="checked"><label for="ODAGrowthIgnore"><digi:trn>Ignore big values</digi:trn></label>
-					</br>
+					<br/><digi:trn>Year To Compare Growth</digi:trn>:
+					<html:select property="filter.yearToCompare"
+						styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
+						style="width:70px;">
+						<html:optionsCollection property="filter.years"
+							label="wrappedInstance" value="wrappedInstance" />
+					</html:select>
+					<br/>
 					<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
+					<input type="hidden" id="ODAGrowthDropdownCurrentTitle" value="<digi:trn jsFriendly='true'>Year</digi:trn>">
+					<input type="hidden" id="ODAGrowthDropdownPreviousTitle" value="<digi:trn jsFriendly='true'>Previous Year to Compare</digi:trn>">
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'ODAGrowth')">
 					</div>
 				</div>

@@ -1308,7 +1308,7 @@ function refreshBoxes(o){
 			div = document.getElementById("ODAGrowthTitleLegend");
 			input = document.getElementById("ODAGrowthTitle");
 			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
-				value = trnODAGrowth + " " + " - " + fundType +" (" + currentYear + "-" + yearToCompare + ")";
+				value = trnODAGrowth + " " + " - " + fundType;
 			} else {
 				value = trnODAGrowth + " " + " - " + document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 				if (getSelectionsFromElement("organization_check",true)!="" && getSelectionsFromElement("organization_check",false).indexOf(',') ==-1) {

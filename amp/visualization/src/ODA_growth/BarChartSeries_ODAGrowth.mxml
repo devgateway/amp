@@ -216,13 +216,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 				messageLoadingPanel.height = h;
 			}			
 			
-			private function showImage():void
-			{
-				messageLoadingPanel.visible = false;
-				sizeLoadingPanel(0, 0);
-				dc.visible = true;
-			}
-			
 			private function captureSnapshot():void
 			{
 				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
@@ -424,9 +417,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
-				var delayer2:Delay = new Delay(showImage,4500,1);
-				var delayer:Delay = new Delay(captureSnapshot,5000,1);
 			}
+			
+			
 		]]>
 	</mx:Script>
 	

@@ -79,6 +79,7 @@ public class ActivityUtil {
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		try {
+			saveFundingOrganizationRole(a);
 			session.clear();
             AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 		
@@ -130,7 +131,6 @@ public class ActivityUtil {
 			
 			saveContacts(a, session,(draft != draftChange));
 			saveIndicators(a, session);
-			saveFundingOrganizationRole(a);
 
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version

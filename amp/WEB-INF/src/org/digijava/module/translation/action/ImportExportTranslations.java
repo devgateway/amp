@@ -183,6 +183,11 @@ public class ImportExportTranslations extends Action {
 						for(Message message: messages){
 							column=0;
 							if(rownum==65536){
+								for (int i = 0; i < 3; i++) {
+									sheet.autoSizeColumn(i); // adjust width of
+																// the first
+																// column
+								}
 								 sheet = wb.createSheet();
 								 rownum=0;
 							}

@@ -494,7 +494,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 								</field:display>
 								<p>
 									<label><digi:trn>Funding type</digi:trn> </label>
-									<select id="fundingType" name="fundingType" value="commitment" styleId="fundType">
+									<select id="fundingType" name="fundingType" value="commitment" class="fundType">
 							            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 							            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
 							            </field:display>
@@ -506,6 +506,21 @@ var tabView = new YAHOO.widget.TabView('demo');
 							            </field:display>
 						        	</select>
 								</p>
+								
+								<field:display name="Show Type of assistance" feature="GIS DASHBOARD">
+									<p>
+										<label><digi:trn>Type of assistance</digi:trn> </label>
+										<select name="selectedTypeOfAssistance" class="selectedCurrency">
+											<option value="-1" selected><digi:trn>All</digi:trn></option>
+											<logic:notEmpty name="gisDashboardForm" property="typeOfAssistanceVals">
+												<logic:iterate name="gisDashboardForm" property="typeOfAssistanceVals" id="typeOfAssistanceItem">
+												<option value="<bean:write name="typeOfAssistanceItem" property="id"/>"><bean:write name="typeOfAssistanceItem" property="value"/></option>
+												</logic:iterate>
+											</logic:notEmpty>
+										</select>
+									</p>
+								</field:display>
+								
 								<c:if test="${empty param.public}">
 									<p>
 										<label style="width:230px"><digi:trn>Show data for sel. workspace only</digi:trn></label>

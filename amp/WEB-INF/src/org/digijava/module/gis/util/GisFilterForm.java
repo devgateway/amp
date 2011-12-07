@@ -27,6 +27,15 @@ public class GisFilterForm {
     private boolean filterAllSectors;
     private boolean curWorkspaceOnly;
     private AmpTeam curWorkspace;
+    private Long[] selectedTypeOfAssistance;
+
+    public Long[] getSelectedTypeOfAssistance() {
+        return selectedTypeOfAssistance;
+    }
+
+    public void setSelectedTypeOfAssistance(Long[] selectedTypeOfAssistance) {
+        this.selectedTypeOfAssistance = selectedTypeOfAssistance;
+    }
 
     public boolean isCurWorkspaceOnly() {
         return curWorkspaceOnly;

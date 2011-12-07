@@ -34,6 +34,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.gis.util.GisUtil;
@@ -58,6 +61,14 @@ public class ShowGisDashboard extends Action {
 
         if (gisForm.getGisDashboardMode() == null || gisForm.getGisDashboardMode().isEmpty()) {
             gisForm.setGisDashboardMode(GisUtil.GIS_MODE_FUNDINGS);
+        }
+
+
+        AmpCategoryClass categoryClass = CategoryManagerUtil
+					.loadAmpCategoryClassByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+
+        if (categoryClass != null) {
+            gisForm.setTypeOfAssistanceVals(categoryClass.getPossibleValues());
         }
 
         //currently we are using base currency but in the future we may use value, selected from currency breakdown.

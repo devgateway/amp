@@ -1756,6 +1756,7 @@ public class DbUtil {
                                                 boolean includeCildLocations,
                                                 Collection<AmpCategoryValueLocations> locations,
                                                 List <AmpTeam> workspaces,
+                                                Collection <Long> typeOfAssistanceIds,
                                                 java.util.Date startDate,
                                                 java.util.Date endDate) {
         List queryResults = null;
@@ -1768,6 +1769,23 @@ public class DbUtil {
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
         String donorTypeIdsWhereclause = generateWhereclause(donorTypeIds, new GenericIdGetter());
+        String typeOfAssistanceWhereclause = null;
+
+        boolean ignoreTOA = false;
+        if (typeOfAssistanceIds != null && !typeOfAssistanceIds.isEmpty()) {
+            for (Long toaId:typeOfAssistanceIds) {
+                if (toaId.longValue() < 0l) {
+                    ignoreTOA = true;
+                    break;
+                }
+            }
+        } else {
+            ignoreTOA = true;
+        }
+
+        if (!ignoreTOA) {
+            typeOfAssistanceWhereclause = generateWhereclause(typeOfAssistanceIds, new GenericIdGetter());
+        }
 
         String workspaceIdsWhereclause = null;
         if (workspaces != null && !workspaces.isEmpty()) {
@@ -1834,6 +1852,11 @@ public class DbUtil {
                 if (workspaceIdsWhereclause != null) {
                     queryStr.append(" and fd.ampFundingId.ampActivityId.team.ampTeamId in ");
                     queryStr.append(workspaceIdsWhereclause);
+                }
+
+                if (typeOfAssistanceWhereclause != null) {
+                    queryStr.append(" and fd.ampFundingId.typeOfAssistance.id in ");
+                    queryStr.append(typeOfAssistanceWhereclause);
                 }
 
                 Query q = sess.createQuery(queryStr.toString());

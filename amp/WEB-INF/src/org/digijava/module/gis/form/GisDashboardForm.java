@@ -8,6 +8,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Form for GIS Dashboard actions.
@@ -48,6 +49,17 @@ public class GisDashboardForm extends ActionForm {
 	private Object[] selectedSecondaryPrograms;
 
     private String gisDashboardMode;
+
+
+    private List <AmpCategoryValue> typeOfAssistanceVals;
+
+    public List<AmpCategoryValue> getTypeOfAssistanceVals() {
+        return typeOfAssistanceVals;
+    }
+
+    public void setTypeOfAssistanceVals(List<AmpCategoryValue> typeOfAssistanceVals) {
+        this.typeOfAssistanceVals = typeOfAssistanceVals;
+    }
 
     public String getGisDashboardMode() {
         return gisDashboardMode;

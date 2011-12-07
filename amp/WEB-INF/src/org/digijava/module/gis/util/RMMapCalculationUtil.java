@@ -25,6 +25,7 @@ public class RMMapCalculationUtil {
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
         Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
         Set sectorCollector = new HashSet();
 
@@ -77,7 +78,7 @@ public class RMMapCalculationUtil {
                                                                donorTypeIds,
                                                                includeCildLocations,
                                                                locations,
-                                                               workspaces, fStartDate.getTime(), fEndDate.getTime());
+                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
@@ -120,6 +121,7 @@ public class RMMapCalculationUtil {
         Collection<Long> donorGroupIds = longArrayToColl(filter.getSelectedDonorGroups());
         Collection<Long> donnorAgencyIds = longArrayToColl(filter.getSelectedDonnorAgency());
         Collection<Long> programsIds = longArrayToColl(filter.getSelectedNatPlanObj());
+        Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
         String defaultCountryISO = null;
 
@@ -155,7 +157,7 @@ public class RMMapCalculationUtil {
                                                                donorTypeIds,
                                                                includeCildLocations,
                                                                locations,
-                                                               null, fStartDate.getTime(), fEndDate.getTime());
+                                                               null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,

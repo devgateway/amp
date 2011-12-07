@@ -12,7 +12,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 .dhx_cal_container div{
 	-moz-user-select:none;    
 	-moz-user-select:-moz-none;  
-	font-size:12px;
+	font-size:11px;
 }
 .dhx_cal_navline{
 	height:20px;

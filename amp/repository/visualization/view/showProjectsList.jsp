@@ -51,7 +51,12 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 			<c:set var="index" value="${index+1}"/>
 			<tr>
 			<td class="inside" align=center><c:out value="${index}"/>.</td>
-			<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1" style="color:#376091;">${projectItem.key}</a></td>
+			<c:if test="${!visualizationform.filter.fromPublicView}">
+				<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1" style="color:#376091;">${projectItem.key}</a></td>
+			</c:if>
+			<c:if test="${visualizationform.filter.fromPublicView}">
+				<td class="inside">${projectItem.key}</td>
+			</c:if>
 			<td class="inside" align=center width="90"><b>(<c:out value="${projectItem.value}"/> <c:out value="${visualizationform.filter.currencyCode}"/>)</b></td>
 			</tr>
 			</c:forEach>

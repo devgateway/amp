@@ -100,7 +100,7 @@ public class GetRegionalFundings extends TilesAction {
 			if (rfForm.isCurrFilter()) {
 				if (rfForm.getCurrencies() == null
 						|| rfForm.getCurrencies().size() == 0) {
-					rfForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+					rfForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 				}
 			}
 

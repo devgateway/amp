@@ -107,7 +107,7 @@ public class ShowGisDashboard extends Action {
          
        
         //currency
-        Collection currency = CurrencyUtil.getAmpCurrency();
+        Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
 	    //Only currencies havening exchanges rates AMP-2620
 	    Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	    gisForm.setCurrencies(validcurrencies);

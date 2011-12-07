@@ -288,7 +288,7 @@ public class AddAmpActivity extends Action {
      eaForm.getFunding().setPledgeslist(pledges);
       
      // load all the active currencies
-      eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+      eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
       ArrayList<AmpComponentType> ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
       eaForm.getComponents().setAllCompsType(ampComponentTypes);
       
@@ -1843,7 +1843,7 @@ private ActionForward showStep1(ActionMapping mapping,
 
 
 	// load all the active currencies
-	eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+	eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
 	try {
 		eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));

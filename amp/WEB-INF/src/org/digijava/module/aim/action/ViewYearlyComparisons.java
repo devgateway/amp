@@ -101,7 +101,7 @@ public class ViewYearlyComparisons extends TilesAction
 			}
 			formBean.setYearlyComparisons(c);
 			
-			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			

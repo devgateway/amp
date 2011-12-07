@@ -85,7 +85,7 @@ public class ViewQuarterlyComparisons extends TilesAction	{
 			}
 
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 

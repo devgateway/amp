@@ -130,7 +130,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 			logger.debug("The size of the Collection fb is " + fb.size());
 			formBean.setFinancingBreakdown(fb);
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
 			overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.COMMITMENT,Constants.ACTUAL,false);

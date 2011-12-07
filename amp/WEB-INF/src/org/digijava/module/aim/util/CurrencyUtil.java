@@ -783,13 +783,13 @@ public class CurrencyUtil {
 	}
 
 	
-	public static ArrayList getAmpCurrency() {
+	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByName() {
 		AmpCurrency ampCurrency = null;
 		Session session = null;
 		Query q = null;
-		Iterator iter = null;
+		Iterator<AmpCurrency> iter = null;
 		String queryString = null;
-		ArrayList currency = new ArrayList();
+		ArrayList<AmpCurrency> currency = new ArrayList<AmpCurrency>();
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = " select c from " + AmpCurrency.class.getName()
@@ -798,7 +798,7 @@ public class CurrencyUtil {
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {
-				ampCurrency = (AmpCurrency) iter.next();
+				ampCurrency = iter.next();
 				currency.add(ampCurrency);
 			}
 		} catch (Exception ex) {
@@ -811,6 +811,30 @@ public class CurrencyUtil {
 //				logger.debug("releaseSession() failed", ex2);
 //			}
 //		}
+		return currency;
+	}
+	
+	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByCode() {
+		AmpCurrency ampCurrency = null;
+		Session session = null;
+		Query q = null;
+		Iterator<AmpCurrency> iter = null;
+		String queryString = null;
+		ArrayList<AmpCurrency> currency = new ArrayList<AmpCurrency>();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = " select c from " + AmpCurrency.class.getName()
+					+ " c where c.activeFlag='1' order by c.currencyCode";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				ampCurrency = iter.next();
+				currency.add(ampCurrency);
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get currency " + ex);
+		}
 		return currency;
 	}
 

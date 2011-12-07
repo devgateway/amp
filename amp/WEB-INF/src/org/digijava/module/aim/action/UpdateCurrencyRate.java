@@ -145,7 +145,7 @@ public class UpdateCurrencyRate extends Action {
                         crForm.setUpdateCRateAmount(null);
                       }
                       if (crForm.getCurrencyCodes() == null) {
-                        crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());
+                        crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
                         crForm.setUpdateCRateCode(null);
                         crForm.setUpdateCRateDate(null);
                         crForm.setUpdateCRateId(null);

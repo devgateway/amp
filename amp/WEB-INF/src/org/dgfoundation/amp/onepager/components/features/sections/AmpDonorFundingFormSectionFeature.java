@@ -95,7 +95,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
 			@Override
 			public List<String> getObject() {
-				List<AmpCurrency> tmp = (List<AmpCurrency>) CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
+				List<AmpCurrency> tmp = (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
 				ArrayList<String> ret = new ArrayList<String>(); 
 				
 				Iterator<AmpCurrency> it = tmp.iterator();

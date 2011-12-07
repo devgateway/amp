@@ -93,7 +93,7 @@ public class YearlyComparisonsFilter extends TilesAction	{
 				formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 			}
 			
-			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			

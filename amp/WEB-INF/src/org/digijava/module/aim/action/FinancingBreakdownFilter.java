@@ -109,7 +109,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setYears(YearUtil.getYears());
 		formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+		formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT,Constants.ACTUAL,false);
 		formBean.setTotalCommitted(overallTotalCommitted);
                 overallTotalPlannedCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT,Constants.PLANNED,false);

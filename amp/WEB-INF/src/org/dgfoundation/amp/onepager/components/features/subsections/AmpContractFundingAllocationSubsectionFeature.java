@@ -39,7 +39,7 @@ public class AmpContractFundingAllocationSubsectionFeature extends
 		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
 			@Override
 			public List<AmpCurrency> getObject() {
-				return (List<AmpCurrency>) CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
+				return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
 			}
 		};
 		

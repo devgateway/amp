@@ -41,7 +41,7 @@ public class ShowReport extends Action {
 		
 		
 		//Set currencies
-		tf.setCurrencies(CurrencyUtil.getAmpCurrency());
+		tf.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 		if (request.getParameter("id")!=null && !request.getParameter("id").equalsIgnoreCase("null")){
 			tf.setReportid(request.getParameter("id"));
 		}

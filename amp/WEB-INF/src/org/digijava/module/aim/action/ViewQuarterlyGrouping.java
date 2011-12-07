@@ -86,7 +86,7 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams",fp);
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());

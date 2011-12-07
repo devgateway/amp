@@ -511,7 +511,7 @@ public class RMMapCalculationUtil {
 
     private static Map<String, AmpCurrency> getCurrencyCodeObjectMap () {
         Map<String, AmpCurrency> retVal = new HashMap <String, AmpCurrency> ();
-        List <AmpCurrency> currencyList = CurrencyUtil.getAmpCurrency();
+        List <AmpCurrency> currencyList = CurrencyUtil.getActiveAmpCurrencyByName();
         for (AmpCurrency currency: currencyList) {
             retVal.put(currency.getCurrencyCode(), currency);
         }

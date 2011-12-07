@@ -331,7 +331,7 @@ public class QueryUtil {
 
 		}
 		filter.setZones(zones);
-		Collection currency = CurrencyUtil.getAmpCurrency();
+		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
         List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
         filter.setCurrencies(validcurrencies);
         //Only currencies which have exchanges rates

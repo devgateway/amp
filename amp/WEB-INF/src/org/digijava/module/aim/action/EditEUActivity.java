@@ -94,7 +94,7 @@ public class EditEUActivity extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		EUActivityForm eaf = (EUActivityForm) form;
-		eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
+		eaf.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 		//eaf.setDonors(DbUtil.getAllOrganisation());
 		eaf.setFinTypes(DbUtil.getAllAssistanceTypesFromCM());
 		eaf.setFinInstrs(DbUtil.getAllFinancingInstruments());

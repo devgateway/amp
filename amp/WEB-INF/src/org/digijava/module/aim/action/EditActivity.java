@@ -1941,7 +1941,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
        */
 
       // load all the active currencies
-      eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+      eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
       
       //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();

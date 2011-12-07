@@ -97,7 +97,7 @@ public class ViewMonthlyInfo extends TilesAction {
         monthlyForm.setFromYear(fp.getFromYear());
         monthlyForm.setToYear(fp.getToYear());
         monthlyForm.setYears(YearUtil.getYears());
-        monthlyForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+        monthlyForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {

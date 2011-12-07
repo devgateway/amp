@@ -183,7 +183,7 @@ public class ShowCurrencyRates extends Action {
         }
 
 		crForm.setCurrentPage(new Integer(page));
-		crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());
+		crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
 		crForm.setTimePeriods(getTimePeriods());
 		crForm.setUpdateCRateAmount(null);
 		crForm.setUpdateCRateCode(null);

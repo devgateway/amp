@@ -75,7 +75,7 @@ public class AddPledge extends Action {
             	plForm.getYears().add(String.valueOf(i));
             }
     		
-    		Collection currencies = CurrencyUtil.getAmpCurrency();
+    		Collection currencies = CurrencyUtil.getActiveAmpCurrencyByName();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	    	plForm.setValidcurrencies(validcurrencies);
 	        if(currencies!=null && currencies.size()>0){

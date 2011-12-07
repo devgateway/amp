@@ -83,7 +83,7 @@ public class EditIPAContract extends MultiAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
-        eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
+        eaf.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
         return modeSelect(mapping, form, request, response);
     }

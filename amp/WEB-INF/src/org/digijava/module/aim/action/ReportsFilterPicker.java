@@ -192,7 +192,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
                }
 		
-		Collection currency = CurrencyUtil.getAmpCurrency();
+		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
 	     //Only currencies having exchanges rates AMP-2620
 	      Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	      filterForm.setCurrencies(validcurrencies);

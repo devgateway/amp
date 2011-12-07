@@ -119,7 +119,7 @@ public class ShowDesktopActivities extends TilesAction {
 						//dForm.setFltrCalendar(tm.getAppSettings().getFisCalId().longValue());
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.CURRENCY_FILTER)) {
 						// adding currency filter
-						Collection col = CurrencyUtil.getAmpCurrency();
+						Collection col = CurrencyUtil.getActiveAmpCurrencyByName();
 						dForm.setCurrencies(col);
 						String currCode = null;
 						if (col != null) {
@@ -251,7 +251,7 @@ public class ShowDesktopActivities extends TilesAction {
 					&& dForm.getFltrCurrency().trim().length() > 0) {
 				currCode = dForm.getFltrCurrency();
 			} else {
-				itr = CurrencyUtil.getAmpCurrency().iterator();
+				itr = CurrencyUtil.getActiveAmpCurrencyByName().iterator();
 				while (itr.hasNext()) {
 					AmpCurrency curr = (AmpCurrency) itr.next();
 					if (curr.getAmpCurrencyId().equals(tm.getAppSettings().getCurrencyId())) {

@@ -166,7 +166,7 @@ public class EditFunding extends Action {
 		}
 		
 		//
-		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+		formBean.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 		//
 		formBean.getFunding().setNumComm(numComm);
 		formBean.getFunding().setNumDisb(numDisb);

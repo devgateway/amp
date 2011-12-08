@@ -1560,6 +1560,10 @@ public class DataDispatcher extends DispatchAction {
         String text = TranslatorWorker.translateText("Year",locale, siteId);
 
 		csvString.append("\"" + text + "\"");
+		if (filter.isPledgeVisible() && pledgesVisible) {
+			csvString.append(",");
+			csvString.append("\"" + pledgesTranslatedTitle + "\"");
+		}
 		if (filter.isCommitmentsVisible()) {
 			csvString.append(",");
 			csvString.append("\"" + comTranslatedTitle);
@@ -1578,10 +1582,6 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("#");
 	        csvString.append(Constants.EXPENDITURE + "\"");
 	    }
-		if (filter.isPledgeVisible() && pledgesVisible) {
-			csvString.append(",");
-			csvString.append("\"" + pledgesTranslatedTitle + "\"");
-		}
 		csvString.append("\n");
 
 		
@@ -1598,13 +1598,13 @@ public class DataDispatcher extends DispatchAction {
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
-				if (filter.isDisbursementsVisible()) {
-					DecimalWraper fundingDisb = DbUtil
-					.getFunding(filter, startDate, endDate, null, null,
-							Constants.DISBURSEMENT, Constants.ACTUAL);
+				if (filter.isPledgeVisible() && pledgesVisible) {
+					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
+							filter.getOrgGroupIds(), startDate, endDate,
+							currCode);
 					xmlString
-					.append("<fundingtype category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+					.append("<fundingtype category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
+					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
 					DecimalWraper fundingComm = DbUtil
@@ -1613,6 +1613,14 @@ public class DataDispatcher extends DispatchAction {
 					xmlString
 					.append("<fundingtype category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				}
+				if (filter.isDisbursementsVisible()) {
+					DecimalWraper fundingDisb = DbUtil
+					.getFunding(filter, startDate, endDate, null, null,
+							Constants.DISBURSEMENT, Constants.ACTUAL);
+					xmlString
+					.append("<fundingtype category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
+					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
 					DecimalWraper fundingExp = DbUtil
@@ -1623,14 +1631,6 @@ public class DataDispatcher extends DispatchAction {
 					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
-				if (filter.isPledgeVisible() && pledgesVisible) {
-					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
-							filter.getOrgGroupIds(), startDate, endDate,
-							currCode);
-					xmlString
-					.append("<fundingtype category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-				}
 				xmlString.append("</year>\n");
 			}
 
@@ -1663,25 +1663,7 @@ public class DataDispatcher extends DispatchAction {
 	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			csvString.append(yearName);
-			csvString.append(",");
-
-			if (filter.isCommitmentsVisible()) {
-				DecimalWraper fundingComm = DbUtil.getFunding(filter, startDate, endDate, null, null,Constants.COMMITMENT, Constants.ACTUAL);
-				csvString.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-				csvString.append(",");
-			}
-			
-			if (filter.isDisbursementsVisible()) {
-	    		DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
-	    		csvString.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			}
-			
-			DecimalWraper fundingExp = new DecimalWraper();
-			if (filter.isExpendituresVisible() && expendituresVisible) {
-				csvString.append(",");
-				fundingExp = DbUtil.getFunding(filter, startDate, endDate,null, null, Constants.EXPENDITURE, Constants.ACTUAL);
-				csvString.append(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			}
+			//csvString.append(",");
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
 			if (filter.isPledgeVisible() && pledgesVisible) {
@@ -1690,32 +1672,28 @@ public class DataDispatcher extends DispatchAction {
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
-			//if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0 || fundingExp.doubleValue() != 0) {
-				// nodata = false;
-			//}
+			if (filter.isCommitmentsVisible()) {
+				DecimalWraper fundingComm = DbUtil.getFunding(filter, startDate, endDate, null, null,Constants.COMMITMENT, Constants.ACTUAL);
+				csvString.append(",");
+				csvString.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			}
 			
+			if (filter.isDisbursementsVisible()) {
+	    		DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
+	    		csvString.append(",");
+	    		csvString.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			}
+			
+			DecimalWraper fundingExp = new DecimalWraper();
+			if (filter.isExpendituresVisible() && expendituresVisible) {
+				fundingExp = DbUtil.getFunding(filter, startDate, endDate,null, null, Constants.EXPENDITURE, Constants.ACTUAL);
+				csvString.append(",");
+				csvString.append(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			}
+
 			csvString.append("\n");
-			// totalPledges += fundingPledge;
-			// totalCommitments = totalCommitments.add(fundingComm.getValue());
-			// totalDisbursements =
-			// totalDisbursements.add(fundingDisb.getValue());
-			// totalExpenditures = totalExpenditures.add(fundingExp.getValue());
 		}
 
-		// if (totalPledges == 0.0&&filter.isPledgeVisible())
-		// result.removeRow(pledgesTranslatedTitle);
-		// if (totalCommitments.equals(new BigDecimal(0)))
-		// result.removeRow(actComTranslatedTitle);
-		// if (totalDisbursements.equals(new BigDecimal(0)))
-		// result.removeRow(actDisbTranslatedTitle);
-		// if (totalExpenditures.equals(new
-		// BigDecimal(0))&&filter.isExpendituresVisible())
-		// result.removeRow(actExpTranslatedTitle);
-		//
-		//
-		// if (nodata) {
-		// result = new DefaultCategoryDataset();
-		// }
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF-8"), true);
 

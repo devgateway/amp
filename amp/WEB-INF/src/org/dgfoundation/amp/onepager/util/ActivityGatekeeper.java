@@ -75,6 +75,6 @@ public class ActivityGatekeeper {
 	}
 	
 	public static String buildRedirectLink(String id){
-		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~editError=" + ActivityGatekeeper.getUserEditing(String.valueOf(id));
+		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + ActivityGatekeeper.getUserEditing(String.valueOf(id));
 	}
 }

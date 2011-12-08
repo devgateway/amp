@@ -1,8 +1,4 @@
 	YAHOOAmp = YAHOO;
-	YAHOOAmp.namespace("YAHOOAmp.amptab");
-	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
-	};
 		
     var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
 		width:"800px",

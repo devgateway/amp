@@ -11,30 +11,9 @@
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 
 <digi:instance property="aimEditActivityForm" />
-<digi:form  name="addIssueForm" type="aimEditActivityForm"  styleId="addIssueForm"  action="/addIssue.do" method="post"  onsubmit="return validate()">
+<digi:form  name="addIssueForm" type="aimEditActivityForm"  styleId="addIssueForm"  action="/addIssue.do" method="post"  >
 <script language="JavaScript">
 
-	function validate() {
-		if(isEmpty(document.getElementById('issue').value) == true) {	
-			var issueError = "<digi:trn key="aim:enterIssue">Please enter issue</digi:trn>"; 	
-			alert(issueError);			
-			addIssueForm.issue.focus();
-			return false;
-		}
-		<field:display feature="Issues" name="Issue Date">
-			if(isEmpty(document.getElementById('issue').value) == true) {	
-				var issueError2 = "<digi:trn key="aim:enterIssueDate">Please enter issue date</digi:trn>"; 	
-				alert(issueError2);
-				return false;
-		}	
-		</field:display>
-	return true;
-	}
-
-	function clearField(){
-		document.getElementById('issue').value="";
-		return true;
-	}
 	
 </script>
 
@@ -83,15 +62,15 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.issues.issueId == -1}">
-															<input type="submit" value="<digi:trn key='btn:addIssue'>Add</digi:trn>" class="dr-menu">												
+															<input type="submit" onclick="return validateIssue()" value="<digi:trn key='btn:addIssue'>Add</digi:trn>" class="dr-menu">												
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.issueId != -1}">
-															<input type="submit" value="<digi:trn key='btn:updateIssue'>Update</digi:trn>" class="dr-menu">													
+															<input type="submit"  onclick="return validateIssue()" value="<digi:trn key='btn:updateIssue'>Update</digi:trn>" class="dr-menu">													
 														</c:if>
 													</td>
 													<td>
-														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">													
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearFieldIssue()">													
 													</td>
 												</tr>
 											</table>										

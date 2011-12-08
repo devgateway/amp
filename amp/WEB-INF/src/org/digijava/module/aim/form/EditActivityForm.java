@@ -85,6 +85,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String svAction;
 	private int isPreview = 0;
 	private String buttonText;
+	private String activityExists = "yes";
 	
 	private String workingTeamLeadFlag;
 	private boolean teamLead;
@@ -5242,6 +5243,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public String getButtonText() {
 		return buttonText;
+	}
+
+	public String getActivityExists() {
+		return activityExists;
+	}
+
+	public void setActivityExists(String activityExists) {
+		this.activityExists = activityExists;
 	}
 	
 }

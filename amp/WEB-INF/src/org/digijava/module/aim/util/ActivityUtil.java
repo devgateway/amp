@@ -4986,6 +4986,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
 	}
 	
-	
+	public static Integer activityExists (Long versionId,Session session) throws Exception{
+		Integer retVal = null;
+		try {
+			Query qry= session.createQuery("select count(a) from " +AmpActivityVersion.class.getName() +" a where a.ampActivityId="+versionId);
+			retVal = (Integer)qry.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return retVal;		
+	}
 	
 } // End

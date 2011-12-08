@@ -211,40 +211,49 @@ function collapseAll() {
 	     </tr>
 	</table>
 </logic:present>
-<div class="activity_preview_header">
-  <table width="990" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td width="710">
-    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
-    </td>
-    <td width=130>
-    	<div class="l_sm">
-    	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
-		</gs:test>
-    	</div>
-    </td>
-    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
-    <td align=right>
-    	<c:set var="trn">
-			<digi:trn>Export To PDF</digi:trn>
-		</c:set> 
-		<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;"><digi:trn>${trn}</digi:trn></a>
-    </td>
-	<td width=10>&nbsp;</td>
-    <td align=right>
-    	<img src="img_2/ico_print.gif" width="15" height="18" />
-    </td>
-    <td align=right>
-    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;">
-    		<digi:trn key="aim:print">Print</digi:trn>
-    	</a>
-    </td>
-  </tr>
-</table>
-</div>
+<c:if test="${aimEditActivityForm.activityExists=='no'}">
+	<div class="activity_preview_header">
+		<ul style="padding-top: 5px;font-size: 12px">
+			<li><digi:trn>Couldn't find activity! It may be no longer exists in the system. </digi:trn></li>
+		</ul>	
+	</div>
+</c:if>
+<c:if test="${aimEditActivityForm.activityExists!='no'}">
 
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	<div class="activity_preview_header">
+	  <table width="990" border="0" cellpadding="0" cellspacing="0">
+	  <tr>
+	    <td width="710">
+	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
+	    </td>
+	    <td width=130>
+	    	<div class="l_sm">
+	    	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+			 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
+			</gs:test>
+	    	</div>
+	    </td>
+	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
+	    <td align=right>
+	    	<c:set var="trn">
+				<digi:trn>Export To PDF</digi:trn>
+			</c:set> 
+			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;"><digi:trn>${trn}</digi:trn></a>
+	    </td>
+		<td width=10>&nbsp;</td>
+	    <td align=right>
+	    	<img src="img_2/ico_print.gif" width="15" height="18" />
+	    </td>
+	    <td align=right>
+	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;">
+	    		<digi:trn key="aim:print">Print</digi:trn>
+	    	</a>
+	    </td>
+	  </tr>
+	</table>
+	</div>
+	
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
   <tr>
     <td width=215 bgcolor="#F4F4F4" valign=top>
 	<div class="dash_left">
@@ -2698,6 +2707,10 @@ function collapseAll() {
 </div></td>
   </tr>
 </table>
+</c:if>
+
+
+
 <!-- MAIN CONTENT PART END -->
 	</logic:present>
 </digi:form>

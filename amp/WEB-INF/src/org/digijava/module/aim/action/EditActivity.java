@@ -123,6 +123,7 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 
@@ -211,6 +212,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     hsession=PersistenceManager.getSession();
     
     if (activityId != null) {
+    	//check whether activity exists
+    	Integer count = ActivityUtil.activityExists(activityId, hsession);    	
+    	if(count==null || count==0){
+			eaForm.setActivityExists("no");
+			return mapping.findForward("forward");
+    	}else{
+    		eaForm.setActivityExists("yes");
+    	}
+    	
         activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)

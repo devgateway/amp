@@ -151,14 +151,14 @@ function checkallIssues() {
 
 	function validateIssue() {
 		if(isEmpty(document.getElementById('issue').value) == true) {	
-			var issueError = "<digi:trn key="aim:enterIssue">Please enter issue</digi:trn>"; 	
+			var issueError = "<digi:trn jsFriendly='true'>Please enter issue</digi:trn>"; 	
 			alert(issueError);			
 			addIssueForm.issue.focus();
 			return false;
 		}
 		<field:display feature="Issues" name="Issue Date">
 			if(isEmpty(document.getElementById('issueDate').value) == true) {	
-				var issueError2 = "<digi:trn key="aim:enterIssueDate">Please enter issue date</digi:trn>"; 	
+				var issueError2 = "<digi:trn jsFriendly='true'>Please enter issue date</digi:trn>"; 	
 				alert(issueError2);
 				return false;
 		}	
@@ -170,7 +170,7 @@ function checkallIssues() {
 	function validateMeasure() {
 		var meas = document.getElementsByName("issues.measure")[0];
 		if(isEmpty(meas.value) == true) {
-			var measError = "<digi:trn key="aim:enterMeasure">Please enter the measure</digi:trn>"; 	
+			var measError = "<digi:trn jsFriendly='true'>Please enter the measure</digi:trn>"; 	
 			alert(measError);
 			meas.focus();
 			return false;
@@ -182,7 +182,7 @@ function checkallIssues() {
 	function validateActor() {
 		var actor = document.getElementsByName("issues.actor")[0];
 		if(isEmpty(actor.value) == true) {
-			var actorError = "<digi:trn key="aim:enterMeasure">Please enter the actor</digi:trn>"; 	
+			var actorError = "<digi:trn jsFriendly='true'>Please enter the actor</digi:trn>"; 	
 			alert(actorError);
 			actor.focus();
 			return false;

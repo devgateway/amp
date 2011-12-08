@@ -10,29 +10,9 @@
 									
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<digi:instance property="aimEditActivityForm" />
-	<digi:form name="addObservationForm" type="aimEditActivityForm"  styleId="addObservationForm"  action="/addObservation.do" method="post"  onsubmit="return validate()">
+	<digi:form name="addObservationForm" type="aimEditActivityForm"  styleId="addObservationForm"  action="/addObservation.do" method="post" >
 		<script language="JavaScript">
-			function validate() {
-				if(isEmpty(document.getElementById('observation').value) == true) {	
-					var observationError = "<digi:trn jsFriendly='true'>Please enter observation</digi:trn>"; 	
-					alert(observationError);			
-					addObservationForm.observation.focus();
-					return false;
-				}
-				<field:display name="Regional Observations Date" feature="Regional Observations" >
-					if(isEmpty(document.getElementById('observation').value) == true) {	
-						var observationError2 = "<digi:trn jsFriendly='true'>Please enter observation date</digi:trn>"; 	
-						alert(observationError2);
-						return false;
-				}	
-				</field:display>
-			return true;
-			}
-		
-			function clearField(){
-				document.getElementById('observation').value="";
-				return true;
-			}
+			
 			
 		</script>
 		
@@ -80,14 +60,14 @@
 														<tr>
 															<td>
 																<c:if test="${aimEditActivityForm.observations.issueId == -1}">
-																	<input type="submit" value="<digi:trn key='btn:addObservation'>Add</digi:trn>" class="dr-menu">												
+																	<input type="submit" onclick="return validateObservation()" value="<digi:trn key='btn:addObservation'>Add</digi:trn>" class="dr-menu">												
 																</c:if>
 																<c:if test="${aimEditActivityForm.observations.issueId != -1}">
-																	<input type="submit" value="<digi:trn key='btn:updateObservation'>Update</digi:trn>" class="dr-menu">													
+																	<input type="submit" onclick="return validateObservation()" value="<digi:trn key='btn:updateObservation'>Update</digi:trn>" class="dr-menu">													
 																</c:if>
 															</td>
 															<td>
-																<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">													
+																<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearFieldObservation()">													
 															</td>
 														</tr>
 													</table>										

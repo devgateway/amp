@@ -10,19 +10,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <digi:instance property="aimEditActivityForm" />
-<digi:form name="addMeasureForm" type="aimEditActivityForm" action="/addRegionalObservationMeasure.do" method="post" onsubmit="return validate()">
+<digi:form name="addMeasureForm" type="aimEditActivityForm" action="/addRegionalObservationMeasure.do" method="post">
 <script language="JavaScript">
 <!--
-
-	function validate() {
-		var meas = document.getElementsByName("observations.measure")[0];
-		if(isEmpty(meas.value) == true) {
-			alert("<digi:trn jsFriendly='true'>Please enter the measure</digi:trn>");
-			meas.focus();
-			return false;
-		}
-		return true;
-	}
 
 	function addMeasure() {
 		var flag = validate();
@@ -39,11 +29,7 @@
 
 	function unload() {}
 
-	function clearField(){
-		document.getElementsByName("observations.measure")[0].value="";
-		return true;
-	}
-
+	
 -->
 </script>
 <html:hidden property="observations.issueId" />
@@ -77,16 +63,16 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.observations.measureId == -1}">
-															<input type="submit" value="<digi:trn key='btn:addMeasure'>Add</digi:trn>" class="dr-menu">
+															<input type="submit" onclick="return validateMeasure()" value="<digi:trn key='btn:addMeasure'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.observations.measureId != -1}">
-															<input type="submit" value="<digi:trn key='btn:updateMeasure'>Update</digi:trn>" class="dr-menu">													
+															<input type="submit" onclick="return validateMeasure()" value="<digi:trn key='btn:updateMeasure'>Update</digi:trn>" class="dr-menu">													
 														</c:if>
 														
 													</td>
 													<td>
-														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearFieldMeasure()">
 													</td>
 												
 												</tr>

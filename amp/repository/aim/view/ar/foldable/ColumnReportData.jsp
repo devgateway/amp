@@ -1,3 +1,5 @@
+<%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
+<%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -35,6 +37,32 @@
 	session.setAttribute("progressValue", counter);
 %>
 
+<%
+//This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon. 
+Boolean validateItem = false;
+if(columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
+{
+	org.dgfoundation.amp.ar.CellColumn cellColumn = (org.dgfoundation.amp.ar.CellColumn)columnReport.getItem(0);
+	Cell cell = cellColumn.getByOwner((Long)ownerId);
+	MetaTextCell metaCell = (MetaTextCell) cell;
+	if(metaCell.getColour().equalsIgnoreCase("green")){
+		validateItem = true;
+	}
+}
+%>
+<c:set var="action" value="edit"/>
+<c:set var="actionString" value="Edit"/>
+<c:if test="${currentMember.teamHead}">
+	<%
+	if(validateItem){
+		%>
+		<c:set var="action" value="validate"/>
+		<c:set var="actionString" value="Validate"/>
+		<%
+	}
+	%>
+</c:if>
+	
 <% 
 		if(bckColor.equals("true")) {
 %>
@@ -46,7 +74,9 @@
 	</c:if>
 		<td align="center" class="report_inside" width="25">
 			<logic:present name="currentMember" scope="session">
-				<img style="cursor:hand" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" height="16" width="16"><br/>
+				<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
+				</a>
 			</logic:present>
 		</td>
 	
@@ -68,7 +98,9 @@
 		</c:if>
 			<td align="center" class="report_inside" width="25">
 				<logic:present name="currentMember" scope="session">
-					<img style="cursor:hand" onclick="reportOptions(this,${ownerId})" src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" height="16" width="16"><br/>
+					<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
+						<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
+					</a>
 				</logic:present>
 			</td>
 		

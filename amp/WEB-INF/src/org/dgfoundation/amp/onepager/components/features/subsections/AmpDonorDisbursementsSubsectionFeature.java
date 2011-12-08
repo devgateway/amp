@@ -58,8 +58,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 //				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				fd.setTransactionType(Constants.DISBURSEMENT);
-				model.getObject().getFundingDetails().add(fd);
-				disbursementsTableFeature.getList().removeAll();
+				disbursementsTableFeature.getEditorList().addItem(fd);
 				target.addComponent(disbursementsTableFeature);
 				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
 				target.addComponent(parent.getFundingInfo());

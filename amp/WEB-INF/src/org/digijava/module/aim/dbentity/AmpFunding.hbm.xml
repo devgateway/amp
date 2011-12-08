@@ -44,7 +44,7 @@
 
 		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 
-		<set name="fundingDetails" cascade="all-delete-orphan" table="AMP_FUNDING_DETAIL">
+		<set name="fundingDetails" cascade="all-delete-orphan" table="AMP_FUNDING_DETAIL" order-by="transactionDate asc">
 			<cache usage="read-write" />
 			<key column="amp_funding_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />

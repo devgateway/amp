@@ -4,16 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -35,13 +31,10 @@ public class AmpDonorExpendituresFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName) throws Exception {
 		super(id, model, fmName, Constants.EXPENDITURE, 6);
 
-		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());
-
-		list = new ListView<AmpFundingDetail>("listExp", listModel) {
-
+		list = new ListEditor<AmpFundingDetail>("listExp", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 			@Override
-			protected void populateItem(final ListItem<AmpFundingDetail> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				item.add(getFundingAmountComponent(item.getModel()));
@@ -52,13 +45,9 @@ public class AmpDonorExpendituresFormTableFeature extends
 						"Expenditure Classification",true);
 				classification.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
 				item.add(classification);
-				
-				item.add(getDeleteLinkField("delExp",
-						"Delete Expenditure", item));
-
+				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"));
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
 
 	}

@@ -51,8 +51,7 @@ public class AmpMTEFProjectionSubsectionFeature extends
 //				projection.setProjectionDate(new Date(System.currentTimeMillis()));
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
 				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
-				model.getObject().getMtefProjections().add(projection);
-				mtefTableFeature.getList().removeAll();
+				mtefTableFeature.getEditorList().addItem(projection);
 				target.addComponent(mtefTableFeature);
 				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
 				target.addComponent(parent.getFundingInfo());

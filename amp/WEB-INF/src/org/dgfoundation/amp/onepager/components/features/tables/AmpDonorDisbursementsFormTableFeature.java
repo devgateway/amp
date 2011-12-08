@@ -16,6 +16,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -40,10 +42,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName) throws Exception {
 		super(id, model, fmName, Constants.DISBURSEMENT, 8);
 
-		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());
-
-		
 		final AbstractReadOnlyModel<List<String>> disbOrderIdModel = new AbstractReadOnlyModel<List<String>>() {
 			@Override
 			public List<String> getObject() {
@@ -54,11 +52,11 @@ public class AmpDonorDisbursementsFormTableFeature extends
 			}
 		};
 		
-		
-		list = new ListView<AmpFundingDetail>("listDisbursements", listModel) {
+		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 
 			@Override
-			protected void populateItem(final ListItem<AmpFundingDetail> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				item.add(getFundingAmountComponent(item.getModel()));
 
@@ -97,12 +95,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 								return arg0.getTitle();
 							}
 						}));
-
-				item.add(getDeleteLinkField("delDisbursement",
-						"Delete Disbursement Order", item));
+				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"));
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
 
 	}

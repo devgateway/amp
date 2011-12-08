@@ -19,7 +19,16 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 
 		@Override
 		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
-			if(arg0.getReportingDate()!=null && arg1.getReportingDate()!=null) 
+			
+			if (arg0.getTransactionDate() != null && arg0.getTransactionAmount() != null && arg0.getAdjustmentType() != null){
+				if(arg0.getTransactionDate()!=null && arg1.getTransactionDate()!=null && arg0.getTransactionDate().compareTo(arg1.getTransactionDate()) != 0) 
+					return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
+				if(arg0.getTransactionDate()!=null && arg1.getTransactionDate()==null) 
+					return -1;
+				if(arg0.getTransactionDate()==null && arg1.getTransactionDate()!=null) 
+					return 1;
+			}
+			if(arg0.getReportingDate()!=null && arg1.getReportingDate()!=null)
 				return arg0.getReportingDate().compareTo(arg1.getReportingDate());
 			if(arg0.getAmpFundDetailId()!=null && arg1.getAmpFundDetailId()!=null) 
 				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
@@ -29,7 +38,6 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 				return 1;
 			return arg0.hashCode()-arg1.hashCode();
 		}
-		
 	}
 	
 	private Long ampFundDetailId ;

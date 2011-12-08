@@ -52,8 +52,10 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionType(Constants.COMMITMENT);
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
-				model.getObject().getFundingDetails().add(fd);
-				commitsTableFeature.getList().removeAll();
+				
+				//model.getObject().getFundingDetails().add(fd);
+				//commitsTableFeature.getList().removeAll();
+				commitsTableFeature.getEditorList().addItem(fd);
 				target.addComponent(commitsTableFeature);
 				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
 				target.addComponent(parent.getFundingInfo());

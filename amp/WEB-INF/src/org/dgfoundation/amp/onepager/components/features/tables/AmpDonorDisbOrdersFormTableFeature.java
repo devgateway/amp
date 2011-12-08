@@ -5,20 +5,13 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbOrdersSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -42,14 +35,10 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName) throws Exception {
 		super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
-		AbstractReadOnlyModel<List<AmpFundingDetail>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel,new AmpFundingDetail.FundingDetailComparator());
-
-		list = new ListView<AmpFundingDetail>("listDisbOrders", listModel) {
-
+		list = new ListEditor<AmpFundingDetail>("listDisbOrders", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 			@Override
-			protected void populateItem(final ListItem<AmpFundingDetail> item) {
-
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				item.add(getFundingAmountComponent(item.getModel()));
 
@@ -79,23 +68,9 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 								"disbursementOrderRejected"), "Rejected", true);
 				item.add(rejected);
 
-				AmpDeleteLinkField delDisbOrder = new AmpDeleteLinkField(
-						"delDisbOrder", "Delete Disbursement Order") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						parentModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpDonorDisbOrdersFormTableFeature.this);
-						list.removeAll();
-						AmpDonorDisbOrdersSubsectionFeature subsection=(AmpDonorDisbOrdersSubsectionFeature) AmpDonorDisbOrdersFormTableFeature.this.getParent();
-						subsection.updateDisbOrderPickers(target);
-					}
-				};
-
-				item.add(delDisbOrder);
-
+				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"));
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
 
 	}

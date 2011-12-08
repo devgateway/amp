@@ -13,9 +13,9 @@ import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbOrdersFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbursementsFormTableFeature;
@@ -57,8 +57,8 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 	 * @param target
 	 */
 	public void updateDisbOrderPickers(AjaxRequestTarget target) {
-		Iterator<? extends ListItem<AmpFundingDetail>> iterator = disbursements
-				.getDisbursementsTableFeature().getList().iterator();
+		Iterator<? extends ListItem<AmpFundingDetail>> iterator = (Iterator<? extends ListItem<AmpFundingDetail>>) disbursements
+				.getDisbursementsTableFeature().getEditorList().iterator();
 		while (iterator.hasNext()) {
 			ListItem<AmpFundingDetail> listItem = (ListItem<AmpFundingDetail>) iterator
 					.next();
@@ -118,8 +118,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				Set fundingDetails = model.getObject().getFundingDetails();
 				fd.setDisbOrderId(generateNewDisbOrderId(fundingDetails));
-				fundingDetails.add(fd);
-				disbOrdersTableFeature.getList().removeAll();
+				disbOrdersTableFeature.getEditorList().addItem(fd);
 				target.addComponent(disbOrdersTableFeature);
 				updateDisbOrderPickers(target);
 				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();

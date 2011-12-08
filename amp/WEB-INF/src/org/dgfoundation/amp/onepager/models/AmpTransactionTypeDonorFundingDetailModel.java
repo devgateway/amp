@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.wicket.model.IModel;
@@ -47,9 +48,13 @@ public class AmpTransactionTypeDonorFundingDetailModel implements
 
 	@Override
 	public void setObject(Set<AmpFundingDetail> object) {
-		for (AmpFundingDetail ampFundingDetail : model.getObject())
+		Set<AmpFundingDetail> set = model.getObject();
+		Iterator<AmpFundingDetail> it = set.iterator();
+		while (it.hasNext()) {
+			AmpFundingDetail ampFundingDetail = (AmpFundingDetail) it.next();
 			if (ampFundingDetail.getTransactionType().equals(transactionType))
-				model.getObject().remove(ampFundingDetail);
+				it.remove();
+		}
 		model.getObject().addAll(object);
 	}
 

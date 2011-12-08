@@ -4,22 +4,19 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -29,7 +26,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author mpostelnicu@dgateway.org since Nov 5, 2010
  */
 public class AmpMTEFProjectionFormTableFeature extends
-		AmpFormTableFeaturePanel<AmpFunding,AmpFundingMTEFProjection> {
+		AmpFundingFormTableFeaturePanel<AmpFunding,AmpFundingMTEFProjection> {
 
 	/**
 	 * @param id
@@ -52,12 +49,12 @@ public class AmpMTEFProjectionFormTableFeature extends
 		AbstractReadOnlyModel<List<AmpFundingMTEFProjection>> listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator());
 
-		list = new ListView<AmpFundingMTEFProjection>("listMTEF",
-				listModel) {
+		list = new ListEditor<AmpFundingMTEFProjection>("listMTEF",
+				setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator()) {
 
 			@Override
-			protected void populateItem(
-					final ListItem<AmpFundingMTEFProjection> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
 			
 				AmpCategoryGroupFieldPanel projected;
 				try {
@@ -77,22 +74,10 @@ public class AmpMTEFProjectionFormTableFeature extends
 						"fundingAmount", item.getModel(), "Amount", "amount",
 						"Currency", "ampCurrency", "Date", "projectionDate"));
 
-				AmpDeleteLinkField delMtef = new AmpDeleteLinkField(
-						"delMtef", "Delete MTEF Projection") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpMTEFProjectionFormTableFeature.this);
-						list.removeAll();
-					}
-				};
-				item.add(delMtef);
-
+				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"));
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
-
 	}
 
 }

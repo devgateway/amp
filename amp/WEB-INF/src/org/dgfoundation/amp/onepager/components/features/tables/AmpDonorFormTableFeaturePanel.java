@@ -31,7 +31,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
  * @author mpostelnicu@dgateway.org since Nov 12, 2010
  */
 public abstract class AmpDonorFormTableFeaturePanel extends
-		AmpFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
+	AmpFundingFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
 
 	protected IModel<Set<AmpFundingDetail>> parentModel;
 	protected IModel<Set<AmpFundingDetail>> setModel;
@@ -74,6 +74,10 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				"ampCurrencyId", "Transaction Date", "transactionDate");
 	}
 
+	
+	/**
+	 * Deprecated
+	 * 
 	protected AmpDeleteLinkField getDeleteLinkField(String id, String fmName,
 			final ListItem<AmpFundingDetail> item) {
 		return new AmpDeleteLinkField(id, fmName) {
@@ -87,4 +91,6 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			}
 		};
 	}
+	 *	
+	 */
 }

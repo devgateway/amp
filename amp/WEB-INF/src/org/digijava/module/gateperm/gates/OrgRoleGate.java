@@ -81,7 +81,7 @@ public class OrgRoleGate extends Gate {
 	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 	if (oo instanceof AmpActivityVersion)
 	    ampa = (AmpActivityVersion) oo;
-	logger.info("Object is:"+o.toString());
+	logger.debug("Object is:"+o.toString());
 //	if (oo instanceof Activity)
 //	    a = (Activity) oo;
 

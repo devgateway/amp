@@ -13,6 +13,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.FeedbackMessage;
@@ -20,6 +21,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -30,7 +33,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
@@ -72,6 +74,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	
 
 	protected Form<AmpActivityVersion> activityForm;
+	private static final Integer GO_TO_DESKTOP=1;
+	private static final Integer STAY_ON_PAGE=2;
 	public Form<AmpActivityVersion> getActivityForm() {
 		return activityForm;
 	}
@@ -83,6 +87,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	public ListView<AmpComponentPanel> getFeatureList() {
 		return featureList;
 	}
+	private Integer redirected;
 	
 	
 	/**
@@ -198,14 +203,49 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		activityForm.add(saveAndSubmit);
-
+		
 		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.MODULE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}
+		};
+			saveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "showDraftPanel();"));
+			saveAsDraft.setVisible(true);
+			saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+			activityForm.add(saveAsDraft);
+			final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
+			Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
+			myDraftOpts.setOutputMarkupId(true);
+			myDraftOpts.setRenderBodyOnly(false);
+			radioDesktop.add(new AjaxEventBehavior("onclick") {
+				private static final long serialVersionUID = 1L;
+	
+				protected void onEvent(final AjaxRequestTarget target) {
+					myDraftOpts.setModelObject(GO_TO_DESKTOP);
+					target.addComponent(myDraftOpts);
+				}
+			});
+			myDraftOpts.add(radioDesktop);
+			Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
+			radioStay.add(new AjaxEventBehavior("onclick") {
+				private static final long serialVersionUID = 1L;
+				
+				protected void onEvent(final AjaxRequestTarget target) {
+					myDraftOpts.setModelObject(STAY_ON_PAGE);
+					target.addComponent(myDraftOpts);
+				}
+			});
+			myDraftOpts.add(radioStay);
+			activityForm.add(myDraftOpts);
+		
+
+		AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			TextField<String> titleField=null;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
 				
-
+				redirected=myDraftOpts.getModelObject();
 				toggleSemanticValidation(false, form,target);
 
 
@@ -222,10 +262,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.addComponent(feedbackPanel);
 			}
 		};
-		saveAsDraft.getButton().setDefaultFormProcessing(false); //disable global validation of the form
-		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
-		saveAsDraft.getButton().add(updateEditors);
-		activityForm.add(saveAsDraft);
+		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
+		saveAsDraftAction.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraftAction.getButton().add(updateEditors);
+		activityForm.add(saveAsDraftAction);
+		AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}
+		};
+		cancelSaveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "hideDraftPanel();"));
+		cancelSaveAsDraft.setVisible(true);
+		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		activityForm.add(cancelSaveAsDraft);
 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
 			@Override
@@ -377,7 +426,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				replaceStr = "new";
 			else
 				replaceStr = String.valueOf(oldId);
-			target.appendJavascript("window.location.replace('/');");
+			if(redirected.equals(STAY_ON_PAGE)){
+				target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
+			}
+			else{
+				target.appendJavascript("window.location.replace('/');");
+			}
 		//}
 		target.addComponent(feedbackPanel);
 	}

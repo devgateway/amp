@@ -53,6 +53,25 @@
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
 									<div style="padding: 2px;" wicket:id="saveAndSubmit" />
 									<div style="padding: 2px;" wicket:id="saveAsDraft" />
+									<div id="saveAsDraftPanel" style="display:none">
+										<div class="hd" style="text-align: left">
+											<wicket:trn>Save as Draft</wicket:trn>
+										</div>
+					    <div class="bd" style="text-align: center">
+					        <p>
+					        <wicket:trn>Where would you like to navigate after save action?</wicket:trn>
+					        </p>
+								<span wicket:id="draftRedirectedGroup"> 
+								<input type="radio" wicket:id="draftRedirectedDesktop">
+																<wicket:trn>Go to the desktop</wicket:trn></input> 
+								<input type="radio" wicket:id="draftStayOnPage">
+																<wicket:trn>Stay on the activity page</wicket:trn></input> </span>
+					      <br />
+					     	<span style="padding: 2px;" wicket:id="saveAsDraftAction" />
+					     	<span style="padding: 2px;" wicket:id="saveAsDraftCanceld" />
+					    </div>
+					    <div class="ft"></div>
+	</div>
 									<div style="padding: 2px;" wicket:id="logframe" />
 									<div style="padding: 2px;" wicket:id="preview" />
 								</div>

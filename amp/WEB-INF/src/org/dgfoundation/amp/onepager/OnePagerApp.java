@@ -87,6 +87,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
 			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
+			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js"));
 			 
 			 mount.clone()
 			 	.setPath("/style/all-23.css")

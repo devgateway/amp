@@ -87,7 +87,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	public ListView<AmpComponentPanel> getFeatureList() {
 		return featureList;
 	}
-	private Integer redirected;
+	private Integer redirected = GO_TO_DESKTOP;
 	
 	
 	/**
@@ -209,34 +209,34 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 			}
 		};
-			saveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "showDraftPanel();"));
-			saveAsDraft.setVisible(true);
-			saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
-			activityForm.add(saveAsDraft);
-			final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
-			Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
-			myDraftOpts.setOutputMarkupId(true);
-			myDraftOpts.setRenderBodyOnly(false);
-			radioDesktop.add(new AjaxEventBehavior("onclick") {
-				private static final long serialVersionUID = 1L;
-	
-				protected void onEvent(final AjaxRequestTarget target) {
-					myDraftOpts.setModelObject(GO_TO_DESKTOP);
-					target.addComponent(myDraftOpts);
-				}
-			});
-			myDraftOpts.add(radioDesktop);
-			Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
-			radioStay.add(new AjaxEventBehavior("onclick") {
-				private static final long serialVersionUID = 1L;
-				
-				protected void onEvent(final AjaxRequestTarget target) {
-					myDraftOpts.setModelObject(STAY_ON_PAGE);
-					target.addComponent(myDraftOpts);
-				}
-			});
-			myDraftOpts.add(radioStay);
-			activityForm.add(myDraftOpts);
+		saveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "showDraftPanel();"));
+		saveAsDraft.setVisible(true);
+		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		activityForm.add(saveAsDraft);
+		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
+		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
+		myDraftOpts.setOutputMarkupId(true);
+		myDraftOpts.setRenderBodyOnly(false);
+		radioDesktop.add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = 1L;
+
+			protected void onEvent(final AjaxRequestTarget target) {
+				myDraftOpts.setModelObject(GO_TO_DESKTOP);
+				target.addComponent(myDraftOpts);
+			}
+		});
+		myDraftOpts.add(radioDesktop);
+		Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
+		radioStay.add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = 1L;
+			
+			protected void onEvent(final AjaxRequestTarget target) {
+				myDraftOpts.setModelObject(STAY_ON_PAGE);
+				target.addComponent(myDraftOpts);
+			}
+		});
+		myDraftOpts.add(radioStay);
+		activityForm.add(myDraftOpts);
 		
 
 		AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -453,7 +453,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				else{
 					WebMarkupContainer tmp = new WebMarkupContainer("quickName");
 					tmp.setVisible(false);
+					item.setVisible(false);
 					item.add(tmp);
+					//item.add(new SimpleAttributeModifier("style", "display: none"));
 				}
 			}
 		};

@@ -40,8 +40,11 @@
 
 	        
 	function ajaxLogin() {
-		$
-				.ajax({
+		$(".error_text_login").remove();
+		$('#result').before("<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
+
+		
+		$.ajax({
 					url : "/j_spring_security_check",
 					type : "POST",
 					data : $("#loginForm").serialize(),

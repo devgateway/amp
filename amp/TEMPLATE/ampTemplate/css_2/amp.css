@@ -84,7 +84,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
 .logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
-.amp_label {padding-top:10px;float:left;font-size:14px;}
+.amp_label {padding-top:10px;font-size:14px;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}

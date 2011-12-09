@@ -213,7 +213,32 @@ div.fakefile2 input{
 			document.getElementById('keywordsDiv').style.display='none';
 		}
 	}
-
+function checkSelectedLanguages(){
+	var submit=true;
+	if($("select[name='exportFormat'] option:selected").val()==2){
+		var selected =$("input[name='selectedLanguages']:checked") ;
+		var num=selected.length;
+		var englishSelected=false;
+		selected.each(function() {
+			if($(this).val()=='en'){
+			englishSelected=true; 
+		}
+			 
+		});
+		if(englishSelected){
+			if(num>2||num==1){
+				submit=false;
+			}	
+		}
+		else{
+			submit=false;
+		}
+	}
+	if(!submit){
+		alert("<digi:trn>Please select only one language in addition to english language</digi:trn>")
+	}
+		return submit;
+	}
 
 </script>
 
@@ -289,7 +314,7 @@ div.fakefile2 input{
                                   <c:set var="translation">
                                     <digi:trn>Export</digi:trn>
                                   </c:set>
-                                  <html:submit style="dr-menu" value="${translation}" property="export"/>
+                                  <html:submit style="dr-menu" value="${translation}" property="export" onclick="return checkSelectedLanguages()"/>
                                 </td>
 							 </tr>
 							 <tr>

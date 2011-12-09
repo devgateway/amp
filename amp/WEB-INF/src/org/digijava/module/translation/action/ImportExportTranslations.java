@@ -38,6 +38,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.form.ImportExportForm;
 import org.digijava.module.translation.importexport.ImportExportOption;
 import org.digijava.module.translation.importexport.ImportType;
@@ -170,17 +171,23 @@ public class ImportExportTranslations extends Action {
 					response.setContentType("application/vnd.ms-excel");
 					response.setHeader("Content-disposition",
 							"inline; filename=translations.xls");
-					List<Message> messages = ImportExportUtil
-							.loadMessages(languagesToExport);
+					List<MessageGroup> messageGroups=ImportExportUtil.loadMessageGroups(languagesToExport);
+					String targetLang=null;
+					for(String lang:languagesToExport){
+						if(!lang.equals("en")){
+							targetLang=lang;
+							break;
+						}
+					}
 					HSSFWorkbook wb = new HSSFWorkbook();
 					HSSFSheet sheet = wb.createSheet();
 					int rownum=0,column=0;
 					HSSFRow row=sheet.createRow(rownum++);
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Message", request));
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Language", request));
-					if(messages!=null){
-						for(Message message: messages){
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("en", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText(targetLang, request));
+					if( messageGroups!=null){
+						for(MessageGroup messageGrp:  messageGroups){
 							column=0;
 							if(rownum==65536){
 								for (int i = 0; i < 3; i++) {
@@ -194,12 +201,25 @@ public class ImportExportTranslations extends Action {
 							row=sheet.createRow(rownum++);
 							if(rownum==1){
 								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
-								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Message", request));
-								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Language", request));
+								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("en", request));
+								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText(targetLang, request));
 							}
-							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getKey());
-							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getMessage());
-							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(message.getLocale());
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(messageGrp.getKey());
+							String englishText=null;
+							String targetText=null;
+							for(Message message :messageGrp.getAllMessages()){
+								if(message.getLocale().equals("en")){
+									englishText=message.getMessage();
+								}
+								else{
+									targetText=message.getMessage();
+								}
+							}
+							englishText=(englishText==null)?"":englishText;
+							targetText=(targetText==null)?"":targetText;
+			
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(englishText);
+							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetText);
 						}
 					}
 					for (int i = 0; i < 3; i++) {

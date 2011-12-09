@@ -408,7 +408,7 @@ public class ImportExportUtil {
 	 * @throws AimException
 	 */
 	@SuppressWarnings("unchecked")
-	private static List<MessageGroup> loadMessageGroups(Set<String> languagesToLoad) throws AimException{
+	public static List<MessageGroup> loadMessageGroups(Set<String> languagesToLoad) throws AimException{
 		List<MessageGroup> result = null;
 		try {
 			Session session = PersistenceManager.getRequestDBSession();

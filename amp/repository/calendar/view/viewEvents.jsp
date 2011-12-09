@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <!-- CSS -->
 <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
@@ -60,6 +63,19 @@
 	                	<tr valign="top">
 	                    	<td valign="top" style="padding:10px;">
 	                    		<jsp:include page="viewEventsFilter.jsp" flush="true"/>
+	                    	</td>
+	                	</tr>
+	                	<tr valign="top">
+	                    	<td valign="top" style="padding:10px;">
+								<feature:display name="Filter" module="Calendar">
+										<field:display name="Run Filter Button" feature="Filter">
+											<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onClick="changeDonorsAndEventTypesState();"/>
+								    	</field:display>
+								    	&nbsp;
+								    	<field:display name="Reset Filter Button" feature="Filter">
+								    		<input class="buttonx" type="button" onclick="javascript:document.location.href = '/calendar/showCalendarView.do?filterInUse=false'" value="<digi:trn>Reset</digi:trn>" />
+										</field:display>
+								</feature:display>
 	                    	</td>
 	                	</tr>
 	            	</table>

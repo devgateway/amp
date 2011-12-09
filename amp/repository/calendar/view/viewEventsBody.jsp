@@ -391,14 +391,6 @@ window.onload=init;
 		</div>		
 		<feature:display name="Filter" module="Calendar">
 			<div style="padding-top:30px;width:250px;height:28px;white-space: nowrap;">
-				<field:display name="Run Filter Button" feature="Filter">
-					<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onClick="changeDonorsAndEventTypesState();"/>
-				</field:display>
-		    	&nbsp;
-		    	<field:display name="Reset Filter Button" feature="Filter">
-		    		<input class="buttonx" type="reset" value="<digi:trn>Reset</digi:trn>" />
-		    	</field:display>
-		    	&nbsp;
 		      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
 		      	<c:if test="${not empty sessionScope.currentMember}">
 		      	&nbsp;

@@ -96,7 +96,7 @@ function showContent(){
 function preview(id)
 {
 	showPanelLoading();
-	var postString="&pageId=2&activityId=" + id+"&isPreview=1&previewPopin=true";
+	var postString="&pageId=2&activityId=" + id+"&isPreview=2&previewPopin=true";
 	//alert(postString);
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
 	var url = "<%=addUrl %>?"+postString;

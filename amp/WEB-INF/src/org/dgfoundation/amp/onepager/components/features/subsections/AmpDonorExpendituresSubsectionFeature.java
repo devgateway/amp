@@ -56,7 +56,8 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				expTableFeature.getEditorList().addItem(fd);
 				target.addComponent(expTableFeature);
-				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+				parent.getFundingInfo().checkChoicesRequired(expTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}

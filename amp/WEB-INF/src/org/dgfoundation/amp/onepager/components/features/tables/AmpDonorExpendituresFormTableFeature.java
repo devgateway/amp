@@ -10,6 +10,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -45,7 +46,14 @@ public class AmpDonorExpendituresFormTableFeature extends
 						"Expenditure Classification",true);
 				classification.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
 				item.add(classification);
-				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"));
+				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
+					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+						super.onClick(target);
+						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						parent.getFundingInfo().checkChoicesRequired(list.getCount());
+						target.addComponent(parent.getFundingInfo());
+					};
+				});
 			}
 		};
 		add(list);

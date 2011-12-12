@@ -11,6 +11,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -68,7 +69,14 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 								"disbursementOrderRejected"), "Rejected", true);
 				item.add(rejected);
 
-				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"));
+				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){
+					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+						super.onClick(target);
+						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						parent.getFundingInfo().checkChoicesRequired(list.getCount());
+						target.addComponent(parent.getFundingInfo());
+					};
+				});
 			}
 		};
 		add(list);

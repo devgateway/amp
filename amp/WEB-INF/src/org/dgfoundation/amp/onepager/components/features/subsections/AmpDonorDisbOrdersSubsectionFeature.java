@@ -121,7 +121,8 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				disbOrdersTableFeature.getEditorList().addItem(fd);
 				target.addComponent(disbOrdersTableFeature);
 				updateDisbOrderPickers(target);
-				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+				parent.getFundingInfo().checkChoicesRequired(disbOrdersTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}

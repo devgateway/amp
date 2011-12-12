@@ -16,6 +16,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -74,7 +75,14 @@ public class AmpMTEFProjectionFormTableFeature extends
 						"fundingAmount", item.getModel(), "Amount", "amount",
 						"Currency", "ampCurrency", "Date", "projectionDate"));
 
-				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"));
+				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"){
+					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+						super.onClick(target);
+						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						parent.getFundingInfo().checkChoicesRequired(list.getCount());
+						target.addComponent(parent.getFundingInfo());
+					};
+				});
 			}
 		};
 		add(list);

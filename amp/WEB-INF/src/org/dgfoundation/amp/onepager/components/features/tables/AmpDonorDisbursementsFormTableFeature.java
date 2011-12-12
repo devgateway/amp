@@ -18,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -95,7 +96,14 @@ public class AmpDonorDisbursementsFormTableFeature extends
 								return arg0.getTitle();
 							}
 						}));
-				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"));
+				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
+					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+						super.onClick(target);
+						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						parent.getFundingInfo().checkChoicesRequired(list.getCount());
+						target.addComponent(parent.getFundingInfo());
+					};
+				});
 			}
 		};
 		add(list);

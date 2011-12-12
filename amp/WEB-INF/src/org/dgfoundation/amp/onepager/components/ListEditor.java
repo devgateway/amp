@@ -26,6 +26,13 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 
 	protected abstract void onPopulateItem(ListItem<T> item);
 
+	public int getCount(){
+		int ret = 0;
+		if (items != null)
+			ret = items.size();
+		return ret;
+	}
+	
 	public void addItem(T value){
 		items.add(value);
 		ListItem<T> item = new ListItem<T>(newChildId(), 

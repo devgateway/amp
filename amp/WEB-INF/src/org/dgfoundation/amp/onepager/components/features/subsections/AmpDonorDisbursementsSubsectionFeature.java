@@ -60,7 +60,8 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 				fd.setTransactionType(Constants.DISBURSEMENT);
 				disbursementsTableFeature.getEditorList().addItem(fd);
 				target.addComponent(disbursementsTableFeature);
-				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+				parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}

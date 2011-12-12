@@ -57,7 +57,9 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				//commitsTableFeature.getList().removeAll();
 				commitsTableFeature.getEditorList().addItem(fd);
 				target.addComponent(commitsTableFeature);
-				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				
+				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+				parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}

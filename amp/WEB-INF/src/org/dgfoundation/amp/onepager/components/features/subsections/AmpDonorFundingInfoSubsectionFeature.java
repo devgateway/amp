@@ -22,10 +22,8 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 	private AmpCategorySelectFieldPanel financingInstrument;
 	private AmpCategorySelectFieldPanel typeOfAssistance;
 
-	public void checkChoicesRequired() {
-		AmpFunding funding = getModel().getObject();
-		if (funding.getFundingDetails() != null
-				&& funding.getFundingDetails().size() > 0) {
+	public void checkChoicesRequired(int size) {
+		if (size > 0) {
 			financingInstrument.getChoiceContainer().setRequired(true);
 			typeOfAssistance.getChoiceContainer().setRequired(true);
 		} else {
@@ -82,15 +80,11 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"Funding Organization Id");
 //		financingId.getNewLine().setVisible(false);
 		add(financingId);
-		
-		checkChoicesRequired();
+		if (model != null && model.getObject() != null && 
+			model.getObject().getFundingDetails() != null &&
+			model.getObject().getFundingDetails().size() > 0)
+			checkChoicesRequired(model.getObject().getFundingDetails().size());
+		else
+			checkChoicesRequired(0);
 	}
-	
-	@Override
-	protected void onBeforeRender() {
-		// TODO Auto-generated method stub
-		super.onBeforeRender();
-		checkChoicesRequired();
-	}
-
 }

@@ -14,6 +14,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -70,7 +71,14 @@ public class AmpDonorCommitmentsFormTableFeature extends
 								return arg0.getTitle();
 							}
 						}));
-				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"));
+				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
+					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+						super.onClick(target);
+						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						parent.getFundingInfo().checkChoicesRequired(list.getCount());
+						target.addComponent(parent.getFundingInfo());
+					};
+				});
 			}
 		};
 		add(list);

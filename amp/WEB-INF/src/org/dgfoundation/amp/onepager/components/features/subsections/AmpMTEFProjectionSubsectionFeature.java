@@ -53,7 +53,8 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				mtefTableFeature.getEditorList().addItem(projection);
 				target.addComponent(mtefTableFeature);
-				AmpFundingItemFeaturePanel parent=(AmpFundingItemFeaturePanel) this.getParent().getParent();
+				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+				parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}

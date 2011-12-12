@@ -281,7 +281,7 @@ YAHOO.namespace("YAHOO.amp");
 	}
 	
 	function checkNumber(number){
-	 	var validChars= "0123456789()+ ";
+	 	var validChars= "0123456789/-()+ ";
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){

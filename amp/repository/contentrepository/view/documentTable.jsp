@@ -77,11 +77,13 @@
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:otherwise>
-									</c:choose>															
-									
+									</c:choose>									
 									&nbsp;
 									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
 										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span>
+									</logic:equal>
+									<logic:equal name="documentData" property="lastVersionIsPublic" value="true">
+										<span style="color:red;font-weigth:bold;font-size:9pt;">*</span>
 									</logic:equal>
 								</td>
 								<td>

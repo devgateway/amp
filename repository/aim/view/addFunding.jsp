@@ -169,6 +169,16 @@
 		}
 	<%}%>
 		
+		
+		<field:display name="Capital Spending" feature="Funding Information">
+			var percenageVal = document.getElementsByName("funding.capitalSpendingPercentage")[0].value;
+			var CapSpendingErr = "<digi:trn key="aim:addFunding:error:incorrectCapSpendingPercent">Incorrect capital spending percentage (needs to be in 0-100 range)</digi:trn>";
+			var intPercentageVal = parseFloat(percenageVal);
+			if (intPercentageVal == null || isNaN(intPercentageVal) || intPercentageVal < 0 || intPercentageVal > 100) {
+				alert (CapSpendingErr);
+				return false;	
+			}
+		</field:display>
 
 
 		return true;
@@ -491,6 +501,20 @@
 									
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.modeOfPayment"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.MODE_OF_PAYMENT_KEY %>" styleClass="inp-text"/>
 									
+								</td>
+							</tr>
+							</field:display>
+							
+							<field:display name="Capital Spending" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+									<b>
+									<a title="<digi:trn>Capital Spending Percentage</digi:trn>">
+									<digi:trn>Capital Spending Percentage</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<html:text size="5" name="aimEditActivityForm"   property="funding.capitalSpendingPercentage"/>%
 								</td>
 							</tr>
 							</field:display>

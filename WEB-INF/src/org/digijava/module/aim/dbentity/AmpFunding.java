@@ -48,6 +48,17 @@ public class AmpFunding implements Serializable {
 	private AmpCategoryValue fundingStatus;
 	private AmpCategoryValue modeOfPayment;
 
+
+    private float capitalSpendingPercentage;
+
+    public float getCapitalSpendingPercentage() {
+        return capitalSpendingPercentage;
+    }
+
+    public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
+        this.capitalSpendingPercentage = capitalSpendingPercentage;
+    }
+
 	// private Set survey;
 
 	/**

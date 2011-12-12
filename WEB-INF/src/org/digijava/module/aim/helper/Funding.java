@@ -46,7 +46,17 @@ public class Funding implements Serializable
 	private String subtotalExpenditures;
 	private String subtotalActualDisbursementsOrders;
 	private String undisbursementbalance;
-   		
+
+    private float capitalSpendingPercentage;
+
+    public float getCapitalSpendingPercentage() {
+        return capitalSpendingPercentage;
+    }
+
+    public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
+        this.capitalSpendingPercentage = capitalSpendingPercentage;
+    }
+
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
 	}

@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
@@ -1171,6 +1170,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
 			            fund.setConditions(ampFunding.getConditions());
 			            fund.setDonorObjective(ampFunding.getDonorObjective());
+                        fund.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
 
 			            /* Get MTEF Projections */
 			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();

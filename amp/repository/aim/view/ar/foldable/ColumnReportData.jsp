@@ -1,5 +1,8 @@
 <%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
+<%@ page import="org.digijava.module.aim.util.ActivityUtil" %>
+<%@ page import="org.digijava.module.aim.helper.TeamMember" %>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -46,22 +49,22 @@ if(columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
 	Cell cell = cellColumn.getByOwner((Long)ownerId);
 	MetaTextCell metaCell = (MetaTextCell) cell;
 	if(metaCell.getColour().equalsIgnoreCase("green")){
-		validateItem = true;
+		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
+		if(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getAmpTeamId() == currentMember.getTeamId() && currentMember.getTeamHead())
+			validateItem = true;
 	}
 }
 %>
 <c:set var="action" value="edit"/>
 <c:set var="actionString" value="Edit"/>
-<c:if test="${currentMember.teamHead}">
-	<%
-	if(validateItem){
-		%>
-		<c:set var="action" value="validate"/>
-		<c:set var="actionString" value="Validate"/>
-		<%
-	}
+<%
+if(validateItem){
 	%>
-</c:if>
+	<c:set var="action" value="validate"/>
+	<c:set var="actionString" value="Validate"/>
+	<%
+}
+%>
 	
 <% 
 		if(bckColor.equals("true")) {

@@ -1035,7 +1035,9 @@ private ActionForward showStep9(ActionMapping mapping,
 	        /*
 	         * If the mode is 'Add', set the Activity Creator as the current logged in user
 	         */
-	        if (eaForm.getIsPreview() != 1) {
+			if (request.getParameter("isPreview")!= null)
+				eaForm.setIsPreview(Integer.parseInt(request.getParameter("isPreview")));
+		    if (eaForm.getIsPreview() != 1) {
 	          if (teamMember != null && (!eaForm.isEditAct()) &&
 	              (eaForm.getIdentification().getActAthEmail() == null ||
 	               eaForm.getIdentification().getActAthEmail().trim().length() == 0)) {

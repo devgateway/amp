@@ -235,7 +235,7 @@ function showContent(){
 function preview(id)
 {
 	showPanelLoading();
-	var postString="&pageId=2&activityId=" + id+"&isPreview=1&previewPopin=true";
+	var postString="&pageId=2&activityId=" + id+"&isPreview=2&previewPopin=true";
 	//alert(postString);
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
 	var url = "<%=addUrl %>?"+postString;
@@ -245,16 +245,14 @@ function preview(id)
 function previewClicked() {
 	var flag = validateForm();
 	if (flag == true) {
-	document.aimEditActivityForm.step.value = "9";
-	document.aimEditActivityForm.pageId.value = "1";
-
-	showPanelLoading();
-	var postString="&edit=true&currentlyEditing=true&previewClicked=true&isPreview=1&previewPopin=true";
-	//alert(postString);
-	<digi:context name="addUrl" property="context/module/moduleinstance/previewActivity.do" />
-	var url = "<%=addUrl %>?"+postString;
-	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
-	
+		document.aimEditActivityForm.pageId.value = "1";
+		document.aimEditActivityForm.step.value = "9";
+		showPanelLoading();
+		var postString="&edit=true&currentlyEditing=true&previewClicked=true&isPreview=2&previewPopin=true";
+		//alert(postString);
+		<digi:context name="addUrl" property="context/module/moduleinstance/previewActivity.do" />
+		var url = "<%=addUrl %>?"+postString;
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 }
 
@@ -1043,6 +1041,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 						</tr>
 					</field:display>
 				</feature:display>
+				<c:if test="${aimEditActivityForm.activityId != null && aimEditActivityForm.activityId != 0}">
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
 						<tr>
@@ -1053,7 +1052,8 @@ of ActivityUtil class also when change step visibility module/feature name -->
 							</td>
 						</tr>
 					</field:display>
-				</feature:display>			
+				</feature:display>		
+				</c:if>	
 				<tr>
 					<td align="center">
 						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveClicked()">

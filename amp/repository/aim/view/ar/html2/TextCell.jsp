@@ -12,7 +12,7 @@
 
 <logic:notEqual name="textCell"  property="translationKey" value="0">
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>" 
-title="<digi:trn><bean:write name="textCell" property="fullTextVersion" filter="false"/></digi:trn>">
+title="${textCell.fullTextVersion}">
 	<%if (textCell.getShortTextVersion().length() > 39){ %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
@@ -33,7 +33,7 @@ title="<digi:trn><bean:write name="textCell" property="fullTextVersion" filter="
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">
 <div style='position:relative;display:none;' id='<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>'> 
-	<bean:write name="textCell" filter="false"/>
+	${textCell.fullTextVersion}
 </div>
 <div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> <digi:trn>Full Text</digi:trn>',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn>full text</digi:trn></u>]
 </div>

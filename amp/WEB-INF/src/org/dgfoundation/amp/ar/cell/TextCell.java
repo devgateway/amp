@@ -22,6 +22,9 @@ public class TextCell extends Cell {
 	
 	protected String value;
 	
+	protected String shortText	= null;
+	protected String fullText	= null;
+	
 	public TextCell() {
 		super();
 		value="";		
@@ -85,25 +88,40 @@ public class TextCell extends Cell {
 	}
 	
 	public String getShortTextVersion() {
-		Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
-		if (!getHasLongVersion())
-			return ptr.matcher(value).replaceAll("");
-		String alteredValue =  value.replaceAll("\\<.*?>","");
-		alteredValue		= ptr.matcher(alteredValue).replaceAll("");
-		if(alteredValue.length()<shortLength)
-			return alteredValue;
-		return alteredValue.substring(0, shortLength-1);
+		if ( this.shortText == null ) {
+			Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
+			Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
+			if (!getHasLongVersion()) {
+				this.shortText	= ptr.matcher(value).replaceAll("").trim(); 
+				this.shortText	= ptr2.matcher(this.shortText).replaceAll("");
+				return this.shortText;
+			}
+			this.shortText	= ptr.matcher(value).replaceAll("").trim();
+			this.shortText 	= this.shortText.replaceAll("\\<.*?>","");
+			this.shortText	= ptr2.matcher(this.shortText).replaceAll("");
+			if(this.shortText.length()<shortLength)
+				return this.shortText;
+			
+			this.shortText	= this.shortText.substring(0, shortLength-1);
+			return this.shortText;
+		}
+		return this.shortText;
+		
 	}
 	
 	
 	public String getFullTextVersion() {
 		//if (!getHasLongVersion())
 		//	return value;
-		
-		Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
-		String alteredValue	= ptr.matcher(value).replaceAll("");
-		alteredValue 		= alteredValue.replaceAll("\\<.*?>", "");
-		return alteredValue;
+		if ( this.fullText == null ) {
+			Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
+			Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
+			this.fullText	= ptr.matcher(value).replaceAll("").trim();
+			this.fullText	= this.fullText.replaceAll("\\<.*?>", "");
+			this.fullText	= ptr2.matcher(this.fullText).replaceAll("");
+			return this.fullText;
+		}
+		return this.fullText;
 
 	}
 	

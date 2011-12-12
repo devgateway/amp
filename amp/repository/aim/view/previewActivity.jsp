@@ -158,7 +158,7 @@ function collapseAll() {
 %>
 
 <digi:context name="digiContext" property="context" />
-<digi:form action="/saveActivity.do" method="post">
+
 <html:hidden property="step" />
 <html:hidden property="editAct" />
 <html:hidden property="identification.approvalStatus" styleId="approvalStatus" />
@@ -179,6 +179,7 @@ function collapseAll() {
 		<td width="10" align="left" vAlign="top">&nbsp;</td>
 		<td align=left vAlign=top>
 			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
+					<c:if test="${aimEditActivityForm.isPreview != 2}">
 					<tr><td>
 					<logic:present name="currentMember" scope="session">
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -276,6 +277,7 @@ function collapseAll() {
 					</table>
 					</logic:present>
 				</td></tr>
+				</c:if>
 				<tr><td>
 					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="bottom">
 						<tr>
@@ -2981,45 +2983,49 @@ function collapseAll() {
 									</field:display>
 									</logic:iterate>
 									</logic:notEmpty>
-									<c:if test="${aimEditActivityForm.pageId == 1}">
-									<tr><td bgcolor="#f0f0f0" align="center" colspan="2">
-										<table cellPadding=3>
-											<tr>
-												<td>
-													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
-												<td>
-													<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>												</td>
-											</tr>
-										</table>
-									</td></tr>
-									</c:if>
-									<c:if test="${aimEditActivityForm.pageId > 2}">
-									<tr><td bgcolor="#f0f0f0" align="center" colspan="2">
-										<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<digi:trn key="btn:back">Back</digi:trn>' />
-									</td></tr>
+									<c:if test="${aimEditActivityForm.isPreview != 2}">
+										<c:if test="${aimEditActivityForm.pageId == 1}">
+										<tr><td bgcolor="#f0f0f0" align="center" colspan="2">
+											<table cellPadding=3>
+												<tr>
+													<td>
+														<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
+													<td>
+														<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>												</td>
+												</tr>
+											</table>
+										</td></tr>
+										</c:if>
+										<c:if test="${aimEditActivityForm.pageId > 2}">
+										<tr><td bgcolor="#f0f0f0" align="center" colspan="2">
+											<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<digi:trn key="btn:back">Back</digi:trn>' />
+										</td></tr>
+										</c:if>
 									</c:if>
 								</table>
 							</td></tr>
 							</table>
 							</td></tr>
-							<tr>
-								<td>
-									<div align="center">
-										<logic:notEmpty name="previousActivity" scope="session">
-											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="previousActivity" paramScope="session"><font size="2"><digi:trn key="aim:previous">Previous</digi:trn></font></digi:link>
-												<logic:notEmpty name="nextActivity" scope="session">
-													<font size="2">
-														&nbsp;-&nbsp;
-													</font>
-												</logic:notEmpty>
-										</logic:notEmpty>
-										<logic:notEmpty name="nextActivity" scope="session">
-											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="nextActivity" paramScope="session"><font size="2"><digi:trn key="aim:next">Next</digi:trn></font></digi:link>
-										</logic:notEmpty>
-
-									</div>
-								</td>
-							</tr>
+							<c:if test="${aimEditActivityForm.isPreview != 2}">
+								<tr>
+									<td>
+										<div align="center">
+											<logic:notEmpty name="previousActivity" scope="session">
+												<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="previousActivity" paramScope="session"><font size="2"><digi:trn key="aim:previous">Previous</digi:trn></font></digi:link>
+													<logic:notEmpty name="nextActivity" scope="session">
+														<font size="2">
+															&nbsp;-&nbsp;
+														</font>
+													</logic:notEmpty>
+											</logic:notEmpty>
+											<logic:notEmpty name="nextActivity" scope="session">
+												<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="nextActivity" paramScope="session"><font size="2"><digi:trn key="aim:next">Next</digi:trn></font></digi:link>
+											</logic:notEmpty>
+	
+										</div>
+									</td>
+								</tr>
+							</c:if>
 						</table>
 						</td></tr>
 					</table>
@@ -3034,8 +3040,7 @@ function collapseAll() {
 </table>
 </td>
 </tr>
-</table></digi:form>
-
+</table>
 <script language="javascript">
 $(document).ready(function(){
 	expandAll();

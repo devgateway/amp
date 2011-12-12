@@ -1,10 +1,12 @@
 package org.digijava.module.translation.util;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -15,12 +17,20 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.translation.action.ImportExportTranslations;
 import org.digijava.module.translation.entity.MessageGroup;
@@ -456,5 +466,74 @@ public class ImportExportUtil {
 			throw new AimException("Cannot load messages for expot.",e);
 		}
 		return messages;
+	}
+	/**
+	 * Used to import translations from xsl file.
+	 * @param inputStreame 
+	 * @param msgSiteId 
+	 * @return list target language 
+	 * @throws AimException
+	 */
+	public static String importExcelFile(InputStream inputStreame, String msgSiteId)  throws AimException{
+		String targetLanguage=null;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			POIFSFileSystem fsFileSystem = new POIFSFileSystem(inputStreame);
+			TranslatorWorker worker = TranslatorWorker.getInstance("");
+			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
+			HSSFSheet hssfSheet = workBook.getSheetAt(0);
+			Iterator<Row> rowIterator = hssfSheet.rowIterator();
+			targetLanguage=null;
+			while (rowIterator.hasNext()) {
+				Row hssfRow = rowIterator.next();
+				if(hssfRow.getRowNum()==0){
+					targetLanguage=hssfRow.getCell(2).getStringCellValue();
+					if(!DbUtil.isAvailableLanguage(targetLanguage)){
+						return null;
+					}
+					continue;
+				}
+				
+				String key=hssfRow.getCell(0).getStringCellValue();
+				Message existingMessageInTargetLang =ImportExportUtil.getCacheSearcher().get(key,targetLanguage,msgSiteId);
+				Message existingMessageInEnglish =ImportExportUtil.getCacheSearcher().get(key,"en",msgSiteId);
+				String englishText=hssfRow.getCell(1).getStringCellValue();
+				String targetText=hssfRow.getCell(2).getStringCellValue();
+				//save only new trns
+				if (existingMessageInTargetLang == null) {
+					saveMsg(msgSiteId, session, worker, targetLanguage,
+							targetText, key);
+				}
+				if(existingMessageInEnglish==null){
+					saveMsg(msgSiteId, session, worker, "en",
+							englishText, key);
+				}
+				
+			}
+		}
+		catch(NullPointerException e){
+			logger.error("file is not ok");
+			throw new AimException("Cannot import messages",e);
+		}
+		catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot import messages",e);
+		}
+		return targetLanguage;
+
+	}
+
+	private static void saveMsg(String msgSiteId, Session session,
+			TranslatorWorker worker, String targetLanguage, String msgBodyText,
+			String key) throws WorkerException {
+		Message message = new Message();
+		message.setKey(key);
+		message.setLocale(targetLanguage);
+		message.setSiteId(msgSiteId);
+		message.setMessage(msgBodyText);
+		message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
+		message.setLastAccessed(message.getCreated());
+		session.save(message);
+		worker.refresh(message);
 	}
 }

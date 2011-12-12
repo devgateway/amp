@@ -79,6 +79,27 @@ public class DbUtil {
 
 		return languages;
 	}
+	public static boolean isAvailableLanguage(String code) throws AdminException {
+		boolean available=false;
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			Query q = session.createQuery("from " +
+					Locale.class.getName() +
+			" l where l.available=true and l.code=:code");
+			q.setString("code", code);
+			if(q.uniqueResult()!=null){
+				available=true;
+			}
+		}
+		catch (Exception ex) {
+			logger.debug("Unable to get language from database", ex);
+			throw new AdminException(
+					"Unable to get language list from database", ex);
+		}
+
+		return available;
+	}
 
 	public static void createSite(Site site) throws AdminException {
 		Session sess = null;

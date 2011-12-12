@@ -345,7 +345,7 @@ function checkSelectedLanguages(){
                                   <c:set var="translation">
                                     <digi:trn >Import</digi:trn>
                                   </c:set>
-                                  <html:submit style="dr-menu" value="${translation}" property="import"/><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" alt="" title='<digi:trn>Provide xml files only</digi:trn>'/></td>
+                                  <html:submit style="dr-menu" value="${translation}" property="import"/></td>
 							 </tr>
 					</digi:form>
 

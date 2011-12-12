@@ -17,14 +17,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -33,11 +28,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
-import org.apache.xerces.parsers.DOMParser;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LuceneWorker;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.form.ImportExportForm;
 import org.digijava.module.translation.importexport.ImportExportOption;
@@ -46,10 +43,6 @@ import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ImportExportUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 /**
  * Handles all steps of translation import and export wizard in AMP admin menu.
@@ -84,6 +77,32 @@ public class ImportExportTranslations extends Action {
 			FormFile uploadedFile = ioForm.getFileUploaded();
 			byte[] fileData = uploadedFile.getFileData();
 			InputStream inputStream = new ByteArrayInputStream(fileData);
+			if(uploadedFile.getContentType().equals("application/vnd.ms-excel")){
+				Site site = RequestUtils.getSite(request);
+				try {
+					String targetLanguage = ImportExportUtil.importExcelFile(
+							inputStream, site.getId().toString());
+					if (targetLanguage == null) {
+						ActionMessages errors = new ActionMessages();
+						errors.add(
+								ActionMessages.GLOBAL_MESSAGE,
+								new ActionMessage(
+										"error.aim.importErrorFileContentLanguageTranslation"));
+						saveErrors(request, errors);
+					} else {
+						String[] selectedLanguages = { "en", targetLanguage };
+						recreateLucIndex(selectedLanguages);
+					}
+				} catch (Exception ex) {
+					ActionMessages errors = new ActionMessages();
+					errors.add(
+							ActionMessages.GLOBAL_MESSAGE,
+							new ActionMessage(
+									"error.aim.importErrorFileContentExcelTranslation"));
+					saveErrors(request, errors);
+				}
+				return mapping.findForward("forward");
+			}
 			request.getSession().setAttribute(SESSION_FILE, uploadedFile);
 			try {
 				Unmarshaller unmarshaller = ImportExportUtil.getUnmarshaler();
@@ -130,17 +149,7 @@ public class ImportExportTranslations extends Action {
 			//Do work - import translation
 			ImportExportUtil.importTranslations(translations, option);
 			
-			//recreating indexes for help
-			ServletContext context = getServlet().getServletContext();
-			LangSupport[] langs = LangSupport.values();
-			for (LangSupport lang : langs) {
-				TrnLuceneModule module = new TrnLuceneModule(lang);
-				for (String selectedLanguage : selectedLanguages) {
-					if (lang.getLangCode().equals(selectedLanguage)) {
-						LuceneWorker.recreateIndext(module, context);
-					}
-				}
-			}
+			recreateLucIndex(selectedLanguages);
 			
 			request.getSession().removeAttribute(SESSION_FILE);
 			request.getSession().removeAttribute(SESSION_ROOT);
@@ -184,8 +193,8 @@ public class ImportExportTranslations extends Action {
 					int rownum=0,column=0;
 					HSSFRow row=sheet.createRow(rownum++);
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("en", request));
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText(targetLang, request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue("en");
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetLang);
 					if( messageGroups!=null){
 						for(MessageGroup messageGrp:  messageGroups){
 							column=0;
@@ -199,11 +208,6 @@ public class ImportExportTranslations extends Action {
 								 rownum=0;
 							}
 							row=sheet.createRow(rownum++);
-							if(rownum==1){
-								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
-								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("en", request));
-								row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText(targetLang, request));
-							}
 							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(messageGrp.getKey());
 							String englishText=null;
 							String targetText=null;
@@ -244,6 +248,21 @@ public class ImportExportTranslations extends Action {
 			
 		}
 		return mapping.findForward("forward");
+	}
+
+	private void recreateLucIndex(String[] selectedLanguages)
+			throws DgException {
+		//recreating indexes for help
+		ServletContext context = getServlet().getServletContext();
+		LangSupport[] langs = LangSupport.values();
+		for (LangSupport lang : langs) {
+			TrnLuceneModule module = new TrnLuceneModule(lang);
+			for (String selectedLanguage : selectedLanguages) {
+				if (lang.getLangCode().equals(selectedLanguage)) {
+					LuceneWorker.recreateIndext(module, context);
+				}
+			}
+		}
 	}
 	
 	private Map<String,ImportType> getImportTypesByLanguage(HttpServletRequest request,String[] languagesToProcess){

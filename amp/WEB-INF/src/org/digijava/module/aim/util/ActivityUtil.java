@@ -3414,33 +3414,36 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  return execRate;
   	}
 
-  	public static List<AmpActivityVersion> getLastUpdatedActivities(AmpTeam team) {
+  	public static List<AmpActivityVersion> getLastUpdatedActivities(AmpTeam team, Set teamAssignedOrgs) {
 		List col = null;
 		Session session = null;
 		Query qry = null;
-
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			//String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct group by ampAct.ampActivityGroup having count(*) > 1 order by ampAct.ampActivityGroup";
-			//String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct order by ampAct.ampActivityId desc";
-			/*
-			String queryString = "select ampAct from "
+			String queryString;
+			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
+				queryString = "select distinct ampAct from "
 					+ AmpActivityVersion.class.getName()
-					+ " ampAct left outer join "
-					+ AmpActivityGroup.class.getName()
-					+ " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
-			*/
-			String queryString = "select ampAct from "
-				+ AmpActivityVersion.class.getName()
-				+ " ampAct"
-				+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
+					+ " ampAct left join ampAct.orgrole orgRole"
+					+ " left join ampAct.funding fundingDetail"
+					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and (ampAct.team.ampTeamId = :teamId  "
+					+ " OR fundingDetail.ampDonorOrgId.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + ") "
+					+ " OR orgRole.organisation.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + "))"
+					+ " and ampAct.team is not null "
+					+ " order by ampAct.ampActivityId desc";
+			}
+			else
+			{
+				queryString = "select ampAct from "
+					+ AmpActivityVersion.class.getName()
+					+ " ampAct"
+					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
+			}
 			qry = session.createQuery(queryString).setMaxResults(5);
 			qry.setLong("teamId", team.getAmpTeamId());
-			//qry.setParameter(0, team.getAmpTeamId());
 			col = qry.list();
 		} catch (Exception e1) {
 			logger.error("Could not retrieve the activities list from getLastUpdatedActivities", e1);
-			//e1.printStackTrace();
 		}
 		return col;
 	}	

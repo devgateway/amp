@@ -2,6 +2,7 @@ package org.digijava.module.versioning.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,11 +28,16 @@ public class ViewLastVersions extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		Set ampTeams = null;
+
 		AmpTeam currentTeam = null;
 		if (tm != null) {
 			currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 		}
-		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam);
+		ampTeams = TeamUtil.getRelatedTeamsForMember(tm);
+		Set teamAssignedOrgs = TeamUtil.getComputedOrgs(ampTeams);
+		
+		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam, teamAssignedOrgs);
 		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
 		return null;
 	}

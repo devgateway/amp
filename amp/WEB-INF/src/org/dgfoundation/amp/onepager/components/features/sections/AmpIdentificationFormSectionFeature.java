@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,7 +18,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetField;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpBudgetClassificationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
@@ -36,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Identification section in activity form. This is also an AMP feature
@@ -117,7 +119,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 							CategoryConstants.ACCHAPTER_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(acChapter);
 			
-			AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
+			final AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
 			budgetExtras.setOutputMarkupId(true);
 
 			WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
@@ -127,12 +129,57 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			WebMarkupContainer budgetClassificationContainer = new WebMarkupContainer("budgetClassificationContainer");
 			budgetClassificationContainer.setOutputMarkupId(true);
-			AmpBudgetClassificationField budgetClassification = new AmpBudgetClassificationField("budgetClassification", am, "Budget Classification");
+			final AmpBudgetClassificationField budgetClassification = new AmpBudgetClassificationField("budgetClassification", am, "Budget Classification");
 			budgetClassification.setOutputMarkupId(true);
 			budgetClassificationContainer.add(budgetClassification);
 			add(budgetClassificationContainer);
 
-			AmpActivityBudgetField activityBudget = new AmpActivityBudgetField("activityBudget", new PropertyModel(am, "budget"), "Activity Budget", budgetExtras, budgetClassification);
+			//AmpActivityBudgetField activityBudget = new AmpActivityBudgetField("activityBudget", new PropertyModel(am, "budget"), "Activity Budget", budgetExtras, budgetClassification);
+			//add(activityBudget);
+
+			final AmpCategorySelectFieldPanel activityBudget = new AmpCategorySelectFieldPanel(
+					"activityBudget",
+					CategoryConstants.ACTIVITY_BUDGET_KEY,
+					new AmpCategoryValueByKeyModel(
+							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+							CategoryConstants.ACTIVITY_BUDGET_KEY),
+							CategoryConstants.ACTIVITY_BUDGET_NAME, true, true, null, AmpFMTypes.MODULE);
+			activityBudget.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+				{
+					updateBudget();
+				}
+				
+				private void toggleExtraFields(boolean b){
+					budgetExtras.setVisible(b);
+					budgetClassification.toggleActivityBudgetVisibility(b);
+				}
+				
+				private void updateExtraFields(AjaxRequestTarget target){
+					target.addComponent(budgetExtras.getParent());
+					budgetClassification.addToTargetActivityBudget(target);
+				}
+				
+				private void updateBudget(){
+					AmpCategoryValue obj = (AmpCategoryValue) activityBudget.getChoiceContainer().getModelObject();
+					AmpCategoryValue budgetOn = null;
+					try {
+						budgetOn = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+					} catch (Exception e) {
+						logger.error(e);
+					}	
+				    long budgetOnId = (budgetOn==null)?1:budgetOn.getId();
+					if (obj != null && obj.getId() == budgetOnId) // "On" was selected
+						toggleExtraFields(true);
+					else
+						toggleExtraFields(false);
+				}
+				
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					updateBudget();
+					updateExtraFields(target);
+				}
+			});
 			add(activityBudget);
 
 			AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(

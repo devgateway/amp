@@ -28,15 +28,11 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 public class FundingAdded extends Action {
 
@@ -127,6 +123,8 @@ public class FundingAdded extends Action {
 			newFund.setConditions(currentFunding.getFundingConditions());
 			newFund.setActStartDate(currentFunding.getActualStartDate());
 			newFund.setActCloseDate(currentFunding.getActualCompletionDate());
+            newFund.setCapitalSpendingPercentage(currentFunding.getCapitalSpendingPercentage());
+
 			//
 			Collection mtefProjections=new ArrayList();
 			if (currentFunding.getFundingMTEFProjections() != null) {

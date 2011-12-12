@@ -2477,7 +2477,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private long transIndexId;
         private String fundingCurrCode;
         private int selectedMTEFProjectionYear;
-        
+
+        private float capitalSpendingPercentage;
+
+        public float getCapitalSpendingPercentage() {
+            return capitalSpendingPercentage;
+        }
+
+        public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
+            this.capitalSpendingPercentage = capitalSpendingPercentage;
+        }
+
         public Collection<FundingPledges> getPledgeslist() {
 			return pledgeslist;
 		}

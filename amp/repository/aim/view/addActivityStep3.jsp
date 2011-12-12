@@ -578,7 +578,7 @@
                                                                             <table width="100%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
                                                                             <field:display name="Funding Organization Id" feature="Funding Information"></field:display>
                                                                               <tr>
-                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                <td bgcolor="#FFFFFF" align="left" width="200">
                                                                                   <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
                                                                                     Funding Organization Id</digi:trn></a>
                                                                                 </td>
@@ -663,6 +663,20 @@
                                                                                 </td>
          	                                                                     </tr>
 																			</field:display>
+																			
+																			
+                                                                              <field:display name="Capital Spending" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn>Capital Spending Percentage</digi:trn>"><digi:trn>Capital Spending Percentage</digi:trn></a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                 	<bean:write name="funding" property="capitalSpendingPercentage"/>&nbsp;%
+                                                                                </td>
+         	                                                                     </tr>
+																																							</field:display>																			
+																			
 
 																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>

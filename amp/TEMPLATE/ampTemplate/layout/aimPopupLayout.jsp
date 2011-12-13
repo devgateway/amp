@@ -18,9 +18,7 @@
 				<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
 				<c:set var="key">aim:pagetitle:<%=key%><%=extTitle%></c:set>
 				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn>   
-				<digi:trn key="${key}">
-					<%=title%> <%=extTitle%>
-				</digi:trn>
+				<digi:trn><%=title%></digi:trn> ${extTitle}
 		</logic:present>
 	
 		<logic:notPresent name="extraTitle" scope="request">

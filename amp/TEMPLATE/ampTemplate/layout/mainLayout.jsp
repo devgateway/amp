@@ -37,9 +37,7 @@
 		<title>
 			<c:set var="key">aim:pagetitle:<%=key%><%=extTitle%></c:set>
 			<digi:trn>Aid Management Platform </digi:trn> 
-			<digi:trn key="${key}">
-				<%=title%> <%=extTitle%>
-			</digi:trn>
+			<digi:trn><%=title%></digi:trn> ${extTitle}
 		</title>
 	</logic:present>
 	<logic:notPresent name="extraTitle" scope="request">

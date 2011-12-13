@@ -81,7 +81,7 @@
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="80px" />
-				<div style="width: 76%; height: 100%; padding: 0px; float: left;">
+				<div style="width: 76%; height: 100%; padding: 0px; float: left; position: relative;">
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />

@@ -140,8 +140,8 @@ public class getNPDgraph extends Action {
                 int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                	String key="aim:NPD:"+indicator.getName();
-                	String displayLabel = CategoryManagerUtil.translate(key, request, indicator.getName());
+                	//String key="aim:NPD:"+indicator.getName();
+                	String displayLabel = indicator.getName();
                     
                     
                     try {

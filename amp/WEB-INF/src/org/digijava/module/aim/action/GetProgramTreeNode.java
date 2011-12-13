@@ -55,7 +55,7 @@ public class GetProgramTreeNode
       Collection<AmpTheme> themes = ProgramUtil.getAllThemes(true);
 
       // Construct XML tree
-      String xml = ProgramUtil.getThemesHierarchyXML(themes,request);
+      String xml = ProgramUtil.getThemesHierarchyXML(themes);
 
       // return XML
       out = new PrintWriter(outputStream, true);

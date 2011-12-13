@@ -1720,7 +1720,7 @@ public class ProgramUtil {
 		}
 
 
-        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes, HttpServletRequest request) throws Exception {
+        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes) throws Exception {
             String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
             result += "<progTree>\n";
             if (allAmpThemes != null && allAmpThemes.size() > 0) {
@@ -1732,7 +1732,7 @@ public class ProgramUtil {
                 //get XML from each top level item. They will handle subitems.
                 for (Iterator treeItemIter = themeTree.iterator(); treeItemIter.hasNext(); ) {
                     TreeItem item = (TreeItem) treeItemIter.next();
-                    result += item.getXml(request);
+                    result += item.getXml();
                 }
             }
             result += "</progTree>\n";
@@ -1957,7 +1957,7 @@ public class ProgramUtil {
 				retVal += "   </td>";
 			}
 			retVal += "   <td  class=\"progName inside\">";
-			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+getTrn("aim:admin:themeTree:theme_name",((AmpTheme) item.getMember()).getEncodeName(), request)+"</a>\n";
+			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+((AmpTheme) item.getMember()).getEncodeName()+"</a>\n";
 			retVal += "   </td>";
 			retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ ((AmpTheme) item.getMember()).getThemeCode() + ")</td>";
 			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";

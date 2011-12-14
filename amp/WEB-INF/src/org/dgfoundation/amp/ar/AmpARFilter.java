@@ -888,7 +888,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 				ServletContext ampContext = session.getServletContext();
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
-
+				if(request.getParameter("searchMode") != null)
+					searchMode = request.getParameter("searchMode");
 				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
 				logger.info("New lucene search !");
 				if(hits!=null)

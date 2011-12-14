@@ -592,7 +592,7 @@ public class ExportToPDF extends Action {
 		            //PdfPCell sectorProfTitleCell = new PdfPCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONT));
 		            //sectorProfTitleCell.setColspan(colspan);
 		            //sectorProfTbl.addCell(sectorProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell = new PdfPCell(new Paragraph(sectorTrn, HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            sectorProfTbl.addCell(cell);
 		            singleRow = sectorProfRows[1].split(">");
@@ -645,7 +645,7 @@ public class ExportToPDF extends Action {
 		            //PdfPCell regionProfTitleCell = new PdfPCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONT));
 		            //regionProfTitleCell.setColspan(colspan);
 		            //regionProfTbl.addCell(regionProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell = new PdfPCell(new Paragraph(regionTrn, HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            regionProfTbl.addCell(cell);
 		            singleRow = regionProfRows[1].split(">");
@@ -698,7 +698,7 @@ public class ExportToPDF extends Action {
 		            //PdfPCell donorProfTitleCell = new PdfPCell(new Paragraph(donorProfTrn + " (" + currName + ")", HEADERFONT));
 		            //donorProfTitleCell.setColspan(colspan);
 		            //donorProfTbl.addCell(donorProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell = new PdfPCell(new Paragraph(donorTrn, HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            donorProfTbl.addCell(cell);
 		            singleRow = donorProfRows[1].split(">");

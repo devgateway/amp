@@ -666,7 +666,7 @@ public class ExportToWord extends Action {
 		            //sectorProfTitleCell.setColspan(colspan);
 		            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //sectorProfTbl.addCell(sectorProfTitleCell);
-		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            sectorProfTbl.addCell(cell);
@@ -727,7 +727,7 @@ public class ExportToWord extends Action {
 		            //regionProfTitleCell.setColspan(colspan);
 		            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //regionProfTbl.addCell(regionProfTitleCell);
-		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell = new RtfCell(new Paragraph(regionTrn, HEADERFONTWHITE));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            regionProfTbl.addCell(cell);
@@ -788,7 +788,7 @@ public class ExportToWord extends Action {
 		            //donorProfTitleCell.setColspan(colspan);
 		            //donorProfTitleCell.setBackgroundColor(TITLECOLOR);
 		            //donorProfTbl.addCell(donorProfTitleCell);
-		            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell = new RtfCell(new Paragraph(donorTrn, HEADERFONTWHITE));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            cell.setBackgroundColor(TITLECOLOR);
 		            donorProfTbl.addCell(cell);

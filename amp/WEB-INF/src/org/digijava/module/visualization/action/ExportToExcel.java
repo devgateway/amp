@@ -890,7 +890,7 @@ public class ExportToExcel extends Action {
 	            cellNum = 0;
 	            row = sheet6.createRow(rowNum++);
 	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(yearTrn);
+	            headerText = new HSSFRichTextString(sectorTrn);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            singleRow = sectorProfRows[1].split(">");
@@ -967,7 +967,7 @@ public class ExportToExcel extends Action {
 	            cellNum = 0;
 	            row = sheet7.createRow(rowNum++);
 	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(yearTrn);
+	            headerText = new HSSFRichTextString(regionTrn);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            singleRow = regionProfRows[1].split(">");
@@ -1044,7 +1044,7 @@ public class ExportToExcel extends Action {
 	            cellNum = 0;
 	            row = sheet8.createRow(rowNum++);
 	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(yearTrn);
+	            headerText = new HSSFRichTextString(donorTrn);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            singleRow = donorProfRows[1].split(">");

@@ -11,6 +11,8 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -73,6 +75,10 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
 		final AmpPercentageCollectionValidatorField<AmpActivitySector> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivitySector>(
 				"sectorPercentageTotal", listModel, "sectorPercentageTotal") {
 			@Override
@@ -80,12 +86,12 @@ public class AmpSectorsFormTableFeature extends
 				return item.getSectorPercentage();
 			}
 		};
-
+		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 
 		final AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
 				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator");
-
+		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(minSizeCollectionValidationField);
 		
 		
@@ -96,7 +102,7 @@ public class AmpSectorsFormTableFeature extends
 				return t.getSectorId().getName();
 		 	}	
 		};
-
+		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
 		final AmpTreeCollectionValidatorField<AmpActivitySector> treeCollectionValidationField = new AmpTreeCollectionValidatorField<AmpActivitySector>(
 				"treeSectorsValidator", listModel, "treeSectorsValidator") {
@@ -105,7 +111,7 @@ public class AmpSectorsFormTableFeature extends
 						return t.getSectorId();
 					}			
 		};
-
+		treeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(treeCollectionValidationField);
 		 
 

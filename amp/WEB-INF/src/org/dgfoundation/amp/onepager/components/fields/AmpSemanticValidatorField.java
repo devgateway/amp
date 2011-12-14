@@ -15,7 +15,7 @@ import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
  */
 public abstract class AmpSemanticValidatorField <H> extends AmpHiddenFieldPanel <H> implements IAjaxIndicatorAware {
 
-	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+	private AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 	protected AmpSemanticValidator<H> semanticValidator;
 
 	public AmpSemanticValidator getSemanticValidator() {
@@ -34,5 +34,11 @@ public abstract class AmpSemanticValidatorField <H> extends AmpHiddenFieldPanel 
 		return indicatorAppender.getMarkupId();
 	}
 
+	public AjaxIndicatorAppender getIndicatorAppender(){
+		return indicatorAppender;
+	}
 	
+	public void setIndicatorAppender(AjaxIndicatorAppender i){
+		this.indicatorAppender = i;
+	}
 }

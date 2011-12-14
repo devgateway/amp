@@ -1136,6 +1136,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		if (filterForm.getIndexString() != null) {
 			arf.setIndexText(filterForm.getIndexString());
+			arf.setSearchMode(filterForm.getSearchMode());
 		}
 
 		arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear().longValue() == -1 ? null : new Integer(filterForm.getFromYear().intValue()));

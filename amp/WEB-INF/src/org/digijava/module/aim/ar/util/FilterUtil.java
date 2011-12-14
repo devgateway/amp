@@ -188,6 +188,7 @@ public class FilterUtil {
 		
 		form.setText( filter.getText() );
 		form.setIndexString( filter.getIndexText() );
+		form.setSearchMode(filter.getSearchMode());
 		
 		form.setFromYear( filter.getYearFrom()!=null ? filter.getYearFrom().longValue() : null );
 		form.setToYear( filter.getYearTo()!=null ? filter.getYearTo().longValue() : null );

@@ -154,6 +154,12 @@ StopWatch.next("Filters", true);
 		<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
 			src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
 			<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
+			&nbsp;
+			<html:select property="searchMode" styleClass="inp-text" style="width: 150px;">
+				<option value="0"><digi:trn>Any keyword</digi:trn></option>
+				<option value="1"><digi:trn>All keywords</digi:trn></option>
+			</html:select>
+			
 </div>
 <div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;

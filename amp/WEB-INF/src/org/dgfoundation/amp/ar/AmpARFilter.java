@@ -271,6 +271,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private String text;
 	private String indexText;
+	private String searchMode;
 	private static final String initialPledgeFilterQuery = "SELECT distinct(id) FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
@@ -888,7 +889,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, request.getParameter("searchMode") );
+				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
 				logger.info("New lucene search !");
 				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {
@@ -1756,6 +1757,14 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	public void setProjectImplementingUnits(
 			Set<AmpCategoryValue> projectImplementingUnits) {
 		this.projectImplementingUnits = projectImplementingUnits;
+	}
+
+	public void setSearchMode(String searchMode) {
+		this.searchMode = searchMode;
+	}
+
+	public String getSearchMode() {
+		return searchMode;
 	}
 
 

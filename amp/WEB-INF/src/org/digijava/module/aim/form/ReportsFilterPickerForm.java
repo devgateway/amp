@@ -106,6 +106,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] planMinRanks;
 	private String text;
 	private String indexString;
+	private String searchMode;
 	private String pageSize; // the specific page sizes
 
 	private Boolean governmentApprovalProcedures;
@@ -1039,6 +1040,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setAllgroupingseparators(Collection<String> allgroupingseparators) {
 		this.allgroupingseparators = allgroupingseparators;
+	}
+
+	public void setSearchMode(String searchMode) {
+		this.searchMode = searchMode;
+	}
+
+	public String getSearchMode() {
+		return searchMode;
 	}	
 	
 	

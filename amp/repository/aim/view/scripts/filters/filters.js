@@ -6,6 +6,9 @@ function resetFilter(){
 		if (aimReportsFilterPickerForm.indexString)
 			aimReportsFilterPickerForm.indexString.value="";
 			
+		if (aimReportsFilterPickerForm.searchMode)
+			aimReportsFilterPickerForm.searchMode.value="0";
+
 		if (aimReportsFilterPickerForm.fromDate)
 			aimReportsFilterPickerForm.fromDate.value="";
 		

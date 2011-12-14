@@ -1511,8 +1511,7 @@ function getValueToFlash(idContainer, field){
 function updateGraph(e, chartName){
 
 	//Get array of graphs
-	var allGraphs = document.getElementsByName("flashContent");
-	
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	//Iterate and refresh the graph
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal

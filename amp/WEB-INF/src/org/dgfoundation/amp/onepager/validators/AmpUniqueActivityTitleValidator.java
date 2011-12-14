@@ -41,6 +41,8 @@ public class AmpUniqueActivityTitleValidator implements IValidator<String> {
 				error.addMessageKey("AmpUniqueActivityTitleValidator");
 				if(activityByName.getTeam()!=null) 
 					error.setVariable("workspace", activityByName.getTeam().getName());
+				else 
+					error.setVariable("workspace", " ");
 				validatable.error(error);
 			}
 

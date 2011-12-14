@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -38,6 +39,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -51,6 +53,16 @@ import org.hibernate.Session;
  */
 public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 	private final ListView<IndicatorActivity> list;
+	
+	private boolean titleSelected;
+	private boolean codeSelected;
+	private WebMarkupContainer indicatorFeedbackContainer;
+	private Label indicatorFeedbackLabel;
+	
+	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please type indicator name and code");
+	static final private String noCodeMsg = "*" + TranslatorUtil.getTranslatedText("Please choose indicator code");
+	static final private String noTitleMsg = "*" + TranslatorUtil.getTranslatedText("Please choose a unique title");
+	
 	public AmpMEFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
@@ -121,11 +133,13 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		
 		AmpTextFieldPanel<String> indName = new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.MODULE);
 		//indName.getTextContainer().setRequired(true);
+		indName.setOutputMarkupId(true);
 		add(indName);
 		
 		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.MODULE));
 		AmpTextFieldPanel<String> indCode = new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.MODULE);
 		//indCode.getTextContainer().setRequired(true);
+		indCode.setOutputMarkupId(true);
 		add(indCode);
 		
 		AmpDatePickerFieldPanel datePicker = new AmpDatePickerFieldPanel("indDate", new PropertyModel<Date>(newInd, "creationDate"), "Creation Date");
@@ -231,28 +245,50 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.MODULE) {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				try {
-					Session session = PersistenceManager.getSession();
-//beginTransaction();
-					session.save(newInd.getObject());
-					//tr.commit();
-					
-					IndicatorActivity ia = new IndicatorActivity();
-					ia.setActivity(am.getObject());
-					ia.setIndicator(newInd.getObject());
-					am.getObject().getIndicators().add(ia);
-					//setModel.getObject().add(ia);
-					
-					newInd.setObject(getNewIndicator());
-					
-					target.addComponent(list.getParent());
-					target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
-				} catch (Exception e) {
-					logger.error(e);
+				AmpIndicator indicator =newInd.getObject(); 
+				if(indicator.getName()!=null && indicator.getName().trim().length()>0 &&
+						indicator.getCode()!=null && indicator.getCode().length()>0){
+					try {
+						Session session = PersistenceManager.getSession();
+						//beginTransaction();
+						session.save(indicator);
+						//tr.commit();
+						
+						updateVisibility(newInd);
+						target.addComponent(indicatorFeedbackContainer);
+						
+						IndicatorActivity ia = new IndicatorActivity();
+						ia.setActivity(am.getObject());
+						ia.setIndicator(indicator);
+						am.getObject().getIndicators().add(ia);
+						//setModel.getObject().add(ia);
+						
+						newInd.setObject(getNewIndicator());
+						
+						target.addComponent(list.getParent());
+						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+					} catch (Exception e) {
+						logger.error(e);
+					}
+				}else{
+					updateVisibility(newInd);
+					target.addComponent(indicatorFeedbackContainer);
 				}
+				
 			}
 		};
+		
 		add(addIndicator);
+
+		indicatorFeedbackContainer = new WebMarkupContainer("indicatorFeedbackContainer");
+		indicatorFeedbackLabel = new Label("indicatorFeedbackLabel", new Model(defaultMsg));
+		indicatorFeedbackContainer.setOutputMarkupId(true);
+		indicatorFeedbackContainer.setOutputMarkupPlaceholderTag(true);
+		indicatorFeedbackContainer.setVisible(false);
+		indicatorFeedbackContainer.add(indicatorFeedbackLabel);
+		add(indicatorFeedbackContainer);
+		
+		
 	}
 	
 	private AmpIndicator getNewIndicator() {
@@ -264,6 +300,42 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 	private IModel<AmpIndicator> getNewIndicatorModel() {
 		return new Model(getNewIndicator());
+	}
+	
+	protected boolean updateVisibility(IModel<AmpIndicator> indicatorModel){
+		AmpIndicator ind = indicatorModel.getObject();
+		boolean oldCodeSelected = codeSelected;
+		boolean oldTitleSelected = titleSelected;
+		if (ind.getCode() == null)
+			codeSelected = false;
+		else
+			codeSelected = true;
+		
+		if (ind.getName() == null || ind.getName() == "")
+			titleSelected = false;
+		else
+			titleSelected = true;
+
+		if (codeSelected && titleSelected){
+			indicatorFeedbackContainer.setVisible(false);
+		}
+		else{
+			indicatorFeedbackContainer.setVisible(true);
+			if (!codeSelected && !titleSelected){
+				indicatorFeedbackLabel.setDefaultModelObject(defaultMsg);
+			}
+			else{
+				if (!codeSelected)
+					indicatorFeedbackLabel.setDefaultModelObject(noCodeMsg);
+				else
+					indicatorFeedbackLabel.setDefaultModelObject(noTitleMsg);
+			}
+		}
+		
+		if ((oldTitleSelected == titleSelected) && (oldCodeSelected == codeSelected))
+			return false;
+		else
+			return true;
 	}
 
 }

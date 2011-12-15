@@ -42,17 +42,24 @@
 
 <%
 //This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon. 
+Boolean showColumn = false;
 Boolean validateItem = false;
-if(columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
+
+TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
+if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
+	showColumn = true;
+}
+
+if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
 {
 	org.dgfoundation.amp.ar.CellColumn cellColumn = (org.dgfoundation.amp.ar.CellColumn)columnReport.getItem(0);
 	Cell cell = cellColumn.getByOwner((Long)ownerId);
 	MetaTextCell metaCell = (MetaTextCell) cell;
 	if(metaCell.getColour().equalsIgnoreCase("green")){
-		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
 		if(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getAmpTeamId() == currentMember.getTeamId() && currentMember.getTeamHead())
 			validateItem = true;
 	}
+	
 }
 %>
 <c:set var="action" value="edit"/>
@@ -77,9 +84,11 @@ if(validateItem){
 	</c:if>
 		<td align="center" class="report_inside" width="25">
 			<logic:present name="currentMember" scope="session">
+				<%if (showColumn) { %>
 				<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
 				</a>
+				<%} %>
 			</logic:present>
 		</td>
 	
@@ -101,9 +110,11 @@ if(validateItem){
 		</c:if>
 			<td align="center" class="report_inside" width="25">
 				<logic:present name="currentMember" scope="session">
+				<%if (showColumn) { %>
 					<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
 						<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
 					</a>
+				<%} %>
 				</logic:present>
 			</td>
 		

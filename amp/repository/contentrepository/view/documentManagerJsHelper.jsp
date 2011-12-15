@@ -233,7 +233,7 @@ font-weight : bold;
 </c:set>
 
 <c:set var="translation_validation_title_chars">
-			<digi:trn>Please only use letters, digits, '_' and space !</digi:trn>
+			<digi:trn>Please only use letters, digits, '_', () and space !</digi:trn>
 </c:set>
 <c:set var="translation_validation_filedata">
 			<digi:trn>Please select a file path !</digi:trn>
@@ -1129,7 +1129,7 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%& ']+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
 	var urlFormat = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&.]+");
 	
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );

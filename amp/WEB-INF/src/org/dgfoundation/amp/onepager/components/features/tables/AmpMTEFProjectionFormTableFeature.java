@@ -77,8 +77,8 @@ public class AmpMTEFProjectionFormTableFeature extends
 
 				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						super.onClick(target);
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.addComponent(parent.getFundingInfo());
 					};

@@ -71,8 +71,8 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 
 				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						super.onClick(target);
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.addComponent(parent.getFundingInfo());
 					};

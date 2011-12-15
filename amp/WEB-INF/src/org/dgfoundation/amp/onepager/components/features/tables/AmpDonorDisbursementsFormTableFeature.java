@@ -98,8 +98,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						}));
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						super.onClick(target);
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.addComponent(parent.getFundingInfo());
 					};

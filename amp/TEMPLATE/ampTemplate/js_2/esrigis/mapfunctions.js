@@ -277,8 +277,8 @@ function findbydistance(evt){
 	foundstr = [];
 	if (structures.length>0){
 		var count=0;
-		var tasktime = structures.length * 5 * 1000 ;
-		var t=setTimeout("showStInfoWindow();",tasktime);
+		//var tasktime = structures.length * 5 * 1000 ;
+		//var t=setTimeout("showStInfoWindow();",tasktime);
 	   
 		var distParams = new esri.tasks.DistanceParameters();
 		for ( var int = 0; int < structures.length; int++) {
@@ -317,7 +317,7 @@ function showStInfoWindow () {
 	        map.infoWindow.hide();
 		}
     map.infoWindow.setTitle("Structures");
-    for ( var int = 0; int < foundstr.length; int++) {
+    for ( var int = 0; int < foundstr.length; int+=2) {
     	    content = content + "<tr><td style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Structure Name"] + "</a></td>" ;
     	    content = content + "<td align='left' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Structure Type"] + "</td>" ;
     	    content = content + "<td style='border-bottom: 1px solid gray;padding: 3px;'>" + foundstr[int].attributes["Activity"] + "</td></tr>" ;
@@ -648,7 +648,7 @@ function drawpoints(){
 			width: 400,
 			height: 260
 		},
-		flareLimit: 15,
+		flareLimit: 20,
 		flareDistanceFromCenter: 30
 	});
 	map.addLayer(cL);
@@ -897,15 +897,17 @@ function getStructures(clear) {
  * @param structureGraphicLayer
  */
 function MapFindStructure(activity, structureGraphicLayer){
+	var stinfoTemplate = new esri.InfoTemplate("Structure Details", "<table style='font-size: 11px;'>" +
+			"<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>" +
+			"<tr><td nowrap style='padding-right:20px;'><b>Activity<b></td><td style='margin-right:5px;'>${Activity}</td></tr>" +
+			"<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>" +
+			"<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>" +
+			"<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
+	
 	dojo.forEach(activity.structures,function(structure) {
 		var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + structure.typeId, 32, 37);
 		var pgraphic;
-		var stinfoTemplate = new esri.InfoTemplate("Structure Details", "<table style='font-size: 11px;'>" +
-				"<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>" +
-				"<tr><td nowrap style='padding-right:20px;'><b>Activity<b></td><td style='margin-right:5px;'>${Activity}</td></tr>" +
-				"<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>" +
-				"<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>" +
-				"<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
+		
 		if(structure.shape == ""){
 			var pt = new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);
 			var transpt = esri.geometry.geographicToWebMercator(pt);
@@ -920,9 +922,7 @@ function MapFindStructure(activity, structureGraphicLayer){
 				  "Coordinates":pt.x + " , " + pt.y
 				  });
 			structures.push(pgraphic);
-		}
-		else
-		{
+		}else{
 			var jsonObject = eval('(' + structure.shape + ')');
 			if(jsonObject.geometry != null){ //If it's a complete Graphic object
 				pgraphic = new esri.Graphic(jsonObject);
@@ -938,9 +938,7 @@ function MapFindStructure(activity, structureGraphicLayer){
 					pgraphic.setSymbol(sms);
 				}
 				
-			}
-			else
-			{
+			}else{
 				pt = new esri.geometry.Point(jsonObject);
 				var infoTemplate = stinfoTemplate;   
 				var attr = {"Temp":"Temporal Attribute"};

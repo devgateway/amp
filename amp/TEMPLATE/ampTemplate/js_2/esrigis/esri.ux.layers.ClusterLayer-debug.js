@@ -183,7 +183,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 y = centerPoint.y + bufferDistance * dblSinus;
 
                 //constructing the flare graphic point
-                pt = new esri.geometry.Point(x, y, this._map.spatialReference)
+                pt = new esri.geometry.Point(x, y, this._map.spatialReference);
                 var currentSymbol;
                 //Get donor code and draw
                 if (this.symbolBank[graphic.attributes[i].Code] != null)
@@ -355,9 +355,9 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
                                 var tileCenterPoint = df.reduce(col, tileCenterPointF);
                                 var sym;
-                                if (col.length <= 15) {
+                                if (col.length <= 20) {
                                     sym = this.symbolBank.less16;
-                                } else if (col.length > 15 && col.length <= 30) {
+                                } else if (col.length > 20 && col.length <= 30) {
                                     sym = this.symbolBank.less30;
                                 } else if (col.length > 30 && col.length <= 50) {
                                     sym = this.symbolBank.less50;

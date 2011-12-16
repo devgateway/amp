@@ -2093,7 +2093,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				
 				//only the team leader of the team that owns the activity has rights to validate it
 				//if activity is already approved it will display the edit value
-				if("alledits".compareTo(apps.getValidation().toLowerCase())==0 )
+				if( apps.getValidation()!= null && "alledits".compareTo(apps.getValidation().toLowerCase())==0 )
 					if(teamLeadFlag &&
 					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
 					   (Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0 || 
@@ -2104,7 +2104,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				
 				//only the team leader of the team that owns the activity has rights to validate it
 				//it will display the validate label only if it is just started and was not approved not even once
-				if("newonly".compareTo(apps.getValidation().toLowerCase())==0)
+				if(apps.getValidation()!=null && "newonly".compareTo(apps.getValidation().toLowerCase())==0)
 					if(teamLeadFlag && 
 							Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0					
 							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())

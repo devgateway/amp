@@ -79,6 +79,7 @@ public class ActivityManager extends Action {
 		actForm.setLastKeyword(null);
 		actForm.setSortByColumn(null);
 		actForm.setPage(0);
+		actForm.setTempNumResults(10);
 	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {

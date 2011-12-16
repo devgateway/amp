@@ -56,7 +56,16 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	
 	private Long groupVersionedFunding;
 
-	// private Set survey;
+    private Float capitalSpendingPercentage;
+
+    public Float getCapitalSpendingPercentage() {
+        return capitalSpendingPercentage;
+    }
+
+    public void setCapitalSpendingPercentage(Float capitalSpendingPercentage) {
+        this.capitalSpendingPercentage = capitalSpendingPercentage;
+    }
+    // private Set survey;
 
 	
 	/**

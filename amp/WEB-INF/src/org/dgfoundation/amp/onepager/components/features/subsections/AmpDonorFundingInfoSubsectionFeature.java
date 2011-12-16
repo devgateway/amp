@@ -6,6 +6,8 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.MaximumValidator;
+import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -80,6 +82,16 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"Funding Organization Id");
 //		financingId.getNewLine().setVisible(false);
 		add(financingId);
+
+        AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
+				"capitalSpendingPercentage",
+				new PropertyModel<Float>(model, "capitalSpendingPercentage"),
+				"Capital Spending Percentage");
+        capitalSpendingPercentage.setVisible(true);
+        capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
+        capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
+        add(capitalSpendingPercentage);
+
 		if (model != null && model.getObject() != null && 
 			model.getObject().getFundingDetails() != null &&
 			model.getObject().getFundingDetails().size() > 0)

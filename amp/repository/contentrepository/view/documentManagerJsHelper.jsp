@@ -1130,7 +1130,7 @@ function setType(typeValue) {
 
 function validateAddDocument() {
 	var regexp	= new RegExp("[a-zA-Z0-9_ΐΑΓΔΗΘΙΛΜΝΟΡÒΣΥΦΩΪάΰαγδηθιλμνορςσυφωϊό%&' ()]+");
-	var urlFormat = new RegExp("[a-zA-Z0-9_ΐΑΓΔΗΘΙΛΜΝΟΡÒΣΥΦΩΪάΰαγδηθιλμνορςσυφωϊό%&.]+");
+	var urlFormat = new RegExp("[a-zA-Z0-9_ΐΑΓΔΗΘΙΛΜΝΟΡÒΣΥΦΩΪάΰαγδηθιλμνορςσυφωϊό%&./:]+");
 	
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );

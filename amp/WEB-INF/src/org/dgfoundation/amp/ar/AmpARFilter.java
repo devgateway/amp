@@ -363,10 +363,8 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 	
-		if (calendarType==null){
-			if (tempSettings!=null){
-				calendarType=tempSettings.getFiscalCalendar();
-			}
+		if (tempSettings!=null){
+			calendarType=tempSettings.getFiscalCalendar();
 		}
 		String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (calendarType==null){

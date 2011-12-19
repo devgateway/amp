@@ -69,13 +69,11 @@ function banUser(txt) {
             </td>
           </tr> -->
           <tr>
-            <td bgcolor=#c7d4db align=center colspan=8 style=" background-color: #F2F2F2;
-    border: 1px solid #D0D0D0;
-    padding: 5px;">
+            <td bgcolor=#c7d4db align=center colspan=8 style=" background-color: #F2F2F2; border: 1px solid #D0D0D0;padding: 5px;">
               <digi:errors/> 
               <span style="font-size:12px; font-weight:bold;">
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
-                List of users
+                List of users 
                 </digi:trn>
               </span>
             </td>
@@ -105,10 +103,11 @@ function banUser(txt) {
 	              </td>
           		</c:when>
           		<c:otherwise>
-	            <td width="160" class="usersSelectForm"  colspan=3 style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
-		              <digi:trn key="um:viewAllUsers:filter">
-		              Filter by:
-		              </digi:trn>
+	            <td width="50px" class="usersSelectForm" style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
+		              <digi:trn key="um:viewAllUsers:filter">Filter by:</digi:trn>
+		        </td>
+		        
+		         <td width="40px" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
 		              <html:select property="type" style="font-family:verdana;font-size:11px;" >
 		                <c:set var="translation">
 		                  <digi:trn key="um:viewAllUsers:all">
@@ -134,14 +133,16 @@ function banUser(txt) {
 	              </td>
 	              </c:otherwise>
               </c:choose>
-              <td width="250" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
-	              <digi:trn key="um:viewAllUsers:keyword">
-	              keyword:
-	              </digi:trn>
-	              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
+              <td width="50px" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
+	              <digi:trn key="um:viewAllUsers:keyword">keyword:</digi:trn>
+	          </td>
+              <td width="50px" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
+              	<html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
               </td>
-              <td width="100" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
+              <td width="40px" align="left" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
               	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+              </td>
+              <td width="50px" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
 				<html:select property="tempNumResults" styleClass="inp-text">
 					<html:option value="10">10</html:option>
 					<html:option value="20">20</html:option>
@@ -149,11 +150,9 @@ function banUser(txt) {
 					<html:option value="-1">ALL</html:option>
 				</html:select>
               </td>
-			  <td width="260" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;">
+			  <td width="300px" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;">
 	              <c:set var="translation">
-	                <digi:trn key="um:viewAllUsers:showButton">
-	                Show
-	                </digi:trn>
+	                <digi:trn key="um:viewAllUsers:showButton">Show</digi:trn>
 	              </c:set>
 	              <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
             </td>

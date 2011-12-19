@@ -53,9 +53,11 @@
 	<!-- Scripts  -->
 	
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/common.js"/>"></script>
+	 <digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 </head>
 
 <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+<div class="headerTop">
 	<digi:secure authenticated="false">
 		<logic:notPresent name="currentMember" scope="session">
 			<digi:insert attribute="headerTop" />	
@@ -64,6 +66,7 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
+</div>
 	<center>
 	<div class="main_menu" >
 		  	<table cellpadding="0"cellspacing="0" width="1000">
@@ -94,7 +97,9 @@
 	
 	</table>
     </div>
+    <div class="footerText" >
     <digi:insert attribute="footer"/>
+    </div>
     </center>
 </body>
 </html>

@@ -87,7 +87,6 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"capitalSpendingPercentage",
 				new PropertyModel<Float>(model, "capitalSpendingPercentage"),
 				"Capital Spending Percentage");
-        capitalSpendingPercentage.setVisible(true);
         capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
         capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
         add(capitalSpendingPercentage);

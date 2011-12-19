@@ -243,6 +243,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			TextField<String> titleField=null;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.appendJavascript("hideDraftPanel();");
 				am.setObject(am.getObject());
 				
 				redirected=myDraftOpts.getModelObject();

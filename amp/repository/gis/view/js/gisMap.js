@@ -776,6 +776,7 @@
 			$("#mapZoom30").removeClass("navVisible");
 			$("#mapZoom30").addClass("navHiden");
 			actionImgLoading = false;
+			jQuery.fn.getImageMap();
 			
 		});
 		
@@ -800,6 +801,7 @@
 			$("#mapZoom30").removeClass("navVisible");
 			$("#mapZoom30").addClass("navHiden");
 			actionImgLoading = false;
+			jQuery.fn.getImageMap();
 			
 			
 		});
@@ -825,6 +827,7 @@
 			$("#mapZoom30").removeClass("navVisible");
 			$("#mapZoom30").addClass("navHiden");
 			actionImgLoading = false;
+			jQuery.fn.getImageMap();
 			
 		});
 		
@@ -845,6 +848,7 @@
 			$("#mapZoom20").removeClass("navVisible");
 			$("#mapZoom20").addClass("navHiden");
 			actionImgLoading = false;
+			jQuery.fn.getImageMap();
 			
 		});
 		
@@ -890,7 +894,7 @@
 		var mapLevelInt = $("#mapLevel").val();
 		if (mapLevelInt != curMapLevel) {
 			curMapLevel = mapLevelInt;
-			jQuery.fn.getImageMap();			
+			jQuery.fn.getImageMap();
 		}
 		
 		jQuery.fn.dataForSectorFin();

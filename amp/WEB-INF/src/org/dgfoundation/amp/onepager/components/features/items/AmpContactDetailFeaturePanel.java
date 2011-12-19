@@ -98,9 +98,16 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 				if(setModel.getObject()!=null){
 					for (AmpContactProperty detail : setModel.getObject()) {
 						if(detail.getName().equals(contactProperty)){
-							if(detail.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)&&detail.getActualValue()==null){
-								detail.setActualValue(detail.getActualPhoneNumber());
-								detail.setCategoryValue(ContactInfoUtil.getPhoneCategoryValue(detail.getValue()));
+							if(detail.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+								if(detail.getActualValue()==null){
+									detail.setActualValue(detail.getActualPhoneNumber());
+									if(detail.getCategoryValue()==null)
+									detail.setCategoryValue(ContactInfoUtil.getPhoneCategoryValue(detail.getValue()));
+								}
+								else{
+									String prefix=(detail.getCategoryValue()==null)?"0":detail.getCategoryValue().getId().toString();
+									detail.setValue(prefix+" "+detail.getActualValue());
+								}
 							}
 							specificContacts.add(detail);
 						}

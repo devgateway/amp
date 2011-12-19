@@ -3167,11 +3167,8 @@ public class DbUtil {
                 			ampContact.setFunction(contact.getFunction());
                 			//remove old properties
                 			if(ampContact.getProperties()!=null){
-                				for (AmpContactProperty dbProperty : ampContact.getProperties()) {
-                					sess.delete(dbProperty);
-                				}
+                				ampContact.getProperties().clear();
                 			}
-                			ampContact.setProperties(null);
                 			sess.update(ampContact);
                 		}else{
                 			sess.save(contact);

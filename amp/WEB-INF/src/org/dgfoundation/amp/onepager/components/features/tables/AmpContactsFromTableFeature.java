@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -93,28 +94,35 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             protected void populateItem(final ListItem<AmpActivityContact> item) {
                 try {
                     final MarkupContainer listParent=this.getParent();
+                    AmpActivityContact actContact=item.getModelObject();
+                   
 
-                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(item.getModelObject().getContact());
+                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(actContact.getContact());
 
                     item.add(new Label("contactName", contactModel.getObject().getNameAndLastName()));
-                    final AjaxCheckBox primary=new AjaxCheckBox("primaryContact",new PropertyModel<Boolean>(item.getModel(),"primaryContact")){
-					private static final long serialVersionUID = 1L;
-					@Override
+					final AjaxCheckBox primary = new AjaxCheckBox(
+							"primaryContact", new PropertyModel<Boolean>(
+									item.getModel(), "primaryContact")) {
+						private static final long serialVersionUID = 1L;
+
+						@Override
 						protected void onUpdate(AjaxRequestTarget target) {
-						  if (getModelObject()) { 
-							  if(primaryContact!=null){
-									  primaryContact.clearInput();
-									  primaryContact.setModelObject(Boolean.FALSE);
-									  target.addComponent(primaryContact); 
-							  }
-							  primaryContact=this;
-						  }
-						  else{
-							  primaryContact=null;
-						  }
-						 
+							if (getModelObject()) {
+								if (primaryContact != null) {
+									primaryContact.clearInput();
+									primaryContact.setModelObject(Boolean.FALSE);
+									target.addComponent(primaryContact);
+								}
+								primaryContact = this;
+							} else {
+								primaryContact = null;
+							}
 						}
-                    };
+					};
+					final Boolean isPrimaryContact=primary.getModelObject();
+					if(isPrimaryContact!=null&&isPrimaryContact){
+						primaryContact=primary;
+					}
                     primary.setOutputMarkupId(true);
                     item.add(primary);
                     AmpDeleteLinkField delContact = new AmpDeleteLinkField(

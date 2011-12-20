@@ -456,22 +456,28 @@ function adminHelp(){
 	                                            	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
 	                                            </a>
 	                                            <div id="workspaceSubMenu" class="yuiampmenu">
-	                                          		<div class="bd">                    
-	                                                      <ul>
-															<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+	                                          		<div class="bd">      
+	                                          		
+	                                          		<c:if test="${fn:length(USER_WORKSPACES) ge 16}">
+	                                          		      <ul style="overflow-x:hidden;overflow-y:scroll;height: 400px;width:auto;">
+	                                          		</c:if>
+	                                          		<c:if test="${fn:length(USER_WORKSPACES) le 15}">             
+	                                          			  <ul>
+	                                          		</c:if>
+															<logic:iterate id="item" name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
 																<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
 																<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel"  style="height:18px;white-space: nowrap;">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel"  style="height:18px;white-space: nowrap;font-size: 10px;">
 																		<a href="#"><bean:write name="team" property="name"/></a>
 																	</li>
 																</logic:equal>
 																<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel" style="height:18px;white-space: nowrap;">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel" style="height:18px;white-space: nowrap;font-size: 10px;">
 																		<a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
 																	</li>
 																</logic:notEqual>
 															</logic:iterate>
-	                                                      </ul>
+														  </ul>
 	                                                  </div>
 	                                              </div>
 	                                        </li>
@@ -901,8 +907,6 @@ function adminHelp(){
 
 YAHOO.util.Event.onDOMReady(function () {
 	var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader");
-	lazyload: true;
 	oMenuBar.render();
-	
 });
  </script>

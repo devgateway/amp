@@ -110,6 +110,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1749,26 +1750,47 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
       if (teamMember != null) {
           //oql += " and " +getTeamMemberWhereClause(teamMember);
+    	  AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
           if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
-              AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-              Set<AmpOrganisation> orgs = team.getOrganizations();
-              Iterator<AmpOrganisation> iter = orgs.iterator();
-              String ids = "";
-              while (iter.hasNext()) {
-                  AmpOrganisation org = iter.next();
-                  ids += org.getAmpOrgId() + ",";
-              }
+              String ids = DashboardUtil.getComputationOrgsQry(team);
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
               oql += "  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
-              }
-          }
+             }
+          } 
           else{
-               oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
+				if (team.getAccessType().equals("Management")) {
+					oql += " and latestAct.draft=false and latestAct.approvalStatus ='approved' ";
+					oql += " and (";
+					List<AmpTeam> teams = new ArrayList<AmpTeam>();
+					DashboardUtil.getTeams(team, teams);
+					String relatedOrgs = "", teamIds = "";
+					for (AmpTeam tm : teams) {
+						if (tm.getComputation() != null && tm.getComputation()) {
+							relatedOrgs += DashboardUtil
+									.getComputationOrgsQry(tm);
+						}
+						teamIds += tm.getAmpTeamId() + ",";
+					}
+					if (relatedOrgs.length() > 1) {
+						relatedOrgs = relatedOrgs.substring(0,
+								relatedOrgs.length() - 1);
+						oql += "  and ( latestAct.team.ampTeamId ="+team.getAmpTeamId()+" or  role.organisation.ampOrgId in("
+								+ relatedOrgs + "))";
+					}
+					if (teamIds.length() > 1) {
+						teamIds = teamIds.substring(0, teamIds.length() - 1);
+						oql += " latestAct.team.ampTeamId in ( " + teamIds
+								+ ")";
+					}
+					oql +=")";
+
+				} else {
+					oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
+				}
           }
         
       }
-        oql+=" and latestAct.team is not NULL ";
 	  return oql;
   }
 
@@ -1793,7 +1815,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         if (locationId != null) {
           query.setLong("LocationID", locationId.longValue());
         }
-        if (teamMember!=null && teamMember.getTeamId()!=null){
+        if (teamMember!=null && teamMember.getTeamId()!=null&&!teamMember.getTeamAccessType().equals("Management")){
       	  query.setLong("teamId", teamMember.getTeamId());
         }
         

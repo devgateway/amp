@@ -222,13 +222,11 @@ function setAsDefault(id) {
 
 
 function deleteFlag(id) {
-
-  <digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
-
-  document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
-
-  document.aimFlagUploaderForm.submit();
-
+	if ( confirm("<digi:trn>Are you sure you want to delete this flag</digi:trn>?") ) {
+  		<digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
+  		document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
+		document.aimFlagUploaderForm.submit();
+	}
 }
 
 

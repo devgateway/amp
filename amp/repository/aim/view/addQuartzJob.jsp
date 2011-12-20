@@ -220,7 +220,12 @@ function typeChanged(value){
                 <digi:trn>Add New Job</digi:trn>
               </span>
             </td>
-          </tr>
+          </tr> 
+          <tr>
+          	<td>
+          		<digi:errors/>
+          	</td>
+          </tr>         
           <tr>
             <td>
               <table cellpadding="2" style="width:400px;">
@@ -253,7 +258,11 @@ function typeChanged(value){
                     <digi:trn>Name</digi:trn>
                   </td>
                   <td>
-                    <html:text name="quartzJobManagerForm" property="name" styleId="txtName" style="font-family:Verdana;font-size:10px;width:250px;" />
+                  	<c:set var="readOnly">
+                  		<c:if test="${quartzJobManagerForm.editAction }">true</c:if>
+                  		<c:if test="${!quartzJobManagerForm.editAction }">false</c:if>
+                  	</c:set>
+                    <html:text name="quartzJobManagerForm" readonly="${readOnly}" property="name" styleId="txtName" style="font-family:Verdana;font-size:10px;width:250px;" />
                   </td>
                 </tr>
               </table>

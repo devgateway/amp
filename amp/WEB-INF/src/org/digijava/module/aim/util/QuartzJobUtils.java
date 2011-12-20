@@ -284,7 +284,8 @@ public class QuartzJobUtils {
 
 	public static void reScheduleJob(QuartzJobForm job) {
 		try {
-			deleteJob(job); // delete previous job
+			//deleteJob(job); // delete previous job
+			deleteJob(job.getName());
 			addJob(job); // add new job
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

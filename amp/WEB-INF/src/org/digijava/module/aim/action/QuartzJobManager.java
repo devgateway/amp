@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -34,6 +35,23 @@ public class QuartzJobManager extends Action {
 		qmform.setInvalidTrigger(false);
 		
 		if ("saveJob".equals(qmform.getAction())) {
+			//check uniqueness
+			boolean jobWithSameNameExists = false;
+			if(qmform.getEditAction()!=null){
+				if(!qmform.getEditAction()){
+					if(QuartzJobUtils.getJobByName(qmform.getName())!=null){
+						jobWithSameNameExists = true;
+					}
+				}
+			}
+			
+			if(jobWithSameNameExists){
+				ActionMessages errors= new ActionMessages();
+				errors.add("name not unique", new ActionMessage("admin.jobs.duplicateName","Jon name should be unique"));
+				saveErrors(request, errors);
+				return mapping.findForward("addJob");
+			}
+			
 			QuartzJobForm job = new QuartzJobForm();
 			job.setClassFullname(qmform.getClassFullname());
 			if (qmform.getTriggerType() == 4) {
@@ -74,7 +92,6 @@ public class QuartzJobManager extends Action {
 			try {
 
 				if (qmform.getEditAction() != null && qmform.getEditAction()) {
-
 					QuartzJobUtils.reScheduleJob(job);
 				} else {
 					// add job validation

@@ -13,7 +13,14 @@
                   </tr>
             </table> 
         </td>
-		<td align="right"><span wicket:id="addDetailButton"/></td>
+		<td align="right">
+			<span wicket:id="addDetailButton"/>
+		</td>
+		<td>
+			<span wicket:id="detailFeedbackContainer" style="color: red;">
+				<span wicket:id="detailFeedbackLabel" class="feedbacklabel.error"></span>
+			</span>
+		</td>
         </tr>
     </table>
 </wicket:extend>

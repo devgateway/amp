@@ -4,14 +4,13 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -50,6 +49,19 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	 */
 	
 	final String  EXPRESSION = "^\\+?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
+	
+	private WebMarkupContainer detailFeedbackContainer;
+	private Label detailFeedbackLabel;
+	
+//	private WebMarkupContainer phonesFeedbackContainer;
+//	private Label pronesFeedbackLabel;
+//	
+//	private WebMarkupContainer faxesFeedbackContainer;
+//	private Label faxesFeedbackLabel;
+	
+	static final private String emailsAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3");
+	static final private String phonesAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3");
+	static final private String faxesAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3");
 	
 	public AmpContactDetailFeaturePanel(String id, String fmName)
 			throws Exception {
@@ -135,10 +147,15 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 						@Override
                         public void onClick(AjaxRequestTarget target) {
-                            setModel.getObject().remove(item.getModelObject());
+                            boolean succesfuldelete = setModel.getObject().remove(item.getModelObject());
+                            if(succesfuldelete){
+                            	detailFeedbackContainer.setVisible(false);
+        						target.addComponent(detailFeedbackContainer);
+                            }                            
                             target.addComponent(resultcontainer);
                         }
                     };
+                    
                     if (!item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(item.getModel(), "value");
                         Fragment frg1 = new Fragment("detailPanel", "frag1",this);
@@ -196,8 +213,19 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				if(detailsList.getModelObject().size() >= 3) 
+				if(detailsList.getModelObject().size() >= 3) {
+					if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+						detailFeedbackLabel.setDefaultModelObject(emailsAmountReachedLimitMsg);						
+					}else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+						detailFeedbackLabel.setDefaultModelObject(phonesAmountReachedLimitMsg);
+					}else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
+						detailFeedbackLabel.setDefaultModelObject(faxesAmountReachedLimitMsg);
+					}
+					detailFeedbackContainer.setVisible(true);
+					target.addComponent(detailFeedbackContainer);
 					return;
+				}
+					
 				AmpContactProperty fakeContact1 = new AmpContactProperty();
 				fakeContact1.setContact(model.getObject());
 				fakeContact1.setName(contactProperty);
@@ -216,13 +244,54 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 			}
 
-            
-
-		};
-		add(addLink);
+		};		
+		add(addLink);	
 		
 		
-		
+		detailFeedbackContainer = new WebMarkupContainer("detailFeedbackContainer");
+		detailFeedbackLabel = new Label("detailFeedbackLabel", new Model(""));
+		detailFeedbackLabel.setOutputMarkupId(true);
+		detailFeedbackContainer.setOutputMarkupId(true);
+		detailFeedbackContainer.setOutputMarkupPlaceholderTag(true);
+		detailFeedbackContainer.setVisible(false);
+		detailFeedbackContainer.add(detailFeedbackLabel);
+		add(detailFeedbackContainer);
 	}
+	
+//	protected boolean updateVisibility(IModel<AmpContact> indicatorModel){
+//		AmpIndicator ind = indicatorModel.getObject();
+//		boolean oldCodeSelected = codeSelected;
+//		boolean oldTitleSelected = titleSelected;
+//		if (ind.getCode() == null)
+//			codeSelected = false;
+//		else
+//			codeSelected = true;
+//		
+//		if (ind.getName() == null || ind.getName() == "")
+//			titleSelected = false;
+//		else
+//			titleSelected = true;
+//
+//		if (codeSelected && titleSelected){
+//			indicatorFeedbackContainer.setVisible(false);
+//		}
+//		else{
+//			indicatorFeedbackContainer.setVisible(true);
+//			if (!codeSelected && !titleSelected){
+//				indicatorFeedbackLabel.setDefaultModelObject(defaultMsg);
+//			}
+//			else{
+//				if (!codeSelected)
+//					indicatorFeedbackLabel.setDefaultModelObject(noCodeMsg);
+//				else
+//					indicatorFeedbackLabel.setDefaultModelObject(noTitleMsg);
+//			}
+//		}
+//		
+//		if ((oldTitleSelected == titleSelected) && (oldCodeSelected == codeSelected))
+//			return false;
+//		else
+//			return true;
+//	}
 
 }

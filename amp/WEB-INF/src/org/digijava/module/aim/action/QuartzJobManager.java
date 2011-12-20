@@ -47,7 +47,7 @@ public class QuartzJobManager extends Action {
 			
 			if(jobWithSameNameExists){
 				ActionMessages errors= new ActionMessages();
-				errors.add("name not unique", new ActionMessage("admin.jobs.duplicateName","Jon name should be unique"));
+				errors.add("name not unique", new ActionMessage("admin.jobs.duplicateName","Job name should be unique"));
 				saveErrors(request, errors);
 				return mapping.findForward("addJob");
 			}

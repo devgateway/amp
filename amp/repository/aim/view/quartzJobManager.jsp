@@ -42,9 +42,11 @@
     }
 
     function deleteJob(name){
-        if(setNameAndAction(name,"deleteJob")){
-            quartzJobManagerForm.submit();
-        }
+    	if ( confirm("<digi:trn>Are you sure you want to delete this Job</digi:trn>?") ) {
+	        if(setNameAndAction(name,"deleteJob")){
+	            quartzJobManagerForm.submit();
+	        }
+    	}
     }
     function pauseJob(name){
         if(setNameAndAction(name,"pauseJob")){

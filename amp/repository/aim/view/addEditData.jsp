@@ -193,11 +193,11 @@ function validation(){
   <tr>
     <td height="25" align="center" colspan="6" style="padding-top:15px;">
       <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>
-      <c:set var="trncancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>
+      <c:set var="trnReset"><digi:trn>Reset</digi:trn></c:set>
       <c:set var="trnclose"><digi:trn key="aim:btn:close">Close</digi:trn></c:set>
       
       <input class="buttonx" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
-      <input class="buttonx" type="reset" value="${trncancel}">
+      <input class="buttonx" type="reset" value="${trnReset}">
       <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="window.close();">
     </td>
   </tr>

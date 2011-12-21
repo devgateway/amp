@@ -1003,12 +1003,8 @@
 </script>
 <script language="javascript">
     function exportXSL(){
-        var teams=""
-        $(".teamsOnpage").each(function (i,element){
-            teams+="~team="+element.value;
-        })
             <digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
-        document.aimWorkspaceForm.action="${exportUrl}"+teams;
+        document.aimWorkspaceForm.action="${exportUrl}";
         document.aimWorkspaceForm.target="_blank";
         document.aimWorkspaceForm.submit();
     }

@@ -1583,7 +1583,7 @@ public class TeamUtil {
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
                
-                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivityVersion.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false)";
+                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivity.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false)";
                 if(keyword!=null){
                 	queryString += " and lower(a.name) like lower(:name)" ;
                 }
@@ -2243,6 +2243,56 @@ public class TeamUtil {
                 throw new RuntimeException(ex);
             }
         }
+        return teams;
+    }
+    public static Collection<AmpTeam> getAllTeams(String keyword,String type) {
+        Session session = null;
+        Query qry = null;
+        Collection<AmpTeam> teams = null;
+        boolean computed=type!=null&&type.equals("computed");
+        String accessType= null;
+		if (type.equals("management")) {
+			accessType = "Management";
+		} else {
+			if (type.equals("management")) {
+				accessType = "Team";
+			}
+		}
+
+        try {
+            session = PersistenceManager.getSession();
+            StringBuilder queryString =new StringBuilder();
+            queryString.append("select t from ");
+            queryString.append(AmpTeam.class.getName());
+            queryString.append(" t ");
+            queryString.append(" where 1=1 ");
+            if(keyword!=null&&keyword.trim().length()>0){
+            	queryString.append(" and lower(t.name) like lower(:keyword) ");
+            }
+            if(computed){
+            	queryString.append(" and t.computation=:computation ");
+            }
+            if(accessType!=null){
+            	queryString.append(" and t.accessType=:accessType ");
+            }
+            queryString.append("order by name");
+            qry = session.createQuery(queryString.toString());
+            if(keyword!=null&&keyword.trim().length()>0){
+            	 qry.setString("keyword", '%' + keyword + '%');
+            }
+            if(computed){
+            	qry.setBoolean("computation", Boolean.TRUE);
+            }
+            if(accessType!=null){
+            	qry.setString("accessType",accessType);
+            }
+            qry.setCacheable(true);
+            teams = qry.list();
+        } catch(Exception e) {
+            logger.debug("cannot get All teams");
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        } 
         return teams;
     }
     /**

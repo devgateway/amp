@@ -27,6 +27,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -41,6 +42,7 @@ public class ExportWorkspaceManager2XSL extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         HttpSession session = request.getSession();
+        WorkspaceForm wsForm = (WorkspaceForm) form;
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -58,7 +60,7 @@ public class ExportWorkspaceManager2XSL extends Action {
        
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
-        String[] teams=request.getParameterValues("team");
+        Collection<AmpTeam> teams=TeamUtil.getAllTeams(wsForm.getKeyword(), wsForm.getWorkspaceType());
         
      // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
@@ -121,8 +123,7 @@ public class ExportWorkspaceManager2XSL extends Action {
 
         if (teams != null) {
             
-            for (String teamId :  teams) {
-                AmpTeam team=TeamUtil.getAmpTeam(Long.valueOf(teamId));
+            for ( AmpTeam team :  teams) {
                 List<AmpActivityVersion> activityList =null;
                 if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                     activityList =new ArrayList<AmpActivityVersion>(TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null));

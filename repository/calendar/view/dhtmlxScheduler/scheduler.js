@@ -223,7 +223,76 @@ scheduler._correct_shift=function(start){
 }
 scheduler._on_mouse_move=function(e){
 	if (this._drag_mode){
-		return;
+		var pos=this._mouse_coords(e);
+		if (!this._drag_pos || this._drag_pos.x!=pos.x || this._drag_pos.y!=pos.y){
+			
+			if (this._edit_id!=this._drag_id)
+				this._close_not_saved();
+				
+			this._drag_pos=pos;
+			
+			if (this._drag_mode=="create"){
+				this._close_not_saved();
+				this._loading=true; //will be ignored by dataprocessor
+				
+				var start=this._min_date.valueOf()+(pos.y*this.config.time_step+(this._table_view?0:pos.x)*24*60)*60000;
+				start = this._correct_shift(start);
+				
+				if (!this._drag_start){
+					this._drag_start=start; return; 
+				}
+				var end = start;
+				if (end==this._drag_start) return;
+				
+				this._drag_id=this.uid();
+				this.addEvent(new Date(this._drag_start), new Date(end),this.locale.labels.new_event,this._drag_id);
+				
+				this.callEvent("onEventCreated",[this._drag_id,e]);
+				this._loading=false;
+				this._drag_mode="new-size";
+				
+			} 
+
+			var ev=this.getEvent(this._drag_id);
+			var start,end;
+			if (this._drag_mode=="move"){
+				start = this._min_date.valueOf()+(pos.y*this.config.time_step+pos.x*24*60)*60000+(this._table_view? this.date.time_part(ev.start_date)*1000:0);
+				end = ev.end_date.valueOf()-(ev.start_date.valueOf()-start);
+			} else {
+				start = ev.start_date.valueOf();
+				if (this._table_view)
+					end = this._min_date.valueOf()+pos.y*this.config.time_step*60000 + 24*60*60000;
+				else{
+					end = this.date.date_part(ev.end_date).valueOf()+pos.y*this.config.time_step*60000;
+					this._els["dhx_cal_data"][0].style.cursor="s-resize";
+				}
+				if (this._drag_mode == "new-size"){ 
+					if (end <= this._drag_start){
+						start = end;
+						end = this._drag_start;
+					} 
+				} else if (end<=start) 
+					end=start+this.config.time_step*60000;
+			}
+
+			start = this._correct_shift(start);
+			end = this._correct_shift(end);
+			var new_end = new Date(end-1);			
+			var new_start = new Date(start);
+			//prevent out-of-borders situation for day|week view
+			if (this._table_view || (new_end.getDate()==new_start.getDate() && new_end.getHours()<this.config.last_hour)){
+				ev.start_date=new_start;
+				ev.end_date=new Date(end);
+				if (this.config.update_render)
+					this.update_view();
+				else
+					this.updateEvent(this._drag_id);
+			}
+			if (this._table_view)
+				this.for_rendered(this._drag_id,function(r){
+					r.className+=" dhx_in_move";
+				})
+		}
 	}
 }
 scheduler._on_mouse_context=function(e,src){

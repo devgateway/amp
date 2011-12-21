@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -147,7 +148,18 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 						@Override
                         public void onClick(AjaxRequestTarget target) {
-                            boolean succesfuldelete = setModel.getObject().remove(item.getModelObject());
+							Set<AmpContactProperty> properties=setModel.getObject();
+							AmpContactProperty property=item.getModelObject();
+							boolean succesfuldelete=false;
+							Iterator<AmpContactProperty> iter=properties.iterator();
+							while(iter.hasNext()){
+								AmpContactProperty pr=iter.next();
+								if(pr.getName().equals(property.getName())&&pr.getValue().equals(property.getValue())){
+									iter.remove();
+									succesfuldelete=true;
+									break;
+								}
+							}
                             if(succesfuldelete){
                             	detailFeedbackContainer.setVisible(false);
         						target.addComponent(detailFeedbackContainer);

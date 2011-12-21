@@ -326,7 +326,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 				<td height="25" align="center" colspan="3" bgcolor=#ffffff>
 				<hr />
 						<input class="buttonx" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
-						<input class="buttonx" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>">&nbsp;&nbsp;
+						<input class="buttonx" type="reset" value="<digi:trn>Reset</digi:trn>">&nbsp;&nbsp;
 						<input class="buttonx" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
 				</tr>	
   </table>

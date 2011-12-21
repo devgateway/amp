@@ -418,6 +418,8 @@ public class ReportWizardAction extends MultiAction {
 		if ( filter == null )
 			filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
 		if ( filter != null && myForm.getUseFilters()) {
+			if ( ampReport.getAmpReportId()!=null )
+				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 			Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
 			if ( ampReport.getFilterDataSet() == null )
 				ampReport.setFilterDataSet(fdSet);
@@ -425,9 +427,6 @@ public class ReportWizardAction extends MultiAction {
 				ampReport.getFilterDataSet().clear();
 				ampReport.getFilterDataSet().addAll(fdSet);
 			}
-			
-			if ( ampReport.getAmpReportId()!=null )
-				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 				
 		}
 		else

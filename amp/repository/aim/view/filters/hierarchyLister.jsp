@@ -23,11 +23,13 @@
 	<ul style="list-style-type: none">
 		<logic:iterate id="entity" name="entityList" scope="page">
 			<c:set var="checked" value="" scope="page" />
-			<c:forEach var="elInArray"  items="${beanSetterArray}">
-				<c:if test="${elInArray==entity.uniqueId}">
-					<c:set var="checked" scope="page" >checked='checked'</c:set>
-				</c:if>
-			</c:forEach>
+			<logic:notEmpty name="reqBeanSetterObject" property="${selectedEntityIds}">
+				<c:forEach var="elInArray"  items="${beanSetterArray}">
+					<c:if test="${elInArray==entity.uniqueId}">
+						<c:set var="checked" scope="page" >checked='checked'</c:set>
+					</c:if>
+				</c:forEach>
+			</logic:notEmpty>
 			<li style="margin-left: -20px; ">
 				<table>
 					<tr>

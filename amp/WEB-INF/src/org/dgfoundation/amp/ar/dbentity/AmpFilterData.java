@@ -18,8 +18,10 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AmpFilterData implements Serializable {
 	private Long id;
@@ -198,8 +200,10 @@ public class AmpFilterData implements Serializable {
 	
 	public static void deleteOldFilterData ( Long ampReportId ) {
 		Session sess 	= null;
+		Transaction tx	= null;
 		try {
-			sess	= PersistenceManager.getRequestDBSession();
+			sess	= PersistenceManager.openNewSession();
+			tx		= sess.beginTransaction();
 			String qryStr	= "select a from "
 				+ AmpFilterData.class.getName() + " a "
 				+ "where (a.ampReport=:report)";
@@ -220,11 +224,24 @@ public class AmpFilterData implements Serializable {
 					sess.delete(afd);
 				}
 			}
+			tx.commit();
 			
-//session.flush();
 		} catch (Exception e) {
+			logger.error("Rolling back transaction of deleting exising filters before saving new ones");
+			tx.rollback();
 			e.printStackTrace();
 		}
+		finally{
+			if ( sess != null ) {
+				try {
+					sess.close();
+				}
+				catch (HibernateException e) {
+					logger.error("Unable to close manually opened hibernate session");
+				}
+			}
+		}
+		
 	} 
 	
 	

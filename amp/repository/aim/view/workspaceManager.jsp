@@ -281,7 +281,7 @@
         
             var myColumnDefs = [
                 {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250,formatter:this.formatTeamName},
-                {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
+                {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 160, formatter:this.formatActions,className:"ignore"}
             ];
   
             var div = document.getElementById('errors');

@@ -599,6 +599,7 @@
       <forward name="forward" path="/showLayout.do?layout=organisationManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimOrgManagerForm" path="/aim/exportOrgManager" scope="session" type="org.digijava.module.aim.action.ExportOrganizationManager2XSL" validate="false" />
     <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false" parameter="actionFlag">
       <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
       <forward name="index" path="/aim/index.do" redirect="true" />

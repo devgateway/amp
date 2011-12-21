@@ -52,10 +52,11 @@
 																<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 																	<digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn>	
 																</logic:equal>
-                                                                                        <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
-
 														</td>
-													</tr>
+                                                        <td bgColor=#c9c9c7 class=box-title align="right">
+                                                        	<div class="adminicon" style="float: right;"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+                                                        </td>
+                                                    </tr>
 												</table>
 											</td>
 										</tr>

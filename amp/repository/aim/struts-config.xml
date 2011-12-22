@@ -1026,6 +1026,7 @@
       <forward name="forward" path="/showLayout.do?layout=activityManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimActivityForm" path="/aim/exportActivityManagerXSL" scope="session" type="org.digijava.module.aim.action.ExportActivityManager2XSL" validate="false"/>
     <action name="aimReportsForm" path="/aim/reportsManager" scope="request" type="org.digijava.module.aim.action.ReportsManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=reportsManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />

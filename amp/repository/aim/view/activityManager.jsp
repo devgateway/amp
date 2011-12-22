@@ -31,7 +31,7 @@
 	        	tIds=tIds.substring(0,tIds.length-1);
 	        	<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
 	    		document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
-	    		//document.aimActivityForm.target = "_self";
+	    		document.aimActivityForm.target = "_self";
 	    		document.aimActivityForm.submit();	
 	        }else{
 	        	var translation = "<digi:trn key="aim:activityselectone">Please select at least one topic to be deleted</digi:trn>"; 
@@ -59,6 +59,7 @@
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
 		     url = "<%= searchOrg %>?action=search";
 		     document.aimActivityForm.action = url;
+		     document.aimActivityForm.target="_self";
 		     document.aimActivityForm.submit();
 			 return true;
 		}
@@ -75,6 +76,7 @@
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false";
 		     document.aimActivityForm.action = url;
+		     document.aimActivityForm.target="_self";
 		     document.aimActivityForm.submit();
 			 return true;
 		}
@@ -102,13 +104,20 @@
 	     document.aimActivityForm.submit();
 		 return true;
 
-	}	
+	}
+	  function exportXSL(){
+	        <digi:context name="exportUrl" property="context/module/moduleinstance/exportActivityManagerXSL.do"/>;
+	        document.aimActivityForm.action="${exportUrl}";
+	        document.aimActivityForm.target="_blank";
+	        document.aimActivityForm.submit();
+	    }
 	
 -->
 </script>
 
 
-
+<digi:instance property="aimActivityForm" />
+<digi:form action="/activityManager.do" method="post">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
@@ -146,12 +155,24 @@
 				</tr>-->
 			<tr>
 				<td align="left">
-				<!--  please note that this page contains form and you can not nested it inside other form -->
-				<jsp:include
-					page="/repository/aim/view/exportTable.jsp" /></td>
+				
+            <table border="0" align="center" bgcolor="#f2f2f2" width=100%>
+                <tr>
+
+
+                    <td noWrap align=center valign="middle">
+                        <a target="_blank" onclick="exportXSL(); return false;">
+                            <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif" border="0" alt="Export to Excel" />
+                        </a>
+
+                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                    <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly"/>
+                </digi:link>
+        </td>
+    </tr>
+</table></td>
 			</tr>
-			<digi:instance property="aimActivityForm" />
-			<digi:form action="/activityManager.do" method="post">
+			
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
@@ -441,5 +462,7 @@
 					</td>
 				</tr>
 		</table>
-
+</td>
+</tr>
+</table>
 </digi:form>

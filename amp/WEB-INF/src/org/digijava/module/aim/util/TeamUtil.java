@@ -2404,14 +2404,33 @@ public class TeamUtil {
         }
 
     }
-
-    public static class HelperAmpTeamNameComparatorDesc implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            AmpTeam team1 = (AmpTeam) obj1;
-            AmpTeam team2 = (AmpTeam) obj2;
-            return team2.getName().compareTo(team1.getName());
-        }
+    
+    public static class HelperAmpTeamNameComparatorTrimmed
+    implements Comparator {
+    public int compare(Object obj1, Object obj2) {
+        AmpTeam team1 = (AmpTeam) obj1;
+        AmpTeam team2 = (AmpTeam) obj2;
+        return team1.getName().trim().toLowerCase().compareTo(team2.getName().trim().toLowerCase());
     }
+
+}
+    
+	public static class HelperAmpTeamNameComparatorDesc implements Comparator {
+	    public int compare(Object obj1, Object obj2) {
+	        AmpTeam team1 = (AmpTeam) obj1;
+	        AmpTeam team2 = (AmpTeam) obj2;
+	        return team2.getName().compareTo(team1.getName());
+	    }
+	}
+	
+	public static class HelperAmpTeamNameComparatorDescTrimmed implements Comparator {
+	    public int compare(Object obj1, Object obj2) {
+	        AmpTeam team1 = (AmpTeam) obj1;
+	        AmpTeam team2 = (AmpTeam) obj2;
+	        return team2.getName().trim().toLowerCase().compareTo(team1.getName().trim().toLowerCase());
+	    }
+	}
+	    
     
     public static List<AmpTeam> getTeamByOrg(Long orgId) {
  	 	List<AmpTeam> retValue = new ArrayList<AmpTeam>();

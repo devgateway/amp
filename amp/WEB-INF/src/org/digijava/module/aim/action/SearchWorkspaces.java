@@ -150,9 +150,9 @@ public class SearchWorkspaces extends Action {
 
 			if (sortBy != null && sortDir != null) {
 				if (sortBy.equals("name") && sortDir.equals("asc")) {
-					Collections.sort(ampTeams, new TeamUtil.HelperAmpTeamNameComparator());
+					Collections.sort(ampTeams, new TeamUtil.HelperAmpTeamNameComparatorTrimmed());
 				} else if (sortBy.equals("name") && sortDir.equals("desc")) {
-					Collections.sort(ampTeams, new TeamUtil.HelperAmpTeamNameComparatorDesc());
+					Collections.sort(ampTeams, new TeamUtil.HelperAmpTeamNameComparatorDescTrimmed());
 				}
 			}
 			vwForm.setWorkspaces(ampTeams);

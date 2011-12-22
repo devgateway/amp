@@ -90,7 +90,10 @@
 		this.bodyEl.style.display	= "none";
 	}
 	TabManager.prototype.setBody	= function ( content ) {
-		this.bodyEl.innerHTML		= content;
+		var tmpDiv = document.createElement("DIV");
+		tmpDiv.innerHTML = content;
+		this.bodyEl.innerHTML = "";
+		this.bodyEl.appendChild(tmpDiv);
 	}
 	TabManager.prototype.setFooter	= function ( content ) {
 		this.footerEl.innerHTML		= content;

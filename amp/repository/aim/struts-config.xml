@@ -674,6 +674,7 @@
       <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+     <action name="aimCurrencyForm" path="/aim/exportCurrencyManager2XSL" scope="session" type="org.digijava.module.aim.action.ExportCurrencyManager2XSL" validate="false"/>
 	 <action name="aimCurrencyForm" path="/aim/saveCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false"
 				input="/showLayout.do?layout=aim_updateCurrency">
       <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />

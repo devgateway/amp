@@ -19,8 +19,8 @@
 			key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn></strong></p>
 		<p align="center"> Version <tiles:getAsString name="version"/></p>
 		</td>
-		<td width="220"><img width="220" height="149"
-			src="/TEMPLATE/ampTemplate/images/dgf_logo.jpg"></td>
+		<td width="220"><img width="220" height="100"
+			src="/TEMPLATE/ampTemplate/img_2/logo-development-gateway.png"></td>
 	</tr>
 	<tr>
 		<td colspan="2">

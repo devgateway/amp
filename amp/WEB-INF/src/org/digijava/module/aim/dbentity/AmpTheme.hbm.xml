@@ -19,14 +19,13 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
 
-		<property name="leadAgency" column="lead_agency" type="java.lang.String" />
-		<property name="targetGroups" column="target_groups" type="java.lang.String" />
-		<property name="background" column="background" type="java.lang.String" />
-		<property name="objectives" column="objectives" type="java.lang.String" />
-		<property name="outputs" column="outputs" type="java.lang.String" />
-		<property name="beneficiaries" column="beneficiaries" type="java.lang.String" />
-		<property name="environmentConsiderations" column="environment_considerations"
-			type="java.lang.String" />
+		<property name="leadAgency" column="lead_agency" type="text" />
+		<property name="targetGroups" column="target_groups" type="text" />
+		<property name="background" column="background" type="text" />
+		<property name="objectives" column="objectives" type="text" />
+		<property name="outputs" column="outputs" type="text" />
+		<property name="beneficiaries" column="beneficiaries" type="text" />
+		<property name="environmentConsiderations" column="environment_considerations" type="text" />
 
 		<property access="field" name="externalFinancing" column="external_financing"
 			type="java.lang.Double" />

@@ -1918,8 +1918,8 @@ public class ProgramUtil {
 		 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		 String translatedText = null;
 		 try {
-			logger.info("siteID : "+siteId);
-			logger.info("locale : "+locale);
+//			logger.info("siteID : "+siteId);
+//			logger.info("locale : "+locale);
 			translatedText = TranslatorWorker.translateText("No Programs present", locale, siteId.toString());
 		 } catch (WorkerException e) {
 			e.printStackTrace();

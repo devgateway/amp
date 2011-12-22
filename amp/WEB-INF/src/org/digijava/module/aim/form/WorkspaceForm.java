@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class WorkspaceForm extends ActionForm {
 
@@ -20,6 +21,7 @@ public class WorkspaceForm extends ActionForm {
         
         private Integer currentRow;
         private Integer currentPage;
+        private Long selectedWs;
 
         public Integer getCurrentPage() {
             return currentPage;
@@ -36,6 +38,14 @@ public class WorkspaceForm extends ActionForm {
         public void setCurrentRow(Integer currentRow) {
             this.currentRow = currentRow;
         }
+
+        public Long getSelectedWs() {
+			return selectedWs;
+		}
+
+		public void setSelectedWs(Long selectedWs) {
+			this.selectedWs = selectedWs;
+		}
 
 	public String getKeyword() {
 		return keyword;

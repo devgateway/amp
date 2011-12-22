@@ -219,8 +219,7 @@
 		
         YAHOO.example.XHR_JSON = new function() {
  	
-       	         
-            this.formatActions = function(elCell, oRecord, oColumn, sData) {
+       	    this.formatActions = function(elCell, oRecord, oColumn, sData) {
                 elCell.innerHTML = 
                     "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
                     "<a onclick='setViewTemDetails()' href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
@@ -356,23 +355,24 @@
             this.myDataTable.subscribe('postRenderEvent',function(oArgs){
 			if(second){
 			    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
-				second=false;
+			    showTeamDetails(${aimWorkspaceForm.selectedWs},null);
+			    second=false;
 			}
             
             if(added=="true"){
-				if(${aimWorkspaceForm.currentPage}!=1){
+            	if(${aimWorkspaceForm.currentPage}!=1){
 					myPaginator.setPage(${aimWorkspaceForm.currentPage});
-					second=true;
+				    second=true;
 				}
 				else{
 					this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
-					second=false;
+				    second=false;
 				} 
                added="false";
             }
             });
             </c:if>
-
+          
 
             // Update totalRecords on the fly with value from server
             this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
@@ -911,12 +911,20 @@
         }
     }
     function showTeamDetails(id, description){
-
-        document.getElementsByName('teamId')[0].value=id;
+    	value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
+    	if(value==0){
+        	if (description==null){
+            	description='<digi:trn jsFriendly="true">Members</digi:trn>';
+        	}
+    	}else{
+    		 if (description==null){
+             	description='<digi:trn jsFriendly="true">Activities</digi:trn>';
+             }
+        }
+    	document.getElementsByName('teamId')[0].value=id;
         document.getElementsByName('teamName')[0].value=description;
-	
+    	
         if(viewTeamDetails!='false'){
-            value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
             if(value==0){
                 showTeamMembers(id, description);			
             }

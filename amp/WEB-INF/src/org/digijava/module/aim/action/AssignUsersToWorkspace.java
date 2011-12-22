@@ -100,7 +100,8 @@ public class AssignUsersToWorkspace extends Action {
                 HttpSession session = request.getSession();
                 session.setAttribute("fromPage", tmForm.getFromPage());
                 session.setAttribute("selectedRow", tmForm.getSelectedRow());
-		
+                session.setAttribute("selectedWs", tmForm.getTeamId());
+                
 		return mapping.findForward(redirectWhere);
 
 	}

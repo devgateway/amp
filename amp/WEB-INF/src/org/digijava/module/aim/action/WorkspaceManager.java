@@ -53,7 +53,11 @@ public class WorkspaceManager extends Action {
                     wsForm.setCurrentRow((Integer)session.getAttribute("selectedRow"));
                     session.removeAttribute("selectedRow");
                 }
-		
+                if(session.getAttribute("selectedWs")!=null){
+                    wsForm.setSelectedWs((Long)session.getAttribute("selectedWs"));
+                    session.removeAttribute("selectedWs");
+                }
+                
 		String keyword = wsForm.getKeyword();
 		Collection<String> keywords=new ArrayList<String>();
 		StringTokenizer st = new StringTokenizer("");

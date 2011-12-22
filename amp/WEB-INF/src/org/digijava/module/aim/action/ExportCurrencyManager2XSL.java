@@ -102,7 +102,7 @@ public class ExportCurrencyManager2XSL extends Action {
 				  row.createCell(cellIndex++).setCellValue((currency.getActiveFlag()==0)?inactive:active);
 				  row.createCell(cellIndex++).setCellValue(currency.getCurrencyCode());
 				  row.createCell(cellIndex++).setCellValue(currency.getCurrencyName());
-				  row.createCell(cellIndex++).setCellValue(currency.getCountryLocation().getName());
+				  row.createCell(cellIndex++).setCellValue((currency.getCountryLocation()!=null)?currency.getCountryLocation().getName():"");
 				
 			}
 		}

@@ -19,7 +19,7 @@
 								<jsp:include page="toolbar.jsp" />
 							</c:if>		
 							<br />			
-							<table cellpadding="0" cellspacing="0" style="width: 735px; vertical-align: middle">
+							<table align="center" cellpadding="0" cellspacing="0" style="width: 735px; vertical-align: middle">
 								<tr>
 									<td width="48%" align="center">
 										<fieldset class="main_side_cont">

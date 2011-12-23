@@ -53,6 +53,9 @@ public class FilterValues {
 			possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document",request)));
 			possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet",request)));
 			possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text",request)));
+			possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file",request)));
+			possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images",request)));
+			
 			
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

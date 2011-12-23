@@ -74,13 +74,15 @@ public class DocumentFilter {
 	}
 	
 	public Collection<DocumentData> applyFilter(Collection<DocumentData> col) {
+		String fileTypeFilter="image/";
 		ArrayList<DocumentData> retCol	= new ArrayList<DocumentData>();
 		if ( col != null ) {
 			for ( DocumentData dd: col ) {
 				boolean pass	= true;
-				if ( this.filterDocTypeIds != null && !this.filterDocTypeIds.contains( dd.getCmDocTypeId() ) ) 
+				if ( this.filterDocTypeIds != null && !this.filterDocTypeIds.contains( dd.getCmDocTypeId() ) ) {					
 					pass	= false;
-				else if ( this.filterFileType != null && !this.filterFileType.contains( dd.getContentType() ) ) 
+				}else if ( this.filterFileType != null && (!this.filterFileType.contains(dd.getContentType()) &&
+						!(this.filterFileType.contains(fileTypeFilter) && dd.getContentType().contains(fileTypeFilter)))	) 
 					pass	= false;
 				else if ( this.filterTeamIds != null && !this.filterTeamIds.contains( dd.getCreatorTeamId() ) )
 					pass	= false;

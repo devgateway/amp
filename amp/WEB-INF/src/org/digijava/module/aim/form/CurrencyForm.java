@@ -36,7 +36,21 @@ public class CurrencyForm extends ActionForm {
     private int offset;
     
     private int order;
-    
+    private Integer activeFlag;
+
+	/**
+	 * @return Returns the activeFlag.
+	 */
+	public Integer getActiveFlag() {
+		return activeFlag;
+	}
+	/**
+	 * @param activeFlag The activeFlag to set.
+	 */
+	public void setActiveFlag(Integer activeFlag) {
+		this.activeFlag = activeFlag;
+	}
+	
 	public int getOrder() {
 		return order;
 	}

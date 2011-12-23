@@ -70,6 +70,7 @@ public class UpdateCurrency extends Action {
                         }
                         crForm.setCurrencyName(curr.getCurrencyName());
                         crForm.setId(curr.getAmpCurrencyId());
+                        crForm.setActiveFlag(curr.getActiveFlag());
                         break;
                     }
                 }
@@ -144,7 +145,11 @@ public class UpdateCurrency extends Action {
         curr.setCurrencyCode(crForm.getCurrencyCode());
         curr.setCurrencyName(crForm.getCurrencyName());
         curr.setAmpCurrencyId(crForm.getId());
-        curr.setActiveFlag(new Integer(1));
+        if (crForm.getActiveFlag()!=null){
+        	curr.setActiveFlag(crForm.getActiveFlag());
+        }else{
+        	curr.setActiveFlag(new Integer(1));
+        }
         AmpCurrencyRate cRate = new AmpCurrencyRate();
         if (crForm.getExchangeRate() != null &&
             crForm.getExchangeRateDate() != null &&

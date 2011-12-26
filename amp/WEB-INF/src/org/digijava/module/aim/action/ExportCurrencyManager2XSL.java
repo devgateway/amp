@@ -23,6 +23,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
+import org.digijava.module.aim.util.AdminXSLExportUtil;
 
 public class ExportCurrencyManager2XSL extends Action {
 	 private static Logger logger = Logger.getLogger(ExportCurrencyManager2XSL.class);
@@ -51,16 +52,10 @@ public class ExportCurrencyManager2XSL extends Action {
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("export");
 		// title cells
-       HSSFCellStyle titleCS = wb.createCellStyle();
-       titleCS.setWrapText(true);
-       titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
-       HSSFFont fontHeader = wb.createFont();
-       fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-       fontHeader.setFontHeightInPoints((short) 10);
-       fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-       titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-       titleCS.setFont(fontHeader);
-
+		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
+		 //ordinary cell style
+		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
+	   
       
        int rowIndex = 0;
        int cellIndex = 0;
@@ -99,10 +94,23 @@ public class ExportCurrencyManager2XSL extends Action {
 			for(AmpCurrency currency:currencies){
 				cellIndex=0;
 				  HSSFRow row = sheet.createRow(rowIndex++);
-				  row.createCell(cellIndex++).setCellValue((currency.getActiveFlag()==0)?inactive:active);
-				  row.createCell(cellIndex++).setCellValue(currency.getCurrencyCode());
-				  row.createCell(cellIndex++).setCellValue(currency.getCurrencyName());
-				  row.createCell(cellIndex++).setCellValue((currency.getCountryLocation()!=null)?currency.getCountryLocation().getName():"");
+				  
+				  HSSFCell cell=row.createCell(cellIndex++);
+				  cell.setCellStyle(cs);
+				  cell.setCellValue((currency.getActiveFlag()==0)?inactive:active);
+				  
+				  cell=row.createCell(cellIndex++);
+				  cell.setCellStyle(cs);
+				  cell.setCellValue(currency.getCurrencyCode());
+				  
+				  cell=row.createCell(cellIndex++);
+				  cell.setCellStyle(cs);
+				  cell.setCellValue(currency.getCurrencyName());
+				  
+				  cell=row.createCell(cellIndex++);
+				  cell.setCellStyle(cs);
+				  cell.setCellValue((currency.getCountryLocation()!=null)?currency.getCountryLocation().getName():"");
+				  
 				
 			}
 		}

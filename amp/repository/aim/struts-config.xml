@@ -1749,6 +1749,7 @@
       <forward name="forward" path="/showLayout.do?layout=viewIndicators"/>
       <forward name="deleted" path="/aim/viewIndicators.do?indicator=deleted" />
     </action>
+     <action name="aimViewIndicatorsForm" path="/aim/exportIndicatorManager2XSL" scope="session" type="org.digijava.module.aim.action.ExportIndicatorManager2XSL" validate="false"/>
 	<action name="aimNewIndicatorForm" path="/aim/addNewIndicator" scope="session" type="org.digijava.module.aim.action.AddNewIndicator" validate="false">
      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
      <forward name="added" path="/aim/viewIndicators.do" redirect="true"/>

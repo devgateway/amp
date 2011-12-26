@@ -107,23 +107,8 @@
 								<digi:trn>Printer Friendly</digi:trn>
 							</c:set>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
-								<table border="0" align="center">
-									<tr>
-										<td noWrap align=left valign="middle" style="cursor: pointer;"
-											height="30px"><a target="_blank"
-											onclick="exportXSL(); return false;"> <digi:img
-													width="17" hspace="2" vspace="2"
-													src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif"
-													border="0" alt="${translationxls}" /> </a></td>
-										<td noWrap align=left valign="middle"><digi:link
-												styleId="printWin" href="#"
-												onclick="window.print(); return false;">
-												<digi:img width="17" hspace="2" vspace="2"
-													src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"
-													border="0" alt="${translationPrinter}" />
-											</digi:link></td>
-									</tr>
-								</table>
+									<jsp:include
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
 							</div></td>
 
 					</tr>

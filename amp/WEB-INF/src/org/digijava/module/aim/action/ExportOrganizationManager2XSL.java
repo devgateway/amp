@@ -25,6 +25,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgManagerForm;
+import org.digijava.module.aim.util.AdminXSLExportUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ExportOrganizationManager2XSL  extends Action {
@@ -54,16 +55,9 @@ public class ExportOrganizationManager2XSL  extends Action {
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("export");
 		// title cells
-        HSSFCellStyle titleCS = wb.createCellStyle();
-        titleCS.setWrapText(true);
-        titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
-        HSSFFont fontHeader = wb.createFont();
-        fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontHeader.setFontHeightInPoints((short) 10);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        titleCS.setFont(fontHeader);
-
+		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
+		 //ordinary cell style
+		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
        
         int rowIndex = 0;
         int cellIndex = 0;
@@ -97,12 +91,25 @@ public class ExportOrganizationManager2XSL  extends Action {
 			for(AmpOrganisation organization:organizations){
 				cellIndex=0;
 				  HSSFRow row = sheet.createRow(rowIndex++);
-				  row.createCell(cellIndex++).setCellValue(organization.getName());
-				  row.createCell(cellIndex++).setCellValue(organization.getAcronym());
-				  AmpOrgGroup group=organization.getOrgGrpId();
-				  row.createCell(cellIndex++).setCellValue(group.getOrgType().getOrgType());
-				  row.createCell(cellIndex++).setCellValue(group.getOrgGrpName());
-				
+				  
+				HSSFCell cell = row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(organization.getName());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(organization.getAcronym());
+
+				AmpOrgGroup group = organization.getOrgGrpId();
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(group.getOrgType().getOrgType());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(group.getOrgGrpName());
+					
 			}
 		}
 		sheet.autoSizeColumn(0); //adjust width of the first column

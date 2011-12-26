@@ -24,13 +24,13 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.UserBean;
+import org.digijava.module.aim.util.AdminXSLExportUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
 
 public class ExportUserManager2XSL extends Action {
 	private static Logger logger = Logger
 			.getLogger(ExportUserManager2XSL.class);
-	private final static char BULLETCHAR = '\u2022';
-	private final static char NEWLINECHAR = '\n';
+
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
@@ -56,22 +56,10 @@ public class ExportUserManager2XSL extends Action {
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("export");
 		// title cells
-		HSSFCellStyle titleCS = wb.createCellStyle();
-		titleCS.setWrapText(true);
-		titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
-		HSSFFont fontHeader = wb.createFont();
-		fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-		fontHeader.setFontHeightInPoints((short) 10);
-		fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		titleCS.setFont(fontHeader);
+		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
 		 //ordinary cell style
-		HSSFCellStyle  cs = wb.createCellStyle();
-	    cs.setWrapText(true);
-	    cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-		for (int i = 0; i < 3; i++) {
-			sheet.setDefaultColumnStyle(i, cs);
-		}
+		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
+	   
 
 
 		int rowIndex = 0;
@@ -85,38 +73,42 @@ public class ExportUserManager2XSL extends Action {
 		titleCell.setCellValue(title);
 		titleCell.setCellStyle(titleCS);
 
-		HSSFCell cellName = titleRow.createCell(cellIndex++);
+		HSSFCell cellEmail = titleRow.createCell(cellIndex++);
 		HSSFRichTextString nameTitle = new HSSFRichTextString(
 				TranslatorWorker.translateText("Email", locale, siteId));
-		cellName.setCellValue(nameTitle);
-		cellName.setCellStyle(titleCS);
+		cellEmail.setCellValue(nameTitle);
+		cellEmail.setCellStyle(titleCS);
 
-		HSSFCell countryTitleCell = titleRow.createCell(cellIndex++);
+		HSSFCell workspaceTitleCell = titleRow.createCell(cellIndex++);
 		HSSFRichTextString countryTitle = new HSSFRichTextString(
 				TranslatorWorker.translateText("Workspace", locale, siteId));
-		countryTitleCell.setCellValue(countryTitle);
-		countryTitleCell.setCellStyle(titleCS);
+		workspaceTitleCell.setCellValue(countryTitle);
+		 workspaceTitleCell.setCellStyle(titleCS);
 		Collection<UserBean> users = userForm.getUsers();
 
 		if (users != null) {
 			for (UserBean user : users) {
 				cellIndex = 0;
 				HSSFRow row = sheet.createRow(rowIndex++);
-				row.createCell(cellIndex++).setCellValue(
-						user.getFirstNames() + " " + user.getLastName());
-				row.createCell(cellIndex++).setCellValue(user.getEmail());
-				HSSFCell cell = row.createCell(cellIndex++);
+				HSSFCell cell=row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(user.getFirstNames() + " " + user.getLastName());
+				cell = row.createCell(cellIndex++);
+				cell.setCellStyle(cs);
+				cell.setCellValue(user.getEmail());
+				cell = row.createCell(cellIndex++);
 				String currentRecord = "";
 				if (user.getTeamMembers() != null&&user.getTeamMembers().size()>0) {
 					for (AmpTeamMember member : user.getTeamMembers()) {
-						currentRecord += BULLETCHAR
-								+ member.getAmpTeam().getName() + NEWLINECHAR;
+						currentRecord +=AdminXSLExportUtil.BULLETCHAR
+								+ member.getAmpTeam().getName() + AdminXSLExportUtil.NEWLINECHAR;
 					}
 					cell.setCellValue( currentRecord);
 				} else {
 					cell.setCellValue(TranslatorWorker.translateText(
 							"Unassigned", locale, siteId));
 				}
+				cell.setCellStyle(cs);
 
 			}
 		}

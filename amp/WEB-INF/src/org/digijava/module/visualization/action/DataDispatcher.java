@@ -362,7 +362,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
 				child.put("name", act.getName());
 				child.put("id", act.getAmpActivityId());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topProjects.add(child);
 			}
 		}
@@ -376,7 +376,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topSectors.add(child);
 			}
 		}
@@ -390,7 +390,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topDonors.add(child);
 			}
 		}
@@ -404,7 +404,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 				topRegions.add(child);
 			}
 		}

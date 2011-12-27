@@ -324,9 +324,8 @@ function exportXSL(){
 																				</span>
 																			</c:if></td>
 																		<td align="left" class="inside"><a
-																			href="javascript:editCurrency('${curr.currencyCode}')">
-																				<digi:trn
-																					key='aim:currency:${fn:replace(curr.currencyCode, " ", "_")}'>${curr.currencyCode}</digi:trn>
+																			href="javascript:editCurrency('${curr.currencyCode}')">${curr.currencyCode}
+<!--																				
 																		</a>
 																		</td>
 																		<td align="left" class="inside"><a

@@ -175,7 +175,7 @@
 				var paletteStr:String = null;
 				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
 				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
-				decimalsToShow = LoaderInfo(this.root.loaderInfo).parameters.decimalsToShow;
+				decimalsToShow = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DecimalsToShow')}"));
 				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
 				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
 				var palArray:Array = paletteStr.split(",");
@@ -194,7 +194,6 @@
 				formatter.thousandsSeparatorFrom=groupSeparator;
 				formatter.thousandsSeparatorTo=groupSeparator;
 				formatter.precision = decimalsToShow;
-
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 
 				//Set the title and the rest of the parameters for legend

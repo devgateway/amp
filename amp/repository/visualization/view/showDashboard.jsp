@@ -1238,7 +1238,7 @@ function initializeGlobalVariables(){
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
-				<div id="RegionProfileHeader" class="chart_header" style="float:left">
+				<div id="RegionProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>
@@ -1279,7 +1279,7 @@ function initializeGlobalVariables(){
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
-				<div id="SectorProfileHeader" class="chart_header" style="float:left">
+				<div id="SectorProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>

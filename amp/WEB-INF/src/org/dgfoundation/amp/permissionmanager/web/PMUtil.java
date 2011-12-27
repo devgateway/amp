@@ -644,6 +644,13 @@ public final class PMUtil {
 				CompositePermission cp = (CompositePermission)p;
 				PMUtil.deleteCompositePermission(cp, session,true);
 			    }
+			    else if (p!=null && p.isDedicated() && pMapList!=null){
+			    	//PMUtil.deletePermissionMap(permissionMap, session);
+			    	p.getPermissibleObjects().remove(permissionMap);
+			    	session.saveOrUpdate(p);
+			    	permissionMap.setPermission(null);
+			    	session.delete(permissionMap);
+			    }
 			}
 		}
 		

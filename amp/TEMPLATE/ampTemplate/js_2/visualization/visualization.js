@@ -1494,6 +1494,9 @@ function getValueToFlash(idContainer, field){
 	if (field == 'Currency'){
 		return document.getElementById("currencyCode").value;
 	}
+	if (field == 'DecimalsToShow'){
+		return document.getElementById("decimalsToShow").value;
+	}
 	var inputObject = document.getElementById(idContainer + field);
 	var returnValue;
 	

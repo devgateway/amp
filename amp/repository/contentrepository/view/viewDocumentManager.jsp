@@ -207,6 +207,10 @@ function setHoveredTable(tableId, hasHeaders) {
 			
 			
 		}
+		
+		
+		 //var sharedDocsFilterBtn = $('div#sharedListObjDivId').find('.yui-dt-empty');
+		 //alert(sharedDocsFilterBtn.html());
 	}
 	
 	function afterPageLoad(e) {
@@ -286,6 +290,8 @@ function setHoveredTable(tableId, hasHeaders) {
 		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", 
 				getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels", trnObj);
 		templateFPanel.initLabelArray(false);
+		
+		
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>
@@ -502,14 +508,17 @@ function setHoveredTable(tableId, hasHeaders) {
 			<div style="width:1000px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
-			        <feature:display name="My Resources" module="Content Repository">
-			        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
-			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
-			        	</c:if>
-			        	<c:if  test="${selectedType!='private' && selectedType!='version'}">
-			        		<li id="tab1"><a href="#my_res"><div> <digi:trn>My Resources</digi:trn></div></a></li>
-			        	</c:if>
-			        </feature:display>
+						<feature:display name="My Resources" module="Content Repository">
+				        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
+				        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
+				        	</c:if>
+				        	<c:if  test="${selectedType!='private' && selectedType!='version'}">
+				        		<li id="tab1"><a href="#my_res"><div> <digi:trn>My Resources</digi:trn></div></a></li>
+				        	</c:if>
+				        </feature:display>
+
+			        
+			        
 			        <feature:display name="Team Resources" module="Content Repository">
 			        	<c:if  test="${selectedType=='team'}">
 			        		<li id="tab2" class="selected"><a href="#team_res"><div class="tab_link"><digi:trn>Team Resources</digi:trn></div></a></li>
@@ -518,31 +527,36 @@ function setHoveredTable(tableId, hasHeaders) {
 			        		<li id="tab2"><a href="#team_res"><div class="tab_link"><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
 					</feature:display>
-					<feature:display name="Shared Resources" module="Content Repository">
-						<c:if  test="${selectedType=='shared'}">
-			        		<li id="tab3" class="selected"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
-			        	</c:if>
-			        	<c:if  test="${selectedType!='shared'}">
-			        		<li id="tab3"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
-			        	</c:if>
-					</feature:display>					
 					
-					<feature:display name="Public Resources" module="Content Repository">
-						<c:set var="selectedClass">
-							<c:if test="${selectedType!='private' && selectedType!='version' && selectedType!='team' && selectedType!='shared'}">selected</c:if>
-						</c:set>
-			        	<li id="tab4" class="${selectedClass}"><a href="#public_res"><div class="tab_link"><digi:trn>Public Resources</digi:trn></div></a></li>
-			       </feature:display>
+					<c:if test="${not empty myForm.sharedDocsTabVisible && myForm.sharedDocsTabVisible}">
+						<feature:display name="Shared Resources" module="Content Repository">
+							<c:if  test="${selectedType=='shared'}">
+				        		<li id="tab3" class="selected"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
+				        	</c:if>
+				        	<c:if  test="${selectedType!='shared'}">
+				        		<li id="tab3"><a href="#shared_res"><div class="tab_link"><digi:trn>Shared Resources</digi:trn></div></a></li>
+				        	</c:if>
+						</feature:display>
+					</c:if>			
+					
+					<c:if test="${not empty myForm.publicDocsTabVisible && myForm.publicDocsTabVisible}">					
+						<feature:display name="Public Resources" module="Content Repository">
+							<c:set var="selectedClass">
+								<c:if test="${selectedType!='private' && selectedType!='version' && selectedType!='team' && selectedType!='shared'}">selected</c:if>
+							</c:set>
+				        	<li id="tab4" class="${selectedClass}"><a href="#public_res"><div class="tab_link"><digi:trn>Public Resources</digi:trn></div></a></li>
+				       </feature:display>
+			       </c:if>
 			    </ul> 
 			     
 			    <div class="yui-content" style="border-color: #d0d0d0">
-			    	<feature:display name="My Resources" module="Content Repository">
-			      		<div id="my_res" class="resource_popin" style="border: none;">				        	       
+		    		<feature:display name="My Resources" module="Content Repository">
+			      		<div id="my_res" class="resource_popin" style="border: none;">
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
 							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
-							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif"> 
+							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
 								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId')">
 								    		<digi:trn>Filters</digi:trn>
@@ -552,7 +566,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    </td>								    
+								    </td>
 								</tr>
 								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>
 								<tr>
@@ -577,7 +591,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<bean:define id="filterDivId" value="privateFilterDivId" toScope="request" />
 							<jsp:include page="filters/filters.jsp"/>	        
 				        </div>
-					</feature:display>
+					</feature:display>			    	
 					
 					
 					<feature:display name="Team Resources" module="Content Repository">
@@ -633,51 +647,57 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					<!-- Shared Resources Start  -->
 					<feature:display name="Shared Resources" module="Content Repository">
-						<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
-							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
-								<tr>
-									<td>										
-										<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
-								    		<digi:trn>Filters</digi:trn>
-								    	</button>
-								    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();">
-								    		<digi:trn>Labels</digi:trn>
-								    	</button>
-									</td>
-								</tr>						
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
-								<tr>
-									<td>										
-										<div style="width: 80%; float: left" id="sharedFilterInfo" class="t_sm"></div>
-										<br />
-										<div id="shared_markup" align="left" class="all_markup">
-												
-										</div>
-										<br />
-									</td>
-								</tr>
-							</table>
-							<bean:define id="filterDivId" value="sharedFilterDivId" toScope="request" />
-							<jsp:include page="filters/filters.jsp"/>		        
-				        </div>
+						<c:if test="${not empty myForm.sharedDocsTabVisible && myForm.sharedDocsTabVisible}">
+							<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
+								<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
+									<tr>
+										<td>										
+											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
+									    		<digi:trn>Filters</digi:trn>
+									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+									    	</button>
+									    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();">
+									    		<digi:trn>Labels</digi:trn>
+									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+									    	</button>
+										</td>
+									</tr>						
+									<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
+									<tr>
+										<td>										
+											<div style="width: 80%; float: left" id="sharedFilterInfo" class="t_sm"></div>
+											<br />
+											<div id="shared_markup" align="left" class="all_markup">
+													
+											</div>
+											<br />
+										</td>
+									</tr>
+								</table>
+								<bean:define id="filterDivId" value="sharedFilterDivId" toScope="request" />
+								<jsp:include page="filters/filters.jsp"/>		        
+					        </div>						
+						</c:if>						
 					</feature:display>
 					
 					<!-- Shared Resources end  -->
 					
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Content Repository">
-				        <div id="public_res"  class="resource_popin" style="border: none;">				        	       
-							<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >
-								<tr>
-									<td>										
-										<div id="public_markup" align="left" class="all_markup">
-										
-										</div>
-										<br />
-									</td>
-								</tr>
-							</table>	        
-				        </div>
+						<c:if test="${not empty myForm.publicDocsTabVisible && myForm.publicDocsTabVisible}">
+							<div id="public_res"  class="resource_popin" style="border: none;">				        	       
+								<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >
+									<tr>
+										<td>										
+											<div id="public_markup" align="left" class="all_markup">
+											
+											</div>
+											<br />
+										</td>
+									</tr>
+								</table>	        
+					        </div>
+						</c:if>				        
 			        </feature:display>
 					<!--End public Resources-->
 				</div>
@@ -706,3 +726,7 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 	
 <%@include file="documentManagerDivHelper.jsp" %>
+
+<script type="text/javascript">
+ 
+</script>

@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.jackrabbit.api.JackrabbitRepository;
+import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
@@ -588,7 +589,8 @@ public class DocumentManagerUtil {
 	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember){
 		String userName		= teamMember.getEmail();
 		String teamId		= "" + teamMember.getTeamId();
-		
+			
+				
 		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
 	}
 	
@@ -1035,5 +1037,58 @@ public class DocumentManagerUtil {
 		logger.info("Jackrabbit repository shutdown succesfully !");
 	}
 	
+//	public static boolean privateDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
+//		boolean retVal=false;
+//		String userName		= teamMember.getEmail();
+//		String teamId		= "" + teamMember.getTeamId();
+//		Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+//		try {
+//			NodeIterator iter = node.getNodes();
+//			if(iter.hasNext()){
+//				retVal=true;
+//			}
+//		} catch (RepositoryException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return retVal;
+//	}
+//	
+//	public static boolean teamDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
+//		boolean retVal=false;
+//		return retVal;
+//	}
+	
+	public static boolean sharedDocumentsExist(TeamMember teamMember){
+		boolean retVal=false;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		String queryString=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select count(r.nodeUUID) from " + CrSharedDoc.class.getName() + " r where r.team="+teamMember.getTeamId()+" and r.state="+CrConstants.SHARED_AMONG_WORKSPACES;
+			qry=session.createQuery(queryString);
+			retVal=(Integer)qry.uniqueResult()>0?true:false;
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resourcess: " + e.toString());
+		}
+		return retVal;
+	}
+	
+	public static boolean publicDocumentsExist(TeamMember teamMember){
+		boolean retVal=false;		
+		org.hibernate.Session session=null;
+		Query qry=null;
+		String queryString=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select count(r) from " + CrDocumentNodeAttributes.class.getName() + " r";
+			qry=session.createQuery(queryString);
+			retVal=(Integer)qry.uniqueResult()>0?true:false;
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resourcess: " + e.toString());
+		}
+		return retVal;
+	}
 	
 }

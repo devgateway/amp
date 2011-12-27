@@ -29,7 +29,7 @@
 <% pageContext.setAttribute("currentTimeInMillis", System.currentTimeMillis()); %>
 
 <table id="team_table" bgcolor="white" width="100%">						
-						<tbody>
+						<tbody>						
 						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
 							<%--
 					int index2;
@@ -290,11 +290,22 @@
 											</a>
 										</logic:equal>									
 									</logic:equal>
-									
 	
 									<logic:equal name="documentData" property="hasDeleteRights" value="true">
 										<br />
-										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
+										
+											<script type="text/javascript">
+											var parent_id;
+											$('a').click(function() {
+											    var el = $(this);
+											    var parent_id = el.prevAll(div.all_markup).attr(id);
+											    alert(parent_id);
+											});
+
+											</script>
+										
+										
+										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>','${tabTypeLocal}');"
 										title="<digi:trn>Click here to delete this document</digi:trn>"><digi:trn>Delete</digi:trn></a>
 									</logic:equal>
 								

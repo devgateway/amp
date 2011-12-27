@@ -83,7 +83,8 @@ public class DocumentManager extends Action {
 	    for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 	      	myForm.getYears().add(new Long(i));
 	    }
-
+	    
+	    
 		showContentRepository(request, myForm, errors);
 		
 		this.saveErrors(request, errors);
@@ -270,6 +271,12 @@ public class DocumentManager extends Action {
 			myForm.setTeamLeader( teamMember.getTeamHead() );
 			myForm.setTeamMembers( TeamMemberUtil.getAllTeamMembers(teamMember.getTeamId()) );
 			
+			Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+			
+			//check if tabs have data
+		    myForm.setSharedDocsTabVisible(DocumentManagerUtil.sharedDocumentsExist(teamMember));
+		    myForm.setPublicDocsTabVisible(DocumentManagerUtil.publicDocumentsExist(teamMember));
+			
 			// AMP-8791: "resourcesTab" is set only when the document is
 			// shared/unshared.
 			// Then the attribute is deleted from session. If there is no
@@ -282,9 +289,9 @@ public class DocumentManager extends Action {
 						myForm.setType("private");
 					}else if (FeaturesUtil.isVisibleFeature("Team Resources", ampContext)){
 						myForm.setType("team");
-					}else if (FeaturesUtil.isVisibleFeature("Shared Resources", ampContext)){
+					}else if (FeaturesUtil.isVisibleFeature("Shared Resources", ampContext) && myForm.getSharedDocsTabVisible()){
 						myForm.setType("shared");
-					}else if (FeaturesUtil.isVisibleFeature("Public Resources", ampContext)){
+					}else if (FeaturesUtil.isVisibleFeature("Public Resources", ampContext) && myForm.getPublicDocsTabVisible()){
 						myForm.setType("public");
 					}
 					
@@ -296,8 +303,7 @@ public class DocumentManager extends Action {
 						
 			if (teamMember == null) {
 				throw new Exception("No TeamMember found in HttpSession !");
-			}
-			Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+			}			
 			
 			
 			if ( myForm.getType() != null && myForm.getType().equals("private") ) {

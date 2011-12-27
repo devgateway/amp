@@ -61,6 +61,9 @@ public class DocumentManagerForm extends ActionForm {
 	
 	private Boolean pageCloseFlag	= false;
 	
+	private Boolean sharedDocsTabVisible ;
+	private Boolean publicDocsTabVisible ;
+	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
 	}
@@ -361,5 +364,21 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setFilterLabelsUUID(String[] filterLabelsUUID) {
 		this.filterLabelsUUID = filterLabelsUUID;
+	}
+
+	public Boolean getSharedDocsTabVisible() {
+		return sharedDocsTabVisible;
+	}
+
+	public void setSharedDocsTabVisible(Boolean sharedDocsTabVisible) {
+		this.sharedDocsTabVisible = sharedDocsTabVisible;
+	}
+
+	public Boolean getPublicDocsTabVisible() {
+		return publicDocsTabVisible;
+	}
+
+	public void setPublicDocsTabVisible(Boolean publicDocsTabVisible) {
+		this.publicDocsTabVisible = publicDocsTabVisible;
 	}	
 }

@@ -7,17 +7,19 @@
 
 <style type="text/css">
 
-.yui-tt{ background: LightYellow; border-color: black }
-.yui-skin-sam .yui-dt th{background:#C7D4DB}
+.yui-tt{ background: LightYellow; border-color: #CCCCCC }
+.yui-skin-sam .yui-dt th{background:#C7D4DB;border-color: white}
+.yui-skin-sam .yui-dt table {border-color: #CCCCCC}
+.yui-skin-sam .yui-dt-sortable span {font-size: 11px; font-family: Arial,Helvetica,sans-serif;}
 
-.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 100%}
-.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px;}
-.all_markup th {padding:.25em;background-color:#000000; font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup table {border-collapse:collapse;border: 1px solid #CCCCCC;  width: 100%}
+.all_markup td {padding:.25em;font-family:	Arial,Helvetica,sans-serif;font-size:11px;letter-space:2px;}
+.all_markup th {padding:.25em;background-color:#000000; font-size:11px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
 .all_markup .yui-dt {width: 100%;} 
 .all_markup .yui-dt-even td {background-color:#FFFFFF;} 
-.all_markup .yui-dt-odd td {background-color:#DBE5F1;} /* blue*/
+.all_markup .yui-dt-odd td {background-color:#f2f2f2;} /* blue*/
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .all_markup .yui-dt-headcontainer {background-color: #C7D4DB; color: black;}
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer td{color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
@@ -27,7 +29,7 @@
 
 .versions_markup {margin:1em; overflow: auto; } 
 .versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
-.versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
+.versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:11px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
 .versions_markup .yui-dt-odd td {background-color:#A7CC25;} /* a light blue color -- this doesn't apply (?)' */ 
@@ -439,6 +441,7 @@ myTable.enhanceMarkup = function(markupName) {
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 
 	
+	 
 	return dataTable;
 };
 
@@ -454,7 +457,7 @@ var categories	= YAHOO.amp.actionPanels;
 
 /* Ajax function that creates a callback object after a delete command 
 was issued in order to delete the respective row/document*/
-function getCallbackForDelete (rows) {
+function getCallbackForDelete (rows,tabType) {
 	callbackForDelete = {
 		success: function(o) {
 			YAHOO.amp.panels[2].setBody(o.responseText);
@@ -470,9 +473,16 @@ function getCallbackForDelete (rows) {
 					
 					repositoryTabView.activatedLists[2]	= false;
 					repositoryTabView.activatedLists[3]	= false;
-					sharedListObj.clearBody();
-					publicListObj.clearBody();
+					if(document.getElementById("shared_markup")!=null){
+						sharedListObj.clearBody();	
+					}
+					
+					if(document.getElementById("public_markup")!=null){
+						publicListObj.clearBody();	
+					}
+					
 				}
+				updateFilterPanel('',tabType);
 			}
 			else 
 				YAHOO.amp.panels[2].show();
@@ -487,7 +497,7 @@ function getCallbackForDelete (rows) {
 	return callbackForDelete;
 }
 /* Function called after clicking delete */
-function deleteRow(uuid, o) {
+function deleteRow(uuid,o) {
 	var links			= document.getElementsByTagName('a');
 	var possibleRows	= new Array();
 	if (links != null) {
@@ -510,7 +520,7 @@ function deleteRow(uuid, o) {
 		//YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
 		//showPanel(2);
 		//YAHOO.amp.table.dataTable.deleteRow(possibleRow);
-		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows));
+		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows,o));
 		
 	}
 }
@@ -885,7 +895,10 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 					YAHOO.amp.datatables.push( datatable );
 					if ( windowController != null)
 						windowController.datatable	= datatable;
-				
+					
+					updateFilterPanel(divId,null);				
+					
+					 
 					//createToolTips(containerElement);
 				},
 		failure: function(o) {
@@ -895,6 +908,36 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 	
 	return callbackForOtherDocuments;
 
+}
+
+function updateFilterPanel(divId,tabType){
+	if(divId==null || divId==''){
+		if(tabType=='private'){
+			divId='privateListObjDivId';
+		}
+		if(tabType=='team'){
+			divId='teamListObjDivId';
+		}
+	}
+	var filterAndLabelShow = $('div#'+divId).find('.yui-dt-empty');
+	
+	if(divId=='privateListObjDivId'){
+		if(filterAndLabelShow.html()!=null){
+			$('#filterButtonId').hide();
+			$('#labelButtonId').hide();			
+		}else{
+			$('#filterButtonId').show();
+			$('#labelButtonId').show();
+		}
+	}else if (divId=='teamListObjDivId'){
+		if(filterAndLabelShow.html()!=null){
+			$('#teamFilterButtonId').hide();
+			$('#teamLabelButtonId').hide();
+		}else{
+			$('#teamFilterButtonId').show();
+			$('#teamLabelButtonId').show();			
+		}
+	}
 }
 
 /* Creating document selector menu for new window */

@@ -45,7 +45,7 @@
 					</table>
 		</div>
 	</div>
-	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
+	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%; position: relative;">
 		<div style="background: #4C6185; margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%;
 			border-right: 1px solid black; border-bottom: 1px solid black;border-top: 1px solid black;">
 				<div class="memberSelectorHeader" style="float: left" >&nbsp;<digi:trn>Member Selector</digi:trn></div>

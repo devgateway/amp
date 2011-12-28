@@ -464,23 +464,15 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootOnOffBudget	= new HierarchyListableImplementation();
-			rootOnOffBudget.setLabel("All");
-			rootOnOffBudget.setUniqueId("-1");
-			rootOnOffBudget.setChildren( children );
-			HierarchyListableImplementation onBudgetDO	= new HierarchyListableImplementation();
-			onBudgetDO.setLabel("On Budget");
-			onBudgetDO.setUniqueId("1");
-			children.add(onBudgetDO);
-			HierarchyListableImplementation offBudgetDO	= new HierarchyListableImplementation();
-			offBudgetDO.setLabel("Off Budget");
-			offBudgetDO.setUniqueId("0");
-			children.add(offBudgetDO);
+			Collection<AmpCategoryValue> budgetCategoryValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true, request);	
+			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
+			rootBudgetCategory.setLabel("All");
+			rootBudgetCategory.setUniqueId("0");
+			rootBudgetCategory.setChildren( budgetCategoryValues );
 			GroupingElement<HierarchyListableImplementation> disbOrdersElement	=
-					new GroupingElement<HierarchyListableImplementation>("On Budget", "filter_on_budget_div", 
-							rootOnOffBudget, "selectedBudgets");
+				new GroupingElement<HierarchyListableImplementation>("Activity Budget", "filter_on_budget_div", 
+						rootBudgetCategory, "selectedBudgets");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true) { 
@@ -1197,28 +1189,18 @@ public class ReportsFilterPicker extends MultiAction {
 		} else
 			arf.setDonorGroups(null);
 
-		if (filterForm.getSelectedBudgets() != null) {
-	 	 	int selectedValue;
-	 	 	if ( filterForm.getSelectedBudgets().length == 1 ) {
-	 	 		selectedValue   = Integer.parseInt( (String)filterForm.getSelectedBudgets()[0] );
-	 	 	} else
-	 	 		selectedValue   = -1;
-	 	 	switch (selectedValue) {
-	 	 	case -1:
-	 	 	arf.setBudget(null);
-				break;
-			case 1:
-				arf.setBudget(true);
-				break;
-			case 0:
-				arf.setBudget(false);
-				break;
-
+		if (filterForm.getSelectedBudgets() != null && filterForm.getSelectedBudgets().length > 0) {
+			arf.setBudget(new HashSet<AmpCategoryValue>());
+			for (int i = 0; i < filterForm.getSelectedBudgets().length; i++) {
+				Long id = filterForm.getSelectedBudgets()[i];
+				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+				if (value != null)
+					arf.getBudget().add(value);
 			}
-		}
-		else 
+		} else {
 			arf.setBudget(null);
-		
+		}
+
 		arf.setJustSearch(filterForm.getJustSearch()==null?false:filterForm.getJustSearch());
 
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);

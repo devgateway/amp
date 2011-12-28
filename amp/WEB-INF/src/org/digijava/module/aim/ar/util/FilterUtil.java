@@ -244,10 +244,7 @@ public class FilterUtil {
 		form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
 		form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
 
-		if (filter.getBudget() != null) {
-	 		form.setSelectedBudgets( new Object[1] );
-	 	 	form.getSelectedBudgets()[0]    = filter.getBudget()?"1":"0" ;
-	 	}
+		form.setSelectedBudgets(FilterUtil.getObjectsIds(filter.getBudget()));
 		
 		form.setJustSearch( filter.isJustSearch() );
 		form.setRenderStartYear( filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );

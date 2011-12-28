@@ -73,6 +73,14 @@ function valid(value){
  	 }
  	 return false;
 }
+function editEvent(){
+         document.getElementById('hdnMethod').value = '';
+         var allOptions = document.getElementById('selreceivers').options;
+         for(var i=0;i<allOptions.length;i++){
+             allOptions[i].selected=true;
+         }
+ 	 return true;
+}
 
 </script>
 
@@ -294,7 +302,7 @@ function valid(value){
 					              	<td>
 					                	<input type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 					                	&nbsp;
-					                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+					                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="editEvent()">
 									</td>
 								</tr>
 								<tr height="3px"><td colspan="2"></td></tr>

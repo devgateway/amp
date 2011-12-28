@@ -14,6 +14,10 @@
     }
 
     function saveClicked(){
+            if(document.getElementById("configNameId").value==''){
+                alert("<digi:trn>Please enter name</digi:trn>")
+                return false;
+            }
 	   var id = document.getElementById("originalSectorId").value;
 	   var newId = document.getElementById("sctClassId").value;
 	   // Check if this is edit.
@@ -92,16 +96,16 @@
                                                                 <table width="100%">
                                                                     <tr>
                                                                         <td>
-                                                                            <digi:trn key="aim:SectorClassificationsConfiguration:ConfigurationName">Configuration Name</digi:trn> :
+                                                                            <digi:trn key="aim:SectorClassificationsConfiguration:ConfigurationName">Configuration Name</digi:trn><font size="2" color="#FF0000">*</font> :
                                                                         </td>
-                                                                        <td>
+                                                                        <td>             
                                                                             <c:if test="${aimSectorClassConfigForm.id>0}">
                                                                  
-                                                                                <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35" readonly="true"/> 
+                                                                                <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35" readonly="true" styleId="configNameId"/> 
                                                                             
                                                                             </c:if>
                                                                              <c:if test="${empty aimSectorClassConfigForm.id||aimSectorClassConfigForm.id==0}">
-                                                                                <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35"/> 
+                                                                                 <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35" styleId="configNameId"/> 
                                                                             </c:if>
                                                                             
                                                                         </td>
@@ -138,6 +142,9 @@
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:Save">Save</digi:trn>
                                                                         </html:submit>
                                                                         <td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2"><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
                                                                     </tr>
                                                                 </table>
                                                             </td>

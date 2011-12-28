@@ -68,7 +68,7 @@
 						  				<c:set var="trnCancelBtn">
 						  					<digi:trn>Cancel</digi:trn>
 						  				</c:set>
-						  			 	<input type="button" value="${trnCancelBtn}" onclick="myclose()" class="dr-menu"/>
+						  			 	<input type="button" value="${trnCancelBtn}" onclick="myPanel.hide();" class="dr-menu"/>
 						  			</td>
 								</tr>
 							</table>

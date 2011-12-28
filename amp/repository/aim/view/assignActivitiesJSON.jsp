@@ -89,7 +89,7 @@
 											<tr>
 												<td align="center" colspan="2">
 													<input class="dr-menu" type="button" onclick="assignActivityList();" value="<digi:trn>Assign</digi:trn>"/>
-													<input class="dr-menu" type="button" onclick="closeWindow();" value="<digi:trn>Cancel</digi:trn>"/>
+													<input class="dr-menu" type="button" onclick="myPanel.hide();" value="<digi:trn>Cancel</digi:trn>"/>
 												</td>
 											</tr>
 											</table>

@@ -503,7 +503,7 @@
     function checkErrorAndClose(){
         if(checkAndClose==true){
             if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-                myclose();
+            	myPanel.hide();
                 refreshPage();
             }
             checkAndClose=false;			
@@ -518,7 +518,6 @@
 
     function myclose(){
         myPanel.setBody("");
-        myPanel.hide();	
         panelStart=1;
     	
     }

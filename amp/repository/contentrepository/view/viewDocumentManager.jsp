@@ -218,7 +218,8 @@ function setHoveredTable(tableId, hasHeaders) {
 				labels: "<digi:trn>Labels</digi:trn>",
 				filters: "<digi:trn>Filters</digi:trn>",
 				apply: "<digi:trn>Apply</digi:trn>",
-				close: "<digi:trn>Close</digi:trn>"
+				close: "<digi:trn>Close</digi:trn>",
+				none: "<digi:trn>none</digi:trn>"
 		};
 		//set breadcrumb text
 		var breadCrumbObj=$('div.breadcrump_cont').text(breadcrumbName);

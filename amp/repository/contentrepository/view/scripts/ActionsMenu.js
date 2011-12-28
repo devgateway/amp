@@ -13,7 +13,7 @@ function ActionsMenu(objectId,nameprefix,isTeamMenu, trnObj){
 		this.ownerType	= "private";
 	
 	this.trnObj	= {
-			addResource: "Add Resource"
+			addResource: "<digi:trn>Add Resource</digi:trn>"
 	};
 	
 	if (trnObj != null)

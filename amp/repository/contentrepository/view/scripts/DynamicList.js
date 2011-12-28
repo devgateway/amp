@@ -49,7 +49,7 @@ FilterWrapper.prototype.labelsToHTML	= function(text) {
 		}
 	}
 	else
-		ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'>none<span>";
+		ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'>"+this.trnObj.none +"<span>";
 	
 	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
 	return ret;	

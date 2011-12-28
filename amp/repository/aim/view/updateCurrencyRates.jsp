@@ -91,15 +91,15 @@ function closePopup() {
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
 		<td align=left valign="top">
-			<table bgcolor=#aaaaaa cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
-				<tr bgcolor="#aaaaaa">
-					<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+			<table cellpadding="0" cellspacing="0" width="100%" class="inside" style="background-color: white; border-width: 1px;">
+				<tr style="background-color: #F2F2F2;">
+					<td vAlign="center" width="100%" align ="center" height="20" style="font-size: 12px;">
 						<digi:trn key="aim:currencyRateEditor">Currency Rate Editor</digi:trn>
 					</td></tr>
 				<tr>
 					<td align="center">
 						<table border="0" cellpadding="2" cellspacing="1" width="100%">
-							<tr bgcolor="#f4f4f2">
+							<tr>
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
 									<digi:trn key="aim:currencyCode">Currency Code</digi:trn>&nbsp;
@@ -111,7 +111,7 @@ function closePopup() {
 									</html:select>
 								</td>
 							</tr>
-							<tr bgcolor="#f4f4f2">
+							<tr>
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
 									<digi:trn key="aim:exchangeRateDate">Exchange rate date</digi:trn>&nbsp;
@@ -131,7 +131,7 @@ function closePopup() {
 									</table>
 								</td>
 							</tr>
-							<tr bgcolor="#f4f4f2">
+							<tr>
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
 									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> in selected currency)</digi:trn>&nbsp;
@@ -165,7 +165,7 @@ function closePopup() {
 								</table>
 								</td>
 							</tr>
-							<tr bgcolor="#ffffff">
+							<tr>
 								<td colspan="2">
 									<table width="100%" cellpadding="3" cellspacing="3" border="0">
 										<tr>
@@ -173,13 +173,13 @@ function closePopup() {
                                               <c:set var="trnSaveBtn">
                                                 <digi:trn key="aim:btnSave">Save</digi:trn>
                                               </c:set>
-                                              <input type="button" value="${trnSaveBtn}" onclick="saveRate()" style="dr-menu">
+                                              <input type="button" value="${trnSaveBtn}" onclick="saveRate()" class="buttonx">
 											</td>
 											<td align="left">
                                               <c:set var="trnCloseBtn">
                                                 <digi:trn key="aim:btnClose">Close</digi:trn>
                                               </c:set>
-                                              <input type="button" value="${trnCloseBtn}" onclick="closePopup()" style="dr-menu">
+                                              <input type="button" value="${trnCloseBtn}" onclick="closePopup()" class="buttonx">
 											</td>
 										</tr>
 									</table>

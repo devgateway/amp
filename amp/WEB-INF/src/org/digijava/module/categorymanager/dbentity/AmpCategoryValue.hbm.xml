@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" table="AMP_CATEGORY_VALUE" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_CATEGORY_VALUE_seq</param>
+			</generator>
+		</id>
+
+		<property name="value" column="category_value" type="java.lang.String" index="value" />
+		
+		<properties name="class_index_uniqueness" unique="true">
+			<many-to-one name="ampCategoryClass" column="amp_category_class_id" lazy="false"
+				class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
+			<property name="index" column="index_column" type="int" update="true" insert="true" />
+		</properties>
+		<!--   <property name="fieldType" column="field_type" type="long" /> -->
+
+		<set name="usedValues" table="AMP_CATEGORY_VALUES_USED" lazy="false">
+			<key column="value_id"/>
+			<many-to-many column="used_value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		</set>
+		<set name="usedByValues" table="AMP_CATEGORY_VALUES_USED" inverse="true" lazy="true">
+			<key column="used_value_id"/>
+			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		</set>
+	</class>
+</hibernate-mapping>

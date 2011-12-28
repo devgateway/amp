@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_CV_LOC_seq</param>
+			</generator>
+		</id>
+
+		<property name="name" column="location_name" type="java.lang.String" />
+		<many-to-one name="parentCategoryValue" column="parent_category_value"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
+		<many-to-one name="parentLocation" column="parent_location"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false" />
+		<property name="description" column="description" type="text" />
+		<property name="gsLat" column="gs_lat" type="java.lang.String" />
+		<property name="gsLong" column="gs_long" type="java.lang.String" />
+		<property name="geoCode" column="geo_code" type="java.lang.String" />
+		<property name="code" column="code" type="java.lang.String" />
+		<property column="ISO3" length="3" name="iso3" type="java.lang.String" unique-key="iso3_key" />
+		<property column="ISO" length="3" name="iso" type="java.lang.String" unique-key="iso_key" />
+		
+		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan" order-by="location_name">
+			<key column="parent_location"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
+		</set>
+
+	</class>
+</hibernate-mapping>

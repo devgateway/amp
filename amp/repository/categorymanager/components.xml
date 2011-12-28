@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<config>
+<secondary-pages>
+<!-- category manager  -->
+	<page name="viewCategoryManager"  title ="- Category Manager " />
+	<page name="createOrEditCategory" title= "- Category Manager - Create or Edit Category " />
+</secondary-pages>
+
+
+</config>

@@ -1,0 +1,1 @@
+alter table amp_activity_program modify program_percentage float;

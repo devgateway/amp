@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.dataExchange.dbentity.DELogPerExecution" table="de_log_per_execution">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">DE_LOG_PER_EXECUTION_seq</param>
+			</generator>
+		</id>
+		<property name="description" column="description" type="text" />		
+		<property name="externalTimestamp" column="external_timestamp" type="java.lang.String" />
+		<property name="executionTime" column="execution_time" type="java.sql.Timestamp" />
+		
+		<many-to-one name="deSourceSetting" column="de_source_setting_id" lazy="proxy"
+			class="org.digijava.module.dataExchange.dbentity.DESourceSetting" cascade="none" />
+		
+		<list name="logItems" lazy="false" cascade="all-delete-orphan">
+			<key column="de_log_per_execution_id" />
+			<index column="index_column" />
+			<one-to-many class="org.digijava.module.dataExchange.dbentity.DELogPerItem" /> 
+		</list>
+		
+		
+	</class>
+</hibernate-mapping>

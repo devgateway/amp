@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpClosingDateHistory"
+		table="AMP_CLOSING_DATE_HISTORY">
+		<cache usage="read-write" />
+		<id name="ampClosingDteHstryId" column="amp_closing_dte_hstry_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">amp_closing_date_history_seq</param>
+			</generator>
+		</id>
+
+		<property name="type" column="type" type="java.lang.Integer" />
+		<property name="closingDate" column="closing_date" type="java.util.Date" />
+
+		<many-to-one name="ampFundingId" column="amp_funding_id"
+			class="org.digijava.module.aim.dbentity.AmpFunding" not-null="true" />
+	</class>
+</hibernate-mapping>

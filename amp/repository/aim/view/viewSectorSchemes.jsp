@@ -18,8 +18,15 @@
 		var flag = confirm("${translation}");
 		return flag;
 	}
+	 function exportXSL(){
+     <digi:context name="exportUrl" property="context/module/moduleinstance/exportSectorManager2XSL.do"/>;
+     document.aimAddSectorForm.action="${exportUrl}";
+     document.aimAddSectorForm.target="_blank";
+     document.aimAddSectorForm.submit();
+ }
 </script>
 <digi:instance property="aimAddSectorForm" />
+<digi:form action="/getSectorSchemes.do" method="post">
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -52,9 +59,9 @@
 				</tr>-->
 				<tr>
 						<td align="left">
-						<!--  please note that this page contains form and you can not nested it inside other form -->
-						<jsp:include
-							page="/repository/aim/view/exportTable.jsp" /></td>
+							<jsp:include
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+					</td>
 				</tr>
 				<tr>
 					<td height=16 valign="center" width=571>
@@ -242,5 +249,6 @@
 		</td>
 	</tr>
 </table>
+</digi:form>
 
 

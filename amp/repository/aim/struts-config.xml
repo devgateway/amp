@@ -501,6 +501,7 @@
       <forward name="levelEnough" path="/showLayout.do?layout=editLevelEnough" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimAddSectorForm" path="/aim/exportSectorManager2XSL" scope="request" type="org.digijava.module.aim.action.ExportSectorManager2XSL" validate="false"/>
     <action name="aimSectorClassConfigForm" path="/aim/getSectorClassConfig" scope="session" type="org.digijava.module.aim.action.ManageClassificationConfig" validate="false">
       <forward name="manageClassifications" path="/showLayout.do?layout=manageClassificationsConfig" />
     </action>

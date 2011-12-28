@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.fields;
 
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.util.lang.PropertyResolver;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 
 /**
  * @author dan
@@ -43,9 +44,9 @@ public class AmpPMPermissibleCategoryChoiceRenderer extends ChoiceRenderer {
 		if(!(object instanceof Class)) return super.getDisplayValue(object);
 		else{
 			String s = ((Class)object).getSimpleName();
-			if("AmpActivity".compareTo(s)==0) result="Activity";
-			if("AmpFieldsVisibility".compareTo(s)==0) result= "Field";
-			if("AmpFeaturesVisibility".compareTo(s)==0) result= "Feature";
+			if("AmpActivity".compareTo(s)==0) result=TranslatorUtil.getTranslation("Activity");
+			if("AmpFieldsVisibility".compareTo(s)==0) result= TranslatorUtil.getTranslation("Field");
+			if("AmpFeaturesVisibility".compareTo(s)==0) result= TranslatorUtil.getTranslation("Feature");
 		}
 		return result;
 	}

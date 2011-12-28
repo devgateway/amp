@@ -202,14 +202,13 @@ public class XLSExportAction extends Action {
 			String translatedReportName="Report Name:";
 			String translatedReportDescription="Description:";			
 			try{	
-				if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+				if (arf.getAmountinthousand()){
 			    	translatedNotes=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
+				    if("".equalsIgnoreCase(translatedNotes)){
+				    	translatedNotes=AmpReports.getNote(session);    
+				    }
 				}
 				
-			    if("".equalsIgnoreCase(translatedNotes)){
-			    	translatedNotes=AmpReports.getNote(session);    
-			    }
-			    
 			    translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
 				translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 			}catch (WorkerException e){e.printStackTrace();}

@@ -11,6 +11,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="http://java.fckeditor.net" prefix="FCK" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 
 <script>
@@ -124,15 +126,39 @@ function cancelText(){
 
 	<html:options collection="lid" property="code" labelProperty="name"/></html:select>
 	 -->
-	
-			<html:select property="lang" onchange="ChangeLanguage(this)">
-				<c:forEach var="lng" items="${editorForm.languages}">
-					<c:set var="trn">
-						<digi:trn key="editor:sourceLanguage:${lng.name}">${lng.name}</digi:trn>
-					</c:set>
-					<html:option value="${lng.code}">${trn}</html:option>
-				</c:forEach>
-			</html:select>
+			
+			<bean:define id="showLanguageSwitch">true</bean:define>
+			<c:set var="showLanguageSwitch">
+				<feature:display name="Editor language switch" module="Project ID and Planning">true</feature:display>
+			</c:set>
+			
+			<c:if test="${showLanguageSwitch==''}">
+				<c:set var="showLanguageSwitch">false</c:set>
+			</c:if>
+			
+			<%-- Always enabled for admin users --%>
+			<digi:secure group="ADMIN">
+				<c:set var="showLanguageSwitch">true</c:set>
+			</digi:secure>
+			<digi:secure group="Administrators">
+				<c:set var="showLanguageSwitch">true</c:set>
+			</digi:secure>
+			<digi:secure group="Translators">
+				<c:set var="showLanguageSwitch">true</c:set>
+			</digi:secure>
+			
+			<c:if test="${showLanguageSwitch == true}">
+				<html:select property="lang" onchange="ChangeLanguage(this)">
+					<c:forEach var="lng" items="${editorForm.languages}">
+						<c:set var="trn">
+							<digi:trn key="editor:sourceLanguage:${lng.name}">${lng.name}</digi:trn>
+						</c:set>
+						<html:option value="${lng.code}">${trn}</html:option>
+					</c:forEach>
+				</html:select>
+			</c:if>
+			
+			
 	</digi:form>
 
 

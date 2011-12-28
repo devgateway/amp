@@ -239,7 +239,7 @@ public class AmpARFilter extends PropertyListable {
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
 	private boolean publicView = false;
-	private Boolean budget = null;
+	private Set<AmpCategoryValue> budget = null;
 	private Collection<Integer> lineMinRank;
 	private Collection<Integer> planMinRank;
 	private String fromDate;
@@ -366,10 +366,8 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 	
-		if (calendarType==null){
-			if (tempSettings!=null){
-				calendarType=tempSettings.getFiscalCalendar();
-			}
+		if (tempSettings!=null){
+			calendarType=tempSettings.getFiscalCalendar();
 		}
 		String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (calendarType==null){
@@ -523,10 +521,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		indexedParams=new ArrayList<FilterParam>();
 		
-		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
-				+ (budget != null ? (budget)?"1":"0" : "null")
-				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
-						: "");
+		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_activity_budget WHERE budget_id IN ("
+			+ Util.toCSString(budget) + ")";
 		String TEAM_FILTER = "";
 
 		//new computed filter - after permissions #3167
@@ -1217,11 +1213,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		this.widget = widget;
 	}
 
-	public Boolean getBudget() {
+	public Set getBudget() {
 		return budget;
 	}
 
-	public void setBudget(Boolean budget) {
+	public void setBudget(Set budget) {
 		this.budget = budget;
 	}
 

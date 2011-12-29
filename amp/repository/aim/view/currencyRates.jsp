@@ -322,39 +322,36 @@ function fnSubmit() {
 
 
 							</td></tr>
-							<tr><td bgcolor="#ffffff" valign="top" align="left">
+							<tr><td bgcolor="#ffffff" valign="top" align="left" class="report">
 								<!-- Exchange rates table -->
-								<div style="clear:both;">&nbsp;</div>
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="100%" style="font-size:12px;">
+								<!-- div style="clear:both;">&nbsp;</div> -->
+								<table class="inside" cellSpacing="1" cellPadding="2" vAlign="top" align="left"  width="100%" style="font-size:12px;">
+								<thead>
 									<tr bgcolor="eeeeee">
-										<td align="center" width="3">
+										<td class="inside" style="cursor: pointer;" align="center" width="3">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
 										</td>
-										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside"  align="center" width="40">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside"  align="center" width="200">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside"  align="center" width="40">
 											<b><digi:trn> Source Currency Code</digi:trn></b>
 										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside"  align="center" width="200" >
 											<b><digi:trn>Source Currency Name</digi:trn></b>
 										</td>
-										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside"  align="center" width="80" >
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
 										</td>
-										<td align="center" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										<td class="inside" align="center">
 											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
 										</td>
 									</tr>
+									</thead>
+									<tbody class="yui-dt-data">
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
 									<tr bgcolor="#f4f4f2">
 										<td colspan="7" align="center">
@@ -372,34 +369,35 @@ function fnSubmit() {
 									<tr class="rowAlternate">
 									<% }
 									index++;%>
-										<td align="center" width="3">
+										<td align="center" width="3" class="inside">
 											<html:multibox property="selectedRates">
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
                                           <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
 											<c:out value="${cRates.currencyName}"/>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
                                          	${cRates.fromCurrencyCode}
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
 											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
-										<td align="center">
+										<td align="center" class="inside">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>
 										</td>
-										<td align="right" nowrap="nowrap">
+										<td align="right" nowrap="nowrap" class="inside">
 												<aim:formatNumber minIntegerDigits="1" maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
 									</c:forEach>
 									</c:if>
+									</tbody>
 								</table>
 							</td></tr>
 							<tr>

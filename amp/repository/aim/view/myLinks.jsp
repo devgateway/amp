@@ -33,7 +33,7 @@
 						</a>
 					</c:if>
 			    </logic:iterate>
-			   	<a href="/contentrepository/documentManager.do">
+			   	<a href="/contentrepository/documentManager.do?type=team">
 		       		<digi:trn key="aim:moreResources">More resources</digi:trn>
 				</a>	 	
 	      </logic:notEmpty>    

@@ -587,6 +587,7 @@
       <forward name="forward" path="/showLayout.do?layout=fiscalCalendarManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimFiscalCalendarForm" path="/aim/exportCalanderManager2XSL" scope="request" type="org.digijava.module.aim.action.ExportCalendarManager2XSL" validate="false"/>
     <action input="/showLayout.do?layout=addFiscalCalendar" name="aimAddFiscalCalForm" path="/aim/editFiscalCalendar" scope="request" type="org.digijava.module.aim.action.EditFiscalCalendar" validate="true">
       <forward name="forward" path="/showLayout.do?layout=addFiscalCalendar" />
       <forward name="index" path="/aim/index.do" redirect="true" />

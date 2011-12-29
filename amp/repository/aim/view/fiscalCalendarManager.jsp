@@ -6,9 +6,21 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script type="text/javascript">
+ function exportXSL(){
+        <digi:context name="exportUrl" property="context/module/moduleinstance/exportCalanderManager2XSL.do"/>;
+        document.aimFiscalCalendarForm.action="${exportUrl}";
+        document.aimFiscalCalendarForm.target="_blank";
+        document.aimFiscalCalendarForm.submit();
+    }
+
+
+</script>
+
 <digi:errors/>
 <digi:instance property="aimFiscalCalendarForm" />
 <digi:context name="digiContext" property="context" />
+<digi:form action="/fiscalCalendarManager.do" method="post">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -49,9 +61,15 @@
 				</tr>
 				<tr>
 						<td align="left">
-						<!--  please note that this page contains form and you can not nested it inside other form -->
-						<jsp:include
-							page="/repository/aim/view/exportTable.jsp" /></td>
+						<c:set var="translationxls">
+							<digi:trn>Export to Excel</digi:trn>
+							</c:set> <c:set var="translationPrinter">
+								<digi:trn>Printer Friendly</digi:trn>
+							</c:set>
+							<div class="toolbar" align="center" style="background: #f2f2f2;">
+									<jsp:include
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+							</div></td>
 			</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top" align="center">
@@ -257,3 +275,4 @@
 	</td>
 	</tr>
 </table>
+</digi:form>

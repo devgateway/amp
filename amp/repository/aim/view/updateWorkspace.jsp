@@ -22,6 +22,13 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 <script language="JavaScript">
 <!--
 
+YAHOO.util.Event.addListener(window, "load", initWorkspacePage) ;
+
+function initWorkspacePage() {
+	workspaceChangeType();
+	computationChange();
+}
+
 function toggleGroup(group_id){
 	var strId='#'+group_id;
 	$(strId+'_minus').toggle();
@@ -790,7 +797,3 @@ function cancel()
 </td></tr>
 </table>
 </digi:form>
-<script language="JavaScript">
-	workspaceChangeType();
-	computationChange();
-</script>

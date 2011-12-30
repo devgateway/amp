@@ -4514,11 +4514,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) and a.name like :searchStr order by a.name";
+                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) and lower(a.name) like lower(:searchStr) order by a.name";
 
                     } else {
                         // none computed workspace
-                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ") and a.name like :searchStr";
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ") and lower(a.name) like lower(:searchStr)";
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }

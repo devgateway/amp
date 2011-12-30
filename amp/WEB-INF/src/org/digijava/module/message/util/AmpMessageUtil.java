@@ -1001,7 +1001,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();
 			queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
-					" and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!='' and (lower(prop.contact.lastname) like :searchStr or lower(prop.contact.name) like :searchStr)";
+					" and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!='' and (lower(prop.contact.lastname) like lower(:searchStr) or lower(prop.contact.name) like lower(:searchStr))";
 			query=session.createQuery(queryString);
 			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
             query.setString("searchStr", searchStr + "%");

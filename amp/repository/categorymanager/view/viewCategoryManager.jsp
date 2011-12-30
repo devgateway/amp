@@ -21,8 +21,14 @@ function confirmDelete() {
 	var ret		= confirm('${translation}');
 	return ret;
 }
+function exportXSL(){
+    <digi:context name="exportUrl" property="context/module/moduleinstance/exportCatManager2XSL.do"/>;
+    document.cmCategoryManagerForm.action="${exportUrl}";
+    document.cmCategoryManagerForm.target="_blank";
+    document.cmCategoryManagerForm.submit();
+}
 </script>
-
+<digi:form action="/categoryManager.do" method="post">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align=center class="box-border-nopadding">
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
@@ -58,9 +64,8 @@ function confirmDelete() {
 				</tr>
 				<tr>
 						<td align="left">
-						<!--  please note that this page contains form and you can not nested it inside other form -->
 						<jsp:include
-							page="/repository/aim/view/exportTable.jsp" /></td>
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
 				<tr>
 					<td height=16 valign="center" width=571>
@@ -209,3 +214,4 @@ function confirmDelete() {
 	</td>
 	</tr>
 </table>
+</digi:form>

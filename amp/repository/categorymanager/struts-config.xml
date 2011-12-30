@@ -10,6 +10,7 @@
 			<forward name="forward" path="/showLayout.do?layout=viewCategoryManager" />
 			<forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
 		</action>
+		<action name="cmCategoryManagerForm" path="/categorymanager/exportCatManager2XSL" scope="session" type="org.digijava.module.categorymanager.action.ExportCategoryManager2XSL" validate="false"/>
 		<action name="cmCategoryManagerForm" path="/categorymanager/categoryLabelsAction" scope="session" type="org.digijava.module.categorymanager.action.CategoryLabelsAction" validate="false">
 			<forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
 		</action>

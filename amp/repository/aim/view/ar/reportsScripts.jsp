@@ -305,7 +305,7 @@ saveReportEngine	= null;
 	
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
-		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 		
 		filterForm.submit();
@@ -608,7 +608,8 @@ function validateFormat(){
 	
 	var msg3="<digi:trn key="rep:pop:freezingReportHeading"> Freezing Report Heading </digi:trn>";
 	
-
+	var msg4="<digi:trn key="rep:pop:freezingReportHeading"> Unfreezing Report Heading </digi:trn>";
+	
 
 
 	function addOnloadEvent(fnc){
@@ -646,6 +647,7 @@ function validateFormat(){
 	
 	
 	function sendCookieAndReload (){
+		showWaitPanel(msg3);
 		createCookie('report_scrolling',currentReportId,1);
 		submitFilters();
 	}
@@ -664,6 +666,7 @@ function validateFormat(){
 		//document.getElementById("frezzlink").innerHTML=msg2;
 	}
 	function hiddeScroll(){
+		showWaitPanel(msg4);
 		eraseCookie('report_scrolling');
 		submitFilters();
 	}
@@ -699,7 +702,27 @@ function validateFormat(){
 	}
 		addOnloadEvent(enableLink);
 	
-		
+		function showWaitPanel(msgF){
+			var wait = new YAHOOAmp.widget.Panel("wait",   
+		        { width:"240px",  
+		          fixedcenter:true,  
+		          close:false,  
+		          draggable:false,  
+		          zindex:99, 
+		          modal:true, 
+		          visible:false,
+		          underlay:"shadow"
+		        }  
+		    ); 
+
+			wait.setHeader(msg0); 
+			wait.setBody("<div align='center'>"+msgF+"</div>"); 
+			wait.render(document.body);
+			wait.show();
+			
+			}
+
+			
 	//-----------------------
 	function showScroll(){
 		var wait = new YAHOOAmp.widget.Panel("wait",   

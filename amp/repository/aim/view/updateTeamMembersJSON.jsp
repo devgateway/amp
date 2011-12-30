@@ -94,7 +94,7 @@
 																		<input class="dr-menu" type="button" value="<digi:trn>Delete</digi:trn>" name="apply" onclick="confirmActionMember()"/>
 																	</td>
 																	<td width="50%" align="left">
-																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="hideWindow()">
 																			<digi:trn key="btn:cancel">Cancel</digi:trn>
 																		</html:reset>																					</td>
 																	</td>
@@ -111,7 +111,7 @@
 																		<input class="dr-menu" type="button" value="<digi:trn>Save</digi:trn>" name="apply" onclick="confirmActionMember()"/>
 																	</td>
 																	<td width="50%" align="left">
-																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="hideWindow()">
 																			<digi:trn key="btn:cancel">Cancel</digi:trn>
 																		</html:reset>
 																	</td>

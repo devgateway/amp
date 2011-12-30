@@ -526,6 +526,11 @@
     function closeWindow() {
         myclose();
     }
+
+    function hideWindow() {
+    	myPanel.hide();
+    }
+    
     function showPanelLoading(msg){
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 

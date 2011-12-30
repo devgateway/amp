@@ -298,8 +298,14 @@
 				else{
 					collectionName="phones";
 					place=document.getElementById("phonesPlace");
-					var phoneTypeList = property.childNodes[0].childNodes;
-					divProperty=createProperty(dataName,collectionName,index,phoneTypeList);	
+                                        var  phoneTypeList= property.childNodes[0];
+                                        if(phoneTypeList!=null){
+                                         divProperty=createProperty(dataName,collectionName,index,phoneTypeList.childNodes);   
+                                        }
+                                        else{
+                                            divProperty=createProperty(dataName,collectionName,index);
+                                        }
+						
 				}
 			}
 			
@@ -330,6 +336,7 @@
 					var labelNone=document.createTextNode("<digi:trn>None</digi:trn>");
 					optionNone.appendChild(labelNone);
 					select.appendChild(optionNone);
+                                        if(phoneTypeList!=null)
 					for (var i=0; i<phoneTypeList.length; i++) {
 						var option=document.createElement("option");
 						option.value=phoneTypeList[i].getAttribute("id");

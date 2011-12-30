@@ -36,7 +36,7 @@ version: 2.8.2r1
 .yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:auto;z-index:9050;white-space:normal;}
 .yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:640px;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
 .yui-skin-sam .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
-.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:640px;}
+.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:640px;_height:40px;}
 .yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;width:640px;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#4a687a;color:#FFF;width:640px;}

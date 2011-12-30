@@ -345,6 +345,9 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullSectors(null);
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
+			form.getRanksInformation().setTopSectors(null);
+			form.getRanksInformation().setTopRegions(null);
+			form.getRanksInformation().setTopProjects(null);
 		}
 	}
     public static String getInStatement(Long ids[]) {

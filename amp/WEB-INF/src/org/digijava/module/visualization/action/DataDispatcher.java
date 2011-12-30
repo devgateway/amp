@@ -2520,9 +2520,9 @@ public class DataDispatcher extends DispatchAction {
 					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 					rankObjects.add(child);
 				}
-				rootObjects.put("type", "ProjectsList");
-				rootObjects.put("list", rankObjects);
 			}
+			rootObjects.put("type", "ProjectsList");
+			rootObjects.put("list", rankObjects);
 		}
 		else if (objectType != null && objectType.equalsIgnoreCase("sectors")){
 			Map<AmpSector, BigDecimal> sectorsList = visualizationForm.getRanksInformation().getFullSectors();
@@ -2535,10 +2535,9 @@ public class DataDispatcher extends DispatchAction {
 					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 					rankObjects.add(child);
 				}
-				rootObjects.put("type", "SectorsList");
-				rootObjects.put("list", rankObjects);
-			}
-			
+			} 
+			rootObjects.put("type", "SectorsList");
+			rootObjects.put("list", rankObjects);
 		}
 		else if (objectType != null && objectType.equalsIgnoreCase("regions")){
 			Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getFullRegions();
@@ -2551,9 +2550,9 @@ public class DataDispatcher extends DispatchAction {
 					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 					rankObjects.add(child);
 				}
-				rootObjects.put("type", "RegionsList");
-				rootObjects.put("list", rankObjects);
 			}
+			rootObjects.put("type", "RegionsList");
+			rootObjects.put("list", rankObjects);
 		}
 		else if (objectType != null && objectType.equalsIgnoreCase("donors")){
 			Map<AmpOrganisation, BigDecimal> donorsList = visualizationForm.getRanksInformation().getFullDonors();
@@ -2566,9 +2565,9 @@ public class DataDispatcher extends DispatchAction {
 					child.put("value", FormatHelper.formatNumber((BigDecimal) entry.getValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
 					rankObjects.add(child);
 				}
-				rootObjects.put("type", "DonorsList");
-				rootObjects.put("list", rankObjects);
 			}
+			rootObjects.put("type", "DonorsList");
+			rootObjects.put("list", rankObjects);
 		}
 		
 		JSONArray children = new JSONArray();

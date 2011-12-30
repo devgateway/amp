@@ -143,6 +143,8 @@ var updateFullList = {
 							inner = "";
 						}
 						break;
+					default:
+						break;
 				}
 		  },
 		  failure: function(o) {

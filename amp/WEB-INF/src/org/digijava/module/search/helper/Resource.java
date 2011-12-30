@@ -1,5 +1,6 @@
 package org.digijava.module.search.helper;
 
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class Resource implements LoggerIdentifiable {
@@ -63,5 +64,10 @@ public class Resource implements LoggerIdentifiable {
 		
 		return true;
 	}
+         @Override
+        public String getObjectFilteredName() {
+		return DbUtil.filter(getObjectName());
+	}
+
 
 }

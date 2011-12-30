@@ -25,6 +25,7 @@ package org.digijava.module.calendar.dbentity;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class CalendarItem implements LoggerIdentifiable{
@@ -168,5 +169,10 @@ public class CalendarItem implements LoggerIdentifiable{
 	@Override
 	public Object getIdentifier() {
 		return  getId();
-	}	
+	}
+         @Override
+        public String getObjectFilteredName() {
+		return DbUtil.filter(getObjectName());
+	}
+
 }

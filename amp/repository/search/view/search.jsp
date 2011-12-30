@@ -146,7 +146,7 @@
 								<ul>
 									<c:forEach items="${resultActivities}" var="activity">
 										<li><digi:link module="aim"
-											href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectName}</digi:link>
+											href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectFilteredName}</digi:link>
 									</c:forEach>
 								</ul>
 								</div>
@@ -158,7 +158,7 @@
 								<c:forEach items="${resultTabs}" var="tab">
 									<li><a
 										title="<digi:trn>Click here to view the tab</digi:trn>"
-										href="/search/search.do?ampReportId=${tab.ampReportId}">${tab.objectName}</a>
+										href="/search/search.do?ampReportId=${tab.ampReportId}">${tab.objectFilteredName}</a>
 								</c:forEach>
 							</ul>
 							</div>
@@ -171,7 +171,7 @@
 									<li><a
 										title="<digi:trn>Click here to view the report</digi:trn>"
 										onclick="return popup(this,'');"
-										href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectName}</a>
+										href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectFilteredName}</a>
 								</c:forEach>
 							</ul>
 							</div>

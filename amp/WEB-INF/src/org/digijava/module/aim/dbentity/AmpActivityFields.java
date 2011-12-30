@@ -11,6 +11,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1354,6 +1355,10 @@ contactName = string;
 
 	public String getObjectName() {
 		return this.getAmpId()+" "+this.getName();
+	}
+        @Override
+        public String getObjectFilteredName() {
+		return DbUtil.filter(getObjectName());
 	}
 
 	public String getFY() {

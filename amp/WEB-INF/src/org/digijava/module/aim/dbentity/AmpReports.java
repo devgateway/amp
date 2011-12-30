@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -513,5 +514,10 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 		}
 		return ret;
 	}
+         @Override
+        public String getObjectFilteredName() {
+		return DbUtil.filter(getObjectName());
+	}
+
 	
 }

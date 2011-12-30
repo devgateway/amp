@@ -5,6 +5,7 @@ package org.digijava.module.admin.helper;
 
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 
 /**
@@ -109,5 +110,10 @@ public class AmpActivityFake implements LoggerIdentifiable{
 		// TODO Auto-generated method stub
 		return this.getAmpId()+" "+this.getName();
 	}
+         @Override
+        public String getObjectFilteredName() {
+		return DbUtil.filter(getObjectName());
+	}
+
 
 }

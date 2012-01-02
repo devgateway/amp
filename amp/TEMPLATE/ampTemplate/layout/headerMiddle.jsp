@@ -227,7 +227,7 @@ function adminHelp(){
 </script>
 			 <div class="yuiamp-skin-amp" style="clear:both;">
               <div id="mainmenuHeader" class="yuiampmenu">
-                  <div class="bd">
+                  <div class="bd bd_drop">   
                       <ul class="first-of-type">
                     	<li class="yuiampmenuitem">
                         	<c:set var="message">
@@ -246,15 +246,15 @@ function adminHelp(){
                                  <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd" style="border: 1px solid transparent; width:100px;">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
                                        <feature:display name="Language Option" module="Tools">
-		                                        <li style="_width:240px">
+		                                        <li>
 		                                        	<a class="yuiampmenuitemlabel" href="#">
 		                                        		<digi:trn key="aim:deflanguage">Language</digi:trn>
 		                                       		</a>
 		                                          <div id="reports2" class="yuiampmenu">
-		                                              <div class="bd">                    
+		                                              <div class="bd bd_drop">                    
 		                                                  <ul>
 															<digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                                                  </ul>
@@ -281,7 +281,7 @@ function adminHelp(){
                                  <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd" style="border: 1px solid transparent; width:100px;">                    
+                                  <div class="bd bd_drop" style="border: 1px solid transparent; width:100px;">                    
                                       <ul>
 																			<feature:display name="Admin Help" module="HELP">
                                         <li class="yuiampmenuitem_drop">

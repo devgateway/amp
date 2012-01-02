@@ -66,6 +66,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long childTeamTypeId;
 	private Collection availChildWorkspaces;
 	private Collection availChildOrgs;
+	private Collection<Long> deletedChildWorkspaces;
 	private Long[] selChildWorkspaces;
 	private Long[] selChildOrgs;
 	private boolean popupReset;
@@ -682,6 +683,14 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	 */
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
+	}
+
+	public void setDeletedChildWorkspaces(Collection<Long> deletedChildWorkspaces) {
+		this.deletedChildWorkspaces = deletedChildWorkspaces;
+	}
+
+	public Collection<Long> getDeletedChildWorkspaces() {
+		return deletedChildWorkspaces;
 	}
 
 

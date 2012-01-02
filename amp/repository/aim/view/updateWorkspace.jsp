@@ -83,19 +83,22 @@ function removeChildOrg(id) {
 
 
 function removeChildWorkspace(id) {
+	alert("desde updateWS");
 	var temp = confirm("<digi:trn key="aim:deletechildworkspace">Do you want to delete this child workspace ?</digi:trn>");
 	if(temp == false)
 	{
-			document.aimUpdateWorkspaceForm.submit();
+			//There's no explanation for this being here, since we are cancelling an action, it shouldn't do anything.
+			//Commenting it out.
+			//document.aimUpdateWorkspaceForm.submit();
 			return false;
 	}
 	else
 	{
-	<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
-	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&tId="+id;
-	document.aimUpdateWorkspaceForm.target = "_self";
-	document.aimUpdateWorkspaceForm.addFlag.value = false;
-	document.aimUpdateWorkspaceForm.submit();
+		<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&tId="+id;
+		document.aimUpdateWorkspaceForm.target = "_self";
+		document.aimUpdateWorkspaceForm.addFlag.value = false;
+		document.aimUpdateWorkspaceForm.submit();
 	}
 }
 

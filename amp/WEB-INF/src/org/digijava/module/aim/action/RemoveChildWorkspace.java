@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
-import org.digijava.module.aim.util.TeamUtil;
 
 public class RemoveChildWorkspace extends Action {
 	
@@ -32,7 +32,6 @@ public class RemoveChildWorkspace extends Action {
 		logger.debug("In Remove child workspace");
 		String id = request.getParameter("tId");
 		
-		//ugly removal of linked orgs
 		if(request.getParameter("childorgs")!=null){
 			Long orgId=new Long(id);
 			Iterator i=uwForm.getOrganizations().iterator();
@@ -46,12 +45,18 @@ public class RemoveChildWorkspace extends Action {
 		if (id != null && id.trim().length() > 0) {
 			long temp = Long.parseLong(id);
 			Long teamId = new Long(temp);
-			AmpTeam tempTeam = new AmpTeam();
-			tempTeam.setAmpTeamId(teamId);
 			if (uwForm.getChildWorkspaces() != null) {
-				uwForm.getChildWorkspaces().remove(tempTeam);
-				TeamUtil.unlinkParentWorkspace(tempTeam.getAmpTeamId());
-				logger.debug("Child workspace removed!");
+				if(uwForm.getDeletedChildWorkspaces() == null)
+					uwForm.setDeletedChildWorkspaces(new ArrayList<Long>());
+				Iterator<AmpTeam> i= uwForm.getChildWorkspaces().iterator();
+				while (i.hasNext()) {
+					AmpTeam team = (AmpTeam) i.next();
+					
+					if(team.getAmpTeamId().equals(teamId)){
+						i.remove();
+						uwForm.getDeletedChildWorkspaces().add(teamId);
+					} 
+				}
 			}
 		}
 		

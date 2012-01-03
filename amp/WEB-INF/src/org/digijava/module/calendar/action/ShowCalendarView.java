@@ -1,7 +1,9 @@
 package org.digijava.module.calendar.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +36,10 @@ public class ShowCalendarView extends Action {
         HttpSession ses = request.getSession();
         String printView =  request.getParameter("view");
         String printDate =  request.getParameter("date");
+        Date printDateD = null;
+        if (printDate!=null && !printDate.equals("NaN")) {
+        	printDateD = new Date(Long.parseLong(printDate));
+		}
         int numDays = 0;
         
         if(printView != null){
@@ -249,7 +255,15 @@ public class ShowCalendarView extends Action {
          ses.setAttribute("calendarMode",calendarViewForm.getView().length());
          ses.setAttribute("view",calendarViewForm.getPrintMode());
          ses.setAttribute("print",calendarViewForm.getPrint());
-         ses.setAttribute("date",printDate);
+         if (printDateD!=null){
+        	 java.util.Calendar gc = new GregorianCalendar ();
+        	 gc.setTime(printDateD);
+         	ses.setAttribute("printDay",gc.get(java.util.Calendar.DAY_OF_MONTH));
+         	ses.setAttribute("printMonth",gc.get(java.util.Calendar.MONTH) + 1);
+         	ses.setAttribute("printYear",gc.get(java.util.Calendar.YEAR));
+         } else {
+        	 ses.setAttribute("date",printDate);
+         }
          ses.setAttribute("publicEvent", filter.getShowPublicEvents());
          ses.setAttribute("donor", filter.getSelectedDonors());
          ses.setAttribute("year", calendarViewForm.getBaseDateBreakDown().getYear());

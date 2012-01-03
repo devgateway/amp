@@ -178,14 +178,14 @@
 		var ehtMonth = <%=request.getSession().getAttribute("month")%>;
 		var type = calType(<%=request.getSession().getAttribute("type")%>);
 		var printView = <%=request.getSession().getAttribute("view")%>;
-		var printDate = <%=request.getSession().getAttribute("date")%>;
+		var printYear = <%=request.getSession().getAttribute("printYear")%>;
 
 
-		if(printDate !=null){
-		 var date = <%=request.getSession().getAttribute("date")%>;
-		}else{
-			date = myDate;
-			}
+		if(printYear != null){
+			var dateP = getEthiopianCalendarDate(<%=request.getSession().getAttribute("printYear")%>,<%=request.getSession().getAttribute("printMonth")%>,<%=request.getSession().getAttribute("printDay")%>);
+			myDate = new Date(dateP);
+		}
+		date = myDate;
 		
 		var defoultView = "year";
 		if(printView!=null){

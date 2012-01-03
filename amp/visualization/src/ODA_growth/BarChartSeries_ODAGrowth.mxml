@@ -540,6 +540,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 									  dataFontFamily="{dataFontFamily}"
 									  dataFontSize="{dataFontSize}"
 									  dataFontWeight="{dataFontWeight}"
+									  dataTipLabelFunction="null"
 									  visible="true"/>
 				</axiis:layouts>
 			</axiis:VBoxLayout>
@@ -551,7 +552,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:ComboBox dataProvider="{yearsArray}" id="currentYear" width="90" x="130" y="420" change="combo_change(2)"> 
 	</mx:ComboBox>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
-	<mx:Label x="300" y="420" id="previousComboLabel" height="36" fontSize="12"/>
+	<mx:Label x="280" y="420" id="previousComboLabel" height="36" fontSize="12"/>
 	<mx:Label x="50" y="420" id="currentComboLabel" height="36" fontSize="12"/>
 	</mx:Canvas>
 	

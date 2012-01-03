@@ -22,9 +22,11 @@
 	<action name="crDocumentManagerForm" scope="request" path="/contentrepository/getVersionsForDocumentManager" type="org.digijava.module.contentrepository.action.GetVersionsForDocumentManager" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=amp_getDocumentVersionList" />
 	</action>
-    <action path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=amp_deleteDocumentResponse" />
     </action>
+    <action path="/contentrepository/getResourcesInfo" type="org.digijava.module.contentrepository.action.GetResourcesInfo" validate="false"/>
+    
     <action name="crDocumentManagerForm" path="/contentrepository/shareDoc" type="org.digijava.module.contentrepository.action.ShareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>

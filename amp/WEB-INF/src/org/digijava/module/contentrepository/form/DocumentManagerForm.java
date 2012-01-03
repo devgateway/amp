@@ -63,6 +63,8 @@ public class DocumentManagerForm extends ActionForm {
 	
 	private Boolean sharedDocsTabVisible ;
 	private Boolean publicDocsTabVisible ;
+	private Boolean privateDocsExist;
+	private Boolean teamDocsExist;
 	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
@@ -380,5 +382,21 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setPublicDocsTabVisible(Boolean publicDocsTabVisible) {
 		this.publicDocsTabVisible = publicDocsTabVisible;
+	}
+
+	public Boolean getPrivateDocsExist() {
+		return privateDocsExist;
+	}
+
+	public void setPrivateDocsExist(Boolean privateDocsExist) {
+		this.privateDocsExist = privateDocsExist;
+	}
+
+	public Boolean getTeamDocsExist() {
+		return teamDocsExist;
+	}
+
+	public void setTeamDocsExist(Boolean teamDocsExist) {
+		this.teamDocsExist = teamDocsExist;
 	}	
 }

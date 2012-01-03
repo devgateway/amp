@@ -727,7 +727,3 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 	
 <%@include file="documentManagerDivHelper.jsp" %>
-
-<script type="text/javascript">
- 
-</script>

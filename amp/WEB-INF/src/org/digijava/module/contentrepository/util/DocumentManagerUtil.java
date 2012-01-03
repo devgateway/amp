@@ -1037,27 +1037,40 @@ public class DocumentManagerUtil {
 		logger.info("Jackrabbit repository shutdown succesfully !");
 	}
 	
-//	public static boolean privateDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-//		boolean retVal=false;
-//		String userName		= teamMember.getEmail();
-//		String teamId		= "" + teamMember.getTeamId();
-//		Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
-//		try {
-//			NodeIterator iter = node.getNodes();
-//			if(iter.hasNext()){
-//				retVal=true;
-//			}
-//		} catch (RepositoryException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return retVal;
-//	}
-//	
-//	public static boolean teamDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-//		boolean retVal=false;
-//		return retVal;
-//	}
+	public static boolean privateDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
+		boolean retVal=false;
+		String userName		= teamMember.getEmail();
+		String teamId		= "" + teamMember.getTeamId();
+		Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+		try {
+			NodeIterator iter = node.getNodes();
+			if(iter.hasNext()){
+				retVal=true;
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
+	
+	public static boolean teamDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
+		boolean retVal=false;
+		String teamId		= "" + teamMember.getTeamId();
+		Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
+		try {
+			NodeIterator iter = node.getNodes();
+			if(iter.hasNext()){
+				retVal=true;
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
 	
 	public static boolean sharedDocumentsExist(TeamMember teamMember){
 		boolean retVal=false;

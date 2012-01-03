@@ -896,7 +896,7 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 					if ( windowController != null)
 						windowController.datatable	= datatable;
 					
-					updateFilterPanel(divId,null);				
+					updateFilterPanel(divId,null);
 					
 					 
 					//createToolTips(containerElement);
@@ -911,6 +911,7 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 }
 
 function updateFilterPanel(divId,tabType){
+	var type=tabType;
 	if(divId==null || divId==''){
 		if(tabType=='private'){
 			divId='privateListObjDivId';
@@ -922,20 +923,40 @@ function updateFilterPanel(divId,tabType){
 	var filterAndLabelShow = $('div#'+divId).find('.yui-dt-empty');
 	
 	if(divId=='privateListObjDivId'){
-		if(filterAndLabelShow.html()!=null){
-			$('#filterButtonId').hide();
-			$('#labelButtonId').hide();			
-		}else{
-			$('#filterButtonId').show();
-			$('#labelButtonId').show();
+		if(tabType==null){
+			type = 'private';
 		}
 	}else if (divId=='teamListObjDivId'){
-		if(filterAndLabelShow.html()!=null){
-			$('#teamFilterButtonId').hide();
-			$('#teamLabelButtonId').hide();
-		}else{
+		if(tabType==null){
+			type = 'team';
+		}
+	}
+	
+	var requestURL = "../../contentrepository/getResourcesInfo.do?type=" + type+ "&unique=" + new Date().getTime();
+	$.get(requestURL, getResourcesInfoComplited, "xml");
+}
+
+function getResourcesInfoComplited(data, textStatus) {
+	var exists = data.getElementsByTagName('resource-info')[0].attributes.getNamedItem("docsExist").value;
+	var tabType= data.getElementsByTagName('resource-info')[0].attributes.getNamedItem("tabType").value;
+	if(exists =='true'){
+		if(tabType=='private'){
+			$('#filterButtonId').show();
+			$('#labelButtonId').show();
+			
+		}else if(tabType=='team'){
 			$('#teamFilterButtonId').show();
-			$('#teamLabelButtonId').show();			
+			$('#teamLabelButtonId').show();		
+		}
+		
+	}else{
+		if(tabType=='private'){
+			$('#filterButtonId').hide();
+			$('#labelButtonId').hide();
+			
+		}else if(tabType=='team'){
+			$('#teamFilterButtonId').hide();
+			$('#teamLabelButtonId').hide();		
 		}
 	}
 }

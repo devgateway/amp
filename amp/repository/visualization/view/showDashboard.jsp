@@ -779,19 +779,9 @@ function initializeGlobalVariables(){
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total" id="divTotalComms"></div>
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    	<div class="dashboard_name" id="dashboard_name">
-    		<!--<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-    			<digi:trn>ALL DONORS</digi:trn>
-    		</c:if>
-    		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-    			<digi:trn>ALL SECTORS</digi:trn>
-    		</c:if>
-    		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-    			<digi:trn>ALL REGIONS</digi:trn>
-    		</c:if>
-    	--></div>
+<div class="dashboard_name" id="dashboard_name"></div>
+ <table border="0" cellspacing="0" cellpadding="0">
+  <tr>  
     <td>
     	<table>
     		<tr>

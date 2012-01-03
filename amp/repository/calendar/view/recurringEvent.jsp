@@ -594,10 +594,10 @@ function resetRecurrent(){
 			<table cellpadding="5" cellspacing="5">
 				<tr>
 					<td align="center">
-						<input type="button" onclick="eventType();" value="<digi:trn>Save And Close</digi:trn>"/>
+						<input type="button" class="buttonx" onclick="eventType();" value="<digi:trn>Save And Close</digi:trn>"/>
 					</td>
 					<td align="center">
-						<input type="button" onclick="resetRecurrent();" value="<digi:trn>Reset</digi:trn>"/>
+						<input type="button" class="buttonx" onclick="resetRecurrent();" value="<digi:trn>Reset</digi:trn>"/>
 					</td>
 				</tr>
 			</table>

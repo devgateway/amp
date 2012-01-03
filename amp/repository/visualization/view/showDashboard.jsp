@@ -1100,7 +1100,7 @@ function initializeGlobalVariables(){
 </fieldset>
 
 <fieldset>
-	<legend><span id="topProjectsTitle" class=legend_label></span></legend>
+	<legend><span id="topProjectsTitle" class=legend_label style="width:200px"></span></legend>
 	<div id="divTopProjects" class="field_text">
 		<c:set var="index" value="0"/>
 		<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
@@ -1126,7 +1126,7 @@ function initializeGlobalVariables(){
 </fieldset>
 <c:if test="${visualizationform.filter.dashboardType ne '1' }">
 	<fieldset>
-		<legend><span id="topDonorsTitle" class=legend_label></span></legend>
+		<legend><span id="topDonorsTitle" class=legend_label style="width:200px"></span></legend>
 		<div id="divTopDonors" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topDonors}" var="donorItem">
@@ -1153,7 +1153,7 @@ function initializeGlobalVariables(){
 </c:if>
 <c:if test="${visualizationform.filter.dashboardType ne '3' }">
 	<fieldset>
-		<legend><span id="topSectorsTitle" class=legend_label></span></legend>
+		<legend><span id="topSectorsTitle" class=legend_label style="width:200px"></span></legend>
 		<div id="divTopSectors" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topSectors}" var="sectorItem">
@@ -1180,7 +1180,7 @@ function initializeGlobalVariables(){
 </c:if>
 <c:if test="${visualizationform.filter.dashboardType ne '2' }">
 	<fieldset>
-		<legend><span id="topRegionsTitle" class=legend_label></span></legend>
+		<legend><span id="topRegionsTitle" class=legend_label style="width:200px"></span></legend>
 		<div id="divTopRegions" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">

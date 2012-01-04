@@ -201,12 +201,20 @@ $(document).ready(function(){
 	};
 
 	function switchBoxTab(switchToTabID) {
+		//IE 8 fix
+		if (switchToTabID.indexOf("#") > 1) {
+				switchToTabID = switchToTabID.substring(switchToTabID.indexOf("#"), switchToTabID.length);
+		}
+		
 		childTab = switchToTabID.substring(5);
+		
 		var selectedTab = $(".tab_opt>.tab_opt_cont b");
 		selectedTab.parent().html("<a class='l_sm' href='#" + selectedTab.parent().attr("id") + "'>" + selectedTab.text() + "</a>");
 		$(switchToTabID).html('<b class="sm_sel">' + $(switchToTabID + '>a').text() + '</b>');
+		
 		$(".tab_opt_cont a").unbind("click");
 		$(".tab_opt_cont a").bind("click", boxTabClick);
+		
 	}
 
 	$(".tab_opt_cont a").bind("click", boxTabClick);

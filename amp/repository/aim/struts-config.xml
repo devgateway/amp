@@ -576,6 +576,7 @@
       <forward name="forward" path="/showLayout.do?layout=aim_dynLocationManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+     <action name="aimDynLocationManagerForm" path="/aim/exportDynLocationManager2XSL" scope="request" type="org.digijava.module.aim.action.ExportRegionManager2XSL" validate="false"/>
      <action name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="false">
       <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
     </action>

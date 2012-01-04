@@ -64,6 +64,7 @@
 		if ( confirm("<digi:trn>Are you sure you want to delete this location and all the locations it contains ?</digi:trn>") ) {
 			var myForm							= document.getElementById("dynLocationManagerForm");
 			myForm.deleteLocationId.value		= deleteLocationId;
+			myForm.target="_self";
 			myForm.submit();
 		}
 	}
@@ -75,6 +76,7 @@
 		var myForm						= document.getElementById("dynLocationManagerForm");
 		myForm.treeStructure.value		= getTreeStruct(locationsUlId);
 		myForm.unorgLocations.value		= getTreeStruct(unorgLocsUlId);
+		myForm.target="_self";
 		myForm.submit();
 		
 	}
@@ -90,6 +92,7 @@
 	function simpleSubmit() {
 		var myForm		= document.getElementById("dynLocationManagerForm");
 		myForm.action	= "/aim/dynLocationManager.do?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked ; 
+		myForm.target="_self";
 		myForm.submit();
 	}
 
@@ -167,19 +170,29 @@
 		var myForm						= document.getElementById("addNewLocationForm");
 		myForm.parentCatValId.value		= locCategDbId;
 		myForm.parentLocationId.value 	= parentDbId;
-		myForm.event.value 				= "add";	
+		myForm.event.value 				= "add";
+		myForm.target="_self";
 		myForm.submit();
 	}
 	function editLocation( locationDbId ) {
 		var myForm						= document.getElementById("addNewLocationForm");
 		myForm.editedId.value			= locationDbId;
-		myForm.event.value 				= "edit";	
+		myForm.event.value 				= "edit";
+		myForm.target="_self";
 		myForm.submit();
 	}
 
 	
 
 	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
+	 function exportXSL(){
+	        <digi:context name="exportUrl" property="context/module/moduleinstance/exportDynLocationManager2XSL.do"/>;
+			var myForm= document.getElementById("dynLocationManagerForm");
+			alert(document.getElementById("hide_empty_countries").checked);
+	        myForm.action="${exportUrl}?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked;
+	        myForm.target="_blank";
+	        myForm.submit();
+	    }
 </script>
  <div style="margin:0 auto;width:1000px;">
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
@@ -216,6 +229,11 @@
 						</span>
 					</td>
 				</tr>
+					<tr>
+						<td align="left">
+						<jsp:include
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+					</tr>
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<digi:errors />

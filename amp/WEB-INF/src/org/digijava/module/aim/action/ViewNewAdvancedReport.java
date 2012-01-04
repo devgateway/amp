@@ -96,14 +96,16 @@ public class ViewNewAdvancedReport extends Action {
 		if ( ampReportId != null )
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
 		
-		if (rfpForm == null || "reset".equals(request.getParameter("view")) ) {
-			// if ampReportId parameter is in the request we need to reset the settings cause a new report was opened
-			rfpForm		= new ReportsFilterPickerForm();
-			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
-			rfp.modePrepare(mapping, rfpForm, request, response);
-			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
-		}	
-		
+		if ( lastReportId == null || !ampReportId.equals(lastReportId) ) { 
+			// if it's the first time we load a report/tab OR if we are loading another report we should reset
+			if (rfpForm == null || "reset".equals(request.getParameter("view")) ) {
+				// if ampReportId parameter is in the request we need to reset the settings cause a new report was opened
+				rfpForm		= new ReportsFilterPickerForm();
+				request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+				rfp.modePrepare(mapping, rfpForm, request, response);
+				TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
+			}	
+		}
 		
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;

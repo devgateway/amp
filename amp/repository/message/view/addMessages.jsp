@@ -476,20 +476,19 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
   }
 	
   function validate(){
-	  	
-	        var titleSize=document.messageForm.messageName.value.trim().length;
-            var descSize=document.messageForm.description.value.length;
-            <c:set var="message">
-        		<digi:trn>Please enter name </digi:trn>						
-            </c:set>
-            <c:set var="msg">
-        		${fn:replace(message,'\\n',' ')}
-            </c:set>
-            <c:set var="quote">'</c:set>
-            <c:set var="escapedQuote">\'</c:set>
-            <c:set var="msgsq">
-        		${fn:replace(msg,quote,escapedQuote)}
-            </c:set>
+      var titleSize=document.messageForm.messageName.value.trim().length;
+        var descSize=document.messageForm.description.value.length;
+        <c:set var="message">
+    		<digi:trn>Please enter name </digi:trn>						
+        </c:set>
+        <c:set var="msg">
+    		${fn:replace(message,'\\n',' ')}
+        </c:set>
+        <c:set var="quote">'</c:set>
+        <c:set var="escapedQuote">\'</c:set>
+        <c:set var="msgsq">
+    		${fn:replace(msg,quote,escapedQuote)}
+        </c:set>
 		if(titleSize==0){
 			alert('${msgsq}');
 			return false;
@@ -503,6 +502,13 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 				return false;
          	}
         }
+    var selAct = document.messageForm.selectedAct.value;
+    if (selAct != null && selAct.trim().length > 0) { //Activity selected
+     	if (selAct.indexOf("(") < -1 || selAct.indexOf(")") < -1 || selAct.lastIndexOf("(") > selAct.lastIndexOf(")")){
+	    	alert ("Please select activity from the autocomplite list.");
+	    	return false;
+    	}
+    }
 		return true;
 	}
 

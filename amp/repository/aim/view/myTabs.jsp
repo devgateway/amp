@@ -134,7 +134,7 @@ var myTabsObject;
 					width:"320px", height:"225px", visible:false,
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					constraintoviewport:true }  );
-		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
+		allTabsPanel.setHeader("<digi:trn>Please select from the list below</digi:trn>");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);
 		var divAllTabs = document.getElementById("allTabs");
@@ -159,7 +159,7 @@ var myTabsObject;
 
 		var objeto = document.createElement("DIV");
 	
-		objeto.innerHTML = label;
+		objeto.innerHTML = label.replace("<", "&lt;").replace(">", "&gt;");
 		objeto.id = "replaceableTab";
 
 		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 

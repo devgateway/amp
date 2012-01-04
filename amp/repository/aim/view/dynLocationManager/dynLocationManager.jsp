@@ -63,6 +63,8 @@
 	function deleteLocation(deleteLocationId) {
 		if ( confirm("<digi:trn>Are you sure you want to delete this location and all the locations it contains ?</digi:trn>") ) {
 			var myForm							= document.getElementById("dynLocationManagerForm");
+		    <digi:context name="delete" property="context/module/moduleinstance/dynLocationManager.do"/>;
+			myForm.action="${delete}?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked;
 			myForm.deleteLocationId.value		= deleteLocationId;
 			myForm.target="_self";
 			myForm.submit();
@@ -188,7 +190,6 @@
 	 function exportXSL(){
 	        <digi:context name="exportUrl" property="context/module/moduleinstance/exportDynLocationManager2XSL.do"/>;
 			var myForm= document.getElementById("dynLocationManagerForm");
-			alert(document.getElementById("hide_empty_countries").checked);
 	        myForm.action="${exportUrl}?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked;
 	        myForm.target="_blank";
 	        myForm.submit();

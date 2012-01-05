@@ -6,7 +6,9 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.io.Serializable;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -46,13 +48,20 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		
 		textAreaContainer = new TextArea<T>("richText", model);
 		textAreaContainer.setOutputMarkupId(true);
-		Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
+		
+		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
+
+		WebMarkupContainer closeLink = new WebMarkupContainer("closeLink");
+		closeLink.setOutputMarkupId(true);
+		closeLink.add(new SimpleAttributeModifier("onclick", "CKEDITOR.instances['"+ textAreaContainer.getMarkupId() +"'].updateElement(); $('#"+ preview.getMarkupId() +"').html($('#"+ textAreaContainer.getMarkupId() +"').val()); ;$('#"+ preview.getMarkupId() +"').show(); CKEDITOR.instances['"+ textAreaContainer.getMarkupId() +"'].destroy(); $('#"+ textAreaContainer.getMarkupId() +"').hide(); $('#"+ closeLink.getMarkupId() +"').hide(); return false;"));
+		add(closeLink);
+		
 		preview.setVisible(false);
 		preview.setOutputMarkupId(true);
 		if(wysiwyg){
 			preview.setVisible(true);
 			textAreaContainer.add(new SimpleAttributeModifier("style", "display: none;"));
-			preview.add(new SimpleAttributeModifier("onclick", "$('#"+ preview.getMarkupId() +"').hide();CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {on:{instanceReady : function( ev ){this.focus();}}} );$('#"+ textAreaContainer.getMarkupId() +"').show();"));
+			preview.add(new SimpleAttributeModifier("onclick", "$('#"+ preview.getMarkupId() +"').hide();CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {on:{instanceReady : function( ev ){this.focus();}}} );$('#"+ textAreaContainer.getMarkupId() +"').show(); $('#"+ closeLink.getMarkupId() +"').show();"));
 		}
 		add(preview);
 		addFormComponent(textAreaContainer);

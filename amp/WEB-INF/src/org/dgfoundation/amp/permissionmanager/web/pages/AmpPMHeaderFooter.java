@@ -58,12 +58,14 @@ public class AmpPMHeaderFooter extends WebPage {
 			public Map getObject() {
 				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(2);
 				variables.put("callBackUrl", callBackUrl);
+				String OnePager = "false";
+				variables.put("onepagerMode", OnePager);
 				return variables;
 			}
 		};
-
-		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
-
+		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
+				"translations.js", variablesModel));
+		
 		
 		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
 			    @Override

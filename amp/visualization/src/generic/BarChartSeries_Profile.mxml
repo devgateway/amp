@@ -220,8 +220,7 @@
 
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
-				dc.visible = true;
-				
+				//dc.visible = true;
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
 				var determinedMaxValue:Number = 0;

@@ -7,11 +7,13 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
@@ -73,6 +75,11 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 		 */
 		choiceContainer.setSuffix(" ");
 		addFormComponent(choiceContainer);
+	}
+	
+	@Override
+	protected AjaxEventBehavior visualErrorBehavior() {
+		return new ChoiceComponentVisualErrorBehavior("onchange", feedbackContainer);
 	}
 
 

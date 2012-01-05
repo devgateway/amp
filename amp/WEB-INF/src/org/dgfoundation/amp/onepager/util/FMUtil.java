@@ -107,7 +107,8 @@ public final class FMUtil {
 				//return true; //for now
 			}
 			else{
-				logger.error("Can't find ampTreeVisibility in context, all components enabled!");
+				if (ampTreeVisibility == null)
+					logger.error("Can't find ampTreeVisibility in context, all components enabled!");
 				return true;
 			}
 		} catch (PathException e) {

@@ -1,4 +1,4 @@
-YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache) {
+YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache, isDisabled) {
     this.dataSource = new YAHOO.widget.WicketDataSource(callbackUrl);
     if(useCache) {
     	this.dataSource.maxCacheEntries = 100;
@@ -46,7 +46,12 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     };
     this.autoComplete.itemSelectEvent.subscribe(this.itemSelectHandler);//subscribes this handler to YUI autocomplete
     var bToggler = YAHOO.util.Dom.get(toggleButtonId);
-    var oPushButtonB = new YAHOO.widget.Button({container:bToggler});
+    var oPushButtonB;
+    if (isDisabled)
+    	oPushButtonB = new YAHOO.widget.Button({container:bToggler, disabled:true});
+    else
+    	oPushButtonB = new YAHOO.widget.Button({container:bToggler});
+    
     var toggleB = function(e) {
         if(!YAHOO.util.Dom.hasClass(bToggler, "open")) {
             YAHOO.util.Dom.addClass(bToggler, "open");

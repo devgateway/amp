@@ -70,7 +70,7 @@ public class ActivityGatekeeper {
 		}
 	}
 	
-	private static long getUserEditing(String id){
+	private static Long getUserEditing(String id){
 		return userEditing.get(id);
 	}
 	

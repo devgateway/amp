@@ -69,12 +69,12 @@ public class CompareActivityVersions extends DispatchAction {
 			
 			AmpActivityVersion prevVer = group.getAmpActivityLastVersion();
 
-			// Update the modified date of the selected activity to send it last
-			// to the list
-			activity.setModifiedDate(Calendar.getInstance().getTime());
+			//Why send the activity to the top of the list? It's confusing for users
+			//thus we don't set the modifiedDate
+			//activity.setModifiedDate(Calendar.getInstance().getTime()); 
 			group.setAmpActivityLastVersion(activity);
 			session.update(group);
-			session.update(activity);
+			//session.update(activity);
 
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);

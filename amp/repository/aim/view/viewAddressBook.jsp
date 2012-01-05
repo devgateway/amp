@@ -5,17 +5,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
-
-
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
-
-
 
 <style>
 
@@ -180,20 +175,12 @@
 
 </style>
 
-
-
-
-
 <!-- Individual YUI JS files --> 
-
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script>
- 
-
- 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
@@ -484,12 +471,19 @@
 																		    	<html:hidden property="keyword" styleId="myHidden"/>																			   																			    	
 																		   	</div>
 																		</td>
-																		<td align="left" valign="top" width=50>
+																		<td align="left" valign="top" width="30px">
 																			<c:set var="trn">
 																				<digi:trn>find</digi:trn>
 																			</c:set>
-																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>
-													</td><td class="t_mid" valign="top">						
+																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>																			
+																		</td>
+																		<td valign="top" align="left">
+																			<c:set var="trnReset">
+																				<digi:trn>Reset</digi:trn>
+																			</c:set>
+																			<input type="button" value="${trnReset}"  class="buttonx_sm" onclick="resetSearch()"/>
+																		</td>
+																		<td class="t_mid" valign="top">						
 																			<digi:trn>Go To : </digi:trn>
 																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="clearKeyword()" styleId="alphaDropdown">
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">

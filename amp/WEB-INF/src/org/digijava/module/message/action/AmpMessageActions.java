@@ -1026,7 +1026,7 @@ public class AmpMessageActions extends DispatchAction {
     		message.setRelatedActivityId(new Long(activityId));
     		//now we must create activity URL
     		String fullModuleURL=RequestUtils.getFullModuleUrl(request);
-    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewActivityPreview.do~isPreview=1~pageId=2~activityId="+activityId;
+    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
     		message.setObjectURL(objUrl);
     	}
     	//should we send a message or not
@@ -1042,7 +1042,7 @@ public class AmpMessageActions extends DispatchAction {
     		Calendar cal=Calendar.getInstance();
     		message.setCreationDate(cal.getTime());
     		
-    		//save attached files
+    		//save attached files 
         	Sdm document=messageForm.getSdmDocument();
         	Sdm doc=null;
         	if(document!=null){

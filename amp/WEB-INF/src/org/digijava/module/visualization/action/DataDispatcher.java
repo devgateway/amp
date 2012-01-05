@@ -618,9 +618,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("\"Sector Name\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Sector Name", locale, siteId)+"\"");
 	    		csvString.append(",");
-	    		csvString.append("\"Amount\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5
@@ -967,9 +967,9 @@ public class DataDispatcher extends DispatchAction {
                 list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-        		csvString.append("\"Donor Name\"");
+        		csvString.append("\""+TranslatorWorker.translateText("Donor Name", locale, siteId)+"\"");
         		csvString.append(",");
-        		csvString.append("\"Amount\"");
+        		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
         		csvString.append("\n");
                 BigDecimal othersValue = BigDecimal.ZERO;
 
@@ -2030,9 +2030,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("\"Region Name\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Region Name", locale, siteId)+"\"");
 	    		csvString.append(",");
-	    		csvString.append("\"Amount\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            

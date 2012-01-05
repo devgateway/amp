@@ -722,9 +722,20 @@ public class DbUtil {
         if (filter.getCurrencyId()!=null) {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
 		} 
-        
+
         Long[] orgIds = filter.getOrgIds();
-        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+
+        Long[] orgsGrpIds = filter.getOrgGroupIds();
+		Long orgsGrpId = filter.getOrgGroupId();
+
+		Long[] orgGroupIds;
+		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
+			Long[] temp = {orgsGrpId};
+	        orgGroupIds = temp;
+		} else {
+	        orgGroupIds = orgsGrpIds;
+		}	
+        
         
         TeamMember tm = filter.getTeamMember();
         Long[] locationIds = filter.getSelLocationIds();

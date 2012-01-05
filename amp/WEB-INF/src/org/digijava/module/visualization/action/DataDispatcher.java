@@ -443,6 +443,7 @@ public class DataDispatcher extends DispatchAction {
 		
 		root.put("objectType", "lists");
 		root.put("children", children);
+        request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, " ");
 
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;

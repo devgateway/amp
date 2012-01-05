@@ -645,6 +645,9 @@ public class DataDispatcher extends DispatchAction {
 	    		if(divide){
 	    			filter.setDivideThousands(false);
 	    		}
+	    		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	    		response.setHeader("Pragma", "no-cache");
+	    		response.setDateHeader("Expires", 0);
 	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
 	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -781,6 +784,9 @@ public class DataDispatcher extends DispatchAction {
 				filter.setDivideThousands(false);
 			}
 	        	
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 				PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
@@ -976,6 +982,9 @@ public class DataDispatcher extends DispatchAction {
             		index++;
                 }
                
+        		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        		response.setHeader("Pragma", "no-cache");
+        		response.setDateHeader("Expires", 0);
                 PrintWriter out = new PrintWriter(new OutputStreamWriter(
             			response.getOutputStream(), "UTF-8"), true);
         		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -1112,6 +1121,9 @@ public class DataDispatcher extends DispatchAction {
     			filter.setDivideThousands(false);
     		}
 
+    		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    		response.setHeader("Pragma", "no-cache");
+    		response.setDateHeader("Expires", 0);
     		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
     			PrintWriter out = new PrintWriter(new OutputStreamWriter(
             			response.getOutputStream(), "UTF-8"), true);
@@ -1283,6 +1295,9 @@ public class DataDispatcher extends DispatchAction {
 			if(divide){
 				filter.setDivideThousands(false);
 			}
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
@@ -1336,6 +1351,9 @@ public class DataDispatcher extends DispatchAction {
     		}
         }
 		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
     			response.getOutputStream(), "UTF-8"), true);
 
@@ -1421,6 +1439,9 @@ public class DataDispatcher extends DispatchAction {
 			}
 			
 			visualizationForm.getExportData().setAidPredicTableData(aidPredData);
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
 
@@ -1472,6 +1493,9 @@ public class DataDispatcher extends DispatchAction {
 		if(divide){
 			filter.setDivideThousands(false);
 		}
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF-8"), true);
 
@@ -1627,7 +1651,9 @@ public class DataDispatcher extends DispatchAction {
 			if(divide){
 				filter.setDivideThousands(false);
 			}
-			
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
 
@@ -1681,6 +1707,9 @@ public class DataDispatcher extends DispatchAction {
 
 			csvString.append("\n");
 		}
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
 
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF-8"), true);
@@ -2020,6 +2049,9 @@ public class DataDispatcher extends DispatchAction {
 	    			filter.setDivideThousands(false);
 	    		}
 
+	    		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	    		response.setHeader("Pragma", "no-cache");
+	    		response.setDateHeader("Expires", 0);
 	            PrintWriter out = new PrintWriter(new OutputStreamWriter(
 	        			response.getOutputStream(), "UTF-8"), true);
 	    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
@@ -2158,6 +2190,9 @@ public class DataDispatcher extends DispatchAction {
 			if(divide){
 				filter.setDivideThousands(false);
 			}
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 	        
 			if(!lineChart){ // Line Chart needs a special treatment (yearly values)
 				PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -2301,6 +2336,9 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<organization name=\"\">\n");
 				xmlString.append("</organization>\n");
 			}
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			
 			if(format != null && format.equals("xml")){
 		        PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -2396,6 +2434,9 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<organization name=\"\">\n");
 				xmlString.append("</organization>\n");
 			}
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
 			
 			if(format != null && format.equals("xml")){
 		        PrintWriter out = new PrintWriter(new OutputStreamWriter(

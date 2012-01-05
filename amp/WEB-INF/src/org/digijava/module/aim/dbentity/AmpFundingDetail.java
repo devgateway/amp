@@ -104,7 +104,12 @@ public class AmpFundingDetail implements Serializable, Cloneable {
             this.transactionAmount=transactionAmount;
             }
             else{
-                this.transactionAmount=transactionAmount/percent1/percent2*100;
+            	//Check if the the percentage is null before dividing. If it's null, the calculation cannot be done, so return 0
+            	if(percent1 != null && percent2 != null)
+            		this.transactionAmount=transactionAmount/percent1/percent2*100;
+            	else
+            		this.transactionAmount= 0d;
+            		
             }
         }
         

@@ -366,7 +366,7 @@ function initializeGlobalVariables(){
 											<div
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="orgGrpDivList">
-												<ul style="list-style-type: none">
+												<ul style="list-style-type: none;margin-left: 0px;">
 													<li><c:if
 															test="${visualizationform.filter.dashboardType eq '1' }">
 															<input type="radio" value="-1" id="org_grp_check_all"
@@ -432,7 +432,7 @@ function initializeGlobalVariables(){
 											<div
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="regionDivList">
-												<ul style="list-style-type: none">
+												<ul style="list-style-type: none;margin-left: 0px;">
 													<li><c:if
 															test="${visualizationform.filter.dashboardType eq '2' }">
 															<input type="radio" id="region_check_all"
@@ -499,7 +499,7 @@ function initializeGlobalVariables(){
 												<div
 													style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 													id="sectorDivList">
-													<ul style="list-style-type: none">
+													<ul style="list-style-type: none;margin-left: 0px;">
 														<c:forEach
 															items="${visualizationform.filter.configWithSectorAndSubSectors}"
 															var="item">

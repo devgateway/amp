@@ -113,11 +113,21 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 
 			@Override
 			public void onSelect(AjaxRequestTarget target,AmpOrganisation choice) {
-				AmpOrganisationContact ampOrgCont = new AmpOrganisationContact();
-				ampOrgCont.setOrganisation(choice);
-				ampOrgCont.setContact(model.getObject());
+				boolean duplicateOrg=false;
 				Set<AmpOrganisationContact> set = setModel.getObject();
-				set.add(ampOrgCont);
+				for (AmpOrganisationContact ampOrganisationContact : set) {
+					if(ampOrganisationContact.getOrganisation().getAmpOrgId().equals(choice.getAmpOrgId())){
+						duplicateOrg=true;
+						break;
+					}
+				}
+				if(!duplicateOrg){
+					AmpOrganisationContact ampOrgCont = new AmpOrganisationContact();
+					ampOrgCont.setOrganisation(choice);
+					ampOrgCont.setContact(model.getObject());					
+					set.add(ampOrgCont);
+				}
+				
 				/*
 				idsList.removeAll();
 				target.addComponent(idsList.getParent());

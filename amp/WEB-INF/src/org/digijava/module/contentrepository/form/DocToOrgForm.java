@@ -4,6 +4,7 @@
 package org.digijava.module.contentrepository.form;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -17,8 +18,8 @@ public class DocToOrgForm extends ActionForm {
 	boolean hasAddParticipatingOrgRights	= false;
 	
 	String uuidForOrgsShown;
-	List<AmpOrganisation> orgs;
-	List<AmpOrganisation> addedOrgs;
+	Set<AmpOrganisation> orgs;
+	Set<AmpOrganisation> addedOrgs;
 	
 	String removingUuid;
 	Long removingOrgId;
@@ -55,31 +56,20 @@ public class DocToOrgForm extends ActionForm {
 		this.uuidForOrgsShown = uuidForOrgsShown;
 	}
 
-	/**
-	 * @return the orgs
-	 */
-	public List<AmpOrganisation> getOrgs() {
+
+	public Set<AmpOrganisation> getOrgs() {
 		return orgs;
 	}
 
-	/**
-	 * @param orgs the orgs to set
-	 */
-	public void setOrgs(List<AmpOrganisation> orgs) {
+	public void setOrgs(Set<AmpOrganisation> orgs) {
 		this.orgs = orgs;
 	}
 
-	/**
-	 * @return the addedOrgs
-	 */
-	public List<AmpOrganisation> getAddedOrgs() {
+	public Set<AmpOrganisation> getAddedOrgs() {
 		return addedOrgs;
 	}
 
-	/**
-	 * @param addedOrgs the addedOrgs to set
-	 */
-	public void setAddedOrgs(List<AmpOrganisation> addedOrgs) {
+	public void setAddedOrgs(Set<AmpOrganisation> addedOrgs) {
 		this.addedOrgs = addedOrgs;
 	}
 

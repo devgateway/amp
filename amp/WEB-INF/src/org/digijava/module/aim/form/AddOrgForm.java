@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -105,7 +106,7 @@ public class AddOrgForm extends ActionForm {
     private String lineMinRegDate;
     private String operFuncApprDate;
     private String receiptLegPersonalityAct;
-    private List<AmpOrganisation> budgetOrgs;
+    private Set<AmpOrganisation> budgetOrgs;
     private Long[] selBudgetOrg;
     private Collection<Location> selectedLocs = null;
 	private Collection<AmpDepartments> departments;
@@ -824,14 +825,6 @@ public class AddOrgForm extends ActionForm {
 		this.receiptLegPersonalityAct = receiptLegPersonalityAct;
 	}
 
-	public List<AmpOrganisation> getBudgetOrgs() {
-		return budgetOrgs;
-	}
-
-	public void setBudgetOrgs(List<AmpOrganisation> budgetOrgs) {
-		this.budgetOrgs = budgetOrgs;
-	}
-
 	public Long[] getSelBudgetOrg() {
 		return selBudgetOrg;
 	}
@@ -910,5 +903,13 @@ public class AddOrgForm extends ActionForm {
 
 	public void setFundingorgid(String fundingorgid) {
 		this.fundingorgid = fundingorgid;
+	}
+
+	public Set<AmpOrganisation> getBudgetOrgs() {
+		return budgetOrgs;
+	}
+
+	public void setBudgetOrgs(Set<AmpOrganisation> budgetOrgs) {
+		this.budgetOrgs = budgetOrgs;
 	}	
 }

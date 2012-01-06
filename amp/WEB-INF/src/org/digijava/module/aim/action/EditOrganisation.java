@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -647,7 +648,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgInfoSelectedYear(orgBudgetInfo.getYear().toString());
       editForm.setOrgInfoCurrId(orgBudgetInfo.getCurrency().getAmpCurrencyId());
       editForm.setOrgInfoAmount(orgBudgetInfo.getAmount().toString());
-      List<AmpOrganisation> orgs=new ArrayList<AmpOrganisation>();
+      Set<AmpOrganisation> orgs=new TreeSet<AmpOrganisation>();
       if(orgBudgetInfo.getOrganizations()!=null){
           orgs.addAll(orgBudgetInfo.getOrganizations());
           editForm.setBudgetOrgs(orgs);
@@ -750,7 +751,7 @@ public class EditOrganisation extends DispatchAction {
       }
       AddOrgForm editForm = (AddOrgForm) form;
       Long[] selOrgs = editForm.getSelBudgetOrg();
-      List<AmpOrganisation> orgs = editForm.getBudgetOrgs();
+      Set<AmpOrganisation> orgs = editForm.getBudgetOrgs();
       for (int i = 0; i < selOrgs.length; i++) {
           Iterator<AmpOrganisation> iterOrgs = orgs.iterator();
           while (iterOrgs.hasNext()) {

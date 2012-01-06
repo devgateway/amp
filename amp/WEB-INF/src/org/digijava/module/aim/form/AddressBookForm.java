@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
@@ -58,7 +59,7 @@ public class AddressBookForm   extends ActionForm {
 	
 	//for import
 	private FormFile fileUploaded;
-    private List<AmpOrganisation> organizations;
+    private Set<AmpOrganisation> organizations;
 	
     //private List<AmpOrganisationContact> contactOrganizations;
     private List<AmpContact> probablyDuplicatedContacs;
@@ -241,13 +242,13 @@ public class AddressBookForm   extends ActionForm {
 
 	public void setFaxesSize(int faxesSize) {
 		this.faxesSize = faxesSize;
-	}
+	}	
 
-	public List<AmpOrganisation> getOrganizations() {
+	public Set<AmpOrganisation> getOrganizations() {
 		return organizations;
 	}
 
-	public void setOrganizations(List<AmpOrganisation> organizations) {
+	public void setOrganizations(Set<AmpOrganisation> organizations) {
 		this.organizations = organizations;
 	}
 

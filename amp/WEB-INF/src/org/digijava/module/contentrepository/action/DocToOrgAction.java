@@ -5,6 +5,7 @@ package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.version.Version;
@@ -45,7 +46,8 @@ public class DocToOrgAction extends MultiAction {
 		DocToOrgForm docToOrgForm	= (DocToOrgForm) form;
 		docToOrgForm.setMessages(null);
 		if ( docToOrgForm.getAddedOrgs() == null )
-			docToOrgForm.setAddedOrgs(new ArrayList<AmpOrganisation>() );
+			docToOrgForm.setAddedOrgs(new TreeSet<AmpOrganisation>() );
+		
 		String uuid					= request.getParameter("orgsforuuid");
 		
 		if ( uuid!=null ) {
@@ -148,7 +150,7 @@ public class DocToOrgAction extends MultiAction {
 		catch (Exception e) {
 			logger.info("Error finding root node of version");
 		}
-		docToOrgForm.setOrgs(new ArrayList<AmpOrganisation>() );
+		docToOrgForm.setOrgs(new TreeSet<AmpOrganisation>() );
 		if (uuid != null) {
 			List<CrDocumentsToOrganisations> docsToOrgsList	= DocToOrgDAO.getDocToOrgObjsByUuid(uuid);
 			if ( docsToOrgsList != null ) {

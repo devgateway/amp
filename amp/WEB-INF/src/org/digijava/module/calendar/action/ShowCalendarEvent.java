@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,7 +111,7 @@ public class ShowCalendarEvent extends Action {
         	Long[] listSelectedOrganizations = ceform.getSelOrganizations();
             if (listSelectedOrganizations != null && listSelectedOrganizations.length > 0) {
                 Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
-                Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
+                Collection<AmpOrganisation> newColOrganizations = new TreeSet<AmpOrganisation>();
                 newColOrganizations.addAll(colOrganizations);
 
                 Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
@@ -203,7 +204,7 @@ public class ShowCalendarEvent extends Action {
         
         Collection<AmpOrganisation> organizations = ceform.getOrganizations();
         if(organizations == null)
-        	ceform.setOrganizations(new ArrayList<AmpOrganisation>());
+        	ceform.setOrganizations(new TreeSet<AmpOrganisation>());
         
         
         if (ceform.getMethod().equalsIgnoreCase("new")) {
@@ -633,7 +634,7 @@ public class ShowCalendarEvent extends Action {
                 	}
                 }
 
-                Collection<AmpOrganisation> orgs = new ArrayList<AmpOrganisation> ();
+                Collection<AmpOrganisation> orgs = new TreeSet<AmpOrganisation> ();
                 if (ampCalendar.getOrganisations() != null) {
                     Iterator orgItr = ampCalendar.getOrganisations().iterator();
                     while (orgItr.hasNext()) {

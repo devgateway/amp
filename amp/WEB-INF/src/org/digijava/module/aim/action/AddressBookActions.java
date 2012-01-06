@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -338,10 +339,10 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setOrganisationName(contact.getOrganisationName());
 				myForm.setFunction(contact.getFunction());
 				myForm.setOfficeaddress(contact.getOfficeaddress());
-                myForm.setOrganizations(new ArrayList<AmpOrganisation>());
+                myForm.setOrganizations(new TreeSet<AmpOrganisation>());
                 List<AmpOrganisationContact> contOrgs=ContactInfoUtil.getContactOrganizations(contact.getId());
                 if(contOrgs!=null){
-                	List<AmpOrganisation> organisations=new ArrayList<AmpOrganisation>();
+                	Set<AmpOrganisation> organisations=new TreeSet<AmpOrganisation>();
                 	for (AmpOrganisationContact orgContact : contOrgs) {
                 		organisations.add(orgContact.getOrganisation());
 					}

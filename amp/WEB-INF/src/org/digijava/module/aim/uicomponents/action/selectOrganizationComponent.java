@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -419,7 +420,7 @@ public class selectOrganizationComponent extends Action {
 			Collection<AmpOrganisation> targetCollecion = (Collection<AmpOrganisation>) target.get(eaForm.getTargetForm());
 
 			if (targetCollecion == null) {
-				targetCollecion = new ArrayList<AmpOrganisation>();
+				targetCollecion = new TreeSet<AmpOrganisation>(); //Don't change this! otherwise contains function will compare objects using equals,which is not overriden in AmpOrganisation
 			}
 
 			List<Long> orgIds = eaForm.getAllSelectedOrgsIds();

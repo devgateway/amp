@@ -65,6 +65,7 @@ public final class ArConstants {
 	
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
+	public final static String CAPITAL_PERCENT="Capital Percent";
 	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
@@ -268,5 +269,53 @@ public final class ArConstants {
 	
 	public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
 	
+	public final static List<SyntheticColumnsMeta> syntheticColumns = Arrays.asList(
+			new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),
+			new SyntheticColumnsMeta("Planned Disbursements - Expenditure", new CapitalExpenditureCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Expenditure","Planned Disbursements"))
+	) ;
+	
+	public static class SyntheticColumnsMeta {
+		String columnName;
+		SyntheticCellGenerator generator;
 		
+		
+		public SyntheticColumnsMeta(String columnName,
+				SyntheticCellGenerator generator) {
+			super();
+			this.columnName = columnName;
+			this.generator = generator;
+		}
+		/**
+		 * @return the columnName
+		 */
+		public String getColumnName() {
+			return columnName;
+		}
+		/**
+		 * @param columnName the columnName to set
+		 */
+		public void setColumnName(String columnName) {
+			this.columnName = columnName;
+		}
+		/**
+		 * @return the generator
+		 */
+		public SyntheticCellGenerator getGenerator() {
+			return generator;
+		}
+		/**
+		 * @param generator the generator to set
+		 */
+		public void setGenerator(SyntheticCellGenerator generator) {
+			this.generator = generator;
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
+	
 }

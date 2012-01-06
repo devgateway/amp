@@ -310,5 +310,18 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
+	
+	public String getSectorPathString(){
+		String ret = "[" + name + "]";
+
+		AmpSector s = parentSectorId;
+		while (s != null){
+			ret = "[" + s.name + "]" + " - " + ret;
+			s = s.getParentSectorId();
+		}
+		
+		//ret = "[" + ampSecSchemeId.getSecSchemeName() + "]" + " - " + ret;
+		return ret;
+	}
 
 }

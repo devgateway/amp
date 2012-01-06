@@ -130,8 +130,7 @@ public class AmpSectorsFormTableFeature extends
 				item.add(percentageField);
 
 				item.add(new Label("sectorLabel", item.getModelObject()
-						.getSectorId().getName()));
-
+						.getSectorId().getSectorPathString()));
 				AmpDeleteLinkField delSector = new AmpDeleteLinkField(
 						"delSector", "Delete Sector") {
 					@Override

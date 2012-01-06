@@ -13,6 +13,8 @@
      	<forward name="showAllMessages" path="/showLayout.do?layout=allMessagesLayout"/>
 	<forward name="showAllMessagesClean" path="/showLayout.do?layout=allMessagesLayoutContent"/>
      	<forward name="forwardMsgPage" path="/showLayout.do?layout=forwardMessagesLayout"/>
+	<forward name="createMessageError" path="/message/messageActions.do?editingMessage=false&amp;actionType=fillTypesAndLevels"/>
+
      </action>
      <action path="/message/getMessages" name="messageForm" scope="session" type="org.digijava.module.message.action.ViewMessages" />
      <action path="/message/msgSettings" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.MsgSettingsAction">

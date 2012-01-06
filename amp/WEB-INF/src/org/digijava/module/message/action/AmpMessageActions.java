@@ -33,6 +33,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
@@ -959,7 +961,7 @@ public class AmpMessageActions extends DispatchAction {
      * add Message
      */
     public ActionForward addMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,	HttpServletResponse response) throws Exception {
-
+        ActionErrors errors = null;
     	HttpSession session = request.getSession();
     	TeamMember teamMember = new TeamMember();
     	 // Get the current member who has logged in from the session
@@ -1021,13 +1023,28 @@ public class AmpMessageActions extends DispatchAction {
     	}
     	//link message to activity if necessary
     	if(messageForm.getSelectedAct()!=null && messageForm.getSelectedAct().length()>0){
-    		String act=messageForm.getSelectedAct();
-    		String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
-    		message.setRelatedActivityId(new Long(activityId));
-    		//now we must create activity URL
-    		String fullModuleURL=RequestUtils.getFullModuleUrl(request);
-    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
-    		message.setObjectURL(objUrl);
+            try {
+                String act=messageForm.getSelectedAct();
+                String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
+                Long actId = new Long(activityId);
+                AmpActivityVersion testAct = ActivityUtil.getAmpActivity(actId);
+                if (testAct == null) {
+                    if (errors == null) {
+                        errors=new ActionErrors();
+                    }
+                    errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name",request)));
+                }
+                message.setRelatedActivityId(actId);
+                //now we must create activity URL
+                String fullModuleURL=RequestUtils.getFullModuleUrl(request);
+                String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
+                message.setObjectURL(objUrl);
+            } catch (NumberFormatException ex) {
+                if (errors == null) {
+                    errors=new ActionErrors();
+                }
+                errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name",request)));
+            }
     	}
     	//should we send a message or not
     	if(request.getParameter("toDo")!=null){
@@ -1091,7 +1108,7 @@ public class AmpMessageActions extends DispatchAction {
 //				statesMemberIds.add(mId.getMemberId());
 //			}
 //    	}
-    	if (messageReceivers != null && messageReceivers.length > 0) {
+    	if (messageReceivers != null && messageReceivers.length > 0 && (errors == null || errors.size() == 0)) {
             Collection<InternetAddress> addrCol=new ArrayList<InternetAddress>();
             for (String receiver : messageReceivers) {
                 if (receiver.startsWith("m")) {
@@ -1163,8 +1180,16 @@ public class AmpMessageActions extends DispatchAction {
         } else {
             messageForm.setChildTab("inbox");
         }
-           
-        return mapping.findForward("showAllMessages");
+
+        String fwd = null;
+        
+        if (errors.size() > 0){
+            saveErrors(request, errors);
+            fwd = "createMessageError";
+        } else {
+            fwd = "showAllMessages";
+        }
+        return mapping.findForward(fwd);
 	}
 
 

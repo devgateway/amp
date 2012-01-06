@@ -502,9 +502,10 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 				return false;
          	}
         }
+        
     var selAct = document.messageForm.selectedAct.value;
     if (selAct != null && selAct.trim().length > 0) { //Activity selected
-     	if (selAct.indexOf("(") < -1 || selAct.indexOf(")") < -1 || selAct.lastIndexOf("(") > selAct.lastIndexOf(")")){
+     	if (selAct.indexOf("(") < 0 || selAct.indexOf(")") < 0 || selAct.lastIndexOf("(") > selAct.lastIndexOf(")")){
 	    	alert ("Please select activity from the autocomplite list.");
 	    	return false;
     	}
@@ -813,6 +814,7 @@ span.extContactDropdownEmail {
 <module:display name="Messages" parentModule="Messaging System"></module:display>
 
 <div class="ins_box_left" style="border: 1px solid silver; background-color:#F5F5F5;">
+	<digi:errors/>
 	<div class="create_message">
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 		  <tr>

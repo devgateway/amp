@@ -174,8 +174,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		String donorGroupName=null;
 		String donorTypeName=null;
-		Double fixedExchangeRate = null;;
-		Double pledgetotal = null;;
+		Double fixedExchangeRate = null;
+		Double pledgetotal = null;
+		Double capitalPercent	= null;
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
@@ -202,6 +203,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if (columnsMetaData.contains("total_pledged")) {
 			pledgetotal	= rs.getDouble("total_pledged");
+		}
+		
+		if (columnsMetaData.contains("capital_spend_percent") ) {
+			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
@@ -432,6 +437,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(pledgetotal!=null) {
 			MetaInfo pledgedtotalname = this.getCachedMetaInfo(ArConstants.PLEDGED_TOTAL, null);
 			acc.getMetaData().add(pledgedtotalname);
+		}
+		
+		if(capitalPercent != null) {
+			MetaInfo capitalPercentMI = this.getCachedMetaInfo(ArConstants.CAPITAL_PERCENT, capitalPercent);
+			acc.getMetaData().add(capitalPercentMI);
 		}
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT

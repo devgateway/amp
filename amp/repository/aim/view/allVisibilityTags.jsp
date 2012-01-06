@@ -190,7 +190,9 @@
 <feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
-<feature:display name="Planned Disbursements" module="Measures"></feature:display> 
+<feature:display name="Planned Disbursements" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Capital" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Expenditure" module="Measures"></feature:display>   
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 

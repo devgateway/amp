@@ -182,7 +182,19 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 
+		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
+		
+		for ( AmpReportMeasures repMes: reportMetadata.getMeasures() ) {
+			AmpMeasures measure	= repMes.getMeasure();
+			for (ArConstants.SyntheticColumnsMeta scm: ArConstants.syntheticColumns) {
+				if (scm.getColumnName().equals(measure.getMeasureName() ) ) {
+					syntCellGenerators.add(scm.getGenerator());
+				}
+			}
+		}
+		
 		Iterator<AmpReportColumn> i = extractable.iterator();
+		
 		try {
 
 			while (i.hasNext()) {
@@ -246,6 +258,16 @@ public class AmpReportGenerator extends ReportGenerator {
 				ce.setPledge(pledgereport);
 				
 				Column column = ce.populateCellColumn();
+				
+				if ( syntCellGenerators.size() > 0 && ArConstants.COLUMN_FUNDING.equals(column.getName()) ) {
+					for (SyntheticCellGenerator scg: syntCellGenerators) {
+						int order	= reportMetadata.getMeasureOrder( scg.getMeasureName() );
+						Collection<CategAmountCell> newCells	= scg.generate( column.getItems(), order );
+						if ( newCells!=null )
+							column.getItems().addAll(newCells);
+					}
+				} 
+				
 
 				if (relatedContentPersisterClass != null) {
 					column.setRelatedContentPersisterClass(Class

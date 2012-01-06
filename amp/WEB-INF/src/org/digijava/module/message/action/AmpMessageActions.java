@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -112,12 +112,11 @@ public class AmpMessageActions extends DispatchAction {
             }
         }
 
-        response.getOutputStream().print(retVal.toString());
-        /*
-        response.setContentType("text/xml");
-        relatedActivityAutocompData.output(response.getOutputStream());
-        */
-        response.getOutputStream().close();
+
+        response.setCharacterEncoding("UTF-8");
+        ServletOutputStream sos = response.getOutputStream();
+        sos.write(retVal.toString().getBytes("UTF-8"));
+        sos.close();
 
 	    return null;
 	}

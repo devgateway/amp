@@ -57,7 +57,9 @@ public class MetaTextColWorker extends TextColWorker {
 				rs.getString(4)!=null && 
 				(generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE))
 		{
-			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
+			double percentage	= rs.getDouble(4);
+			if ( percentage != 0.0 )
+				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));
 		}	
 		else if(columnName.equals("Componente")){
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 

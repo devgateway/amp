@@ -74,6 +74,14 @@ function valid(value){
  	 }
  	 return false;
 }
+function editEvent(){
+         document.getElementById('hdnMethod').value = '';
+         var allOptions = document.getElementById('selreceivers').options;
+         for(var i=0;i<allOptions.length;i++){
+             allOptions[i].selected=true;
+         }
+ 	 return true;
+}
 
 </script>
 

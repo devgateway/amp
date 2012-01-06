@@ -417,7 +417,7 @@ function isInvalid(field){
                                                                    			<digi:trn key="aim:viewEditUser:password">Password:</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2" class="inputcontainer">
-                                                                    		<html:password name="umViewEditUserForm" property="newPassword" />
+                                                                    		<html:password name="umViewEditUserForm" property="newPassword" redisplay="false"/>
                                                                			</td>
 																	</tr>
 																	<tr>
@@ -426,7 +426,7 @@ function isInvalid(field){
                                                                    			<digi:trn key="aim:viewEditUser:confirmPassword">Confirm:</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2"  class="inputcontainer">
-                                                                    		<html:password name="umViewEditUserForm" property="confirmNewPassword" />
+                                                                    		<html:password name="umViewEditUserForm" property="confirmNewPassword" redisplay="false"/>
                                                                			</td>
 																	</tr>
 																	<tr>

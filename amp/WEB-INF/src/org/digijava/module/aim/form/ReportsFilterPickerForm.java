@@ -111,7 +111,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
-	private Object[] selectedBudgets = null;
+	private Long[] selectedBudgets = null;
 	private Boolean justSearch = null;
 	
 	private Boolean unallocatedLocation = null;
@@ -284,14 +284,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	/**
 	 * @return the selectedBudgets
 	 */
-	public Object[] getSelectedBudgets() {
+	public Long[] getSelectedBudgets() {
 		return selectedBudgets;
 	}
 
 	/**
 	 * @param selectedBudgets the selectedBudgets to set
 	 */
-	public void setSelectedBudgets(Object[] selectedBudgets) {
+	public void setSelectedBudgets(Long[] selectedBudgets) {
 		this.selectedBudgets = selectedBudgets;
 	}
 

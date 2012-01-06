@@ -47,12 +47,6 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		return value;
 	}
 
-	public Set getActivities() {
-		return activities;
-	}
-	public void setActivities(Set activities) {
-		this.activities = activities;
-	}
 	public Long getId() {
 		return id;
 	}

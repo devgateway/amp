@@ -685,7 +685,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgId + "";
+        return String.valueOf(this.ampOrgId.longValue());
 	}
 
 	@Override
@@ -699,6 +699,10 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.translateable	= translateable;
 		
 	}
+
+    public String getAdditionalSearchString() {
+        return this.acronym;
+    }
 	
 	
 }	

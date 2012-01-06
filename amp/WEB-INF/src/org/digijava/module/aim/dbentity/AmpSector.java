@@ -313,7 +313,6 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	
 	public String getSectorPathString(){
 		String ret = "[" + name + "]";
-
 		AmpSector s = parentSectorId;
 		while (s != null){
 			ret = "[" + s.name + "]" + " - " + ret;
@@ -324,4 +323,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		return ret;
 	}
 
+    public String getAdditionalSearchString() {
+        return this.sectorCode;
+    }
 }

@@ -193,7 +193,7 @@ public class AmpCategoryValueLocations implements Identifiable,
 
 	@Override
 	public String getUniqueId() {
-		return this.id + "";
+		return String.valueOf(this.id.longValue());
 	}
 	
 	@Override
@@ -228,4 +228,8 @@ public class AmpCategoryValueLocations implements Identifiable,
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.code;
+    }
 }

@@ -129,7 +129,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	
 	@Override
 	public String getUniqueId() {
-		return id+"";
+        return String.valueOf(this.id.longValue());
 	}
 	
 	@Override
@@ -171,4 +171,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		this.activities.add(newActivity);
 		return this;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.value;
+    }
 }

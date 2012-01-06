@@ -110,7 +110,7 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgTypeId + "";
+        return String.valueOf(this.ampOrgTypeId.longValue());
 	}
 
 	@Override
@@ -122,5 +122,9 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	public void setTranslateable(boolean translateable) {
 		this.translateable = translateable;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.orgTypeCode;
+    }
 	
 }

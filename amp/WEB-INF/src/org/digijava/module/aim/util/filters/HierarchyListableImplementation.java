@@ -11,6 +11,7 @@ import org.digijava.module.aim.util.HierarchyListable;
 public class HierarchyListableImplementation implements HierarchyListable {
 	
 	private String label;
+    private String additionalSearchableString;
 	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
 	
@@ -90,5 +91,8 @@ public class HierarchyListableImplementation implements HierarchyListable {
 		this.translateable = translateable;
 	}
 
-	
+
+    public String getAdditionalSearchString() {
+        return this.additionalSearchableString;
+    }
 }

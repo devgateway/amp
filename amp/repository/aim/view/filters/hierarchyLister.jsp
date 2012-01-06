@@ -43,6 +43,9 @@
 									${entity.label} 
 								</c:if>
 							</span>
+							<div style="display:none">
+								${entity.additionalSearchString}
+							</div>
 						</td>
 					</tr>
 				</table> 

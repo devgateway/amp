@@ -114,7 +114,7 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	}
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgGrpId+"";
+        return String.valueOf(this.ampOrgGrpId.longValue());
 	}
 	@Override
 	public boolean getTranslateable() {
@@ -124,5 +124,9 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	public void setTranslateable(boolean translateable) {
 		this.translateable = translateable;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.orgGrpCode;
+    }
 	
 }

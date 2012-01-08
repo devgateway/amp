@@ -99,6 +99,10 @@ public class AmpReportGenerator extends ReportGenerator {
 					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
 					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 				}
+			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+					ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
+				ret.add(ArConstants.MODE_OF_PAYMENT);
+			}
 
 		}
 		return ret;
@@ -595,24 +599,52 @@ public class AmpReportGenerator extends ReportGenerator {
 		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
 				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
 				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+			
+			//iterate each column in newcol
+//			for (int i=0; i< newcol.getItems().size();i++){
+//				Column nestedCol = (Column) newcol.getItems().get(i);
+//				if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
+//				
+//				List<String> cat = new ArrayList<String>();
+//				cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+//				GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
+//						true, reportMetadata);
+//				
+//				nestedCol2.addColumn(nestedCol);
+//				nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+//				newcol.replaceColumn(nestedCol.getName(), nestedCol2);
+//				
+//			}
+			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+		}
+		
+		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+				ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
+			
+			this.addTotalsVerticalSplit(newcol, ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_TOTAL);
+		}
+		
+		rawColumns.addColumn(newcol);
+	}
+	
+	protected void addTotalsVerticalSplit(GroupColumn newcol, String splitterCol, String totalsSplitterCol) {
 		//iterate each column in newcol
 		for (int i=0; i< newcol.getItems().size();i++){
 			Column nestedCol = (Column) newcol.getItems().get(i);
 			if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
 			
 			List<String> cat = new ArrayList<String>();
-			cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+			cat.add(splitterCol);
 			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
 					true, reportMetadata);
 			
 			nestedCol2.addColumn(nestedCol);
-			nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+			nestedCol.setName(totalsSplitterCol);
 			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
 			
-			}
 		}
 		
-		rawColumns.addColumn(newcol);
 	}
 
 	protected void applyExchangeRate() {

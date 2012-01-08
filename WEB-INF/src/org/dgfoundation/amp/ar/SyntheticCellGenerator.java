@@ -37,7 +37,7 @@ public abstract class SyntheticCellGenerator {
 					
 					try {
 						CategAmountCell newCell	= (CategAmountCell) categAmountCell.clone();
-						newCell.setAmount( this.computeAmount(newCell.getAmount(), categAmountCell.getMetaData()) );
+						newCell.setAmount( this.computeAmount(newCell.getInitialAmount(), categAmountCell.getMetaData()) );
 						newCell.setMetaData(new HashSet<Object>() );
 						Iterator<MetaInfo> iter	= categAmountCell.getMetaData().iterator();
 						while ( iter.hasNext() ) {

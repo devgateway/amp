@@ -111,7 +111,8 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				
-				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element instanceof TotalCommitmentsAmountColumn){ 
+				if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
+						&& element instanceof TotalCommitmentsAmountColumn){ 
 					continue;
 				}
 				
@@ -232,6 +233,16 @@ public class GroupColumn extends Column {
     	  }
         
       }
+      if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true")) {
+    	  if(category.equals(ArConstants.MODE_OF_PAYMENT) ) {
+        	metaSet.add(new MetaInfo<String>(ArConstants.MODE_OF_PAYMENT,ArConstants.MODE_OF_PAYMENT_TOTAL));
+          }
+    	  
+    	  if(category.equals(ArConstants.QUARTER)) {
+    		  metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,ArConstants.QUARTERS_TOTAL));
+    	  }
+        
+      }
         
     	   //manually add at least one term :(
     	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
@@ -281,6 +292,9 @@ public class GroupColumn extends Column {
         	//if this category is found inside the grand totals column, ignore it 
             if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
             		element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL) && src instanceof TotalAmountColumn) continue;
+            
+            if(element.getCategory().equals(ArConstants.MODE_OF_PAYMENT) && 
+            		element.getValue().equals(ArConstants.MODE_OF_PAYMENT_TOTAL) && src instanceof TotalAmountColumn) continue;
 
             CellColumn cc = null;
             if (generateTotalCols)
@@ -326,6 +340,12 @@ public class GroupColumn extends Column {
     			//this means ALL cells be added here regardless of their category
     			if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
     					element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL)){
+    					cc.addCell(item);
+    					continue;
+    			}
+    			
+    			if(element.getCategory().equals(ArConstants.MODE_OF_PAYMENT) && 
+    					element.getValue().equals(ArConstants.MODE_OF_PAYMENT_TOTAL)){
     					cc.addCell(item);
     					continue;
     			}

@@ -59,6 +59,7 @@ public final class ArConstants {
 	
 	public final static String DONOR="Donor Agency";
 	public final static String MODE_OF_PAYMENT="Mode of Payment";
+	public final static String MODE_OF_PAYMENT_TOTAL="Total";
 	public final static String FUNDING_STATUS="Funding Status";
 	
 	public final static String MODE_OF_PAYMENT_UNALLOCATED="Mode of Payment Unallocated";

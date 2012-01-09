@@ -38,6 +38,15 @@ public class NewAdvancedTrnForm extends ActionForm {
 	private List<org.digijava.kernel.entity.Locale> languages;
 	private String action;
 	private int itemsPerPage;
+	private boolean showOnlyEnglish;
+
+	public boolean isShowOnlyEnglish() {
+		return showOnlyEnglish;
+	}
+
+	public void setShowOnlyEnglish(boolean showOnlyEnglish) {
+		this.showOnlyEnglish = showOnlyEnglish;
+	}
 
 	public int getItemsPerPage() {
 		return itemsPerPage;

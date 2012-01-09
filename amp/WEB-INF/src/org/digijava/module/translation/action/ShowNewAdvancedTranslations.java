@@ -63,6 +63,7 @@ public class ShowNewAdvancedTranslations extends Action{
 		List<org.digijava.kernel.entity.Locale> sortedLanguages = TranslationManager.getTreeLanguagesToDisplay(
 				site, null, false);
 		trnForm.setLanguages(sortedLanguages);
+	
 		
 		int totalPages = 0;
 
@@ -95,6 +96,7 @@ public class ShowNewAdvancedTranslations extends Action{
 		int itemsPerPage =trnForm.getItemsPerPage();
 		int startItemNo = itemsPerPage * currentPage;
 		int stopItemNo = startItemNo + itemsPerPage;
+		if(!trnForm.isShowOnlyEnglish()){
 		
 		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")&&trnForm.getAction().equals("search")){
 
@@ -199,6 +201,25 @@ public class ShowNewAdvancedTranslations extends Action{
 				List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);
 				trnForm.setResultList(groupsList);
 				totalPages = (int) Math.ceil(keys.size() / itemsPerPage);
+		}
+		}
+		else{
+			List<Message> allOnlyLanguageMessages=TranslatorWorker.getOnlyLanguageTranslationsKeys(site, "en");
+			int size=allOnlyLanguageMessages.size();
+			if(size>0){
+				stopItemNo=(size<stopItemNo)?size-1:stopItemNo;
+				List<Message> results=allOnlyLanguageMessages.subList(startItemNo,stopItemNo);
+				Collection<MessageGroup> groups = TrnUtil.groupByKey(results);
+				List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);
+				trnForm.setResultList(groupsList);
+				totalPages = (int) Math.ceil(size / itemsPerPage);
+			}
+			else{
+				trnForm.setResultList(null);
+				totalPages = 0;
+			}
+			
+			
 		}
 		if(trnForm.getPageNumber()==null){
 			trnForm.setPageNumber(new Integer(1));

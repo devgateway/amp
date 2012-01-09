@@ -157,6 +157,8 @@ th {
 		<div class="pageTitle">
 			<span class="subtitle-blue"><digi:trn>Search Translations</digi:trn></span>
 		</div>
+		<html:checkbox styleId="showOnlyEnglishCHK" name ="newAdvancedTrnForm" property="showOnlyEnglish" onclick="showOnlyEnglishTRNs();"/>
+		<digi:trn>Show translations which have value only in one english</digi:trn>
 		<div class="controlPanel">
 			<div class="clearfix">
 				<div style="float:left;padding: 1px">
@@ -373,9 +375,23 @@ th {
 		if (opened=='true'){
 			openChangesList(true);
 		}
+		var show = $('#showOnlyEnglishCHK').is(':checked');
+		if(show){
+			 $('.controlPanel').hide();
+		}
+		else{
+			$('.controlPanel').show();	
+		}
 
 		
 	});//document ready end
+	
+function showOnlyEnglishTRNs(){
+
+	$('#hiddenPageNumber').val(1);
+	var myForm = document.newAdvancedTrnForm;
+	myForm.submit();
+	}
 
 	function loadChanges(){
 		var imgTag = '<div align="center"><img src="'+imgLoading+'"></div>';
@@ -588,7 +604,7 @@ th {
 		var myForm = document.newAdvancedTrnForm;
 		myForm.submit();
 	}
-
+	
 	
 
 </script>

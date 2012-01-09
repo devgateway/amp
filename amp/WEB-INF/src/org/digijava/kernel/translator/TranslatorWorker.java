@@ -1757,6 +1757,33 @@ public class TranslatorWorker {
 		}
     	return keys;
     }
+   
+   /**
+    * Get messages that have values only in particular language 
+    * @param site
+    * @param locale
+    * @return
+    * @throws WorkerException
+    */
+	@SuppressWarnings("unchecked")
+	public static List<Message> getOnlyLanguageTranslationsKeys(Site site,
+			String locale) throws WorkerException {
+		Session session = null;
+		List<Message> messages =null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+				String oql = " from " + Message.class.getName()
+				+ " as m where m.key in (select m1.key from " + Message.class.getName()
+					+ " as m1 group by m1.key having count(m1.key)=1) and  m.siteId =:siteId and m.locale=:locale order by  m.key ";
+				Query query = session.createQuery(oql);
+				query.setString("siteId",  site.getId().toString());
+				query.setString("locale", locale);
+				messages=query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}
+		return messages;
+	}
 
     /**
      * Sets on-site translation mode on/off

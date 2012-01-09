@@ -2,11 +2,16 @@ package org.dgfoundation.amp.onepager.components;
 
 import java.util.List;
 
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
 
 public abstract class ListEditorButton extends AmpLinkField {
 	private static final long serialVersionUID = 1L;
 	private transient ListItem< ? > parent;
+
+	public ListEditorButton(String id, String fmName, String question){
+		super(id, fmName, new Model<String>(question));
+	}
 
 	public ListEditorButton(String id, String fmName){
 		super(id, fmName);

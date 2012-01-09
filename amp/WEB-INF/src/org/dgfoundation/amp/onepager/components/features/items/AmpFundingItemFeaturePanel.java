@@ -72,11 +72,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				funding.setFundingDetails(new TreeSet<AmpFundingDetail>());
 				funding.setGroupVersionedFunding(System.currentTimeMillis());
 				
-				parent.getSetModel().getObject().add(funding);
-				parent.getList().removeAll();
+				parent.getList().addItem(funding);
 				target.addComponent(parent);
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
-				
 			}
 		};
 		add(addNewFunding);

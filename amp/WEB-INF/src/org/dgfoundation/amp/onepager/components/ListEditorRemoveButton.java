@@ -7,6 +7,10 @@ public class ListEditorRemoveButton extends ListEditorButton {
         super(id, fmName);
     }
 
+    public ListEditorRemoveButton(String id, String fmName, String question){
+        super(id, fmName, question);
+    }
+
 	@Override
 	protected void onClick(AjaxRequestTarget target) {
         int idx = getItem().getIndex();

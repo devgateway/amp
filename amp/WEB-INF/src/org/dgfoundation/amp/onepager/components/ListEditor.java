@@ -10,13 +10,15 @@ import java.util.Set;
 import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
 public abstract class ListEditor<T> extends RepeatingView implements IFormModelUpdateListener{
 	public transient List<T> items;
 	IModel<Set<T>> model;
 	private transient Comparator<T> comparator;
-	
+
+	public ListEditor(String id, IModel<Set<T>> model){
+		this(id, model, null);
+	}
 	public ListEditor(String id, IModel<Set<T>> model, Comparator<T> comparator){
 		super(id, model);
 		setOutputMarkupId(true);
@@ -57,6 +59,6 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 
 	@Override
 	public void updateModel(){
-		model.setObject(new HashSet(items));
+		model.setObject(new HashSet<T>(items));
 	}
 }

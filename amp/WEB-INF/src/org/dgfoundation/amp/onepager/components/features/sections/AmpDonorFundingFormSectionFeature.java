@@ -16,9 +16,6 @@ import java.lang.Double;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -26,11 +23,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converters.DoubleConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -54,11 +50,11 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class AmpDonorFundingFormSectionFeature extends
 		AmpFormSectionFeaturePanel {
 
-	protected ListView<AmpFunding> list;
+	protected ListEditor<AmpFunding> list;
 	private IModel<Set<AmpFunding>> setModel;
 	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
 
-	public ListView<AmpFunding> getList() {
+	public ListEditor<AmpFunding> getList() {
 		return list;
 	}
 
@@ -117,12 +113,10 @@ public class AmpDonorFundingFormSectionFeature extends
 		add(date);
 		
 		
-		listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
-
-		list = new ListView<AmpFunding>("listFunding", listModel) {
+		list = new ListEditor<AmpFunding>("listFunding", setModel) {
 			@Override
-			protected void populateItem(final ListItem<AmpFunding> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
 				AmpFundingItemFeaturePanel fundingItemFeature;
 				try {
 					fundingItemFeature = new AmpFundingItemFeaturePanel(
@@ -134,22 +128,19 @@ public class AmpDonorFundingFormSectionFeature extends
 				item.add(fundingItemFeature);
 
 				String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
-				AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-						"delFunding", "Delete Funding Item",new Model<String>(translatedMessage)) {
+				
+				item.add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
 					@Override
-					public void onClick(AjaxRequestTarget target) {
-						setModel.getObject().remove(item.getModelObject());
+					protected void onClick(AjaxRequestTarget target) {
+						super.onClick(target);
 						target.addComponent(AmpDonorFundingFormSectionFeature.this);
 						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-						list.removeAll();
 					}
-				};
-				item.add(deleteLinkField);
+				});
 
 			}
 		};
 
-		list.setReuseItems(true);
 		add(list);
 
 		
@@ -170,9 +161,8 @@ public class AmpDonorFundingFormSectionFeature extends
 				funding.setFundingDetails(new HashSet<AmpFundingDetail>());
 				funding.setGroupVersionedFunding(System.currentTimeMillis());
 
-				setModel.getObject().add(funding);
-				list.removeAll();
-				target.addComponent(AmpDonorFundingFormSectionFeature.this);
+				list.addItem(funding);
+				target.addComponent(list.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 			}
 

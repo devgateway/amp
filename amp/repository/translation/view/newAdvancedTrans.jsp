@@ -158,7 +158,7 @@ th {
 			<span class="subtitle-blue"><digi:trn>Search Translations</digi:trn></span>
 		</div>
 		<html:checkbox styleId="showOnlyEnglishCHK" name ="newAdvancedTrnForm" property="showOnlyEnglish" onclick="showOnlyEnglishTRNs();"/>
-		<digi:trn>Show translations which have value only in one english</digi:trn>
+		<digi:trn>Show translations which have value only in english</digi:trn>
 		<div class="controlPanel">
 			<div class="clearfix">
 				<div style="float:left;padding: 1px">

@@ -194,7 +194,8 @@
                     
                     <tr>
                         <td  align="center" colspan="4">
-                            <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="<digi:trn key='gis:addEditValue:adddata'>Add Value</digi:trn>" onclick="addData()"/>&nbsp;&nbsp;
+                            <c:set var="trnAdd"><digi:trn key="aim:btn:addValue">Add Value</digi:trn></c:set> 
+                            <input style="font-family:verdana;font-size:11px;" type="button" class="buttonx" name="addValBtn" value="${trnAdd}" onclick="addData()"/>&nbsp;&nbsp;
                         </td>
                     </tr>  
                     <tr>
@@ -204,7 +205,8 @@
                                 ${trn}
                             </html:submit>     
                             &nbsp;&nbsp;
-                           <input class="dr-menu" type="button" value="<digi:trn key='gis:addEditValue:cancelBtn'>Cancel</digi:trn>" onclick="cancel()"/>
+                           <c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set> 
+                            <input class="dr-menu" type="button" value="${trnCancel}" onclick="cancel()"/>
                             
                         </td>
                     </tr>

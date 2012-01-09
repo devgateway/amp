@@ -186,8 +186,9 @@
                         <td align="right">
                              <input type="button" onclick="validate()" value="<digi:trn>Save</digi:trn>"/>
                         </td>
+                        <c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set> 
                         <td>
-                            <input type="button" value="Cancel" onclick="cancel()">
+                            <input type="button" value="${trnCancel}" onclick="cancel()">
                         </td>
                     </tr>
                 </table>

@@ -8,11 +8,13 @@ import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
@@ -29,6 +31,8 @@ import edu.emory.mathcs.backport.java.util.Arrays;
  */
 public abstract class AmpRegionalFormTableFeaturePanel extends
 		AmpFormTableFeaturePanel<Set<AmpRegionalFunding>, AmpRegionalFunding> {
+	
+	protected ListEditor<AmpRegionalFunding> list;
 
 	protected IModel<Set<AmpRegionalFunding>> setModel;
 
@@ -70,5 +74,9 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 				list.removeAll();
 			}
 		};
+	}
+	
+	public ListEditor<AmpRegionalFunding> getListEditor() {
+		return list;
 	}
 }

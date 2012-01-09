@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.models;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -19,8 +20,7 @@ import org.digijava.module.aim.dbentity.AmpRegionalFunding;
  * 
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
-public class AmpTrTypeLocationRegionalFundingDetailModel extends
-		AbstractReadOnlyModel<Set<AmpRegionalFunding>> {
+public class AmpTrTypeLocationRegionalFundingDetailModel implements IModel<Set<AmpRegionalFunding>> {
 
 	private static final long serialVersionUID = -544903343417479057L;
 	private IModel<Set<AmpRegionalFunding>> model;
@@ -46,4 +46,23 @@ public class AmpTrTypeLocationRegionalFundingDetailModel extends
 		return s;
 	}
 
+	@Override
+	public void detach() {
+	}
+
+	@Override
+	public void setObject(Set<AmpRegionalFunding> object) {
+		Set<AmpRegionalFunding> s = model.getObject();
+		Iterator<AmpRegionalFunding> it = s.iterator();
+		while (it.hasNext()) {
+			AmpRegionalFunding rf = (AmpRegionalFunding) it
+					.next();
+			if (rf.getTransactionType().equals(transactionType)
+					&& rf.getRegionLocation()
+							.equals(cvLocation.getObject()))
+				it.remove();
+		}
+		s.addAll(object);
+		model.setObject(s);
+	}
 }

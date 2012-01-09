@@ -82,20 +82,6 @@ public class AmpRegionalFundingFormSectionFeature extends
 					throw new RuntimeException(e);
 				}
 				item.add(fundingItemFeature);
-
-				// AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-				// "delItem", "Delete Funding",new
-				// Model<String>("Do you really want to remove funding for this region?"))
-				// {
-				// @Override
-				// public void onClick(AjaxRequestTarget target) {
-				// setModel.getObject().remove(item.getModelObject());
-				// target.addComponent(AmpRegionalFundingFormSectionFeature.this);
-				// target.appendJavascript(OnePagerConst.slideToggle);
-				// list.removeAll();
-				// }
-				// };
-				// item.add(deleteLinkField);
 			}
 		};
 

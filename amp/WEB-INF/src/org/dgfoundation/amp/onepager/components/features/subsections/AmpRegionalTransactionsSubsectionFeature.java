@@ -55,8 +55,7 @@ public class AmpRegionalTransactionsSubsectionFeature extends
 				fd.setTransactionType(transactionType);
 				fd.setRegionLocation(cvLocationModel.getObject());
 				fd.setActivity(am.getObject());
-				model.getObject().add(fd);
-				transactionsTableFeature.getList().removeAll();
+				transactionsTableFeature.getListEditor().addItem(fd);
 				target.addComponent(transactionsTableFeature);
 			}
 		};

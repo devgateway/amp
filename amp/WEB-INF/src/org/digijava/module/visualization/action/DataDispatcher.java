@@ -1617,7 +1617,7 @@ public class DataDispatcher extends DispatchAction {
 							currCode);
 					xmlString
 					.append("<fundingtype category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+					fundingData += ">" + pledgesTranslatedTitle + ">"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
 					DecimalWraper fundingComm = DbUtil
@@ -1625,7 +1625,7 @@ public class DataDispatcher extends DispatchAction {
 							Constants.COMMITMENT, Constants.ACTUAL);
 					xmlString
 					.append("<fundingtype category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+					fundingData += ">" + comTranslatedTitle + ">"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isDisbursementsVisible()) {
 					DecimalWraper fundingDisb = DbUtil
@@ -1633,7 +1633,7 @@ public class DataDispatcher extends DispatchAction {
 							Constants.DISBURSEMENT, Constants.ACTUAL);
 					xmlString
 					.append("<fundingtype category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+					fundingData += ">" + disbTranslatedTitle + ">"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
 					DecimalWraper fundingExp = DbUtil
@@ -1641,7 +1641,7 @@ public class DataDispatcher extends DispatchAction {
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
 					.append("<fundingtype category=\""+ expTranslatedTitle +"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
-					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+					fundingData += ">" + expTranslatedTitle + ">"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
 				xmlString.append("</year>\n");

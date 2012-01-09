@@ -264,7 +264,7 @@
 						<div class="right_menu_cont">
                         <ul id="jobquicklinks">
 			<li class="tri"><digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></li>
-           <li class="tri"> <c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set></li>
+           <c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set>
             <li class="tri"><digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link></li>
 				 
 					</ul>

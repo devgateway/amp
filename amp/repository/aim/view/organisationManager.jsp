@@ -101,11 +101,7 @@
 					</td>
 				</tr>-->
 					<tr>
-						<td align="left" colspan=5><c:set var="translationxls">
-								<digi:trn>Export to Excel</digi:trn>
-							</c:set> <c:set var="translationPrinter">
-								<digi:trn>Printer Friendly</digi:trn>
-							</c:set>
+						<td align="left" colspan=5>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" />

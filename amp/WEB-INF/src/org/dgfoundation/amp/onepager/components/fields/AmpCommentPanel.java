@@ -245,25 +245,27 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		AjaxSubmitLink asl = new AjaxSubmitLink("addCommentButton") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AmpComments c = new AmpComments();
-				c.setAmpFieldId(field);
-				c.setCommentDate(new Date());
-				AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-				
-				Long memberId = webSession.getCurrentMember().getMemberId();
-				AmpTeamMember user = TeamMemberUtil.getAmpTeamMemberCached(memberId);
-				c.setMemberName(user.getUser().getName());
-				c.setComment(trnAddCommentModel.getObject().toString());
-				String msg = savedMsg;
-				
-				if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) == null)
-					org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_ITEMS, new HashSet());
-				
-				org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).add(c);
-				
-				addComment.setModelObject(msg);
-				target.addComponent(addComment);
-				target.addComponent(listView.getParent());
+				if (trnAddCommentModel.getObject() != null){
+					AmpComments c = new AmpComments();
+					c.setAmpFieldId(field);
+					c.setCommentDate(new Date());
+					AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+					
+					Long memberId = webSession.getCurrentMember().getMemberId();
+					AmpTeamMember user = TeamMemberUtil.getAmpTeamMemberCached(memberId);
+					c.setMemberName(user.getUser().getName());
+					c.setComment(trnAddCommentModel.getObject().toString());
+					String msg = savedMsg;
+					
+					if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) == null)
+						org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_ITEMS, new HashSet());
+					
+					org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).add(c);
+					
+					addComment.setModelObject(msg);
+					target.addComponent(addComment);
+					target.addComponent(listView.getParent());
+				}
 			}
 		};
 		form.add(asl);

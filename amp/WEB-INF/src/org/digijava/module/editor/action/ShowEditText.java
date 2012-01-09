@@ -109,7 +109,10 @@ public class ShowEditText
                 //get editor list for other languages
                 dbEditorList = DbUtil.getEditorList(moduleInstance.getSite().
                         getSiteId(), key, currentLang);
-
+/////////////////////////////////////
+                if(dbEditorList.isEmpty() )
+                	dbEditorList = null;
+                
                 if (editor == null) { //create editor
                     Editor editorKey = new Editor();
                     editorKey.setEditorKey(key);

@@ -393,7 +393,8 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 //initial testing w/ IE8 shows that TextSymbols are not displayed for some reason
                                 //this may be an isolated issue.  more testing needed.
                                 //it should work fine for IE7, FF, Chrome
-                                this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5)));
+                                var font = new esri.symbol.Font("10pt", esri.symbol.Font.STYLE_NORMAL, esri.symbol.Font.VARIANT_NORMAL, esri.symbol.Font.WEIGHT_NORMAL, "Trebuchet MS");
+                                this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length,font,new dojo.Color("#000000")).setOffset(0, -5)));
 
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {

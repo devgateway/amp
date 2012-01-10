@@ -3,7 +3,8 @@ function SearchManager(inputEl) {
 	this.position	= 0;
 	this.lastSearchString	= "";
 	this.divEl		= null;
-	this.inputId	= inputEl.id;
+	if ( inputEl != null )
+		this.inputId	= inputEl.id;
 	this.lastNumFound	= 0;
 	
 
@@ -12,10 +13,13 @@ SearchManager.prototype.objectMap	= new Object();
 SearchManager.prototype.keyListenerNext	= null;
 SearchManager.prototype.keyListenerPrev	= null;
 
-function getSearchManagerInstanceByEl(inputEl) {
+function getSearchManagerInstanceByEl(inputEl, smCreator) {
 	var sm	= SearchManager.prototype.objectMap[inputEl.id];
 	if (sm == null) {
-		sm = new SearchManager(inputEl);
+		if ( smCreator == null )
+			sm = standardSearchManagerCreator(inputEl);
+		else
+			sm = smCreator(inputEl);
 		SearchManager.prototype.objectMap[inputEl.id]	= sm;
 	}
 	
@@ -42,10 +46,13 @@ function getSearchManagerInstanceByEl(inputEl) {
 	
 	return sm;
 }
-function getSearchManagerInstanceById(inputId) {
+function getSearchManagerInstanceById(inputId, smCreator) {
 	var sm	= SearchManager.prototype.objectMap[inputId];
 	if (sm == null) {
-		sm = new SearchManager( document.getElementById(inputId) );
+		if ( smCreator == null )
+			sm = standardSearchManagerCreator(document.getElementById(inputId));
+		else
+			sm = smCreator(document.getElementById(inputId));
 		SearchManager.prototype.objectMap[inputId]	= sm;
 	}
 	return sm;
@@ -60,14 +67,22 @@ SearchManager.prototype.setDiv		= function(divEl) {
 	//alert("lala " + divEl.id);
 }
 
+SearchManager.prototype.getMainElements	= function( ) {
+	return new Array();
+};
+
+SearchManager.prototype.getAdditionalElements	= function() {
+	return new Array();
+};
+
 SearchManager.prototype.findNext	= function() {
 		if (this.inputEl.value != this.lastSearchString ) {
 			this.clear();
 		}
 		if ( this.lastNumFound > 0 && this.lastNumFound == this.position) 
 			return;
-		var spans		= this.divEl.getElementsByTagName("span");
-		var additionalSrchDivs = this.divEl.getElementsByTagName("DIV");
+		var spans				= this.getMainElements();//this.divEl.getElementsByTagName("span");
+		var additionalSrchDivs	= this.getAdditionalElements();//this.divEl.getElementsByTagName("DIV");
 		var numFound	= 0;
 		
 		var searchStr = this.inputEl.value.toLowerCase();
@@ -109,8 +124,8 @@ SearchManager.prototype.findPrev	= function() {
 	}
 	if ( this.lastNumFound > 0 && 1 == this.position) 
 		return;
-	var spans		= this.divEl.getElementsByTagName("span");
-	var additionalSrchDivs = this.divEl.getElementsByTagName("DIV");
+	var spans				= this.getMainElements();//this.divEl.getElementsByTagName("span");
+	var additionalSrchDivs	= this.getAdditionalElements();//this.divEl.getElementsByTagName("DIV");
 	var numFound	= 0;
 	
 	var searchStr = this.inputEl.value.toLowerCase();
@@ -160,3 +175,23 @@ SearchManager.prototype.clear	= function() {
 	this.lastNumFound	= 0;
 	
 }
+
+var standardSearchManagerCreator = function (inputEl) {
+	return new StandardSearchManager(inputEl);
+}
+
+StandardSearchManager.prototype				= new SearchManager();
+StandardSearchManager.prototype.parent		= SearchManager;
+StandardSearchManager.prototype.constructor	= StandardSearchManager;
+function StandardSearchManager( inputEl ) {
+	this.parent.call(this, inputEl);
+	
+};
+
+StandardSearchManager.prototype.getMainElements	= function( ) {
+	return this.divEl.getElementsByTagName("span");
+};
+
+StandardSearchManager.prototype.getAdditionalElements	= function() {
+	return this.divEl.getElementsByTagName("div");
+};

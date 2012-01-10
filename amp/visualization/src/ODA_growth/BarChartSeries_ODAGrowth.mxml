@@ -131,7 +131,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 				else
 				{
-					if (service.lastResult.organization.value==null || service.lastResult.organization.value==0){
+					if (dataField in service.lastResult[ODADataField]){
+						dc.visible = true;
+						messagePanel.visible = false;
+						sizePanel(0, 0);
+					} else {
 						dc.visible = false;
 						messagePanel.visible = true;
 						sizePanel(300, 200);
@@ -439,6 +443,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:String id="dataField">value</mx:String>
+	<mx:String id="ODADataField">organization</mx:String>
 	<mx:String id="labelField">name</mx:String>
 	<mx:String id="childDataField">value</mx:String>
 	<mx:String id="childLabelField">label</mx:String>

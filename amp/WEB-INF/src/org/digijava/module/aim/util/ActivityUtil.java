@@ -1756,8 +1756,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
               oql += "  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
-             }
-          } 
+              }
+          }
           else{
 				if (team.getAccessType().equals("Management")) {
 					oql += " and latestAct.draft=false and latestAct.approvalStatus ='approved' ";
@@ -1786,8 +1786,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					oql +=")";
 
 				} else {
-					oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
-				}
+               oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
+          }
           }
         
       }
@@ -5021,5 +5021,38 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}		
 		return retVal;		
 	}
+	
+	public static boolean shouldThisUserValidate (TeamMember tm, Long activityId) {
+		if (tm.getTeamHead() ) {
+			try {
+				Session session	= PersistenceManager.getRequestDBSession();
+				String queryStr	= "SELECT a.ampActivityId, a.team.ampTeamId, a.draft, a.approvalStatus from " + AmpActivityVersion.class.getName() + " a where a.ampActivityId=:aaId";
+				Query query		= session.createQuery(queryStr);
+				query.setCacheable(true);
+				query.setLong("aaId", activityId);
+				Object [] result	= (Object [])query.uniqueResult();
+				
+				Long teamId			= (Long)result[1];
+				Boolean draft		= (Boolean)result[2];
+				String status		= (String)result[3];
+				if ( draft == null )
+					draft	= false;
+				
+				if ( tm.getTeamId().equals(teamId) ) {
+					if ( !draft && ("started".equals(status)||"edited".equals(status)) )
+						return true;
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+
+		return false;
+	} 
 	
 } // End

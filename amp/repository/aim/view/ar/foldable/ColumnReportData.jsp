@@ -50,7 +50,7 @@ if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.g
 	showColumn = true;
 }
 
-if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
+/* if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
 {
 	org.dgfoundation.amp.ar.CellColumn cellColumn = (org.dgfoundation.amp.ar.CellColumn)columnReport.getItem(0);
 	Cell cell = cellColumn.getByOwner((Long)ownerId);
@@ -60,7 +60,10 @@ if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.Cell
 			validateItem = true;
 	}
 	
-}
+} */
+
+if ( showColumn && ActivityUtil.shouldThisUserValidate(currentMember, (Long)ownerId) )
+	validateItem = true;
 %>
 <c:set var="action" value="edit"/>
 <c:set var="actionString" value="Edit"/>

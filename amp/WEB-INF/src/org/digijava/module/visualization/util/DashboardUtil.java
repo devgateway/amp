@@ -342,9 +342,11 @@ public class DashboardUtil {
 			form.getSummaryInformation().setNumberOfRegions(0);
 			form.getSummaryInformation().setNumberOfDonors(0);
 			form.getSummaryInformation().setAverageProjectSize(new BigDecimal(0));
+			form.getRanksInformation().setFullDonors(null);
 			form.getRanksInformation().setFullSectors(null);
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
+			form.getRanksInformation().setTopDonors(null);
 			form.getRanksInformation().setTopSectors(null);
 			form.getRanksInformation().setTopRegions(null);
 			form.getRanksInformation().setTopProjects(null);

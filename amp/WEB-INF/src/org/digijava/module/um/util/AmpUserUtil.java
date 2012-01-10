@@ -2,6 +2,7 @@ package org.digijava.module.um.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -16,7 +17,6 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
@@ -235,7 +235,7 @@ public class AmpUserUtil {
 			throw new AimException("Cannot save user extension",e);
 		}
 	}
-	public static Collection<User> getAllUsersNotBelongingToTeam(Long teamId) throws Exception{
+	public static Collection<User> getAllUsersNotBelongingToTeam(Long teamId,String keyword) throws Exception{
 		Collection<User> retVal=null;
 		Session session=null;
 		String queryString=null;
@@ -243,9 +243,16 @@ public class AmpUserUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString="select u from " +User.class.getName() +" u where u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-			" tm where tm.ampTeam.ampTeamId=:teamId) order by u.email";
+			" tm where tm.ampTeam.ampTeamId=:teamId) ";
+                        if(keyword!=null&&keyword.length()>0){
+                            queryString+=" and concat(u.firstNames,' ',u.lastName)=:keyword";
+                        }
+                        queryString+=" order by u.email";
 			qry=session.createQuery(queryString);
 			qry.setLong("teamId", teamId);
+                        if(keyword!=null&&keyword.length()>0){
+                            qry.setString("keyword", keyword);
+                        }
 			retVal=qry.list();
 		} catch (Exception e) {
 			logger.error(e);
@@ -253,6 +260,26 @@ public class AmpUserUtil {
 		}
 		return retVal;
 	}
+       public static List<String> searchUsesers(String searchStr) throws Exception {
+        Session session = null;
+        String queryString = null;
+        Query query = null;
+        List<String> users = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
+                    " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr)";
+            query=session.createQuery(queryString);   
+            query.setString("searchStr", searchStr + "%");
+            users = query.list();
+        } catch (Exception ex) {
+            logger.error("couldn't load user " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+
+        return users;
+    }
 
 
 }

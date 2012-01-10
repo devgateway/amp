@@ -54,7 +54,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 
 		TeamMemberForm tmForm = (TeamMemberForm) form;
 		if(tmForm.getTeamId()!=null){
-			Collection<User> allUsers= AmpUserUtil.getAllUsersNotBelongingToTeam(tmForm.getTeamId());
+			Collection<User> allUsers= AmpUserUtil.getAllUsersNotBelongingToTeam(tmForm.getTeamId(),tmForm.getFullname());
 			tmForm.setallUser(allUsers);
 		}
 

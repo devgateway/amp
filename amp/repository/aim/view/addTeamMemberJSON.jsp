@@ -11,6 +11,74 @@
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
 
+<!-- Individual YUI CSS files -->
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<style>
+<!--
+.ui-autocomplete {
+	font-size:12px;
+	border: 1px solid silver;
+	max-height: 150px;
+	overflow-y: scroll;
+	background: white;
+}
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+
+#userAutoComp  ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+
+#userAutoComp  div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+#userAutoComp  {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#userAutoComp {
+    z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+    font-size: 12px;
+}
+
+
+#userAutoComp {
+    font-size: 12px;
+}
+
+#userAutoComp {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
+}
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
+
+span.extContactDropdownEmail {
+	color:grey;
+}
+
+
+-->
+</style>
+
 
 
 <style>
@@ -179,7 +247,16 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	    };
     
 	}
-	
+
+        function searchUsers() {
+		aimTeamMemberForm.action="${contextPath}/aim/showAddTeamMemberJSON.do?fromPage="+document.getElementById('wrkspcFromPage').value
+                    +"&teamId="+document.getElementById('wrkspcTeamId').value;
+		aimTeamMemberForm.target = "_self";
+		aimTeamMemberForm.submit();
+	}
+        
+        // don't remove or change this line!!!
+	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -245,6 +322,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <html:hidden name="aimTeamMemberForm" property="teamLeaderExists" styleId="wrkspcManager"/>
 <html:hidden name="aimTeamMemberForm" property="workspaceManagerRoleId" styleId="wrkspcManRoleId"/>
+<html:hidden name="aimTeamMemberForm" property="fromPage" styleId="wrkspcFromPage"/>
+<html:hidden name="aimTeamMemberForm" property="teamId" styleId="wrkspcTeamId" />
 <body>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=450>
 	<tr></tr>
@@ -260,6 +339,19 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 				</logic:empty>
 				<bean:define id="addSelectedMembers"><digi:trn>Add Selected Members</digi:trn></bean:define>
 				<logic:notEmpty name="aimTeamMemberForm" property="allUser">
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <div style="float: left">
+                                                    <html:text property="fullname"  styleId="userInput" styleClass="inputx"  style="width:320px; Font-size: 10pt; height:22px;"/>
+                                                    <div id="userAutoComp"></div>
+                                                </div>
+                                                <div style="float: left">
+                                                    <input type="button" value="<digi:trn>find</digi:trn>" class="buttonx_sm" onClick="searchUsers()"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
 					<tr>
 						<td align=center>
 							<div class='yui-skin-sam'>
@@ -277,6 +369,15 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	</tr>
 </table>
 </digi:form>
+    <script type="text/javascript">
+        var userDataSource = new YAHOO.widget.DS_XHR("/aim/searchFutureTeamMembers.do", ["\n", ";"]);
+        userDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+        userDataSource.queryMatchContains = true;
+        userDataSource.scriptQueryParam  = "srchStr";
+        var userAutoComp = new YAHOO.widget.AutoComplete("userInput","userAutoComp", userDataSource);
+        userAutoComp.queryDelay = 0.5;
+        $("#userInput").css("position", "static");
+    </script>
 </body>
 
 

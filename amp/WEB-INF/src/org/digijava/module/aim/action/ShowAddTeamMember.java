@@ -44,7 +44,7 @@ public class ShowAddTeamMember extends Action {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				upMemForm.setPermissions("default");
 				upMemForm.setFromPage(frmPage);
-				Collection<User> allUsers= AmpUserUtil.getAllUsersNotBelongingToTeam(id); //get only the users not belonging to current team
+				Collection<User> allUsers= AmpUserUtil.getAllUsersNotBelongingToTeam(id,upMemForm.getFullname()); //get only the users not belonging to current team
 				upMemForm.setallUser(allUsers);
 				
 				AmpTeamMember teamLeader=TeamMemberUtil.getTeamHead(id);

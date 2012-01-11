@@ -161,13 +161,8 @@
 
 
                     <td noWrap align=center valign="middle">
-                        <a target="_blank" onclick="exportXSL(); return false;">
-                            <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif" border="0" alt="Export to Excel" />
-                        </a>
-
-                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                    <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly"/>
-                </digi:link>
+                      	<jsp:include
+									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
         </td>
     </tr>
 </table></td>

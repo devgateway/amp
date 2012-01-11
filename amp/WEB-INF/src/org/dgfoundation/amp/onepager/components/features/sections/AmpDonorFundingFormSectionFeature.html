@@ -1,20 +1,5 @@
 <wicket:extend>
-	<wicket:fm fmNames="Amount;Date;Currency">
-		<tr><td colspan="2">
-			<table width="100%" border="0" cellspacing="2" cellpadding="2" class="inside">
-				<tr>
-					<td colspan="3" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
-						<b class="ins_header"><wicket:trn key="addNewDocument">Proposed Project Cost</wicket:trn></b>
-					</td>
-				</tr>	
-				<tr>
-					<td><span wicket:id="proposedAmount"></span></td>
-					<td><span wicket:id="proposedCurrency"></span></td>
-					<td><span wicket:id="proposedDate"></span></td>
-				</tr>
-			</table>
-		</td></tr>
-	</wicket:fm>
+	<div wicket:id="propProjCost" />
 	<tr><td colspan="2" align="center"><p/>
 		<div wicket:id="listFunding">
 			<div class="organization_box">

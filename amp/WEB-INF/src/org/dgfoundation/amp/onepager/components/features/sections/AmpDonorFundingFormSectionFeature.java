@@ -4,42 +4,27 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.lang.Double;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converters.DoubleConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -76,41 +61,10 @@ public class AmpDonorFundingFormSectionFeature extends
 		if (setModel.getObject() == null)
 			setModel.setObject(new LinkedHashSet<AmpFunding>());
 		
-		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount",
-				new PropertyModel<Double>(am, "funAmount"), "Amount",false) {
-			public IConverter getInternalConverter(java.lang.Class<?> type) {
-				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
-				converter.setNumberFormat(getLocale(), formatter);
-				return converter; 
-			}
-		};
-		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
-		add(amount);
 		
-		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
-			@Override
-			public List<String> getObject() {
-				List<AmpCurrency> tmp = (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
-				ArrayList<String> ret = new ArrayList<String>(); 
-				
-				Iterator<AmpCurrency> it = tmp.iterator();
-				while (it.hasNext()) {
-					AmpCurrency c = (AmpCurrency) it.next();
-					ret.add(c.getCurrencyCode());
-				}
-				return ret;
-			}
-		};
-		
-		AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("proposedCurrency",
-				new PropertyModel<String>(am, "currencyCode"),
-				currencyList,
-				"Currency", false, false);
-		add(currency);
-		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", new PropertyModel<Date>(
-				am, "funDate"), "Date", false);
-		add(date);
+		//group fields in FM under "Proposed Project Cost"
+		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost("propProjCost", "Proposed Project Cost", am);
+		add(propProjectCost);
 		
 		
 		list = new ListEditor<AmpFunding>("listFunding", setModel) {

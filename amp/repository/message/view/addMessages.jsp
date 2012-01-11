@@ -14,15 +14,15 @@
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+<bean:define id="reqSearchManagerId" toScope="request" value="searchStr" />
 
 <!-- Individual YUI CSS files -->
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
-
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
-
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <style>
@@ -691,9 +691,8 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
     	}
 		return true;
 	}	
-
+	
 	// don't remove or change this line!!!
-
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
 
@@ -824,27 +823,33 @@ span.extContactDropdownEmail {
   			</tr>
   			<tr>
   				<td colspan=2 style="font-size:12px;">
-					<div class="msg_receivers">
-							<logic:empty name="messageForm" property="teamMapValues">
-								<div class="msg_lbl"><digi:trn>No receivers</digi:trn></div>
-							</logic:empty>
-							<logic:notEmpty name="messageForm"  property="teamMapValues" >
+  					<div class="memberSelectorInputWrapper">
+  						<input onkeypress="getSearchManagerInstanceByEl(this,messagesSearchManagerCreator).clear()" placeholder="Search" id="${reqSearchManagerId}" type="text" style="margin-top:0px; " class="inputx" />&nbsp;
+  						<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${reqSearchManagerId}',messagesSearchManagerCreator).findPrev()" style="padding: 0px;" type="button">&lt;&lt;</button>
+						<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${reqSearchManagerId}',messagesSearchManagerCreator).findNext()" style="padding: 0px;" type="button">&gt;&gt;</button>
+  					</div>
+					<div class="msg_receivers" id="msg_Receivers_div">						
+						<logic:empty name="messageForm" property="teamMapValues">
+							<div class="msg_lbl"><digi:trn>No receivers</digi:trn></div>
+						</logic:empty>
+						<logic:notEmpty name="messageForm"  property="teamMapValues" >
 								<c:forEach var="team" items="${messageForm.teamMapValues}">
 									<logic:notEmpty name="team" property="members">
 										<div class="rec_group_container">
-											<div class="msg_grp_name">
+											<div class="msg_grp_name" id="t:${team.id}">
 												<html:multibox property="receiversIds" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
-												<div class="msg_lbl">---${team.name}---</div>
+												<div class="msg_lbl"><span>---${team.name}---</span></div>
 											</div>
-											<div class="msg_grp_mem_name">
-												<c:forEach var="tm" items="${team.members}">
-													<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" />${tm.memberName}<br/>
-												</c:forEach>
-											</div>
+											<c:forEach var="tm" items="${team.members}">
+													<div class="msg_grp_mem_name" id="m:${tm.memberId}">
+														<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" /><span>${tm.memberName}</span> <br/>
+													</div>													
+											</c:forEach>
 										</div>
 									</logic:notEmpty>											                                                		
 								</c:forEach>		
-							</logic:notEmpty>						
+						</logic:notEmpty>		
+								
 				</div>
 			<br/>
 			<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
@@ -1161,6 +1166,9 @@ span.extContactDropdownEmail {
 		</logic:iterate>
 		fillExternalContact();
 	</logic:present>
+	
+	var divEl=document.getElementById('msg_Receivers_div');
+	getSearchManagerInstanceById('searchStr',messagesSearchManagerCreator).setDiv(divEl);	
 	
 </script>
 

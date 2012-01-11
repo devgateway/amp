@@ -19,7 +19,7 @@ function getSearchManagerInstanceByEl(inputEl, smCreator) {
 		if ( smCreator == null )
 			sm = standardSearchManagerCreator(inputEl);
 		else
-			sm = smCreator(inputEl);
+			sm = smCreator+'('+inputEl+')';
 		SearchManager.prototype.objectMap[inputEl.id]	= sm;
 	}
 	
@@ -92,21 +92,28 @@ SearchManager.prototype.findNext	= function() {
 				spans[i].style.fontWeight	= "";
 				spans[i].style.color		= "";
 				var spanString	= spans[i].innerHTML.toLowerCase();
-				var additionalSrchDivString	= additionalSrchDivs[i].innerHTML.toLowerCase();
+				var additionalSrchDivString	= '';
+				if(additionalSrchDivs.length > 0){
+					additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+				}				 
 				
 				if ( spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
 					spans[i].style.fontWeight	= "bold";
 					if ( this.position == numFound ) {
 						spans[i].style.color	= "red";
 						var parentNode			= spans[i].parentNode;
+						var inputs				= null;
 						for (var ii=0; ii<5; ii++) {
-							if ( parentNode.nodeName.toLowerCase() == "li" ) {
-								break;
+							if ( parentNode.nodeName.toLowerCase() == "li" || parentNode.nodeName.toLowerCase() == "div") {
+								inputs		= parentNode.getElementsByTagName("input");
+								if ( inputs.length > 0 )
+									break;
 							}
 							parentNode			= parentNode.parentNode;
 						}
-						if ( parentNode.nodeName.toLowerCase() == "li" )
-							parentNode.getElementsByTagName("input")[0].focus();
+						if ( parentNode.nodeName.toLowerCase() == "li" || parentNode.nodeName.toLowerCase() == "div")
+							if ( inputs != null && inputs.length > 0 )
+								inputs[0].focus();
 					}
 					numFound++;
 				}
@@ -134,21 +141,28 @@ SearchManager.prototype.findPrev	= function() {
 			spans[i].style.fontWeight	= "";
 			spans[i].style.color		= "";
 			var spanString	= spans[i].innerHTML.toLowerCase();
-			var additionalSrchDivString	= additionalSrchDivs[i].innerHTML.toLowerCase();
+			var additionalSrchDivString	= '';
+			if(additionalSrchDivs.length > 0){
+				additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+			}
 			
 			if (spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
 				spans[i].style.fontWeight	= "bold";
 				if ( this.position-2 == numFound ) {
 					spans[i].style.color	= "red";
 					var parentNode			= spans[i].parentNode;
+					var inputs				= null;
 					for (var ii=0; ii<5; ii++) {
-						if ( parentNode.nodeName.toLowerCase() == "li" ) {
-							break;
+						if ( parentNode.nodeName.toLowerCase() == "li" || parentNode.nodeName.toLowerCase() == "div") {
+							inputs		= parentNode.getElementsByTagName("input");
+							if ( inputs.length > 0 )
+								break;
 						}
 						parentNode			= parentNode.parentNode;
 					}
-					if ( parentNode.nodeName.toLowerCase() == "li" )
-						parentNode.getElementsByTagName("input")[0].focus();
+					if ( parentNode.nodeName.toLowerCase() == "li" || parentNode.nodeName.toLowerCase() == "div")
+						if ( inputs != null && inputs.length > 0 )
+							inputs[0].focus();
 				}
 				numFound++;
 			}
@@ -161,10 +175,10 @@ SearchManager.prototype.findPrev	= function() {
 }
 
 SearchManager.prototype.clear	= function() {
-	if (this.position == 0){
-		return;
-	}
-	var spans	= this.divEl.getElementsByTagName("span");
+//	if (this.position == 0){
+//		return;
+//	}
+	 var spans	= this.divEl.getElementsByTagName("span");
 	if (spans != null) {
 		for (var i=0; i<spans.length; i++) {
 			spans[i].style.fontWeight	= "";
@@ -194,4 +208,24 @@ StandardSearchManager.prototype.getMainElements	= function( ) {
 
 StandardSearchManager.prototype.getAdditionalElements	= function() {
 	return this.divEl.getElementsByTagName("div");
+};
+
+var messagesSearchManagerCreator = function (inputEl) {
+	return new MessagesSearchManager(inputEl);
+}
+
+MessagesSearchManager.prototype				= new SearchManager();
+MessagesSearchManager.prototype.parent		= SearchManager;
+MessagesSearchManager.prototype.constructor	= MessagesSearchManager;
+function MessagesSearchManager( inputEl ) {
+	this.parent.call(this, inputEl);
+	
+};
+
+MessagesSearchManager.prototype.getMainElements	= function( ) {
+	return this.divEl.getElementsByTagName("span");
+};
+
+MessagesSearchManager.prototype.getAdditionalElements	= function() {
+	return new Array();
 };

@@ -188,7 +188,8 @@ public class ContactInfoUtil {
 			if(keyword!=null && alpha!=null){
 				queryString+=" where lower(cont.name) like lower('"+alpha+"%') and concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
 			}else if(keyword!=null && alpha == null){
-				queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+				//queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+				queryString+=" where concat(lower(cont.name),"+"' ',"+"lower(cont.lastname)) like '%"+keyword.toLowerCase()+"%'";
 			}else if (keyword==null && alpha!=null){
 				queryString+=" where lower(cont.name) like lower('"+alpha+"%')";
 			}

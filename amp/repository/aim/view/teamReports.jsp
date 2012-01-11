@@ -152,7 +152,7 @@
 										<img src= "/repository/contentrepository/view/images/make_private.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn key="aim:teamReportListViewableByManagerdAndCreator">
-											Indicates the report is viewable by the Workspace Manager and the Creator of the Report
+											Indicates the report is viewable by the Creator of the Report
 											</digi:trn>
 										</c:if>
 										<c:if test="${aimTeamReportsForm.showReportList == false}">

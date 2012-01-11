@@ -355,7 +355,7 @@ public class ActivityUtil {
 
 	private static void updateComponentFunding(AmpActivityVersion a,
 			Session session) {
-		if (a.getComponents() == null)
+		if (a.getComponentFundings() == null || a.getComponents() == null)
 			return;
 		Iterator<AmpComponentFunding> it1 = a.getComponentFundings().iterator();
 		while (it1.hasNext()) {

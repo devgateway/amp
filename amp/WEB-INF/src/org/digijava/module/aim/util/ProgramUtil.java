@@ -1829,8 +1829,11 @@ public class ProgramUtil {
         return programSettings;
 }
 
-
     public static String printHierarchyNames(AmpTheme child) {
+    	return printHierarchyNames(child, false);
+    }
+    
+    public static String printHierarchyNames(AmpTheme child, boolean insertNewLine) {
     	Session session = null;
         Transaction tx = null;
         String names = "";
@@ -1844,8 +1847,10 @@ public class ProgramUtil {
                     return names;
             }
             else {
-                    names = printHierarchyNames(parent);
+                    names = printHierarchyNames(parent, insertNewLine);
                     names += "[" + parent.getName() + "] ";
+                    if (insertNewLine)
+                    	names +="<br/>";
             }
             //tx.rollback();
         } catch (Exception ex) {

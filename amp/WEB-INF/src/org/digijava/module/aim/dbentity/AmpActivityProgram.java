@@ -54,8 +54,12 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         }
 
         public String getHierarchyNames() {
+        	return getHierarchyNames(false);
+        }
+        
+        public String getHierarchyNames(boolean insertNewLine) {
                 String names = "";
-                names = ProgramUtil.printHierarchyNames(this.program);
+                names = ProgramUtil.printHierarchyNames(this.program, insertNewLine);
                 names += "[" + this.program.getName() + "]";
                 return names;
         }

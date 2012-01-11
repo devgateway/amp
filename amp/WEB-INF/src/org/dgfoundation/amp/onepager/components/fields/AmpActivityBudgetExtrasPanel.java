@@ -4,8 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
@@ -18,9 +20,26 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 		this.fmType = AmpFMTypes.MODULE;
 		
 		add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model, "FY"), "FY", false, false));
-		add(new AmpTextFieldPanel<String>("vote", new PropertyModel(model, "vote"), "Vote", false, false));
-		add(new AmpTextFieldPanel<String>("subVote", new PropertyModel(model, "subVote"), "Sub-Vote", false, false));
-		add(new AmpTextFieldPanel<String>("subProgram", new PropertyModel(model, "subProgram"), "Sub-Program", false, false));
-		add(new AmpTextFieldPanel<String>("projectCode", new PropertyModel(model, "projectCode"), "Project Code", false, false));
+		
+		final AmpTextFieldPanel<String> vote = new AmpTextFieldPanel<String>("vote", new PropertyModel(model, "vote"), "Vote", false, false); 
+		final AmpTextFieldPanel<String> subVote = new AmpTextFieldPanel<String>("subVote", new PropertyModel(model, "subVote"), "Sub-Vote", false, false); 
+		final AmpTextFieldPanel<String> subProgram = new AmpTextFieldPanel<String>("subProgram", new PropertyModel(model, "subProgram"), "Sub-Program", false, false); 
+		final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel(model, "projectCode"), "Project Code", false, false); 
+		add(new AmpComponentPanel("requiredField", "Validator Required Fields") {
+			@Override
+			protected void onBeforeRender() {
+				super.onBeforeRender();
+				if (this.isVisible()){
+					vote.getTextContainer().setRequired(true);
+					subVote.getTextContainer().setRequired(true);
+					subProgram.getTextContainer().setRequired(true);
+					projectCode.getTextContainer().setRequired(true);
+				}
+			}
+		});
+		add(vote);
+		add(subVote);
+		add(subProgram);
+		add(projectCode);
 	}
 }

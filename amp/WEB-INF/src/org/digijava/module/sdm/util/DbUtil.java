@@ -350,6 +350,20 @@ public class DbUtil {
 
         return document;
     }
+    
+    public static Sdm getDocument(Long id,Session session) throws SDMException {
+
+        Sdm document = null;
+        try {
+            document = (Sdm) session.load(Sdm.class, id);
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get Document from Database", ex);
+            throw new SDMException("Unable to get Document from Database", ex);
+        }
+
+        return document;
+    }
 
     /**
      * Updtae SDM  item

@@ -149,6 +149,23 @@ public class DbUtil {
 
 		return items;
 	}    
+	
+	public static List<Editor> getEditorList(String editorKey,String siteId,Session session) throws EditorException {
+		List<Editor> items = new ArrayList<Editor>();
+		try {
+			Query q = session.createQuery("from "+ Editor.class.getName()+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+			q.setString("siteId", siteId);
+			q.setString("editorKey", editorKey);
+
+			items = q.list();
+		} catch (Exception ex) {
+			logger.debug("Unable to get editor item from database ", ex);
+			throw new EditorException(
+					"Unable to get editor item from database", ex);
+		}
+
+		return items;
+	}    
     
     public static void deleteEditor(Editor ed) throws
         EditorException {

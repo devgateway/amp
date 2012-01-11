@@ -49,6 +49,7 @@ import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.lucene.LucHelpModule;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -334,34 +335,39 @@ public class HelpUtil {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			//session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
+			 session = PersistenceManager.openNewSession();
+	         tx = session.beginTransaction();
 			if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
-				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId(),session);
 				if (editors!=null && editors.size()>0){
 					for (Editor editor : editors) {
-						String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
-						Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
-						Matcher matcher = pattern.matcher(editor.getBody());
-						if (matcher.find()){				
-							String imgTag = matcher.group(0);
-							if(imgTag.contains("documentId=")){
-								String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
-								if(docId.contains("&")){
-									docId = docId .substring(0,docId.indexOf("&"));
-								}else{
-									docId = docId .substring(0,docId.indexOf("\""));
+						if(editor.getBody()!=null){
+							String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
+							Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
+							Matcher matcher = pattern.matcher(editor.getBody());
+							if (matcher.find()){				
+								String imgTag = matcher.group(0);
+								if(imgTag.contains("documentId=")){
+									String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
+									if(docId.contains("&")){
+										docId = docId .substring(0,docId.indexOf("&"));
+									}else{
+										docId = docId .substring(0,docId.indexOf("\""));
+									}
+									Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId),session);
+									session.delete(doc);
 								}
-								Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId));
-								session.delete(doc);
-							}
-						}
+							}							
+						}	
 						session.delete(editor);
 					}
 				}
 			}
-			session.delete(topic);
-			//tx.commit();
+			session.delete(topic);			
+			tx.commit();
+			session.flush();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
 				//skip lucene work for glossary topics.
 				removeFromLucene(topic, request);
@@ -376,7 +382,16 @@ public class HelpUtil {
 				}
 			}
 			throw new AimException("Can't remove help topic", e);
-		}
+		}finally {
+            if (session != null) {
+                try {
+                    //PersistenceManager.releaseSession(session);
+                    session.close();
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed", ex1);
+                }
+            }
+        }
 	}
 	
 	public static void saveOrUpdateFromLucene(HelpTopic topic, HttpServletRequest request, boolean update) throws DgException{

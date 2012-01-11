@@ -1182,7 +1182,7 @@ public class AmpMessageActions extends DispatchAction {
 
         String fwd = null;
         
-        if (errors.size() > 0){
+        if (errors != null && errors.size() > 0){
             saveErrors(request, errors);
             fwd = "createMessageError";
         } else {

@@ -188,13 +188,31 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 
 			@Override
             public void onSelect(AjaxRequestTarget target, AmpContact choice) {
-				AmpActivityContact activityContact = new AmpActivityContact();
-				activityContact.setContact(choice);			
-				activityContact.setActivity(am.getObject());
-				activityContact.setContactType(contactType);
-				if (setModel.getObject() == null)
+				boolean contactExists = false;
+				if (setModel.getObject() == null){
 					setModel.setObject(new HashSet<AmpActivityContact>());
-				setModel.getObject().add(activityContact);
+				}
+				
+				Set<AmpActivityContact> actContacts = setModel.getObject();
+				if(choice.getId()!=null){
+					for (AmpActivityContact actCont : actContacts) {
+						if(actCont.getContact().getId()!=null && actCont.getContact().getId().equals(choice.getId()) 
+								&& contactType.equals(actCont.getContactType())){
+							contactExists = true;
+							break;
+						}
+					}
+				}
+				
+				if(!contactExists){
+					AmpActivityContact activityContact = new AmpActivityContact();
+					activityContact.setContact(choice);			
+					activityContact.setActivity(am.getObject());
+					activityContact.setContactType(contactType);
+					
+					setModel.getObject().add(activityContact);
+				}
+				
 				idsList.removeAll();
 				target.addComponent(idsList.getParent());
             }
@@ -203,8 +221,5 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
         add(searchContacts);
 
     }
-    
-	
-
     
 }

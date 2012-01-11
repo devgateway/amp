@@ -873,7 +873,7 @@
         var fromPage=myPaginator.getCurrentPage();
         var recordID = YAHOO.example.XHR_JSON.myDataTable.getSelectedRows()[0];
         var selectedRow= YAHOO.example.XHR_JSON.myDataTable.getTrIndex(recordID);
-        document.aimWorkspaceForm.action="${exportUrl}?fromPage="+fromPage+"&teamId="+document.getElementsByName('teamId')[0].value+"&selectedRow="+selectedRow;
+        document.aimWorkspaceForm.action="${exportUrl}?fromPage="+fromPage+"&teamId="+document.getElementsByName('teamId')[0].value+"&selectedRow="+selectedRow+"&reset=true";
         document.aimWorkspaceForm.target="_self";
         document.aimWorkspaceForm.submit();	
     }

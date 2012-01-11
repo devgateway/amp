@@ -30,6 +30,10 @@ public class ShowAddTeamMember extends Action {
 	public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
+		String reset = request.getParameter("reset");
+		if(reset!=null){
+			upMemForm.setFullname(null);
+		}
 
 		String teamId = request.getParameter("teamId");
 		String fromPage = request.getParameter("fromPage");

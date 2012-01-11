@@ -531,8 +531,9 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name .... 
-				x.purpose = rs.getString("ebody");
+				//you can't use "trim(dg_editor.body)" as column name ....
+				if(x != null)
+					x.purpose = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}

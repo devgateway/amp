@@ -235,7 +235,24 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 							CategoryConstants.ACCESSION_INSTRUMENT_KEY),
 							CategoryConstants.ACCESSION_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
 			add(accessionInstrument);
-			
+
+			AmpCategorySelectFieldPanel projectCategory = new AmpCategorySelectFieldPanel(
+					"projectCategory",
+					CategoryConstants.PROJECT_CATEGORY_KEY,
+					new AmpCategoryValueByKeyModel(
+							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+							CategoryConstants.PROJECT_CATEGORY_KEY),
+							CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
+			add(projectCategory);
+			AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
+					"projectImplementingUnit",
+					CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY,
+					new AmpCategoryValueByKeyModel(
+							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+							CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY),
+							CategoryConstants.PROJECT_IMPLEMENTING_UNIT_NAME, true, true, null, AmpFMTypes.MODULE);
+			add(projectImplementingUnit);
+
 			add(new AmpBooleanChoiceField("governmentApprovalProcedures", 
 					new PropertyModel<Boolean>(am, "governmentApprovalProcedures"), "Government Approval Procedures"));
 

@@ -5,8 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.TreeSet;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -21,7 +21,8 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFun
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -56,9 +57,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			fundingModel.getObject().setFundingDetails(new TreeSet());
 		
 		
-		AmpLabelFieldPanel<AmpOrganisation> orgLabel = new AmpLabelFieldPanel<AmpOrganisation>(
-				"donorOrg", new PropertyModel<AmpOrganisation>(fundingModel,
-						"ampDonorOrgId"), "Donor Organisation", true);
+		final Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"));
+		orgLabel.setOutputMarkupId(true);
 		add(orgLabel);
 		
 		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
@@ -78,6 +78,41 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			}
 		};
 		add(addNewFunding);
+		
+		
+		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("newOrgSelect","Replace Funding Organizations",AmpOrganisationSearchModel.class) {			
+			@Override
+			protected String getChoiceValue(AmpOrganisation choice) {
+				return choice.getName();
+			}
+			@Override
+			public void onSelect(AjaxRequestTarget target,
+					AmpOrganisation choice) {
+				PropertyModel<AmpOrganisation> pm = new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId");
+				pm.setObject(choice);
+				this.setVisible(false);
+				
+				target.addComponent(parent);
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
+			}
+			@Override
+			public Integer getChoiceLevel(AmpOrganisation choice) {
+				return null;
+			}
+		};
+		newOrgSelect.setIgnoreFmVisibility(true);
+		newOrgSelect.setVisible(false);
+		newOrgSelect.setOutputMarkupId(true);
+		add(newOrgSelect);
+
+		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				newOrgSelect.setVisible(true);
+				target.addComponent(newOrgSelect.getParent());
+			}
+		};
+		add(changeFundingOrg);
 		
 		
 		AmpCheckBoxFieldPanel active = new AmpCheckBoxFieldPanel("active",

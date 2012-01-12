@@ -42,6 +42,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected AjaxCheckBox cascadeFmToChildren;
 	protected Label cascadeFmToChildrenLabel;
 	
+	protected boolean ignoreFmVisibility = false;
+	
 	public IModel<T> getModel() {
 		return (IModel<T>) getDefaultModel();
 	}
@@ -91,6 +93,10 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		this(id,null,fmName,AmpFMTypes.MODULE);
 	}
 	
+	public void setIgnoreFmVisibility(boolean ignoreFmVisibility) {
+		this.ignoreFmVisibility = ignoreFmVisibility;
+	}
+
 	/**
 	 * Switch visibility for this fm Control. Change Hide with Show for the FM Button
 	 * @param target the ajax target
@@ -218,6 +224,10 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			downButton.setVisible(false);
 			foldButton.setVisible(false);
 		}
+		
+		if (ignoreFmVisibility){
+			visibleFmButton.setEnabled(false);
+		}
 	}
 	
 	public AmpComponentPanel(String id, IModel<T> model,String fmName) {
@@ -251,7 +261,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		
 		setEnabled(fmMode?true:fmEnabled);
-		setVisible(fmMode?true:fmVisible);
+		if (!ignoreFmVisibility)
+			setVisible(fmMode?true:fmVisible);
 		
 		enabledFmButton.add(new AttributeModifier("value", new Model((fmEnabled?"Disable":"Enable")+ " "+getShorterFmName())));
 		visibleFmButton.add(new AttributeModifier("value", new Model((fmVisible?"Hide":"Show")+ " "+getShorterFmName())));

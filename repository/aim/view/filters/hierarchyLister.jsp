@@ -36,6 +36,9 @@
 							<span style="font-family: Arial; font-size: 12px;">
 								<digi:trn>${entity.label}</digi:trn> 
 							</span>
+							<div style="display:none">
+								${entity.additionalSearchString}
+							</div>
 						</td>
 					</tr>
 				</table> 

@@ -755,8 +755,12 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgId + "";
+		return String.valueOf(this.ampOrgId.longValue());
 	}
+
+    public String getAdditionalSearchString() {
+        return this.acronym;
+    }
 	
 	
 }	

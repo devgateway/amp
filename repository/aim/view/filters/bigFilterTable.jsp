@@ -67,6 +67,9 @@
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span>
+										<div style="display:none">
+											${element.rootHierarchyListable.additionalSearchString}
+										</div>
 									<jsp:include page="hierarchyLister.jsp" />
 								</li>
 							</ul>

@@ -91,6 +91,7 @@ function showFullList(objectType){
 
 var updateFullList = {
 		  success: function(o) {
+			  	var dashboardType = document.getElementById("dashboardType").value;
 				var results = YAHOO.lang.JSON.parse(o.responseText);
 				var child = results.children[0];
 				switch(child.type){

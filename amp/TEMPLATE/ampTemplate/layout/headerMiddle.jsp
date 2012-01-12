@@ -616,7 +616,7 @@ function adminHelp(){
 					                          	<c:if test="${not empty link}">
 					                          		<a class="yuiampmenuitemlabel"  href="${link}" onclick="return canExit()">
 					                                 	<digi:trn>View Calendar</digi:trn>
-					                              `	</a>
+					                              	</a>
 					                          	</c:if>
 					                          	<c:if test="${empty link}">
 					                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" onclick="return canExit()">

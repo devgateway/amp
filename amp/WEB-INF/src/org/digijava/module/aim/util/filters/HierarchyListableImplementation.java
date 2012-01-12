@@ -13,7 +13,7 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	private String label;
 	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
-
+    private String additionalSearchableString;
 
 	/* (non-Javadoc)
 	 * @see org.digijava.module.aim.util.HierarchyListable#getCountDescendants()
@@ -75,6 +75,10 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	public void setChildren(Collection<? extends HierarchyListable> children) {
 		this.children = children;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.additionalSearchableString;
+    }
 
 	
 }

@@ -444,4 +444,8 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		public void setTransientBoolean(boolean transientBoolean) {
 			this.transientBoolean = transientBoolean;
 		}
+
+    public String getAdditionalSearchString() {
+        return this.description;
+    }
 }

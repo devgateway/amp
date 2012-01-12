@@ -110,6 +110,10 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	}
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgGrpId+"";
+		return String.valueOf(this.ampOrgGrpId.longValue());
 	}
+
+    public String getAdditionalSearchString() {
+        return this.orgGrpCode;
+    }
 }

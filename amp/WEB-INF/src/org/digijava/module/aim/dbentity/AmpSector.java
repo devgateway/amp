@@ -287,6 +287,10 @@ public void setAmpOrgId(AmpOrganisation org) {
 		return getChildren();
 	}
 
+    public String getAdditionalSearchString() {
+        return this.sectorCode;
+    }
+
 	
 
 	

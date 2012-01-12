@@ -161,11 +161,15 @@ public class AmpCategoryValueLocations implements Identifiable, HierarchyListabl
 
 	@Override
 	public String getUniqueId() {
-		return this.id + "";
+		return String.valueOf(this.id.longValue());
 	}
 	
 	@Override
 	public Class getDimensionClass() {
 		return LocationsDimension.class;
 	}
+
+    public String getAdditionalSearchString() {
+        return this.code;
+    }
 }

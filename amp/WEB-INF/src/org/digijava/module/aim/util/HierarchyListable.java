@@ -11,6 +11,7 @@ import java.util.Collection;
 public interface HierarchyListable {
 	public String getLabel();
 	public String getUniqueId();
+    public String getAdditionalSearchString();
 	public Collection<? extends HierarchyListable> getChildren();
 	/**
 	 * 

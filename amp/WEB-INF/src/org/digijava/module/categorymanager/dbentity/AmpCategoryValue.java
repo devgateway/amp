@@ -121,6 +121,10 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	
 	@Override
 	public String getUniqueId() {
-		return id+"";
+		return String.valueOf(this.id.longValue());
 	}
+
+    public String getAdditionalSearchString() {
+        return this.value;
+    }
 }

@@ -66,14 +66,20 @@ SearchManager.prototype.findNext	= function() {
 		}
 		if ( this.lastNumFound > 0 && this.lastNumFound == this.position) 
 			return;
-		var spans		= this.divEl.getElementsByTagName("span");
+		var spans				= this.divEl.getElementsByTagName("span");
+		var additionalSrchDivs	= this.divEl.getElementsByTagName("DIV");
 		var numFound	= 0;
+		
+		var searchStr = this.inputEl.value.toLowerCase();
+		
 		if (spans != null) {
 			for (var i=0; i<spans.length; i++) {
 				spans[i].style.fontWeight	= "";
 				spans[i].style.color		= "";
 				var spanString	= spans[i].innerHTML.toLowerCase();
-				if ( spanString.indexOf(this.inputEl.value.toLowerCase()) >= 0 ) {
+				var additionalSrchDivString	= additionalSrchDivs[i].innerHTML.toLowerCase();
+				
+				if ( spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
 					spans[i].style.fontWeight	= "bold";
 					if ( this.position == numFound ) {
 						spans[i].style.color	= "red";
@@ -103,14 +109,19 @@ SearchManager.prototype.findPrev	= function() {
 	}
 	if ( this.lastNumFound > 0 && 1 == this.position) 
 		return;
-	var spans		= this.divEl.getElementsByTagName("span");
+	var spans				= this.divEl.getElementsByTagName("span");
+	var additionalSrchDivs	= this.divEl.getElementsByTagName("DIV");
 	var numFound	= 0;
+	
+	var searchStr = this.inputEl.value.toLowerCase();
 	if (spans != null) {
 		for (var i=0; i<spans.length; i++) {
 			spans[i].style.fontWeight	= "";
 			spans[i].style.color		= "";
 			var spanString	= spans[i].innerHTML.toLowerCase();
-			if ( spanString.indexOf(this.inputEl.value.toLowerCase()) >= 0 ) {
+			var additionalSrchDivString	= additionalSrchDivs[i].innerHTML.toLowerCase();
+			
+			if (spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
 				spans[i].style.fontWeight	= "bold";
 				if ( this.position-2 == numFound ) {
 					spans[i].style.color	= "red";

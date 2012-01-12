@@ -108,6 +108,10 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 
 	@Override
 	public String getUniqueId() {
-		return this.ampOrgTypeId + "";
+		return String.valueOf(this.ampOrgTypeId.longValue());
 	}
+
+    public String getAdditionalSearchString() {
+        return this.orgTypeCode;
+    }
 }

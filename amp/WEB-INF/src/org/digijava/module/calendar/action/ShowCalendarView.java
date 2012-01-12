@@ -212,22 +212,7 @@ public class ShowCalendarView extends Action {
                 selectedEventTypes[index++] = eventType.getId().toString();
             }
             filter.setSelectedEventTypes(selectedEventTypes);
-            // donor
-            // FFerreyra: The selectedDonors array has one more member for "None" to show events without Donor set. See AMP-2691
-            String[] selectedDonors = new String[filter.getDonors().size() + 1];
-            index = 0;
-
-            // FFerreyra: Add the first NULL Option to be set in the filter by default
-            selectedDonors[index++] = "None";
-
-            it = filter.getDonors().iterator();
-            while (it.hasNext()) {
-                LabelValueBean lvb = (LabelValueBean) it.next();
-                selectedDonors[index++] = lvb.getValue();
-            }
-            filter.setSelectedDonors(selectedDonors);
-
-
+            
             if (eventCreated != null) {
             	 filter.setShowPublicEvents(showPublicEvents);
                 // we are showing private or public events depending on the newly created event
@@ -238,17 +223,6 @@ public class ShowCalendarView extends Action {
                 filter.setShowPublicEvents(false);
             }*/
             
-        }else{
-        	 if (filter.getSelectedDonors().length ==0 && calendarViewForm.getResetDonors()!=null && ! calendarViewForm.getResetDonors()){
-        		 String[] selectedDonors = new String[1];
-        		 selectedDonors[0] = "None";
-        		 /*it = filter.getDonors().iterator();
-                 while (it.hasNext()) {
-                     LabelValueBean lvb = (LabelValueBean) it.next();
-                     selectedDonors[index++] = lvb.getValue();
-                 }*/
-                 filter.setSelectedDonors(selectedDonors);
-             }
         }
 
          //fill session

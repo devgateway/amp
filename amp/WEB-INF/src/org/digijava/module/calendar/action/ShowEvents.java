@@ -47,7 +47,7 @@ public class ShowEvents extends Action {
 			filter.setSelectedEventTypes(eventTypes);			
 			
 			 
-		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.getShowPublicEvents(),siteId,filter.getSelectedDonors(),filter.getSelectedEventTypes(),moduleInstance);   
+		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.getShowPublicEvents(),siteId,filter.getSelectedEventTypes(),moduleInstance);   
 			response.setContentType("text/xml; charset=UTF-8");               
 		    PrintWriter out = response.getWriter();
 			xml+="<data>";

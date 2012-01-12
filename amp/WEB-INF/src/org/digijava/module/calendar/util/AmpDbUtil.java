@@ -313,7 +313,7 @@ public class AmpDbUtil {
 
   public static Collection<AmpCalendar> getAmpCalendarEventsPublic(
 		  Integer showPublicEvents, 
-		  String[] selectedDonorIds,String[] selectedeventTypeIds,
+		  String[] selectedeventTypeIds,
 		  String instanceId, 
 		  String siteId)
 		  throws CalendarException {
@@ -321,7 +321,7 @@ public class AmpDbUtil {
 	  try {
 		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
 		
-			List events = getAmpCalendarEvents(selectedDonorIds,selectedeventTypeIds, null, showPublicEvents, instanceId, siteId);
+			List events = getAmpCalendarEvents(selectedeventTypeIds, null, showPublicEvents, instanceId, siteId);
 			if (events != null) {
 				for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
 					AmpCalendar ampCal = (AmpCalendar) eventItr.next();
@@ -338,7 +338,7 @@ public class AmpDbUtil {
   
   public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
 		  Integer showPublicEvents, 
-		  String[] selectedDonorIds,String[] selectedeventTypeIds,
+		  String[] selectedeventTypeIds,
 		  String instanceId, 
 		  String siteId)
 		  throws CalendarException {
@@ -348,7 +348,7 @@ public class AmpDbUtil {
 
 		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
 		
-	List events = getAmpCalendarEvents(selectedDonorIds,selectedeventTypeIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
+	List events = getAmpCalendarEvents(selectedeventTypeIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
 	if (events != null) {
 		for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
 			AmpCalendar ampCal = (AmpCalendar) eventItr.next();
@@ -389,7 +389,7 @@ public class AmpDbUtil {
 	  	}
   }
   
-  public static List getAmpCalendarEvents(String[] selectedDonorIds,String[] selectedEventTypeIds,
+  public static List getAmpCalendarEvents(String[] selectedEventTypeIds,
 		  Long userId,Integer showPublicEvents,String instanceId, String siteId) throws CalendarException {
 	  try {
 		  Session session = PersistenceManager.getRequestDBSession();
@@ -407,29 +407,7 @@ public class AmpDbUtil {
 			if(showPublicEvents == 1){
 	        	  queryString.append(" and ac.privateEvent=true");
 	        }
-			List <Long> selectedDonors = new ArrayList<Long>();
-			if(selectedDonorIds != null && selectedDonorIds.length != 0) {
-			boolean includeNullOrganizations = false;
-			for(int index = 0; index < selectedDonorIds.length; index++){
-				if(selectedDonorIds[index].equals("None")){
-				includeNullOrganizations = true;
-			} else {
-				selectedDonors.add(Long.parseLong(selectedDonorIds[index]));
-			}
-			}
-
-				queryString.append(" and (");
-			if (selectedDonors.size() > 0) {
-				queryString.append("org.id in (:selectedDonorIds)");
-			}
-			if (includeNullOrganizations) {
-			if (selectedDonors.size() > 0) {
-				queryString.append(" or ");
-			}
-				queryString.append("org is null");
-			}
-				queryString.append(")");
-			}
+			
 			
 			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
 	        	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
@@ -444,11 +422,7 @@ public class AmpDbUtil {
 				queryString.append(" and c.siteId = :siteId");
 			}
 			Query query = session.createQuery(queryString.toString());
-			
-			if (selectedDonorIds != null && selectedDonorIds.length != 0 && selectedDonors.size()>0) {
-				query.setParameterList("selectedDonorIds", selectedDonors);
-			}
-			
+						
 			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
 	        	  List <Long> selectedEventType = new ArrayList<Long>();
 	        	  for(int index = 0; index < selectedEventTypeIds.length; index++) {

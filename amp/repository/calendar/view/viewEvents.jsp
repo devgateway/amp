@@ -44,7 +44,7 @@
 	        	<digi:form action="/showCalendarView.do" styleId="filterForm">   
 	            	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 	                	<tr>
-			          		<td valign="top"  align="left">
+			          		<td valign="top" colspan="2" align="left">
 			          			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				                	<tr>
 				                  		<td style="font-weight:Bold;font-family:Tahoma;padding-left:10px;font-size: 12px;color: #000000">
@@ -55,29 +55,26 @@
 				            	</table>          	          
 			          		</td>
 			        	</tr>
-			        	<tr>
-	                    	<td valign="top" style="padding:10px;">
-	                    		<jsp:include page="viewEventsNavigator.jsp" flush="true"/>
-	                    	</td>
-	                	</tr>
-	                	<tr valign="top">
-	                    	<td valign="top" style="padding:10px;">
+
+	                	<tr valign="top" >
+	                    	<td valign="top" colspan="2" style="padding:10px;">
 	                    		<jsp:include page="viewEventsFilter.jsp" flush="true"/>
 	                    	</td>
 	                	</tr>
-	                	<tr valign="top">
-	                    	<td valign="top" style="padding:10px;">
-								<feature:display name="Filter" module="Calendar">
-										<field:display name="Run Filter Button" feature="Filter">
-											<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onClick="changeDonorsAndEventTypesState();"/>
-								    	</field:display>
-								    	&nbsp;
-								    	<field:display name="Reset Filter Button" feature="Filter">
-								    		<input class="buttonx" type="button" onclick="javascript:document.location.href = '/calendar/showCalendarView.do?filterInUse=false'" value="<digi:trn>Reset</digi:trn>" />
-										</field:display>
-								</feature:display>
+	                	<feature:display name="Filter" module="Calendar">
+	                	<tr valign="top" align="center">
+	                    	<td valign="top" width="50%" align="right" style="padding:10px;">
+								<field:display name="Run Filter Button" feature="Filter">
+									<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onClick="changeDonorsAndEventTypesState();"/>
+						    	</field:display>
+							</td>
+							<td valign="top" width="50%" align="left" style="padding:10px;">
+						    	<field:display name="Reset Filter Button" feature="Filter">
+						    		<input class="buttonx" type="button" onclick="javascript:document.location.href = '/calendar/showCalendarView.do?filterInUse=false'" value="<digi:trn>Reset</digi:trn>" />
+								</field:display>
 	                    	</td>
 	                	</tr>
+	                	</feature:display>
 	            	</table>
 	        	</digi:form>
 			</td>

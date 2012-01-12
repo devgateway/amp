@@ -47,7 +47,7 @@ function getElementsByName_iefix(tag, name) {
     return arr;
 }
 function changeDonorsAndEventTypesState(){
-	changeDonorsState();
+	//changeDonorsState();
 	changeEventTypesState();
 	var form = document.getElementById('filterForm');
 	
@@ -170,36 +170,36 @@ function changeEventTypesState(){
 	<div style="height:5px;font-family:Tahoma;">
 	&nbsp;
 	</div>
-	<field:display name="Donor Filter" feature="Filter">
-		<div class="right_menu">
-			<div class="right_menu_header_big">
-				<div class="right_menu_header_cont"><digi:trn>Donors</digi:trn></div>
-		  	</div>
-		  	<div class="right_menu_box_big" style="height:175px; overflow: auto;">
-			    <c:if test="${!empty calendarViewForm.filter.donors}">
-			    	<table cellpadding="0" cellspacing="0">
-						<tr>
-			        		<td>
-			            	<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>
-			            	<digi:trn>None</digi:trn>
-			            	</td>
-			            </tr>
-			        	<c:forEach var="donor" items="${calendarViewForm.filter.donors}" varStatus="stat">
-							<tr>
-								<td style="overflow: auto;">
-		              			<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}" styleId="donors_${stat.index}"/>
-		              			${donor.label} 
-								</td>
-							</tr>
-			        	</c:forEach>
-			      	</table>
-				</c:if>
-			</div>
-		</div>
-	</field:display>
+<!--	<field:display name="Donor Filter" feature="Filter">-->
+<!--		<div class="right_menu">-->
+<!--			<div class="right_menu_header_big">-->
+<!--				<div class="right_menu_header_cont"><digi:trn>Donors</digi:trn></div>-->
+<!--		  	</div>-->
+<!--		  	<div class="right_menu_box_big" style="height:175px; overflow: auto;">-->
+<!--			    <c:if test="${!empty calendarViewForm.filter.donors}">-->
+<!--			    	<table cellpadding="0" cellspacing="0">-->
+<!--						<tr>-->
+<!--			        		<td>-->
+<!--			            	<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>-->
+<!--			            	<digi:trn>None</digi:trn>-->
+<!--			            	</td>-->
+<!--			            </tr>-->
+<!--			        	<c:forEach var="donor" items="${calendarViewForm.filter.donors}" varStatus="stat">-->
+<!--							<tr>-->
+<!--								<td style="overflow: auto;">-->
+<!--		              			<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}" styleId="donors_${stat.index}"/>-->
+<!--		              			${donor.label} -->
+<!--								</td>-->
+<!--							</tr>-->
+<!--			        	</c:forEach>-->
+<!--			      	</table>-->
+<!--				</c:if>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</field:display>-->
 	<c:if test="${not empty sessionScope.currentMember}">
 		<div style="padding:5px;height:28px;">
-	 	<select id="publicFilter" style="width:160px;" class="inp-text" onchange="changeState()" name="filter.showPublicEvents" >
+	 	<select id="publicFilter" style="width:210px;" class="inp-text" onchange="changeState()" name="filter.showPublicEvents" >
 			<c:if test="${calendarViewForm.showPublicEvents == 0}">
 				<option selected="selected" value="0">	
 			</c:if>

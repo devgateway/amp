@@ -53,13 +53,16 @@ public class GetWorkspace extends Action {
 		if (!permitted) {
 			return mapping.findForward("justList");
 		}
+		String updated=request.getParameter("updated");
+		String dest = request.getParameter("dest");
+		String id	= request.getParameter("tId");
+		String action = request.getParameter("event");
+		if(updated==null||!Boolean.parseBoolean(updated)){
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);
 		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
 		
-		String dest = request.getParameter("dest");
-		String id	= request.getParameter("tId");
-		String action = request.getParameter("event");
+	
 		
 		if(action!=null && "reset".compareTo(action)==0)
 		{
@@ -164,10 +167,10 @@ public class GetWorkspace extends Action {
 				uwForm.setRelatedTeamName(TeamUtil.getAmpTeam(uwForm.getRelatedTeam()).getName());
 			}
 			logger.debug("uwForm.getRelatedTeamFlag() : " + uwForm.getRelatedTeamFlag());
-			
-			uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
+				uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
 			uwForm.setActionEvent("edit");
-		}			
+		}
+		}
 
 		logger.debug("Dest value = " + dest);
 		return mapping.findForward(dest);

@@ -775,7 +775,7 @@
     </action>
     <action name="aimUpdateWorkspaceForm" path="/aim/childWorkspacesAdded" scope="session" type="org.digijava.module.aim.action.AddChildWorkspaces" validate="false">
       <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
-      <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
+      <forward name="teamLead" path="/aim/workspaceOverview.do?dest=teamLead&amp;subtab=2&amp;updated=true"   />
     </action>
     <action name="aimUpdateWorkspaceForm" path="/aim/removeChildWorkspace" scope="session" type="org.digijava.module.aim.action.RemoveChildWorkspace" validate="false">
       <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />

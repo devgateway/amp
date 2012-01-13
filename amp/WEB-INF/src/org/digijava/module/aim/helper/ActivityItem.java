@@ -187,23 +187,33 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * and donors list as child nodes.
 	 * @return String representing XML of the Activity.
 	 */
-	public String getXml() {
+	public String getXml(String currencyCode) {
 		String result = "";
 		if (id != null) {
 			result += "<" + TAG_NAME;
 			result += " " + PARAM_ID + "=\"" + id.toString()+ "\"";
 			result += " " + PARAM_STATUS + "=\"" + getStatusValue() + "\"";
 			result += " " + PARAM_NAME + "=\"" + getNameValue() + "\"";
-			result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
-			result += " " + PARAM_ACTUAL_AMOUNT + "=\"" + getActualAmount() + "\"";
-			result += " " + PARAM_ACTUAL_DISB_AMOUNT + "=\"" + getActualDisbAmount()+ "\"";
+			result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount();
+			if(!getProposedAmount().equals("N/A"))
+				result += " "+ currencyCode;
+			result +="\"";
+			result += " " + PARAM_ACTUAL_AMOUNT + "=\"" + getActualAmount() ;
+			if(!getActualAmount().equals("N/A"))
+				result += " "+ currencyCode;
+			result +="\"";
+			result += " " + PARAM_ACTUAL_DISB_AMOUNT + "=\"" + getActualDisbAmount();
+			if(!getActualDisbAmount().equals("N/A"))
+				result += " "+ currencyCode;
+			result +="\"";
+			
 			result += " " + PARAM_DATE + "=\"" + getStartDate() + "\"";
 			result += ">";
 			result += "<" + DONORS_TAG_NAME + ">";
 			result += getDonorsList();
 			result += "</" + DONORS_TAG_NAME + ">";
 			result += "</" + TAG_NAME + ">";
-		}
+			}
 		return result;
 	}
 

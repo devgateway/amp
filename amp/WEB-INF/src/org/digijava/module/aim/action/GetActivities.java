@@ -306,12 +306,12 @@ public class GetActivities extends Action {
 				actualSum += amounts.getActualAmount();
 				actualDisbSum+= amounts.getActualDisbAmoount();
 				//generate one activity portion of XML from helper
-				temp += item.getXml();
+				temp += item.getXml(currencyCode);
 			}
 		}
-		result += " proposedSum=\"" +((proposedSum!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
-		result += " actualSum=\"" + ((actualSum!=0)? FormatHelper.formatNumber(actualSum):0)+ "\" ";
-		result += " actualDisbSum=\"" + ((actualDisbSum!=0)? FormatHelper.formatNumber(actualDisbSum):0) + "\" ";
+		result += " proposedSum=\"" +((proposedSum!=0)? FormatHelper.formatNumber(proposedSum):0) + " "+ currencyCode+ "\" ";
+		result += " actualSum=\"" + ((actualSum!=0)? FormatHelper.formatNumber(actualSum):0)+ " "+ currencyCode+ "\" ";
+		result += " actualDisbSum=\"" + ((actualDisbSum!=0)? FormatHelper.formatNumber(actualDisbSum):0) + " "+ currencyCode+ "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;

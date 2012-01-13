@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">amp_audit_logger_seq</param>
+				<param name="sequence">AMP_AUDIT_LOGGER_seq</param>
 			</generator>
 		</id>
 

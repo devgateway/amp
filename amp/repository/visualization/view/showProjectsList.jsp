@@ -52,7 +52,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 			<tr>
 			<td class="inside" align=center><c:out value="${index}"/>.</td>
 			<c:if test="${!visualizationform.filter.fromPublicView}">
-				<td class="inside"><a href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1" style="color:#376091;">${projectItem.key}</a></td>
+				<td class="inside"><a target="_blank" href="/aim/viewActivityPreview.do~pageId=2~activityId=${projectItem.key.ampActivityId}~isPreview=1" style="color:#376091;">${projectItem.key}</a></td>
 			</c:if>
 			<c:if test="${visualizationform.filter.fromPublicView}">
 				<td class="inside">${projectItem.key}</td>

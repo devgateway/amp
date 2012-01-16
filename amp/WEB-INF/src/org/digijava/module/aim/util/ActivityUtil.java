@@ -4080,6 +4080,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     double tempActual = 0;
     double tempPlanned = 0;
     ActivityAmounts result = new ActivityAmounts();
+    percent=(percent==null)?100:percent;
 
     AmpCategoryValue statusValue = CategoryManagerUtil.
         getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());

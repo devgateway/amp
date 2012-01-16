@@ -202,7 +202,14 @@ public class ActivityManager extends Action {
 		default:
 			Collections.sort(activities, new Comparator<AmpActivityFake>(){
 				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
-					return a1.getName().compareTo(a2.getName());
+					String s1	= a1.getName();
+					String s2	= a2.getName();
+					if ( s1 == null )
+						s1	= "";
+					if ( s2 == null )
+						s2	= "";
+					
+					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
 				}
 			});
 			break;

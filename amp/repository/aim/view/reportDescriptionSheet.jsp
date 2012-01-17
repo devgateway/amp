@@ -41,7 +41,7 @@
 					<td><a style='cursor:pointer;color:#006699' onClick='openReportWindow()'><digi:trn key='aim:defaultTeamReportViewReportMessage'>View report</digi:trn></a></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button type="button" id="closePanelButton" onClick="YAHOO.reportsheet.myPanel.hide()">Close</button></td>
+					<td colspan="2"><button type="button" id="closePanelButton" class="buttonx" onClick="YAHOO.reportsheet.myPanel.hide()">Close</button></td>
 				</tr>
 			</table>
 	</div>

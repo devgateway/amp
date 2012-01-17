@@ -295,7 +295,7 @@ function loadShareRules(){
 									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 								</td>
 								<td class="inside">
-									<html:select property="defaultReportForTeamId" styleClass="inputx insidex" onchange="changePanel()" styleId="defaultReport">
+									<html:select property="defaultReportForTeamId" styleClass="inputx insidex"  styleId="defaultReport">
 										<html:option value="0">
 											------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
 										</html:option>

@@ -14,6 +14,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.um.util.AmpUserUtil;
@@ -30,8 +31,10 @@ public class SearchUser extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         String srchStr = request.getParameter("srchStr");
+        TeamMemberForm upMemForm = (TeamMemberForm) form;
+        Long teamId= upMemForm.getTeamId();
 
-        List<String> srcResArray = AmpUserUtil.searchUsesers(srchStr);
+        List<String> srcResArray = AmpUserUtil.searchUsesers(srchStr,teamId);
         StringBuilder retVal = new StringBuilder();
         if(srcResArray!=null&&srcResArray.size()>0){
             for(String name:srcResArray){

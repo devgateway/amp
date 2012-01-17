@@ -338,20 +338,24 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 					</tr>
 				</logic:empty>
 				<bean:define id="addSelectedMembers"><digi:trn>Add Selected Members</digi:trn></bean:define>
-				<logic:notEmpty name="aimTeamMemberForm" property="allUser">
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <div style="float: left">
-                                                    <html:text property="fullname"  styleId="userInput" styleClass="inputx"  style="width:320px; Font-size: 10pt; height:22px;"/>
-                                                    <div id="userAutoComp"></div>
-                                                </div>
-                                                <div style="float: left">
-                                                    <input type="button" value="<digi:trn>find</digi:trn>" class="buttonx_sm" onClick="searchUsers()"/>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+						<tr>
+							<td>
+								<div>
+									<div style="float: left">
+									<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn>change the field's value to blank and click to find button if you want to view all available users</digi:trn>"/>
+										<html:text property="fullname" styleId="userInput"
+											styleClass="inputx"
+											style="width:320px; Font-size: 10pt; height:22px;" />
+										<div id="userAutoComp"></div>
+									</div>
+									<div style="float: left">
+										<input type="button" value="<digi:trn>find</digi:trn>"
+											class="buttonx_sm" onClick="searchUsers()" />
+									</div>
+								</div></td>
+						</tr>
+						<logic:notEmpty name="aimTeamMemberForm" property="allUser">
+                                   
 					<tr>
 						<td align=center>
 							<div class='yui-skin-sam'>

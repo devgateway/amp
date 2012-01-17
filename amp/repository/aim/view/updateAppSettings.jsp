@@ -131,6 +131,7 @@ function loadShareRules(){
 		<td noWrap vAlign="top">
 			<c:set var="selectedTab" value="0" scope="request"/>
 			<c:set var="selectedSubTab" value="1" scope="request"/>
+			<c:set var="childWorkspaces" value="enabled" scope="request" />
 			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 				<tr>
 				<td>

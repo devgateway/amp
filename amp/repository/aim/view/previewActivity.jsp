@@ -23,6 +23,15 @@
 <script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script type="text/javascript" src="<digi:file src="script/ajaxconnection/connection-min.js"/>"></script>
+
+
 	<DIV id="TipLayer"
 		style="visibility: hidden; position: absolute; z-index: 1000; top: -100;">
 	</DIV>
@@ -143,6 +152,23 @@ function collapseAll() {
 		}	
 	}
 	var coordinates = new Array();
+	
+	
+	
+	YAHOO.namespace("YAHOO.amp");
+
+		var myPanel = new YAHOO.widget.Panel("indicatorChartPopin", {
+			width:"600px",
+			fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true
+		    });
+	
+	
 </script>
 
 <%
@@ -2814,5 +2840,49 @@ function collapseAll() {
 		  	  }
 	});
 	
+	//Change map URLs to popin
+	var chartAreas = $("map[name='<%= actPerfChartFileName %>']").find("area");
+	if (chartAreas != null) {
+		$.each(chartAreas, function (idx, val) {
+				//console.log (val.href);
+				val.href = "javascript:showIndicatorValsPopin(\"" + val.href + "\")";
+			});
+	}
+	
+	var chartAreasRisk = $("map[name='<%= actRiskChartFileName %>']").find("area");
+	if (chartAreasRisk != null) {
+		$.each(chartAreasRisk, function (idx, val) {
+				//console.log (val.href);
+				val.href = "javascript:showIndicatorValsPopin(\"" + val.href + "\")";
+			});
+	}
+	
+	
+	//Init indicator popin
+	var msg='\n<digi:trn>Indicator values</digi:trn>';
+	myPanel.setHeader(msg);
+	myPanel.setBody("");
+	myPanel.render(document.body);	
+	
+	
+	function showIndicatorValsPopin (url) {
+		YAHOOAmp.util.Connect.asyncRequest("GET", url, callback);
+	}
+	
+	var responseSuccess = function(o){
+		var response = o.responseText; 
+		myPanel.setBody(response);
+		myPanel.show();
+	}
+
+	var responseFailure = function(o){ 
+		alert("Connection Failure!"); 
+	}
+	
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	}; 
 	
 </script>

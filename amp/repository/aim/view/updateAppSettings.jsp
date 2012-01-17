@@ -300,11 +300,8 @@ function loadShareRules(){
 											------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
 										</html:option>
 										<c:forEach var="reports" items="${aimUpdateAppSettingsForm.reports}">
-											<c:set var="trn">
-												<digi:trn key="aim:settings:${reports.name}">${reports.name}</digi:trn>
-											</c:set>
 											<html:option value="${reports.ampReportId}">
-												${trn}
+												${reports.name}
 											</html:option>
 										</c:forEach>
 									</html:select>

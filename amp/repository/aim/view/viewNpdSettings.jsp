@@ -62,13 +62,13 @@
 						  				<c:set var="trnSaveBtn">
 						  					<digi:trn>Save</digi:trn>
 						  				</c:set>
-						  				<input type="button" value="${trnSaveBtn}" onclick="validateValues()" class="dr-menu"/>
+						  				<input type="button" value="${trnSaveBtn}" onclick="validateValues()" class="buttonx"/>
 						  			</td>
 						  			<td>
 						  				<c:set var="trnCancelBtn">
 						  					<digi:trn>Cancel</digi:trn>
 						  				</c:set>
-						  			 	<input type="button" value="${trnCancelBtn}" onclick="myPanel.hide();" class="dr-menu"/>
+						  			 	<input type="button" value="${trnCancelBtn}" onclick="myPanel.hide();" class="buttonx"/>
 						  			</td>
 								</tr>
 							</table>

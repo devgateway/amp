@@ -362,6 +362,10 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * @return
 	 */
 	protected Collection<CHOICE> getChoices(String input) {
+		/*
+		 * when adjusting minimum length for the search keyword, also
+		 * adjust "autoComplete.minQueryLength" in the js file 
+		 */
 		if (input != null && input.length() > 0 && input.length() < 2)
 			return Collections.emptyList();
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;

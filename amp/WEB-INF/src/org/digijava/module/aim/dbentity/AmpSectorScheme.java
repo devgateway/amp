@@ -66,7 +66,7 @@ public class AmpSectorScheme implements Serializable
        public boolean isUsed() {
         boolean used = true;
         try {
-            used = SectorUtil.isClassificationUsed(ampSecSchemeId);
+            used = SectorUtil.isSchemeUsed(ampSecSchemeId);
 
         } catch (DgException ex) {
             ex.printStackTrace();

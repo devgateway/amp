@@ -1292,6 +1292,43 @@ public class SectorUtil {
     }
 
     /**
+     * Returns true if specified Scheme is selected as default classification 
+     * in the configuration
+     * otherwise returns false.
+     * 
+     * @param classificationId  Id of classification
+     * @return true If specified classification is selected as default classification 
+     * in the configuration
+     * @throws DgException If exception occurred
+     */
+    public static boolean isSchemeUsed(Long classificationId) throws DgException {
+
+        Session session = null;
+        boolean used = false;
+        String queryString = null;
+        List configs = null;
+        Query qry = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.classification=:classificationId ";
+            qry = session.createQuery(queryString);
+            qry.setLong("classificationId", classificationId);
+            configs = qry.list();
+            if (configs != null && configs.size() > 0) {
+                used = true;
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get configs from database " + ex.getMessage());
+            throw new DgException(ex);
+
+        }
+
+        return used;
+    }
+
+    /**
      * Returns true if specified classification is selected as default classification 
      * in the configuration
      * otherwise returns false.
@@ -1312,7 +1349,7 @@ public class SectorUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.classification=:classificationId ";
+            queryString = "select aps from " + AmpActivitySector.class.getName() + " aps where aps.classificationConfig=:classificationId";
             qry = session.createQuery(queryString);
             qry.setLong("classificationId", classificationId);
             configs = qry.list();

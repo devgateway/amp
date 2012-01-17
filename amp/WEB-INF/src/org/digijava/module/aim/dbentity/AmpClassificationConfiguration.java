@@ -2,6 +2,9 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.util.SectorUtil;
+
 
 public class AmpClassificationConfiguration implements Serializable {
 	
@@ -60,5 +63,16 @@ public class AmpClassificationConfiguration implements Serializable {
         this.primary = primary;
     }
         
+    public boolean isUsed() {
+        boolean used = true;
+        try {
+            used = SectorUtil.isClassificationUsed(id);
+
+        } catch (DgException ex) {
+            ex.printStackTrace();
+
+        }
+        return used;
+    }
 
 }

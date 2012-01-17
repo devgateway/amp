@@ -11,7 +11,7 @@
 
 <script langauage="JavaScript">
     <c:set var="translation">
-    <digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
+    <digi:trn>Delete this Classification?</digi:trn>
     </c:set>
     function onDelete() {
         var flag = confirm("${translation}");
@@ -57,53 +57,52 @@
                 </tr>
                 <tr>
                     <td noWrap width="100%" vAlign="top">
-                        <table width="100%" cellspacing="1" cellspacing="1" border="0">
+                        <table>
                             <tr>
                             	<td noWrap width=600 vAlign="top">
-                            		<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
+                            		<table width="100%" valign="top">
                                 		<tr bgColor=#ffffff>
                                     		<td vAlign="top" width="100%">
-                                        		<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
+                                        		<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left class="inside">
+                                                	<thead>
                                                 	<tr>
-                                                		<td bgColor=#d7eafd class=box-title height="20" align="center">
+                                                		<td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" >
                                                             <!-- Table title -->
-                                                    		<digi:trn key="aim:ManageClassificationsConfigurations">Manage Classifications Configurations</digi:trn>
+                                                    		<b style="font-size:12px;"><digi:trn key="aim:ManageClassificationsConfigurations">Manage Classifications Configurations</digi:trn></b>
                                                             <!-- end table title -->
                                                     	</td>
                                                 	</tr>
-                                                	<tr>
-                                               			<td>
-                                                    		<table width="90%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#d7eafd">
-                                                        		<logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
-                                                            		<logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
-																				type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
-                                                                 		<tr>
-                                                                    		<td width="256" bgcolor="#ffffff">
-                                                                        		<digi:trn>${classConfig.name}</digi:trn>
-                                                                         	</td>
-                                                         					<td bgcolor="#ffffff" width="80px" align="right">
-                                                                        		<c:set var="trnEditScheme">
-                                                                            		<digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
-                                                                              	</c:set>
-                                                                                [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}">
-                                                                                	<digi:trn key="aim:edit">edit</digi:trn>
-                                                                                </digi:link>]													  
-                                                                             </td>
-                                                                             <td bgcolor="#ffffff" width="80px" align="left">
-                                                                        		<c:set var="trnEditScheme">
-                                                                            		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
-                                                                              	</c:set>
-                                                                                [ <digi:link href="/updateSectorClassConfig.do?event=delete&id=${classConfig.id}"  title="${trnEditScheme}">
-                                                                                	 <digi:trn key="aim:delete">Delete</digi:trn>
-                                                                                </digi:link>]													  
-                                                                             </td>
-                                                                        	</tr>
-                                                                	</logic:iterate>
-                                                               </logic:notEmpty>
-                                                                <!-- end page logic -->
-                                                            </table>
-                                                    	</td>
-                                                    </tr>
+                                                	</thead>
+                                                	<logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
+                                                 		<logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
+															type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
+                                                      		<tr>
+                                                         		<td width="80%" bgcolor="#ffffff" class="inside">
+                                                             		<digi:trn>${classConfig.name}</digi:trn>
+                                                              	</td>
+                                              					<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
+                                                             		<c:set var="trnEditScheme">
+                                                                 		<digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
+                                                                   	</c:set>
+                                                                     [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}">
+                                                                     	<digi:trn key="aim:edit">edit</digi:trn>
+                                                                     </digi:link>]													  
+                                                                  </td>
+                                                                 <td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
+                                                                   	<c:if test="${!classConfig.used}">
+                                                             		<c:set var="trnEditScheme">
+                                                                 		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
+                                                                   	</c:set>
+                                                                     [ <digi:link href="/updateSectorClassConfig.do?event=delete&id=${classConfig.id}" onclick="return onDelete()" title="${trnEditScheme}">
+                                                                     	 <digi:trn key="aim:delete">Delete</digi:trn>
+                                                                     </digi:link>]	
+                                                                     </c:if>												  
+                                                                  </td>
+                                                             	</tr>
+                                                     	</logic:iterate>
+                                                    </logic:notEmpty>
+                                                     <!-- end page logic -->
+                                                           
                                                 </table>
                                             </td>
                                         </tr>
@@ -115,23 +114,23 @@
                                         <tr>
                                             <td>
                                                 <!-- Other Links -->
-                                                <table cellpadding="0" cellspacing="0" width="20"0>
-                                                    <tr>
-                                                        <td bgColor=#c9c9c7 class=box-title>
-                                                            <digi:trn key="aim:otherLinks">
-                                                                Other links
-                                                            </digi:trn>
-                                                        </td>
-                                                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;</td>
-                                                    </tr>
-                                                </table>
+			                                      <table cellpadding="0" cellspacing="0" width="100">
+													<tr>
+														<td bgColor=#c9c9c7 class=box-title>
+															<digi:trn key="aim:otherLinks">
+															<b style="font-size:12px; padding-left:5px;">Other links</b>
+															</digi:trn>
+														</td>
+														<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+													</tr>
+												</table>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td bgColor=#ffffff class=box-border>
-                                                <table cellPadding=5 cellspacing="1" width="100%">
+                                                <table cellPadding=5 cellspacing="1" width="100%" class="inside">
                                                   <tr>
-                                                  	<td>
+                                                  	<td class="inside">
                                                     	<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                                         <c:set var="trnAddScheme">
                                                          	<digi:trn key="aim:clickToAddConfiguration">Click here to Add a Configuration</digi:trn>
@@ -142,7 +141,7 @@
                                                           </td>
                                                         </tr>
                                               		 <tr>
-                                                        <td>
+                                                        <td class="inside">
                                                             <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                                             <c:set var="trnViewAdmin">
                                                                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

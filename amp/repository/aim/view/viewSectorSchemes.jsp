@@ -12,7 +12,7 @@
 
 <script langauage="JavaScript">
 	<c:set var="translation">
-		<digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
+		<digi:trn>Delete this Scheme ?</digi:trn>
 	</c:set>
 	function onDelete() {
 		var flag = confirm("${translation}");
@@ -130,7 +130,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="10%" align="left" class="inside ignore">
+														<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">

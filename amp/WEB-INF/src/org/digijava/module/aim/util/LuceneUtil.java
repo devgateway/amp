@@ -826,9 +826,9 @@ public class LuceneUtil implements Serializable {
 			searchString = searchString.replace("{","\\}");
 			searchString = searchString.replace("[","\\[");
 			searchString = searchString.replace("]","\\]");
-			searchString = searchString.replaceAll("\\W\\w{1,2}\\W", " ");
-			searchString = searchString.replaceAll("^\\w{1,2}\\W", " ");
-			searchString = searchString.replaceAll("\\W\\w{1,2}$", " ");
+			searchString = searchString.replaceAll("\\s\\w{1,2}\\s", " ");
+			searchString = searchString.replaceAll("^\\w{1,2}\\s", " ");
+			searchString = searchString.replaceAll("\\s\\w{1,2}$", " ");
 			
 			query = parser.parse(searchString.trim());
 			BooleanQuery bol = new BooleanQuery();

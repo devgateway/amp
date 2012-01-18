@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMSimpleChoiceRenderer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -76,8 +77,8 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final IModel<String> permissionChoiceModel = new Model(permissionPriorityList.get(0));
 		
 		//permission priority radiobutton
-		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriorityList);
-
+		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriorityList, new AmpPMSimpleChoiceRenderer());
+		//permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", );
 		permissionPriorityChoices.setSuffix("");
 		form.add(permissionPriorityChoices);
 		

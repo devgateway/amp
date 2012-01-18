@@ -45,9 +45,12 @@
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/parisindicator/script/pi_scripts.js"/>"></script>
 			
 			<digi:errors />
-					
+		
+			
 			<%String reportId = request.getParameter("reportId");%>
 			<digi:form action="/parisindicator.do" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
+				<c:choose>
+			    <c:when test="${not empty parisIndicatorForm.piReport}">  
 			     <jsp:include page="viewParisIndicatorPopupScripts.jsp" />
 			    <jsp:include page="viewParisIndicatorPopupFilter.jsp" />
 			   
@@ -219,6 +222,7 @@
 									                    		</td>
 									                    	</tr>
 									                  	</table>
+									        
 								                       	<div id="reportContent" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
 									                    	<logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="3">
 																<jsp:include page="parisindicator_3.jsp"></jsp:include>
@@ -248,6 +252,7 @@
 								                               	<jsp:include page="parisindicator_10b.jsp"></jsp:include>
 								                           	</logic:equal>
 							                           </div>
+							                           
 							                    	</td>
 							                	</tr>
 							           		</table>
@@ -259,7 +264,13 @@
 						</td>
 					</tr>
 				</table>
+				</c:when>
+			<c:otherwise>
+				<digi:trn>No indicator(s) found</digi:trn>
+			</c:otherwise>
+			</c:choose>
 			</digi:form>
+			
 		</td>
 	</tr>
 </table>

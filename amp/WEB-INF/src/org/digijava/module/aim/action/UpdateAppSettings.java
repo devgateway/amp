@@ -166,10 +166,12 @@ public class UpdateAppSettings extends Action {
 				}
 					
 			}
-			
+			//Set workspaceType added by Armen 18/01/12
+			Long currentTeamId=tm.getTeamId();
+			uForm.setWorkspaceType(TeamUtil.getWorkspace(currentTeamId).getWorkspaceType());
 			
 			//get team members
-			Long currentTeamId=tm.getTeamId();
+			
 			List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
 			uForm.setTeamMembers(members);
 			if(uForm.getAllowPublishingResources()!=null && uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS)){

@@ -36,6 +36,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 								 * settings or user specific settings
 								 */
 
+	private String workspaceType = null;
+	
 	private Collection currencies = null;
 
 	private Collection fisCalendars = null;
@@ -341,6 +343,14 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setResetTeamMembers(Boolean resetTeamMembers) {
 		this.resetTeamMembers = resetTeamMembers;
+	}
+
+	public String getWorkspaceType() {
+		return workspaceType;
+	}
+
+	public void setWorkspaceType(String workspaceType) {
+		this.workspaceType = workspaceType;
 	}
 	
 }

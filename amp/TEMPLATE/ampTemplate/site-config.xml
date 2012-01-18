@@ -728,6 +728,7 @@
                 <page>myLastVersions</page>
                 <page>aim_assignActivitiesJSON</page>
 				<page>aim_updateTeamMembersJSON</page> 
+				<page>aim_filterPicker2</page>
             </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>
@@ -754,7 +755,6 @@
 				<page>aim_saveMessage</page>
 				<page>aim_showSelectedFilters</page>
 				<page>tabManagerData</page>
-				<page>aim_filterPicker2</page>
 				<page>selectPledgeLocation</page>
 				<page>selectPledgeProgram</page>
 			</module>

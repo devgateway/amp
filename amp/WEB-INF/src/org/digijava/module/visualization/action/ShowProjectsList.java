@@ -195,6 +195,7 @@ public class ShowProjectsList extends Action {
     		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
     	}
+        DashboardFilter newFilter = filter.getCopyFilterForFunding();
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
@@ -205,23 +206,38 @@ public class ShowProjectsList extends Action {
 	        BigDecimal totalSum = BigDecimal.ZERO;
 	        while(it.hasNext()){
 	        	AmpActivityVersion act = it.next();
-				filter.setActivityId(act.getAmpActivityId());
+	        	newFilter.setActivityId(act.getAmpActivityId());
 	        	DecimalWraper fundingCal = null;
 	        	if (type.equals("FundingChart")){
-	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Integer.parseInt(id), Constants.ACTUAL);
 	        	} else if (type.equals("AidPredictability")){
-	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Integer.parseInt(id));
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), Integer.parseInt(id));
 	        	} else if (type.equals("AidType")){
-	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), Constants.ACTUAL);
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, Long.parseLong(id), null, newFilter.getTransactionType(), Constants.ACTUAL);
 	        	} else if (type.equals("FinancingInstrument")){
-	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), Constants.ACTUAL);
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, Long.parseLong(id), newFilter.getTransactionType(), Constants.ACTUAL);
+	        	} else if (type.equals("SectorProfile")){
+	        		Long[] id1 = {Long.parseLong(id)};
+	        		newFilter.setSelSectorIds(id1);
+					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), Constants.ACTUAL);
+					newFilter.setSelSectorIds(null);
+	        	} else if (type.equals("RegionProfile")){
+	        		Long[] id1 = {Long.parseLong(id)};
+	        		newFilter.setSelLocationIds(id1);
+					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), Constants.ACTUAL);
+					newFilter.setSelLocationIds(null);
+	        	} else if (type.equals("DonorProfile")){
+	        		Long[] id1 = {Long.parseLong(id)};
+	        		newFilter.setOrgIds(id1);
+					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), Constants.ACTUAL);
+					newFilter.setOrgIds(null);
 	        	} else {
-	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), Constants.ACTUAL);
 	        	}
-	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(newFilter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        	totalSum = totalSum.add(total);
 	        	itemProjectsList.put(act, total);
-	        	filter.setActivityId(null);
+	        	newFilter.setActivityId(null);
 			}
 	        return itemProjectsList;
 		}

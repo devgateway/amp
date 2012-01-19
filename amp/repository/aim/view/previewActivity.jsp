@@ -386,7 +386,7 @@ function collapseAll() {
 	</fieldset>	
 	<fieldset>
 	<legend>
-		<span class=legend_label>Additional info</span>	</legend>
+		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big">
 	<digi:trn>Activity created by</digi:trn>: <br/>
 		<b> 

@@ -85,6 +85,7 @@ public class ShowDashboard extends Action {
 			initializeFilter(filter);
 		}
 		filter.setFromPublicView(fromPublicView);
+		filter.setShowOnlyNonDraftActivities(true);
 	}
 
 	private void prepareDonorDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
@@ -311,6 +312,7 @@ public class ShowDashboard extends Action {
 			initializeFilter(filter);
 		}
 		filter.setFromPublicView(fromPublicView);
+		filter.setShowOnlyNonDraftActivities(true);
 	}
 
 }

@@ -388,7 +388,8 @@ function exportXSL(){
 														<c:if test="${!empty aimCurrencyForm.pages}">
 															<tr>
 																<td align="left" style="font-size: 12px;">
-																	<hr /> Pages : <c:if
+																	<hr /> <digi:trn>Pages :</digi:trn>
+																	<c:if
 																		test="${aimCurrencyForm.currentPage > 1}">
 																		<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 																			class="java.util.HashMap" />

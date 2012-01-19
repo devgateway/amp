@@ -26,8 +26,10 @@ import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValida
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -130,7 +132,25 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		};
 		list.setReuseItems(true);
 		add(list);
-		
+
+
+		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+			@Override
+			public void setPercentage(AmpActivityProgram loc, int val) {
+				loc.setProgramPercentage((float) val);
+			}
+			@Override
+			public int getPercentage(AmpActivityProgram loc) {
+				return (int)((float)(loc.getProgramPercentage()));
+			}
+			@Override
+			public boolean itemInCollection(AmpActivityProgram item) {
+				if (item != null && item.getProgramSetting() != null && item.getProgramSetting().getAmpProgramSettingsId() == programSettings.getObject().getAmpProgramSettingsId())
+					return true;
+				return false;
+			}
+			
+		});
 		
 		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",AmpThemeSearchModel.class) {
 			@Override

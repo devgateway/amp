@@ -279,8 +279,7 @@ th {
 			</div>
 		</div>
 <!--		<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>-->
-		<div class="pagination"><digi:trn>Pages:</digi:trn>
-		Pages_en:
+		<div class="pagination"><digi:trn>Pages:</digi:trn>		
 			<c:forEach begin="1" end="${newAdvancedTrnForm.totalPages}" var="pageNo">
 				<c:if test="${pageNo==newAdvancedTrnForm.pageNumber}"><strong>${pageNo}</strong></c:if>&nbsp;
 				<c:if test="${pageNo!=newAdvancedTrnForm.pageNumber}"><a href="javascript: gotoPage(${pageNo})">${pageNo}</a></c:if>&nbsp;

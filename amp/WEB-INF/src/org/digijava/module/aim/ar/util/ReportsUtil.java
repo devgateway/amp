@@ -1,8 +1,6 @@
 package org.digijava.module.aim.ar.util;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -35,22 +33,31 @@ public class ReportsUtil {
     }
 	
 	@SuppressWarnings("unchecked")
-	public static Collection<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {
+	public static List<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {
         Session session = null;
-        Collection<AmpOrganisation> col = null;
+        List<AmpOrganisation> col = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+
             String queryString = "select distinct ao.* from amp_organisation ao " +
 						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
-						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) " +
-						"order by ao.name";
+						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) ";
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
             col = qry.setString("roleCode", roleCode).list();
+
+            Collections.sort(col, new Comparator<AmpOrganisation>() {
+                public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+                    return o1.getName().trim().compareTo(o2.getName().trim());
+                }
+            });
+
         } catch (Exception e) {
             logger.debug("Exception from getAllOrgByRoleOfPortfolio()");
             logger.debug(e.toString());
         }
+
+
         return col;
 
     }

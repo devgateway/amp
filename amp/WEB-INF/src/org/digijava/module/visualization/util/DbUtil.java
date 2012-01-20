@@ -122,10 +122,33 @@ public class DbUtil {
 	        Query qry = null;
 	        try {
 	            session = PersistenceManager.getRequestDBSession();
-	            queryString.append("select distinct sec from ");
+	            //queryString.append("select distinct sec from ");
+	            //queryString.append(AmpActivitySector.class.getName());
+	            //queryString.append(" actSec inner join actSec.classificationConfig cls inner join actSec.sectorId sec where  cls.id=:configId and sec.ampSecSchemeId=cls.classification and sec.parentSectorId is null order by sec.name");
+
+	            queryString.append("SELECT DISTINCT sect FROM ");
+	            queryString.append(AmpSector.class.getName());
+	            queryString.append(" sect WHERE (sect.ampSectorId IN ");
+
+	            queryString.append("(SELECT DISTINCT sec FROM ");	
 	            queryString.append(AmpActivitySector.class.getName());
-	            queryString.append(" actSec inner join actSec.classificationConfig cls inner join actSec.sectorId sec where  cls.id=:configId and sec.ampSecSchemeId=cls.classification and sec.parentSectorId is null order by sec.name");
-				qry = session.createQuery(queryString.toString());
+	            queryString.append(" actSec INNER JOIN actSec.classificationConfig cls INNER JOIN actSec.sectorId sec WHERE cls.id=:configId AND sec.ampSecSchemeId=cls.classification) ");
+
+	            queryString.append(" OR sect.ampSectorId IN ");
+
+	            queryString.append("(SELECT DISTINCT sec.parentSectorId FROM ");	
+	            queryString.append(AmpActivitySector.class.getName());
+	            queryString.append(" actSec INNER JOIN actSec.classificationConfig cls INNER JOIN actSec.sectorId sec WHERE cls.id=:configId AND sec.ampSecSchemeId=cls.classification) ");
+
+	            queryString.append(" OR sect.ampSectorId IN ");
+
+	            queryString.append("(SELECT DISTINCT sec.parentSectorId.parentSectorId FROM ");	
+	            queryString.append(AmpActivitySector.class.getName());
+	            queryString.append(" actSec INNER JOIN actSec.classificationConfig cls INNER JOIN actSec.sectorId sec WHERE cls.id=:configId AND sec.ampSecSchemeId=cls.classification)) ");
+
+	            queryString.append(" AND sect.parentSectorId IS NULL ORDER BY sect.name ");
+	            
+	            qry = session.createQuery(queryString.toString());
 				qry.setLong("configId", configId);
 	            sectors=qry.list();
 	        } catch (Exception ex) {

@@ -269,7 +269,7 @@ function popup(mylink, windowname)
                             type="org.digijava.module.aim.dbentity.AmpReports">
                             <tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');">
                               <td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>">
-                                  <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>"> <b>
+                                  <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>"> <b>
                                     <p style="max-width: 400px;white-space: normal" title="${report.name}">
                                       <c:if test="${fn:length(report.name) > 120}" >
                                         <c:out value="${fn:substring(report.name, 0, 120)}" />

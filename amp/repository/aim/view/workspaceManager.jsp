@@ -366,6 +366,7 @@
 				}
 				else{
 					this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
+					showTeamDetails(${aimWorkspaceForm.selectedWs},null);
 				    second=false;
 				} 
                added="false";

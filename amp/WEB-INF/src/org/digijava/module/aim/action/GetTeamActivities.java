@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
@@ -134,16 +135,16 @@ public class GetTeamActivities
 
                 Comparator acronymComp = new Comparator() {
                     public int compare(Object o1, Object o2) {
-                        AmpActivity r1 = (AmpActivity) o1;
-                        AmpActivity r2 = (AmpActivity) o2;
+                    	AmpActivityVersion r1 = (AmpActivityVersion) o1;
+                    	AmpActivityVersion r2 = (AmpActivityVersion) o2;
                         
                         return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
                     }
                 };
                 Comparator racronymComp = new Comparator() {
                     public int compare(Object o1, Object o2) {
-                    	AmpActivity r1 = (AmpActivity) o1;
-                    	AmpActivity r2 = (AmpActivity) o2;
+                    	AmpActivityVersion r1 = (AmpActivityVersion) o1;
+                    	AmpActivityVersion r2 = (AmpActivityVersion) o2;
                         return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
                     }
                 };

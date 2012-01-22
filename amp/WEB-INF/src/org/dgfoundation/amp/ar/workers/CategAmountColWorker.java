@@ -274,7 +274,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if("donor_name".equals(headMetaName)){
 			String donorName = rs.getString("donor_name");
-			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
+			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, (donorName!=null)?donorName.trim():donorName);			
 		}
 
 		if (filter.getAmountinthousand()==null) {

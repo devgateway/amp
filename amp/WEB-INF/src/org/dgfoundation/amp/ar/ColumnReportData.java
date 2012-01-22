@@ -191,6 +191,11 @@ public class ColumnReportData extends ReportData {
 
 			dest.addReport(crd);
 
+			int locationLevel		= ArConstants.LOCATION_COLUMNS.indexOf(cat.getColumn().getName().trim() );
+			int parentLocationLevel	= -1;
+			if ( this.getSplitterCell() != null )
+				parentLocationLevel		= ArConstants.LOCATION_COLUMNS.indexOf( this.getSplitterCell().getColumn().getName().trim() );
+			
 			// construct the Set of ids that match the filter:
 			Set ids = new TreeSet();
 			// TODO: we do not allow GroupColumnS for keyColumns
@@ -209,7 +214,7 @@ public class ColumnReportData extends ReportData {
 					}
 					/* Adding region percentages for each activity (for problem 2) */
 					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
-					if ( ArConstants.LOCATION_COLUMNS.contains(cat.getColumn().getName().trim() ) && 
+					if ( locationLevel >= 0 && (parentLocationLevel!=locationLevel-1  || parentLocationLevel==-1) &&
 							filterObj.getLocationSelected() == null &&  
 							element instanceof MetaTextCell && !summedValuesPerActivity.contains(element.getValue()) ) {
 						MetaInfo<Double> mInfo	= ((MetaTextCell)element).getMetaInfo(ArConstants.PERCENTAGE);

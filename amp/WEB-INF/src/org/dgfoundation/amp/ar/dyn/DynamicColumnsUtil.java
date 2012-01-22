@@ -5,6 +5,7 @@ package org.dgfoundation.amp.ar.dyn;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -143,6 +144,16 @@ public class DynamicColumnsUtil {
     			+ " p ";
     		q = session.createQuery(queryString);
     		List<Integer> retList = q.list();
+    		if ( retList!=null && retList.size()>0 ) {
+    			Iterator<Integer> iter	= retList.iterator();
+    			while (iter.hasNext() ) {
+    				Integer item	= iter.next();
+    				if ( item == null ) {
+    					logger.warn("There seem to be some null projection_date-s in the amp_funding_mtef_projection");
+    					iter.remove();
+    				}
+    			}
+    		}
     		return retList;
     	} catch (Exception ex) {
     		ex.printStackTrace();	

@@ -628,6 +628,7 @@ function validateFormat(){
 	
 	var msg3="<digi:trn key="rep:pop:freezingReportHeading"> Freezing Report Heading </digi:trn>";
 	
+	var msg4="<digi:trn key="rep:pop:freezingReportHeading"> Unfreezing Report Heading </digi:trn>";
 
 
 
@@ -670,6 +671,7 @@ function validateFormat(){
 	}
 	
 	function sendCookieAndReload (){
+		showWaitPanel(msg3);
 		createCookie('report_scrolling',currentReportId,1);
 		submitSettings();
 	}
@@ -688,6 +690,7 @@ function validateFormat(){
 		//document.getElementById("frezzlink").innerHTML=msg2;
 	}
 	function hiddeScroll(){
+		showWaitPanel(msg4);
 		eraseCookie('report_scrolling');
 		//submitSettings();
 	}

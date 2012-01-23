@@ -5114,6 +5114,7 @@ public class DbUtil {
             String queryString = "select distinct org from "
                 + AmpOrgGroup.class.getName() + " org "
                 + " where org.orgType=:orgType";
+            queryString +=  "  order by orgGrpName";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();

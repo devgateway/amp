@@ -300,7 +300,7 @@ function popup(mylink, windowname)
 																					<c:when test="${idx%2==1}">
 																				#dbe5f1
 																				</c:when>
-																					<c:otherwise>
+								z													<c:otherwise>
 																				#ffffff
 																				</c:otherwise>
 																				</c:choose>

@@ -102,25 +102,6 @@ function popup(mylink, windowname)
 function confirmFunc() {
   return confirm("${translation}");
   
-}
-function activate(id){
-	var number=0;
-	$.ajax({
-		   type: 'GET',
-		   url: '/aim/getTabPositionSize.do',
-		   cache : false,
-		   	success: function(data,msg){
-			number=parseInt(data);
-			if(number<5){
-				$(".activateTab"+id).hide();
-				$(".savePosition"+id).show();	
-			}
-			else{
-				alert("Please deactivate other tabs first!");
-			}
-		   },
-	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');} 
-	});
 	
 	return false;
 }
@@ -500,7 +481,7 @@ $(document).ready(function() {
 					                              								</td>
 					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
-						                              									<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
+	                              <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 							                              									<b>
 							                              										<p style="max-width: 400px;white-space: normal" title="${report.name}">
 																									<c:if test="${fn:length(report.name) > 120}" >

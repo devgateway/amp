@@ -352,8 +352,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		}	
 		
 		
-		if (td==null) 
+		if (td==null) {
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
+			return null;
+		}
 		
 		
 		String quarter=null;

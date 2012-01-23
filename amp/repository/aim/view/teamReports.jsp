@@ -69,7 +69,7 @@
 			<c:if test="${aimTeamReportsForm.showReportList == true}">
 			   <c:set var="message">
                 <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-                     Are you sure you want to remove selected reports?___
+                     Are you sure you want to remove selected reports?
                 </digi:trn>
               </c:set>
           </c:if>

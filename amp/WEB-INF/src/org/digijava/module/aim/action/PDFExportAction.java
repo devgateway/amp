@@ -304,7 +304,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
 			}
 
-			if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
+			if (arf.getAmountinthousand() != null && arf.getAmountinthousand().booleanValue()){					
 				translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
 			}
 			translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;

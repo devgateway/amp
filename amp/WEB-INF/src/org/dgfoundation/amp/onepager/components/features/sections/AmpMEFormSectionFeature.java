@@ -56,12 +56,14 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 	
 	private boolean titleSelected;
 	private boolean codeSelected;
+        private boolean sectorAdded;
 	private WebMarkupContainer indicatorFeedbackContainer;
 	private Label indicatorFeedbackLabel;
 	
-	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please type indicator name and code");
+	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please type indicator name and code and add sector(s)");
 	static final private String noCodeMsg = "*" + TranslatorUtil.getTranslatedText("Please choose indicator code");
 	static final private String noTitleMsg = "*" + TranslatorUtil.getTranslatedText("Please choose a unique title");
+        static final private String noSectorsMsg = "*" + TranslatorUtil.getTranslatedText("Please add sector(s)");
 	
 	public AmpMEFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
@@ -221,7 +223,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			public void onSelect(AjaxRequestTarget target, AmpSector choice) {
 				sectorSetModel.getObject().add(choice);
 				list.removeAll();
+                                indicatorFeedbackContainer.setVisible(false);
 				target.addComponent(list.getParent());
+                                target.addComponent(indicatorFeedbackContainer);
 			}
 
 			@Override
@@ -247,7 +251,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			public void onClick(AjaxRequestTarget target) {
 				AmpIndicator indicator =newInd.getObject(); 
 				if(indicator.getName()!=null && indicator.getName().trim().length()>0 &&
-						indicator.getCode()!=null && indicator.getCode().length()>0){
+						indicator.getCode()!=null && indicator.getCode().length()>0&&indicator.getSectors()!=null&&indicator.getSectors().size()>0){
 					try {
 						Session session = PersistenceManager.getSession();
 						//beginTransaction();
@@ -302,10 +306,14 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		return new Model(getNewIndicator());
 	}
 	
-	protected boolean updateVisibility(IModel<AmpIndicator> indicatorModel){
+	protected void updateVisibility(IModel<AmpIndicator> indicatorModel){
 		AmpIndicator ind = indicatorModel.getObject();
-		boolean oldCodeSelected = codeSelected;
-		boolean oldTitleSelected = titleSelected;
+                if(ind.getSectors()==null||ind.getSectors().isEmpty()){
+                    sectorAdded=false;
+                }
+                else{
+                    sectorAdded=true;
+                }
 		if (ind.getCode() == null)
 			codeSelected = false;
 		else
@@ -316,26 +324,28 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		else
 			titleSelected = true;
 
-		if (codeSelected && titleSelected){
+		if (codeSelected && titleSelected&&sectorAdded){
 			indicatorFeedbackContainer.setVisible(false);
 		}
 		else{
 			indicatorFeedbackContainer.setVisible(true);
-			if (!codeSelected && !titleSelected){
+			if (!codeSelected && !titleSelected&&!sectorAdded){
 				indicatorFeedbackLabel.setDefaultModelObject(defaultMsg);
 			}
 			else{
 				if (!codeSelected)
 					indicatorFeedbackLabel.setDefaultModelObject(noCodeMsg);
-				else
+                                else{
+                                    if(!titleSelected)
 					indicatorFeedbackLabel.setDefaultModelObject(noTitleMsg);
+                                    else{
+                                        indicatorFeedbackLabel.setDefaultModelObject(noSectorsMsg);
+                                    }
+                                    
+                                }
+                                    
 			}
 		}
-		
-		if ((oldTitleSelected == titleSelected) && (oldCodeSelected == codeSelected))
-			return false;
-		else
-			return true;
 	}
 
 }

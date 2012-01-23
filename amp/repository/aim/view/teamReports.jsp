@@ -26,11 +26,21 @@
 
 
 	function validate() {
-		<c:set var="message">
-        <digi:trn key="aim:teamWorkspaceSetup:selectReportToRemove">
-        Please choose a report to remove
-        </digi:trn>
-        </c:set>
+
+		<c:if test="${aimTeamReportsForm.showReportList == true}">
+		   <c:set var="message">
+         <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
+         Please choose a report to remove
+         </digi:trn>
+       </c:set>
+   </c:if>
+	  <c:if test="${aimTeamReportsForm.showReportList == false}">
+	      <c:set var="message">
+           <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
+           Please choose a tab to remove
+           </digi:trn>
+       </c:set>
+	  </c:if>					
 		if (document.aimTeamReportsForm.selReports.checked != null) {
 			if (document.aimTeamReportsForm.selReports.checked == false) {				
 				alert("${message}");
@@ -55,11 +65,22 @@
         function confirmDelete() {
 		var valid = validate();
 		if (valid == true) {
-                    <c:set var="message">
+
+			<c:if test="${aimTeamReportsForm.showReportList == true}">
+			   <c:set var="message">
+                <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
+                     Are you sure you want to remove selected reports?___
+                </digi:trn>
+              </c:set>
+          </c:if>
+		  <c:if test="${aimTeamReportsForm.showReportList == false}">
+		      <c:set var="message">
                   <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-                  Are you sure you want to remove selected reports?
+                  Are you sure you want to remove selected tabs?
                   </digi:trn>
-                  </c:set>
+              </c:set>
+		  </c:if>																			
+
 			var flag = confirm("${message}");
 			if(flag == false)
 			  return false;

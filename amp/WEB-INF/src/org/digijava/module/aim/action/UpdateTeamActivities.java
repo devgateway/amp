@@ -173,7 +173,7 @@ public class UpdateTeamActivities extends Action {
 		} else {
 			/* show all unassigned activities */
 
-			if (request.getParameter("page") == null) {
+			if (request.getParameter("page") == null||page==0) {
 				page = 1;
 			} else {
 				page = Integer.parseInt(request.getParameter("page"));

@@ -205,9 +205,9 @@ public class CalendarUtil {
 					 Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
 					 while(itritm.hasNext()){
 						 CalendarItem calItme = (CalendarItem) itritm.next();
-						 xml+="<text>"+calItme.getTitle()+"</text>";
+						 xml+="<text>"+org.digijava.module.aim.util.DbUtil.filter(calItme.getTitle())+"</text>";
 						 if(calItme.getDescription() != null){
-							 xml+="<details>"+calItme.getDescription()+"</details>";
+							 xml+="<details>"+org.digijava.module.aim.util.DbUtil.filter(calItme.getDescription())+"</details>";
 						 }else{
 						 	xml+="<details>"+"No Description"+"</details>";
 						 }

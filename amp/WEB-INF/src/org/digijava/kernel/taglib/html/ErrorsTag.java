@@ -165,6 +165,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
         ActionMessages newErrors = null;
 //        Message message;
         String newKey = null;
+        StringBuilder result=new StringBuilder();
 
         try {
             errors = TagUtils.getInstance().getActionMessages(pageContext, name);
@@ -184,30 +185,38 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             while (iter.hasNext()) {
                 ActionMessage item = (ActionMessage)iter.next();
 
-                newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
-                logger.debug("New key for error is " + newKey);
-                newErrors.add(property, new ActionMessage(newKey, item.getValues()));
+                /*newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
+                logger.debug("New key for error is " + newKey);*/
+                
                 
                 //Add the new string id if needed.
                 try {
 	                Message msg = new Message();
-	                msg.setKey(item.getKey().trim().toLowerCase());
-	                msg.setMessage(bundleApplication.getString(item.getKey()));
+	                //msg.setKey(item.getKey().trim().toLowerCase());
+                        String body=bundleApplication.getString(item.getKey());
+                        msg.setKey(TranslatorWorker.generateTrnKey(body));
+	                msg.setMessage(body);
+                        String errorMsg=body;
 	                msg.setSiteId(site.getId().toString());
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
+                        Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString());
+	                if (message == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
 		                }
 	                }
+                        else{
+                            errorMsg=message.getMessage();
+                        }
+                  newErrors.add((property==null)?Globals.MESSAGE_KEY:property, new ActionMessage(errorMsg,false));
                 }catch(Exception e){
                 	logger.error(e);
                 }
             }
 
             if( !newErrors.isEmpty() )
-                request.setAttribute(Globals.MESSAGE_KEY, newErrors);
+                request.setAttribute(Globals.ERROR_KEY, newErrors);
         }
     }
 

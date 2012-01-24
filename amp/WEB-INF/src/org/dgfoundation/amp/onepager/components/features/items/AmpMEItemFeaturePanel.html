@@ -1,0 +1,39 @@
+<wicket:extend>
+<span wicket:id="featureLabel"/>
+	<a href="#" class="slider" style="background-color:#FFFFFF; padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;">
+		<b><span wicket:id="indicatorName"/></b><span wicket:id="indicatorCode" />
+	</a>
+	<div style="display: none">
+		<table width="100%" border="0" cellspacing="2" cellpadding="2" class="activity_me">
+			<tr>
+				<td colspan="2">
+					<span wicket:id="logframe"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<hr>
+				</td>
+			</tr>
+			<span wicket:id="base"/>
+			<span wicket:id="target"/>
+			<span wicket:id="revised"/>
+			<span wicket:id="current"/>
+			<tr>
+				<td colspan="2" align="center">
+					<select class="dropdwn_sm" wicket:id="risk"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<hr>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<span wicket:id="setValues" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</wicket:extend>

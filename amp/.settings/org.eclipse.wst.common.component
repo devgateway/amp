@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="amp-2.0-release">
+            <wb-resource deploy-path="/" source-path="/"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WEB-INF/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/gen-src"/>
+            <property name="context-root" value="/"/>
+    </wb-module>
+</project-modules>

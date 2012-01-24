@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<global-exceptions>
+	        <exception type="java.lang.Throwable" key="errors.general"
+        	    handler="org.digijava.kernel.exception.ActionExceptionHandler" />
+	</global-exceptions>
+
+  <global-forwards>
+    <forward name="adminIndex" path="/showLayout.do?layout=admin" />
+  </global-forwards>
+  <!-- =================================== Action Mapping Definitions -->
+  <action-mappings>
+		<action forward="/showLayout.do" path="/index" />
+		<action type="org.digijava.kernel.action.ShowLayout" path="/showLayout" />
+		<action type="org.digijava.module.aim.auth.AmpAuthenticationStatus" path="/aim/getLoginStatus" />
+		<action name="userLogonForm" forward="/showLayout.do?layout=LoginPrompt" path="/um/showPrompt" />
+		<!-- <action name="userLogonForm" type="org.digijava.module.um.action.LogonAction" validate="true" path="/um/logonAction">
+		  <forward name="forward" path="/showLayout.do?layout=LoginPrompt" redirect="true" />
+		</action>-->
+		<!--  Page Forward Actions //  	-->
+		<action type="org.apache.struts.actions.ForwardAction" parameter="/showLayout.do?layout=userRegister" path="/umShowUserRegister" />
+		<action name="exceptionReportForm" type="org.digijava.kernel.exception.DigiExceptionHandler" validate="false" path="/exceptionHandle" scope="session" />
+  </action-mappings>
+  <!-- ===================================== Controller Configuration -->
+  <!-- <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" /> -->
+  <controller processorClass="org.digijava.kernel.request.RequestProcessor" contentType="text/html;charset=UTF-8" />
+  <!-- ================================ Message Resources Definitions -->
+  <message-resources parameter="java.resources.application" />
+  <!-- comment following if struts1.0.x -->
+  <plug-in className="org.apache.struts.tiles.TilesPlugin">
+    <set-property value="/WEB-INF/tiles-defs.xml" property="definitions-config" />
+    <set-property value="true" property="moduleAware" />
+    <set-property value="true" property="definitions-parser-validate" />
+  </plug-in>
+  <!-- end comment if struts1.0.x -->
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property value="/WEB-INF/validator-rules.xml,
+						 /repository/struts-validation.xml,
+						 /repository/admin/struts-validation.xml,
+						 /repository/um/struts-validation.xml,
+						 /repository/aim/struts-validation.xml"
+    			 property="pathnames" />
+  </plug-in>
+</struts-config>

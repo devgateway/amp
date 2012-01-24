@@ -1,0 +1,98 @@
+<wicket:extend>
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+		<tbody>
+			<tr>
+				<td width="768">
+				<div class="step_head">
+				<div class="step_head_cont"><wicket:trn key="aim:EditActivityForm">Edit Activity Form</wicket:trn>&nbsp;<span wicket:id="activityName"></span></div>
+				
+				</div>
+				</td>
+				<td width="232"></td>
+			</tr>
+			<tr valign="top">
+				<td class="main_side">
+				<form wicket:id="activityForm">
+				<div id="mainContent" class="main_side_cont">
+				<div style="float: right;"></div>
+					<span name="section" wicket:id="featureList">
+						<span wicket:id="featureItem"/>
+					</span>
+					<div wicket:id="feedbackPanel" />
+					 </div>
+				<br />
+					<div id="rightMenu" style="float: right; position: fixed; display:none; margin:0px 0px 0px 15px;">
+							<div id="quickfloat" class="right_menu" style="margin:0px;">
+								<div onclick="$(this).siblings('div:first').slideToggle('normal', function () { if ($(this).is(':hidden')) {$('#qListLabel').html('+' + $('#qListLabel').html().substring(1));} else {$('#qListLabel').html('-' + $('#qListLabel').html().substring(1));}});" class="right_menu_header">
+								<div id="qListLabel" class="right_menu_header_cont">- <wicket:trn>Quick Links</wicket:trn></div>
+								</div>
+								<div id="qListItems" class="right_menu_box" style="margin-top:0px;background:#fff;">
+					            	<ul style="padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+										<li class="tri" wicket:id="quickList">
+											<b><a class="hoverUnderline" wicket:id="quickName" href="#">Identification</a></b>
+										</li>
+					                </ul>
+								</div>
+							</div>
+							<div class="right_menu" style="margin-top:10px;">
+								<div class="right_menu_header">
+								<div class="right_menu_header_cont"><wicket:trn>Actions</wicket:trn></div>
+									<div style="display: none;">
+										<div id="imgOnepagerModeTitle"><wicket:trn jsFriendly="true">Press here to switch to one page view</wicket:trn></div>
+										<div id="imgGroupModeTitle"><wicket:trn jsFriendly="true">Press here to switch to multiple pages view</wicket:trn></div>
+									</div>
+									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif" 
+										title=""
+										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										onclick="switchOnepagerMode(); return true;"/>
+									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif" 
+										title=""
+										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										onclick="switchOnepagerMode(); return true;"/>	
+								</div>
+								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
+									<div style="padding: 2px;" wicket:id="saveAndSubmit" />
+									<div style="padding: 2px;" wicket:id="saveAsDraft" />
+									<div id="saveAsDraftPanel" style="display:none">
+										<div class="hd" style="text-align: left">
+											<wicket:trn>Save as Draft</wicket:trn>
+										</div>
+									    <div class="bd" style="text-align: center">
+									        <p>
+									        	<wicket:trn>Where would you like to navigate after save action?</wicket:trn>
+									        </p>
+											<span wicket:id="draftRedirectedGroup"> 
+												<input type="radio" wicket:id="draftRedirectedDesktop">
+													<wicket:trn>Go to the desktop</wicket:trn>
+												</input> 
+												<input type="radio" wicket:id="draftStayOnPage">
+													<wicket:trn>Stay on the activity page</wicket:trn>
+												</input>
+											</span>
+									      	<br />
+									     	<span style="padding: 2px;" wicket:id="saveAsDraftAction" />
+									     	<span style="padding: 2px;" wicket:id="saveAsDraftCanceld" />
+									    </div>
+									    <div class="ft"></div>
+									</div>
+									<div style="padding: 2px;" wicket:id="logframe" />
+									<div style="padding: 2px;" wicket:id="preview" />
+								</div>
+							</div>
+					</div>
+				</form>
+				</td>
+				<td>
+				    &nbsp;
+				    <div id="wicketRightMenu"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>			
+	
+	<div id="myPLogframe" style="display: none">
+		<div id="myPLogframeContent" class="content">
+			===== ERROR =====
+		</div>
+	</div>
+</wicket:extend>

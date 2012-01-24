@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.dataExchange.dbentity.DESourceSetting" table="de_source_setting" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">DE_SOURCE_SETTING_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="isImport" column="is_import" type="java.lang.Boolean" />
+		<property name="source" column="source" type="java.lang.String" />		
+		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
+		<property name="uniqueIdentifier" column="unique_identifier" type="java.lang.String" />
+		<property name="uniqueIdentifierSeparator" column="unique_identifier_separator" type="java.lang.String" />
+		<property name="languageId" column="language_id" type="java.lang.String" />
+		<property name="importStrategy" column="import_strategy" type="java.lang.String" />
+		<property name="url" column="url" type="java.lang.String" />
+		
+		<many-to-one name="attachedFile" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
+		
+		<many-to-one name="importWorkspace" column="amp_team_id" lazy="false" 
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+		
+		<list name="fields" table="de_source_setting_fields" cascade="all" lazy="false">
+			<cache usage="read-write"/>
+			<key column="de_source_setting_id" />
+			<list-index column="index_column" />
+			<element column="field_string" type="string" />
+		</list>
+		
+		<list name="logs" lazy="false" cascade="all-delete-orphan">
+			<key column="de_source_setting_id" />
+			<index column="index_column" />
+			<one-to-many class="org.digijava.module.dataExchange.dbentity.DELogPerExecution" />
+		</list>
+		
+		
+		
+	</class>
+</hibernate-mapping>

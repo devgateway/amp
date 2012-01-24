@@ -1,0 +1,33 @@
+<wicket:extend>
+<span wicket:id="featureLabel"/>
+	<a href="#" onclick="$(this).siblings('div:first').slideToggle();return false;">
+	<b><span wicket:id="donorOrg"/></b>
+	</a>
+	<div>
+	<table width="0" border="0" cellspacing="2" cellpadding="2">
+		<tr>
+			<td>
+				<span wicket:id="active"/>
+			</td>
+			<td>
+				<span wicket:id="delegatedCooperation"/>
+			</td>
+			<td>
+				<span wicket:id="delegatedPartner"/>
+			</td>
+		</tr>
+	</table>
+	<div style="margin-top: 15px" wicket:id="fundingInfoSubsection"/>
+	<div style="margin-top: 15px" wicket:id="mtefProjectionsSubsection"/>
+	<div style="margin-top: 15px" wicket:id="commitments"/>
+	<div style="margin-top: 15px" wicket:id="disbOrders"/>
+	<div style="margin-top: 15px" wicket:id="disbursements"/>
+	<div style="margin-top: 15px" wicket:id="expenditures"/>
+
+	<div style="margin-top: 15px" wicket:id="newOrgSelect"/>
+	<div>
+		<div style="margin-top: 15px; float: left; width: 190px;" wicket:id="newOrgButton"/>
+		<div style="margin-top: 15px; float: left; width: 190px;" wicket:id="addAnotherFunding"/>
+	</div>
+	</div>
+</wicket:extend>

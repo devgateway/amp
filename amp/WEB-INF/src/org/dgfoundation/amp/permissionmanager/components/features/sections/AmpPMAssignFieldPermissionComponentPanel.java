@@ -16,6 +16,7 @@ import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
@@ -25,9 +26,9 @@ import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMSimpleChoiceRenderer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -77,7 +78,12 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final IModel<String> permissionChoiceModel = new Model(permissionPriorityList.get(0));
 		
 		//permission priority radiobutton
-		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriorityList, new AmpPMSimpleChoiceRenderer());
+		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriorityList, new ChoiceRenderer(){			
+			@Override
+			public Object getDisplayValue(Object object) {
+				return TranslatorUtil.getTranslation(object.toString());
+			}
+		});
 		//permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", );
 		permissionPriorityChoices.setSuffix("");
 		form.add(permissionPriorityChoices);

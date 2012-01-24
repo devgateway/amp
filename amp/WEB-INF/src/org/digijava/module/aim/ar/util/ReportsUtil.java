@@ -33,7 +33,7 @@ public class ReportsUtil {
     }
 	
 	@SuppressWarnings("unchecked")
-	public static List<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {
+	public static Collection<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {
         Session session = null;
         List<AmpOrganisation> col = null;
         try {

@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -164,10 +165,14 @@ public class GetTeamActivities
                         else
                             Collections.sort(temp, Collections.reverseOrder());
                     } else if("donor".equals(sort)) {
+                        /*
                         if("asc".equals(sortOrder))
                             Collections.sort(temp, acronymComp);
                         else
-                            Collections.sort(temp, racronymComp);
+                            Collections.sort(temp, racronymComp);*/
+
+                        boolean order = "asc".equals(sortOrder)?true:false;
+                        temp = ActivityUtil.getSortedActivitiesByDonors(temp, order);
                     }
                 }
                 taForm.setAllActivities(temp);

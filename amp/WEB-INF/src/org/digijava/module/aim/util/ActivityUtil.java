@@ -5,23 +5,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -120,6 +103,25 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Restrictions;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -3128,6 +3130,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 qry.setLong("activityId", activityId);
 
                 List<AmpOrganisation> organizations = qry.list();
+                if (organizations != null && organizations.size() > 1) {
+                    Collections.sort(organizations, new Comparator<AmpOrganisation>() {
+                        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+                            return o1.getName().compareTo(o2.getName());
+                        }
+                    });
+                }
                 for (AmpOrganisation donor : organizations) {
                     donors.append(donor.getName());
                     donors.append(",");
@@ -3142,6 +3151,68 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             throw new RuntimeException(ex);
 
         }
+    }
+
+    public static List getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {
+        List<AmpActivityVersion> retVal = new ArrayList<AmpActivityVersion>();
+
+        Map <String, AmpActivityVersion> donorNameActivityMap = new HashMap <String, AmpActivityVersion> ();
+        List <AmpActivityVersion> noFundingActivities = null;
+        for (AmpActivityVersion actItem : acts) {
+            if (actItem.getFunding() != null && !actItem.getFunding().isEmpty()) {
+                /*
+                Set <String> nameSorter = new HashSet<String>();
+                for (Object fndObj : actItem.getFunding()) {
+                    AmpFunding fnd = (AmpFunding) fndObj;
+                    nameSorter.add(fnd.getAmpDonorOrgId().getName());
+                }
+                List <String> sortedList = new ArrayList<String>(nameSorter);
+                Collections.sort(sortedList);*/
+                //donorNameActivityMap.put(sortedList.get(0), actItem);
+                //donorNameActivityMap.put(((AmpFunding)actItem.getFunding().iterator().next()).getAmpDonorOrgId().getName(), actItem);
+                
+                StringBuilder donorNames = new StringBuilder();
+                
+                List organizations = new ArrayList(actItem.getFunding());
+                if (organizations != null && organizations.size() > 1) {
+                    Collections.sort(organizations, new Comparator<AmpFunding>() {
+                        public int compare(AmpFunding o1, AmpFunding o2) {
+                            return o1.getAmpDonorOrgId().getName().compareTo(o2.getAmpDonorOrgId().getName());
+                        }
+                    });
+                }
+
+                for (Object fndObj : organizations) {
+                    AmpFunding fnd = (AmpFunding) fndObj;
+                    donorNames.append(fnd.getAmpDonorOrgId().getName());
+                    donorNames.append(",");
+                }
+                donorNameActivityMap.put(donorNames.toString(), actItem);
+
+            } else {
+                if (noFundingActivities == null) {
+                    noFundingActivities = new ArrayList <AmpActivityVersion> ();
+                }
+                noFundingActivities.add(actItem);
+            }
+        }
+        
+        Set <String> keys = donorNameActivityMap.keySet();
+        List <String> sortedKeys = new ArrayList <String> (keys);
+        Collections.sort(sortedKeys);
+        if (!acs) {
+            Collections.reverse(sortedKeys);
+        }
+        
+        for (String key : sortedKeys) {
+            retVal.add(donorNameActivityMap.get(key));
+        }
+
+        if (noFundingActivities != null) {
+            retVal.addAll(noFundingActivities);
+        }
+        
+        return retVal;
     }
 
   public static Collection getDonors(Long actId) {

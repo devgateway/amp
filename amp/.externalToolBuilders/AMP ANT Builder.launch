@@ -7,7 +7,7 @@
 <booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="false"/>
 <stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${workspace}"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/amp-2.0-release/build.xml"/>
+<listEntry value="/amp-2.1-release/build.xml"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -15,7 +15,7 @@
 <booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="amp-2.0-tag"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="amp-2.1-release"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${project_loc}/build.xml"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,clean"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-DserverName=local -Dexternal-lib=${external-lib} -Djdbc.db=amp_drc -Djdbc.user=postgres -Djdbc.password=1234"/>

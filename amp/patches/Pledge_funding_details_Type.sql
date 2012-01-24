@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS  amp_funding_pledges_details;
+CREATE TABLE `amp_funding_pledges_details` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `funding_date` datetime DEFAULT NULL,
+  `amount` double DEFAULT NULL,
+  `pledge_type` bigint(20) NOT NULL,
+  `pledge_id` bigint(20) NOT NULL,
+  `currency` bigint(20) DEFAULT NULL,
+  `type_of_assistance` bigint(20) DEFAULT NULL,
+  `aid_modality` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK479CAA2065456B7A` (`aid_modality`),
+  KEY `FK479CAA2051B03351` (`type_of_assistance`),
+  KEY `FK479CAA2023D31441` (`pledge_id`),
+  KEY `FK479CAA205C9CE2F6` (`pledge_type`),
+  KEY `FK479CAA2069857849` (`currency`),
+  CONSTRAINT `FK479CAA2069857849` FOREIGN KEY (`currency`) REFERENCES `amp_currency` (`amp_currency_id`),
+  CONSTRAINT `FK479CAA2023D31441` FOREIGN KEY (`pledge_id`) REFERENCES `amp_funding_pledges` (`id`),
+  CONSTRAINT `FK479CAA2051B03351` FOREIGN KEY (`type_of_assistance`) REFERENCES `amp_category_value` (`id`),
+  CONSTRAINT `FK479CAA205C9CE2F6` FOREIGN KEY (`pledge_type`) REFERENCES `amp_category_value` (`id`),
+  CONSTRAINT `FK479CAA2065456B7A` FOREIGN KEY (`aid_modality`) REFERENCES `amp_category_value` (`id`));

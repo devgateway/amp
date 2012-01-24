@@ -1,0 +1,34 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center"><b class="ins_title"><wicket:trn key="trn:program">Program</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:percent">Percent</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="listProgs">
+		<td class="inside"><span wicket:id="name" /></td>
+		<td class="inside"><span wicket:id="percent"/></td>
+		<td class="inside" align="center">
+			<span wicket:id="delProgram"/>
+		</td>
+	</tr>
+	<tr>
+			<td class="inside" align="center" colspan="3">
+				<span wicket:id="programPercentageTotal"/>
+				<span wicket:id="uniqueProgramsValidator"/>
+			</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="inside" align="center">
+			<table>
+				<tr>
+					<td>
+						<div style="float: center;" wicket:id="search"/>			
+					</td>
+					<td>
+						<div style="float: center;" wicket:id="dividePercentage"/>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</wicket:extend>

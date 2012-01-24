@@ -1,0 +1,18 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:type">Type</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:title">Title</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr>
+		<td class="inside" align="right"><select wicket:id="compTypes" style="max-width: 300px;"/></td>
+		<td class="inside"><input class="inputx" size="35" wicket:id="name" /></td>
+		<td class="inside" align="center"><span wicket:id="deleteComponent"/></td>
+	</tr>
+	<tr wicket:id="feedbackContainer">
+		<td class="inside" align="center" colspan="3">
+			<span wicket:id="feedbackLabel" class="feedbacklabel.error"></span>
+		</td>
+	</tr>
+</wicket:extend>				
+				 

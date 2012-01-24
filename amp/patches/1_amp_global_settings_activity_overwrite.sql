@@ -1,0 +1,1 @@
+insert into amp_global_settings (settingsName, settingsValue, possibleValues, description, section) values ('Do you want to allow Activity overwriting ?', 'false','t_Boolean','Enable or Disable Activity overwriting', 'general');

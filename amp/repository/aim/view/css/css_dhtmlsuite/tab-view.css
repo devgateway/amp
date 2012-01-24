@@ -1,0 +1,72 @@
+/************************************************************************************************************
+*	Tab view class	(CSS for the DHTMLSuite_tabView class)
+*
+*	Created:			August, 21st, 2006
+*	Purpose of class:	Tab view class - transfors plain HTML into tabable layers.
+*
+*
+* 	Update log:
+*
+************************************************************************************************************/
+/* The tab widget */
+.DHTMLSuite_tabWidget{
+	margin-bottom:5px;	/* A little space below the tab pane */
+}
+
+.DHTMLSuite_tabContainer{
+	height:21px;	/* Height of tabs */
+	border-bottom:1px solid #919b9c;
+}
+.DHTMLSuite_aTab{
+	border-left:1px solid #919b9c;
+	border-right:1px solid #919b9c;
+	border-bottom:1px solid #919b9c;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	padding:5px;		
+	
+}
+.DHTMLSuite_tabContainer DIV{
+	float:left;
+	height:100%;	/* Height of tabs */
+	padding-left:3px;
+	vertical-align:middle;
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	cursor:pointer;
+	position:relative;
+	bottom:-1px;
+	margin-left:0px;
+	margin-right:0px;
+}
+.DHTMLSuite_tabContainer .tabActive{
+	margin-left:0px;
+	margin-right:0px;	
+	z-index:10;	
+}
+.DHTMLSuite_tabContainer .tabInactive{
+	margin-left:0px;
+	margin-right:0px;
+	z-index:1;
+}
+
+.DHTMLSuite_tabContainer .inactiveTabOver{
+	margin-left:0px;
+	margin-right:0px;
+}
+.DHTMLSuite_tabContainer span{
+	font-family:arial;
+	vertical-align:top;
+	font-size:11px;
+	padding-left:3px;
+	padding-right:3px;		
+	line-height:21px;
+	float:left;
+}
+.DHTMLSuite_tabContainer .tabActive span{
+	padding-bottom:1px;
+	line-height:20px;
+}
+
+.DHTMLSuite_tabContainer img{
+	float:left;
+}

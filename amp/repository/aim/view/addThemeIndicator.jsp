@@ -333,7 +333,7 @@ function closeWindow(){
 		<table  width=772 cellpadding="1" cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
 				<tr>
 					 <td bgColor="#c7d4db" class="box-title" height="25" align="center">
-						<digi:trn key="aim:manageindicators"><b>Manage Indicators</b></digi:trn><b>: ${aimThemeForm.themeName}</b>
+                                             <digi:trn key="aim:manageindicators"><b>Manage Indicators</b></digi:trn><b>:<c:out value="${aimThemeForm.themeName}"/> </b>
 					 </td>
 				 </tr>
 					 <tr>
@@ -363,7 +363,7 @@ function closeWindow(){
 												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
 									</td>
 									<td align="left" width="60%" bgcolor="#f4f4f2" class="inside">
-										<b>${prgIndicatorItr.indicator.name}</b>
+                                                                            <b><c:out value="${prgIndicatorItr.indicator.name}"/></b>
 									</td>
 					                <td height="15" width="25%"bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
 										  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

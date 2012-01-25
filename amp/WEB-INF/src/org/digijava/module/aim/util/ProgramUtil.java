@@ -1962,11 +1962,11 @@ public class ProgramUtil {
 				retVal += "   </td>";
 			}
 			retVal += "   <td  class=\"progName inside\">";
-			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+((AmpTheme) item.getMember()).getEncodeName()+"</a>\n";
+			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getName())+"</a>\n";
 			retVal += "   </td>";
-			retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ ((AmpTheme) item.getMember()).getThemeCode() + ")</td>";
+			retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode()) + ")</td>";
 			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+theme.getEncodeName()+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> \n";
+			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+org.digijava.module.aim.util.DbUtil.filter(theme.getEncodeName())+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> \n";
 			retVal += "   </td>";
 			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
 			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";

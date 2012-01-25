@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11949</jira>
+    <keyword>Paris Indicators</keyword>
+    <author>Medea</author>
+    <description>add missing questions</description>
+    <trigger type="all">
+        <condition  type="tableEmpty">amp_ahsurvey_question</condition>
+        <condition  type="tableNotEmpty">amp_ahsurvey_question_type</condition>
+        <condition  type="tableNotEmpty">amp_ahsurvey_indicator</condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status)  
+                SELECT 1,'In this project / activity, do the disbursements made by this development partner correspond to aid flows in support to the government sector?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='3'),'1',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+				
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 2,'In this project / activity, are disbursements made by this development partner reported in the national budget?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='3'),'2',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              
+				
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 3,'In this project / activity, is the funding provided by this particular development partner part of a coordinated programme?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='4'),'3',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              
+                
+				
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 4,'In this project / activity, what is the technical co-operation share in the funding of this particular development partner?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='4'),'4',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='input'),NULL;
+              
+                
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 5,'Does this development partner, in this particular project / activity, use the national budget execution procedures?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='5a'),'5',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+                
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 6,'Does this development partner, in this particular project / activity, use the national financial reporting procedures?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='5a'),'6',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+                
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 7,'Does this development partner, in this particular project / activity, use the national auditing procedures?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='5a'),'7',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+                		
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 8,'Does this development partner, in this particular project / activity, use the national procurement procedures?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='5b'),'8',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+                
+                
+                
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 9,'Does this development partner, in this particular project / activity, use a parallel Project Implementation Unit (PIU)?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='6'),'9',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              	
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status) 
+                SELECT 10,'Difference(%) between planned and actual disbursements.',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='7'),'10',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='calculated'),NULL;
+              
+                		
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status)  
+                SELECT 11,'Is this project provided in the context of a programme-based approach?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='9'),'11',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              
+                
+				
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status)  
+                SELECT 12,'Is this mission joint?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='10a'),'12',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              
+                
+				
+                INSERT INTO amp_ahsurvey_question (amp_question_id, question_text, amp_indicator_id, question_number, amp_type_id, status)   
+                SELECT 13,'Is this country analytic work joint?',
+                (SELECT amp_indicator_id FROM amp_ahsurvey_indicator WHERE indicator_code='10b'),'13',(SELECT amp_type_id FROM amp_ahsurvey_question_type WHERE "name"='yes-no'),NULL;
+              
+                
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

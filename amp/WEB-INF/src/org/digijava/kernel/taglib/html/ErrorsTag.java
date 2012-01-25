@@ -24,6 +24,7 @@ package org.digijava.kernel.taglib.html;
 
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import javax.servlet.ServletContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -38,6 +39,8 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -192,6 +195,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 //Add the new string id if needed.
                 try {
 	                Message msg = new Message();
+                        ServletContext context = pageContext.getServletContext();
 	                //msg.setKey(item.getKey().trim().toLowerCase());
                         String body=bundleApplication.getString(item.getKey());
                         msg.setKey(TranslatorWorker.generateTrnKey(body));
@@ -201,9 +205,23 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
                         Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString());
+                        if (!msg.getLocale().equals("en")) {
+                        Message messageEn = TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), "en", site.getId().toString());
+                        if (messageEn == null) {
+                            messageEn = new Message();
+                            messageEn.setKey(msg.getKey());
+                            messageEn.setMessage(body);
+                            messageEn.setSiteId(site.getId().toString());
+                            messageEn.setLocale("en");
+                            TranslatorWorker.getInstance(msg.getKey()).save(messageEn);
+                            LuceneWorker.addItemToIndex(messageEn, context, "en");
+
+                        }
+                    }
 	                if (message == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
+      					LuceneWorker.addItemToIndex(msg, context,msg.getLocale());				
 		                }
 	                }
                         else{

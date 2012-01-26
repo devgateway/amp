@@ -98,7 +98,7 @@
 		YAHOO.reportsheet.myPanel.render();
 	}
 
-	//YAHOO.util.Event.addListener(window, "load", initReportSheet) ;
+	YAHOO.util.Event.addListener(window, "load", initReportSheet) ;
 
 
 	YAHOO.reportsheet.jsReports	= new Array();
@@ -163,7 +163,7 @@
 		YAHOO.reportsheet.myPanel.setHeader(YAHOO.reportsheet.jsReports[selectedReport].name);
 	}
 	function showMyPanel () {
-		initReportSheet();
+		//initReportSheet();
 		changePanel();
 		YAHOO.reportsheet.myPanel.show();
 	}

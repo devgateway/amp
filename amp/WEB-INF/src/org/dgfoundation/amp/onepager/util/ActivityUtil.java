@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -169,7 +170,7 @@ public class ActivityUtil {
 			
 			saveResources(a); 
 			saveEditors(session); 
-			saveComments(a, session); 
+			saveComments(a, session,draft); 
 			
 			updateComponentFunding(a, session);
 			
@@ -373,7 +374,7 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void saveComments(AmpActivityVersion a, Session session) {
+	private static void saveComments(AmpActivityVersion a, Session session, boolean draft) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		
@@ -392,7 +393,7 @@ public class ActivityUtil {
 			Iterator<AmpComments> ni = newComm.iterator();
 			while (ni.hasNext()) {
 				AmpComments tComm = (AmpComments) ni.next();
-				if (ActivityVersionUtil.isVersioningEnabled()){
+				if (ActivityVersionUtil.isVersioningEnabled() && !draft){
 					try {
 						tComm = (AmpComments) tComm.prepareMerge(a);
 					} catch (CloneNotSupportedException e) {

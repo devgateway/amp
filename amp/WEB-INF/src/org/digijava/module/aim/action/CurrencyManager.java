@@ -73,13 +73,13 @@ public class CurrencyManager extends Action {
             Collection currencies =crForm.getAllCurrencies();
 
             if(currencies!=null){
-                for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
-                    AmpCurrency cur = (AmpCurrency) cuIter.next();
-                    AmpCategoryValueLocations cn=cur.getCountryLocation();
-//                    if(cn!=null){
-//                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
-//                    }
-                }
+//                for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
+//                    AmpCurrency cur = (AmpCurrency) cuIter.next();
+//                    AmpCategoryValueLocations cn=cur.getCountryLocation();
+////                    if(cn!=null){
+////                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
+////                    }
+//                }
                 crForm.setAllCurrencies(currencies);
             }
 

@@ -31,8 +31,34 @@ function init() {
 	loading = dojo.byId("loadingImg");
 	loading.hidden = true;
 	
-	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
-	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map/MapServer";
+	var basemapUrl;
+	var mapurl;
+	
+	var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?getconfig=true",
+			handleAs : "json",
+			sync:true,
+			load: function(jsonData) {
+				   dojo.forEach(jsonData,function(map) {
+			        	switch (map.maptype) {
+						case 1:
+							basemapUrl = map.mapurl;
+							break;
+						case 2:
+							mapurl = map.mapurl;
+						default:
+							break;
+						}
+			        });
+				},
+			error : function(error) {
+				console.log(error);
+			}
+		}
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+	
+	
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
 

@@ -122,6 +122,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -193,6 +195,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     		eaForm.getMessages().clear();
         }
     }
+    
+    /* Set Map configuration */ 
+    List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
+	for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
+		AmpMapConfig map = (AmpMapConfig) iterator.next();
+		if (map.getMaptype() == 5){
+			eaForm.setEsriapiurl(map.getMapurl());
+		}
+	}
+	
     
     // set Globam Settings Multi-Sector Selecting
    /* String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.

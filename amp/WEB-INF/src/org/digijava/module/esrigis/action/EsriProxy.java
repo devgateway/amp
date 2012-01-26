@@ -12,6 +12,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,23 +25,36 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.helpers.DbHelper;
 
 public class EsriProxy extends Action {
-
+	
+	
 	/*
 	 * "<url>[,<token>]" For ex. (secured server):
 	 * "http://myserver.mycompany.com/arcgis/rest/services,ayn2C2iPvqjeqWoXwV6rjmr43kyo23mhIPnXz2CEiMA6rVu0xR0St8gKsd0olv8a"
 	 * For ex. (non-secured server):
 	 * "http://sampleserver1.arcgisonline.com/arcgis/rest/services"
 	 */
-	final String[] serverUrls = {
-			"http://sampleserver1.arcgisonline.com/arcgis/rest/services",
-			"http://4.79.228.117:8399/arcgis/rest/services" // NOTE no comma after the last item
-	};
-
+	
+	
+	private String[] serverUrls;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
+		int i=0;
+		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
+			AmpMapConfig map = (AmpMapConfig) iterator.next();
+			if (map.getMaptype() == 7){
+				serverUrls[i]=map.getMapurl();
+			}
+			i++;
+		}
+		
 		try {
 			String reqUrl = request.getQueryString();
 			boolean allowed = false;

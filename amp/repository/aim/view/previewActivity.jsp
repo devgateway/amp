@@ -47,7 +47,8 @@
 	}
 %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
+<link rel="stylesheet" type="text/css" href="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css">
+<script type="text/javascript" src="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/?v=2.2"></script>
 
 
 

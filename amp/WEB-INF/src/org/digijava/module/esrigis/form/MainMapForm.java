@@ -8,5 +8,5 @@ public class MainMapForm extends ActionForm{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 }

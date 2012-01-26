@@ -29,6 +29,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.content.dbentity.AmpContentItem;
+import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.visualization.util.DashboardUtil; //TODO: Check this functions and use a common
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -619,6 +620,22 @@ public class DbHelper {
         return sts;
 	}
 
+	public static List<AmpMapConfig> getMaps() {
+		Session session = null;
+        Query q = null;
+        List<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
+        StringBuilder queryString = new StringBuilder("select a from " + AmpMapConfig.class.getName()+ " a");
+       try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            maps = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get maps from database ", ex);
+        }
+        return maps;
+	}
+	
+	
 	public static AmpStructureType getStructureType(Long structureTypeId) {
 		Session session = null;
 		AmpStructureType ampStructureType = null;
@@ -633,7 +650,6 @@ public class DbHelper {
 		}
 		return ampStructureType;
 	}
-
 	public static void deleteStructureType(AmpStructureType structureType) {
 		Session sess = null;
 		Transaction tx = null;

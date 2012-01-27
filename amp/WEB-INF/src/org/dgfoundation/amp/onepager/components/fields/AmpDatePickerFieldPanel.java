@@ -78,8 +78,8 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 				AmpDatePickerFieldPanel otherPicker = AmpDatePickerFieldPanel.this.otherDatePicker;
 				Boolean check = (Boolean) this.checkbox.getDefaultModelObject();
 				if (check) {
-					date.setEnabled(false);
-					dateWrapper.setEnabled(false);
+					//date.setEnabled(true);
+					dateWrapper.setEnabled(true);
 					String js=String.format("$('#%s').val($('#%s').val());",date.getMarkupId(),otherPicker.getDate().getMarkupId());
 					target.appendJavascript(js);
 					target.addComponent(dateWrapper);

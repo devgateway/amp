@@ -63,7 +63,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		if (choice.getId() == null) {
 			return "l_mid_b";
 		}
-		return null;
+		return "";
 	}
 
 	public String getAdditionalDetails(AmpContact contact) {
@@ -78,7 +78,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 			details.append(contact.getTitle().getValue());
 		}
 		details.append(" ");
-		details.append(contact.getNameAndLastName());
+		details.append(DbUtil.filter(contact.getNameAndLastName()));
 		details.append("<br/>");
 		if (contact.getProperties() != null) {
 			for (AmpContactProperty property : contact.getProperties()) {
@@ -119,11 +119,11 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 						.getOrganisationName().length() > 0)) {
 			if (contact.getOrganisationName() != null
 					&& contact.getOrganisationName().length() > 0) {
-				orgs += contact.getOrganisationName() + "<br/>";
+				orgs += DbUtil.filter(contact.getOrganisationName()) + "<br/>";
 			}
 			for (AmpOrganisationContact contOrg : contact
 					.getOrganizationContacts()) {
-				orgs += contOrg.getOrganisation().getName() + "<br/>";
+				orgs += DbUtil.filter(contOrg.getOrganisation().getName()) + "<br/>";
 			}
 		}
 		details.append("<br/>");

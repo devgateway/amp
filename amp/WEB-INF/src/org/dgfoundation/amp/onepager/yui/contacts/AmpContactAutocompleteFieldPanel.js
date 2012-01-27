@@ -32,6 +32,9 @@ function hidePanel() {
 		informationPanel.hide();
 	}
 }
+function convertResult(str){
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
 
 
 YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache) {
@@ -59,7 +62,7 @@ YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containe
     	}
     	
     	if(pResultData[2]!=''){
-    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
+    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+convertResult(formatedResult)+"</span>";
     	}
     	if(pResultData[3]!=''){
     		formatedResult="<span class='"+pResultData[3]+"'>" +formatedResult+"</span>";

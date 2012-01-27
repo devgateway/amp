@@ -150,7 +150,7 @@ public class AddressBookActions extends DispatchAction {
 				JSONObject jcontact = new JSONObject();
 				jcontact.put("ID", contact.getId());
 				jcontact.put("title", contact.getTitle()!=null?"<ul style=\"padding:10px;\"><li>"+contact.getTitle().getValue()+"</li></ul>":"");
-				jcontact.put("name", (contact.getName() !=null && contact.getName().length()>0 || contact.getLastname() !=null && contact.getLastname().length()>0)?"<ul style=\"padding:10px;\"><li>"+contact.getName()+" "+contact.getLastname()+"</li></ul>":"");
+				jcontact.put("name", (contact.getName() !=null && contact.getName().length()>0 || contact.getLastname() !=null && contact.getLastname().length()>0)?"<ul style=\"padding:10px;\"><li>"+DbUtil.filter(contact.getName()+" "+contact.getLastname())+"</li></ul>":"");
 				String emails="";
 				String orgs="";
 				String phones="";
@@ -189,15 +189,15 @@ public class AddressBookActions extends DispatchAction {
 				if((contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0) || (contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0)){
 					orgs+="<ul style=\"padding:10px;\">";
 					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
-						orgs+="<li>"+contact.getOrganisationName()+"</li>";
+						orgs+="<li>"+DbUtil.filter(contact.getOrganisationName())+"</li>";
 					}
 					for (AmpOrganisationContact contOrg : contact.getOrganizationContacts()) {
-						orgs+="<li>"+contOrg.getOrganisation().getName()+"</li>";
+						orgs+="<li>"+DbUtil.filter(contOrg.getOrganisation().getName())+"</li>";
 					}
 					orgs+="</ul>";
 				}
 				jcontact.put("organizations", orgs);
-				jcontact.put("function",contact.getFunction()!=null && contact.getFunction().length()>0?"<ul style=\"padding:10px;\"><li>"+contact.getFunction()+"</li></ul>":"");
+				jcontact.put("function",contact.getFunction()!=null && contact.getFunction().length()>0?"<ul style=\"padding:10px;\"><li>"+DbUtil.filter(contact.getFunction())+"</li></ul>":"");
 				jcontact.put("phones", phones);
 				jcontact.put("faxes", faxes);
 				jsonArray.add(jcontact);

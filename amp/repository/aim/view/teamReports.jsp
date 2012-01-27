@@ -14,87 +14,6 @@
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
 
-<script type="text/javascript">
-
-<!--
-	function listReports()
-	{
-		document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
-		document.aimTeamReportsForm.action="/updateTeamReports.do";
-		document.aimTeamReportsForm.submit();
-	}
-
-
-	function validate() {
-
-		<c:if test="${aimTeamReportsForm.showReportList == true}">
-		   <c:set var="message">
-         <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-         Please choose a report to remove
-         </digi:trn>
-       </c:set>
-   </c:if>
-	  <c:if test="${aimTeamReportsForm.showReportList == false}">
-	      <c:set var="message">
-           <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-           Please choose a tab to remove
-           </digi:trn>
-       </c:set>
-	  </c:if>					
-		if (document.aimTeamReportsForm.selReports.checked != null) {
-			if (document.aimTeamReportsForm.selReports.checked == false) {				
-				alert("${message}");
-				return false;
-			}
-		} else {
-			var length = document.aimTeamReportsForm.selReports.length;
-			var flag = 0;
-			for (i = 0; i < length; i ++) {
-				if (document.aimTeamReportsForm.selReports[i].checked == true) {
-					flag = 1;
-					break;
-				}
-			}
-			if (flag == 0) {
-				alert("${message}");
-				return false;
-			}
-		}
-		return true;
-	}
-        function confirmDelete() {
-		var valid = validate();
-		if (valid == true) {
-
-			<c:if test="${aimTeamReportsForm.showReportList == true}">
-			   <c:set var="message">
-                <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-                     Are you sure you want to remove selected reports?
-                </digi:trn>
-              </c:set>
-          </c:if>
-		  <c:if test="${aimTeamReportsForm.showReportList == false}">
-		      <c:set var="message">
-                  <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
-                  Are you sure you want to remove selected tabs?
-                  </digi:trn>
-              </c:set>
-		  </c:if>																			
-
-			var flag = confirm("${message}");
-			if(flag == false)
-			  return false;
-			else
-				return true;
-		} else {
-			return false;
-		}
-	}
-
-
--->
-
-</script>
 
 <digi:instance property="aimTeamReportsForm" />
 
@@ -424,6 +343,80 @@
 </table>
 
 </digi:form>
+
+<script type="text/javascript">
+
+function listReports()
+{
+	document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
+	document.aimTeamReportsForm.action="/updateTeamReports.do";
+	document.aimTeamReportsForm.submit();
+}
+
+
+function validate() {
+
+	<c:if test="${aimTeamReportsForm.showReportList == true}">
+	   <c:set var="message" scope="request">
+          <digi:trn>Please choose a report to remove</digi:trn>
+      </c:set>
+  </c:if>
+  <c:if test="${aimTeamReportsForm.showReportList == false}">
+      <c:set var="message" scope="request">	      
+       <digi:trn>Please choose a tab to remove</digi:trn>
+   </c:set>
+  </c:if>	
+				
+	if(document.aimTeamReportsForm.selReports.checked != null) {
+		if (document.aimTeamReportsForm.selReports.checked == false) {				
+			alert("${message}");
+			return false;
+		}
+	} else {
+		var length = document.aimTeamReportsForm.selReports.length;
+		var flag = 0;
+		for (i = 0; i < length; i ++) {
+			if (document.aimTeamReportsForm.selReports[i].checked == true) {
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0) {
+			alert("${message}");
+			return false;
+		}
+	}
+	return true;
+}
+    function confirmDelete() {
+	var valid = validate();
+	if (valid == true) {
+
+		<c:if test="${aimTeamReportsForm.showReportList == true}">
+		   <c:set var="message">
+            <digi:trn>Are you sure you want to remove selected reports?</digi:trn>
+          </c:set>
+      </c:if>
+	  <c:if test="${aimTeamReportsForm.showReportList == false}">
+	      <c:set var="message">
+              <digi:trn>Are you sure you want to remove selected tabs?</digi:trn>
+          </c:set>
+	  </c:if>																			
+
+		var flag = confirm("${message}");
+		if(flag == false)
+		  return false;
+		else
+			return true;
+	} else {
+		return false;
+	}
+}
+
+
+</script>
+
+
 
 <script language="javascript">
 		$("#checkAll").bind("change", function (obj){

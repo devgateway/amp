@@ -139,7 +139,10 @@
 						</td>
 					</tr>
 				</c:forEach>
+				
                                 <!-- pagination -->
+                                <!-- remove pagination if list is empty -->
+                <c:if test="${ not empty gisIndicatorSectorRegionForm.indSectList}">
                                 <tr>
                                     <td colspan="4">
                                         <digi:trn key="gis:Pages">Pages</digi:trn>:
@@ -205,6 +208,8 @@
                                              </c:choose> &nbsp;${gisIndicatorSectorRegionForm.selectedPage}&nbsp;<digi:trn key="gis:pagination:of">of</digi:trn>&nbsp;${gisIndicatorSectorRegionForm.pages}
                                     </td>
                                 </tr>
+                                
+                                </c:if>
                                     <!-- end of pagination -->
 			</table>
 

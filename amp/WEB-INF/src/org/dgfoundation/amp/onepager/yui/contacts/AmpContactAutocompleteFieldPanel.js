@@ -55,14 +55,14 @@ YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containe
     	var escapedResultData=pResultData[1];
     	
     	if(pQuery==""){
-    		formatedResult=ac_left_padding(pResultMatch,escapedResultData);
+    		formatedResult=ac_left_padding(convertResult(pResultMatch),escapedResultData);
     	}
     	else{
-    		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
+    		formatedResult=ac_left_padding(convertResult(pResultMatch).replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
     	}
     	
     	if(pResultData[2]!=''){
-    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+convertResult(formatedResult)+"</span>";
+    		formatedResult= "<span onmouseover=\"eventFunction(event,'"+pResultData[2]+"')\" onmouseout=\"hidePanel()\">"+formatedResult+"</span>";
     	}
     	if(pResultData[3]!=''){
     		formatedResult="<span class='"+pResultData[3]+"'>" +formatedResult+"</span>";

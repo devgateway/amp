@@ -45,6 +45,7 @@ var COUNTY;
 var DISTRICT;
 var COUNT;
 var GEO_ID;
+var basemapsarray = new Array();
 // var povertyratesurl =
 // "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
 // var population =
@@ -69,6 +70,8 @@ function init() {
 					COUNT = map.countfield;
 				case 4:
 					geometryServiceurl = map.mapurl;
+				case 6:
+					basemapsarray.push(map.mapurl);
 				default:
 					break;
 				}
@@ -553,108 +556,93 @@ function getActivities(clear) {
  * @param activity
  */
 var donorArray = new Array();
-
 function MapFind(activity) {
-	dojo
-			.forEach(
-					activity.locations,
-					function(location) {
-						// If the location has lat and lon not needs to find the
-						// point in the map
-						if (location.islocated == false && countrymapurl) {
-							findTask = new esri.tasks.FindTask(countrymapurl);
-							// create find parameters and define known values
-							findParams = new esri.tasks.FindParameters();
-							findParams.returnGeometry = true;
-							findParams.layerIds = [ 0, 1 ];
-							findParams.contains = false;
-							// TODO:Configure the search field in global
-							// settings
-							findParams.searchFields = [ "GEO_ID" ];
-							execute(location.geoId);
-							totallocations++;
-						} else {
-							if (location.exactlocation) {
-								var pt = new esri.geometry.Point(
-										location.exactlocation_lon,
-										location.exactlocation_lat,
-										new esri.SpatialReference({
-											"wkid" : 4326
-										}));
-							} else {
-								var pt = new esri.geometry.Point(location.lon,
-										location.lat,
-										new esri.SpatialReference({
-											"wkid" : 4326
-										}));
-							}
-							// Create a graphic point based on the x y
-							// coordinates wkid(Well-known ID) 4326 for
-							// GCS_WGS_1984 projection
-							var sms = new esri.symbol.SimpleMarkerSymbol()
-									.setStyle(
-											esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE)
-									.setColor(
-											new dojo.Color([ 255, 0, 0, 0.5 ]));
-							var attr = {
-								"Temp" : "Temporal Attribute"
-							};
-							var infoTemplate = new esri.InfoTemplate("");
-							var pgraphic = new esri.Graphic(pt, sms, attr,
-									infoTemplate);
+	dojo.forEach(activity.locations,function(location) {
+		// If the location has lat and lon not needs to find the
+		// point in the map
+		if (location.islocated == false && countrymapurl) {
+			findTask = new esri.tasks.FindTask(countrymapurl);
+			// create find parameters and define known values
+			findParams = new esri.tasks.FindParameters();
+			findParams.returnGeometry = true;
+			findParams.layerIds = [ 0, 1 ];
+			findParams.contains = false;
+			findParams.searchFields = [ "GEO_ID" ];
+			execute(location.geoId);
+			totallocations++;
+		}else{
+			if (location.exactlocation) {
+				var pt = new esri.geometry.Point(
+						location.exactlocation_lon,
+						location.exactlocation_lat,
+						new esri.SpatialReference({"wkid" : 4326}));
+			} else {
+				if(location.lon != '' && location.lat != '')
+					var pt = new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid" : 4326}));
+				else{
+					console.log(location.name +' '+ activity.activityname);
+					return true;
+				}
+			}
+			// Create a graphic point based on the x y
+			// coordinates wkid(Well-known ID) 4326 for
+			// GCS_WGS_1984 projection
+			var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([ 255, 0, 0, 0.5 ]));
+			var attr = {"Temp" : "Temporal Attribute"};
+			var infoTemplate = new esri.InfoTemplate("");
+			var pgraphic = new esri.Graphic(pt, sms, attr,infoTemplate);
 
-							dojo.forEach(activity.sectors, function(sector) {
-								primarysector = sector.sectorName;
-								primarysectorschema = sector.sectorScheme;
-								primarypercentage = sector.sectorPercentage;
-							});
+			dojo.forEach(activity.sectors, function(sector) {
+				primarysector = sector.sectorName;
+				primarysectorschema = sector.sectorScheme;
+				primarypercentage = sector.sectorPercentage;
+			});
 
-							var donorname;
-							var donorCode;
-							dojo.forEach(activity.donors, function(donor) {
-								if (!containsDonor(donor, donorArray)) {
-									donorArray.push(donor);
+			var donorname;
+			var donorCode;
+			dojo.forEach(activity.donors, function(donor) {
+				if (!containsDonor(donor, donorArray)) {
+					donorArray.push(donor);
 
-								}
-								if (donorname == null) {
-									donorname = donor.donorname;
-									donorCode = donor.donorCode;
-								} else {
-									donorname = donorname + ","
-											+ donor.donorname;
-								}
-							});
-							pgraphic
-									.setAttributes({
-										"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
-												+ activity.id
-												+ '~isPreview=1" target="_blank">'
-												+ activity.activityname
-												+ '</a>',
-										"Donors" : '<b>' + donorname + '</b>',
-										"Location" : '<b>' + location.name
-												+ '</b>',
-										"Primary Sector" : '<b>'
-												+ primarysector + '</b>',
-										"Total commitments" : '<b>'
-												+ activity.commitments + ' '
-												+ activity.currecycode + '</b>',
-										"Total disbursements" : '<b>'
-												+ activity.disbursements + ' '
-												+ activity.currecycode + '</b>',
-										"Commitments for this location" : '<b>'
-												+ location.commitments + ' '
-												+ activity.currecycode + '</b>',
-										"Disbursements for this location" : '<b>'
-												+ location.disbursements
-												+ ' '
-												+ activity.currecycode + '</b>',
-										"Code" : '' + donorCode + ''
-									});
-							location.isdisplayed = true;
-							features.push(pgraphic);
-						}
+				}
+				if (donorname == null) {
+					donorname = donor.donorname;
+					donorCode = donor.donorCode;
+				} else {
+					donorname = donorname + ","
+							+ donor.donorname;
+				}
+			});
+			pgraphic.setAttributes({
+						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+								+ activity.id
+								+ '~isPreview=1" target="_blank">'
+								+ activity.activityname
+								+ '</a>',
+						"Donors" : '<b>' + donorname + '</b>',
+						"Location" : '<b>' + location.name
+								+ '</b>',
+						"Primary Sector" : '<b>'
+								+ primarysector + '</b>',
+						"Total commitments" : '<b>'
+								+ activity.commitments + ' '
+								+ activity.currecycode + '</b>',
+						"Total disbursements" : '<b>'
+								+ activity.disbursements + ' '
+								+ activity.currecycode + '</b>',
+						"Commitments for this location" : '<b>'
+								+ location.commitments + ' '
+								+ activity.currecycode + '</b>',
+						"Disbursements for this location" : '<b>'
+								+ location.disbursements
+								+ ' '
+								+ activity.currecycode + '</b>',
+						"Code" : '' + donorCode + ''
 					});
+			location.isdisplayed = true;
+			features.push(pgraphic);
+		}
+	});
 }
 
 /**
@@ -675,53 +663,50 @@ function execute(searchText) {
  */
 function showResults(results) {
 	// find results return an array of findResult.
-	dojo
-			.forEach(
-					results,
-					function(result) {
-						var graphic = result.feature;
-						// console.log("Found : " + result.layerName + "," +
-						// result.foundFieldName + "," + result.value);
-						var point = graphic.geometry.getExtent().getCenter();
-						var sms = new esri.symbol.SimpleMarkerSymbol()
-								.setStyle(
-										esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE)
-								.setColor(new dojo.Color([ 255, 0, 0, 0.5 ]));
-						var attr = {
-							"Location" : result.value
-						};
-						var infoTemplate = new esri.InfoTemplate("");
-						var pgraphic = new esri.Graphic(point, sms, attr,
-								infoTemplate);
+	dojo.forEach(results,function(result) {
+		var graphic = result.feature;
+		// console.log("Found : " + result.layerName + "," +
+		// result.foundFieldName + "," + result.value);
+		var point = graphic.geometry.getExtent().getCenter();
+		var sms = new esri.symbol.SimpleMarkerSymbol()
+				.setStyle(
+						esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE)
+				.setColor(new dojo.Color([ 255, 0, 0, 0.5 ]));
+		var attr = {
+			"Location" : result.value
+		};
+		var infoTemplate = new esri.InfoTemplate("");
+		var pgraphic = new esri.Graphic(point, sms, attr,
+				infoTemplate);
 
-						// Iterate over the activities array and assign the
-						// attributes to each point
-						var exit = false;
-						for ( var int = 0; int < activitiesarray.length; int++) {
-							var activity = activitiesarray[int];
-							for ( var int2 = 0; int2 < activitiesarray[int].locations.length; int2++) {
-								var loc = activitiesarray[int].locations[int2];
-								if (loc.name == result.value
-										&& loc.isdisplayed != true) {
-									pgraphic.setAttributes({
-										"Activity" : activity.activityname,
-										"Location" : loc.name
-									});
-									loc.isdisplayed = true;
-									exit = true;
-								}
-							}
-							if (exit == true) {
-								break;
-							}
-						}
-						features.push(pgraphic);
-						totallocations--;
-
-						if (totallocations == 0) {
-							drawpoints();
-						}
+		// Iterate over the activities array and assign the
+		// attributes to each point
+		var exit = false;
+		for ( var int = 0; int < activitiesarray.length; int++) {
+			var activity = activitiesarray[int];
+			for ( var int2 = 0; int2 < activitiesarray[int].locations.length; int2++) {
+				var loc = activitiesarray[int].locations[int2];
+				if (loc.name == result.value
+						&& loc.isdisplayed != true) {
+					pgraphic.setAttributes({
+						"Activity" : activity.activityname,
+						"Location" : loc.name
 					});
+					loc.isdisplayed = true;
+					exit = true;
+				}
+			}
+			if (exit == true) {
+				break;
+			}
+		}
+		features.push(pgraphic);
+		totallocations--;
+
+		if (totallocations == 0) {
+			drawpoints();
+		}
+	});
 }
 
 /**
@@ -820,6 +805,7 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
+	showLoading();
 	implementationLevel[0].mapField = COUNTY;
 	implementationLevel[1].mapField = DISTRICT;
 	locations = new Array();

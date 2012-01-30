@@ -30,7 +30,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
-import au.com.bytecode.opencsv.CSVReader;
+//import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * @author jose
@@ -182,7 +182,7 @@ public class AddFundingDetail extends Action {
 		String error = "";
 		try {
 			InputStreamReader isr = new InputStreamReader(formFile.getInputStream());
-			CSVReader reader = new CSVReader(isr);
+			/*CSVReader reader = new CSVReader(isr);
 			
 			
 			String [] nextLine;
@@ -218,7 +218,7 @@ public class AddFundingDetail extends Action {
 						
 					}
 				}
-			}			
+			}			*/
 			eaForm.getFunding().setFundingDetails(fundingDetails);
 		} catch (NumberFormatException e)
 		{

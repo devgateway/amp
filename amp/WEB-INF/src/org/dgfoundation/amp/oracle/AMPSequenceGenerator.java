@@ -2,7 +2,6 @@ package org.dgfoundation.amp.oracle;
 
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.Dialect;
@@ -10,7 +9,6 @@ import org.hibernate.id.SequenceGenerator;
 import org.hibernate.type.Type;
 import org.hibernate.util.PropertiesHelper;
 
-import com.mysql.jdbc.CallableStatement;
 
 /**
  * 

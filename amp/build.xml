@@ -39,13 +39,13 @@
 	</condition>
 	
 	<!-- amp_clean specific -->
-	<condition property="jdbc.password" value="">
+	<condition property="jdbc.password" value="1234">
 	 	<not>
 	 		<isset property="jdbc.password"/>                              
 	 	</not>
 	 </condition>
 
-	<condition property="jdbc.user" value="root">
+	<condition property="jdbc.user" value="postgres">
 	 	<not>
 	 		<isset property="jdbc.user"/>                              
 	 	</not>
@@ -83,9 +83,8 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
-        <fileset dir="${external-lib}">
-          <include name="**/*.jar"/>
-        </fileset>
+    	<pathelement location="${classes}"/>
+    	<pathelement path="${compile_classpath}"/>
     </path>
 
     <!-- classpath for JAXB -->	
@@ -94,19 +93,18 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
+    	<pathelement path="${compile_classpath}"/>
     </path>
 
     <!-- classpath for Struts 1.1 -->
     <path id="run.classpath">
 		<pathelement location="${etc}"/>
 		<pathelement location="${classes}"/>
+    	<pathelement path="${compile_classpath}"/>
         <fileset dir="${lib}">
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
-        <fileset dir="${external-lib}">
-        	<include name="**/*.jar"/>
-         </fileset>
     </path>
 
 	<target name="get-jvm">
@@ -289,6 +287,8 @@
 
     <!-- Normal build of application -->
     <target name="compile" depends="prepare,resources,jaxb">
+    	<property name="cp" refid="compile.classpath"/>
+    	<echo message="Classpath = ${cp}"/>
         <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m" encoding="utf8">
             <classpath refid="compile.classpath"/>
         </javac>

@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.web.pages;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,8 +37,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 

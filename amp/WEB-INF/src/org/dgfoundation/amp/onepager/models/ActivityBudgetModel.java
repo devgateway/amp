@@ -6,13 +6,10 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import com.rc.retroweaver.runtime.Arrays;
-
-import groovy.model.ValueModel;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011

@@ -8,16 +8,15 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.digijava.module.aim.form.EditActivityForm.Survey;
 import org.digijava.module.aim.util.Output;
 
-import com.rc.retroweaver.runtime.Collections;
 
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 

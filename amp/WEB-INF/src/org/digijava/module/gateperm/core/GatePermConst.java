@@ -4,17 +4,17 @@
  */
 package org.digijava.module.gateperm.core;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 
-import com.rc.retroweaver.runtime.Collections;
 
 /**
  * GateConstants.java 

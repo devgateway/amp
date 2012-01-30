@@ -9,7 +9,7 @@
 	<info>FCKeditor taglib</info>
 	<tag>
 		<name>editor</name>
-		<tagclass>com.fredck.FCKeditor.tags.FCKeditorTag</tagclass>
+		<tagclass>net.fckeditor.tags.EditorTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
 			<name>id</name>

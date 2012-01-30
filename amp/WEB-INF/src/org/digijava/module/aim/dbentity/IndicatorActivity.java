@@ -1,13 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
 import org.digijava.module.aim.util.Output;
 
-import com.rc.retroweaver.runtime.Collections;
 
 /**
  * Project Indicator.

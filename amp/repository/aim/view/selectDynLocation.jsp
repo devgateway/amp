@@ -10,6 +10,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <script language="JavaScript">
 	function locationChanged( selectId ) {
@@ -30,6 +31,9 @@
 	function closeWindow() {
 		window.close();
 	}
+	
+	var enterBinder	= new EnterHitBinder('addLocationBtn');
+	
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -122,8 +126,7 @@
 												disabled="true"
 											</c:if> 
 											
-											type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
-											onclick="submitForm()">
+											type="button" value="<digi:trn>Add</digi:trn>" class="dr-menu" onclick="submitForm()" id="addLocationBtn">
 										</td>
 										<td>
 											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">

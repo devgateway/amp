@@ -21,6 +21,8 @@
 <!-- dynamic tooltip -->
 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
+
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <style type="text/css"> 
 	#demo .yui-nav li {
@@ -213,6 +215,8 @@ function saveAllSettings(){
 function setIndex(index){
 		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
 	}
+	
+var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 --></script>
 
 
@@ -747,7 +751,7 @@ function setIndex(index){
 				                              <td colspan="2" align="center" valign="bottom" >
 					                              	<html:hidden property="allValues"/>
 					                              	<html:hidden property="indexTab"/>
-					                              	<html:submit property="saveAll">
+					                              	<html:submit property="saveAll" styleId="gsSaveAllBtn">
 					                                    <digi:trn key="aim:saveAll">
 					                                    	Save All                                    
 					                                    </digi:trn>

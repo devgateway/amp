@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <%@page import="org.digijava.module.aim.action.SelectFilteredCurrencyRates"%>
 
@@ -33,6 +33,9 @@
 		myForm.action		= "/aim/selectFilteredRates.do?<%=SelectFilteredCurrencyRates.ACTION_PARAMETER %>=<%=SelectFilteredCurrencyRates.ACTION_ADD %>";
 		myForm.submit();
 	}
+	
+	var enterBinder	= new EnterHitBinder('addFilteredRateBtn');
+
 </script>
 
 
@@ -143,7 +146,7 @@
 														</td>
 													</tr>
 										</table>
-										<button type="button" onclick="return addFilteredRate();" class="buton" > <digi:trn>Add</digi:trn> </button>
+										<button type="button" onclick="return addFilteredRate();" class="buton" id="addFilteredRateBtn"> <digi:trn>Add</digi:trn> </button>
 								</td>
 								<td valign="top">
 											<table align=center cellPadding=0 cellSpacing=0 width="90%"

@@ -10,6 +10,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/currency.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <script language="JavaScript">
 
@@ -89,6 +90,8 @@ function submitPages(){
 	}
 		
 }
+
+var enterBinder	= new EnterHitBinder('currencyFilterBtn');
 </script>
 
 
@@ -167,7 +170,7 @@ function submitPages(){
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="applyFilter()"/>
+                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="applyFilter()" id="currencyFilterBtn"/>
 										</td>
 									</tr>
 								</table>

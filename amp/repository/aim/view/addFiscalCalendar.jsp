@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <script language="JavaScript">
 
@@ -99,6 +100,7 @@
 		return fixedTrim
 	}
 
+	var enterBinder	= new EnterHitBinder('addFiscalCalBtn');
 </script>
 
 <digi:instance property="aimAddFiscalCalForm" />
@@ -252,7 +254,7 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="45%" align="right">
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()" styleId="addFiscalCalBtn">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					</td>

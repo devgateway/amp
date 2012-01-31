@@ -16,6 +16,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style>
 .contentbox_border {
@@ -401,7 +402,7 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit><digi:trn>Save</digi:trn></html:submit>
+		<html:submit styleId="saveContent"><digi:trn>Save</digi:trn></html:submit>
 		</div>
       </td>
   </tr>
@@ -524,5 +525,6 @@ function validateUpload(){
 	return true;
 }
 
+var enterBinder	= new EnterHitBinder('saveContent');
 </script>
 </digi:form>

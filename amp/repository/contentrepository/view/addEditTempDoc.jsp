@@ -266,7 +266,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=editTemplateDocumentField" />
 		tempDocManagerForm.action = "<%=addEdiNewField%>&templateDocFieldTemporaryId="+fieldTempId+"&selFieldType="+fieldType;
 		tempDocManagerForm.submit();
-	}
+	}	
 
 </script>
 
@@ -344,7 +344,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 						<c:set var="trndel"><digi:trn>Remove Selected Fields</digi:trn></c:set>
 				    	<input type="button" style="font-family:verdana;font-size:11px;" name="delValBtn" value="${trndel}" onclick="deleteFields()">
 				    	&nbsp;
-						<html:submit onclick="return validateDoc()"><digi:trn>Save Template</digi:trn></html:submit>
+						<html:submit onclick="return validateDoc()" styleId="saveTemplateBtn"><digi:trn>Save Template</digi:trn></html:submit>
 				    	
 					</td>
 				</tr>

@@ -1622,7 +1622,7 @@
 						<table cellPadding="3">
 							<tr>
 								<td>
-									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
+									<input type="button" id="saveFundingBtn" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
 								</td>
 								<td>
 									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
@@ -1642,4 +1642,7 @@
 </digi:form>
 </body>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
+<script type="text/javascript">
+var enterBinder	= new EnterHitBinder('saveFundingBtn');
+</script>

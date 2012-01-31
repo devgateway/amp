@@ -539,13 +539,13 @@ div.fakefile2 input{
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="<digi:trn key="aim:DmfAdd">Add</digi:trn>" class="dr-menu" onclick="addDocument()">
+														<input type="button" value="<digi:trn>Add</digi:trn>" class="dr-menu" onclick="addDocument()" id="addDocBtn">
 													</td>
 													<td>
-														<input type="reset" value="<digi:trn key="aim:DmfClear">Clear</digi:trn>" class="dr-menu">													
+														<input type="reset" value="<digi:trn>Clear</digi:trn>" class="dr-menu">													
 													</td>
 													<td>
-														<input type="button" value="<digi:trn key="aim:DmfClose">Close</digi:trn>" class="dr-menu"
+														<input type="button" value="<digi:trn>Close</digi:trn>" class="dr-menu"
 														onclick="closeWindow()">
 													</td>
 												</tr>
@@ -563,10 +563,13 @@ div.fakefile2 input{
 </table>
 </digi:form>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <script type="text/javascript">
 	initFileUploads();
 	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
 			window.opener.location.replace(window.opener.location.href); 
 			window.close();
 		}
+	
+	var enterBinder	= new EnterHitBinder('addDocBtn');
 </script>

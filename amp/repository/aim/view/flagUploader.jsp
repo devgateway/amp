@@ -387,7 +387,7 @@ function deleteFlag(id) {
 
                       <tr>
 
-                        <td colspan="2" align="center">
+                        <td colspan="2" align="left">
 
                           <digi:errors/>
 

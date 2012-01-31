@@ -394,7 +394,7 @@ function initializeGlobalVariables(){
 																	title="${item.mainEntity.orgGrpName}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span><digi:trn>${item.mainEntity.orgGrpName}</digi:trn>
+															</c:if> <span>${item.mainEntity.orgGrpName}
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -460,7 +460,7 @@ function initializeGlobalVariables(){
 																	title="${item.mainEntity.name}"
 																	value="${item.mainEntity.id}"
 																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span> <digi:trn>${item.mainEntity.name}</digi:trn>
+															</c:if> <span>${item.mainEntity.name}
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"

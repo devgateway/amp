@@ -337,6 +337,8 @@
       <delete dir="${doc.path}"/>
       <delete dir="${gen-src}"/>
       <delete dir="${metainf}"/>    	
+   	  <delete dir="${webinf}/lib"/>
+      <mkdir dir="${webinf}/lib"/>
     </target>
                                  
 

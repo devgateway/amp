@@ -847,6 +847,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>WEB-INF/lib</outputDirectory>
+							<excludeScope>provided</excludeScope>
 						</configuration>
 					</execution>
 				</executions>

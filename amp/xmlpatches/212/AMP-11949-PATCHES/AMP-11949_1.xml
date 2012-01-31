@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11949</jira>
+    <keyword>Paris Indicators</keyword>
+    <author>Medea</author>
+    <description>add missing question types</description>
+    <trigger type="all">
+        <condition  type="tableEmpty">amp_ahsurvey_question_type</condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_ahsurvey_question_type (amp_type_id,"name", description) VALUES (1,'yes-no', 'for yes/no type question');
+                INSERT INTO amp_ahsurvey_question_type (amp_type_id,"name", description) VALUES (2,'calculated', 'for calculated type question');
+                INSERT INTO amp_ahsurvey_question_type (amp_type_id,"name", description) VALUES (3,'input', 'input from user');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

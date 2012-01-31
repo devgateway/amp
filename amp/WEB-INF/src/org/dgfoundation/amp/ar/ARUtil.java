@@ -11,6 +11,7 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.cell.DateCell;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -521,4 +522,30 @@ public final class ARUtil {
 	private static void cleanTextCell(TextCell cell) {
 		cell.setValue(DataExchangeUtils.convertHTMLtoChar((String)cell.getValue()));
 	}
+	
+	public static double retrievePercentageFromCell ( MetaTextCell mtc ) throws Exception {
+		MetaInfo<Double> mInfo	= mtc.getMetaInfo(ArConstants.PERCENTAGE);
+		if ( mInfo != null && mInfo.getValue() > 0) {
+			Double percentage 		= mInfo.getValue();
+			return percentage;
+		}
+		throw new Exception("No percentage found it MetaTextCell " + mtc);
+	}
+	
+	public static double retrieveParentPercetage( Long ownerId, Cell splitterCell ) throws Exception {
+		Column col				= splitterCell.getColumn();
+		Iterator<TextCell> iter	= col.getItems().iterator();
+		while (iter.hasNext()) {
+			TextCell	textCell		= iter.next();
+			if ( textCell instanceof MetaTextCell ) {
+				MetaTextCell metaTextCell 	= (MetaTextCell) textCell;
+				if ( splitterCell.getValue().equals(metaTextCell.getValue()) && ownerId.equals(metaTextCell.getOwnerId() ) ) {
+					Double percentage		= retrievePercentageFromCell(metaTextCell);
+					return percentage;
+				}
+			}
+		}
+		return 100.0 ;
+	}
+	
 }

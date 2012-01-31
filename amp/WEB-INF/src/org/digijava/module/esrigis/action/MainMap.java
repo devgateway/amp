@@ -32,7 +32,9 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
+import org.digijava.module.esrigis.form.MainMapForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -48,6 +50,14 @@ public class MainMap extends Action{
 			filter = null;
 		}
 		
+		
+		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
+		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
+			AmpMapConfig map = (AmpMapConfig) iterator.next();
+			if (map.getMaptype() == 5){
+				dataDispatcherForm.setApiurl(map.getMapurl());
+			}
+		}
 		
 		if (filter == null){
 			filter = new MapFilter();

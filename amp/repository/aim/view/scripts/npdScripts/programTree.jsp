@@ -288,6 +288,7 @@ function setCurProgData(progId,nodeId){
 				//prepare node data
 				var prgID=prg.getAttribute("id");
 				var prgName=prg.getAttribute("name");
+                                prgName=prgName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 				var prgURL="javascript:browseProgram('"+prgID+"')";
 				var prgParent=target;
 				//create tree view node object
@@ -339,7 +340,7 @@ function setCurProgData(progId,nodeId){
 				//}
 				//result+=' >';
 				var name = indics[i].getAttribute('name');
-				result+='&gt;&nbsp;'+name+'</td>';//<td>&nbsp;&nbsp;</td>';
+				result+='&gt;&nbsp;'+name.replace(/</g, "&lt;").replace(/>/g, "&gt;")+'</td>';//<td>&nbsp;&nbsp;</td>';
 				result+='</tr>';
 			}
 			result+='</table>';
@@ -513,17 +514,17 @@ function getIdFromHref( href ) {
 				background, objectives, outputs, beneficiaries, environmentConsiderations) {
 			var panelBody =	"";
 			panelBody += '<table border="0">';
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramName'>Program Name</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ programName +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Description'>Description</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ description +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:LeadAgency'>Lead Agency</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ leadAgency +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramCode'>Program Code</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ programCode +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramType'>Program Type</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ programType +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:TargetGroups'>Target Groups</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ targetGroups +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Background'>Background</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ background +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Objectives'>Objectives</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ objectives +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Outputs'>Outputs</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ outputs +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramName'>Program Name</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+  programName.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Description'>Description</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ description.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:LeadAgency'>Lead Agency</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ leadAgency.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramCode'>Program Code</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ programCode.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:ProgramType'>Program Type</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ programType.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:TargetGroups'>Target Groups</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ targetGroups.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Background'>Background</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ background.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Objectives'>Objectives</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ objectives.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Outputs'>Outputs</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ outputs.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
 			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Beneficiaries'>Beneficiaries</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ beneficiaries +"</td></tr>";
-			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Environment'>Environment Considerations</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ environmentConsiderations +"</td></tr>";
+			panelBody += "<tr><td align='left' class='l_sm'><b><digi:trn key='aim:NPD:Environment'>Environment Considerations</digi:trn>:</b>&nbsp;</td><td class='l_sm'>"+ environmentConsiderations.replace(/</g, "&lt;").replace(/>/g, "&gt;") +"</td></tr>";
 			panelBody += '</table>';
 
 			themeArray[pid]	= panelBody;

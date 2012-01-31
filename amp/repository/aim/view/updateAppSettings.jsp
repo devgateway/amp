@@ -311,7 +311,7 @@ function loadShareRules(){
 										</html:option>
 										<c:forEach var="reports" items="${aimUpdateAppSettingsForm.reports}">
 											<html:option value="${reports.ampReportId}">
-												${reports.name}
+												<c:out value="${reports.name}"/>
 											</html:option>
 										</c:forEach>
 									</html:select>

@@ -94,6 +94,12 @@
 <field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
 <feature:display name="Map Options" module="Map Module"></feature:display>
 <field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
+<feature:display name="Use Indicators Maps" module="Map Module"></feature:display>
+<feature:display name="Add activity" module="Map Module"></feature:display>
+<feature:display name="Search  Structures" module="Map Module"></feature:display>
+<feature:display name="Structures" module="Map Module"></feature:display>
+<feature:display name="Highlight regions" module="Map Module"></feature:display>
+<feature:display name="Highlight Zones" module="Map Module"></feature:display>
 
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 

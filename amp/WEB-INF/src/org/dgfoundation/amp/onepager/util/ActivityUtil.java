@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -169,7 +170,7 @@ public class ActivityUtil {
 			
 			saveResources(a); 
 			saveEditors(session); 
-			saveComments(a, session); 
+			saveComments(a, session,draft); 
 			
 			updateComponentFunding(a, session);
 			
@@ -373,7 +374,7 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void saveComments(AmpActivityVersion a, Session session) {
+	private static void saveComments(AmpActivityVersion a, Session session, boolean draft) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		
@@ -392,7 +393,7 @@ public class ActivityUtil {
 			Iterator<AmpComments> ni = newComm.iterator();
 			while (ni.hasNext()) {
 				AmpComments tComm = (AmpComments) ni.next();
-				if (ActivityVersionUtil.isVersioningEnabled()){
+				if (ActivityVersionUtil.isVersioningEnabled() && !draft){
 					try {
 						tComm = (AmpComments) tComm.prepareMerge(a);
 					} catch (CloneNotSupportedException e) {
@@ -673,7 +674,7 @@ public class ActivityUtil {
 
                                 }
                             }
-                            session.update(ampContact);    			    			
+                            session.update(ampContact);
 	    		}else{
                             if (contact.getProperties() != null) {
                                 for (AmpContactProperty formProperty : contact.getProperties()) {
@@ -688,24 +689,29 @@ public class ActivityUtil {
 	    		
 	    		//save cont. organizations
 	    		if(contact.getOrganizationContacts()!=null){
+                            if(ampContact!=null){
 	    			for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
-						if(ampContact!=null){
-							orgCont.setContact(ampContact);
-						}else{
-							orgCont.setContact(contact);
-						}
 						AmpOrganisationContact newOrgCont=new AmpOrganisationContact();
-						AmpOrganisation organization =(AmpOrganisation)session.get(AmpOrganisation.class, orgCont.getOrganisation().getAmpOrgId());
+                                                Long ampOrgId = orgCont.getOrganisation().getAmpOrgId();
+                                               
+						AmpOrganisation organization =(AmpOrganisation)session.get(AmpOrganisation.class, ampOrgId);
 						if(organization.getOrganizationContacts()==null){
 							organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
 						}
 						newOrgCont.setOrganisation(organization);
-						newOrgCont.setContact(orgCont.getContact());
+						newOrgCont.setContact(ampContact);
 						newOrgCont.setPrimaryContact(orgCont.getPrimaryContact());
 						organization.getOrganizationContacts().add(newOrgCont);
-                        session.save(newOrgCont);
+                                    //session.save(newOrgCont);
+                                                if(ampContact.getOrganizationContacts()==null){
+                                                    ampContact.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+                                                }
+                                                ampContact.getOrganizationContacts().add(newOrgCont);
 						session.update(organization);
+                                                
 					}
+                                session.update(ampContact);
+                  }
 	    		}
 	    		if(activityContact.getId() != null){
 	    			activityContact =(AmpActivityContact) session.merge(activityContact);

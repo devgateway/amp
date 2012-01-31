@@ -192,9 +192,7 @@ public class ColumnReportData extends ReportData {
 			dest.addReport(crd);
 
 			int locationLevel		= ArConstants.LOCATION_COLUMNS.indexOf(cat.getColumn().getName().trim() );
-			int parentLocationLevel	= -1;
-			if ( this.getSplitterCell() != null )
-				parentLocationLevel		= ArConstants.LOCATION_COLUMNS.indexOf( this.getSplitterCell().getColumn().getName().trim() );
+			
 			
 			// construct the Set of ids that match the filter:
 			Set ids = new TreeSet();
@@ -214,22 +212,21 @@ public class ColumnReportData extends ReportData {
 					}
 					/* Adding region percentages for each activity (for problem 2) */
 					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
-					if ( locationLevel >= 0 && (parentLocationLevel!=locationLevel-1  || parentLocationLevel==-1) &&
+					if ( locationLevel >= 0 &&  
 							filterObj.getLocationSelected() == null &&  
 							element instanceof MetaTextCell && !summedValuesPerActivity.contains(element.getValue()) ) {
-						MetaInfo<Double> mInfo	= ((MetaTextCell)element).getMetaInfo(ArConstants.PERCENTAGE);
-						if ( mInfo != null && mInfo.getValue() > 0) {
-//							summedCellValues.add( id, element.getValue() );
-							
+						try {
 							summedValuesPerActivity.add(element.getValue() );
 							
-							Double percentage 		= mInfo.getValue();
+							Double percentage 		= ARUtil.retrievePercentageFromCell( (MetaTextCell)element );
 							Double tempPerc			= percentagesMap.get(id);
 							percentagesMap.put(id, (tempPerc!=null?tempPerc:0.0) + percentage );
+						} catch (Exception e) {
+							logger.error(e);
+							e.printStackTrace();
 						}
+						
 					}
-					
-					
 					
 					/* We remove the ids that appear in a category */
 					activitiesInColReport.remove( id );
@@ -251,9 +248,17 @@ public class ColumnReportData extends ReportData {
 			Iterator<Entry<Long, Double>> iter	= percentagesMap.entrySet().iterator();
 			while ( iter.hasNext() ) {
 				Entry<Long, Double> e		= iter.next();
+				Double parentPercentage		= 100.0;
+				if ( this.getSplitterCell() != null ) {
+					try {
+						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
 				if ( e.getValue() < 100.0 ) {
 					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol);
-					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, 100.0-e.getValue() );
+					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, parentPercentage-e.getValue() );
 					metaFakeCell	= (MetaTextCell)fakeCell;
 					( (CellColumn)keyCol ).addCell(fakeCell);
 				}

@@ -196,15 +196,15 @@ public class UpdateTeamActivities extends Action {
 			
 			Comparator acronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					AmpActivity r1 = (AmpActivity) o1;
-					AmpActivity r2 = (AmpActivity) o2;
+					AmpActivityVersion r1 = (AmpActivityVersion) o1;
+					AmpActivityVersion r2 = (AmpActivityVersion) o2;
 			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
 				}
 			};
 			Comparator racronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					AmpActivity r1 = (AmpActivity) o1;
-					AmpActivity r2 = (AmpActivity) o2;
+					AmpActivityVersion r1 = (AmpActivityVersion) o1;
+					AmpActivityVersion r2 = (AmpActivityVersion) o2;
 					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
 				}
 			};

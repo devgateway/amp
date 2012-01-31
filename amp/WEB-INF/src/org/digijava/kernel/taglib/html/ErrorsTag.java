@@ -24,6 +24,7 @@ package org.digijava.kernel.taglib.html;
 
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import javax.servlet.ServletContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -38,6 +39,8 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -165,6 +168,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
         ActionMessages newErrors = null;
 //        Message message;
         String newKey = null;
+        StringBuilder result=new StringBuilder();
 
         try {
             errors = TagUtils.getInstance().getActionMessages(pageContext, name);
@@ -184,30 +188,53 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             while (iter.hasNext()) {
                 ActionMessage item = (ActionMessage)iter.next();
 
-                newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
-                logger.debug("New key for error is " + newKey);
-                newErrors.add(property, new ActionMessage(newKey, item.getValues()));
+                /*newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
+                logger.debug("New key for error is " + newKey);*/
+                
                 
                 //Add the new string id if needed.
                 try {
 	                Message msg = new Message();
-	                msg.setKey(item.getKey().trim().toLowerCase());
-	                msg.setMessage(bundleApplication.getString(item.getKey()));
+                        ServletContext context = pageContext.getServletContext();
+	                //msg.setKey(item.getKey().trim().toLowerCase());
+                        String body=bundleApplication.getString(item.getKey());
+                        msg.setKey(TranslatorWorker.generateTrnKey(body));
+	                msg.setMessage(body);
+                        String errorMsg=body;
 	                msg.setSiteId(site.getId().toString());
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
+                        Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString());
+                        if (!msg.getLocale().equals("en")) {
+                        Message messageEn = TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), "en", site.getId().toString());
+                        if (messageEn == null) {
+                            messageEn = new Message();
+                            messageEn.setKey(msg.getKey());
+                            messageEn.setMessage(body);
+                            messageEn.setSiteId(site.getId().toString());
+                            messageEn.setLocale("en");
+                            TranslatorWorker.getInstance(msg.getKey()).save(messageEn);
+                            LuceneWorker.addItemToIndex(messageEn, context, "en");
+
+                        }
+                    }
+	                if (message == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
+      					LuceneWorker.addItemToIndex(msg, context,msg.getLocale());				
 		                }
 	                }
+                        else{
+                            errorMsg=message.getMessage();
+                        }
+                  newErrors.add((property==null)?Globals.MESSAGE_KEY:property, new ActionMessage(errorMsg,false));
                 }catch(Exception e){
                 	logger.error(e);
                 }
             }
 
             if( !newErrors.isEmpty() )
-                request.setAttribute(Globals.MESSAGE_KEY, newErrors);
+                request.setAttribute(Globals.ERROR_KEY, newErrors);
         }
     }
 

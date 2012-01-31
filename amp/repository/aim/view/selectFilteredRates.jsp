@@ -44,17 +44,10 @@
 
 <digi:form action="/selectFilteredRates.do">
 
-
-
-
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
-<tr><td>
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp"  />
-<!-- End of Logo -->
-</td></tr>
-<tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table>
+	<tr>
+		<td>
+			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=1000>
@@ -75,10 +68,12 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td colspan="2" height=25 align="center" width=1000 bgcolor="#c7d4db"><span class=subtitle-blue> 
-						<b><digi:trn>
-							Select Filtered Currency Rates
-						</digi:trn></b></span>
+					<td colspan="2" height=25 align="center" width="100%" bgcolor="#c7d4db">
+						<span class=subtitle-blue> 
+							<b><digi:trn>
+								Select Filtered Currency Rates
+							</digi:trn></b>
+						</span>
 						<digi:errors/>
 					</td>
 				</tr>
@@ -86,23 +81,26 @@
 					<td noWrap width=100% vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" align="left">
 							<tr>
-								<td valign="top" width=60% >
-											<logic:notEmpty name="myForm" property="existingFilteredRates">
-												<table cellSpacing="1" cellPadding="4"
-														align="left" width="100%" class="inside">
-														<thead>
+								<td valign="top" width="500px">
+									<logic:notEmpty name="myForm" property="existingFilteredRates">
+									<table width="100%">
+										<tr>
+											<td>
+												
+										<table cellSpacing="1" cellPadding="4" align="left" width="100%" class="inside">
+											<thead>
 															<tr bgcolor="eeeeee">
-																<td align="left" class="inside" width="20%">
+																<td align="left" class="inside" width="10px">
 																	<b><digi:trn>
 																		Selection
 																	</digi:trn></b>
 																</td>
-																<td align="left" class="inside" width="40%">
+																<td align="left" class="inside" >
 																	<b><digi:trn>
 																		To Currency
 																	</digi:trn></b>
 																</td>
-																<td align="left" class="inside" width="40%">
+																<td align="left" class="inside">
 																	<b><digi:trn>
 																		From Currency
 																	</digi:trn></b>
@@ -117,24 +115,35 @@
 															</tr>
 														</logic:iterate>
 												</table>
+												
+													
+											</td>
+										</tr>
+										<tr>
+											<td>
 												<c:set var="trnBtn">
 													<digi:trn> Remove Selected Filtered Rates </digi:trn>
 												</c:set>
 												<input class="buttonx" type="button" onclick="return deleteSelection();" value="${trnBtn}" />
-											</logic:notEmpty>
+											</td>
+										</tr>
+									</table>
+									</logic:notEmpty>
 								</td>
-								<td valign="top" width=20% >
-									<table cellSpacing="1" cellPadding="4"
-										 align="left" width="100%" class="inside">
-										<thead>
-											<tr bgcolor="eeeeee">
-												<td align="left" class="inside" width="100%" colspan="2">
-													<b><digi:trn>
-														Add New Filtered Rate
-													</digi:trn></b>
-												</td>
-											</tr>
-										</thead>
+								<td valign="top" width="300px">
+									<table width="100%">
+										<tr>
+											<td width="100%">
+												<table cellSpacing="1" cellPadding="4" align="left" width="100%" class="inside">
+											<thead>
+												<tr bgcolor="eeeeee">
+													<td align="left" class="inside" width="100%" colspan="2">
+														<b><digi:trn>
+															Add New Filtered Rate
+														</digi:trn></b>
+													</td>
+												</tr>
+											</thead>
 											<tr> 
 												<td align="left" class="inside"><digi:trn>To Rate</digi:trn>:</td> 
 												<td align="center" class="inside">
@@ -152,30 +161,43 @@
 												</td>
 											</tr>
 										</table>
-										<c:set var="trnAddBtn">
-											<digi:trn>Add</digi:trn>
-										</c:set>
-										<input class="buttonx" type="button" onclick="return addFilteredRate();" value="${trnAddBtn}" />
+											</td>
+										</tr>
+										<tr>
+											<td width="100%">
+												<c:set var="trnAddBtn">
+													<digi:trn>Add</digi:trn>
+												</c:set>
+												<input class="buttonx" type="button" onclick="return addFilteredRate();" value="${trnAddBtn}" />	
+											</td>
+										</tr>
+									</table>
+								
+										
 								</td>
-								<td valign="top" width=20% >
-											<table align=center cellPadding=0 cellSpacing=0 width="90%"
-												border=0>
-												<tr>
-													<td><!-- Other Links -->
-													<table cellPadding=0 cellSpacing=0 width=100>
-														<tr>
-															<td bgColor=#c9c9c7 class=box-title>
-															<b style="font-size: 12px; padding-left: 5px;"><digi:trn
-																key="aim:otherLinks">
-															Other links
-															</digi:trn></b>
-															</td>
-															<td background="module/aim/images/corner-r.gif" height="17"
-																width=17>&nbsp;</td>
-														</tr>
-													</table>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</td>
+
+<!-- other links -->
+<td>
+			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" >
+				<thead>
+												<tr bgcolor="eeeeee">
+													<td align="left" class="inside" width="100%" colspan="2">
+														<b><digi:trn>
+															Other Links
+														</digi:trn></b>
 													</td>
 												</tr>
+											</thead>
+												
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
 													<table cellPadding=5 cellSpacing=1 width="100%" class="inside">
@@ -214,18 +236,10 @@
 													</td>
 												</tr>
 											</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
 		</td>
 	</tr>
-</table>
-</td></tr>
-</table>
-</digi:form>
-
+</table> 
+ 
+ </digi:form>
 
 

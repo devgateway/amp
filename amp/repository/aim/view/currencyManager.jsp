@@ -292,41 +292,29 @@ function exportXSL(){
 																	
 																	<tr class="rowAlternate">
 																		<%}index++;%>
-																		<td align="left" width="3" class="inside"><c:if
-																				test="${curr.activeFlag == 1}">
+																		<td align="left" width="3" class="inside">
+																			<c:if test="${curr.activeFlag == 1}">
 																				<c:set var="translation">
-																					<digi:trn
-																						key="aim:clickHereToMakeTheCurrencyInactive">
-																	Click here to make the currency inactive
-																	</digi:trn>
+																					<digi:trn>Click here to make the currency inactive</digi:trn>
 																				</c:set>
-																				<a
-																					href="javascript:makeInactive('${curr.currencyCode}')"
-																					title="${translation}"> <digi:img
-																						src="module/aim/images/bullet_green.gif"
-																						border="0" />
+																				<a	href="javascript:makeInactive('${curr.currencyCode}')" title="${translation}">
+																					<digi:img src="module/aim/images/bullet_green.gif" border="0" />
 																				</a>
 																				<span style="display: none"><digi:trn>Active currencies</digi:trn>
 																				</span>
-																			</c:if> <c:if test="${curr.activeFlag != 1}">
+																			</c:if>
+																			<c:if test="${curr.activeFlag != 1}">
 																				<c:set var="translation">
-																					<digi:trn
-																						key="aim:clickHereToMakeTheCurrencyActive">
-																	Click here to make the currency Active
-																</digi:trn>
+																					<digi:trn>Click here to make the currency Active</digi:trn>
 																				</c:set>
-																				<a
-																					href="javascript:makeActive('${curr.currencyCode}')"
-																					title="${translation}"> <digi:img
-																						src="module/aim/images/bullet_grey.gif" border="0" />
+																				<a href="javascript:makeActive('${curr.currencyCode}')" title="${translation}">
+																					<digi:img src="module/aim/images/bullet_grey.gif" border="0" />
 																				</a>
-																				<span style="display: none"><digi:trn>Inactive currencies</digi:trn>
-																				</span>
-																			</c:if></td>
-																		<td align="left" class="inside"><a
-																			href="javascript:editCurrency('${curr.currencyCode}')">${curr.currencyCode}
-<!--																				
-																		</a>
+																				<span style="display: none"><digi:trn>Inactive currencies</digi:trn></span>
+																			</c:if>
+																		</td>
+																		<td align="left" class="inside">
+																			<a href="javascript:editCurrency('${curr.currencyCode}')">${curr.currencyCode}</a>
 																		</td>
 																		<td align="left" class="inside"><a
 																			href="javascript:editCurrency('${curr.currencyCode}')">
@@ -339,8 +327,7 @@ function exportXSL(){
 																		<!--  tds marked with class "ignore" will be ignored during export -->
 																		<td align="right" class="inside ignore"><a
 																			href="javascript:deleteCurrency('${curr.currencyCode}')">
-																				<digi:img src="../ampTemplate/images/deleteIcon.gif"
-																					border="0" alt="Delete this Currency" /> </a>
+																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this Currency" /> </a>
 																		</td>
 																	</tr>
 																</c:forEach>

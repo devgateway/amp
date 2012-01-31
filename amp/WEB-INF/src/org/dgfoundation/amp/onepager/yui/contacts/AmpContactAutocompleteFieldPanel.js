@@ -32,6 +32,9 @@ function hidePanel() {
 		informationPanel.hide();
 	}
 }
+function convertResult(str){
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
 
 
 YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache) {
@@ -52,10 +55,10 @@ YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containe
     	var escapedResultData=pResultData[1];
     	
     	if(pQuery==""){
-    		formatedResult=ac_left_padding(pResultMatch,escapedResultData);
+    		formatedResult=ac_left_padding(convertResult(pResultMatch),escapedResultData);
     	}
     	else{
-    		formatedResult=ac_left_padding(pResultMatch.replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
+    		formatedResult=ac_left_padding(convertResult(pResultMatch).replace( new RegExp( "(" + ac_preg_quote( pQuery ) + ")" , 'gi' ), "<b><u>$1</u></b>" ),escapedResultData);
     	}
     	
     	if(pResultData[2]!=''){

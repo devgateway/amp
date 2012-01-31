@@ -12,6 +12,7 @@
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<digi:instance property="datadispatcherform" />
 <html>
   
   <head>
@@ -23,9 +24,9 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <title>
     </title>
-    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/soria/soria.css">
-    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/Grid.css"> 
-    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/SoriaGrid.css"> 
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/soria/soria.css">
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/Grid.css"> 
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/SoriaGrid.css"> 
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/mapstyles.css" type="text/css" rel="stylesheet" />
    	
@@ -36,10 +37,10 @@
       };
     </script>
     <!-- Map Scripts -->
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
+    <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=2.2"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-min.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
@@ -51,7 +52,7 @@
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
    	
    	 <style type="text/css">
-      @import "http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css";
+      @import "<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css";
       .zoominIcon { background:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomin.png) no-repeat right; width:16px; height:16px;}
       .zoomoutIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomout.png); width:16px; height:16px; }
       .zoomfullextIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_fullextent.png); width:16px; height:16px; }
@@ -121,12 +122,88 @@
 	});
 	
 	var currentFormat = "<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %>";
+	
+	function translate(text) {
+        
+		if(text == "Commitments") {
+            value = "<digi:trn>Commitments</digi:trn>";
+            return value;
+         }
+        if(text == "Disbursements") {
+            value = "<digi:trn>Disbursements</digi:trn>";
+            return value;
+         }
+        if(text == "Expenditures") {
+            value = "<digi:trn>Expenditures</digi:trn>";
+            return value;
+         }
+        if(text == "Point color reference") {
+            value = "<digi:trn>Point color reference</digi:trn>";
+            return value;
+         }
+        if(text == "Activity Details") {
+            value = "<digi:trn>Activity Details</digi:trn>";
+            return value;
+         }
+        if(text == "Activity") {
+            value = "<digi:trn>Activity</digi:trn>";
+            return value;
+         }
+        if(text == "Donors") {
+            value = "<digi:trn>Donors</digi:trn>";
+            return value;
+         }
+        if(text == "Primary Sector") {
+            value = "<digi:trn>Primary Sector</digi:trn>";
+            return value;
+         }
+        if(text == "Location") {
+            value = "<digi:trn>Location</digi:trn>";
+            return value;
+         }
+        if(text == "Total commitments") {
+            value = "<digi:trn>Total commitments</digi:trn>";
+            return value;
+         }
+        if(text == "Total disbursements") {
+            value = "<digi:trn>Total disbursements</digi:trn>";
+            return value;
+         }
+        if(text == "Commitments for this location") {
+            value = "<digi:trn>Commitments for this location</digi:trn>";
+            return value;
+         }
+        if(text == "Disbursements for this location") {
+            value = "<digi:trn>Disbursements for this location</digi:trn>";
+            return value;
+         }
+        if(text == "Region") {
+            value = "<digi:trn>Region</digi:trn>";
+            return value;
+         }
+        if(text == "zone") {
+            value = "<digi:trn>zone</digi:trn>";
+            return value;
+         }
+        if(text == "Funding") {
+            value = "<digi:trn>Funding</digi:trn>";
+            return value;
+         }
+        if(text == "Showing commitments for Region") {
+            value = "<digi:trn>Showing commitments for Region</digi:trn>";
+            return value;
+         }
+        if(text == "Showing commitments for Region") {
+            value = "<digi:trn>Showing commitments for Zone</digi:trn>";
+            return value;
+         }
+        return text;
+    	}
+	
 </script>
 
  	<!-- Filter Styles -->
-   	<link rel="stylesheet" href="css_2/visualization.css" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="js_2/yui/tabview/assets/skins/sam/tabview.css">
-	<digi:ref href="css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
+   	<digi:ref href="css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
 	
 	<!-- Filter Scripts-->
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
@@ -182,16 +259,28 @@
 	            </div>
 	            <div id="divmenucontent">
 		            <ul>
-		              	<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
-						<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
-						<li id="hlightz" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
-						<li id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
+		            	<feature:display name="Search  Structures" module="Map Module">
+		              		<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
+		              	</feature:display>
+		              	<feature:display name="Highlight regions" module="Map Module">
+							<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
+						</feature:display>
+						<feature:display name="Highlight Zones" module="Map Module">
+							<li id="hlightz" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
+						</feature:display>
+						<feature:display name="Add activity" module="Map Module">
+							<li id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
+						</feature:display>
 						<!-- 
 						<li onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></li>
 						-->
-						<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
-						<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
-						<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+						<feature:display name="Structures" module="Map Module">
+							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+						</feature:display>
+						<feature:display name="Use Indicators Maps" module="Map Module">
+							<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
+							<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+						</feature:display>
 						<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
 				     </ul>
 			     </div>
@@ -202,7 +291,7 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		<div class='legendHeader' id="fakecolor">Color reference<br/><hr/></div>
- 		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
+ 		<div id="pointsLegend" class="legendContent" style="left:15px;width: auto;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
        
@@ -240,9 +329,9 @@
         	</table>
         </div>
         <!-- Data Source -->
-        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;"> 
+        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;overflow-y: scroll;"> 
         	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
-        	<div class="legendHeader">Data Source<br/><hr/></div>
+        	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
         	<table id="sourcecontent" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
         		<tbody>
 					<tr>

@@ -248,8 +248,9 @@ public class CurrencyUtil {
 		String qryStr = null;
 
 		try {
-			session = PersistenceManager.getSession();
-//beginTransaction();
+			//session = PersistenceManager.getSession();
+            session = PersistenceManager.getCurrentSession();
+            tx = session.beginTransaction();
 
 			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
@@ -272,7 +273,7 @@ public class CurrencyUtil {
 				session.save(cRate);
 			}
 
-			//tx.commit();
+			tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRate");
 			e.printStackTrace(System.out);
@@ -286,7 +287,8 @@ public class CurrencyUtil {
 		} finally {
 			if (session != null) {
 				try {
-					PersistenceManager.releaseSession(session);
+					//PersistenceManager.releaseSession(session);
+                    if(session.isOpen()) session.close();
 				} catch (Exception rsf) {
 					logger.error("Release session failed");
 				}

@@ -6,7 +6,7 @@
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
 			<!-- Limit the activities showed to those belonging to the workspace selected  -->
 			<Table name="cached_amp_activity">
-				<SQL dialect="mysql"><![CDATA[cached_amp_activity.amp_activity_id IN (@donorquery)]]> </SQL>
+				<SQL dialect="postgres"><![CDATA[cached_amp_activity.amp_activity_id IN (@donorquery)]]> </SQL>
 			</Table>
 			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
 			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
@@ -15,7 +15,7 @@
 	<Dimension name="Pledges Dates" type="TimeDimension">
 		  <Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Pledges_Dates#" primaryKey="amp_fund_detail_id" caption="#Pledges_Dates#">
 			   <View alias="v_pledges_date_hierarchy">
-          <SQL dialect="mysql">
+          <SQL dialect="postgres">
             <![CDATA[select * from v_pledges_date_hierarchy]]>
           </SQL>
         </View>
@@ -23,7 +23,7 @@
 			 <Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
 			 <Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric">
 			 <NameExpression>
-					<SQL dialect="mysql">
+					<SQL dialect="postgres">
 						case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN '#january#'
 						WHEN month_name='february' THEN '#february#'
 						WHEN month_name='march' THEN '#march#'
@@ -49,9 +49,9 @@
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
 				<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric">
 				<NameExpression>
-					<SQL dialect="mysql">
+					<SQL dialect="postgres">
 						case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN '#january#'
-						WHEN month_name='february' THEN '#february#'
+						WHEN month_name='february' THEN '#february#' 
 						WHEN month_name='march' THEN '#march#'
 						WHEN month_name='april' THEN '#april#'
 						WHEN month_name='may' THEN '#may#'
@@ -77,8 +77,8 @@
 	</Dimension>
 	
 	<Cube name="Donor Funding">
-		<Table name="cached_v_donor_funding">
-			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
+		<Table name="cached_v_m_donor_funding">
+			<SQL dialect="postgres"><![CDATA[cached_v_m_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
 		<Dimension name="Donor">
 			<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#"
@@ -86,8 +86,8 @@
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorName" column="donor_name">
 					<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(donor_name,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(donor_name,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -98,8 +98,8 @@
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorGroup" column="org_grp_name">
 					<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(org_grp_name,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(org_grp_name,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -110,8 +110,8 @@
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorType" column="donor_type_name">
 				<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(donor_type_name,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(donor_type_name,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -122,8 +122,8 @@
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="Financing Instrument" column="financing_instrument_name">
 					<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(financing_instrument_name,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(financing_instrument_name,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -134,8 +134,8 @@
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="Terms of Assistance" column="terms_assist_name">
 					<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(terms_assist_name,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(terms_assist_name,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -143,11 +143,11 @@
 		</Dimension>
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors" primaryKey="amp_activity_id" caption="#Primary_Sector#">
-				<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
+				<Level name="Primary Sector Scheme" column="p_amp_sec_scheme_name"/>
 				<Level name="Primary Sector" column="p_sectorname">
 				<NameExpression>
-						<SQL dialect="mysql">
-							IFNULL(p_sectorname,'#No_Data#')
+						<SQL dialect="postgres">
+							COALESCE(p_sectorname,'#No_Data#')
 						</SQL>
 					</NameExpression>
 				</Level>
@@ -157,8 +157,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
 			<Level name="Region" column="region">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(region,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(region,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -168,8 +168,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
 			<Level name="Primary Program" column="primary_program_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(primary_program_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(primary_program_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -179,8 +179,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secondary_Program#">
 			<Level name="Secondary Program" column="secondary_program_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(secondary_program_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(secondary_program_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -190,8 +190,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#National_Program#">
 			<Level name="National Program" column="national_program_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(national_program_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(national_program_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -201,8 +201,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
 			<Level name="sub-sector" column="p_sub_sector_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(p_sub_sector_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(p_sub_sector_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -214,22 +214,22 @@
 		
 		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=0
-					and cached_v_donor_funding.adjustment_type=1 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=0
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Actual Disbursements" aggregator="sum" caption="#Actual_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=1
-					and cached_v_donor_funding.adjustment_type=1 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=1
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -237,44 +237,44 @@
 		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter" />
 		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=2
-					and cached_v_donor_funding.adjustment_type=1 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=2
+					and cached_v_m_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=0
-					and cached_v_donor_funding.adjustment_type=0 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=0
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=1
-					and cached_v_donor_funding.adjustment_type=0 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=1
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_donor_funding.transaction_type=2
-					and cached_v_donor_funding.adjustment_type=0 then
-					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchange('@currency',cached_v_donor_funding.transaction_date)
+				<SQL dialect="postgres">
+					case when cached_v_m_donor_funding.transaction_type=2
+					and cached_v_m_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 
+					getExchange('@currency',cached_v_m_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -283,7 +283,7 @@
 	
   <Cube name="Pledges Funding">
 		<View alias="v_pledges_funding">
-      <SQL dialect="mysql">
+      <SQL dialect="postgres">
         <![CDATA[select * from v_pledges_funding]]>
       </SQL>
     </View>
@@ -291,8 +291,8 @@
 		<Hierarchy hasAll="true" allLevelName="All Titles" caption="#Tilte#" allMemberCaption="#All_Titles#">
 			<Level name="Title" column="title">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(title,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(title,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -302,8 +302,8 @@
 		<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
 			<Level name="DonorName" column="org_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(org_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(org_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -313,8 +313,8 @@
 		<Hierarchy hasAll="true" allLevelName="All Type of Assistance#" allMemberCaption="#All_Type_of_Assistance#" caption="#Type_of_Assistance#">
 	  	<Level name="Type of Assistance" column="type_of_assistance_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(type_of_assistance_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(type_of_assistance_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -324,8 +324,8 @@
 		<Hierarchy hasAll="true" allLevelName="All Aid Modality" allMemberCaption="#All_Aid_Modality#" caption="#Aid_Modality#">
 	  	<Level name="Aid Modality" column="aid_modality_name">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(aid_modality_name,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(aid_modality_name,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -335,8 +335,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Primary_Sectors#" allMemberName="All Primary Sectors"  caption="#Primary_Sector#">
 			<Level name="Primary Sector" column="p_sectorname">
 			<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(p_sectorname,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(p_sectorname,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -346,8 +346,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" caption="#Regions#">
 			<Level name="Region" column="region">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(region,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(region,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -357,8 +357,8 @@
 		<Hierarchy hasAll="true" allMemberCaption="#All_Pledges_Types#" allMemberName="All Regions" caption="#Pledge_Type#">
 			<Level name="Pledge Type" column="pledge_type">
 				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(pledge_type,'#No_Data#')
+					<SQL dialect="postgres">
+						COALESCE(pledge_type,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
@@ -369,7 +369,7 @@
 	
 	<Measure name="Pledges" aggregator="sum" caption="#Total Pledges#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 		<MeasureExpression>
-			<SQL dialect="mysql">
+			<SQL dialect="postgres">
 				v_pledges_funding.amount/getExchange(v_pledges_funding.currency_code,v_pledges_funding.transaction_date)
 			</SQL>
 		</MeasureExpression>
@@ -379,14 +379,14 @@
   
   <Cube name="Pledges Commitmens">
 		<View alias="v_donor_funding">
-      <SQL dialect="mysql">
+      <SQL dialect="postgres">
         <![CDATA[select * from v_donor_funding WHERE NOT ISNULL(pledge_id)]]>
       </SQL>
     </View>
     
     <Measure name="Pledges Actual Commitments" aggregator="sum" caption="#Pledges Actual Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
+				<SQL dialect="postgres">
 				  case when transaction_type = 0 and adjustment_type =1  then
           transaction_amount / getExchangeWithFixed(currency_code, transaction_date,fixed_exchange_rate) 
           else 0  end
@@ -395,7 +395,7 @@
 		</Measure>
     <Measure name="Pledges Actual Disbursements" aggregator="sum" caption="#Pledges Actual Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
-				<SQL dialect="mysql">
+				<SQL dialect="postgres">
 				  case when transaction_type = 1 and adjustment_type =1 then
           transaction_amount / getExchangeWithFixed(currency_code, transaction_date,fixed_exchange_rate) 
           else 0  end

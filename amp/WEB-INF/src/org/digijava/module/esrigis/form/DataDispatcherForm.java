@@ -10,6 +10,7 @@ public class DataDispatcherForm extends ActionForm {
 	 */
 	private static final long serialVersionUID = 1L;
 	private MapFilter filter = null;
+	private String apiurl;
 	
 	public MapFilter getFilter() {
 		return filter;
@@ -19,4 +20,10 @@ public class DataDispatcherForm extends ActionForm {
 		this.filter = filter;
 	}
 	
+	public String getApiurl() {
+		return apiurl;
+	}
+	public void setApiurl(String apiurl) {
+		this.apiurl = apiurl;
+	}
 }

@@ -44,6 +44,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -86,10 +87,39 @@ public class DataDispatcher extends MultiAction {
 			return modeShowStructures(mapping, form, request, response);
 		}else if (request.getParameter("selectedfilter") != null) { 
 			return modeGetSelectedFilter(mapping, form, request, response);
+		}else if (request.getParameter("getconfig") != null) { 
+			return modeGetConfiguration(mapping, form, request, response);
 		}
+		
 		return null;
 	}
 
+	
+	private ActionForward modeGetConfiguration(ActionMapping mapping,ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
+		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
+		JSONArray jsonArray = new JSONArray();
+		
+		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
+			AmpMapConfig map = (AmpMapConfig) iterator.next();
+			jsonArray.add(map);
+		}
+		
+		PrintWriter pw;
+		try {
+			pw = response.getWriter();
+			pw.write(jsonArray.toString());
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;	
+		
+	}
+	
 	
 	private ActionForward modeGetSelectedFilter(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) {

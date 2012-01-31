@@ -201,9 +201,9 @@ public class GroupReportData extends ReportData {
 				for (int k = 0; k < firstRd.getTrailCells().size(); k++) {
 					Cell c=(Cell) firstRd.getTrailCells().get(k);
 					if (c!=null){
-					Cell newc=c.newInstance();
-					newc.setColumn(c.getColumn());
-					trailCells.add(newc);
+						Cell newc=c.newInstance();
+						newc.setColumn(c.getColumn());
+						trailCells.add(newc);
 					}else{
 						trailCells.add(null);
 					}

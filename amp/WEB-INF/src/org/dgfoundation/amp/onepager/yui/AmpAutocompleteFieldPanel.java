@@ -260,8 +260,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 				String selectedString = RequestCycle.get().getRequest()
 						.getParameter("selectedString");
 				// hide loading icon:
-				target.appendJavascript("YAHOO.util.Dom.get("
-						+ indicator.getMarkupId() + ").style.display = 'none'");
+				target.appendJavascript("YAHOO.util.Dom.get('"
+						+ indicator.getMarkupId() + "').style.display = 'none';");
 				CHOICE choice = getSelectedChoice(selectedString);
 				onSelect(target, choice);
 			}

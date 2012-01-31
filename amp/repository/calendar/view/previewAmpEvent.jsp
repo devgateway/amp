@@ -129,8 +129,8 @@ function editEvent(){
 			                 <tr>
 								<td style="background-color: #CCDBFF;height: 18px;">
 				               	 	<feature:display name="Event Approve" module="Calendar">
-	 	 	 	 			            <c:if test="${calendarEventForm.approve==0||calendarEventForm.approve==2}">Awaiting Validation</c:if>
-	 	 	 	 			            <c:if test="${calendarEventForm.approve==-1}">Event not Approved</c:if>
+                                                        <c:if test="${calendarEventForm.approve==0||calendarEventForm.approve==2}"><digi:trn>Awaiting Validation</digi:trn></c:if>
+                                                        <c:if test="${calendarEventForm.approve==-1}"><digi:trn>Event not Approved</digi:trn></c:if>
 	 	 	 	 				    </feature:display>
  	 	 	 		            </td>
 			                 </tr>

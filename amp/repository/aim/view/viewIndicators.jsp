@@ -264,12 +264,12 @@ a.itr:hover {
 																									<td width="80%" class="inside"><a
 																										class="itr"
 																										href="javascript:editIndicator('${indItr.id}');">
-																											${indItr.name}</a></td>
+																											<c:out value="${indItr.name}"/></a></td>
 																									<td width="18%" class="inside" nowrap="nowrap">
 																										<c:if test="${!empty indItr.sectorNames}">
 																											<c:forEach var="indsectname"
 																												items="${indItr.sectorNames}">
-	                                            	   ${indsectname}<br>
+                                                                                                                                                                                                        <c:out value="${indsectname}"/><br>
 																											</c:forEach>
 																										</c:if></td>
 																									<td align="right" width="2%"

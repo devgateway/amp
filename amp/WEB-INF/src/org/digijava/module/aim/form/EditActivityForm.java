@@ -116,7 +116,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List<AmpActivityContact> sectorMinistryContacts;
 	private List<AmpActivityContact> projCoordinatorContacts;
 	private List<AmpActivityContact> implExecutingAgencyContacts;
-    
+	
+	/**
+	 * Map Api url for locations map
+	 */
+	private String esriapiurl;
+	
+	public String getEsriapiurl() {
+		return esriapiurl;
+	}
+
+	public void setEsriapiurl(String esriapiurl) {
+		this.esriapiurl = esriapiurl;
+	}
     
     /**
      * This collection represents the list of surveys available in the Paris Indicator page.

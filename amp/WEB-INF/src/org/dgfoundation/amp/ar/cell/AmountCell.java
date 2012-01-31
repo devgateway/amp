@@ -185,6 +185,7 @@ public class AmountCell extends Cell {
 	 * @return Returns the amount.
 	 */
 	public double getAmount() {
+		HashSet<String> summedCells	= new HashSet<String>();
 		double ret = 0;
 		if (id != null){
 			return  convert() * getPercentage() / 100;
@@ -192,7 +193,16 @@ public class AmountCell extends Cell {
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
-			ret += element.getAmount();
+			if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
+				CategAmountCell caCell	= (CategAmountCell)element;
+				String idString			= caCell.getId() + "_" + caCell.getOwnerId();
+				if ( !summedCells.contains(idString) ) {
+					ret += element.getAmount();
+					summedCells.add(idString);
+				}
+			}
+			else
+				ret += element.getAmount();
 			// logger.info("amount++"+element.getAmount());
 		}
 		// logger.info("******total amount for owner
@@ -395,6 +405,7 @@ public class AmountCell extends Cell {
 		 */
 		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, source, sourceCol, percentage);
 		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
 		
 		columnPercent.put(sourceCol.getName(), percentage);
 		columnCellValue

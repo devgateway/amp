@@ -101,7 +101,7 @@ function banUser(txt) {
 					<tr style="background-color: #F2F2F2; padding: 5px;">
 						<c:choose>
 							<c:when test="${umViewAllUsersForm.showBanned}">
-								<td width="160" colspan=5
+								<td width="160" colspan="2"
 									style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
 									<digi:trn key="um:viewAllUsers:filter">
 		              Filter by:

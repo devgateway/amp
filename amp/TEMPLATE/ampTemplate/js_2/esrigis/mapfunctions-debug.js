@@ -450,55 +450,55 @@ function getSelectedFilter() {
 		url : "/esrigis/datadispatcher.do?selectedfilter=true",
 		handleAs : "json",
 		load : function(jsonData) {
-
-			$("#sfilterid").append("<i>Currency</i>: ");
+			
+			$("#sfilterid").append("<i>"+translate('Currency')+"</i>: ");
 			$("#sfilterid").append(jsonData[0].currency);
 
-			$("#sfilterid").append(" <i>| Fiscal Year Start</i> : ");
+			$("#sfilterid").append(" <i>| "+ translate('Fiscal Year Start')+"</i> : ");
 			$("#sfilterid").append(jsonData[0].year);
 
 			if (jsonData[0].projectstatus != '') {
-				$("#sfilterid").append(" <i>| Status</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Status')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].projectstatus);
 			}
 			if (jsonData[0].sector != '') {
-				$("#sfilterid").append(" <i>| Sector</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Primary Sector')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].sector);
 			}
 
 			if (jsonData[0].financinginstrument != '') {
-				$("#sfilterid").append(" <i>| Financing Instrument</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Financing Instrument')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].financinginstrument);
 			}
 			if (jsonData[0].typeofassistance != '') {
-				$("#sfilterid").append(" <i>| Type of Assistance</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Type of Assistance')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].typeofassistance);
 			}
 
-			if (jsonData[0].onbudget = 'true') {
+			if (jsonData[0].onbudget == true) {
 				$("#sfilterid").append(
-						" <i>| Only on budget projects</i> : True");
+						" <i>| "+ translate('Only on budget projects')+"</i> : True");
 			}
 
 			if (jsonData[0].organizationtype != '') {
-				$("#sfilterid").append(" <i>| Organization Type</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Organization Type')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].organizationtype);
 			}
 
 			if (jsonData[0].organizationgroup != '') {
-				$("#sfilterid").append(" <i>| Organization Group</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Organization Group')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].organizationgroup);
 			}
 
 			if (jsonData[0].selecteddonors.length > 0) {
-				$("#sfilterid").append(" <i>| Donors</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Donors')+"</i> : ");
 			}
 			dojo.forEach(jsonData[0].selecteddonors, function(donor) {
 				$("#sfilterid").append(donor.donorname + " ");
 			});
 
 			if (jsonData[0].structuretypes.length > 0) {
-				$("#sfilterid").append(" <i>| Structure Types</i> : ");
+				$("#sfilterid").append(" <i>| "+ translate('Structure Types')+"</i> : ");
 			}
 
 			dojo.forEach(jsonData[0].structuretypes, function(structures) {
@@ -521,6 +521,7 @@ function getSelectedFilter() {
  * @param clear
  */
 function getActivities(clear) {
+	showLoading();
 	if (clear && cL) {
 		cL.clear();
 	}
@@ -548,7 +549,7 @@ function getActivities(clear) {
 	}
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
-	showLoading();
+	
 }
 
 /**
@@ -557,6 +558,7 @@ function getActivities(clear) {
  */
 var donorArray = new Array();
 function MapFind(activity) {
+	showLoading();
 	dojo.forEach(activity.locations,function(location) {
 		// If the location has lat and lon not needs to find the
 		// point in the map
@@ -1054,7 +1056,6 @@ function getStructures(clear) {
 				});
 				map.addLayer(structureGraphicLayer);
 				map.setExtent(map.extent.expand(1.01));
-				hideLoading();
 			},
 			error : function(error) {
 				console.log(error);
@@ -1062,7 +1063,6 @@ function getStructures(clear) {
 		}
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);
-		showLoading();
 	}
 }
 
@@ -1177,8 +1177,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 
 function ExportStructures() {
 	// alert ("/esrigis/excelexporter.do?structures=" + structurestorequest());
-	window
-			.open("/esrigis/excelexporter.do?structures="
+	window.open("/esrigis/excelexporter.do?structures="
 					+ structurestorequest());
 	/*
 	 * var xhrArgs = { url : "/esrigis/excelexporter.do?structures=" +

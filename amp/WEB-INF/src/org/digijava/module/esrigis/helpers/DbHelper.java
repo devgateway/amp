@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -56,6 +57,8 @@ public class DbHelper {
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 		Long[] locationIds = filter.getSelLocationIds();
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+		Long[] zonesids = filter.getZoneIds();
+		boolean zonescondition = zonesids != null && zonesids .length > 1;
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
@@ -71,10 +74,11 @@ public class DbHelper {
 					+ " as fd inner join fd.ampFundingId f ";
 			oql += " inner join f.ampActivityId act ";
 			oql += " inner join act.ampActivityGroup actGroup ";
-			oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+			//oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			if (locationCondition) {
 				oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 			}
+			
 			if (sectorCondition) {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			}
@@ -119,11 +123,14 @@ public class DbHelper {
 			} else {
 				oql += QueryUtil.getTeamQuery(teamMember);
 			}
-			if (locationCondition) {
-				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
+			if (!zonescondition && locationCondition) {
+				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds,0) + ") ";
+			}else if (zonesids!=null){
+				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids,1) + ") ";
 			}
+			
 			if (sectorCondition) {
-				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds) + ") ";
+				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds,0) + ") ";
 			}
 			
 			//Organization Type
@@ -158,7 +165,7 @@ public class DbHelper {
 	        }
 			// Structure Types
 			if(structureTypeCondition){
-				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes())+") ";
+				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes(),0)+") ";
 			}
 
 			if (filter.getShowOnlyApprovedActivities() != null
@@ -245,7 +252,7 @@ public class DbHelper {
 	            String oql = "select distinct loc  from ";
 	            oql += AmpFundingDetail.class.getName()
 	                    + " as fd inner join fd.ampFundingId f ";
-	            oql += "   inner join f.ampActivityId act ";
+	            oql += " inner join f.ampActivityId act ";
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
 	            if (sectorCondition) {

@@ -33,21 +33,21 @@ content=content
 +"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
 +"</td></tr></table>";if(foundstr.length>0){map.infoWindow.setContent(content);map.infoWindow.resize(600,200);map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));}else{clearbuffer();}
 dojo.connect(map.infoWindow,"onHide",clearbuffer);hideLoading();}
-function getSelectedFilter(){$("#sfilterid").html("");var xhrArgs={url:"/esrigis/datadispatcher.do?selectedfilter=true",handleAs:"json",load:function(jsonData){$("#sfilterid").append("<i>Currency</i>: ");$("#sfilterid").append(jsonData[0].currency);$("#sfilterid").append(" <i>| Fiscal Year Start</i> : ");$("#sfilterid").append(jsonData[0].year);if(jsonData[0].projectstatus!=''){$("#sfilterid").append(" <i>| Status</i> : ");$("#sfilterid").append(jsonData[0].projectstatus);}
-if(jsonData[0].sector!=''){$("#sfilterid").append(" <i>| Sector</i> : ");$("#sfilterid").append(jsonData[0].sector);}
-if(jsonData[0].financinginstrument!=''){$("#sfilterid").append(" <i>| Financing Instrument</i> : ");$("#sfilterid").append(jsonData[0].financinginstrument);}
-if(jsonData[0].typeofassistance!=''){$("#sfilterid").append(" <i>| Type of Assistance</i> : ");$("#sfilterid").append(jsonData[0].typeofassistance);}
-if(jsonData[0].onbudget='true'){$("#sfilterid").append(" <i>| Only on budget projects</i> : True");}
-if(jsonData[0].organizationtype!=''){$("#sfilterid").append(" <i>| Organization Type</i> : ");$("#sfilterid").append(jsonData[0].organizationtype);}
-if(jsonData[0].organizationgroup!=''){$("#sfilterid").append(" <i>| Organization Group</i> : ");$("#sfilterid").append(jsonData[0].organizationgroup);}
-if(jsonData[0].selecteddonors.length>0){$("#sfilterid").append(" <i>| Donors</i> : ");}
-dojo.forEach(jsonData[0].selecteddonors,function(donor){$("#sfilterid").append(donor.donorname+" ");});if(jsonData[0].structuretypes.length>0){$("#sfilterid").append(" <i>| Structure Types</i> : ");}
+function getSelectedFilter(){$("#sfilterid").html("");var xhrArgs={url:"/esrigis/datadispatcher.do?selectedfilter=true",handleAs:"json",load:function(jsonData){$("#sfilterid").append("<i>"+translate('Currency')+"</i>: ");$("#sfilterid").append(jsonData[0].currency);$("#sfilterid").append(" <i>| "+translate('Fiscal Year Start')+"</i> : ");$("#sfilterid").append(jsonData[0].year);if(jsonData[0].projectstatus!=''){$("#sfilterid").append(" <i>| "+translate('Status')+"</i> : ");$("#sfilterid").append(jsonData[0].projectstatus);}
+if(jsonData[0].sector!=''){$("#sfilterid").append(" <i>| "+translate('Primary Sector')+"</i> : ");$("#sfilterid").append(jsonData[0].sector);}
+if(jsonData[0].financinginstrument!=''){$("#sfilterid").append(" <i>| "+translate('Financing Instrument')+"</i> : ");$("#sfilterid").append(jsonData[0].financinginstrument);}
+if(jsonData[0].typeofassistance!=''){$("#sfilterid").append(" <i>| "+translate('Type of Assistance')+"</i> : ");$("#sfilterid").append(jsonData[0].typeofassistance);}
+if(jsonData[0].onbudget==true){$("#sfilterid").append(" <i>| "+translate('Only on budget projects')+"</i> : True");}
+if(jsonData[0].organizationtype!=''){$("#sfilterid").append(" <i>| "+translate('Organization Type')+"</i> : ");$("#sfilterid").append(jsonData[0].organizationtype);}
+if(jsonData[0].organizationgroup!=''){$("#sfilterid").append(" <i>| "+translate('Organization Group')+"</i> : ");$("#sfilterid").append(jsonData[0].organizationgroup);}
+if(jsonData[0].selecteddonors.length>0){$("#sfilterid").append(" <i>| "+translate('Donors')+"</i> : ");}
+dojo.forEach(jsonData[0].selecteddonors,function(donor){$("#sfilterid").append(donor.donorname+" ");});if(jsonData[0].structuretypes.length>0){$("#sfilterid").append(" <i>| "+translate('Structure Types')+"</i> : ");}
 dojo.forEach(jsonData[0].structuretypes,function(structures){$("#sfilterid").append(structures+" ");});},error:function(error){console.log(error);}}
 var deferred=dojo.xhrGet(xhrArgs);$("#selectedfilter").show();}
-function getActivities(clear){if(clear&&cL){cL.clear();}
+function getActivities(clear){showLoading();if(clear&&cL){cL.clear();}
 var xhrArgs={url:"/esrigis/datadispatcher.do?showactivities=true",handleAs:"json",load:function(jsonData){totallocations=0;features=[];activitiesarray=[];dojo.forEach(jsonData,function(activity){activitiesarray.push(activity);MapFind(activity);});if(totallocations==0){timer_on=1;drawpoints();}},error:function(error){console.log(error);}}
-var deferred=dojo.xhrGet(xhrArgs);showLoading();}
-var donorArray=new Array();function MapFind(activity){dojo.forEach(activity.locations,function(location){if(location.islocated==false&&countrymapurl){findTask=new esri.tasks.FindTask(countrymapurl);findParams=new esri.tasks.FindParameters();findParams.returnGeometry=true;findParams.layerIds=[0,1];findParams.contains=false;findParams.searchFields=["GEO_ID"];execute(location.geoId);totallocations++;}else{if(location.exactlocation){var pt=new esri.geometry.Point(location.exactlocation_lon,location.exactlocation_lat,new esri.SpatialReference({"wkid":4326}));}else{if(location.lon!=''&&location.lat!='')
+var deferred=dojo.xhrGet(xhrArgs);}
+var donorArray=new Array();function MapFind(activity){showLoading();dojo.forEach(activity.locations,function(location){if(location.islocated==false&&countrymapurl){findTask=new esri.tasks.FindTask(countrymapurl);findParams=new esri.tasks.FindParameters();findParams.returnGeometry=true;findParams.layerIds=[0,1];findParams.contains=false;findParams.searchFields=["GEO_ID"];execute(location.geoId);totallocations++;}else{if(location.exactlocation){var pt=new esri.geometry.Point(location.exactlocation_lon,location.exactlocation_lat,new esri.SpatialReference({"wkid":4326}));}else{if(location.lon!=''&&location.lat!='')
 var pt=new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid":4326}));else{console.log(location.name+' '+activity.activityname);return true;}}
 var sms=new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));var attr={"Temp":"Temporal Attribute"};var infoTemplate=new esri.InfoTemplate("");var pgraphic=new esri.Graphic(pt,sms,attr,infoTemplate);dojo.forEach(activity.sectors,function(sector){primarysector=sector.sectorName;primarysectorschema=sector.sectorScheme;primarypercentage=sector.sectorPercentage;});var donorname;var donorCode;dojo.forEach(activity.donors,function(donor){if(!containsDonor(donor,donorArray)){donorArray.push(donor);}
 if(donorname==null){donorname=donor.donorname;donorCode=donor.donorCode;}else{donorname=donorname+","
@@ -110,8 +110,8 @@ function updateLocationAttributes(graphicLayer,typeFunding){var df=new DecimalFo
 +" "+currentLocation.amountsCurrencyCode;break;}}}
 return graphicLayer;}
 function getStructures(clear){if(clear){try{structureGraphicLayer=null;structures=[];map.removeLayer(map.getLayer("structuresMap"));}catch(e){console.log(e);}}
-if(structureGraphicLayer){if(structureGraphicLayer.visible){structureGraphicLayer.hide();}else{structureGraphicLayer.show();map.infoWindow.resize(400,250);}}else{structureGraphicLayer=esri.layers.GraphicsLayer({displayOnPan:false,id:"structuresMap",visible:false});structureson=true;var xhrArgs={url:"/esrigis/datadispatcher.do?showstructures=true",handleAs:"json",load:function(jsonData){dojo.forEach(jsonData,function(activity){MapFindStructure(activity,structureGraphicLayer);});map.addLayer(structureGraphicLayer);map.setExtent(map.extent.expand(1.01));hideLoading();},error:function(error){console.log(error);}}
-var deferred=dojo.xhrGet(xhrArgs);showLoading();}}
+if(structureGraphicLayer){if(structureGraphicLayer.visible){structureGraphicLayer.hide();}else{structureGraphicLayer.show();map.infoWindow.resize(400,250);}}else{structureGraphicLayer=esri.layers.GraphicsLayer({displayOnPan:false,id:"structuresMap",visible:false});structureson=true;var xhrArgs={url:"/esrigis/datadispatcher.do?showstructures=true",handleAs:"json",load:function(jsonData){dojo.forEach(jsonData,function(activity){MapFindStructure(activity,structureGraphicLayer);});map.addLayer(structureGraphicLayer);map.setExtent(map.extent.expand(1.01));},error:function(error){console.log(error);}}
+var deferred=dojo.xhrGet(xhrArgs);}}
 function MapFindStructure(activity,structureGraphicLayer){var stinfoTemplate=new esri.InfoTemplate("Structure Details","<table style='font-size: 11px;'>"
 +"<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
 +"<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"

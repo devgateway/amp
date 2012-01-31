@@ -182,6 +182,9 @@ public class DataDispatcher extends MultiAction {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
 				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
+				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
+					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
+				}
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
 					isaggregatable = true;

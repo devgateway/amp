@@ -197,6 +197,43 @@
             value = "<digi:trn>Showing commitments for Zone</digi:trn>";
             return value;
          }
+        if(text == "Currency") {
+            value = "<digi:trn>Currency</digi:trn>";
+            return value;
+         }
+        if(text == "Fiscal Year Start") {
+            value = "<digi:trn>Fiscal Year Start</digi:trn>";
+            return value;
+         }
+        if(text == "Status") {
+            value = "<digi:trn>Status</digi:trn>";
+            return value;
+         }
+        if(text == "Financing Instrument") {
+            value = "<digi:trn>Financing Instrument</digi:trn>";
+            return value;
+         }
+        if(text == "Type of Assistance") {
+            value = "<digi:trn>Type of Assistance</digi:trn>";
+            return value;
+         }
+        if(text == "Only on budget projects") {
+            value = "<digi:trn>Only on budget projects</digi:trn>";
+            return value;
+         }
+        if(text == "Organization Type") {
+            value = "<digi:trn>Organization Type</digi:trn>";
+            return value;
+         }
+        if(text == "Structure Types") {
+            value = "<digi:trn>Structure Types</digi:trn>";
+            return value;
+         }
+        if(text == "Organization Group") {
+            value = "<digi:trn>Organization Group</digi:trn>";
+            return value;
+         }
+        
         return text;
     	}
 	

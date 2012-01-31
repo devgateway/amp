@@ -265,6 +265,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
 		saveAsDraftAction.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model("this.disabled='disabled';"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		activityForm.add(saveAsDraftAction);
 		AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {

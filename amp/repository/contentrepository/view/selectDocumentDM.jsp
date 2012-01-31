@@ -20,6 +20,7 @@
 
 <bean:define id="tMembers" name="teamForm" property="myTeamMembers" />
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 	
 <%@include file="documentManagerJsHelper.jsp" %>
@@ -43,12 +44,14 @@
 		}
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+	
+	var enterBinder	= new EnterHitBinder('addDocFromRepBtn');
 </script>	
 
 <br />
 <div id="otherDocumentsDiv">&nbsp;</div>
 <input type="hidden" name="type" id="typeId"/>
-<html:button  styleClass="dr-menu" property="submitButton" onclick="saveSelectedDocuments()" >
+<html:button  styleClass="dr-menu" property="submitButton" onclick="saveSelectedDocuments()" styleId="addDocFromRepBtn">
 	<digi:trn>Submit this</digi:trn>
 </html:button>
 <br /><br />

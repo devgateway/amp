@@ -146,7 +146,8 @@
 				/repository/dataExchange/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
-				/repository/content/struts-config.xml
+				/repository/content/struts-config.xml,
+				/repository/budgetexport/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

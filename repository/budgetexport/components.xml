@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+<secondary-pages>
+<!-- Budget export  -->
+	<page name="viewBudgetExportManager"  title ="- Budget Export" />
+</secondary-pages>
+
+
+</config>

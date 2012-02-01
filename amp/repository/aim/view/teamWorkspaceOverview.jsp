@@ -25,8 +25,8 @@ function addChildWorkspaces() {
 			document.aimUpdateWorkspaceForm.target = popupPointer.name;
 			document.aimUpdateWorkspaceForm.submit();
 		} else {
-                    var msg="<digi:trn jsFriendly="true">Workspace type must be 'Management' to add teams</digi:trn>"
-			alert(msg);
+            var msg="<digi:trn jsFriendly="true">Workspace type must be 'Management' to add teams</digi:trn>";
+			alert(escape(msg));
 			return false;
 		}
 }

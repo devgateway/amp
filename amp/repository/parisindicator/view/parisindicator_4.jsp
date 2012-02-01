@@ -14,27 +14,27 @@
     <table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
     	<tr align="center">
-            <td width="15%" height="33"  class="inside_header" >
+            <td width="15%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
                 <div align="center">
                     <strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong>
                 </div>
             </td>
-            <td width="5%" height="33"  class="inside_header" >
+            <td width="5%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
                 <div align="center">
                     <strong><digi:trn key="aim:disbursmentYear">Disbursement Year</digi:trn></strong>
                 </div>
             </td>
-            <td width="27%" height="33"  class="inside_header" >
+            <td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
               <div align="center">
                   <strong><digi:trn>Volume of technical co-operation for capacity development provided through co-ordinated programmes</digi:trn></strong>
               </div>
             </td>
-            <td width="26%" height="33"  class="inside_header" >
+            <td width="26%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
               <div align="center">
                   <strong><digi:trn>Total volume of technical co-operation provided</digi:trn></strong>
               </div>
             </td>
-            <td width="27%" height="33"  class="inside_header" >
+            <td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
                 <div align="center">
                     <strong><digi:trn>% of TC for capacity development provided through coordinated programmes consistent with national development strategies</digi:trn></strong>
                 </div>
@@ -42,7 +42,7 @@
         </tr>
         <logic:empty name="parisIndicatorForm" property="mainTableRows">
             <tr>
-                <td width="100%" align="center" height="65" colspan="5" />
+                <td width="100%" align="center" height="65" colspan="5" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside"/>
                     <div align="center">
                         <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
                     </div>

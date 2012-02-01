@@ -14,32 +14,32 @@
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
-	        <td width="15%" height="33"  class="inside_header" >
+	        <td width="15%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong>
 	            </div>
 	        </td>
-	        <td width="5%" height="33"  class="inside_header" >
+	        <td width="5%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn key="aim:disbursmentYear">Disbursement Year</digi:trn></strong>
 	            </div>
 	        </td>
-			<td width="20%" height="33"  class="inside_header" >
+			<td width="20%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 			  <div align="center">
 			      <strong><digi:trn>Budget support aid flows provided in the context of programme based approach</digi:trn></strong>
 			  </div>
 			</td>
-			<td width="20%" height="33"  class="inside_header" >
+			<td width="20%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 			  <div align="center">
 			      <strong><digi:trn>Other aid flows provided in the context of programme based approach</digi:trn></strong>
 			  </div>
 			</td>
-			<td width="20%" height="33"  class="inside_header" >
+			<td width="20%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn>Total aid flows provided</digi:trn></strong>
 	            </div>
 	        </td>
-	        <td width="20%" height="33"  class="inside_header" >
+	        <td width="20%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
                 <div align="center">
                     <strong><digi:trn>Proportion of aid flows provided in the context of programme based approach</digi:trn></strong>
                 </div>
@@ -47,7 +47,7 @@
 		</tr>
 		<logic:empty name="parisIndicatorForm" property="mainTableRows">
 	        <tr>
-	            <td width="100%" align="center" height="65" colspan="6"  class="inside_header" >
+	            <td width="100%" align="center" height="65" colspan="6" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	                <div align="center">
 	                    <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
 	                </div>

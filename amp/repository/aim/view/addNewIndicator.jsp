@@ -212,7 +212,7 @@ function closeWindow() {
       <td>
           <table border="0" class="inside">
         <field:display name="Admin Indicator name" feature="Admin"></field:display>
-          <tr id="trName" class="addNewIndicatorLabel">
+          <tr id="trName">
             <td>
             <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             <span style="color:Red;">*</span>
@@ -224,7 +224,7 @@ function closeWindow() {
           
           <field:display name="Admin Description" feature="Admin">
           <tr id="trDescription">
-            <td valign="top" class="addNewIndicatorLabel">
+            <td valign="top">
             <digi:trn key="admin:decription">
             Description:
             </digi:trn>
@@ -236,7 +236,7 @@ function closeWindow() {
           </field:display>
           <field:display name="Indicator code" feature="Admin"></field:display>
           <tr>
-            <td class="addNewIndicatorLabel">
+            <td>
             	<digi:trn key="admin:indicatorcode">
             	Indicator code:
             	</digi:trn>
@@ -249,7 +249,7 @@ function closeWindow() {
           
           <field:display name="Indicator Type" feature="Admin">
           <tr>
-          	<td class="addNewIndicatorLabel"><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
+          	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
           	<td><html:select name="aimNewIndicatorForm" property="type">          		
           		<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
           		<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
@@ -263,7 +263,7 @@ function closeWindow() {
           </tr>
           <field:display name="Sectors" feature="Admin"></field:display> 
           <tr>
-          <td  class="addNewIndicatorLabel">
+          <td>
           <digi:trn key="admin:sectors">
           	Sectors
           </digi:trn>
@@ -277,7 +277,7 @@ function closeWindow() {
            </tr>
           <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
-            <td  class="addNewIndicatorLabel">
+            <td>
             <digi:trn key="admin:creationdate">
             Creation date:
             </digi:trn>

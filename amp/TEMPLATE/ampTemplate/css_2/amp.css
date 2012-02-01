@@ -43,7 +43,7 @@ table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
-td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #cccccc; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;padding:3px;}
+td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
 .ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
 .ins_title_sm {font-size:9px; color:#767676;}
@@ -711,5 +711,3 @@ a.hoverUnderline {text-decoration: none;}
 a:focus.hoverUnderline {outline: 0px none blue !important;}
 a:HOVER.hoverUnderline {text-decoration: underline;}
 .innerTabHeader{padding:0px 5px 0px 0px;}
-#currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
-td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}

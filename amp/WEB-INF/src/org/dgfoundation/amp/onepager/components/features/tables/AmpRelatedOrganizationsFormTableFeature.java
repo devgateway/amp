@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -66,7 +68,18 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						specificOrgRoles.add(ampOrgRole);
 				}
 				
-				return new ArrayList<AmpOrgRole>(specificOrgRoles);
+				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
+				Collections.sort(ret, new Comparator<AmpOrgRole>() {
+					@Override
+					public int compare(AmpOrgRole o1, AmpOrgRole o2) {
+						if (o1 == null || o1.getOrganisation() == null ||o1.getOrganisation().getAcronymAndName() == null)
+							return 1;
+						if (o2 == null || o2.getOrganisation() == null ||o2.getOrganisation().getAcronymAndName() == null)
+							return -1;
+						return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
+					}
+				});
+				return ret;
 			}
 		};
 
@@ -87,6 +100,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
+						list.removeAll();
 						target.addComponent(listParent);
 					}
 				};

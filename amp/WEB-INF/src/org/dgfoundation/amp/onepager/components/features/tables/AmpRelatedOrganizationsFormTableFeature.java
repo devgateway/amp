@@ -22,8 +22,10 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -83,6 +85,16 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			}
 		};
 
+		
+		final AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrgRole>(
+				"uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
+			@Override
+			public Object getIdentifier(AmpOrgRole t) {
+				return t.getOrganisation().getName();
+			}
+		};
+		add(uniqueCollectionValidationField);
+
 		list = new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
@@ -100,6 +112,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
+						uniqueCollectionValidationField.reloadValidationField(target);
 						list.removeAll();
 						target.addComponent(listParent);
 					}
@@ -124,6 +137,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
 				setModel.getObject().add(ampOrgRole);
+				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();
 				target.addComponent(list.getParent());
 			}

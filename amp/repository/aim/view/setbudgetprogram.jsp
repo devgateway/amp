@@ -36,6 +36,7 @@ function closePopup() {
   window.close();
 }
 
+var enterBinder	= new EnterHitBinder('setBudgPrgBtn');
 </script>
 <digi:form action="/setbudgetprogram.do">
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
@@ -73,7 +74,7 @@ function closePopup() {
                               <c:set var="trnSaveBtn">
                                 <digi:trn key="aim:btnSave">Save</digi:trn>&nbsp;
                               </c:set>
-                              <input type="button" value="${trnSaveBtn}" onclick="return Save()" class="dr-menu">
+                              <input type="button" value="${trnSaveBtn}" onclick="return Save()" class="dr-menu" id="setBudgPrgBtn">
                             </td>
                             <td align="left">
                               <c:set var="trnCloseBtn">

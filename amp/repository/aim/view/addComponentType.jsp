@@ -73,6 +73,8 @@ function myOnload(){
 function unload(){}
 
 function closeWindow(){window.close();}
+
+var enterBinder	= new EnterHitBinder('addBtn');
 </script>
 <style type="text/css">
 <!--

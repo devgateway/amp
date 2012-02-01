@@ -48,6 +48,8 @@
         expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
 
     }
+     
+     var enterBinder	= new EnterHitBinder('addRegFundBtn');     
 
 </script>
 
@@ -387,7 +389,7 @@
 									<table cellPadding=3>
 										<tr>
 											<td>
-												<input type="button" value="${translationSave}" class="inp-text" onclick="return addRegionalFunding()">
+												<input type="button" value="${translationSave}" class="inp-text" onclick="return addRegionalFunding()" id="addRegFundBtn">
 											</td>
 											<td>
 												<input type="reset" value="${translationReset}" class="inp-text">

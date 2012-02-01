@@ -66,6 +66,8 @@
 	}
 		return true;
 }
+   
+   var enterBinder	= new EnterHitBinder('addPropFundingBtn');
 </script>
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProposedFunding.do?edit=true" method="post">
@@ -162,7 +164,7 @@
                 <c:set var="translationSave"><digi:trn key="btn:addRegionalFundingSave">Save</digi:trn></c:set>
 				<c:set var="translationReset"><digi:trn key="btn:addRegionalFundingReset">Reset</digi:trn></c:set>
 				<c:set var="translationClose"><digi:trn key="btn:addRegionalFundingClose">Close</digi:trn></c:set>
-                  <input type="button" value="${translationSave}" class="inp-text" onclick="addPropFunding();">
+                  <input type="button" value="${translationSave}" class="inp-text" onclick="addPropFunding();" id="addPropFundingBtn">
                 </td>
                 <td>
                   <input type="reset" value="${translationReset}" class="inp-text">

@@ -68,6 +68,8 @@ function selectOrganisation1() {
 			calendarObjForForm.display();
 		}		
 	}
+	
+	var enterBinder	= new EnterHitBinder('addEUActBtn');
 </script>		
 
 <body onLoad="load()">
@@ -238,7 +240,7 @@ function selectOrganisation1() {
 
 	<tr>
 		<td colspan="2" align="center">
-		<html:submit styleClass="dr-menu" property="save">
+		<html:submit styleClass="dr-menu" property="save" styleId="addEUActBtn">
 		 <digi:trn key="aim:addEditActivitySave">Save</digi:trn>
 		</html:submit>
 		

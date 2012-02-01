@@ -7,7 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <script language="JavaScript">
 

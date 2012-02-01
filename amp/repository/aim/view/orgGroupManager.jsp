@@ -41,6 +41,8 @@
 	    document.aimOrgGroupManagerForm.submit();
 		return true;
 	}
+	
+	var enterBinder	= new EnterHitBinder('searchOrgGrpBtn');
 </script>
 
 
@@ -110,7 +112,7 @@
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()">
+                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()" id="searchOrgGrpBtn">
 					</td>
 				</tr>
 				<tr>

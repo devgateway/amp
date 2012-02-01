@@ -1,11 +1,8 @@
 function EnterHitBinder (buttonId) {
 	$( window ).bind('keypress',{myObj:this}, function(e){
-	   if ( e.keyCode == 13 ) {
-		   //$("#"+buttonId).click();
+	   if ( e.keyCode == 13 && $(document.activeElement).attr("type") != "textarea") {
 		   //console.log(e.target);
-		  // enterBinder.executeEvent(e);
 		   e.data.myObj.executeEvent(e);
-		   //this.executeEvent(e);
 	   }
 	 });
 	 this.eventMap	= new Object();

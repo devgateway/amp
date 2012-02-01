@@ -60,6 +60,7 @@
 		return fixedTrim
 	}
 
+	var enterBinder	= new EnterHitBinder('saveOrgGrpBtn');
 </script>
 
 <digi:instance property="aimAddOrgGroupForm" />
@@ -194,7 +195,7 @@
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
+																						<html:button  styleClass="dr-menu" property="submitButton" styleId="saveOrgGrpBtn" onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					

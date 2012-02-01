@@ -563,7 +563,6 @@ div.fakefile2 input{
 </table>
 </digi:form>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <script type="text/javascript">
 	initFileUploads();
 	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {

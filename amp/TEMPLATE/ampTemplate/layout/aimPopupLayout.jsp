@@ -10,6 +10,7 @@
 <link href="css/global.css" rel="stylesheet" type="text/css">
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <head>
 			<%

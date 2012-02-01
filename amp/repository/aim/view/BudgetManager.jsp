@@ -49,6 +49,8 @@ function setprogram() {
 	document.BudgetManagerForm.submit();
 }
 
+var enterBinder	= new EnterHitBinder('saveBudgetBtn');
+
 </script>
 
 <digi:form action="/BudgetManager.do" method="post">
@@ -99,7 +101,7 @@ function setprogram() {
 							</tr>
 							<tr>
 								<td colspan="3" align="center"> 
-									<html:button property="submitButton" onclick="validatesector();">
+									<html:button property="submitButton" onclick="validatesector();" styleId="saveBudgetBtn">
 										<digi:trn>Add Sector</digi:trn>
 									</html:button>
 								</td>	

@@ -16,7 +16,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style>
 .contentbox_border {

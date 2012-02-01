@@ -29,6 +29,8 @@
         valid=true;
         return valid;
     }
+   
+   var enterBinder	= new EnterHitBinder('saveMPCBtn');
 
 </script>
 
@@ -151,7 +153,7 @@ Default Hierarchy
 <tr>
 <td colspan="2">
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" onclick="return validateSave()"/>
+<html:submit property="save" value="${trn}" onclick="return validateSave()" styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" value="${resetTrn}" />

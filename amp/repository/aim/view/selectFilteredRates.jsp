@@ -7,7 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <%@page import="org.digijava.module.aim.action.SelectFilteredCurrencyRates"%>
 

@@ -36,6 +36,8 @@
 		return true;
 	}
 	
+	
+	
 </script>
 
 <html:hidden property="issues.issueId"/>
@@ -83,7 +85,7 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.issues.issueId == -1}">
-															<input type="submit" value="<digi:trn key='btn:addIssue'>Add</digi:trn>" class="dr-menu">												
+															<input type="submit" value="<digi:trn key='btn:addIssue'>Add</digi:trn>" class="dr-menu" id="addIssuesBtn">												
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.issueId != -1}">

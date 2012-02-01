@@ -21,7 +21,6 @@
 <!-- dynamic tooltip -->
 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <style type="text/css"> 

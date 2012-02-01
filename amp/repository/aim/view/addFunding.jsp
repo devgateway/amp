@@ -1642,7 +1642,7 @@
 </digi:form>
 </body>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
+
 <script type="text/javascript">
 var enterBinder	= new EnterHitBinder('saveFundingBtn');
 </script>

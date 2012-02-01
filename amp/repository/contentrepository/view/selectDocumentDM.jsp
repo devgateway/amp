@@ -9,18 +9,12 @@
 
 <digi:instance property="crSelectDocumentForm" />
 
-
-
 <bean:define id="myForm" name="crSelectDocumentForm" toScope="request" type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
-
 <bean:define id="teamForm" name="myForm" property="teamInformationBeanDM" toScope="page" />
-	
 <bean:define id="isTeamLeader" name="teamForm" property="isTeamLeader" />
 <bean:define id="meTeamMember" name="teamForm" property="meTeamMember" />
-
 <bean:define id="tMembers" name="teamForm" property="myTeamMembers" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 	
 <%@include file="documentManagerJsHelper.jsp" %>

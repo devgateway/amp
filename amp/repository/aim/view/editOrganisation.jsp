@@ -2261,7 +2261,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         <table width="100%" >
             <tr>
                 <td align="center">
-                	<html:button styleClass="dr-menu" property="submitButton" onclick="return validateSaveOrg()">
+                	<html:button styleClass="dr-menu" property="submitButton" onclick="return validateSaveOrg()" styleId="addOrgBtn">
                         <digi:trn>Save</digi:trn>
                 	</html:button>
                 	<input type="reset" value="<digi:trn>Reset</digi:trn>" class="dr-menu">
@@ -2281,20 +2281,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
 </table>
 </td>
-
 </tr>
 </table>
 </td>
 </tr>
-
-
-
-
-
-
-
 </table>
-
 </digi:form>
 
 
@@ -2303,4 +2294,6 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
     $("#otherInformation").charCounter(256,{format: ' (%1'+ ' <digi:trn jsFriendly="true">characters remaining</digi:trn>)',pulse: false});
+    
+    var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>

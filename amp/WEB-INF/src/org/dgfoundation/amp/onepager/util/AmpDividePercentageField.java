@@ -36,6 +36,9 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 				size++;
 		}
 		
+		if (size == 0)
+			return;
+		
 		int alloc = 100/size;
 		it = set.iterator();
 		while (it.hasNext()) {

@@ -111,7 +111,7 @@
                        			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
                     		 	<%}
                      		  }%>
-	              	</html:link>
+	              			</html:link>
 			             </c:when>
 			             <c:otherwise>
 			             			<digi:trn key="aim:reportBuilder:${reportHeading}">

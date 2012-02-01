@@ -7,9 +7,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueCollectionValidator;
 
 /**
@@ -34,9 +33,9 @@ public abstract class AmpUniqueCollectionValidatorField<T> extends
 	 * @see org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.model.IModel)
 	 */
 	@Override
-	public AbstractReadOnlyModel getHiddenContainerModel(
+	public IModel getHiddenContainerModel(
 			final IModel<? extends Collection<T>> collectionModel) {
-			AbstractReadOnlyModel<String> model=new AbstractReadOnlyModel<String>() {
+			Model<String> model=new Model<String>() {
 			@Override
 			public String getObject() {
 				Set<Object> res=new TreeSet<Object>();

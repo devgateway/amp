@@ -5,8 +5,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
 
 /**
@@ -39,8 +39,12 @@ public abstract class AmpPercentageCollectionValidatorField<T> extends
 
 	
 	@Override
-	public AbstractReadOnlyModel getHiddenContainerModel(final IModel<? extends Collection<T>> collectionModel) {
-		AbstractReadOnlyModel<Double> model=new AbstractReadOnlyModel<Double>() {
+	public IModel getHiddenContainerModel(final IModel<? extends Collection<T>> collectionModel) {
+		Model<Double> model=new Model<Double>() {
+			@Override
+			public void setObject(Double object) {
+			}
+			
 			@Override
 			public Double getObject() {		
 				if(collectionModel.getObject().size()==0) return 100d;

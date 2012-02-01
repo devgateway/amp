@@ -56,7 +56,7 @@ public abstract class AmpCollectionValidatorField<T,H> extends
 		
 	}
 	
-	public abstract AbstractReadOnlyModel getHiddenContainerModel(IModel<? extends Collection<T>> collectionModel);
+	public abstract IModel getHiddenContainerModel(IModel<? extends Collection<T>> collectionModel);
 
 	
 }

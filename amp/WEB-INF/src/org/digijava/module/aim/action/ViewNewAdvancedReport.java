@@ -345,12 +345,13 @@ public class ViewNewAdvancedReport extends Action {
 //		apply pagination if exists
 		boolean pagination=true;
 		Cookie[] cookies=request.getCookies();
-		for (int i = 0; i < cookies.length; i++) {
-			if ("report_scrolling".equalsIgnoreCase(cookies[i].getName())){
-				pagination=false;
+		if ( cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if ("report_scrolling".equalsIgnoreCase(cookies[i].getName())){
+					pagination=false;
+				}
 			}
 		}
-		
 		if (!pagination){
 			startRow="0";
 			endRow=Integer.MAX_VALUE+"";

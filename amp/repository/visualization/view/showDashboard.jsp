@@ -139,7 +139,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
@@ -298,8 +298,8 @@ function initializeGlobalVariables(){
 												</c:if>
 												<hr />
 												<br />
-												<digi:trn>For Time Series Comparison, what data do you want to show</digi:trn>
-												? <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 												<html:checkbox property="filter.commitmentsVisible"
 													styleId="commitments_visible">
 													<digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
@@ -323,8 +323,8 @@ function initializeGlobalVariables(){
 												</module:display>
 												<hr />
 												<br />
-												<digi:trn>What data should the dashboard show</digi:trn>
-												?<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<digi:trn>What data should the dashboard show?</digi:trn>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 												<html:radio property="filter.transactionTypeFilter"
 													styleId="transaction_type_0" value="0">
 													<digi:trn>Commitments</digi:trn>
@@ -1814,7 +1814,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";

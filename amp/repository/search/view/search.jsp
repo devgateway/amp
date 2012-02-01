@@ -112,7 +112,9 @@
 			
 			<html:submit styleClass="buttonx_sm">
 				<digi:trn>Search</digi:trn>
-			</html:submit></div>
+			</html:submit>
+                         <a style="font-size: 11px;" href="/aim/queryEngine.do"><digi:trn>Advanced Search</digi:trn></a>
+                        </div>
 		</digi:form>
 		<table width="100%">
 			<tbody>

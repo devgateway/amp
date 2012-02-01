@@ -229,16 +229,10 @@ YAHOO.namespace("YAHOO.amp");
     	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
-        		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
-            		alert('<digi:trn jsFriendly="true">Please enter phone</digi:trn>');
+    			if(phoneNumbers[i].value==''){
+            		alert('<digi:trn>Please Enter phone</digi:trn>');
             		return false;
-        		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
-        			alert('<digi:trn jsFriendly="true">Please select phone type</digi:trn>');
-        			return false;
-        		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
-        			alert('<digi:trn jsFriendly="true">Please enter phone number</digi:trn>');
-        			return false;
-        		}
+    			}  
     		}
     	}
     	if(phoneNumbers!=null){

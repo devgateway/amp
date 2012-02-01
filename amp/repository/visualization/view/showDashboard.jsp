@@ -1228,6 +1228,7 @@ function initializeGlobalVariables(){
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
+				<a onclick="toggleHeader(this, 'RegionProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="RegionProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
@@ -1264,11 +1265,11 @@ function initializeGlobalVariables(){
 				</div> 
 			</fieldset>
 		</c:if>
-	
-			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
+				<a onclick="toggleHeader(this, 'SectorProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="SectorProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>

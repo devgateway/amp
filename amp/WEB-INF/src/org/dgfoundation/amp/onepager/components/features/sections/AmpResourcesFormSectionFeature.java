@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
@@ -52,24 +54,40 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
 		add(newLink);
 		
-		AmpAutocompleteFieldPanel<NodeWrapper> searchIndicators=new AmpAutocompleteFieldPanel<NodeWrapper>("addExisting","Search Resources",AmpResourcesSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<NodeWrapper> searchDocs=new AmpAutocompleteFieldPanel<NodeWrapper>("addExisting","Search Resources",AmpResourcesSearchModel.class) {			
 			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
 			protected String getChoiceValue(NodeWrapper choice) {
-				return choice.getTitle();
+				return choice.getTitle()+" ("+choice.getUuid().hashCode()+")";
 			}
 
 			@Override
 			public void onSelect(AjaxRequestTarget target, NodeWrapper choice) {
-				AmpActivityDocument ad = new AmpActivityDocument();
-				ad.setAmpActivity(am.getObject());
-				ad.setUuid(choice.getUuid());
-				ad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-				am.getObject().getActivityDocuments().add(ad);
+				Set<AmpActivityDocument> existingActDocs = am.getObject().getActivityDocuments();
+				boolean docExists = false;
+				
+				if(choice.getUuid() != null){
+					for (AmpActivityDocument ampActivityDocument : existingActDocs) {
+						if(ampActivityDocument.getUuid().equals(choice.getUuid())){
+							docExists = true;
+							break;
+						}
+					}
+				}
+				
+				if(!docExists){
+					AmpActivityDocument ad = new AmpActivityDocument();
+					ad.setAmpActivity(am.getObject());
+					ad.setUuid(choice.getUuid());
+					ad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+					am.getObject().getActivityDocuments().add(ad);
+				}
+				
 				target.addComponent(resourcesList.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
+				
 			}
 
 			@Override
@@ -78,6 +96,6 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 			}
 		};
 
-		add(searchIndicators);
+		add(searchDocs);
 	}
 }

@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -38,12 +39,16 @@ import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
-public class NodeWrapper {
+public class NodeWrapper{
 	
 	private static Logger logger	= Logger.getLogger(NodeWrapper.class);
 	
 	private Node node;
 	private boolean errorAppeared	= false;
+	
+	public NodeWrapper() {
+		
+	}
 	
 	public NodeWrapper(Node node) {
 		this.node	= node;
@@ -877,6 +882,15 @@ public class NodeWrapper {
 				e.printStackTrace();
 			}
 		return true;
+	}
+	
+	/**
+	 * Used for Wicket ,when selecting item from dropdown.
+	 * Only title isn't unique, together with id it becomes one
+	 * @return
+	 */
+	public String getFullName(){
+		return this.getTitle()+" ("+this.getUuid().hashCode()+")";
 	}
 	
 }

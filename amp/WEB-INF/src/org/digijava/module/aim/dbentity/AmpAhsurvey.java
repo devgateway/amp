@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.Output;
 
 import com.rc.retroweaver.runtime.Collections;
 
-public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
+public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
 
 	private Long ampAHSurveyId;
 
@@ -89,29 +89,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
         this.pointOfDeliveryDonor = pointOfDeliveryDonor;
     }
     
-    @Override
-	public boolean equals(Object obj) {
-		if(obj instanceof AmpAhsurvey) {
-			AmpAhsurvey aux = (AmpAhsurvey) obj;
-			if (aux.getAmpAHSurveyId() != null && aux.getAmpAHSurveyId() == this.getAmpAHSurveyId()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-	
-	@Override
-	public int hashCode() {
-		if(this.ampAHSurveyId != null) {
-			return this.ampAHSurveyId.intValue();
-		} else {
-			return 0;
-		}
-	}
-	
+   
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpAhsurvey aux = (AmpAhsurvey) obj;
@@ -208,5 +186,12 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+	@Override
+	public int compareTo(AmpAhsurvey o) {
+		if(this.getAmpActivityId()!=null && o.getAmpAHSurveyId()!=null)
+			return this.getAmpAHSurveyId().compareTo(o.getAmpAHSurveyId());
+		else return -1;
 	}
 }

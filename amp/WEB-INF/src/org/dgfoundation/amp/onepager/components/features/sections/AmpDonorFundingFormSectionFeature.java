@@ -118,6 +118,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				list.addItem(funding);
 				target.addComponent(list.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				list.updateModel();
 			}
 
 			@Override

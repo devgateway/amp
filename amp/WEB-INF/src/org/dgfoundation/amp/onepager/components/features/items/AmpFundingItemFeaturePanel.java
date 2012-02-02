@@ -73,6 +73,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				funding.setGroupVersionedFunding(System.currentTimeMillis());
 				
 				parent.getList().addItem(funding);
+				parent.getList().updateModel();
 				target.addComponent(parent);
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
 			}

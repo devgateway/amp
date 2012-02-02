@@ -102,6 +102,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.addComponent(parent.getFundingInfo());
+						updateModel();
 					};
 				});
 			}

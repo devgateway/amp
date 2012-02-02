@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -78,7 +79,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
         IModel<Set<AmpAhsurvey>> surveys = new PropertyModel<Set<AmpAhsurvey>>(am, "survey");
         
         if (surveys.getObject() == null)
-        	surveys.setObject(new HashSet<AmpAhsurvey>());
+        	surveys.setObject(new TreeSet<AmpAhsurvey>());
         
         if (am.getObject().getFunding() == null)
         	am.getObject().setFunding(new HashSet());

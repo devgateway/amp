@@ -212,8 +212,8 @@ function closeWindow() {
       <td>
           <table border="0" class="inside">
         <field:display name="Admin Indicator name" feature="Admin"></field:display>
-          <tr id="trName">
-            <td class="addNewIndicatorLabel">
+          <tr id="trName" class="addNewIndicatorLabel">
+            <td>
             <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             <span style="color:Red;">*</span>
             </td>
@@ -263,7 +263,7 @@ function closeWindow() {
           </tr>
           <field:display name="Sectors" feature="Admin"></field:display> 
           <tr>
-          <td class="addNewIndicatorLabel">
+          <td  class="addNewIndicatorLabel">
           <digi:trn key="admin:sectors">
           	Sectors
           </digi:trn>
@@ -277,7 +277,7 @@ function closeWindow() {
            </tr>
           <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
-            <td class="addNewIndicatorLabel">
+            <td  class="addNewIndicatorLabel">
             <digi:trn key="admin:creationdate">
             Creation date:
             </digi:trn>

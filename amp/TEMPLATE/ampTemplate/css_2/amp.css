@@ -1,5 +1,5 @@
-+html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;}
-+body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;}
+html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;}
+body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;}
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
 div#ampcontainer{width:1000px;margin:0 auto;}
@@ -20,8 +20,7 @@ h1 {text-transform:uppercase;}
 .buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_dis {background-color:#979797; border-top: 1px solid #C5C5C5; border-left:1px solid #C5C5C5; border-right:1px solid #5D5D5D; border-bottom:1px solid #5D5D5D; font-size:11px; color:#D9D9D9; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;}
-+.tabSubmit .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;margin:10px 0px 0px 0px;}
-
+.tabSubmit .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;margin:10px 0px 0px 0px;}
 .buttonx_sm_lgn {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; margin-right:10px;}
 .button_green {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:15px;}
 .button_green_btm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:5px;}
@@ -45,7 +44,6 @@ table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: col
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #cccccc; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;padding:3px;}
-
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
 .ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
 .ins_title_sm {font-size:9px; color:#767676;}
@@ -653,7 +651,6 @@ div.adminicon{float:right;}
 	font-size:12px;
 }
 /**-----IE FIXES-----**/
--html.chrome body{background-position:0px -34px;}
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
 .menucontainer{position:relative;height:30px;}
 .main_menu ul{position:absolute;top:3px;}
@@ -710,9 +707,9 @@ ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;
 #relateorgdiv ul {margin:0;}
 #donor_fund a {color:#000000; font-weight:bold;}
 
+a.hoverUnderline {text-decoration: none;}
+a:focus.hoverUnderline {outline: 0px none blue !important;}
 a:HOVER.hoverUnderline {text-decoration: underline;}
-.innerTabHeader{padding:0px 5px 0px 0px;}
-td.addNewIndicatorLabel{font-family:arial;font-size:12px;color:#000;font-weight:bold;}
 .innerTabHeader{padding:0px 5px 0px 0px;}
 #currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
 td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}

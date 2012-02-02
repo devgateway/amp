@@ -104,27 +104,26 @@
 											<tr>
 												<td>
 													<div style="margin-left: 5px; margin-right: 5px; padding: 2px 2px 2px 2px; Font-size: 8pt; font-family: Arial;">
-														<div style="display: none; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
-															
-						                                            	<h3><strong><digi:trn key="rep:pop:SelectedFilters">Selected Filters</digi:trn>:</strong></h3>
-						                                                <ul style="margin:0px;padding:0px;">
-                                                                        <li><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedStartYear"/></li>
-						                                                <li><digi:trn key="rep:pop:SelectedRangeEndYear">End Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedEndYear"/></li>
-						                                                <i><digi:trn key="rep:pop:CalendarType">Calendar Type</digi:trn>:</i>
+														<div style="display: none; padding: 2px 2px 2px 2px; border-style: solid; border-width: 1px; border-color: #D0D0D0; font-size: 11px; background:#f2f2f2;padding:5px;width:100%;" id="currentDisplaySettings" >
+														
+						                                        
+						                                            	 <h3><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year</digi:trn><bean:write name="parisIndicatorForm" property="selectedStartYear"/></h3>
+						                                              <ul style="margin:0px;padding:0px;"><li><digi:trn key="rep:pop:SelectedRangeEndYear">End Year</digi:trn><bean:write name="parisIndicatorForm" property="selectedEndYear"/>
+						                                                </li><li><digi:trn key="rep:pop:CalendarType">Calendar Type</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedCalendar == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedCalendar != null}">
 						                                                	<digi:trn><bean:write name="parisIndicatorForm" property="selectedCalendar"/></digi:trn>
 						                                                </c:if>
-						                                                <li><digi:trn key="rep:pop:CurrencyType">Currency Type</digi:trn>:</i>
+						                                                </li><li><digi:trn key="rep:pop:CurrencyType">Currency Type</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedCurrency == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
 						                                                <c:if test="${parisIndicatorForm.selectedCurrency != null}">
 						                                                	<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>
 						                                                </c:if>
-						                                               <li><digi:trn key="rep:pop:Donors">Donors</digi:trn>:</i>
+						                                                </li><li><digi:trn key="rep:pop:Donors">Donors</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedDonors == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
@@ -133,7 +132,7 @@
 						                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
-						                                                <li><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:</i>
+						                                                </li><li><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedDonorGroups == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
@@ -142,7 +141,7 @@
 						                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
-						                                                <li><digi:trn>Status</digi:trn>:</i>
+						                                                </li><li><digi:trn>Status</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedStatuses == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
@@ -151,7 +150,7 @@
 						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>
-						                                                <li><digi:trn>Financing Instrument</digi:trn>:</i>
+						                                                </li><li><digi:trn>Financing Instrument</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedFinancingIstruments == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
@@ -160,7 +159,7 @@
 						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>
 						                                                    </logic:iterate>
 						                                                </c:if>                                              
-						                                                <li><digi:trn>Sectors</digi:trn>:</i>
+						                                                </li><li><digi:trn>Sectors</digi:trn>:
 						                                                <c:if test="${parisIndicatorForm.selectedSectors == null}">
 						                                                	<digi:trn key="All">All</digi:trn>
 						                                                </c:if>
@@ -168,10 +167,11 @@
 						                                                	<logic:iterate id="idSector" property="selectedSectors" name="parisIndicatorForm">
 						                                                    	<%=org.digijava.module.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>
 						                                                    </logic:iterate>
-						                                                </c:if>                                                
-						                                   
-														</div>
+						                                                </c:if>  </li></ul>  
+                                                                         <div style="clear:both;"></div>                                         
+						                                     
 													</div>
+                                                     <div style="clear:both;"></div>
 												</td>
 											</tr>
 										</table>

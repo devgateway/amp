@@ -13,7 +13,7 @@
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
-	         <td width="15%" height="33"  class="inside_header"  >
+	        <td width="15%" height="33"  class="inside_header" >
 	            <div align="center">
 	                <strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong>
 	            </div>
@@ -21,7 +21,7 @@
 	        <bean:define id="piForm" name="parisIndicatorForm" type="org.digijava.module.parisindicator.form.PIForm"></bean:define>
 	        <bean:define id="auxRow" name="parisIndicatorForm" property="mainTableRows[0]" type="org.digijava.module.parisindicator.helper.row.PIReport6Row"></bean:define>
 	        <%for(int i = 0; i < auxRow.getYears().length; i++) {%>
-	           <td width="10%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+	           <td width="10%" height="33"  class="inside_header" >
                     <div align="center">
                         <strong><%=piForm.getSelectedStartYear() + i%></strong>
                     </div>
@@ -30,7 +30,7 @@
 		</tr>
 		<logic:empty name="parisIndicatorForm" property="mainTableRows">
 	        <tr>
-	            <td width="100%" align="center" height="55" colspan="${parisIndicatorForm.selectedEndYear + 2 - parisIndicatorForm.selectedStartYear}" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+	            <td width="100%" align="center" height="55" colspan="${parisIndicatorForm.selectedEndYear + 2 - parisIndicatorForm.selectedStartYear}"  class="inside_header" >
 	                <div align="center">
 	                    <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
 	                </div>

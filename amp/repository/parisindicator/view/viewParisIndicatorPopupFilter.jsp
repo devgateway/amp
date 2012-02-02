@@ -97,16 +97,15 @@ div.membersSelector div.memsearch {
 }
 
 .groupingSelector ul {
-	margin: 0 auto;
 	margin-bottom: 15px;
 	width: 285px;
 	
 }
 
- .groupingSelector ul li {
- 	list-style: none;
+.groupingSelector ul li {
+	list-style: none;
 	border-bottom: 1px solid #d0d0d0;
- }
+}
 
 .groupingSelector ul li a {
 	padding: 5px;

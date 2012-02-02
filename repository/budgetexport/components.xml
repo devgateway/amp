@@ -4,6 +4,8 @@
 <secondary-pages>
 <!-- Budget export  -->
 	<page name="viewBudgetExportManager"  title ="- Budget Export" />
+	<page name="addEditBudgetExpProjectLayout"  title ="Add/Edit Budget Export Project" />
+
 </secondary-pages>
 
 

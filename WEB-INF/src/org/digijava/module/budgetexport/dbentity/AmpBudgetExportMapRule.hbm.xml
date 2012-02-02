@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" table="amp_budget_export_map_rule">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">amp_budget_export_map_rule_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String"/>
+        <property name="header" column="has_header" type="boolean"/>
+
+        <many-to-one name="project" column="PROJECT" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" cascade="none"/>
+        <many-to-one name="ampColumn" column="AMP_COLUMN" class="org.digijava.module.aim.dbentity.AmpColumns" cascade="none"/>
+	</class>
+
+</hibernate-mapping>

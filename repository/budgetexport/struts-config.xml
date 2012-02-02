@@ -4,11 +4,17 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="beBudgetExportForm" type="org.digijava.module.budgetexport.form.BudgetExportForm" />
+		<form-bean name="beMapRuleForm" type="org.digijava.module.budgetexport.form.BEMapRuleForm" />
+		<form-bean name="beProjectForm" type="org.digijava.module.budgetexport.form.BEProjectForm" />
+
 	</form-beans>
 	<action-mappings>
-		<action name="beBudgetExportForm" path="/budgetexport/budgetExport" scope="session" 
+		<action name="beBudgetExportForm" path="/budgetexport/budgetExport" scope="request" 
 						type="org.digijava.module.budgetexport.action.BudgetExportAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=viewBudgetExportManager" />
+		</action>
+		<action  name="beProjectForm" path="/budgetexport/addEditDeleteProject" scope="request" type="org.digijava.module.budgetexport.action.AddEditDeleteProject" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=addEditBudgetExpProjectLayout" />
 		</action>
 	</action-mappings>
 </struts-config>

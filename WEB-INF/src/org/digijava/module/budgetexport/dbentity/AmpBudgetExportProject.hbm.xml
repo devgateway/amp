@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" table="amp_budget_export_project">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">amp_budget_export_project_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String"/>
+        <property name="description" column="description" type="java.lang.String"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+	</class>
+
+</hibernate-mapping>

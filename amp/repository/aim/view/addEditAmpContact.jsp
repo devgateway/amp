@@ -529,7 +529,12 @@
 							<li class="selected" >
 								<a>
 									<div>
-										<digi:trn>Add New Contact</digi:trn>
+										<c:if test="${not empty addressbookForm.contactId}">
+											<digi:trn>Edit Contact</digi:trn>
+										</c:if>
+										<c:if test="${empty addressbookForm.contactId}">
+											<digi:trn>Add New Contact</digi:trn>
+										</c:if>
 									</div>
 								</a>
 							</li>

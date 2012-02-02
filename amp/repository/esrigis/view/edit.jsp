@@ -267,6 +267,13 @@ function validateForm(){
 	if($("input[name=name]").val() == ""){
 		strError = "<digi:trn jsFriendly='true'>Name</digi:trn>\n";
 	}
+	if($("input[name=iconFile]").val() == ""){
+		if (strError==""){
+			strError = "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+		}else{
+			strError = strError +  "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+		}
+	}
 	if (strError != ""){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
 		return false;

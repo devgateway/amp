@@ -100,6 +100,7 @@
 <feature:display name="Structures" module="Map Module"></feature:display>
 <feature:display name="Highlight regions" module="Map Module"></feature:display>
 <feature:display name="Highlight Zones" module="Map Module"></feature:display>
+<feature:display name="Media Search" module="Map Module"></feature:display>
 
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 

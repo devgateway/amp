@@ -16,6 +16,7 @@ dojo.require("dijit.Menu");
 dojo.require("esri.dijit.Legend");
 dojo.require("esri.layers.FeatureLayer");
 dojo.require("dojo.dnd.Moveable");
+dojo.require("dojo.io.script");
 /*----variables---------*/
 var map, navToolbar, geometryService, findTask, findParams;
 var totallocations = 0;
@@ -150,59 +151,21 @@ function init() {
  */
 
 function createMapAddLayers(myService1, myService2) {
-	customLods = [ {
-		"level" : 0,
-		"resolution" : 9783.93962049996,
-		"scale" : 36978595.474472
-	}, {
-		"level" : 1,
-		"resolution" : 4891.96981024998,
-		"scale" : 18489297.737236
-	}, {
-		"level" : 2,
-		"resolution" : 2445.98490512499,
-		"scale" : 9244648.868618
-	}, {
-		"level" : 3,
-		"resolution" : 1222.99245256249,
-		"scale" : 4622324.434309
-	}, {
-		"level" : 4,
-		"resolution" : 611.49622628138,
-		"scale" : 2311162.217155
-	}, {
-		"level" : 5,
-		"resolution" : 305.748113140558,
-		"scale" : 1155581.108577
-	}, {
-		"level" : 6,
-		"resolution" : 152.874056570411,
-		"scale" : 577790.554289
-	}, {
-		"level" : 7,
-		"resolution" : 76.4370282850732,
-		"scale" : 288895.277144
-	}, {
-		"level" : 8,
-		"resolution" : 38.2185141425366,
-		"scale" : 144447.638572
-	}, {
-		"level" : 9,
-		"resolution" : 19.1092570712683,
-		"scale" : 72223.819286
-	}, {
-		"level" : 10,
-		"resolution" : 9.55462853563415,
-		"scale" : 36111.909643
-	}, {
-		"level" : 11,
-		"resolution" : 4.77731426794937,
-		"scale" : 18055.954822
-	} ];
-	map = new esri.Map("map", {
-		lods : customLods,
-		extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)
-	});
+	customLods = [
+	       {"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7}, 
+           {"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236}, 
+           {"level" : 2,"resolution" : 2445.98490512499,"scale" : 9244648.868618}, 
+           {"level" : 3,"resolution" : 1222.99245256249,"scale" : 4622324.434309}, 
+           {"level" : 4,"resolution" : 611.49622628138,"scale" : 2311162.217155}, 
+           {"level" : 5,"resolution" : 305.748113140558,"scale" : 1155581.108577}, 
+	       {"level" : 6,"resolution" : 152.874056570411,"scale" : 577790.554289}, 
+	       {"level" : 7,"resolution" : 76.4370282850732,"scale" : 288895.277144}, 
+	       {"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572}, 
+	       {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286}, 
+	       {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
+	       {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
+	
+	map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
@@ -1344,9 +1307,48 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ donorArray[i].donorname + " </div><br/>";
 		}
 	}
-
 	htmlDiv += "</div>";
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');
 	var dnd = new dojo.dnd.Moveable(dojo.byId("pointsLegend"));
 }
+
+
+
+var results = new Array();
+function sendText(value){
+		var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?getmedia=true&searchtext="+value,
+			handleAs : "json",
+			sync : true,
+			load : function(jsonData) {
+				dojo.forEach(jsonData.response.datalayer.locations, function(location) {
+					results.push(location);
+				});
+				placemedia();
+			},
+			error : function(error) {
+				console.log(error);
+			}
+		}
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+}
+	
+function placemedia(){
+	for ( var int = 0; int < results.length; int++) {
+		var pt = new esri.geometry.Point(results[int].latitude,results[int].longitude,map.spatialReference);
+		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([ 255, 0, 0, 0.5 ]));
+		var attr = {"Temp" : "Temporal Attribute"};
+		var infoTemplate = new esri.InfoTemplate("");
+		var pgraphic = new esri.Graphic(pt, sms, attr,infoTemplate);
+		map.graphics.add(pgraphic);
+	}
+}
+
+
+
+
+
+
+

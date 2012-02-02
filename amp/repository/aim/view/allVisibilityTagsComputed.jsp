@@ -106,6 +106,7 @@
 <feature:display name="Structures" module="Map Module"></feature:display>
 <feature:display name="Highlight regions" module="Map Module"></feature:display>
 <feature:display name="Highlight Zones" module="Map Module"></feature:display>
+<feature:display name="Media Search" module="Map Module"></feature:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 

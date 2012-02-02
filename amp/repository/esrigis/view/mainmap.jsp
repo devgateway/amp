@@ -121,6 +121,17 @@
      	});
 	});
 	
+	$(function(){
+  		$('#mediasearch').click(function(){
+  			$('#mediasearchdiv').toggle('slow');
+     	});
+	});
+	$(function(){
+  		$('#mediago').click(function(){
+  			sendText(document.getElementById('searchtext').value);
+     	});
+	});
+	
 	var currentFormat = "<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %>";
 	
 	function translate(text) {
@@ -319,6 +330,9 @@
 							<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
 						</feature:display>
 						<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
+						<feature:display name="Media Search" module="Map Module">
+						<li id="mediasearch" style="cursor: pointer;"><digi:trn>Media Search</digi:trn></li>
+						</feature:display>
 				     </ul>
 			     </div>
 		    </div>
@@ -404,6 +418,27 @@
         		</tr>
         	</table>
         </div>
+        
+         <!-- Search text-->
+        <feature:display name="Media Search" module="Map Module">
+        <div id="mediasearchdiv" class="searchContent">
+        	<table>
+        		<tr>
+        			<td style="color: white;">
+        				<digi:trn>Text</digi:trn>
+        			</td>
+        			<td>
+        				<input type="text"  name="formInput" id="searchtext"></input>
+        				<!-- input type="text" id="textsearch" style="width: 100px;"/--> 
+        			</td>
+        			<td>
+        				<button type="submit" data-dojo-type="dijit.form.Button" id="mediago">Send it!</button>
+        			</td>
+        			
+        		</tr>
+        	</table>
+        </div>
+        </feature:display>	
         <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
         	<div class="gisBoxHeader">

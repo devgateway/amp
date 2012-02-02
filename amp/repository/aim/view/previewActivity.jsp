@@ -871,7 +871,7 @@ function collapseAll() {
 										name="selectedOrganizations" 
 										type="org.digijava.module.aim.helper.OrgProjectId"
 										toScope="request"/></b>
-										<!-- jsp:include page="previewOrganizationPopup.jsp" /-->
+										<jsp:include page="previewOrganizationPopup.jsp" />
 								</c:if>							</td>
 						</tr>
 					</c:if>

@@ -149,6 +149,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			String fmName, final boolean newActivity, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) throws Exception {
 		super(id, am, fmName, true);
 		
+		this.enabledFmButton.setVisible(false);
+		this.visibleFmButton.setVisible(false);
+		this.ignoreFmVisibility = true;
+		this.ignoreFmButtonsVisibility = true;
+		this.setVisible(true);
+		
 		activityForm=new Form<AmpActivityVersion>("activityForm") { 
 			@Override
 			protected void onError() {

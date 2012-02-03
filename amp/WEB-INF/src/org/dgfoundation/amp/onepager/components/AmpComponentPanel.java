@@ -43,6 +43,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected Label cascadeFmToChildrenLabel;
 	
 	protected boolean ignoreFmVisibility = false;
+	protected boolean ignoreFmButtonsVisibility = false;
 	
 	public IModel<T> getModel() {
 		return (IModel<T>) getDefaultModel();
@@ -267,14 +268,14 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		enabledFmButton.add(new AttributeModifier("value", new Model((fmEnabled?"Disable":"Enable")+ " "+getShorterFmName())));
 		visibleFmButton.add(new AttributeModifier("value", new Model((fmVisible?"Hide":"Show")+ " "+getShorterFmName())));
 		
-		if(fmMode) {
+		if(fmMode && !ignoreFmButtonsVisibility) {
 			visibleFmButton.setVisible(true);
 			enabledFmButton.setVisible(true);
 			cascadeFmToChildren.setVisible(true);
 			cascadeFmToChildrenLabel.setVisible(true);
+			String style="border: 1px dashed #9E334D; padding: 4px;";
+			fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		}
-		String style=fmMode?"border: 1px dashed #9E334D; padding: 4px;":"";
-		fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		super.onBeforeRender();
 	}
 }

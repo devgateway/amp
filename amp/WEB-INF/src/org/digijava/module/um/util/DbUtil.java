@@ -17,6 +17,7 @@
  *************************************************************************/
 package org.digijava.module.um.util;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -58,6 +59,8 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.exception.UMException;
+
+import sun.security.util.BigInt;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -589,37 +592,35 @@ public class DbUtil {
 
     }
     
-    public static boolean registerUser(String id) throws
-            UMException {
-        Session sess = null;
+    public static boolean registerUser(String id) throws UMException {
+    	Session session = null;
         boolean verified = false;
         Transaction tx = null;
+        BigInteger iduser;
         try {
-            sess = PersistenceManager.getSession();
-
-            String queryString = "from " + User.class.getName() + " rs where sha(concat(rs.email,rs.id))=:hash and rs.emailVerified=false";
-            Query query = sess.createQuery(queryString);
+        	session = PersistenceManager.getSession();
+            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false";	
+            String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
+            Query query = session.createSQLQuery(queryString);
             query.setString("hash", id);
-            
-            Iterator usIter = query.iterate();
-            if (usIter.hasNext()) {
-                User user = (User) usIter.next();
-                user.setActive(true);
-                user.setBanned(false);
-                user.setEmailVerified(true);
-//beginTransaction();
-                sess.update(user);
-                //tx.commit();
-                verified =true;
-                
-            } 
+            iduser = (BigInteger) query.list().get(0);
+            if (iduser!= null){
+	            User user = (User) session.load(User.class, iduser.longValue());
+	            user.setActivate(true);
+	            user.setBanned(false);
+	            user.setEmailVerified(true);
+	            session.update(user);
+	            verified = true;
+            }else{
+            	verified = false;
+            }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
         } finally {
-            if (sess != null) {
+            if (session != null) {
                 try {
-                    PersistenceManager.releaseSession(sess);
+                    PersistenceManager.releaseSession(session);
                 } catch (Exception ex1) {
                     logger.warn("releaseSession() failed ", ex1);
                 }

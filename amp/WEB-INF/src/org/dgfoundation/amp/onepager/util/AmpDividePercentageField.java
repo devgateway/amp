@@ -3,10 +3,12 @@ package org.dgfoundation.amp.onepager.util;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 
 public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	
@@ -61,6 +63,19 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			dif = dif - delta;
 		}
 		target.addComponent(list.getParent());
+		//This step is required for the validation of the new data
+		list.visitChildren(new IVisitor<Component>() {
+			@Override
+			public Object component(Component component) {
+				if (component instanceof AmpPercentageTextField){
+					AmpPercentageTextField aptf = (AmpPercentageTextField) component;
+					aptf.getTextContainer().modelChanged();
+				}
+				return Component.IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+		//in order to redraw the list without validation errors
+		list.removeAll();
 	}
 	
 	public abstract void setPercentage(T item, int val);

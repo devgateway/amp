@@ -1388,6 +1388,7 @@ public class ReportsFilterPicker extends MultiAction {
 			return mapping.findForward("reportWizard");
 		}
 		if ( request.getParameter("queryEngine") != null && "true".equals(request.getParameter("queryEngine")) ) {
+			httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 			return mapping.findForward("queryView");
 		}
 			

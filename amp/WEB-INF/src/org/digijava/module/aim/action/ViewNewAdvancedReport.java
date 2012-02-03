@@ -89,9 +89,10 @@ public class ViewNewAdvancedReport extends Action {
 		boolean resetSettings = request.getParameter("resetSettings")==null? false : ("true".equals(request.getParameter("resetSettings"))? true : false);
 		String lastReportId	= (String)request.getSession().getAttribute("LAST_REPORT_ID") ; 
 		String ampReportId 	= request.getParameter("ampReportId");
-		
+		if ( request.getParameter("queryEngine") == null || "false".equals(request.getParameter("queryEngine")) ){
 		if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
 			 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
+		}
 		
 		if ( ampReportId != null )
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);

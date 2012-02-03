@@ -24,13 +24,13 @@ public class AddEditDeleteProject extends DispatchAction {
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-        return edit(mapping, form, request, response);
+        return add(mapping, form, request, response);
     }
 
     public ActionForward add(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEProjectForm beProjectForm = (BEProjectForm) form;
-        beProjectForm.setAmpBudgetExportProject(new AmpBudgetExportProject());
+        beProjectForm.setId(null);
         return mapping.findForward("forward");
     }
 
@@ -38,23 +38,39 @@ public class AddEditDeleteProject extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEProjectForm beProjectForm = (BEProjectForm) form;
 
-        AmpBudgetExportProject newPrj = new AmpBudgetExportProject();
-        newPrj.setName(beProjectForm.getName());
-        newPrj.setDescription(beProjectForm.getDescription());
-        newPrj.setCreationDate(new Date());
+        AmpBudgetExportProject prj = null;
 
-        DbUtil.saveOrUpdateProject(newPrj);
+        if (beProjectForm.getId() == null || beProjectForm.getId().longValue() <= 0l) {
+            prj = new AmpBudgetExportProject();
+            prj.setCreationDate(new Date());
+        } else {
+            prj = DbUtil.getProjectById(beProjectForm.getId());
+        }
+        prj.setName(beProjectForm.getName());
+        prj.setDescription(beProjectForm.getDescription());
 
-        return mapping.findForward("forward");
+
+
+        DbUtil.saveOrUpdateProject(prj);
+
+        return mapping.findForward("projectList");
     }
 
     public ActionForward edit(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        BEProjectForm beProjectForm = (BEProjectForm) form;
+        AmpBudgetExportProject prj = DbUtil.getProjectById(beProjectForm.getId());
+
+        beProjectForm.setName(prj.getName());
+        beProjectForm.setDescription(prj.getDescription());
+
         return mapping.findForward("forward");
     }
 
     public ActionForward delete(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-        return mapping.findForward("forward");
+        BEProjectForm beProjectForm = (BEProjectForm) form;
+        DbUtil.deleteProjectById(beProjectForm.getId());
+        return mapping.findForward("projectList");
     }
 }

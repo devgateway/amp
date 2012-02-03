@@ -8,10 +8,10 @@
 				<param name="sequence">amp_budget_export_map_rule_seq</param>
 			</generator>
 		</id>
-		<property name="importedCode" column="IMP_CODE" type="java.lang.String"/>
-        <property name="ampObjectID" column="AMP_OBJECT_ID" type="java.lang.Long"/>
+		<property name="importedCode" column="imp_code" type="java.lang.String"/>
+        <property name="ampObjectID" column="amp_object_id" type="java.lang.Long"/>
 
-        <many-to-one name="rule" column="RULE" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" cascade="none"/>
+        <many-to-one name="rule" column="rule" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" cascade="none"/>
 
 	</class>
 

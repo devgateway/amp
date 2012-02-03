@@ -325,11 +325,20 @@ function cancel() {
 	eventForm.submit();	
 }
 function removeSelOrgs() {
-	setMethod("removeOrg");
-	selectAtts();
-	var eventForm = document.getElementById("showAmpEventFormID");
-	eventForm.target = "_self";
-	eventForm.submit();	
+	var orgList = document.getElementsByName("selOrganizations");
+	var confirmMsg = '<digi:trn jsFriendly="true">Are you sure to remove selected organizations?</digi:trn>';
+	var alertMsg = '<digi:trn jsFriendly="true">You should select at least one organization.</digi:trn>';
+	if (orgList[0].selectedIndex == -1){
+		alert (alertMsg);
+	} else {
+		if (confirm(confirmMsg)){
+			setMethod("removeOrg");
+			selectAtts();
+			var eventForm = document.getElementById("showAmpEventFormID");
+			eventForm.target = "_self";
+			eventForm.submit();	
+		}
+	}
 //	document.calendarEventForm.submit();
 }
 function submitForm() {
@@ -1187,13 +1196,15 @@ function removeGuest(obj) {
 																		</tr>
 						                    	</field:display>
 																	<field:display name="Remove Donor Button" feature="Donors">
-																		<tr>
-																			<td>
-																				<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
-																					<digi:trn key="btn:remove">Remove</digi:trn>
-																				</html:button>
-																			</td>
-																		</tr>
+																		<c:if test="${not empty calendarEventForm.organizations}">
+																			<tr>
+																				<td>
+																					<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
+																						<digi:trn key="btn:remove">Remove</digi:trn>
+																					</html:button>
+																				</td>
+																			</tr>
+																		</c:if>
 																	</field:display>
 																</table>
 															</div>

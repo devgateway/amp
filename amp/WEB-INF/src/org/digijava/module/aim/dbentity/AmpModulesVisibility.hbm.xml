@@ -10,7 +10,7 @@
 			</generator>
 		</id>
 
-		<property name="name" column="name" type="java.lang.String" />
+		<property name="name" column="name" type="java.lang.String" unique="true"/>
 		<property name="description" column="description" type="java.lang.String" />
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 

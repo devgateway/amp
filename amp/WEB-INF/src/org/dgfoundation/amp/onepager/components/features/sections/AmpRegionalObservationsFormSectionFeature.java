@@ -18,9 +18,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
@@ -55,16 +57,8 @@ public class AmpRegionalObservationsFormSectionFeature extends
 			}
 		};
 		add(addbutton);
-
-		IModel<List<AmpRegionalObservation>> listModel = new AbstractReadOnlyModel<List<AmpRegionalObservation>>() {
-			private static final long serialVersionUID = 3706184421459839210L;
-
-			@Override
-			public List<AmpRegionalObservation> getObject() {
-				return new ArrayList<AmpRegionalObservation>(setModel.getObject());
-			}
-		};
-	
+		IModel<List<AmpRegionalObservation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel,new AmpRegionalObservation.RegionalObservationComparator());
+		
 		final List<Class> classTree = new ArrayList<Class>();
 		final Map<Class, String> setName = new HashMap<Class, String>();
 		classTree.add(AmpRegionalObservation.class);

@@ -292,6 +292,8 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
+			<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 			<digi:trn>Total Actual Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
@@ -319,7 +321,11 @@ function collapseAll() {
 			         <bean:write name="aimEditActivityForm" property="currCode" />
 			         </b>
 		         </c:if>
-			<hr/>
+		         <hr/>
+		       </module:display>
+			
+			<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 			<digi:trn>Total Actual Distributements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
@@ -348,6 +354,9 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</module:display>
+			<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
 	                <b>
@@ -376,6 +385,7 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</module:display>
 			<digi:trn>Duration of project</digi:trn>: <br/>
 			<b>${aimEditActivityForm.planning.projectPeriod }</b>
 			<hr/>

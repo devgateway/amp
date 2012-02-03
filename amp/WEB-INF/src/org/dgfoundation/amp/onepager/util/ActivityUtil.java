@@ -478,7 +478,8 @@ public class ActivityUtil {
 				tdd.setName(temp.getFileName());
 				tdd.setDescription(temp.getDescription());
 				tdd.setNotes(temp.getNote());
-				tdd.setCmDocTypeId(temp.getType().getId());
+				if(temp.getType()!=null)
+					tdd.setCmDocTypeId(temp.getType().getId());
 				tdd.setDate(temp.getDate());
 				tdd.setYearofPublication(temp.getYear());
 				

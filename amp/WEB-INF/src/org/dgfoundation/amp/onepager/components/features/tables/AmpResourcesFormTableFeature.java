@@ -123,9 +123,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					logger.error("ola");
 					return;
 				}
-				
 				item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
-				item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
+				
+				String webLink = item.getModelObject().getWebLink();
+				if (webLink!=null && webLink.length()>0 ){
+					item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "webLink"), "Resource Name", true));
+				}
+				else
+					item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
 				
 				PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
 				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -144,7 +149,6 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				else
 					drs = new DownloadResourceStream(item.getModelObject().getFile());
 				
-				String webLink = item.getModelObject().getWebLink();
 				
 				if (webLink!=null && webLink.length()>0 ){
 					ExternalLink link = new ExternalLink("download", new Model<String>(webLink));

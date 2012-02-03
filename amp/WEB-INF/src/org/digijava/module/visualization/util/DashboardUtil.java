@@ -36,6 +36,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -128,6 +129,15 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
+        // If there's just ONE location selected, let's find out if it's a Region or a Zone to decide to aggregate by Region or not
+        boolean aggregateTopLevel = true;
+        if(filter.getSelLocationIds().length == 1 && filter.getSelLocationIds()[0] != -1)
+		{
+			AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[0]);
+			if(loc.getParentCategoryValue().getValue().equalsIgnoreCase("Region")){
+				aggregateTopLevel = false;
+			}
+		}
 		for (Iterator<AmpCategoryValueLocations> iterator = regionsList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
 			Long[] ids = {location.getId()};
@@ -138,17 +148,20 @@ public class DashboardUtil {
             BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             //Get Top Level Zone/Region
             AmpCategoryValueLocations topLevelLocation = getTopLevelLocation(location);
-            
-            if(map.containsKey(topLevelLocation)){
-            	BigDecimal currentTotal = map.get(topLevelLocation);
-            	map.put(topLevelLocation, total.add(currentTotal));
+            if(aggregateTopLevel){
+                if(map.containsKey(topLevelLocation)){
+                	BigDecimal currentTotal = map.get(topLevelLocation);
+                	map.put(topLevelLocation, total.add(currentTotal));
+                }
+                else
+                {
+        	        map.put(topLevelLocation, total);
+                }
             }
             else
             {
-    	        map.put(topLevelLocation, total);
+    	        map.put(location, total);
             }
-            
-	        map.put(location, total);
 		}
 		return sortByValue (map);
 	}
@@ -314,7 +327,6 @@ public class DashboardUtil {
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
-			form.getSummaryInformation().setNumberOfRegions(regionList.size());
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
@@ -333,6 +345,7 @@ public class DashboardUtil {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			form.getSummaryInformation().setNumberOfRegions(form.getRanksInformation().getFullRegions().size());
 			
 		} else {
 			form.getSummaryInformation().setTotalCommitments(new BigDecimal(0));

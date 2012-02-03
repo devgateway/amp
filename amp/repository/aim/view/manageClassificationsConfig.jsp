@@ -78,7 +78,7 @@
 															type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                                       		<tr>
                                                          		<td width="80%" bgcolor="#ffffff" class="inside">
-                                                             		<digi:trn>${classConfig.name}</digi:trn>
+                                                             		<digi:trn><c:out value="${classConfig.name}"/></digi:trn>
                                                               	</td>
                                               					<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
                                                              		<c:set var="trnEditScheme">

@@ -5,31 +5,31 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 <div id="reportSheet" style="display:none">
-	<div class="hd">Report Sheet</div>
+	<div class="hd"><digi:trn>Report Sheet</digi:trn></div>
 	<div align="center" class="bd" id="tableForReportSheet">
 		<table>
 				<tr>
-					<td><strong>ID:</strong></td>
+					<td><strong><digi:trn>ID</digi:trn>:</strong></td>
 					<td id='reportId'>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>Name:</strong></td>
+					<td><strong><digi:trn>Name</digi:trn>:</strong></td>
 					<td id='reportName'>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>Type:</strong></td>
+					<td><strong><digi:trn>Type</digi:trn>:</strong></td>
 					<td id='reportType'>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>Is drilldown:</strong></td>
+					<td><strong><digi:trn>Is drilldown</digi:trn>:</strong></td>
 					<td id='reportDrilldown'>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>Is public:</strong></td>
+					<td><strong><digi:trn>Is public</digi:trn>:</strong></td>
 					<td id='reportPublic'>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>Description:</strong></td>
+					<td><strong><digi:trn>Description</digi:trn>:</strong></td>
 					<td id='reportDescription'>&nbsp;</td>
 				</tr>
 				<tr>
@@ -38,10 +38,10 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td><a style='cursor:pointer;color:#006699' onClick='openReportWindow()'><digi:trn key='aim:defaultTeamReportViewReportMessage'>View report</digi:trn></a></td>
+					<td><a style='cursor:pointer;color:#006699' onClick='openReportWindow()'><digi:trn key='aim:defaultTeamReportViewReportMessage'><digi:trn>View report</digi:trn></digi:trn></a></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button type="button" id="closePanelButton" class="buttonx" onClick="YAHOO.reportsheet.myPanel.hide()">Close</button></td>
+					<td colspan="2"><button type="button" id="closePanelButton" class="buttonx" onClick="YAHOO.reportsheet.myPanel.hide()"><digi:trn>Close</digi:trn></button></td>
 				</tr>
 			</table>
 	</div>
@@ -143,19 +143,19 @@
 		var str_type	= '';
 		switch(num_type) {
 			case '1': 
-				str_type="Donor";
+				str_type="<digi:trn jsFriendly='true'>Donor</digi:trn>";
 				break;
 			case '2': 
-				str_type="Component";
+				str_type="<digi:trn jsFriendly='true'>Component</digi:trn>";
 				break;
 			case '3': 
-				str_type="Regional";
+				str_type="<digi:trn jsFriendly='true'>Regional</digi:trn>";
 				break;
 			case '4': 
-				str_type="Contribution";	
+				str_type="<digi:trn jsFriendly='true'>Contribution</digi:trn>";	
 				break;
 		}
-		document.getElementById('reportType').innerHTML			= str_type;
+		document.getElementById('reportType').innerHTML			=str_type;
 		document.getElementById('reportDrilldown').innerHTML	= returnYesNo(YAHOO.reportsheet.jsReports[selectedReport].drilldown);
 		document.getElementById('reportPublic').innerHTML		= returnYesNo(YAHOO.reportsheet.jsReports[selectedReport].publicReport);
 		document.getElementById('reportDescription').innerHTML	= YAHOO.reportsheet.jsReports[selectedReport].description;
@@ -169,8 +169,8 @@
 	}
 	function returnYesNo(boolStr) {
 		if (boolStr == 'true')
-			return 'yes';
-		return 'no';
+			return '<digi:trn jsFriendly="true">yes</digi:trn>';
+		return '<digi:trn jsFriendly="true">no</digi:trn>';
 	}
 	
 	

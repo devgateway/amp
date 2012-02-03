@@ -11,8 +11,8 @@
 		<property name="name" column="name" type="java.lang.String"/>
         <property name="header" column="has_header" type="boolean"/>
 
-        <many-to-one name="project" column="PROJECT" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" cascade="none"/>
-        <many-to-one name="ampColumn" column="AMP_COLUMN" class="org.digijava.module.aim.dbentity.AmpColumns" cascade="none"/>
+        <many-to-one name="project" column="project" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" cascade="none"/>
+        <many-to-one name="ampColumn" column="amp_column" class="org.digijava.module.aim.dbentity.AmpColumns" cascade="none"/>
 	</class>
 
 </hibernate-mapping>

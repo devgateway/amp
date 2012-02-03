@@ -9,18 +9,18 @@ import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
  * Time: 5:04 PM
  */
 public class BEProjectForm extends ActionForm {
-    private AmpBudgetExportProject ampBudgetExportProject;
+    private Long id;
     private String name;
     private String description;
 
-    public AmpBudgetExportProject getAmpBudgetExportProject() {
-        return ampBudgetExportProject;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setAmpBudgetExportProject(AmpBudgetExportProject ampBudgetExportProject) {
-        this.ampBudgetExportProject = ampBudgetExportProject;
+    public void setId(Long id) {
+        this.id = id;
     }
-
 
     public String getName() {
         return name;

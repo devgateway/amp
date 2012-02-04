@@ -1940,7 +1940,7 @@ function collapseAll() {
 										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}"/>)</b>
-										</logic:notEmpty><
+										</logic:notEmpty>
 									</li>
 								</ul>
 							</logic:iterate>						

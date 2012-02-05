@@ -137,8 +137,8 @@
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
+												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
+												
 												</td>
 											</tr>
 										</table>
@@ -148,7 +148,7 @@
 									<td bgColor=#ffffff class=box-border>
 										<table cellPadding=5 cellspacing="1" width="100%">
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:clickToManageTemplates">Click here to Manage the Templates </digi:trn>
@@ -160,7 +160,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
@@ -172,7 +172,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
@@ -187,7 +187,7 @@
 											
 			
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>

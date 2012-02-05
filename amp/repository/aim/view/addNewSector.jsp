@@ -108,8 +108,8 @@
 
 
 													<tr>
-														<td>
-															&nbsp;
+														<td>&nbsp;
+															
 														</td>
 														<td >&nbsp;&nbsp;
 								<input  type="button" name="addBtn" value=<digi:trn key="btn:save">Save</digi:trn> onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />')"/>
@@ -221,8 +221,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>
@@ -232,7 +232,7 @@
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
-											<td>
+											<td class="inside">
 											<%--	<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
@@ -260,7 +260,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td  class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
@@ -273,7 +273,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

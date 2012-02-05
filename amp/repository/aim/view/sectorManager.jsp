@@ -52,8 +52,8 @@
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
+									<td vAlign="top" width="100%">&nbsp;
+										
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
@@ -165,8 +165,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
+									<td bgColor=#f4f4f2>&nbsp;
+										
 									</td>
 								</tr>
 							</table>
@@ -183,8 +183,8 @@
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
+												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
+												
 												</td>
 											</tr>
 										</table>
@@ -194,7 +194,7 @@
 									<td bgColor=#ffffff class=box-border>
 										<table cellPadding=5 cellspacing="1" width="100%">
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToSearchSector">Click here to Search Sector</digi:trn>
@@ -205,7 +205,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<logic:empty name="aimSectorsForm" property="parentSector">
@@ -232,7 +232,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif"	width="15" height="10"/>
 													<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams3}" property="sectorId">
@@ -247,7 +247,7 @@
 												</td>
 											</tr>											
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

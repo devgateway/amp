@@ -143,8 +143,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>
@@ -154,7 +154,7 @@
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
-											<td nowrap>
+											<td nowrap  class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="ToAddProgramType">
 													<digi:trn key="aim:clickToAddProgramType">Click here to Add a Program Type</digi:trn>
@@ -168,7 +168,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="ToViewAdmin">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

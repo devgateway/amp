@@ -20,7 +20,7 @@
 					<logic:iterate name="beBudgetExportForm" property="projects" id="project">
 						<tr>
 							<td>
-								<bean:write name="project" property="name"/>
+									<a href="/budgetexport/mapActions.do?action=view&projectId=<bean:write name="project" property="id"/>"><bean:write name="project" property="name"/></a>
 							</td>
 							<td>
 								<bean:write name="project" property="description"/>

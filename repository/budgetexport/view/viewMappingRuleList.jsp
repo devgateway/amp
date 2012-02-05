@@ -36,6 +36,9 @@
 							<td>
 								<a href="/budgetexport/addEditDeleteMapRule.do?action=delete&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>">delete</a>
 							</td>
+							<td>
+								<a href="/budgetexport/mapActions.do?action=view&ruleId=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>">Manage map</a>
+							</td>
 						</tr>
 					</logic:iterate>
 			</logic:notEmpty>

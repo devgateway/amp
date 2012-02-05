@@ -2,6 +2,8 @@ package org.digijava.module.budgetexport.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpColumns;
 
+import java.util.List;
+
 /**
  * User: flyer
  * Date: 2/2/12
@@ -13,6 +15,7 @@ public class AmpBudgetExportMapRule {
     private AmpBudgetExportProject project;
     private boolean header;
     private AmpColumns ampColumn;
+    private List<AmpBudgetExportMapItem> items;
 
     public Long getId() {
         return id;
@@ -52,5 +55,13 @@ public class AmpBudgetExportMapRule {
 
     public void setAmpColumn(AmpColumns ampColumn) {
         this.ampColumn = ampColumn;
+    }
+
+    public List<AmpBudgetExportMapItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<AmpBudgetExportMapItem> items) {
+        this.items = items;
     }
 }

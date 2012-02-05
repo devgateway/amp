@@ -32,7 +32,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"  align=center>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
@@ -171,8 +171,8 @@
 							</tr>
 						</table>
 					</td>
-
-					<td noWrap width="100%" vAlign="top">
+					
+					<td noWrap  vAlign="top" style="width:250px;">
 						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
 								<td>

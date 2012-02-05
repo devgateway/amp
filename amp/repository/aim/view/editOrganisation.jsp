@@ -674,7 +674,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         }
 
         function addGroup() {
-            openNewWindow(600, 400);
+            openNewWindow(600, 230);
     <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
             var id = document.aimAddOrgForm.ampOrgId.value;
             url = "<%= selectLoc %>?action=createGroup";

@@ -61,7 +61,8 @@
 	}
 
 </script>
-
+<div class="addOrgBox">
+	<div class="addOrgBoxInner">
 <digi:instance property="aimAddOrgGroupForm" />
 <digi:context name="digiContext" property="context"/>
 
@@ -73,11 +74,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
-	<tr>
-		<td align=left valign="top" width=750>
-			<table cellPadding=5 cellspacing="0" width="100%">
-				<!--<tr>-->
+				<!---->
 					<!-- Start Navigation -->
 					<!--<td height=33 colspan=5><span class=crumb>
 
@@ -98,10 +95,10 @@
 							<digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn>
 						</logic:equal>
                       </span>
-					</td>-->
+					-->
 					<!-- End navigation -->
-				<!--</tr>-->
-				<!--<tr>
+				<!---->
+				<!--
 					<td height=16 valign="center" width=57 colspan=51><span class=subtitle-blue>
 						<digi:trn key="aim:orgGroupManager">
 						Organization Group Manager
@@ -109,60 +106,33 @@
 						</span>
 						<br>
 						<digi:errors/>
-					</td>
-				</tr>-->
-				<tr>
-					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellpadding="1" cellspacing="1">
-					<tr>
-						<td noWrap width=1000 vAlign="top">
-							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
-								<tr>
-									<td vAlign="top" width="100%">&nbsp;
-										
-									</td>
-								</tr>
-								<tr>
-									<td valign="top">
-										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
-											<tr>
-												<td bgColor=#ffffff>
-													<table border="0" cellpadding="1" cellspacing="1" width="100%">
-														<tr>
-															<td bgColor=#c7d4db height="25" align="center" colspan="5">
+					
+				-->
+			
 																<logic:equal name="aimAddOrgGroupForm" property="action" value="create" >
 																	<b><digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn></b>
 																</logic:equal>
 																<logic:equal name="aimAddOrgGroupForm" property="action" value="edit" >
 																	<b><digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn></b>
 																</logic:equal>
-															</td>
-														</tr>
-														<!-- Page Logic -->
-														<tr>
-															<td width="100%" bgColor=#f4f4f2 >
-																<table width="100%" border="0" cellpadding="3" cellspacing="3"	style="margin-top:15px;margin-bottom:15px;">
-																	<tr>
-																		<td width="30%" align="right">
-																		<digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
-																	    <td width="30%" >
-																	          <html:text property="orgGrpName" size="35" />
-																	    </td>
-																	</tr>
-																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupCode">Group
+													
+																		<ul><li><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	
+																	
+																	          <html:text property="orgGrpName" size="35" /></li>
+																
+																		
+																	        <li><digi:trn key="aim:orgGroupCode">Group
                                                                             Code</digi:trn>
-																		</td>
-																		<td width="30%">
-																           <html:text property="orgGrpCode" size="15" />
-																		</td>
-																	</tr>
-																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font>
-																		</td>
-																		<td width="30%">
+																		
+																		
+																           <html:text property="orgGrpCode" size="15" /></li>
+																		
+																	
+																	
+																		
+																	      <li>  <digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font>
+																		
+																		
 																	          <html:select property="orgTypeId">
 																	            <c:set var="translation">
 																					<digi:trn key="aim:btnSelectType">Select Type</digi:trn>
@@ -172,15 +142,15 @@
 																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
 																		   									value="ampOrgTypeId" label="orgType" />
 																		   		</logic:notEmpty>
-																			</html:select>
-																		</td>
-																	</tr>
+																			</html:select></li>
+																		
+																	
 																	<%--
-																	<tr>
-																		<td width="30%" align="right">
+																	
+																		
 																	        <digi:trn key="aim:orgGroupLevel">Level</digi:trn>
-																		</td>
-																		<td width="30%">
+																		
+																		
 																	          <html:select property="levelId">
 																	    		<html:option value="-1">-- Select Level --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="level">
@@ -188,10 +158,9 @@
 																		   				value="ampLevelId" label="name" />
 																		   		</logic:notEmpty>
 																			</html:select>
-																		</td>
-																	</tr> --%>
-																	<tr>
-																		<td colspan="2" width="60%"  align="center" style="padding-top:15px;">
+																		
+																	 --%>
+																	<div class="buttons">
 																			
 																						<html:button  styleClass="buttonx_sm" property="submitButton"  onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
@@ -208,41 +177,27 @@
 																		
 																	</logic:equal>
 																					
-																		</td>
-																	</tr>
+																		
+																	</div>
 																
 																	<logic:equal name="aimAddOrgGroupForm" property="flag" value="orgReferences" >
-																		<tr>
-																			<td colspan="2" width="60%"  align="center">
+																		
+																			
 																				<b><digi:trn key="aim:cannotDeleteOrgGrpMsgRefOrgs"><font color="#FF0000">
 																						Cannot delete the organization group. It is used by one or more organizations.</font>
 																					</digi:trn>
 																				</b>
-																			</td>
-																		</tr>
+																			
+																		
 																	</logic:equal>
-															  </table>
-															</td>
-														</tr>
+															 
+															
+														
 													<!-- end page logic -->
-													</table>
-												</td>
-											</tr>
+													
+												
+											
+</ul>
 
-										</table>
-									</td>
-								</tr>
-
-							</table>
-						</td>
-						<td noWrap width="100%" vAlign="top">
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-	</td>
-	</tr>
-</table>
 </digi:form>
+</div></div>

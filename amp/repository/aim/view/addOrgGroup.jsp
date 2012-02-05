@@ -64,71 +64,24 @@
 	window.close();
 </script>
 </c:if>
-
-
+<div class="addOrgBox">
+	<div class="addOrgBoxInner">
 <html:hidden property="action" />
 <html:hidden property="ampOrgGrpId" />
 <html:hidden property="ampOrgId" />
-
-					<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="612">
-								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="610">
-                                        &nbsp;<digi:errors/>
-									</td>
-								</tr>
-								<tr bgColor=#f4f4f2>
-									<td valign="top" width="610">
-										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
-											<tr>
-												<td bgColor=#ffffff class=box-border>
-													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
-														<tr bgColor=#dddddb>
-															<td bgColor=#dddddb height="20" align="center" colspan="5">
-																<b><digi:trn key="aim:addOrgGroup">Add
-                                                                    Organization
-                                                                    Group</digi:trn></b>
-															</td>
-														</tr>
-														<!-- Page Logic -->
-														<tr>
-															<td width="100%">
-																<table width="100%" border="0"	 bgColor=#f4f4f2>
-																	<tr>
-																		<td width="30%" align="right">
-																		<digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
-																	    <td width="30%" >
-																	          <html:text property="orgGrpName" size="45" />
-																	    </td>
-																	</tr>
-																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupCode">Group
-                                                                            Code</digi:trn>
-																		</td>
-																		<td width="30%">
-																           <html:text property="orgGrpCode" size="15" />
-																		</td>
-																	</tr>
-																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font>
-																		</td>
-																		<td width="30%">
-																	          <html:select property="orgTypeId">
-																	    		<html:option value="-1">-- Select Type --</html:option>
-																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
-																		   									value="ampOrgTypeId" label="orgType" />
-																		   		</logic:notEmpty>
-																			</html:select>
-																		</td>
-																	</tr>
+<h1><digi:trn key="aim:addOrgGroup">Add  Organization Group</digi:trn></h1>
+ <ul><li>
+	 <label><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font></label> 
+     <html:text property="orgGrpName" size="45" /></li>
+	 <li> <label><digi:trn key="aim:orgGroupCode">Group  Code</digi:trn></label>
+	 <html:text property="orgGrpCode" size="15" /></li>
+	 <li> <label><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></label>
+     <html:select property="orgTypeId"> <html:option value="-1">-- Select Type --</html:option></label>
+     <logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl"> <html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" value="ampOrgTypeId" label="orgType" /> </logic:notEmpty> </html:select> </li></ul>
 																	<%--
-																	<tr>
-																		<td width="30%" align="right">
+																	
 																	        <digi:trn key="aim:orgGroupLevel">Level</digi:trn>
-																		</td>
-																		<td width="30%">
+																
 																	          <html:select property="levelId">
 																	    		<html:option value="-1">-- Select Level --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="level">
@@ -136,41 +89,15 @@
 																		   				value="ampLevelId" label="name" />
 																		   		</logic:notEmpty>
 																			</html:select>
-																		</td>
-																	</tr> --%>
-																	<tr>
-																		<td colspan="2" width="60%"  align="center">
-																			<table width="100%" cellspacing="5">
-																				<tr>
-																					<td width="45%" align="right">
+																	 --%>
+																	<div class="buttons">
 																						<input type="button" value="Save" class="dr-menu" onclick="check()">
-																					</td>
-																					<td width="8%" align="left">
+																					
 																						<input type="reset" value="Reset" class="dr-menu">
-																					</td>
-																					<td width="45%" align="left">
+																				
 																						<input type="button" value="Cancel" class="dr-menu" onclick="window.close()">
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-																</table>
-															</td>
-														</tr>
-													<!-- end page logic -->
-													</table>
-												</td>
-											</tr>
-
-										</table>
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#f4f4f2 width="610">
-                                        &nbsp;
-									</td>
-								</tr>
-							</table>
+						</div>
 
 </digi:form>
+</div>
+</div>

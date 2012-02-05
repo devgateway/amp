@@ -1176,3 +1176,12 @@ padding:2px 4px;
 	text-decoration:none;
 	
 }
+div.addOrgBox{border:1px solid #c9c9c7;margin:10px;padding:10px;}
+div.addOrgBoxInner{border:1px solid #c9c9c7;padding:10px;}
+div.addOrgBox h1{background:#dddddb; text-align:center;font-size:12px; color:#484846;padding:3px 0px;}
+div.addOrgBox div.labels{float:left;width:150px;}
+div.addOrgBox div.form{float:left;}
+div.addOrgBox ul li {list-style:none;clear:both;}
+div.addOrgBox ul li label {display:block;float:left;width:120px;}
+div.addOrgBox div.buttons{clear:both;text-align:center;color:#fff;}
+div.addOrgBox div.buttons input{color:#fff;}

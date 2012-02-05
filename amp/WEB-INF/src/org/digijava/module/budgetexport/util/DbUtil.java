@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.hibernate.Query;
@@ -145,5 +146,43 @@ public class DbUtil {
             logger.debug("Unable to save or update Budget export map rule in to DB", ex);
             throw ex;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<AmpBudgetExportMapItem> getMappingRuleItems(Long ruleId) throws DgException {
+        List<AmpBudgetExportMapItem> retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpBudgetExportMapItem.class.getName());
+            queryStr.append(" ruleItem where ruleItem.rule.id=:RULE_ID");
+
+            Query q = sess.createQuery(queryStr.toString());
+            q.setLong("RULE_ID", ruleId);
+            retVal = q.list();
+
+
+        } catch (DgException ex) {
+            logger.debug("Unable to get Budget export rule items from DB", ex);
+            throw ex;
+        }
+
+        return retVal;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static AmpBudgetExportMapItem getMapItemById (Long id) throws DgException {
+        AmpBudgetExportMapItem retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            retVal = (AmpBudgetExportMapItem) sess.load(AmpBudgetExportMapItem.class, id);
+
+        } catch (DgException ex) {
+            logger.debug("Unable to get Budget export map item from DB", ex);
+            throw ex;
+        }
+
+
+        return retVal;
     }
 }

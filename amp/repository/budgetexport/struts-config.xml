@@ -6,8 +6,8 @@
 		<form-bean name="beBudgetExportForm" type="org.digijava.module.budgetexport.form.BudgetExportForm" />
 		<form-bean name="beMapRuleForm" type="org.digijava.module.budgetexport.form.BEMapRuleForm" />
 		<form-bean name="beMapingForm" type="org.digijava.module.budgetexport.form.BEMappingForm" />
-
 		<form-bean name="beProjectForm" type="org.digijava.module.budgetexport.form.BEProjectForm" />
+		<form-bean name="beMapActionsForm" type="org.digijava.module.budgetexport.form.BEMapActionsForm" />
 
 
 	</form-beans>
@@ -38,6 +38,10 @@
 				scope="request" type="org.digijava.module.budgetexport.action.AddEditDeleteMapRule" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=addEditMapRule" />
 			<forward name="ruleList" path="budgetexport/showMapingRuleList.do" />
+		</action>
+		<action  name="beMapActionsForm" path="/budgetexport/mapActions" 
+				scope="request" type="org.digijava.module.budgetexport.action.MapActions" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=budgetExportMapActions" />
 		</action>
 
 		

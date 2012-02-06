@@ -2,8 +2,11 @@ package org.digijava.module.budgetexport.form;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
+import org.digijava.module.budgetexport.util.AmpEntityMappedItem;
 
 import java.util.List;
 
@@ -20,6 +23,10 @@ public class BEMapActionsForm extends ActionForm {
     private Long projectId;
     private AmpBudgetExportMapRule rule;
     private List<AmpBudgetExportMapItem> mapItems;
+    private List<HierarchyListable> ampEntities;
+    private List<AmpBudgetExportCSVItem> csvItems;
+    private List<AmpEntityMappedItem> ampEntityMappedItems;
+    
     private FormFile upload;
 
     private boolean noReload;
@@ -78,5 +85,29 @@ public class BEMapActionsForm extends ActionForm {
 
     public void setNoReload(boolean noReload) {
         this.noReload = noReload;
+    }
+
+    public List<HierarchyListable> getAmpEntities() {
+        return ampEntities;
+    }
+
+    public void setAmpEntities(List<HierarchyListable> ampEntities) {
+        this.ampEntities = ampEntities;
+    }
+
+    public List<AmpBudgetExportCSVItem> getCsvItems() {
+        return csvItems;
+    }
+
+    public void setCsvItems(List<AmpBudgetExportCSVItem> csvItems) {
+        this.csvItems = csvItems;
+    }
+
+    public List<AmpEntityMappedItem> getAmpEntityMappedItems() {
+        return ampEntityMappedItems;
+    }
+
+    public void setAmpEntityMappedItems(List<AmpEntityMappedItem> ampEntityMappedItems) {
+        this.ampEntityMappedItems = ampEntityMappedItems;
     }
 }

@@ -1,6 +1,9 @@
 package org.digijava.module.budgetexport.util;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 
@@ -100,5 +103,34 @@ public class BudgetExportUtil {
             }
         });
         return  retVal;
+    }
+    
+    public static List<AmpEntityMappedItem> getAmpEntityMappedItems (AmpBudgetExportMapRule rule) throws DgException {
+        List<AmpEntityMappedItem> retVal = new ArrayList<AmpEntityMappedItem>();
+        MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
+        List<HierarchyListable> ampEntityList = adapter.getAllObjects();
+
+        List<AmpBudgetExportMapItem> mapItems = rule.getItems();
+        Collections.sort(ampEntityList, new Comparator<HierarchyListable>() {
+            public int compare(HierarchyListable o1, HierarchyListable o2) {
+                return o1.getLabel().compareTo(o2.getLabel());
+            }
+        });
+
+        for (HierarchyListable ampEntity : ampEntityList) {
+            AmpEntityMappedItem ampEntityMappedItem = new AmpEntityMappedItem();
+            ampEntityMappedItem.setAmpEntity(ampEntity);
+
+            for(AmpBudgetExportMapItem mapItem : mapItems) {
+                Long ampEntityId = Long.parseLong(ampEntity.getUniqueId());
+                if (ampEntityId.equals(mapItem.getAmpObjectID())) {
+                    ampEntityMappedItem.setMapItem(mapItem);
+                    //break;
+                }
+            }
+
+            retVal.add(ampEntityMappedItem);
+        }
+        return retVal;
     }
 }

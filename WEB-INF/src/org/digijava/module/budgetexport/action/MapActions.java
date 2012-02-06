@@ -15,9 +15,11 @@ import org.dgfoundation.amp.importers.CSVImporter;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.form.BEMapActionsForm;
+import org.digijava.module.budgetexport.util.AmpEntityMappedItem;
 import org.digijava.module.budgetexport.util.BudgetExportUtil;
 import org.digijava.module.budgetexport.util.DbUtil;
 
@@ -26,8 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -47,14 +51,20 @@ public class MapActions extends DispatchAction {
 
     public ActionForward view(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-        BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
+            BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
 
         if (!beMapActionsForm.isNoReload()) {
             AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
+            List<AmpEntityMappedItem> ampEntityMappedItems = BudgetExportUtil.getAmpEntityMappedItems(rule);
+            beMapActionsForm.setAmpEntityMappedItems(ampEntityMappedItems);
+
             beMapActionsForm.setRule(rule);
             MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
             List<HierarchyListable> ampEntityList = adapter.getAllObjects();
+            beMapActionsForm.setAmpEntities(ampEntityList);
+
             request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
+
             List dbItems = new ArrayList();
             for (AmpBudgetExportMapItem item: rule.getItems()) {
                 dbItems.add(item);
@@ -69,9 +79,7 @@ public class MapActions extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
-
         AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
-
         List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
 
         //Add or update
@@ -117,6 +125,18 @@ public class MapActions extends DispatchAction {
         String csvContent = new String(file.getFileData(), "UTF-8");
         
         Map<String, String> csvMap = BudgetExportUtil.parseCSV(csvContent, rule.isHeader());
+
+        
+        Set <Map.Entry<String, String>> mapEntrySet = csvMap.entrySet();
+        Iterator<Map.Entry<String, String>> mapEntrySetIt = mapEntrySet.iterator();
+        rule.getCsvItems().clear();
+        while (mapEntrySetIt.hasNext()) {
+            Map.Entry<String, String> entry = mapEntrySetIt.next();
+            AmpBudgetExportCSVItem csvItem = new AmpBudgetExportCSVItem(entry.getKey(), entry.getValue(), rule);
+            rule.getCsvItems().add(csvItem);
+        }
+
+        DbUtil.saveOrUpdateMapRule(rule);
 
 
         List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);

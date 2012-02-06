@@ -14,10 +14,16 @@
         <many-to-one name="project" column="project" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" cascade="none"/>
         <many-to-one name="ampColumn" column="amp_column" class="org.digijava.module.aim.dbentity.AmpColumns" cascade="none"/>
 
-        <bag lazy="false" name="items" cascade="all-delete-orphan" inverse="true">
+        <bag lazy="true" name="items" cascade="all-delete-orphan" inverse="true">
             <key column="rule" />
             <one-to-many class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem" />
         </bag>
+
+        <bag lazy="true" name="csvItems" cascade="all-delete-orphan" inverse="true">
+            <key column="rule"/>
+            <one-to-many class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem" />
+        </bag>
+
 	</class>
 
 </hibernate-mapping>

@@ -18,7 +18,6 @@ public class AmpBudgetExportMapItem {
     private Long ampObjectID;
 
 
-    //Not persistent
     private String importedLabel;
     private String ampLabel;
     

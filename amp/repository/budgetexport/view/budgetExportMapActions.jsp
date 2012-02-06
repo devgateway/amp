@@ -112,7 +112,7 @@
 		
 		
 	</table>
-	<input type="button" value="Upload" onClick="saveMapping(this)"/>
+	<input type="button" value="Save" onClick="saveMapping(this)"/>
 </digi:form>
 
 <script language="javascript">

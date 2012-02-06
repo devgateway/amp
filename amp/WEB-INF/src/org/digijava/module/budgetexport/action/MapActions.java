@@ -65,8 +65,6 @@ public class MapActions extends DispatchAction {
             AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
 
             List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
-            request.getSession().removeAttribute(TMP_MAP_SESSION_ATTR);
-
             for (AmpBudgetExportMapItem item : items) {
                 rule.getItems().add(item);
             }
@@ -75,6 +73,7 @@ public class MapActions extends DispatchAction {
 
             DbUtil.saveOrUpdateMapRule(rule);
 
+            request.getSession().removeAttribute(TMP_MAP_SESSION_ATTR);
             return mapping.findForward("forward");
         }
 
@@ -95,7 +94,7 @@ public class MapActions extends DispatchAction {
         List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
 
 
-        List<AmpBudgetExportMapItem> items = BudgetExportUtil.matchAndGetMapItems(csvMap, ampEntityList);
+        List<AmpBudgetExportMapItem> items = BudgetExportUtil.matchAndGetMapItems(csvMap, ampEntityList, rule);
 
         beMapActionsForm.setMapItems(items);
         request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, items);

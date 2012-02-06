@@ -2,6 +2,7 @@ package org.digijava.module.budgetexport.util;
 
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class BudgetExportUtil {
         return  retVal;
     }
     
-    public static List<AmpBudgetExportMapItem> matchAndGetMapItems (Map<String, String> csvMap, List<HierarchyListable> ampObjects) {
+    public static List<AmpBudgetExportMapItem> matchAndGetMapItems (Map<String, String> csvMap, List<HierarchyListable> ampObjects, AmpBudgetExportMapRule rule) {
         List<AmpBudgetExportMapItem> retVal = new ArrayList<AmpBudgetExportMapItem>();
         int matchFragmentLength = 5;
         Set keySet = csvMap.keySet();
@@ -53,6 +54,7 @@ public class BudgetExportUtil {
             newItem.setImportedCode(key);
             newItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_NONE);
             newItem.setImportedLabel(val);
+            newItem.setRule(rule);
 
             for (HierarchyListable ampObj : ampObjects) {
                 matchedFlag = false;

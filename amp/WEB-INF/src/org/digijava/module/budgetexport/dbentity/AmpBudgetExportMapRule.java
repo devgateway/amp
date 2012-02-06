@@ -16,6 +16,7 @@ public class AmpBudgetExportMapRule {
     private boolean header;
     private AmpColumns ampColumn;
     private List<AmpBudgetExportMapItem> items;
+    private List<AmpBudgetExportCSVItem> csvItems;
 
     public Long getId() {
         return id;
@@ -63,5 +64,13 @@ public class AmpBudgetExportMapRule {
 
     public void setItems(List<AmpBudgetExportMapItem> items) {
         this.items = items;
+    }
+
+    public List<AmpBudgetExportCSVItem> getCsvItems() {
+        return csvItems;
+    }
+
+    public void setCsvItems(List<AmpBudgetExportCSVItem> csvItems) {
+        this.csvItems = csvItems;
     }
 }

@@ -117,6 +117,70 @@
 		
 	</table>
 	<input type="button" value="Save" onClick="saveMapping(this)"/>
+	
+	
+	<table><tr><td>
+	
+	<table style="border-collapse:collapse;" border="1">
+		<tr>
+			<td>
+				AMP Label
+			</td>
+			<td>
+				External code
+			</td>
+			<td>
+				External label
+			</td>
+		</tr>
+			<logic:present name="beMapActionsForm" property="ampEntityMappedItems">
+				<logic:iterate name="beMapActionsForm" property="ampEntityMappedItems" id="ampEntityMappedItem">
+					<tr>
+						<td>
+							<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>
+						</td>
+						<td>
+							<logic:present name="ampEntityMappedItem" property="mapItem">
+								<bean:write name="ampEntityMappedItem" property="mapItem.importedCode"/>
+							</logic:present>
+						</td>
+						<td>
+							<logic:present name="ampEntityMappedItem" property="mapItem">
+								<bean:write name="ampEntityMappedItem" property="mapItem.importedLabel"/>
+							</logic:present>
+						</td>
+				</tr>
+			</logic:iterate>
+		</logic:present>
+	</table>
+	
+</td><td>
+	<table style="border-collapse:collapse;" border="1">
+		<tr>
+			<td>
+				Code
+			</td>
+			<td>
+				Label
+			</td>
+		</tr>
+			<logic:present name="beMapActionsForm" property="rule.csvItems">
+				<logic:iterate name="beMapActionsForm" property="rule.csvItems" id="csvItem">
+					<tr>
+						<td>
+							<bean:write name="csvItem" property="code"/>
+						</td>
+						<td>
+							<bean:write name="csvItem" property="label"/>
+						</td>
+				</tr>
+			</logic:iterate>
+		</logic:present>
+	</table>
+	
+</td>
+	
+	
 </digi:form>
 
 <script language="javascript">

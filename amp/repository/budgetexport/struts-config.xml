@@ -42,6 +42,7 @@
 		<action  name="beMapActionsForm" path="/budgetexport/mapActions" 
 				scope="request" type="org.digijava.module.budgetexport.action.MapActions" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=budgetExportMapActions" />
+			<forward name="projectRules" path="budgetexport/showMapingRuleList.do" />
 		</action>
 
 		

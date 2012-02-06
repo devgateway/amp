@@ -105,7 +105,7 @@
 									</div>
 						
 									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
-										<tr>
+										<tr style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">
 									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
@@ -134,8 +134,8 @@
 									    		<digi:trn key="aim:hierarchies">Hierarchies</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
-									    	&nbsp;
+									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;
+									    	
 									    </td>
 									     <td width=7% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
@@ -145,7 +145,7 @@
 										</tr>
 										<logic:empty name="aimTeamReportsForm" property="reports">
 											<tr>
-												<td class="inside">
+												<td class="inside" colspan="7">
 													<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
 													</c:if>

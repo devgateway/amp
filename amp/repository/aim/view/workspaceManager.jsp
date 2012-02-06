@@ -1212,7 +1212,7 @@
                                 <table  cellspacing="1" cellpadding="2" align="left" width="100%" style="font-size:12px;">
                                     <tr><td>
 				<div class="reportHead" style="width: 100%; height: 22px; max-height: 22px; ">
-                                                <table width="100%" class="inside">																				
+                                                <table width="100%" class="inside"style="border-top:1px solid #cccccc;">																				
                                                     <tr class="headTableTr">
                                                         <td align="center" width="300" class="inside" bgcolor=#F2F2f2><digi:trn><b>Name</b></digi:trn></td>
                                                     <td align="center" width="100" class="inside" bgcolor=#F2F2f2><digi:trn><b>Actions</b></digi:trn></td>
@@ -1220,9 +1220,9 @@
                                                 </table>
                                             </div>
 						<div id="demo" class="report box-border-nopadding scrollable" >
-                                                <table class="inside" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
+                                                <table class="inside" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left" >
                                                     <tbody>
-                                                        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
+                                                        <tr><td colspan="2" class="inside"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
                                                     </tbody>
                                                 </table>
                                             </div>

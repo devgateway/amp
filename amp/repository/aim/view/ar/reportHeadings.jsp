@@ -82,7 +82,18 @@
             	</c:choose>				
             <logic:equal name="column" property="columnDepth" value="1">          
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a class="ins_title_reg" style="cursor:pointer;color:#000000; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
+								<c:choose>
+									<c:when test="${param.queryEngine!='true' }">
+										<a class="ins_title_reg"
+											style="cursor: pointer; color: #000000; text-align: center;"
+											onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
+									</c:when>
+									<c:otherwise>
+										<a class="ins_title_reg"
+											style="cursor: pointer; color: #000000; text-align: center;"
+											onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}~queryEngine=true');">
+									</c:otherwise>
+								</c:choose>
 	              		<logic:notEmpty name="reportMeta" property="hierarchies">
 			           		<c:if test="${colIndexId==0}">${reportMeta.hierarchiesPath}<br/> </c:if>
 			           </logic:notEmpty>
@@ -119,9 +130,20 @@
 				</b>
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
-	            <logic:equal name="widget" scope="request" value="true">				
-	              <a class="ins_title_reg" style="cursor:pointer;color:#000000;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
-		              <c:set var="portfTitle">
+	            <logic:equal name="widget" scope="request" value="true">
+									<c:choose>
+										<c:when test="${param.queryEngine!='true' }">
+											<a class="ins_title_reg"
+												style="cursor: pointer; color: #000000;"
+												onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}');">
+										</c:when>
+										<c:otherwise>
+											<a class="ins_title_reg"
+												style="cursor: pointer; color: #000000; text-align: center;"
+												onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~sortBy=<bean:write name="subColumn" property="namePath"/>~${sortAscString}~queryEngine=true');">
+										</c:otherwise>
+									</c:choose>
+						<c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
 		              <digi:trn key="aim:reportBuilder:${reportHeading}"><b><c:out value="${reportHeading}"/></b></digi:trn>

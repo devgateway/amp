@@ -105,6 +105,10 @@
 							<td bgcolor="green">
 							Exact
 						</logic:equal>
+						<logic:equal name="item" property="matchLevel" value="3">
+							<td bgcolor="blue">
+							Manual
+						</logic:equal>
 					</td>
 				</tr>
 			</logic:iterate>

@@ -25,6 +25,7 @@ import org.digijava.module.budgetexport.util.DbUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,34 +49,61 @@ public class MapActions extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
 
-        AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
-        beMapActionsForm.setRule(rule);
+        if (!beMapActionsForm.isNoReload()) {
+            AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
+            beMapActionsForm.setRule(rule);
+            MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
+            List<HierarchyListable> ampEntityList = adapter.getAllObjects();
+            request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
+            List dbItems = new ArrayList();
+            for (AmpBudgetExportMapItem item: rule.getItems()) {
+                dbItems.add(item);
+            }
+            request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, dbItems);
+            beMapActionsForm.setMapItems(dbItems);
 
-        MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
-        List<HierarchyListable> ampEntityList = adapter.getAllObjects();
-        request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
-
+        }
         return mapping.findForward("forward");
     }
 
     public ActionForward save(ActionMapping mapping, ActionForm form,
                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-            BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
+        BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
 
-            AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
+        AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
 
-            List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
-            for (AmpBudgetExportMapItem item : items) {
+        List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
+
+        //Add or update
+        for (AmpBudgetExportMapItem item : items) {
+            if (item.getId() != null && item.getId().longValue() > 0l) {
+                for (AmpBudgetExportMapItem dbItem : rule.getItems()) {
+                    if (dbItem.getId().equals(item.getId())) {
+                        dbItem.setImportedCode(item.getImportedCode());
+                        dbItem.setAmpObjectID(item.getAmpObjectID());
+                        dbItem.setImportedLabel(item.getImportedLabel());
+                        dbItem.setAmpLabel(item.getAmpLabel());
+                        dbItem.setMatchLevel(item.getMatchLevel());
+                        break;
+                    }
+                }
+            } else {
                 rule.getItems().add(item);
             }
-
-
-
-            DbUtil.saveOrUpdateMapRule(rule);
-
-            request.getSession().removeAttribute(TMP_MAP_SESSION_ATTR);
-            return mapping.findForward("forward");
         }
+
+
+
+        DbUtil.saveOrUpdateMapRule(rule);
+
+        request.getSession().removeAttribute(TMP_MAP_SESSION_ATTR);
+
+        StringBuilder fwdBuilder = new StringBuilder("/");
+        fwdBuilder.append(mapping.findForward("projectRules").getPath());
+        fwdBuilder.append("?id=");
+        fwdBuilder.append(beMapActionsForm.getRuleId());
+        return new ActionForward(fwdBuilder.toString());
+    }
 
     public ActionForward upload(ActionMapping mapping, ActionForm form,
                     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -99,7 +127,9 @@ public class MapActions extends DispatchAction {
         beMapActionsForm.setMapItems(items);
         request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, items);
 
-        return view(mapping, form, request, response);
+        beMapActionsForm.setNoReload(true);
+
+        return view(mapping, beMapActionsForm, request, response);
     }
 
     public ActionForward autocomplite (ActionMapping mapping, ActionForm form,
@@ -137,6 +167,7 @@ public class MapActions extends DispatchAction {
                 for (HierarchyListable ampEntity : ampEntityList) {
                     if (ampEntity.getUniqueId().trim().equals(ampObjId.trim())) {
                         item.setAmpObjectID(Long.parseLong(ampEntity.getUniqueId()));
+                        item.setAmpLabel(ampEntity.getLabel());
                         item.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_MANUAL);
                         break;
                     }

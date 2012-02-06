@@ -22,6 +22,8 @@ public class BEMapActionsForm extends ActionForm {
     private List<AmpBudgetExportMapItem> mapItems;
     private FormFile upload;
 
+    private boolean noReload;
+
     public Long getId() {
         return id;
     }
@@ -68,5 +70,13 @@ public class BEMapActionsForm extends ActionForm {
 
     public void setRule(AmpBudgetExportMapRule rule) {
         this.rule = rule;
+    }
+
+    public boolean isNoReload() {
+        return noReload;
+    }
+
+    public void setNoReload(boolean noReload) {
+        this.noReload = noReload;
     }
 }

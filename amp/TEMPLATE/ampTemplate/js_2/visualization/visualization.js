@@ -444,7 +444,9 @@ function resetToDefaults(){
 	
 	document.getElementById("commitments_visible").checked = true;
 	document.getElementById("disbursements_visible").checked = true;
-	document.getElementById("expenditures_visible").checked = true;
+	if (document.getElementById("expenditures_visible")!=null){
+		document.getElementById("expenditures_visible").checked = true;
+	}
 	if (document.getElementById("pledge_visible")!=null){
 		document.getElementById("pledge_visible").checked = true;
 	}
@@ -455,7 +457,9 @@ function resetToDefaults(){
 	
 	document.getElementById("transaction_type_0").checked = false;
 	document.getElementById("transaction_type_1").checked = true;
-	document.getElementById("transaction_type_2").checked = false;
+	if (document.getElementById("transaction_type_2")!=null){
+		document.getElementById("transaction_type_2").checked = false;
+	}
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;

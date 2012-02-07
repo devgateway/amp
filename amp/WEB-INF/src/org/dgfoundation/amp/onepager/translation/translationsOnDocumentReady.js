@@ -37,6 +37,20 @@ $(document).ready(function(){
 			  }
 		  }
 	}
+	
+	//Listener to remove the leave page confirmation on errors
+	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
+	Wicket.Ajax.Request.prototype.stateChangeCallback = function(){
+	    var t = this.transport;
+	    if (t != null) {
+	       var tmp = t.getResponseHeader("Ajax-Location"); 
+	       if (tmp != null){
+	          window.onbeforeunload=null;
+	       }
+	    }
+	    return oldAjaxRequestCallback.call(this);    
+	};
+
 });
 
 //////////////////////////////////////////////////////////////

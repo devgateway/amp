@@ -14,7 +14,9 @@ import java.util.Set;
 import javax.jcr.Node;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,6 +32,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -123,14 +126,11 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					logger.error("ola");
 					return;
 				}
-				item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
 				
-				String webLink = item.getModelObject().getWebLink();
-				if (webLink!=null && webLink.length()>0 ){
-					item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "webLink"), "Resource Name", true));
-				}
-				else
-					item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
+				//item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
+				//item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
+				item.add(new Label("title", item.getModel().getObject().getTitle()));
+				item.add(new Label("resourceName",item.getModel().getObject().getWebLink()));
 				
 				PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
 				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -149,6 +149,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				else
 					drs = new DownloadResourceStream(item.getModelObject().getFile());
 				
+				String webLink = item.getModelObject().getWebLink();
 				
 				if (webLink!=null && webLink.length()>0 ){
 					ExternalLink link = new ExternalLink("download", new Model<String>(webLink));

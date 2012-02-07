@@ -46,6 +46,9 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 						componentModel, componentsSetModel, componentFunding, "Component");
 			add(firstSection);
 			
+			AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
+			componentFunding.add(description);
+			
 			AmpComponentsFundingSubsectionFeature commitments = new AmpComponentsFundingSubsectionFeature("commitments", activityModel, 
 					componentModel, componentsSetModel, "Components Commitments", 
 					Constants.COMMITMENT);

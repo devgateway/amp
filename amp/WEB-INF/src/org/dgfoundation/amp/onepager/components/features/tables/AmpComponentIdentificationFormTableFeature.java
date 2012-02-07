@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -142,6 +143,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		boolean update = updateVisibility(componentModel);
 		if (update){
 			//target.addComponent(this);
+			target.addComponent(feedbackContainer);
 			target.addComponent(componentFundingSection);
 			target.appendJavascript(OnePagerUtil.getToggleChildrenJS(componentFundingSection));
 		}

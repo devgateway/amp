@@ -11,6 +11,12 @@
 		<property name="name" column="name" type="java.lang.String"/>
         <property name="description" column="description" type="java.lang.String"/>
         <property name="creationDate" column="creation_date" type="java.util.Date"/>
+
+        <bag lazy="true" name="rules" cascade="all" inverse="true">
+            <key column="project"/>
+            <one-to-many class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" />
+        </bag>
+
 	</class>
 
 </hibernate-mapping>

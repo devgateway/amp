@@ -1,6 +1,7 @@
 package org.digijava.module.budgetexport.dbentity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: flyer
@@ -12,6 +13,7 @@ public class AmpBudgetExportProject {
     String name;
     String description;
     Date creationDate;
+    List<AmpBudgetExportMapRule> rules;
 
     public Long getId() {
         return id;
@@ -43,5 +45,13 @@ public class AmpBudgetExportProject {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<AmpBudgetExportMapRule> getRules() {
+        return rules;
+    }
+
+    public void setRules(List<AmpBudgetExportMapRule> rules) {
+        this.rules = rules;
     }
 }

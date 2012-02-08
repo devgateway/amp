@@ -70,8 +70,23 @@ public class DbUtil {
     }
     
     public static void deleteProjectById(Long id)  throws DgException {
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            sess.delete(getProjectById(id));
+        } catch (DgException ex) {
+            logger.debug("Unable to delete project from DB", ex);
+            throw ex;
+        }
+    }
+
+    public static void deleteRuleById(Long id)  throws DgException {
+        try {
         Session sess = PersistenceManager.getRequestDBSession();
-        sess.delete(getProjectById(id));
+        sess.delete(getMapRuleById(id));
+        } catch (DgException ex) {
+            logger.debug("Unable delete rule from DB", ex);
+            throw ex;
+        }
     }
 
     @SuppressWarnings("unchecked")

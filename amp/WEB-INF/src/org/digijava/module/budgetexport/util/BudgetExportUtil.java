@@ -93,7 +93,7 @@ public class BudgetExportUtil {
     public static void matchMapItems (List<AmpEntityMappedItem> ampEntityMappedItems, AmpBudgetExportMapRule rule) {
         List<AmpBudgetExportCSVItem> csvItems = rule.getCsvItems();
         int matchFragmentLength = 5;
-        boolean matchedFlag = false;
+        int matchedFlag = AmpBudgetExportMapItem.MAP_MATCH_LEVEL_NONE;
         for  (AmpEntityMappedItem mappedItem : ampEntityMappedItems) {
 
             AmpBudgetExportMapItem mapItem = null;
@@ -107,7 +107,7 @@ public class BudgetExportUtil {
             }
 
             for (AmpBudgetExportCSVItem csvItem : csvItems) {
-                matchedFlag = false;
+                matchedFlag = AmpBudgetExportMapItem.MAP_MATCH_LEVEL_NONE;;
                 //check exact match
                 if (csvItem.getLabel().trim().equalsIgnoreCase(mappedItem.getAmpEntity().getLabel().trim()) ||
                         (mappedItem.getAmpEntity().getAdditionalSearchString() != null && csvItem.getLabel().trim().equalsIgnoreCase(mappedItem.getAmpEntity().getAdditionalSearchString().trim()))) {
@@ -115,22 +115,28 @@ public class BudgetExportUtil {
                     mapItem.setImportedLabel(csvItem.getLabel());
                     mapItem.setImportedCode(csvItem.getCode());
 
-                    matchedFlag = true;
+                    matchedFlag = AmpBudgetExportMapItem.MAP_MATCH_LEVEL_EXACT;;
                 } else {
                     if (csvItem.getLabel().length() > matchFragmentLength) {
                         for (int offset = 0; offset < csvItem.getLabel().length() - matchFragmentLength; offset ++) {
-                            if (mappedItem.getAmpEntity().getLabel().toLowerCase().indexOf(csvItem.getLabel().toLowerCase().substring(offset, offset + matchFragmentLength)) > -1) {
+                            if (mappedItem.getAmpEntity().getLabel().toLowerCase().indexOf(csvItem.getLabel().toLowerCase().substring(offset, offset + matchFragmentLength)) > -1 &&
+                                    matchedFlag == AmpBudgetExportMapItem.MAP_MATCH_LEVEL_NONE) { //Take first particular match.
                                 mapItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_SOME);
                                 mapItem.setImportedLabel(csvItem.getLabel());
                                 mapItem.setImportedCode(csvItem.getCode());
-                                matchedFlag = true;
+                                matchedFlag = AmpBudgetExportMapItem.MAP_MATCH_LEVEL_SOME;
                             }
                         }
                     }
                 }
-                if (matchedFlag) {
+
+                //Do not break after paricular match. Exactly matchin item can be "lower" in the collection
+                if (matchedFlag == AmpBudgetExportMapItem.MAP_MATCH_LEVEL_EXACT ||
+                        matchedFlag == AmpBudgetExportMapItem.MAP_MATCH_LEVEL_SOME) {
                     mappedItem.setMapItem(mapItem);
-                    break;
+                    if (matchedFlag == AmpBudgetExportMapItem.MAP_MATCH_LEVEL_EXACT) {
+                        break;
+                    }
                 }
             }
         }

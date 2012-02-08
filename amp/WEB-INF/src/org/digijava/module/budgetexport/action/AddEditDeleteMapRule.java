@@ -6,10 +6,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.form.BEMapRuleForm;
+import org.digijava.module.budgetexport.form.BEProjectForm;
 import org.digijava.module.budgetexport.util.DbUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +56,18 @@ public class AddEditDeleteMapRule extends DispatchAction {
 
     public ActionForward delete(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-        return mapping.findForward("forward");
+        BEMapRuleForm beMapRuleForm = (BEMapRuleForm) form;
+        DbUtil.deleteRuleById(beMapRuleForm.getId());
+
+
+
+        StringBuilder fwdBuilder = new StringBuilder("/");
+        fwdBuilder.append(mapping.findForward("ruleList").getPath());
+        fwdBuilder.append("?id=");
+        fwdBuilder.append(beMapRuleForm.getCurProjectId());
+        ActionForward fwd = new ActionForward(fwdBuilder.toString());
+        fwd.setRedirect(true);
+        return fwd;
     }
 
     public ActionForward save(ActionMapping mapping, ActionForm form,
@@ -85,6 +98,8 @@ public class AddEditDeleteMapRule extends DispatchAction {
         fwdBuilder.append(mapping.findForward("ruleList").getPath());
         fwdBuilder.append("?id=");
         fwdBuilder.append(beMapRuleForm.getCurProjectId());
-        return new ActionForward(fwdBuilder.toString());
+        ActionForward fwd = new ActionForward(fwdBuilder.toString());
+        fwd.setRedirect(true);
+        return fwd;
     }
 }

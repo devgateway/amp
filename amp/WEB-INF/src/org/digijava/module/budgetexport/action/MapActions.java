@@ -130,8 +130,10 @@ public class MapActions extends DispatchAction {
         StringBuilder fwdBuilder = new StringBuilder("/");
         fwdBuilder.append(mapping.findForward("projectRules").getPath());
         fwdBuilder.append("?id=");
-        fwdBuilder.append(beMapActionsForm.getRuleId());
-        return new ActionForward(fwdBuilder.toString());
+        fwdBuilder.append(beMapActionsForm.getProjectId());
+        ActionForward fwd = new ActionForward(fwdBuilder.toString());
+        fwd.setRedirect(true);
+        return fwd;
     }
 
     public ActionForward upload(ActionMapping mapping, ActionForm form,

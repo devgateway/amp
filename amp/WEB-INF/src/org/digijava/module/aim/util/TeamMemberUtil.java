@@ -841,6 +841,49 @@ public class TeamMemberUtil {
 		return member;
 	}
 
+	public static Collection<AmpTeamMember> getAllAmpTeamMembersByUser(User user) {
+		Session session = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+		Collection<AmpTeamMember> result= null;
+		//if(user == null) return null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tm from "
+					+ AmpTeamMember.class.getName()
+					+ " tm where (tm.user=:user)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("user", user.getId(), Hibernate.LONG);
+			result	=	qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get team Member", e);
+		}
+		return result;
+	}
+	
+	public static AmpTeamMember getAmpTeamMemberByUserByTeam(User user,AmpTeam ampTeam) {
+		Session session = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+		//if(user == null) return null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tm from "
+					+ AmpTeamMember.class.getName()
+					+ " tm where (tm.user=:user) and  (tm.ampTeam=:ampTeam) ";
+			qry = session.createQuery(queryString);
+			qry.setParameter("user", user.getId(), Hibernate.LONG);
+			qry.setParameter("ampTeam", ampTeam.getAmpTeamId(), Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				member = (AmpTeamMember) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get team Member", e);
+		}
+		return member;
+	}
+	
 	public static Collection getTeamMembers(Long teamId) {
 		Session session = null;
 		Collection col = new ArrayList();

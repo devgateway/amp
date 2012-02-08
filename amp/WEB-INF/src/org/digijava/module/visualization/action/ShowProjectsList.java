@@ -106,7 +106,7 @@ public class ShowProjectsList extends Action {
 				Long[] id1 = {long1};
 				newFilter.setSelLocationIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 	    }
@@ -120,7 +120,7 @@ public class ShowProjectsList extends Action {
 				Long[] id1 = {long1};
 				newFilter.setSelSectorIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -134,7 +134,7 @@ public class ShowProjectsList extends Action {
 				Long[] id1 = {long1};
 				newFilter.setOrgIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}

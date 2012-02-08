@@ -201,7 +201,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
                         	collectionByKey.addAll(CategoryManagerUtil
         							.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_PHONE_TYPE_KEY));
-							choiceContainer.setRequired(true);
+							//choiceContainer.setRequired(true);
                             frg2.add(phoneTitle);
                             frg2.add(phn);
                             frg2.add(propertyDeleteLink);

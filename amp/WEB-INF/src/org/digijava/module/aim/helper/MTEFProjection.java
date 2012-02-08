@@ -109,10 +109,13 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 			this.reportingOrganizationName = reportingOrganizationName;
 		}
 
+                @Override
 		public int compareTo(MTEFProjection o) {
 			Date d1 = DateConversion.getDate(this.projectionDate);
 			Date d2 = DateConversion.getDate(o.projectionDate);
-			
+			if(d1==null||d2==null){
+                            return 0;
+                        }
 			return d1.compareTo(d2);
 		}
 

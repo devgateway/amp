@@ -96,7 +96,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			//split column for type of assistance ONLY when TOA is added as column
 			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
-					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns()) && "true".compareTo(FeaturesUtil.getGlobalSettingValue("Enabled Split by Type Of Assistance"))==0) {
 					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 				}
 
@@ -783,8 +783,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			Column c = rawColumns.getColumn(colName);
 			if (c instanceof GroupColumn)
 				continue; // ugly fix to AMP-2793 and the problem created by
-							// mauricio after generating GroupColumnS before
-							// categorizeData
+						  // mauricio after generating GroupColumnS before
+						  // categorizeData
 			CellColumn src = (CellColumn) c;
 			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,

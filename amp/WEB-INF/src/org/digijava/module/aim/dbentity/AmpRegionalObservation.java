@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -167,5 +168,27 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+	public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpRegionalObservation arg0, AmpRegionalObservation arg1) {
+			if(arg0.getObservationDate()!=null && arg1.getObservationDate()!=null) 
+				return arg0.getObservationDate().compareTo(arg1.getObservationDate());
+			if(arg0.getAmpRegionalObservationId()!=null && arg1.getAmpRegionalObservationId()!=null) 
+				return arg0.getAmpRegionalObservationId().compareTo(arg1.getAmpRegionalObservationId());
+			if(arg0.getAmpRegionalObservationId()!=null && arg1.getAmpRegionalObservationId()==null) 
+				return -1;
+			if(arg0.getAmpRegionalObservationId()==null && arg1.getAmpRegionalObservationId()!=null) 
+				return 1;
+			return arg0.hashCode()-arg1.hashCode();
+		}
+		
 	}
 }

@@ -171,8 +171,9 @@ public final class ARUtil {
 		af.readRequestData(request);
 		Object initFilter	= request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB);
 		if ( initFilter!=null && "true".equals(initFilter) ) {
-			FilterUtil.prepare(request, af);
 			FilterUtil.populateFilter(r, af);
+			/* The prepare function needs to have the filter (af) already populated */
+			FilterUtil.prepare(request, af);
 			httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
 		}
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);

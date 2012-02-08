@@ -5,9 +5,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 
 /**
@@ -32,9 +31,9 @@ public abstract class AmpSizeCollectionValidationField<T> extends
 	 * @see org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.model.IModel)
 	 */
 	@Override
-	public AbstractReadOnlyModel getHiddenContainerModel(
+	public IModel getHiddenContainerModel(
 			final IModel<? extends Collection<T>> collectionModel) {
-		AbstractReadOnlyModel<Integer> model=new AbstractReadOnlyModel<Integer>() {
+		Model<Integer> model=new Model<Integer>() {
 			@Override
 			public Integer getObject() {
 				return collectionModel.getObject().size();

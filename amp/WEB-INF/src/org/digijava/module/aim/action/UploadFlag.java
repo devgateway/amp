@@ -29,13 +29,17 @@ public class UploadFlag extends Action {
 		
 		try {
 			if(flagFile == null || flagFile.getFileSize() <= 0){
-				errorMsg = new ActionMessage("error.aim.uploadFlag.noFlagSelected", TranslatorWorker.translateText("No flag selected to upload", request));
+                            errorMsg = new ActionMessage("error.aim.uploadFlag.noFlagSelected");
+                            ActionErrors errors = new ActionErrors();
+                            errors.add(ActionMessages.GLOBAL_MESSAGE, errorMsg);
+                            //set the errors in session due to it is going to be redirected to GetAllFlags.java
+                            request.getSession().setAttribute("uploadFlagErrors", errors);
 			}else{
 				String contentType=flagFile.getContentType();
 				if(!contentType.startsWith("image/")) {
-					errorMsg = new ActionMessage("error.aim.uploadFlag.wrongFormat", TranslatorWorker.translateText("Upload Image", request));
+					errorMsg = new ActionMessage("error.aim.uploadFlag.wrongFormat");
 				}else if(flagFile.getFileData().length>65000){
-					errorMsg = new ActionMessage("error.aim.uploadFlag.wrongSize", TranslatorWorker.translateText("The file's size should be less than 63k", request));
+					errorMsg = new ActionMessage("error.aim.uploadFlag.wrongSize");
 				}
 				if(errorMsg!=null){
 					ActionErrors errors = new ActionErrors();
@@ -70,8 +74,8 @@ public class UploadFlag extends Action {
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
-		
-		return mapping.findForward("forward");
+             
+            return mapping.findForward("forward");
 	}
 	
 }

@@ -392,7 +392,7 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            oql += "  and parcv.value = 'Region'";// get only regions
+	            oql += "  and (parcv.value = 'Region' OR parcv.value = 'Zone' OR parcv.value = 'District') ";// get not only regions, but any subregions that might have data
 
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
@@ -482,6 +482,7 @@ public class DbUtil {
 	                oql += DashboardUtil.getTeamQuery(teamMember);
 	            }
 	            if (locationCondition) {
+	            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
 	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 	            }
 	
@@ -572,6 +573,7 @@ public class DbUtil {
                 oql += DashboardUtil.getTeamQuery(teamMember);
             }
             if (locationCondition) {
+            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
                 oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
             }
             if (sectorCondition) {
@@ -972,6 +974,7 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
+        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
         }
 

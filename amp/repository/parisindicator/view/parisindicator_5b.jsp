@@ -14,27 +14,27 @@
     <table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
         <tr align="center">
-            <td width="15%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+            <td width="15%" height="33"  class="inside_header" >
                 <div align="center">
                     <strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong>
                 </div>
             </td>
-            <td width="5%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+            <td width="5%" height="33"  class="inside_header" >
                 <div align="center">
                     <strong><digi:trn key="aim:disbursmentYear">Disbursement Year</digi:trn></strong>
                 </div>
             </td>
-            <td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+            <td width="27%" height="33"  class="inside_header" >
               <div align="center">
                   <strong><digi:trn>Aid flows to the government sector that use national procurement procedures</digi:trn></strong>
               </div>
             </td>
-            <td width="26%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+            <td width="26%" height="33"  class="inside_header" >
               <div align="center">
                   <strong><digi:trn>Total Aid flows disbursed to the government sector</digi:trn></strong>
               </div>
             </td>
-            <td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+            <td width="27%" height="33"  class="inside_header" >
                 <div align="center">
                     <strong><digi:trn>Proportion of aid flows to the government sector using national procurement procedures</digi:trn></strong>
                 </div>
@@ -42,7 +42,7 @@
         </tr>
         <logic:empty name="parisIndicatorForm" property="mainTableRows">
             <tr>
-                <td width="100%" align="center" height="65" colspan="5" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+                <td width="100%" align="center" height="65" colspan="5"   >
                     <div align="center">
                         <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
                     </div>
@@ -97,10 +97,10 @@
             <td align="center">
 			    <table border="0" width="50%" cellspacing="0" cellpadding="0" align="center" style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;" >
 			        <tr>
-			            <td align="center" rowspan="2" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px;" class="inside">
+			            <td align="center" rowspan="2"  class="inside_header" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px;" class="inside">
 			                <strong><digi:trn>Percent of ODA using national procurement systems</digi:trn></strong>
 			            </td>
-			            <td align="center" colspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
+			            <td align="center" colspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}"  class="inside_header" >
 			                <strong><digi:trn>Percent of donors that use national procurement systems</digi:trn></strong>    
 			            </td>
 			        </tr>

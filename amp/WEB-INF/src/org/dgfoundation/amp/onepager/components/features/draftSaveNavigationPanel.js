@@ -10,6 +10,7 @@ function showDraftPanel(){
 		modal : true,
 		draggable : false
 	});
+	$("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
 	$("#saveAsDraftPanel").show();
 	saveAsDraftPanel.render();
 	 return false;

@@ -51,12 +51,12 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				
 				Criteria crit = session.createCriteria(AmpTheme.class);
 				crit.setCacheable(true);
-
+				getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
 				if (input.trim().length() > 0)
 					crit.add(getTextCriterion("name", input));
 				
-				if(!isExactMatch())
-					crit.add(Restrictions.eq("parentThemeId",def));
+				//if(!isExactMatch())
+				//	crit.add(Restrictions.eq("parentThemeId",def));
 
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

@@ -2543,8 +2543,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-                + "where org.orgTypeId=:orgType and ((lower(acronym) like '%" + keyword + 
+            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org inner join org.orgGrpId grp "
+                + "where grp.orgType=:orgType and ((lower(acronym) like '%" + keyword + 
                 "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);

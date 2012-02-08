@@ -75,6 +75,10 @@ public class PIAction extends Action {
 		if(piForm.getPiReport()==null){
 			return mapping.findForward("forward");
 		}
+		// Create report.
+		PIAbstractReport report = useCase.createReport(piForm, request);
+		piForm.setMainTableRows(report.getReportRows());
+		piForm.setMiniTable(report.getMiniTable());
 
 		// Set output.
 		if (piForm.isPrintPreview()) {

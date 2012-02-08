@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +60,15 @@ public class AssignUsersToWorkspace extends Action {
 				request.getSession().setAttribute("redirectTo", redirectWhere);
 				return mapping.findForward("error");
 	        }
+	        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user,ampTeam);
+	        if(atm != null){
+						errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberAlreadyExist"));
+			        	saveErrors(request, errors);
+			        	tmForm.setSomeError(true);
+						logger.debug("Team Member already exist");
+						resetForm(request, tmForm);
+						return mapping.findForward(redirectWhere);
+	        }
 	        
 	        AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
 			if (role != null) {
@@ -86,24 +97,30 @@ public class AssignUsersToWorkspace extends Action {
 				}
 			}
 		}
-		tmForm.setEmail(null);
-		tmForm.setRole(null);
-		tmForm.setTeamName(null);
 //		if (tmForm.getFromPage() != 1) {
 //			tmForm.setAmpRoles(null);
 //		}
+		
+		resetForm(request, tmForm);
+                
+		return mapping.findForward(redirectWhere);
+
+	}
+
+
+	private void resetForm(HttpServletRequest request, TeamMemberForm tmForm) {
+		tmForm.setEmail(null);
+		tmForm.setRole(null);
+		tmForm.setTeamName(null);
 		tmForm.setPermissions(null);
 		tmForm.setUserIdsWithRoles(null);
 		tmForm.setTeamLeaderExists(null);
 		tmForm.setWorkspaceManagerRoleId(null);
 		tmForm.setTeamHead(null);
-                HttpSession session = request.getSession();
-                session.setAttribute("fromPage", tmForm.getFromPage());
-                session.setAttribute("selectedRow", tmForm.getSelectedRow());
-                session.setAttribute("selectedWs", tmForm.getTeamId());
-                
-		return mapping.findForward(redirectWhere);
-
+        HttpSession session = request.getSession();
+        session.setAttribute("fromPage", tmForm.getFromPage());
+        session.setAttribute("selectedRow", tmForm.getSelectedRow());
+        session.setAttribute("selectedWs", tmForm.getTeamId());
 	}
 	
 	

@@ -149,6 +149,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			String fmName, final boolean newActivity, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) throws Exception {
 		super(id, am, fmName, true);
 		
+		this.enabledFmButton.setVisible(false);
+		this.visibleFmButton.setVisible(false);
+		this.ignoreFmVisibility = true;
+		this.ignoreFmButtonsVisibility = true;
+		this.setVisible(true);
+		
 		activityForm=new Form<AmpActivityVersion>("activityForm") { 
 			@Override
 			protected void onError() {
@@ -265,6 +271,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
 		saveAsDraftAction.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model("this.disabled='disabled';"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		activityForm.add(saveAsDraftAction);
 		AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {

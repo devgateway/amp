@@ -228,19 +228,11 @@
     	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
-        		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
-        			msg='<digi:trn>Please Enter phone</digi:trn>';
+    			if(phoneNumbers[i].value==''){
+    				msg='<digi:trn>Please Enter phone</digi:trn>';
             		alert(msg);
             		return false;
-        		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
-        			msg='<digi:trn>Please select phone type</digi:trn>';
-            		alert(msg);
-        			return false;
-        		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
-        			msg='<digi:trn>Please enter phone number</digi:trn>';
-            		alert(msg);
-        			return false;
-        		}
+    			}        		
     		}
     	}
     	
@@ -537,7 +529,12 @@
 							<li class="selected" >
 								<a>
 									<div>
-										<digi:trn>Add New Contact</digi:trn>
+										<c:if test="${not empty addressbookForm.contactId}">
+											<digi:trn>Edit Contact</digi:trn>
+										</c:if>
+										<c:if test="${empty addressbookForm.contactId}">
+											<digi:trn>Add New Contact</digi:trn>
+										</c:if>
 									</div>
 								</a>
 							</li>

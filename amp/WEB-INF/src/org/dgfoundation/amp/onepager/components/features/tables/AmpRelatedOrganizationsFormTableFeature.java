@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,8 +22,10 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -66,9 +70,30 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						specificOrgRoles.add(ampOrgRole);
 				}
 				
-				return new ArrayList<AmpOrgRole>(specificOrgRoles);
+				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
+				Collections.sort(ret, new Comparator<AmpOrgRole>() {
+					@Override
+					public int compare(AmpOrgRole o1, AmpOrgRole o2) {
+						if (o1 == null || o1.getOrganisation() == null ||o1.getOrganisation().getAcronymAndName() == null)
+							return 1;
+						if (o2 == null || o2.getOrganisation() == null ||o2.getOrganisation().getAcronymAndName() == null)
+							return -1;
+						return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
+					}
+				});
+				return ret;
 			}
 		};
+
+		
+		final AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrgRole>(
+				"uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
+			@Override
+			public Object getIdentifier(AmpOrgRole t) {
+				return t.getOrganisation().getName();
+			}
+		};
+		add(uniqueCollectionValidationField);
 
 		list = new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
@@ -87,6 +112,8 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
+						uniqueCollectionValidationField.reloadValidationField(target);
+						list.removeAll();
 						target.addComponent(listParent);
 					}
 				};
@@ -110,6 +137,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
 				setModel.getObject().add(ampOrgRole);
+				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();
 				target.addComponent(list.getParent());
 			}

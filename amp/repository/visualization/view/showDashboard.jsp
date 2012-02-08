@@ -139,7 +139,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
@@ -298,8 +298,8 @@ function initializeGlobalVariables(){
 												</c:if>
 												<hr />
 												<br />
-												<digi:trn>For Time Series Comparison, what data do you want to show</digi:trn>
-												? <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 												<html:checkbox property="filter.commitmentsVisible"
 													styleId="commitments_visible">
 													<digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
@@ -323,8 +323,8 @@ function initializeGlobalVariables(){
 												</module:display>
 												<hr />
 												<br />
-												<digi:trn>What data should the dashboard show</digi:trn>
-												?<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<digi:trn>What data should the dashboard show?</digi:trn>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 												<html:radio property="filter.transactionTypeFilter"
 													styleId="transaction_type_0" value="0">
 													<digi:trn>Commitments</digi:trn>
@@ -394,7 +394,7 @@ function initializeGlobalVariables(){
 																	title="${item.mainEntity.orgGrpName}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span><digi:trn>${item.mainEntity.orgGrpName}</digi:trn>
+															</c:if> <span>${item.mainEntity.orgGrpName}
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -460,7 +460,7 @@ function initializeGlobalVariables(){
 																	title="${item.mainEntity.name}"
 																	value="${item.mainEntity.id}"
 																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span> <digi:trn>${item.mainEntity.name}</digi:trn>
+															</c:if> <span>${item.mainEntity.name}
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -1228,6 +1228,7 @@ function initializeGlobalVariables(){
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
 			<fieldset class="chartFieldset">
 				<legend><span id="RegionProfileTitleLegend" class=legend_label></span></legend>
+				<a onclick="toggleHeader(this, 'RegionProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="RegionProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
@@ -1264,11 +1265,11 @@ function initializeGlobalVariables(){
 				</div> 
 			</fieldset>
 		</c:if>
-	
-			<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
 			<!-- Show the Sector breakdown or Sub-Sector breakdown if there is a selected Sector -->
 			<fieldset class="chartFieldset">
 				<legend><span id="SectorProfileTitleLegend" class=legend_label></span></legend>
+				<a onclick="toggleHeader(this, 'SectorProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="SectorProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
@@ -1814,7 +1815,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";

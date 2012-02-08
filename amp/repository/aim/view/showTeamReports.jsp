@@ -105,6 +105,27 @@ function confirmFunc() {
 	
 	return false;
 }
+function activate(id){
+	var number=0;
+	$.ajax({
+		   type: 'GET',
+		   url: '/aim/getTabPositionSize.do',
+		   cache : false,
+		   	success: function(data,msg){
+			number=parseInt(data);
+			if(number<5){
+				$(".activateTab"+id).hide();
+				$(".savePosition"+id).show();	
+			}
+			else{
+				alert("Please deactivate other tabs first!");
+			}
+		   },
+	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');} 
+	});
+	
+	return false;
+}
 function showHidePositions(id,selectedPosition){
 	$.ajax({
 	   	url:'/aim/getTakenTabPositions.do',

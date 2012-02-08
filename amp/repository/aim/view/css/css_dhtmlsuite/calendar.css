@@ -1,7 +1,7 @@
 .DHTMLSuite_calendar{	/* Main div for the calendar */
 	border:1px solid #8eb9f3;
 	background-color:#FFF;
-	width:220px;
+	width:245px;
 	position:relative;	
 	overflow:hidden;
 	z-index: 20000;

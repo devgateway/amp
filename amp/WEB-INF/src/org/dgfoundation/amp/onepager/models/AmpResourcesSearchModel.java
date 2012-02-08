@@ -42,7 +42,13 @@ public class AmpResourcesSearchModel extends
 			while (nit.hasNext()) {
 				Node n = (Node) nit.next();
 				NodeWrapper nw = new NodeWrapper(n);
-				ret.add(nw);
+				if(input != null && input.length() >0){
+					if(nw.getFullName().equals(input)){
+						ret.add(nw);
+					}
+				}else{
+					ret.add(nw);
+				}				
 			}
 			return ret;
 		} catch (Exception e) {

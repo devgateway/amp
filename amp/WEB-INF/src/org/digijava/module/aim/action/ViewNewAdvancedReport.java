@@ -89,9 +89,10 @@ public class ViewNewAdvancedReport extends Action {
 		boolean resetSettings = request.getParameter("resetSettings")==null? false : ("true".equals(request.getParameter("resetSettings"))? true : false);
 		String lastReportId	= (String)request.getSession().getAttribute("LAST_REPORT_ID") ; 
 		String ampReportId 	= request.getParameter("ampReportId");
-		
+		if ( request.getParameter("queryEngine") == null || "false".equals(request.getParameter("queryEngine")) ){
 		if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
 			 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
+		}
 		
 		if ( ampReportId != null )
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
@@ -345,12 +346,13 @@ public class ViewNewAdvancedReport extends Action {
 //		apply pagination if exists
 		boolean pagination=true;
 		Cookie[] cookies=request.getCookies();
-		for (int i = 0; i < cookies.length; i++) {
-			if ("report_scrolling".equalsIgnoreCase(cookies[i].getName())){
-				pagination=false;
+		if ( cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if ("report_scrolling".equalsIgnoreCase(cookies[i].getName())){
+					pagination=false;
+				}
 			}
 		}
-		
 		if (!pagination){
 			startRow="0";
 			endRow=Integer.MAX_VALUE+"";

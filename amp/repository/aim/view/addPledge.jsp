@@ -1295,20 +1295,20 @@ function savePledge() {
 				if (document.getElementsByName('fund_'+i+"_2")[0] == null){
 					param += "-1_";
 				}else{
-					param += document.getElementsByName('fund_'+i+"_2")[0].value + "_";
+					param +=  trim(""+document.getElementsByName('fund_'+i+"_2")[0].value) + "_";
 				}
 				if (document.getElementsByName('fund_'+i+"_3")[0] == null){
 					param += "-1_";
 				}else{
-					param += document.getElementsByName('fund_'+i+"_3")[0].value + "_";
+					param += trim(""+document.getElementsByName('fund_'+i+"_3")[0].value) + "_";
 				}
-				param += document.getElementsByName('fund_'+i+"_4")[0].value + "_";
-				param += document.getElementsByName('fund_'+i+"_5")[0].value + "_";
-				param += document.getElementsByName('fund_'+i+"_6")[0].value + "_";
+				param += trim(""+document.getElementsByName('fund_'+i+"_4")[0].value) + "_";
+				param += trim(""+document.getElementsByName('fund_'+i+"_5")[0].value) + "_";
+				param += trim(""+document.getElementsByName('fund_'+i+"_6")[0].value) + "_";
 				if (document.getElementsByName('fund_'+i+"_7")[0] == null){
 					param += "-1_";
 				}else{
-					param += document.getElementsByName('fund_'+i+"_7")[0].value + "_";
+					param += trim(""+document.getElementsByName('fund_'+i+"_7")[0].value) + "_";
 				}
 				param += ";";
 			}
@@ -1321,6 +1321,10 @@ function savePledge() {
 
     	document.pledgeForm.submit();
 	}
+}
+
+function trim(stringToTrim) {
+	return stringToTrim.replace(/^\s+|\s+$/g,"");
 }
 
 function validateData(){
@@ -1425,6 +1429,11 @@ function validateData(){
 	  	Please, insert amount greater than 0 for each funding.
 	  </digi:trn>
 	</c:set>
+	<c:set var="insertNumeric">
+	  <digi:trn key="aim:insertNumericValue">
+	  	Please, amount should be a numeric value.
+	  </digi:trn>
+	</c:set>
 	i = 0;
 	while (i<=numFund){
 		if (document.getElementsByName("fund_"+i+"_4")[0]!=null){
@@ -1432,6 +1441,10 @@ function validateData(){
 			temp = temp + document.getElementsByName("fund_"+i+"_4")[0].value;
 			if (document.getElementsByName("fund_"+i+"_4")[0].value.length==0 || temp==0){
 				alert ("${insertAmount}")
+				return false;
+			}
+			if (isNaN(document.getElementsByName("fund_"+i+"_4")[0].value)){
+				alert ("${insertNumeric}")
 				return false;
 			}
 		}

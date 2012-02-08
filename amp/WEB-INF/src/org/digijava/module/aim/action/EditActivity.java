@@ -1228,10 +1228,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				            		logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
 				            	projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
 				            	projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
-				            	projection.setProjectionDate( DateConversion.ConvertDateToString(ampProjection.getProjectionDate()) );
+                                                if (ampProjection.getProjectionDate() != null) {
+                                                projection.setProjectionDate(DateConversion.ConvertDateToString(ampProjection.getProjectionDate()));
 				            	//projection.setIndex();
 				            	projection.setAmpFunding( ampProjection.getAmpFunding() );
 				            	MTEFProjections.add(projection);
+                                                }
 			            	}
 
 			            }

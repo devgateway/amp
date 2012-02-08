@@ -18,12 +18,11 @@
 					<tr>
 						<td width=40% height=25 align="center"
 							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
-							class="inside"><b class="ins_header">Grouping Selector</b>
+							class="inside"><b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b>
 						</td>
 						<td width=60%
 							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
-							class="inside" align="center"><b class="ins_header">Grouping
-								Details</b>
+							class="inside" align="center"><b class="ins_header"><digi:trn>Grouping Details</digi:trn></b>
 						</td>
 					</tr>
 					<tr>
@@ -31,22 +30,22 @@
 							<ul class="yui-nav" style="width: 70%; position: static;">
 								<div id="selGeneral" class="selector_type">
 									<div class="selector_type_cont">
-										<a href="javascript:changeTab(0)">General</a>
+										<a href="javascript:changeTab(0)"><digi:trn>General</digi:trn></a>
 									</div>
 								</div>
 								<div id="selOrgs" class="selector_type">
 									<div class="selector_type_cont">
-										<a href="javascript:changeTab(1)">Organizations</a>
+										<a href="javascript:changeTab(1)"><digi:trn>Organizations</digi:trn></a>
 									</div>
 								</div>
 								<div id="selRegions" class="selector_type">
 									<div class="selector_type_cont">
-										<a href="javascript:changeTab(2)">Regions</a>
+										<a href="javascript:changeTab(2)"><digi:trn>Regions</digi:trn></a>
 									</div>
 								</div>
 								<div id="selSectors" class="selector_type">
 									<div class="selector_type_cont">
-										<a href="javascript:changeTab(3)">Sectors</a>
+										<a href="javascript:changeTab(3)"><digi:trn>Sectors</digi:trn></a>
 									</div>
 								</div>
 							</ul></td>
@@ -60,15 +59,6 @@
 										</b>
 									</html:checkbox>
 									<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />&nbsp;&nbsp;
-									<!--<b><digi:trn>Decimals to show</digi:trn>: </b>
-									<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
-			                            <html:option value="0">0</html:option>
-			                            <html:option value="1">1</html:option>
-			                            <html:option value="2">2</html:option>
-			                            <html:option value="3">3</html:option>
-			                            <html:option value="4">4</html:option>
-			                            <html:option value="5">5</html:option>
-			                        </html:select> -->
 									<hr/>
 									<fieldset>
 										<b><digi:trn>Type of funding for highlighting</digi:trn>
@@ -89,7 +79,7 @@
 									<hr />
 									<table border="0" cellspacing="0" cellpadding="0">
 										<tr>
-											<td><b>Currency Type:</b>
+											<td><b><digi:trn>Currency Type</digi:trn>:</b>
 											</td>
 											<td><html:select property="filter.currencyId"
 													styleId="currencies_dropdown_ids" styleClass="dropdwn_sm"
@@ -119,7 +109,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Fiscal Year Start:</b>
+												<b><digi:trn>Fiscal Year Start</digi:trn> :</b>
 											</td>
 											<td>
 												<html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:145px;">
@@ -132,7 +122,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Time Scale:</b>
+												<b><digi:trn>Time Scale</digi:trn>:</b>
 											</td>
 											<td><html:select property="filter.yearsInRange"
 													styleId="yearsInRange_dropdown" styleClass="dropdwn_sm"
@@ -148,7 +138,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Project Status:</b>
+												<b><digi:trn>Project Status</digi:trn>:</b>
 											</td>
 											<td><category:showoptions outerstyle="width: 145px"
 													styleClass="dropdwn_sm" property="filter.projectStatusId"
@@ -162,7 +152,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Type of Assistance:</b>
+												<b><digi:trn>Type of Assistance</digi:trn>:</b>
 											</td>
 											<td><category:showoptions outerstyle="width: 145px"
 													styleClass="dropdwn_sm" name="datadispatcherform"
@@ -176,7 +166,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Financing Instrument:</b>
+												<b><digi:trn>Financing Instrument</digi:trn>:</b>
 											</td>
 											<td><category:showoptions outerstyle="width: 145px"
 													styleClass="dropdwn_sm" name="datadispatcherform"
@@ -190,7 +180,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Structure Types:</b>
+												<b><digi:trn>Structure Types</digi:trn>:</b>
 											</td>
 											<td><html:select property="filter.selStructureTypes"
 													styleId="structureTypes_dropdown" styleClass="dropdwn_sm"
@@ -207,7 +197,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Only on budget projects:</b>
+												<b><digi:trn> Only on budget projects</digi:trn>:</b>
 											</td>
 											<td><html:checkbox property="filter.onBudget"
 													styleId="fundingLimit_checkbox"></html:checkbox></td>
@@ -219,9 +209,8 @@
 								</div>
 							</div>
 							<div id="divOrganizationsFilter" style="width: 490px;">
-								<div class="selector_content_org_prof"
-									style="line-height: 25px; width: 245px; float: left;">
-									Funding<br /> <b>Organization Group:</b><br />
+								<div class="selector_content_org_prof" style="line-height: 25px; width: 245px; float: left;"> 
+								<digi:trn>Funding</digi:trn><br /> <b><digi:trn>Organization Group</digi:trn>:</b><br />
 									<html:select multiple="true" property="filter.orgGroupIds"
 										styleId="org_group_dropdown_ids" styleClass="dropdwn_sm"
 										style="width:200px;">
@@ -233,19 +222,17 @@
 									</html:select>
 									<br>
 									<div id="divOrgDrpdwn">
-										<b>Organization:</b><br />
+										<b><digi:trn>Organization</digi:trn>:</b><br />
 										<html:select multiple="true	" property="filter.orgIds"
 											styleId="org_dropdown_ids" styleClass="dropdwn_sm"
 											style="width:145px;max-height:140;">
-											<html:option value="-1">
-												<digi:trn>All</digi:trn>
-											</html:option>
 										</html:select>
 									</div>
 								</div>
 								<div class="selector_content_org_prof"
 									style="line-height: 25px; width: 245px; float: right;">
-									Implementing Agency <br /> <b>Organization Group:</b><br />
+									<digi:trn>Implementing Agency</digi:trn> <br/> <b>
+									<digi:trn>Organization Group</digi:trn>:</b><br />
 									<html:select multiple="true" property="filter.implOrgGroupIds"
 										styleId="imp_org_group_dropdown_ids" styleClass="dropdwn_sm"
 										style="width:200px;">
@@ -272,7 +259,7 @@
 									<hr />
 									<table border="0" cellspacing="0" cellpadding="0">
 										<tr>
-											<td><b>Organization Type:</b>
+											<td><b><digi:trn>Organization Type</digi:trn>:</b>
 											</td>
 											<td><html:select property="filter.organizationsTypeId"
 													styleId="organization_type_dropdown_ids"
@@ -305,7 +292,7 @@
 									</html:select>
 									<hr />
 									<div id="divZoneDrpdwn">
-										<b>Zone:</b><br />
+										<b><digi:trn>Zone</digi:trn>:</b><br />
 										<html:select property="filter.zoneIds" multiple="true"
 											styleId="zone_dropdown_ids" styleClass="dropdwn_sm"
 											style="width:145px;">
@@ -320,7 +307,7 @@
 							<div id="divSectorsFilter">
 								<div class="selector_content_org_prof"
 									style="line-height: 25px; width: 490px;">
-									<b>Sector:</b> <img
+									<b><digi:trn>Sector</digi:trn>:</b> <img
 										src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 									<html:select property="filter.sectorIds"
 										styleId="sector_dropdown_ids" styleClass="dropdwn_sm"
@@ -333,7 +320,7 @@
 									</html:select>
 									<hr />
 									<div id="divSubSectorDrpdwn">
-										<b>Sub-Sectors:</b><br />
+										<b><digi:trn>Sub-Sectors</digi:trn>:</b><br />
 										<html:select property="filter.subSectorIds" multiple="true"
 											styleId="sub_sector_dropdown_ids" styleClass="dropdwn_sm"
 											style="width:145px;">
@@ -350,15 +337,14 @@
 						<td width=40% height=25 align="center" class="inside"
 							style="background-color: white;">&nbsp;</td>
 						<td width=60% class="inside" align="center"
-							style="background-color: white;"><input type="button"
-							value="Filter" class="buttonx" style="margin-top: 10px;"
-							id="applyButton"> <input type="button" value="Reset"
-							onclick="resetToDefaults()" class="buttonx"
-							style="margin-top: 10px;"> <input type="button"
-							value="Close" onclick="closeFilter()" class="buttonx"
-							style="margin-top: 10px;"></td>
+							style="background-color: white;">
+							<input type="button" value="<digi:trn>Filter</digi:trn>" onclick="closeFilter()" class="buttonx" style="margin-top: 10px;"id="applyButton"> 
+							<input type="button" value="<digi:trn>Reset</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-top: 10px;"> 
+							<input type="button" value="<digi:trn>Close</digi:trn>" onclick="closeFilter()" class="buttonx" style="margin-top: 10px;">
+						</td>
 					</tr>
-				</table></td>
+				</table>
+				</td>
 		</tr>
 	</table>
 	<html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
@@ -381,7 +367,7 @@
 </digi:form>
 <script type="text/javascript">
 function closeFilter(){
-	$('#filterdiv').toggle();
+	$('#filterdiv').hide();
 }
 
 function changeTab (selected){
@@ -494,23 +480,21 @@ function countSelected (selector){
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
-				  showLoading();
 				  var refreshHighlight = false;
 				  //if the highlight layer is activated, refresh it
 				  if(map.getLayer("highlightMap") !== undefined && map.getLayer("highlightMap").visible){
 					  refreshHighlight = true;
 					}
-				  getActivities(true);
 				  getStructures(true);
 				  getSelectedFilter();
+				  getActivities(true);
 				}
 				catch (e) {
 				    alert("Invalid response.");
 				}
-				hideLoading();
-			    closeFilter();
+				
 		  },failure: function(o) {
-			  hideLoading();
+			  //hideLoading();
 		  }
 		};
 
@@ -574,41 +558,71 @@ var callbackChildrenCall = {
 					    case "ImplementingOrganizations":
 				    		var orgDropdown = document.getElementById("imp_org_dropdown_ids");
 				    		orgDropdown.options.length = 0;
-				    		orgDropdown.options[0] = new Option("All", -1);
+				    		orgDropdown.options[0] = new Option('<digi:trn>All</digi:trn>', -1);
 				    		for(var i = 0; i < results.children.length; i++){
 				    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		orgDropdown.options[0].onclick=function(){
+				    			var orgDropdown = document.getElementById('imp_org_dropdown_ids');
+				    			for(var i = 1; i < results.children.length; i++){
+				    				orgDropdown.options[i].selected = true;
+				    			}
 				    		}
 				    		break;
 					    case "Organizations":
 				    		var orgDropdown = document.getElementById("org_dropdown_ids");
 				    		orgDropdown.options.length = 0;
-				    		orgDropdown.options[0] = new Option("All", -1);
+				    		orgDropdown.options[0] = new Option('<digi:trn>All</digi:trn>', -1);
 				    		for(var i = 0; i < results.children.length; i++){
 				    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		orgDropdown.options[0].onclick=function(){
+				    			var orgDropdown = document.getElementById('org_dropdown_ids');
+				    			for(var i = 1; i < results.children.length; i++){
+				    				orgDropdown.options[i].selected = true;
+				    			}
 				    		}
 				    		break;
 					    case "Sectors":
 				    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_ids");
 				    		subSectorDropdown.options.length = 0;
-				    		subSectorDropdown.options[0] = new Option("All", -1);
+				    		subSectorDropdown.options[0] = new Option('<digi:trn>All</digi:trn>', -1);
 				    		for(var i = 1; i < results.children.length; i++){
 				    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		subSectorDropdown.options[0].onclick=function(){
+				    			var subSectorDropdown = document.getElementById('sub_sector_dropdown_ids');
+				    			for(var i = 1; i < results.children.length; i++){
+				    				subSectorDropdown.options[i].selected = true;
+				    			}
 				    		}
 				    		break;
 				    	case "Regions":
 				    		var zonesDropdown = document.getElementById("zone_dropdown_ids");
 				    		zonesDropdown.options.length = 0;
-				    		zonesDropdown.options[0] = new Option("All", -1);
+				    		zonesDropdown.options[0] = new Option('<digi:trn>All</digi:trn>', -1);
 				    		for(var i = 1; i < results.children.length; i++){
 				    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		zonesDropdown.options[0].onclick=function(){
+				    			var zonesDropdown = document.getElementById('zone_dropdown_ids');
+				    			for(var i = 1; i < results.children.length; i++){
+				    				zonesDropdown.options[i].selected = true;
+				    			}
 				    		}
 				    		break;
 				    	case "Orgtype":
 				    		var orgDropdown = document.getElementById("org_dropdown_ids");
 				    		orgDropdown.options.length = 0;
-				    		orgDropdown.options[0] = new Option("All", -1);
+				    		orgDropdown.options[0] = new Option('<digi:trn>All</digi:trn>', -1);
 				    		for(var i = 0; i < results.children.length; i++){
 				    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
+				    		orgDropdown.options[0].onclick=function(){
+				    			var orgDropdown = document.getElementById('org_dropdown_ids');
+				    			for(var i = 1; i < results.children.length; i++){
+				    				orgDropdown.options[i].selected = true;
+				    			}
 				    		}
 				    		break;
 				    }
@@ -621,7 +635,12 @@ var callbackChildrenCall = {
 			  }
 		};
 
-
+function SelectAllItems(param){
+	var zonesDropdown = document.getElementById(param);
+	for(var i = 1; i < results.children.length; i++){
+		zonesDropdown.options[i].selected = true;
+	}
+}
 
 YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
@@ -635,7 +654,7 @@ YAHOO.util.Event.onDOMReady(changeTab(0));
 
 
 function resetToDefaults(){
-	
+	closeFilter();
 	showLoading();
 	YAHOO.util.Connect.setForm('datadispatcherform');
 	var sUrl="/esrigis/datadispatcher.do?applyfilter=true&reset=true";

@@ -23,10 +23,20 @@ $(document).ready(function(){
 			$('#imgOnepagerMode').show();
 		}
 	}
+
 	
-	window.onbeforeunload = function() {
-	    return 'Are you sure you want to navigate away from this page?';
-	};
+	window.onbeforeunload = function (e) {
+		  e = e || window.event;
+		  
+		  // For IE and Firefox prior to version 4
+		  if (e) {
+			  if (navigator.appName == 'Microsoft Internet Explorer') {
+				  return 'Are you sure you want to navigate away from this page?';
+			  }else{
+				  e.returnValue = ' ';
+			  }
+		  }
+	}
 });
 
 //////////////////////////////////////////////////////////////

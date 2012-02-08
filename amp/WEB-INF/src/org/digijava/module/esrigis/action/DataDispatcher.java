@@ -4,7 +4,9 @@ package org.digijava.module.esrigis.action;
  * @author Diego Dimunzio
  */
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -21,8 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -54,7 +58,12 @@ import org.digijava.module.esrigis.helpers.SimpleDonor;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.visualization.util.DbUtil;
-
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 public class DataDispatcher extends MultiAction {
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 
@@ -89,11 +98,52 @@ public class DataDispatcher extends MultiAction {
 			return modeGetSelectedFilter(mapping, form, request, response);
 		}else if (request.getParameter("getconfig") != null) { 
 			return modeGetConfiguration(mapping, form, request, response);
-		}
-		
+		}else if (request.getParameter("getmedia") != null) { 
+				return modeGetMedia(mapping, form, request, response);
+			}
 		return null;
 	}
-
+		
+	private ActionForward modeGetMedia(ActionMapping mapping,ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+	  URL url;
+	  String searchtext = request.getParameter("searchtext");
+	  String data = "text="+searchtext;
+	try {
+		url = new URL("http://api.metalayer.com/s/datalayer/1/bundle");
+	  HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+	  
+	  httpCon.setDoOutput(true);
+	  httpCon.setRequestMethod("POST");
+	  OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+	  out.write(data);
+	  out.flush();
+	  out.close();
+	  
+	//Get the response
+	    BufferedReader rd = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
+	    String line;
+	    response.setContentType("text/json-comment-filtered");
+	    PrintWriter pw = response.getWriter();
+	    while ((line = rd.readLine()) != null) {
+	    	JSON jso = JSONSerializer.toJSON(line);
+	    	pw.write(jso.toString());
+	    	
+	    }
+	    pw.flush();
+		pw.close();
+	    rd.close();
+	} catch (MalformedURLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	  
+	  return null;
+	}
 	
 	private ActionForward modeGetConfiguration(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -182,6 +232,9 @@ public class DataDispatcher extends MultiAction {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
 				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
+				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
+					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
+				}
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
 					isaggregatable = true;

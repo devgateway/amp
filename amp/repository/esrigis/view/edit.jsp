@@ -264,8 +264,16 @@ function setHoveredTable(tableId, hasHeaders) {
 function validateForm(){
 	var strError = "";
 	//Check Title and pageCode
-	if($("input[name=name]").val() == ""){
-		strError = "<digi:trn jsFriendly='true'>Name</digi:trn>\n";
+	var isnumeric = IsNumeric($("input[name=name]").val());
+	if($("input[name=name]").val() == "" || isnumeric ){
+		strError = "<digi:trn jsFriendly='true'>Name (Non Numeric Characteres)</digi:trn>\n";
+	}
+	if($("input[name=iconFile]").val() == ""){
+		if (strError==""){
+			strError = "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+		}else{
+			strError = strError +  "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+		}
 	}
 	if (strError != ""){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
@@ -277,5 +285,26 @@ $("#iconFile").change(function(){
 	var binaryImg = document.getElementById("iconFile").files.item(0).getAsDataURL();
 	document.getElementById("imgPlaceholder").src = binaryImg;
 });
+
+function IsNumeric(strString)
+//  check for valid numeric strings	
+{
+var strValidChars = "0123456789.-";
+var strChar;
+var blnResult = true;
+
+if (strString.length == 0) return false;
+
+//  test strString consists of valid characters listed above
+for (i = 0; i < strString.length && blnResult == true; i++)
+   {
+   strChar = strString.charAt(i);
+   if (strValidChars.indexOf(strChar) == -1)
+      {
+      blnResult = false;
+      }
+   }
+return blnResult;
+}
 </script>
 </digi:form>

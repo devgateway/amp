@@ -37,14 +37,14 @@
 						<td>
 							<span style="font-family: Arial; font-size: 12px;">
 								<c:if test="${entity.translateable}">
-									<digi:trn>${entity.label}</digi:trn> 
+									<digi:trn><c:out value="${entity.label}"/></digi:trn> 
 								</c:if>
 								<c:if test="${!entity.translateable}">
-									${entity.label} 
+									<c:out value="${entity.label}"/> 
 								</c:if>
 							</span>
 							<div style="display:none">
-								${entity.additionalSearchString}
+								<c:out value="${entity.additionalSearchString}"/>
 							</div>
 						</td>
 					</tr>

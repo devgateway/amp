@@ -133,10 +133,10 @@ public class QueryUtil {
 		String qry = "";
 		if (orgGroupView) {
 			qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId in ("
-					+ getInStatement(selectedOrgGroups) + ") ";
+					+ getInStatement(selectedOrgGroups,0) + ") ";
 		} else {
 			qry = " and f.ampDonorOrgId in ("
-					+ getInStatement(selectedOrganizations) + ") ";
+					+ getInStatement(selectedOrganizations,0) + ") ";
 		}
 		return qry;
 	}
@@ -144,27 +144,27 @@ public class QueryUtil {
 		String qry = "";
 		if (orgGroupView) {
 			qry = " and  role.organisation.ampOrgGrpId in ("
-					+ getInStatement(selectedOrgGroups) + ") and role.roleCode = '" + typeCode +"' ";
+					+ getInStatement(selectedOrgGroups,0) + ") and role.roleCode = '" + typeCode +"' ";
 		} else {
 			qry = " and role.organisation.orgGrpId in ("
-					+ getInStatement(selectedOrganizations) + ") and role.roleCode = '" + typeCode +"' ";
+					+ getInStatement(selectedOrganizations,0) + ") and role.roleCode = '" + typeCode +"' ";
 		}
 		return qry;
 	}	
 	public static String getOrganizationTypeQuery(boolean orgTypeView, Long[] selectedOrganizations, Long[] selectedtypes) {
 		String qry = "";
 		if (orgTypeView) {
-			qry = " and  f.ampDonorOrgId.orgGrpId.orgType in ("+ getInStatement(selectedtypes) + ") ";
+			qry = " and  f.ampDonorOrgId.orgGrpId.orgType in ("+ getInStatement(selectedtypes,0) + ") ";
 		} else {
-			qry = " and f.ampDonorOrgId in ("+ getInStatement(selectedOrganizations) + ") ";
+			qry = " and f.ampDonorOrgId in ("+ getInStatement(selectedOrganizations,0) + ") ";
 		}
 		return qry;
 	}
 
 	
-	public static String getInStatement(Long ids[]) {
+	public static String getInStatement(Long ids[], int start) {
 		String oql = "";
-		for (int i = 0; i < ids.length; i++) {
+		for (int i = start; i < ids.length; i++) {
 			oql += "" + ids[i];
 			if (i < ids.length - 1) {
 				oql += ",";

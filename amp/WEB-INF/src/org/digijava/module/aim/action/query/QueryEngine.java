@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -33,6 +34,8 @@ public class QueryEngine extends Action{
 		
 		
 		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm) form;
+		HttpSession httpSession = request.getSession();
+		httpSession.removeAttribute(ArConstants.REPORTS_FILTER);
 		
 		rfpForm.setIsnewreport(true);
 		rfpForm.setAmpReportId(null);

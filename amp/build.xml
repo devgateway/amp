@@ -742,11 +742,9 @@
 	
 	<target name="deployForServer" description="deploys the project for use with a given database">
 		<delete file="${repository}/digi.xml"/>
-		<delete file="${webinf}/jboss-web.xml"/>
 		<delete dir="${metainf}"/>
 		<mkdir dir="${metainf}"/>
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
-		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>	
 		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">
 		          <param name="jdbc.user" expression="${jdbc.user}"/>
 				  <param name="jdbc.password" expression="${jdbc.password}"/>

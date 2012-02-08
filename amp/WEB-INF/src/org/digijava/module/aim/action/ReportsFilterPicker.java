@@ -905,6 +905,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSecondaryPrograms(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedNatPlanObj(null);
+		filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		filterForm.setSelectedActivitySettings(null);
 		HttpSession httpSession = request.getSession();
 		
@@ -1382,6 +1383,16 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
+		if ( filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1 ) {
+			arf.setShowArchived(null);
+		}
+		else {
+			String selection 	= (String) filterForm.getSelectedArchivedStatus()[0];
+			if ("1".equals(selection) )
+				arf.setShowArchived(false);
+			else
+				arf.setShowArchived(true);
+		} 
 
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
 			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);
@@ -1414,6 +1425,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
         filterForm.setSelectedTertiarySectors(null);
+        filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		filterForm.setAmountinthousands(false);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);

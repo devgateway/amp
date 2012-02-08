@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@page import="org.digijava.module.aim.action.GetTeamActivities"%>
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -81,6 +82,10 @@
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
+	function submitArchiveCmd(archive) {
+		document.aimTeamActivitiesForm.removeActivity.value = archive;
+		document.aimTeamActivitiesForm.submit();
+	}
 
 	function page(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
@@ -88,6 +93,7 @@
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
+	
 
 -->
 
@@ -109,7 +115,6 @@
 <tr><td>
 
 									<c:set var="selectedTab" value="2" scope="request"/>
-									<c:set var="selectedSubTab" value="0" scope="request"/>
 										
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
@@ -137,8 +142,9 @@
 										<tr>
 											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
-										
-										
+									<c:if test="${selectedSubTab==null}">
+										<c:set var="selectedSubTab" value="0" scope="request"/>
+									</c:if>	
 									<jsp:include page="teamSetupMenu.jsp"  />
 									
 									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
@@ -206,6 +212,7 @@
 													</td>
 												</tr>
 											</logic:iterate>	
+											
 										</logic:notEmpty>
 									</table>
 									
@@ -234,17 +241,42 @@
 									
 									
 									<br>
-									<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
-										<div align="center">
-											<html:submit  styleClass="buttonx_sm btn" property="submitButton"  onclick="return confirmDelete()">
-												<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
-											</html:submit>
-										</div>
-									</logic:notEmpty>
-													
-										
-										
+								<logic:notEmpty name="aimTeamActivitiesForm"
+									property="activities">
+									<div align="center">
+
+										<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
+										<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
+										<c:choose>
+											<c:when test="${selectedSubTab==unarchivedTab}">
+												<c:set var="archiveActs"><%=GetTeamActivities.ARCHIVE_COMMAND %></c:set>
+												<html:submit onclick="submitArchiveCmd('${archiveActs}')"
+													styleClass="buttonx_sm btn" property="submitButton">
+													<digi:trn>Archive Activities</digi:trn>
+												</html:submit>
+											</c:when>
+											<c:when test="${selectedSubTab==archivedTab}">
+												<c:set var="unArchiveActs"><%=GetTeamActivities.UNARCHIVE_COMMAND %></c:set>
+												<html:submit onclick="submitArchiveCmd('${unArchiveActs}')"
+													styleClass="buttonx_sm btn" property="submitButton">
+													<digi:trn>Unarchive Activities</digi:trn>
+												</html:submit>
+											</c:when>
+											<c:otherwise>
+												<html:submit styleClass="buttonx_sm btn"
+													property="submitButton" onclick="return confirmDelete()">
+													<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
+												</html:submit>
+											</c:otherwise>
+										</c:choose>
+
+
 									</div>
+								</logic:notEmpty>
+
+
+
+							</div>
 										</div>											
 												
 											</td>

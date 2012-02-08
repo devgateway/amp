@@ -234,9 +234,33 @@ function putLoading(){
 									<digi:link href="/updateTeamActivity.do" name="urlParams" styleClass="l_sm">
 										<digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn>
 									</digi:link>							
-								</c:if>					
-	          	</c:if>					
+								</c:if>	
+							<span class="breadcrump_sep">|</span>					
+	          	</c:if>	
+	          	<c:if test="${selectedSubTab  == '3'}">
+                             	<span class="bread_sel">
+                                         <digi:trn>Non-Archived Activities</digi:trn>
+                                </span>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '3'}">
+                                     <digi:link href="/teamActivityList.do~showArchivedActivities=false" name="urlParams" styleClass="l_sm">
+                                         <digi:trn>Non-Archived Activities</digi:trn>
+                                     </digi:link>							
+                         </c:if>
+                         <span class="breadcrump_sep">|</span>	
+                          <c:if test="${selectedSubTab  == '4'}">
+                             <span class="bread_sel">
+                                         <digi:trn>Archived Activities</digi:trn>
+                                     </span>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '4'}">
+                                     <digi:link href="/teamActivityList.do~showArchivedActivities=true" name="urlParams" styleClass="l_sm">
+                                         <digi:trn>Archived Activities</digi:trn>
+                                     </digi:link>							
+                         </c:if>	
+	          					
 						</c:if>
+							
 						
 						
 						<c:if test="${selectedTab  == '3'}">

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -16,6 +17,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -31,6 +33,11 @@ public class GetTeamActivities
         extends Action {
 
     private static Logger logger = Logger.getLogger(GetTeamActivities.class);
+    public static final String ARCHIVED_PARAMETER	= "selectedSubTab";
+    public static final String ARCHIVED_SUB_TAB		= "4";
+    public static final String UNARCHIVED_SUB_TAB	= "3";
+    public static final String ARCHIVE_COMMAND		= "archive";
+    public static final String UNARCHIVE_COMMAND	= "unarchive";
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
@@ -175,6 +182,7 @@ public class GetTeamActivities
                     }
                 }
                 taForm.setAllActivities(temp);
+                decideArchiveMode(mapping, taForm, request, response);
 
                 int totActivities = taForm.getAllActivities().size();
                 if(numRecords== -1 ){
@@ -223,5 +231,46 @@ public class GetTeamActivities
         }
 
         return null;
+    }
+ private static void decideArchiveMode(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) {
+    	
+    	TeamActivitiesForm tForm	= (TeamActivitiesForm) form;
+    	String showArchived			= request.getParameter("showArchivedActivities");
+    	String archiveComand		= tForm.getRemoveActivity();
+    	Boolean showArchivedActivities	= null;
+    	tForm.setRemoveActivity(null);
+    	
+    	if ( archiveComand != null ) {
+    		if ( ARCHIVE_COMMAND.equals(archiveComand) )
+    			showArchivedActivities	= false;
+    		if ( UNARCHIVE_COMMAND.equals(archiveComand) )
+    			showArchivedActivities	= true;
+    	}
+    	if ( showArchivedActivities == null && showArchived != null ) 
+    		showArchivedActivities	= Boolean.parseBoolean(showArchived);
+    	
+        if ( showArchivedActivities != null ) {
+        	if ( !showArchivedActivities ) {
+        		request.setAttribute(ARCHIVED_PARAMETER, UNARCHIVED_SUB_TAB);
+        	}
+        	else
+        		request.setAttribute(ARCHIVED_PARAMETER, ARCHIVED_SUB_TAB);
+        	GetTeamActivities.filterArchivedActivities(tForm.getAllActivities(), showArchivedActivities);
+        }
+    }
+    
+    private static void filterArchivedActivities ( Collection<AmpActivityVersion> activities, boolean archived) {
+    	if (activities != null) {
+    		Iterator<AmpActivityVersion> iter	= activities.iterator();
+    		while ( iter.hasNext() ) {
+    			AmpActivityVersion activity	=  iter.next();
+    			Boolean actArchived		= activity.getArchived();
+    			if (actArchived == null)
+    				actArchived = false;
+    			if ( actArchived != archived ) {
+    				iter.remove();
+    			}
+    		}
+    	}
     }
 }

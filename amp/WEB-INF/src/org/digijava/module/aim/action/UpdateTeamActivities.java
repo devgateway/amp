@@ -65,6 +65,28 @@ public class UpdateTeamActivities extends Action {
 
 		Long id = null;
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
+		String archiveCmd	= taForm.getRemoveActivity();
+		if ( archiveCmd != null ) {
+			ArrayList<Long> selectedActivities	= new ArrayList<Long>();
+			if ( taForm.getSelActivities() != null ) {
+				for (int i=0; i<taForm.getSelActivities().length; i++){
+					selectedActivities.add(taForm.getSelActivities()[i]);
+				}
+			}				 
+					
+			if ( GetTeamActivities.ARCHIVE_COMMAND.equals(archiveCmd) ) {
+				ActivityUtil.changeActivityArchiveStatus(selectedActivities, true);
+				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.UNARCHIVED_SUB_TAB);
+				return mapping.findForward("forward");
+			}
+			if ( GetTeamActivities.UNARCHIVE_COMMAND.equals(archiveCmd) ) {
+				ActivityUtil.changeActivityArchiveStatus(selectedActivities, false);
+				request.setAttribute(GetTeamActivities.ARCHIVED_PARAMETER, GetTeamActivities.ARCHIVED_SUB_TAB);
+				return mapping.findForward("forward");
+			}
+			
+		}
 
 		int numRecords = 0;
 		int page = 0;

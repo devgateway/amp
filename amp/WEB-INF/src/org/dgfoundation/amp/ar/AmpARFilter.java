@@ -87,6 +87,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String CRISNumber;
 	private String budgetNumber;
+	private Boolean showArchived    = false;
 	
 	@PropertyListableIgnore
 	private Integer computedYear;
@@ -483,6 +484,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 				+ Util.toCSString(donnorgAgency) + ")";
+		
 			
 //			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
 //				+ (regionSelected==null?null:regionSelected.getIdentifier());
@@ -752,6 +754,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";
+		String ARCHIVED_FILTER          = "";
+		if (this.showArchived != null)
+			ARCHIVED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE "
+					+ ((this.showArchived) ? "archived=true"
+							: "(archived=false or archived is null)");
 
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 
@@ -1003,6 +1010,9 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			String JOINT_CRITERIA_FILTER = "SELECT a.amp_activity_id from amp_activity a where jointCriteria="
 					+ ((jointCriteria)?"true":"false");;
 			queryAppend(JOINT_CRITERIA_FILTER);
+		}
+		if (showArchived != null) {
+			queryAppend(ARCHIVED_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
@@ -1764,6 +1774,22 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	public String getSearchMode() {
 		return searchMode;
 	}
+
+	/**
+	 * @return the showArchived
+	 */
+	public Boolean getShowArchived() {
+		return showArchived;
+	}
+
+	/**
+	 * @param showArchived
+	 *            the showArchived to set
+	 */
+	public void setShowArchived(Boolean showArchived) {
+		this.showArchived = showArchived;
+	}
+
 
 
 }

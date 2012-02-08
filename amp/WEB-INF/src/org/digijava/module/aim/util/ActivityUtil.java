@@ -5141,5 +5141,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 		return false;
 	} 
+	 public static void changeActivityArchiveStatus(Collection<Long> activityIds, boolean status) {
+			try {
+				Session session 			= PersistenceManager.getRequestDBSession();
+				String qryString			= "update " + AmpActivityVersion.class.getName()  + 
+						" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSString(activityIds) + ")";
+				Query query					= session.createQuery(qryString);
+				query.setBoolean("archived", status);
+				query.executeUpdate();
+				session.flush();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+	    }  
+	    
 	
 } // End

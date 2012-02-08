@@ -57,5 +57,6 @@
 				<a href="/budgetexport/addEditDeleteMapRule.do?action=add&curProjectId=<bean:write name="beMapingForm" property="id"/>">Add new rule</a>
 			</td>		
 		</tr>
-	</table>		
+	</table>
+     </div>		
 </digi:form>

@@ -1,18 +1,15 @@
 package org.dgfoundation.amp.onepager.util;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.Component;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.IValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+
 
 
 public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
@@ -75,45 +72,6 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 		target.addComponent(list.getParent());
 		validationHiddenField.reloadValidationField(target);
 		
-		//percentageValidationField
-		//((Amp)list.getParent()).reloadValidationField(target);
-	//	((AmpCollectionValidatorField)getParent()).get .reloadValidationField(target);
-	//	AmpPercentageCollectionValidatorField
-		//list.re
-	//	((Object) getParent()).reloadValidationField(target);
-		
-	//	AmpPercentageCollectionValidatorField
-//	  list.getParent().visitChildren(AmpPercentageCollectionValidatorField.class,
-//				new IVisitor<AmpPercentageCollectionValidatorField>() {
-//			
-//
-//			@Override
-//			public Object component(AmpPercentageCollectionValidatorField component) {
-//				//component.reloadValidationField(AmpDividePercentageField.this.target);
-//				
-//				return Component.IVisitor.CONTINUE_TRAVERSAL;
-//			}
-//		});
-		
-		//This step is required for the validation of the new data
-//		list.visitChildren(new IVisitor<Component>() {
-//			@Override
-//			public Object component(Component component) {
-//				if (component instanceof AmpPercentageTextField){
-//					AmpPercentageTextField aptf = (AmpPercentageTextField) component;
-//					aptf.getTextContainer().modelChanged();
-//					
-//					List<IValidator<Double>> it_val = aptf.getTextContainer().getValidators();
-//
-//				}
-//				return Component.IVisitor.CONTINUE_TRAVERSAL;
-//			}
-//		});
-		
-		
-		
-//		//in order to redraw the list without validation errors
-//		list.removeAll();
 	}
 	
 	public abstract void setPercentage(T item, int val);

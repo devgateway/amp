@@ -11,6 +11,7 @@
 	
 <digi:form action="/addEditDeleteProject.do?action=save" method="post">
 	<html:hidden name="beProjectForm" property="id"/>
+    <div style="padding:25px;" class="budget-table">
 	<table>
 		<tr>
 			<td>Name</td>
@@ -26,8 +27,9 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<html:submit value="Save"/>
+				<html:submit value="Save" class="button"/>
 			</td>
 		</tr>
-	</table>		
+	</table>	
+    </div>	
 </digi:form>

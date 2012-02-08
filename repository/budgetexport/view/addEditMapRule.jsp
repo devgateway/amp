@@ -12,6 +12,7 @@
 <digi:form action="/addEditDeleteMapRule.do?action=save" method="post">
 	<html:hidden name="beMapRuleForm" property="id"/>
 	<html:hidden name="beMapRuleForm" property="curProjectId"/>
+        <div style="padding:25px;" class="budget-table">
 	<table>
 		<tr>
 			<td>Name</td>
@@ -39,5 +40,6 @@
 				<html:submit value="Save"/>
 			</td>
 		</tr>
-	</table>		
+	</table>	
+     </div>	
 </digi:form>

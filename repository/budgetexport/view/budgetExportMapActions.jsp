@@ -11,7 +11,7 @@
 
 <digi:instance property="beMapActionsForm"/>
 
-
+    <div style="padding:25px;" class="budget-table">
 <digi:ref href="/repository/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />	
 	
 <digi:form action="/mapActions.do" method="post" enctype="multipart/form-data">
@@ -172,9 +172,9 @@
 </tr>
 </table>
 
-<input type="button" value="Automatic matching" onClick="automatch(this)">
-<input type="button" value="Save" onClick="saveMapping(this)"/>	
-	
+<input type="button" class="button" value="Automatic matching" onClick="automatch(this)">
+<input type="button" class="button" value="Save" onClick="saveMapping(this)"/>	
+	 </div>
 </digi:form>
 
 <script language="JavaScript" src="/repository/budgetexport/view/js/budgetexport.js"></script>

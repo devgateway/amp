@@ -29,6 +29,13 @@ import java.util.List;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.request.Site;
 import javax.servlet.http.HttpServletRequest;
+
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.exception.UMException;
 import org.digijava.kernel.entity.Interests;
 import org.digijava.kernel.entity.OrganizationType;
@@ -42,8 +49,6 @@ import java.math.BigInteger;
 import java.util.*;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.util.RequestUtils;
-
-
 
 
 public class UmUtil {
@@ -245,6 +250,38 @@ public class UmUtil {
 
             return interest;
     }
+    
+    public static AmpTeamMember assignWorkspaceToUser(HttpServletRequest request,Long roleId ,User user, AmpTeam ampTeam) {
+		AmpTeamMember newMember = null;
+		AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
+		if (role != null) {
+			newMember = new AmpTeamMember();
+			newMember.setUser(user);
+			newMember.setAmpTeam(ampTeam);
+			newMember.setAmpMemberRole(role);
+			// add the default application settings for the user  
+			AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
+			//newAppSettings.setTeam(ampAppSettings.getTeam());
+			newAppSettings.setTeam(newMember.getAmpTeam());
+			newAppSettings.setMember(newMember);
+			newAppSettings.setDefaultRecordsPerPage(ampAppSettings
+					.getDefaultRecordsPerPage());
+			newAppSettings.setCurrency(ampAppSettings.getCurrency());
+			newAppSettings.setFiscalCalendar(ampAppSettings
+					.getFiscalCalendar());
+			newAppSettings.setLanguage(ampAppSettings.getLanguage());
+			newAppSettings.setUseDefault(new Boolean(true));
+			Site site = RequestUtils.getSite(request);
+			try{
+				TeamUtil.addTeamMember(newMember,newAppSettings,site);				
+			}catch (Exception e){
+					e.printStackTrace();
+					//logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
+			}			
+		}
+		return newMember;
+	}
 
     static {
         organizationNameComparator = new Comparator() {

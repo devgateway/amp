@@ -384,18 +384,25 @@ function isInvalid(field){
 																		</td>
 																	</tr>
 																	<tr>
+																		<td align="right"  class="formCheckContainer">
+																			<digi:trn>Assign to Workspace</digi:trn>
+																		</td>
+																		<td class="f-names" align="left">
+																			<html:checkbox property="addWorkspace" styleClass="inp-text"></html:checkbox>
+																		</td>
+																	</tr>
+																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
 																	<tr>
-																	    <td  class="addUserButContainer" width="380" height="30" colspan="2" align="center"style="font-size: 11px;
-    font-weight: bold; color:#000;">
+																	    <td  class="addUserButContainer" width="380" height="30" colspan="2" align="center"style="font-size: 11px; font-weight: bold; color:#000;">
                                                               				<c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:saveButton" jsFriendly="true">Save</digi:trn>
+																                <digi:trn jsFriendly="true">Save</digi:trn>
 																              </c:set>
 																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																
 																              <c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:cancelButton" jsFriendly="true">
+																                <digi:trn jsFriendly="true">
 																                Cancel
 																                </digi:trn>
 																              </c:set>

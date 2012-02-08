@@ -27,29 +27,31 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.UmUtil;
 
 public class ViewEditUser extends Action {
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	
     	//Clear users cache
     	TeamMemberUtil.users.clear();
     	TeamMemberUtil.atmUsers.clear();
-    	
     	
         ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
@@ -178,6 +180,7 @@ public class ViewEditUser extends Action {
             uForm.setConfirmNewPassword(null);
             uForm.setNewPassword(null);
             uForm.setDisplaySuccessMessage(null);
+            uForm.setAddWorkspace(false);
 
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
@@ -268,9 +271,14 @@ public class ViewEditUser extends Action {
                         uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
                     }
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
+                    //workspaces
+                    if(uForm.getWorkspaces() == null){
+                    	uForm.setWorkspaces(TeamUtil.getAllTeams());
+                    }
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 //                }
             }
-        } else {
+        } else {        	
             if (uForm.getEvent().equalsIgnoreCase("save")) {
                 if (user != null) {
                 	// TODO ideally, user, userLangPreferences, and userExtension should be saved in one transaction.
@@ -316,11 +324,66 @@ public class ViewEditUser extends Action {
                     user.setPledger(uForm.getPledger());
                     DbUtil.updateUser(user);
 
+                    //assign workspace place
+                    if(uForm.isAddWorkspace()){
+                		uForm.setAssignedWorkspaces(TeamMemberUtil.getAllAmpTeamMembersByUser(user));
+            			return mapping.findForward("assignWorkspace");
+            		}
+                    
                     resetViewEditUserForm(uForm);
                     return mapping.findForward("saved");
                 }
 
-            } else {
+            }else if(uForm.getEvent().equalsIgnoreCase("assignWorkspaceToUser")){
+            	uForm.setEvent(null);
+            	AmpTeam ampTeam = TeamUtil.getAmpTeam(uForm.getTeamId());
+    			//User user = org.digijava.module.aim.util.DbUtil.getUser(uForm.getEmail());
+    			
+    			if (uForm.getRole() == null) {
+    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+    				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.roleNotSelected"));
+    				saveErrors(request, errors);
+    				return mapping.findForward("forward");			
+    			}
+    			
+    			/* check if user have selected role as Team Lead when a team lead 
+    			 * already exist for the team */
+    			if (ampTeam.getTeamLead() != null &&
+    					ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(uForm.getRole())) {
+    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+    				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamLeadAlreadyExist"));
+    				saveErrors(request, errors);
+    				return mapping.findForward("assignWorkspace");			
+    			}
+    			
+    			/* check if user is already part of the selected team */
+    			if (TeamUtil.isMemberExisting(uForm.getTeamId(),uForm.getEmail())) {
+    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+    				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
+    						"error.aim.addTeamMember.teamMemberAlreadyExist"));
+    				saveErrors(request, errors);
+    				//logger.debug("Member is already existing");
+    				return mapping.findForward("assignWorkspace");			
+    			}
+    			
+    			   
+    			addWorkSpace(UmUtil.assignWorkspaceToUser(request, uForm.getRole(), user, ampTeam), uForm);
+    			return mapping.findForward("assignWorkspace");
+    			
+            } else if (uForm.getEvent().equalsIgnoreCase("deleteWS")){
+            	uForm.setEvent(null);
+            	Long wId = new Long(request.getParameter("wId"));
+            	TeamMemberUtil.removeTeamMembers(new Long[]{wId});
+                Collection asWS = uForm.getAssignedWorkspaces();
+                for(java.util.Iterator it = asWS.iterator(); it.hasNext(); ){
+                	AmpTeamMember newMember = (AmpTeamMember)it.next();
+                	if(newMember.getAmpTeamMemId().compareTo(wId)==0){
+                		asWS.remove(newMember);
+                		break;
+                	}
+                }
+                return mapping.findForward("assignWorkspace");
+            }else {
                 if (uForm.getEvent().equalsIgnoreCase("changePassword")) {
 
                     String newPassword = uForm.getNewPassword();
@@ -342,9 +405,7 @@ public class ViewEditUser extends Action {
                             DbUtil.updateUser(user);
                             uForm.setDisplaySuccessMessage(true);
                         }
-
                     }
-
                 }
 
                 else if (uForm.getEvent().equalsIgnoreCase("typeSelected")) {
@@ -374,6 +435,8 @@ public class ViewEditUser extends Action {
         return mapping.findForward("forward");
     }
 
+	
+
     public ViewEditUser() {
     }
 
@@ -385,4 +448,15 @@ public class ViewEditUser extends Action {
             uForm.setConfirmNewPassword(null);
         }
     }
+    
+    private void addWorkSpace(AmpTeamMember newMember, ViewEditUserForm upMemForm) {
+		Collection assignedWS = upMemForm.getAssignedWorkspaces();
+		if(assignedWS==null){
+			ArrayList assWS = new ArrayList();
+			upMemForm.setAssignedWorkspaces(assWS);
+		}
+		upMemForm.getAssignedWorkspaces().add(newMember);
+		upMemForm.setTeamId(-1L);
+		upMemForm.setRole(-1L);
+	}
 }

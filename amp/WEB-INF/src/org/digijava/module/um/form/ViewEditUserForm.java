@@ -57,6 +57,12 @@ public class ViewEditUserForm extends ActionForm {
 	private Collection<AmpOrganisation> assignedOrgs;
 	private Long selAssignedOrgs[];
 	
+	private boolean addWorkspace;
+	private Collection workspaces;
+	private Collection ampRoles;
+	private Collection assignedWorkspaces;
+	private Long teamId;
+	private Long role;
 
 	public Collection<AmpOrganisation> getAssignedOrgs() {
 		return assignedOrgs;
@@ -294,4 +300,51 @@ public class ViewEditUserForm extends ActionForm {
 		this.pledger = pledger;
 	}
 
+	public boolean isAddWorkspace() {
+		return addWorkspace;
+	}
+
+	public void setAddWorkspace(boolean addWorkspace) {
+		this.addWorkspace = addWorkspace;
+	}
+
+	public Collection getWorkspaces() {
+		return workspaces;
+	}
+
+	public void setWorkspaces(Collection workspaces) {
+		this.workspaces = workspaces;
+	}
+
+	public Collection getAmpRoles() {
+		return ampRoles;
+	}
+
+	public void setAmpRoles(Collection ampRoles) {
+		this.ampRoles = ampRoles;
+	}
+
+	public Collection getAssignedWorkspaces() {
+		return assignedWorkspaces;
+	}
+
+	public void setAssignedWorkspaces(Collection assignedWorkspaces) {
+		this.assignedWorkspaces = assignedWorkspaces;
+	}
+
+	public Long getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
+
+	public Long getRole() {
+		return role;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
 }

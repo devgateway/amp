@@ -1,6 +1,8 @@
 package org.digijava.module.budgetexport.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class AmpBudgetExportMapRule {
     private List<AmpBudgetExportMapItem> items;
     private List<AmpBudgetExportCSVItem> csvItems;
 
+    //Not persistent fields
+    private int totalAmpEntityCount;
+
+    
+    
     public Long getId() {
         return id;
     }
@@ -73,4 +80,21 @@ public class AmpBudgetExportMapRule {
     public void setCsvItems(List<AmpBudgetExportCSVItem> csvItems) {
         this.csvItems = csvItems;
     }
+
+    public int getTotalAmpEntityCount() {
+        return totalAmpEntityCount;
+    }
+
+    public void setTotalAmpEntityCount(int totalAmpEntityCount) {
+        this.totalAmpEntityCount = totalAmpEntityCount;
+    }
+
+    public int getMappedAmpEntityCount() {
+        return items != null ? items.size() : 0;
+    }
+
+    public int getCsvItemCount() {
+        return csvItems != null ? csvItems.size() : 0;
+    }
+
 }

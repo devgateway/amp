@@ -4,13 +4,18 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -94,11 +99,30 @@ public class DbUtil {
     @SuppressWarnings("unchecked")
     public static List<AmpColumns> getAvailableColumns() throws DgException {
         List<AmpColumns> retVal = null;
+        Set <String> adapterKeys = MappingEntityAdapterUtil.getAvailEntityAdapterKeys();
+        StringBuilder viewsWhereclause = new StringBuilder();
+
+        Iterator<String> adapterKeyIt = adapterKeys.iterator();
+        while (adapterKeyIt.hasNext()) {
+            String adapterKey = adapterKeyIt.next();
+            viewsWhereclause.append("'");
+            viewsWhereclause.append(adapterKey);
+            viewsWhereclause.append("'");
+            if (adapterKeyIt.hasNext()) {
+                viewsWhereclause.append(",");
+            }
+        }
+
+
+
         try {
             Session sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("from ");
             queryStr.append(AmpColumns.class.getName());
-            queryStr.append(" col where col.relatedContentPersisterClass != null");
+            queryStr.append(" col where col.extractorView != null");
+            queryStr.append(" and col.extractorView in (");
+            queryStr.append(viewsWhereclause);
+            queryStr.append(")");
             Query q = sess.createQuery(queryStr.toString());
             retVal = q.list();
         } catch (DgException ex) {
@@ -122,8 +146,12 @@ public class DbUtil {
         return retVal;
     }
 
-    @SuppressWarnings("unchecked")
     public static AmpBudgetExportMapRule getMapRuleById (Long id) throws DgException {
+        return getMapRuleById (id, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static AmpBudgetExportMapRule getMapRuleById (Long id, boolean initLazyCollections) throws DgException {
         AmpBudgetExportMapRule retVal = null;
         try {
             Session sess = PersistenceManager.getRequestDBSession();
@@ -134,6 +162,10 @@ public class DbUtil {
             throw ex;
         }
 
+        if (initLazyCollections) {
+            Hibernate.initialize(retVal.getItems());
+            Hibernate.initialize(retVal.getCsvItems());
+        }
 
         return retVal;
     }
@@ -185,4 +217,26 @@ public class DbUtil {
 
         return retVal;
     }
+
+    @SuppressWarnings("unchecked")
+        public static List<AmpBudgetExportCSVItem> getRuleCSVItems(Long ruleId) throws DgException {
+            List<AmpBudgetExportCSVItem> retVal = null;
+            try {
+                Session sess = PersistenceManager.getRequestDBSession();
+                StringBuilder queryStr = new StringBuilder("from ");
+                queryStr.append(AmpBudgetExportCSVItem.class.getName());
+                queryStr.append(" csvItem where csvItem.rule.id=:RULE_ID");
+
+                Query q = sess.createQuery(queryStr.toString());
+                q.setLong("RULE_ID", ruleId);
+                retVal = q.list();
+
+
+            } catch (DgException ex) {
+                logger.debug("Unable to get Budget export rule CSV items from DB", ex);
+                throw ex;
+            }
+
+            return retVal;
+        }
 }

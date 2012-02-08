@@ -4,6 +4,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 
@@ -89,6 +90,52 @@ public class BudgetExportUtil {
         return retVal;
     }
     
+    public static void matchMapItems (List<AmpEntityMappedItem> ampEntityMappedItems, AmpBudgetExportMapRule rule) {
+        List<AmpBudgetExportCSVItem> csvItems = rule.getCsvItems();
+        int matchFragmentLength = 5;
+        boolean matchedFlag = false;
+        for  (AmpEntityMappedItem mappedItem : ampEntityMappedItems) {
+
+            AmpBudgetExportMapItem mapItem = null;
+            if (mappedItem.getMapItem() != null) {
+                mapItem = mappedItem.getMapItem();
+            } else {
+                mapItem = new AmpBudgetExportMapItem();
+                mapItem.setRule(rule);
+                mapItem.setAmpObjectID(Long.parseLong(mappedItem.getAmpEntity().getUniqueId()));
+                mapItem.setAmpLabel(mappedItem.getAmpEntity().getLabel());
+            }
+
+            for (AmpBudgetExportCSVItem csvItem : csvItems) {
+                matchedFlag = false;
+                //check exact match
+                if (csvItem.getLabel().trim().equalsIgnoreCase(mappedItem.getAmpEntity().getLabel().trim()) ||
+                        (mappedItem.getAmpEntity().getAdditionalSearchString() != null && csvItem.getLabel().trim().equalsIgnoreCase(mappedItem.getAmpEntity().getAdditionalSearchString().trim()))) {
+                    mapItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_EXACT);
+                    mapItem.setImportedLabel(csvItem.getLabel());
+                    mapItem.setImportedCode(csvItem.getCode());
+
+                    matchedFlag = true;
+                } else {
+                    if (csvItem.getLabel().length() > matchFragmentLength) {
+                        for (int offset = 0; offset < csvItem.getLabel().length() - matchFragmentLength; offset ++) {
+                            if (mappedItem.getAmpEntity().getLabel().toLowerCase().indexOf(csvItem.getLabel().toLowerCase().substring(offset, offset + matchFragmentLength)) > -1) {
+                                mapItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_SOME);
+                                mapItem.setImportedLabel(csvItem.getLabel());
+                                mapItem.setImportedCode(csvItem.getCode());
+                                matchedFlag = true;
+                            }
+                        }
+                    }
+                }
+                if (matchedFlag) {
+                    mappedItem.setMapItem(mapItem);
+                    break;
+                }
+            }
+        }
+    }
+    
     public static List<HierarchyListable> searchAmpEntity (List<HierarchyListable> searchIn, String searchStr) {
         List<HierarchyListable> retVal = new ArrayList<HierarchyListable>();
         for (HierarchyListable obj : searchIn) {
@@ -104,6 +151,41 @@ public class BudgetExportUtil {
         });
         return  retVal;
     }
+
+    public static List<AmpBudgetExportCSVItem> searchCsvItems (List<AmpBudgetExportCSVItem> searchIn, String searchStr) {
+        return searchCsvItems (searchIn, searchStr, false);
+    }
+
+    public static List<AmpBudgetExportCSVItem> searchCsvItems (List<AmpBudgetExportCSVItem> searchIn, String searchStr, boolean usingCodes) {
+            List<AmpBudgetExportCSVItem> retVal = new ArrayList<AmpBudgetExportCSVItem>();
+            for (AmpBudgetExportCSVItem obj : searchIn) {
+                if (!usingCodes) {
+                    if (obj.getLabel().toLowerCase().startsWith(searchStr.toLowerCase())) {
+                        retVal.add(obj);
+                    }
+                } else {
+                    if (obj.getCode().startsWith(searchStr.toLowerCase())) {
+                        retVal.add(obj);
+                    }
+                }
+            }
+                if (!usingCodes) {
+                    Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
+                        @Override
+                        public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
+                            return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
+                        }
+                    });
+                } else {
+                    Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
+                        @Override
+                        public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
+                            return o1.getCode().compareTo(o2.getCode());
+                        }
+                    });
+                }
+            return  retVal;
+        }
     
     public static List<AmpEntityMappedItem> getAmpEntityMappedItems (AmpBudgetExportMapRule rule) throws DgException {
         List<AmpEntityMappedItem> retVal = new ArrayList<AmpEntityMappedItem>();

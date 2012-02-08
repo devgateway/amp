@@ -43,6 +43,8 @@ import java.util.Set;
 public class MapActions extends DispatchAction {
     private static final String TMP_MAP_SESSION_ATTR = "TMP_MAP_SESSION_ATTR";
     private static final String AMP_ENTITY_LIST_SESSION_ATTR = "AMP_ENTITY_LIST_SESSION_ATTR";
+    private static final String AMP_MAPPED_ENTITY_LIST = "AMP_MAPPED_ENTITY_LIST";
+    private static final String CURRENT_MAPPING_RULE = "CURRENT_MAPPING_RULE";
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -54,49 +56,65 @@ public class MapActions extends DispatchAction {
             BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
 
         if (!beMapActionsForm.isNoReload()) {
-            AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
-            List<AmpEntityMappedItem> ampEntityMappedItems = BudgetExportUtil.getAmpEntityMappedItems(rule);
-            beMapActionsForm.setAmpEntityMappedItems(ampEntityMappedItems);
-
+            AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId(), true);
+            request.getSession().setAttribute(CURRENT_MAPPING_RULE, rule);
             beMapActionsForm.setRule(rule);
+
+            List<AmpEntityMappedItem> ampEntityMappedItems = BudgetExportUtil.getAmpEntityMappedItems(rule);
+            request.getSession().setAttribute(AMP_MAPPED_ENTITY_LIST, ampEntityMappedItems);
+            //beMapActionsForm.setAmpEntityMappedItems(ampEntityMappedItems);
+
+
+
+
             MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
             List<HierarchyListable> ampEntityList = adapter.getAllObjects();
-            beMapActionsForm.setAmpEntities(ampEntityList);
-
             request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
 
-            List dbItems = new ArrayList();
+            beMapActionsForm.setAmpEntities(ampEntityList);
+
+
+
+            List<AmpBudgetExportMapItem> dbItems = new ArrayList();
             for (AmpBudgetExportMapItem item: rule.getItems()) {
                 dbItems.add(item);
             }
             request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, dbItems);
-            beMapActionsForm.setMapItems(dbItems);
+            //beMapActionsForm.setMapItems(dbItems);
 
         }
+
+        beMapActionsForm.setRule((AmpBudgetExportMapRule)request.getSession().getAttribute(CURRENT_MAPPING_RULE));
+        beMapActionsForm.setMapItems((List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR));
+        beMapActionsForm.setAmpEntityMappedItems((List<AmpEntityMappedItem>)request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST));
+
         return mapping.findForward("forward");
     }
 
     public ActionForward save(ActionMapping mapping, ActionForm form,
                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
+
         AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
-        List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
+        List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
 
         //Add or update
-        for (AmpBudgetExportMapItem item : items) {
-            if (item.getId() != null && item.getId().longValue() > 0l) {
-                for (AmpBudgetExportMapItem dbItem : rule.getItems()) {
-                    if (dbItem.getId().equals(item.getId())) {
-                        dbItem.setImportedCode(item.getImportedCode());
-                        dbItem.setAmpObjectID(item.getAmpObjectID());
-                        dbItem.setImportedLabel(item.getImportedLabel());
-                        dbItem.setAmpLabel(item.getAmpLabel());
-                        dbItem.setMatchLevel(item.getMatchLevel());
-                        break;
+        for (AmpEntityMappedItem item : ampEntityMappedItems) {
+            if (item.getMapItem() != null) {
+                AmpBudgetExportMapItem mapItem = item.getMapItem();
+                if (mapItem.getId() != null) { //Update existing DB record
+                    for (AmpBudgetExportMapItem mapDbItem : rule.getItems()) {
+                        if (mapItem.getId().equals(mapDbItem.getId())) {
+                            mapDbItem.setAmpLabel(mapItem.getAmpLabel());
+                            mapDbItem.setAmpObjectID(mapItem.getAmpObjectID());
+                            mapDbItem.setImportedCode(mapItem.getImportedCode());
+                            mapDbItem.setImportedLabel(mapItem.getImportedLabel());
+                            mapDbItem.setMatchLevel(mapItem.getMatchLevel());
+                        }
                     }
+                } else { //Add a new one
+                    rule.getItems().add(mapItem);
                 }
-            } else {
-                rule.getItems().add(item);
             }
         }
 
@@ -105,6 +123,9 @@ public class MapActions extends DispatchAction {
         DbUtil.saveOrUpdateMapRule(rule);
 
         request.getSession().removeAttribute(TMP_MAP_SESSION_ATTR);
+        request.getSession().removeAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
+        request.getSession().removeAttribute(AMP_MAPPED_ENTITY_LIST);
+        request.getSession().removeAttribute(CURRENT_MAPPING_RULE);
 
         StringBuilder fwdBuilder = new StringBuilder("/");
         fwdBuilder.append(mapping.findForward("projectRules").getPath());
@@ -147,25 +168,29 @@ public class MapActions extends DispatchAction {
         beMapActionsForm.setMapItems(items);
         request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, items);
 
-        beMapActionsForm.setNoReload(true);
+        //beMapActionsForm.setNoReload(true);
 
         return view(mapping, beMapActionsForm, request, response);
     }
 
-    public ActionForward autocomplite (ActionMapping mapping, ActionForm form,
-                        HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    public ActionForward autocomplete(ActionMapping mapping, ActionForm form,
+                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         response.setContentType("text/xml");
         String searchStr = request.getParameter("searchStr");
-        List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
+        String searchIn = request.getParameter("searchIn");
+        boolean searchCodes = searchIn != null && searchIn.equalsIgnoreCase("code");
+
+        AmpBudgetExportMapRule rule = (AmpBudgetExportMapRule)request.getSession().getAttribute(CURRENT_MAPPING_RULE);
+
 
         XMLDocument responceXml = new XMLDocument();
         XML rootNode = new XML("result");
         responceXml.addElement(rootNode);
-        List<HierarchyListable> searchResults = BudgetExportUtil.searchAmpEntity(ampEntityList, searchStr);
+        List<AmpBudgetExportCSVItem> searchResults = BudgetExportUtil.searchCsvItems(rule.getCsvItems(), searchStr, searchCodes);
 
-        for (HierarchyListable obj : searchResults) {
+        for (AmpBudgetExportCSVItem obj : searchResults) {
             XML resultItem = new XML("item");
-            resultItem.addAttribute("id", obj.getUniqueId());
+            resultItem.addAttribute("code", obj.getCode());
             StringElement body = new StringElement(obj.getLabel());
             resultItem.addElement(body);
             rootNode.addElement(resultItem);
@@ -178,24 +203,44 @@ public class MapActions extends DispatchAction {
     public ActionForward updateMappingItem (ActionMapping mapping, ActionForm form,
                         HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         String importedCode = request.getParameter("importedCode");
+        String importedLabel = request.getParameter("importedLabel");
         String ampObjId = request.getParameter("ampObjId");
-        List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
-        List<AmpBudgetExportMapItem> items = (List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR);
+
+        List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
+        AmpBudgetExportMapRule rule = (AmpBudgetExportMapRule) request.getSession().getAttribute(CURRENT_MAPPING_RULE);
         
-        for (AmpBudgetExportMapItem item : items) {
-            if (item.getImportedCode().trim().equals(importedCode.trim())) {
-                for (HierarchyListable ampEntity : ampEntityList) {
-                    if (ampEntity.getUniqueId().trim().equals(ampObjId.trim())) {
-                        item.setAmpObjectID(Long.parseLong(ampEntity.getUniqueId()));
-                        item.setAmpLabel(ampEntity.getLabel());
-                        item.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_MANUAL);
-                        break;
-                    }
+        for (AmpEntityMappedItem item : ampEntityMappedItems) {
+            if (item.getAmpEntity().getUniqueId().trim().equals(ampObjId)) {
+                AmpBudgetExportMapItem mapItem = null;
+                if (item.getMapItem() != null) {
+                    mapItem = item.getMapItem();
+                } else {
+                    mapItem = new AmpBudgetExportMapItem();
+                    mapItem.setAmpObjectID(Long.parseLong(item.getAmpEntity().getUniqueId()));
+                    mapItem.setAmpLabel(item.getAmpEntity().getLabel());
+                    mapItem.setRule(rule);
                 }
+                mapItem.setImportedCode(importedCode);
+                mapItem.setImportedLabel(importedLabel);
+                mapItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_MANUAL);
+                item.setMapItem(mapItem);
                 break;
             }
         }
         
         return null;
+    }
+
+    public ActionForward automatch (ActionMapping mapping, ActionForm form,
+                            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
+        beMapActionsForm.setNoReload(true);
+
+        AmpBudgetExportMapRule rule = (AmpBudgetExportMapRule) request.getSession().getAttribute(CURRENT_MAPPING_RULE);
+        List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
+
+        BudgetExportUtil.matchMapItems (ampEntityMappedItems, rule);
+
+        return view(mapping, beMapActionsForm, request, response);
     }
 }

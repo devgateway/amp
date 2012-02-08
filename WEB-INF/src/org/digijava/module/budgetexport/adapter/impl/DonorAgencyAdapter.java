@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -37,6 +38,15 @@ public class DonorAgencyAdapter implements MappingEntityAdapter {
         objQuery.setCacheable(true);
         return objQuery.list();
     }
+
+    public int getObjectCount() throws DgException {
+        Session sess = PersistenceManager.getRequestDBSession();
+        StringBuilder queryStr = new StringBuilder("select distinct donor.amp_donor_org_id from v_donors donor");
+        SQLQuery q = sess.createSQLQuery(queryStr.toString());
+        List<Long> ids = q.list();
+        return ids != null?ids.size():0;
+    }
+
     public HierarchyListable getObjectByID(Long id) throws DgException {
         return null;
     }

@@ -10,47 +10,9 @@
 <%@ page import="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem" %>
 
 <digi:instance property="beMapActionsForm"/>
-	
-<style>
-	.autosuggest_textfield {
-		font-family: Verdana,Tahoma,Arial,sans-serif; 
-		font-size: 10px;
-		font-weight: normal;
-		background-color:#fbfe9e;
-		border:none;
-		display:none;
-		width:100%;
-	}
-	
-	.autosuggest_static_container {
-		cursor:pointer;
-		width:100%;
-		height:100%;
-		border:none;
-	}
-	
-	.autosuggest_dropdown_container {
-		border:1px solid black;
-		position:absolute;
-		background-color:white;
-	}
 
-	div.autosuggest_dropdown_item {
-		cursor:pointer;
-		width:100%;		
-	}	
-	
-	div.autosuggest_dropdown_item:hover {
-		background-color:blue;
-		color:white;
-	}
 
-	div.autosuggest_dropdown_item:active {
-		background-color:navy;
-		color:white;
-	}	
-	
-</style>	
+<digi:ref href="/repository/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />	
 	
 <digi:form action="/mapActions.do" method="post" enctype="multipart/form-data">
 	<html:hidden name="beMapActionsForm" property="id"/>
@@ -58,6 +20,7 @@
 	<html:file name="beMapActionsForm" property="upload"/>
 	<input type="button" value="Upload" onClick="uploadFile(this)"/>
 	
+	<%--
 	<table style="border-collapse:collapse;" border="1">
 		<tr>
 			<td>
@@ -116,8 +79,8 @@
 		
 		
 	</table>
-	<input type="button" value="Save" onClick="saveMapping(this)"/>
 	
+	--%>
 	
 	<table><tr><td>
 	
@@ -127,10 +90,10 @@
 				AMP Label
 			</td>
 			<td>
-				External code
+				External code/label
 			</td>
 			<td>
-				External label
+				Matching
 			</td>
 		</tr>
 			<logic:present name="beMapActionsForm" property="ampEntityMappedItems">
@@ -139,22 +102,49 @@
 						<td>
 							<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>
 						</td>
-						<td>
-							<logic:present name="ampEntityMappedItem" property="mapItem">
-								<bean:write name="ampEntityMappedItem" property="mapItem.importedCode"/>
-							</logic:present>
+						<td class="be_autocomplete_cell">
+							<table width="100%">
+								<tr>
+									<td width="35" class="be_autocomplete_code_cell">
+										<html:hidden name="ampEntityMappedItem" property="ampEntity.uniqueId" styleClass="amp_id_holder"/>
+										<div class="be_autocomplete_static_text">
+											<logic:present name="ampEntityMappedItem" property="mapItem">
+												<bean:write name="ampEntityMappedItem" property="mapItem.importedCode"/>
+											</logic:present>
+										</div>
+									</td>
+									<td align="left" class="be_autocomplete_label_cell">
+										<div class="be_autocomplete_static_text">
+											<logic:present name="ampEntityMappedItem" property="mapItem">
+												<bean:write name="ampEntityMappedItem" property="mapItem.importedLabel"/>
+											</logic:present>
+										</div>
+									</td>
+								</tr>
+							</table>
 						</td>
-						<td>
-							<logic:present name="ampEntityMappedItem" property="mapItem">
-								<bean:write name="ampEntityMappedItem" property="mapItem.importedLabel"/>
-							</logic:present>
-						</td>
+						<logic:present name="ampEntityMappedItem" property="mapItem">
+							<logic:equal name="ampEntityMappedItem" property="mapItem.matchLevel" value="1">
+								<td width="10" bgcolor="yellow">&nbsp</td>
+							</logic:equal>
+							<logic:equal name="ampEntityMappedItem" property="mapItem.matchLevel" value="2">
+								<td width="10" bgcolor="green">&nbsp</td>
+							</logic:equal>
+							<logic:equal name="ampEntityMappedItem" property="mapItem.matchLevel" value="3">
+								<td width="10" bgcolor="blue">&nbsp</td>
+							</logic:equal>
+						</logic:present>
+						<logic:notPresent name="ampEntityMappedItem" property="mapItem">
+							<td width="10" bgcolor="red">&nbsp</td>
+						</logic:notPresent>
 				</tr>
 			</logic:iterate>
 		</logic:present>
 	</table>
 	
 </td><td>
+	
+	<%--
 	<table style="border-collapse:collapse;" border="1">
 		<tr>
 			<td>
@@ -176,116 +166,14 @@
 				</tr>
 			</logic:iterate>
 		</logic:present>
-	</table>
-	
+	</table>--%>
 </td>
-	
+</tr>
+</table>
+
+<input type="button" value="Automatic matching" onClick="automatch(this)">
+<input type="button" value="Save" onClick="saveMapping(this)"/>	
 	
 </digi:form>
 
-<script language="javascript">
-	function uploadFile(obj) {
-		obj.form.action=obj.form.action + "?action=upload";
-		obj.form.submit();
-		
-	}
-	
-	function saveMapping(obj) {
-		obj.form.action=obj.form.action + "?action=save";
-		obj.form.submit();
-		
-	}
-	
-	
-	var activeAutocompliteField = null;
-	var autocompliteActionDelayHandler = null;
-	
-	var autocompKeyPress = function (e) {
-		if (autocompliteActionDelayHandler != null) {
-			window.clearTimeout(autocompliteActionDelayHandler);
-		}
-		
-		autocompliteActionDelayHandler = window.setTimeout(autocompliteRequestSend, 1000);
-	}
-	
-	var autocompliteRequestSend = function () {
-		var url = "../../budgetexport/mapActions.do?action=autocomplite";
-		$.ajax({
-		  type: 'POST',
-		  url: url,
-		  data:{searchStr: activeAutocompliteField.val()},
-		  success: autocompliteRequestSuccess,
-		  dataType: "xml"
-		});
-	}
-	
-	var autocompliteRequestSuccess = function (data, textStatus, jqXHR) {
-		$("#autocomplite_dropdown").remove();
-		var results = data.getElementsByTagName("item");
-		var resultIdx;
-		var componentSrc = [];
-		componentSrc.push("<div id='autocomplite_dropdown' class='autosuggest_dropdown_container'>");
-		componentSrc.push("<table>");
-		for (resultIdx = 0; resultIdx < results.length; resultIdx ++) {
-			var result = results[resultIdx];
-			var id = result.attributes.getNamedItem("id").value;
-			var label = result.childNodes[0].nodeValue;
-			
-			componentSrc.push("<tr><td><div class='autosuggest_dropdown_item' onClick='setManualMapping(this, ");
-			componentSrc.push(id);
-			componentSrc.push(")'>");
-			componentSrc.push(label);
-			componentSrc.push("</div></td></tr>");
-		}
-		componentSrc.push("</table>");
-		componentSrc.push("</div>");
-		
-		activeAutocompliteField.parent().append(componentSrc.join(""));
-		
-		//console.log (componentSrc.join(""));
-	}
-	
-	
-	$(".autosuggestable").click(function (e) {
-		$(".autosuggest_static_container").css("display","block");
-		$(".autosuggest_textfield").css("display","none");
-		var jqObj = $(this);
-		jqObj.find(".autosuggest_static_container").css("display","none");
-		
-		var textFld = jqObj.find(".autosuggest_textfield");
-		textFld.css("display","block");
-		textFld[0].focus();	
-		
-		textFld.keypress(autocompKeyPress);
-		activeAutocompliteField = textFld;
-		
-	});
-	
-	function setManualMapping(obj, id) {
-		var importedCode = activeAutocompliteField.parent().find(".imported_code").val();
-		activeAutocompliteField.val(obj.innerHTML);
-		activeAutocompliteField.css("display","none");
-		activeAutocompliteField.parent().find(".autosuggest_static_container").html(obj.innerHTML.trim());
-		activeAutocompliteField.parent().find(".autosuggest_static_container").css("display","block");
-		$("#autocomplite_dropdown").remove();
-		console.log(id + " - " + importedCode);
-
-		var url = "../../budgetexport/mapActions.do?action=updateMappingItem";
-		$.ajax({
-		  type: 'POST',
-		  url: url,
-		  data:{importedCode:importedCode, ampObjId:id},
-		  success: manualMappingSuccess		 
-		});
-	}
-	
-	
-	var manualMappingSuccess = function (data, textStatus, jqXHR) {
-		var matchLevelCell = activeAutocompliteField.parent().next();
-		matchLevelCell.attr("bgcolor", "blue");
-		matchLevelCell.html("Manual");
-	}
-	
-	
-	
-</script>
+<script language="JavaScript" src="/repository/budgetexport/view/js/budgetexport.js"></script>

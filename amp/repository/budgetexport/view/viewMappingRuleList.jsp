@@ -18,6 +18,9 @@
 					<td>Name</td>
 					<td>AMP Column</td>
 					<td>Has header</td>
+					<td colspan="3">&nbsp;</td>
+					<td>Total/Mapped</td>
+					<td>CSV items</td>
 				</tr>
 					<logic:iterate name="beMapingForm" property="rules" id="rule">
 						<tr>
@@ -39,12 +42,18 @@
 							<td>
 								<a href="/budgetexport/mapActions.do?action=view&ruleId=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>">Manage map</a>
 							</td>
+							<td>
+								(<bean:write name="rule" property="totalAmpEntityCount"/>/<bean:write name="rule" property="mappedAmpEntityCount"/>)
+							</td>
+							<td>
+								<bean:write name="rule" property="csvItemCount"/>
+							</td>
 						</tr>
 					</logic:iterate>
 			</logic:notEmpty>
 		</logic:present>
 		<tr>
-			<td colspan="4" align="right">
+			<td colspan="8" align="right">
 				<a href="/budgetexport/addEditDeleteMapRule.do?action=add&curProjectId=<bean:write name="beMapingForm" property="id"/>">Add new rule</a>
 			</td>		
 		</tr>

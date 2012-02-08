@@ -39,7 +39,7 @@
 			</logic:notEmpty>
 		</logic:present>
 		<tr>
-			<td colspan="4" align="right">
+			<td colspan="5" align="right">
 				<a href="/budgetexport/addEditDeleteProject.do?action=add">Add new project</a>
 			</td>		
 		</tr>

@@ -5,6 +5,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
+import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.form.BEMappingForm;
 import org.digijava.module.budgetexport.util.DbUtil;
@@ -24,6 +26,13 @@ public class ShowMapingRuleList extends Action {
         BEMappingForm beMappingForm = (BEMappingForm) form;
         List<AmpBudgetExportMapRule> projectRules =
                 DbUtil.getProjectMappingRules(beMappingForm.getId());
+
+        //Set total/mapped counts  (not persistent field values)
+        for (AmpBudgetExportMapRule ruleItem : projectRules) {
+            MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(ruleItem.getAmpColumn().getExtractorView());
+            ruleItem.setTotalAmpEntityCount(adapter.getObjectCount());
+        }
+        
         beMappingForm.setRules(projectRules);
         return mapping.findForward("forward");
     }

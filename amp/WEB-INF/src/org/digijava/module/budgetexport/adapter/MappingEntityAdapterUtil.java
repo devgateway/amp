@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,6 +33,21 @@ public class MappingEntityAdapterUtil {
 
         return retVal;
     }
+
+    public static Set getAvailEntityAdapterKeys () {
+        Set retVal = null;
+        if (adapterProperties == null) {
+            adapterProperties = getPropertyFileMapping();
+        }
+
+        if (adapterProperties != null) {
+            retVal = adapterProperties.keySet();
+        }
+
+        return retVal;
+    }
+
+
 
     public static MappingEntityAdapter getEntityAdapter (String extractorView) {
         MappingEntityAdapter adapter = null;
@@ -63,6 +79,8 @@ public class MappingEntityAdapterUtil {
         }
         return retVal;
     }
+
+
     
     public static String generateIdWhereClause(List<Long> ids) {
         StringBuilder retVal = new StringBuilder();

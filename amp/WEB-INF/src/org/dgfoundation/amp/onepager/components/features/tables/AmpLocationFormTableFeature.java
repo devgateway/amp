@@ -193,7 +193,7 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
 			@Override
 			public void setPercentage(AmpActivityLocation loc, int val) {
 				loc.setLocationPercentage((float) val);

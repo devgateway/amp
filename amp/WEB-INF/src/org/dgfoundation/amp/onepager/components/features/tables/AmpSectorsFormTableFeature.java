@@ -151,7 +151,7 @@ public class AmpSectorsFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 		
-		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
 			@Override
 			public void setPercentage(AmpActivitySector loc, int val) {
 				loc.setSectorPercentage((float) val);

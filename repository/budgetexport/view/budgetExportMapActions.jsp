@@ -17,6 +17,7 @@
 <digi:form action="/mapActions.do" method="post" enctype="multipart/form-data">
 	<html:hidden name="beMapActionsForm" property="id"/>
 	<html:hidden name="beMapActionsForm" property="ruleId"/>
+		<html:hidden name="beMapActionsForm" property="projectId"/>
 	<html:file name="beMapActionsForm" property="upload"/>
 	<input type="button" value="Upload" onClick="uploadFile(this)"/>
 	

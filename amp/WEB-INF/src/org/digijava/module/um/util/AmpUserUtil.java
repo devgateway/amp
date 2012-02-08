@@ -242,8 +242,8 @@ public class AmpUserUtil {
 		Query qry=null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString="select u from " +User.class.getName() +" u where u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-			" tm where tm.ampTeam.ampTeamId=:teamId) ";
+			queryString="select u from " +User.class.getName() +" u where u.banned=:banned and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
+			" tm where tm.ampTeam.ampTeamId=:teamId ) ";
                         if(keyword!=null&&keyword.length()>0){
                             queryString+=" and concat(u.firstNames,' ',u.lastName)=:keyword";
                         }
@@ -253,6 +253,7 @@ public class AmpUserUtil {
                         if(keyword!=null&&keyword.length()>0){
                             qry.setString("keyword", keyword);
                         }
+            qry.setBoolean("banned", false);            
 			retVal=qry.list();
 		} catch (Exception e) {
 			logger.error(e);

@@ -432,16 +432,8 @@
 															</digi:link>
 																		<jsp:useBean id="urlParamsLast" type="java.util.Map"
 																			class="java.util.HashMap" />
-																		<c:if
-																			test="${aimOrgManagerForm.pagesSize > aimOrgManagerForm.pagesToShow}">
-																			<c:set target="${urlParamsLast}" property="page"
-																				value="${aimOrgManagerForm.pagesSize -1}" />
-																		</c:if>
-																		<c:if
-																			test="${aimOrgManagerForm.pagesSize < aimOrgManagerForm.pagesToShow}">
 																			<c:set target="${urlParamsLast}" property="page"
 																				value="${aimOrgManagerForm.pagesSize}" />
-																		</c:if>
 																		<c:set target="${urlParamsLast}"
 																			property="orgSelReset" value="false" />
 																		<c:set var="translation">

@@ -1194,7 +1194,9 @@ function setType(typeValue) {
 
 function validateAddDocument() {
 	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
-	var urlFormat = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&./:]+");
+	//var urlFormat = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&./:]+");
+
+	var urlFormat = new RegExp("^((https?|ftp|):\/\/|www)[^\s]+");
 	
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
@@ -1220,8 +1222,8 @@ function validateAddDocument() {
 	
 	if(webUrlVisible.style.display!='none'){
 		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
-		var found	= urlFormat.exec(enteredWebLink);		
-		if ( found != enteredWebLink ) {
+		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);		
+		if ( found != true ) {
 			msg = msg + "${translation_url_format}"+'<br>' ;
 			
 		}

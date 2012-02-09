@@ -4,22 +4,17 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContractsItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.IPAContract;
 
@@ -39,32 +34,31 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 			setModel.setObject(new HashSet<IPAContract>());
 		}
 		
-		AbstractReadOnlyModel<List<IPAContract>> listModel = OnePagerUtil 
-				.getReadOnlyListModelFromSetModel(setModel);
-		
-		ListView<IPAContract> list = new ListView<IPAContract>("list", listModel) {
+		Comparator<IPAContract> ipaComparator = new Comparator<IPAContract>() {
 			@Override
-			protected void populateItem(final ListItem<IPAContract> item) {
-				AmpContractsItemFeaturePanel contractItem = new AmpContractsItemFeaturePanel(
-							"item", "Contract Item", item.getModel());
-				item.add(contractItem);
-				
-				AmpDeleteLinkField deleteLinkField = new AmpDeleteLinkField(
-						"delete", "Delete Contract Item", new Model<String>("Do you really want to delete this contract?")) {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpContractingFormSectionFeature.this);
-						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
-						//list.removeAll();
-					}
-				};
-				item.add(deleteLinkField);
-
+			public int compare(IPAContract o1, IPAContract o2) {
+				if (o1 == null || o1.getContractName() == null)
+					return 1;
+				if (o2 == null || o2.getContractName() == null)
+					return -1;
+				return o1.getContractName().compareTo(o2.getContractName());
 			}
 		};
 		
-		list.setReuseItems(true);
+		final ListEditor<IPAContract> list = new ListEditor<IPAContract>("list", setModel, ipaComparator) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<IPAContract> item) {
+				AmpContractsItemFeaturePanel contractItem = new AmpContractsItemFeaturePanel(
+						"item", "Contract Item", item.getModel());
+				item.add(contractItem);
+				ListEditorRemoveButton deleteField = new ListEditorRemoveButton("delete", "Delete Contract Item", 
+						"Do you really want to delete this contract?");
+				item.add(deleteField);
+			}
+		};
 		add(list);
 		
 
@@ -73,7 +67,8 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 			public void onClick(AjaxRequestTarget target) {
 				IPAContract comp = new IPAContract();
 				comp.setActivity(am.getObject());
-				setModel.getObject().add(comp);
+				//setModel.getObject().add(comp);
+				list.addItem(comp);
 				target.addComponent(this.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
 			}

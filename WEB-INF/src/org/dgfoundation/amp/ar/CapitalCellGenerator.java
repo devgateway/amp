@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 public class CapitalCellGenerator extends SyntheticCellGenerator {
@@ -18,6 +20,16 @@ public class CapitalCellGenerator extends SyntheticCellGenerator {
 			capitalPercent		= mi.getValue();
 		}
 		double ret	= originalAmount * capitalPercent / 100.0;
+		
+		return ret;
+	}
+	
+	@Override
+	public Collection<MetaInfo> syntheticMetaInfo() {
+		ArrayList<MetaInfo> ret	= new ArrayList<MetaInfo>();
+		
+		MetaInfo mi				= new MetaInfo(ArConstants.COLUMN_CAPITAL_EXPENDITRURE, "Expenditure");
+		ret.add(mi);
 		
 		return ret;
 	}

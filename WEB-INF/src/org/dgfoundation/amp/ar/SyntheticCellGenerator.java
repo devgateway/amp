@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 public abstract class SyntheticCellGenerator {
@@ -21,8 +23,6 @@ public abstract class SyntheticCellGenerator {
 		this.measureName = measureName;
 		this.originalMeasureName = originalMeasureName;
 	}
-
-
 
 
 
@@ -55,6 +55,14 @@ public abstract class SyntheticCellGenerator {
 							}
 						}
 						
+						
+						Collection<MetaInfo> mInfos	= this.syntheticMetaInfo();
+						if ( mInfos != null && mInfos.size() > 0  ) {
+							for (MetaInfo metaInfo : mInfos) {
+								newCell.getMetaData().add(metaInfo);
+							}
+						}
+						
 						retCells.add(newCell);
 						
 					} catch (CloneNotSupportedException e) {
@@ -67,10 +75,19 @@ public abstract class SyntheticCellGenerator {
 		return retCells;
 	}
 
+	public boolean checkIfApplicabale(AmpReports reportMetadata) {
+		for ( AmpReportMeasures repMes: reportMetadata.getMeasures() ) {
+			AmpMeasures measure	= repMes.getMeasure();
+			if ( this.measureName.equals(measure.getMeasureName())  ) 
+				return true;
+		}
+		return false;
+	}
+	
 	public abstract double computeAmount (double originalAmount, Set metaData); 
-
-
-
+	
+	public abstract Collection<MetaInfo> syntheticMetaInfo ();
+	
 
 	/**
 	 * @return the metaDataName

@@ -159,6 +159,12 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret)
 public Cell filter(Cell metaCell,Set ids) {
     	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 		if(ret==null) return null;
+		
+		if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_CAPITAL_EXPENDITRURE) ) {
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_CAPITAL_EXPENDITRURE)))
+				return null;
+		}
+		
 		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) 
 		
 		if((!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR))) && (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)))

@@ -58,6 +58,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
 	private boolean pledgereport=false;
+	
+	private HttpServletRequest request	= null;
 
 
 	/**
@@ -188,12 +190,10 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
 		
-		for ( AmpReportMeasures repMes: reportMetadata.getMeasures() ) {
-			AmpMeasures measure	= repMes.getMeasure();
-			for (ArConstants.SyntheticColumnsMeta scm: ArConstants.syntheticColumns) {
-				if (scm.getColumnName().equals(measure.getMeasureName() ) ) {
-					syntCellGenerators.add(scm.getGenerator());
-				}
+		for (ArConstants.SyntheticColumnsMeta scm: ArConstants.syntheticColumns) {
+			SyntheticCellGenerator generator	= scm.getGenerator();
+			if ( generator.checkIfApplicabale(reportMetadata)  ) {
+				syntCellGenerators.add(generator);
 			}
 		}
 		
@@ -244,18 +244,20 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				if (extractorView != null) {
 
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							filter.getGeneratedFilterQuery(), extractorView,
 							columnName, this });
 				} else {
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns, this });
 				}
 
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
+				if (request != null)
+					ce.setSession(request.getSession());
 				
 				
 				ce.setDebugMode(debugMode);
@@ -855,6 +857,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter,
 			HttpServletRequest request) {
 		super();
+		this.request		= request;
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;

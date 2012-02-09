@@ -325,6 +325,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpApplicationSettings tempSettings = null;
 		
+		if ( tm.getTeamId()== null )
+			tm	= null;
+		
 		if (tm != null) {
 			this.setAccessType(tm.getTeamAccessType());
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
@@ -578,7 +581,6 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";
 		
 			}
-			
 		int c;
 		if(draft){
 			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));

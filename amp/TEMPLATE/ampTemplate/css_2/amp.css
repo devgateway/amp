@@ -490,7 +490,8 @@ div.reg_form_container .f-names {color:#000000; font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
 #amphometext{width:750px; float:left;}
-html.ie #amphometext{width:700px; float:left;}
+html.ie #amphometext, html.ie7 #amphometext, html.ie8 #amphometext, html.ie9 #amphometext{width:700px; float:left;}
+
 #amphomesidebar{width:220px; float:right;}
 html.ie #amphomesidebar{width:200px;}
 #Tab_Name td#reportsearchform {font-size: 11px;

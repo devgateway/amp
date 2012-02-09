@@ -11,117 +11,58 @@
 
 <digi:instance property="beMapActionsForm"/>
 
-    <div style="padding:25px;" class="budget-table">
+
 <digi:ref href="/repository/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />	
 	
 <digi:form action="/mapActions.do" method="post" enctype="multipart/form-data">
 	<html:hidden name="beMapActionsForm" property="id"/>
 	<html:hidden name="beMapActionsForm" property="ruleId"/>
-		<html:hidden name="beMapActionsForm" property="projectId"/>
-	<html:file name="beMapActionsForm" property="upload"/>
-	<input type="button" value="Upload" onClick="uploadFile(this)"/>
-	
-	<%--
-	<table style="border-collapse:collapse;" border="1">
-		<tr>
-			<td>
-				External code
-			</td>
-			<td>
-				External label
-			</td>			
-			<td>
-				AMP Label
-			</td>
-			<td>
-				Match level
-			</td>
-		</tr>
-			<logic:present name="beMapActionsForm" property="mapItems">
-				<logic:iterate name="beMapActionsForm" property="mapItems" id="item">
-					<tr>
-						<td>
-							<bean:write name="item" property="importedCode"/>
-						</td>
-						<td>
-							<bean:write name="item" property="importedLabel"/>
-						</td>			
-						<td class="autosuggestable">
-							<div class="autosuggest_static_container">
-								<logic:present name="item" property="ampLabel">
-									<bean:write name="item" property="ampLabel"/>
-								</logic:present>
-							</div>
-							<input type="text" value="<bean:write name="item" property="ampLabel"/>" class="autosuggest_textfield">
-							<input type="hidden" value="<bean:write name="item" property="importedCode"/>" class="imported_code">
-								
-						</td>
-						
-						<logic:equal name="item" property="matchLevel" value="0">
-							<td bgcolor="red">
-							None
-						</logic:equal>
-						<logic:equal name="item" property="matchLevel" value="1">
-							<td bgcolor="yellow">
-							Some
-						</logic:equal>
-						<logic:equal name="item" property="matchLevel" value="2">
-							<td bgcolor="green">
-							Exact
-						</logic:equal>
-						<logic:equal name="item" property="matchLevel" value="3">
-							<td bgcolor="blue">
-							Manual
-						</logic:equal>
-					</td>
-				</tr>
-			</logic:iterate>
-		</logic:present>
-		
-		
-	</table>
-	
-	--%>
+	<html:hidden name="beMapActionsForm" property="projectId"/>
 	
 	<table><tr><td>
 	
 	<table style="border-collapse:collapse;" border="1">
-		<tr>
-			<td>
-				AMP Label
-			</td>
-			<td>
-				External code/label
-			</td>
-			<td>
-				Matching
-			</td>
-		</tr>
+		<tbody>
+			<tr>
+				<td width="300">
+					AMP Label
+				</td>
+				<td width="300">
+					External code/label
+				</td>
+				<td width="20">
+					Matching
+				</td>
+			</tr>
 			<logic:present name="beMapActionsForm" property="ampEntityMappedItems">
 				<logic:iterate name="beMapActionsForm" property="ampEntityMappedItems" id="ampEntityMappedItem">
 					<tr>
-						<td>
-							<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>
+						<td nowrap width="400" style="width:400px;">
+							<span style="height:12px; width:400px; max-width:400px; overflow-x:hidden; display:block;" title="<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>">
+								<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>
+							</span>
 						</td>
 						<td class="be_autocomplete_cell">
 							<table width="100%">
-								<tr>
-									<td width="35" class="be_autocomplete_code_cell">
-										<html:hidden name="ampEntityMappedItem" property="ampEntity.uniqueId" styleClass="amp_id_holder"/>
-										<div class="be_autocomplete_static_text">
-											<logic:present name="ampEntityMappedItem" property="mapItem">
-												<bean:write name="ampEntityMappedItem" property="mapItem.importedCode"/>
-											</logic:present>
-										</div>
-									</td>
-									<td align="left" class="be_autocomplete_label_cell">
-										<div class="be_autocomplete_static_text">
-											<logic:present name="ampEntityMappedItem" property="mapItem">
-												<bean:write name="ampEntityMappedItem" property="mapItem.importedLabel"/>
-											</logic:present>
-										</div>
-									</td>
-								</tr>
+								<tbody>
+									<tr>
+										<td width="50" class="be_autocomplete_code_cell">
+											<html:hidden name="ampEntityMappedItem" property="ampEntity.uniqueId" styleClass="amp_id_holder"/>
+											<div class="be_autocomplete_static_text">
+												<logic:present name="ampEntityMappedItem" property="mapItem">
+													<bean:write name="ampEntityMappedItem" property="mapItem.importedCode"/>
+												</logic:present>
+											</div>
+										</td>
+										<td align="left" class="be_autocomplete_label_cell">
+											<div class="be_autocomplete_static_text">
+												<logic:present name="ampEntityMappedItem" property="mapItem">
+													<bean:write name="ampEntityMappedItem" property="mapItem.importedLabel"/>
+												</logic:present>
+											</div>
+										</td>
+									</tr>
+								</tbody>
 							</table>
 						</td>
 						<logic:present name="ampEntityMappedItem" property="mapItem">
@@ -138,43 +79,27 @@
 						<logic:notPresent name="ampEntityMappedItem" property="mapItem">
 							<td width="10" bgcolor="red">&nbsp</td>
 						</logic:notPresent>
-				</tr>
-			</logic:iterate>
-		</logic:present>
-	</table>
-	
-</td><td>
-	
-	<%--
-	<table style="border-collapse:collapse;" border="1">
-		<tr>
-			<td>
-				Code
-			</td>
-			<td>
-				Label
-			</td>
-		</tr>
-			<logic:present name="beMapActionsForm" property="rule.csvItems">
-				<logic:iterate name="beMapActionsForm" property="rule.csvItems" id="csvItem">
-					<tr>
-						<td>
-							<bean:write name="csvItem" property="code"/>
-						</td>
-						<td>
-							<bean:write name="csvItem" property="label"/>
-						</td>
-				</tr>
-			</logic:iterate>
-		</logic:present>
-	</table>--%>
-</td>
-</tr>
+					</tr>
+				</logic:iterate>
+			</logic:present>
+			<tr>
+				<td colspan="3">
+					<table width="100%">
+						<tr>
+							<td align="left">
+								<input type="button" class="button" value="Automatic matching" onClick="automatch(this)">
+								<input type="button" class="button" value="Save" onClick="saveMapping(this)"/>	
+							</td>
+							<td align="right">
+								<html:file name="beMapActionsForm" property="upload"/>
+								<input type="button" value="Upload" onClick="uploadFile(this)"/>
+							</tr>
+						</tr>
+					</table>
+				</td>
+			</tr>
+	</tbody>
 </table>
-
-<input type="button" class="button" value="Automatic matching" onClick="automatch(this)">
-<input type="button" class="button" value="Save" onClick="saveMapping(this)"/>	
-	 </div>
 </digi:form>
 
 <script language="JavaScript" src="/repository/budgetexport/view/js/budgetexport.js"></script>

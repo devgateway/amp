@@ -17,8 +17,14 @@
 	
 	.autosuggest_dropdown_container {
 		border:1px solid black;
+		border-right:2px solid black;
+		border-bottom:2px solid black;
 		position:absolute;
 		background-color:white;
+		max-height:250px;
+		width:350px;
+		overflow-y:auto;
+		overflow-x:hidden;
 	}
 
 	.autosuggest_dropdown_item {
@@ -35,6 +41,20 @@
 		background-color:navy;
 		color:white;
 	}	
+	
+	.autosuggest_custom_code {
+		cursor:pointer;
+	}	
+	
+	.autosuggest_custom_code:hover {
+		background-color:blue;
+		color:white;
+	}
+
+	.autosuggest_custom_code:active {
+		background-color:navy;
+		color:white;
+	}
 	
 	.be_autocomplete_container {
 		cursor:pointer;

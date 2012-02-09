@@ -22,31 +22,40 @@ function uploadFile(obj) {
 		if (autocompleteActionDelayHandler != null) {
 			window.clearTimeout(autocompleteActionDelayHandler);
 		}
-		autocompleteActionDelayHandler = window.setTimeout(autocompleteRequestSend, 1000);
+		autocompleteActionDelayHandler = window.setTimeout(autocompleteRequestSendEvt, 500);
+		e.stopPropagation();
 	}
 	
-	var autocompleteRequestSend = function () {
+	var autocompleteRequestSendEvt = function () {
+		autocompleteRequestSend();
+	}
+	
+	var autocompleteRequestSend = function (getAll) {
 		var url = "../../budgetexport/mapActions.do?action=autocomplete";
 		var searchIn = activeAutocompleteInput.parent().hasClass("be_autocomplete_label_cell")?"label":"code";
-		//console.log(activeAutocompleteInput);
+		var searchString = getAll==true?"":activeAutocompleteInput.val();
 		$.ajax({
 		  type: 'POST',
 		  url: url,
-		  data:{searchStr: activeAutocompleteInput.val(), searchIn:searchIn},
+		  data:{searchStr:searchString , searchIn:searchIn},
 		  success: autocompleteRequestSuccess,
 		  dataType: "xml"
 		});
 	}
 	
 	var autocompleteRequestSuccess = function (data, textStatus, jqXHR) {
+		$("#autocomplete_dropdown").prev().remove();
 		$("#autocomplete_dropdown").remove();
 		var results = data.getElementsByTagName("item");
-		
 		if (results != null && results.length > 0) {
 			var resultIdx;
 			var componentSrc = [];
-			componentSrc.push("<div id='autocomplete_dropdown' class='autosuggest_dropdown_container'>");
-			componentSrc.push("<table>");
+			componentSrc.push("<br><div id='autocomplete_dropdown' class='autosuggest_dropdown_container'");
+			if (jQuery.browser.msie) {
+				componentSrc.push(" style='height:250px' ");
+			}
+			componentSrc.push(">");
+			componentSrc.push("<table style='zoom: 1;'>");
 			for (resultIdx = 0; resultIdx < results.length; resultIdx ++) {
 				var result = results[resultIdx];
 				var code = result.attributes.getNamedItem("code").value;
@@ -64,7 +73,12 @@ function uploadFile(obj) {
 			}
 			componentSrc.push("</table>");
 			componentSrc.push("</div>");
-			
+			activeAutocompleteInput.parent().append(componentSrc.join(""));
+		} else if (activeAutocompleteInput.parent().hasClass("be_autocomplete_code_cell")) {
+			var componentSrc = [];
+			componentSrc.push("<br><div id='autocomplete_dropdown' class='autosuggest_dropdown_container autosuggest_custom_code' onClick='setCustomCode(this)'>");
+			componentSrc.push("Set this code");
+			componentSrc.push("</div>");
 			activeAutocompleteInput.parent().append(componentSrc.join(""));
 		}
 	}
@@ -83,7 +97,29 @@ function uploadFile(obj) {
 		textFld.keypress(autocompKeyPress);
 		activeAutocompleteField = textFld;
 		
+		
 	});
+	
+	function setCustomCode (obj) {
+		var rowAmpId = activeAutocompleteCell.parent().parent().find(".amp_id_holder").val();
+		var CUSTOM_CODE = "CUSTOM CODE";
+		
+		activeAutocompleteInput.css("display","none");
+		activeAutocompleteCell.parent().parent().find(".be_autocomplete_code_cell").find(".be_autocomplete_static_text").html(activeAutocompleteInput.val()).css("display","block");
+		activeAutocompleteCell.parent().parent().find(".be_autocomplete_label_cell").find(".be_autocomplete_static_text").html(CUSTOM_CODE).css("display","block");
+
+		activeAutocompleteInput.remove();
+		$("#autocomplete_dropdown").prev().remove();
+		$("#autocomplete_dropdown").remove();
+
+		var url = "../../budgetexport/mapActions.do?action=updateMappingItem";
+		$.ajax({
+		  type: 'POST',
+		  url: url,
+		  data:{importedCode:activeAutocompleteInput.val(), importedLabel:CUSTOM_CODE, ampObjId:rowAmpId},
+		  success: manualMappingSuccess		 
+		});
+	}
 	
 	function setManualMapping(obj, code, label) {
 		var rowAmpId = activeAutocompleteCell.parent().parent().find(".amp_id_holder").val();
@@ -93,6 +129,27 @@ function uploadFile(obj) {
 		activeAutocompleteCell.parent().parent().find(".be_autocomplete_label_cell").find(".be_autocomplete_static_text").html(label).css("display","block");
 
 		activeAutocompleteInput.remove();
+		$("#autocomplete_dropdown").prev().remove();
+		$("#autocomplete_dropdown").remove();
+
+		var url = "../../budgetexport/mapActions.do?action=updateMappingItem";
+		$.ajax({
+		  type: 'POST',
+		  url: url,
+		  data:{importedCode:code, importedLabel:label, ampObjId:rowAmpId},
+		  success: manualMappingSuccess		 
+		});
+	}
+	
+	function setManualMapping(obj, code, label) {
+		var rowAmpId = activeAutocompleteCell.parent().parent().find(".amp_id_holder").val();
+		activeAutocompleteInput.val(obj.innerHTML);
+		activeAutocompleteInput.css("display","none");
+		activeAutocompleteCell.parent().parent().find(".be_autocomplete_code_cell").find(".be_autocomplete_static_text").html(code).css("display","block");
+		activeAutocompleteCell.parent().parent().find(".be_autocomplete_label_cell").find(".be_autocomplete_static_text").html(label).css("display","block");
+
+		activeAutocompleteInput.remove();
+		$("#autocomplete_dropdown").prev().remove();
 		$("#autocomplete_dropdown").remove();
 
 		var url = "../../budgetexport/mapActions.do?action=updateMappingItem";
@@ -114,6 +171,7 @@ function uploadFile(obj) {
 	var activeAutocompleteCell = null;
 	
 	autocompleteClick = function (e) {
+		$("#autocomplete_dropdown").prev().remove();
 		$("#autocomplete_dropdown").remove();
 		if (activeAutocompleteInput) {
 			activeAutocompleteInput.remove();
@@ -131,7 +189,8 @@ function uploadFile(obj) {
 		activeAutocompleteInput = activeAutocompleteCell.parent().find(".be_autocomplete_input");
 		activeAutocompleteInput.focus();
 		activeAutocompleteInput.val(activeAutocompleteCell.html().trim());
-		activeAutocompleteInput.keypress(autocompKeyPress);
+		activeAutocompleteInput.keyup(autocompKeyPress);
+		autocompleteRequestSend(true);
 		
 		
 	};

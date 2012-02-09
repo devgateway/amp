@@ -13,7 +13,7 @@
 
 
 
-<digi:form action="/viewNewAdvancedReport.do">
+<digi:form action="/viewNewAdvancedReport.do" module="aim">
 	<table width="400px">
 		
 		<tr>

@@ -273,7 +273,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
-<field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
+<field:display feature="Funding Information" name="Type Of Assistance"></field:display>
+<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>  
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

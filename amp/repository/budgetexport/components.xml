@@ -4,6 +4,7 @@
 <secondary-pages>
 <!-- Budget export  -->
 	<page name="viewBudgetExportManager"  title ="- Budget Export" />
+	<page name="reportWrapper"  title ="- Budget Export" />
 	<page name="addEditBudgetExpProject"  title ="- Add/Edit Budget Export Project" />
 	<page name="viewMappingRuleList"  title ="- Mapping rule list" />
 	<page name="addEditMapRule"  title ="- Add/Edit mapping rule" />

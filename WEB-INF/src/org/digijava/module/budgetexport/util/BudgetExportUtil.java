@@ -144,10 +144,14 @@ public class BudgetExportUtil {
     
     public static List<HierarchyListable> searchAmpEntity (List<HierarchyListable> searchIn, String searchStr) {
         List<HierarchyListable> retVal = new ArrayList<HierarchyListable>();
-        for (HierarchyListable obj : searchIn) {
-            if (obj.getLabel().toLowerCase().startsWith(searchStr.toLowerCase())) {
-                retVal.add(obj);
+        if (searchStr.length()>0) {
+            for (HierarchyListable obj : searchIn) {
+                if (obj.getLabel().toLowerCase().startsWith(searchStr.toLowerCase())) {
+                    retVal.add(obj);
+                }
             }
+        } else {
+            retVal = searchIn;
         }
         Collections.sort(retVal, new Comparator<HierarchyListable>() {
             @Override
@@ -163,7 +167,10 @@ public class BudgetExportUtil {
     }
 
     public static List<AmpBudgetExportCSVItem> searchCsvItems (List<AmpBudgetExportCSVItem> searchIn, String searchStr, boolean usingCodes) {
-            List<AmpBudgetExportCSVItem> retVal = new ArrayList<AmpBudgetExportCSVItem>();
+        List<AmpBudgetExportCSVItem> retVal = null;
+
+        if (searchStr != null && searchStr.length() > 0) {
+            retVal = new ArrayList<AmpBudgetExportCSVItem>();
             for (AmpBudgetExportCSVItem obj : searchIn) {
                 if (!usingCodes) {
                     if (obj.getLabel().toLowerCase().startsWith(searchStr.toLowerCase())) {
@@ -175,23 +182,26 @@ public class BudgetExportUtil {
                     }
                 }
             }
-                if (!usingCodes) {
-                    Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
-                        @Override
-                        public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
-                            return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
-                        }
-                    });
-                } else {
-                    Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
-                        @Override
-                        public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
-                            return o1.getCode().compareTo(o2.getCode());
-                        }
-                    });
-                }
-            return  retVal;
+        } else {
+            retVal = searchIn;
         }
+        if (!usingCodes) {
+            Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
+                @Override
+                public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
+                    return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
+                }
+            });
+        } else {
+            Collections.sort(retVal, new Comparator<AmpBudgetExportCSVItem>() {
+                @Override
+                public int compare(AmpBudgetExportCSVItem o1, AmpBudgetExportCSVItem o2) {
+                    return o1.getCode().compareTo(o2.getCode());
+                }
+            });
+        }
+        return  retVal;
+    }
     
     public static List<AmpEntityMappedItem> getAmpEntityMappedItems (AmpBudgetExportMapRule rule) throws DgException {
         List<AmpEntityMappedItem> retVal = new ArrayList<AmpEntityMappedItem>();

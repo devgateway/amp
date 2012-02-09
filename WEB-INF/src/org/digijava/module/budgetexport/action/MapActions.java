@@ -2,6 +2,7 @@ package org.digijava.module.budgetexport.action;
 
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ecs.StringElement;
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
@@ -193,7 +194,7 @@ public class MapActions extends DispatchAction {
         for (AmpBudgetExportCSVItem obj : searchResults) {
             XML resultItem = new XML("item");
             resultItem.addAttribute("code", obj.getCode());
-            StringElement body = new StringElement(obj.getLabel());
+            StringElement body = new StringElement(StringEscapeUtils.escapeHtml(obj.getLabel()));
             resultItem.addElement(body);
             rootNode.addElement(resultItem);
 

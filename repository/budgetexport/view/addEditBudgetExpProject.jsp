@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<html:submit value="Save" class="button"/>
+				<html:submit value="Save" styleClass="button"/>
 			</td>
 		</tr>
 	</table>	

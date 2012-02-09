@@ -304,17 +304,11 @@ background-color:#FFFFFF;
 					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top"><c:forEach var="year"
-								items="${aimNPDForm.years}" end="4" varStatus="status">
-								<c:forEach var="year" items="${aimNPDForm.years}"
-									begin="${status.index}" step="5">
-									<html:multibox name="aimNPDForm" property="selYears"
-										onclick="return checkYearsRules()">
-												${year.value}
-											</html:multibox>
-									<span class="normal_options">${year.label}</span>
-
-								</c:forEach>
-								<br />
+								items="${aimNPDForm.years}" varStatus="status">
+								<html:multibox name="aimNPDForm" property="selYears" onclick="return checkYearsRules()">
+									${year.value}
+								</html:multibox>${year.label}
+							<c:if test="${status.index!=0&&(status.index+1)%3==0}"><br/></c:if>
 							</c:forEach></td>
 						</tr>
 					</table>

@@ -55,7 +55,7 @@ function uploadFile(obj) {
 				componentSrc.push(" style='height:250px' ");
 			}
 			componentSrc.push(">");
-			componentSrc.push("<table style='zoom: 1;'>");
+			componentSrc.push("<table width='100%'>");
 			for (resultIdx = 0; resultIdx < results.length; resultIdx ++) {
 				var result = results[resultIdx];
 				var code = result.attributes.getNamedItem("code").value;

@@ -1784,7 +1784,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 						oql += " and latestAct.team.ampTeamId in ( " + teamIds
 								+ ")";
 					}
-					oql +=")";
 
 				} else {
                oql += " and ( latestAct.team.ampTeamId =:teamId ) ";

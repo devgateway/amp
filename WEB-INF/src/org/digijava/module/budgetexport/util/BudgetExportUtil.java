@@ -7,6 +7,7 @@ import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 
 import java.util.*;
 
@@ -228,6 +229,19 @@ public class BudgetExportUtil {
             }
 
             retVal.add(ampEntityMappedItem);
+        }
+        return retVal;
+    }
+    
+    public static AmpBudgetExportMapRule getRuleByProjectIdAndView (Long projectID, String viewName) throws DgException{
+        AmpBudgetExportMapRule retVal = null;
+        AmpBudgetExportProject prj = DbUtil.getProjectById(projectID);
+
+        for (AmpBudgetExportMapRule rule : prj.getRules()) {
+            if (rule.getAmpColumn().getExtractorView().equals(viewName)) {
+                retVal = rule;
+                break;
+            }
         }
         return retVal;
     }

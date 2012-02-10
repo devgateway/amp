@@ -2,6 +2,9 @@ package org.digijava.module.budgetexport.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
+import org.digijava.module.budgetexport.util.AmpEntityNameIdPair;
+
+import java.util.List;
 
 /**
  * User: flyer
@@ -12,6 +15,8 @@ public class BEProjectForm extends ActionForm {
     private Long id;
     private String name;
     private String description;
+    private Long selReport;
+    private List<AmpEntityNameIdPair> availReports;
 
 
     public Long getId() {
@@ -36,5 +41,21 @@ public class BEProjectForm extends ActionForm {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getSelReport() {
+        return selReport;
+    }
+
+    public void setSelReport(Long selReport) {
+        this.selReport = selReport;
+    }
+
+    public List<AmpEntityNameIdPair> getAvailReports() {
+        return availReports;
+    }
+
+    public void setAvailReports(List<AmpEntityNameIdPair> availReports) {
+        this.availReports = availReports;
     }
 }

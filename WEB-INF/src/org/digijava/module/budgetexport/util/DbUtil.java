@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
@@ -13,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -329,6 +331,34 @@ public class DbUtil {
             logger.debug("Unable to check rule in DB", ex);
             throw ex;
         }
+        return retVal;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<AmpEntityNameIdPair> getAvailReportIdNamePairs() throws DgException {
+        List<AmpEntityNameIdPair> retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select report.ampReportId, report.name from ");
+            queryStr.append(AmpReports.class.getName());
+            queryStr.append(" report");
+            Query q = sess.createQuery(queryStr.toString());
+            
+            List <Object[]> tmpList = q.list();
+
+            if (tmpList != null) {
+                retVal = new ArrayList<AmpEntityNameIdPair>();
+                for (Object[] obj : tmpList) {
+                    retVal.add(new AmpEntityNameIdPair((Long)obj[0], (String)obj[1]));
+                }
+            }
+
+
+        } catch (DgException ex) {
+            logger.debug("Unable to get available reports from DB", ex);
+            throw ex;
+        }
+
         return retVal;
     }
     

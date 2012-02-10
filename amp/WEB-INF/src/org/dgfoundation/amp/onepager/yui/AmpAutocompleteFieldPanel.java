@@ -404,8 +404,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Collection<CHOICE> choices = newInstance.getObject();
 			
 			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
-			
-			return choices.iterator().next();
+			CHOICE[] allChoices = (CHOICE[]) choices.toArray();
+			return allChoices[allChoices.length - 1];
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchMethodException e) {

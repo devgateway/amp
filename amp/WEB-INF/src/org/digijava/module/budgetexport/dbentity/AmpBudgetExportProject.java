@@ -10,10 +10,12 @@ import java.util.List;
  */
 public class AmpBudgetExportProject {
     private Long id;
-    String name;
-    String description;
-    Date creationDate;
-    List<AmpBudgetExportMapRule> rules;
+    private String name;
+    private String description;
+    private Date creationDate;
+    private List<AmpBudgetExportMapRule> rules;
+    private Long ampReportId;
+
 
     public Long getId() {
         return id;
@@ -53,5 +55,13 @@ public class AmpBudgetExportProject {
 
     public void setRules(List<AmpBudgetExportMapRule> rules) {
         this.rules = rules;
+    }
+
+    public Long getAmpReportId() {
+        return ampReportId;
+    }
+
+    public void setAmpReportId(Long ampReportId) {
+        this.ampReportId = ampReportId;
     }
 }

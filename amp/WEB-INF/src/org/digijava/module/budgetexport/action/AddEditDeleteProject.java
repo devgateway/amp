@@ -33,6 +33,7 @@ public class AddEditDeleteProject extends DispatchAction {
     public ActionForward add(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEProjectForm beProjectForm = (BEProjectForm) form;
+        beProjectForm.setAvailReports(DbUtil.getAvailReportIdNamePairs());
         beProjectForm.setId(null);
         return mapping.findForward("forward");
     }
@@ -50,6 +51,8 @@ public class AddEditDeleteProject extends DispatchAction {
         } else {
             prj = DbUtil.getProjectById(beProjectForm.getId());
         }
+
+        prj.setAmpReportId(beProjectForm.getSelReport());
         prj.setName(beProjectForm.getName());
         prj.setDescription(beProjectForm.getDescription());
 
@@ -74,7 +77,8 @@ public class AddEditDeleteProject extends DispatchAction {
         HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEProjectForm beProjectForm = (BEProjectForm) form;
         AmpBudgetExportProject prj = DbUtil.getProjectById(beProjectForm.getId());
-
+        beProjectForm.setAvailReports(DbUtil.getAvailReportIdNamePairs());
+        beProjectForm.setSelReport(prj.getAmpReportId());
         beProjectForm.setName(prj.getName());
         beProjectForm.setDescription(prj.getDescription());
 

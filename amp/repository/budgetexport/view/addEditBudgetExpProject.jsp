@@ -27,6 +27,16 @@
 			</td>
 		</tr>
 		<tr>
+			<td>Report</td>
+			<td>
+				
+				<bean:define id="availReports" name="beProjectForm" property="availReports"/>
+				<html:select name="beProjectForm" property="selReport">
+					<html:options collection="availReports" property="id" labelProperty="name"/>
+				</html:select>
+				
+			</td>
+		<tr>
 			<td colspan="2">
 				<html:submit value="Save" styleClass="button"/>
 			</td>

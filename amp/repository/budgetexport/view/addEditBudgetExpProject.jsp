@@ -11,7 +11,8 @@
 	
 <digi:form action="/addEditDeleteProject.do?action=save" method="post">
 	<html:hidden name="beProjectForm" property="id"/>
-    <div style="padding:25px;" class="budget-table">
+		<digi:errors/>
+<div style="padding:25px;" class="budget-table">
 	<table>
 		<tr>
 			<td>Name</td>

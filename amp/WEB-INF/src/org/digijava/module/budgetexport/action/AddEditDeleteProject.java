@@ -2,9 +2,12 @@ package org.digijava.module.budgetexport.action;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.form.BEProjectForm;
@@ -37,6 +40,7 @@ public class AddEditDeleteProject extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEProjectForm beProjectForm = (BEProjectForm) form;
+        ActionErrors errors = null;
 
         AmpBudgetExportProject prj = null;
 
@@ -50,10 +54,20 @@ public class AddEditDeleteProject extends DispatchAction {
         prj.setDescription(beProjectForm.getDescription());
 
 
+        if (DbUtil.projectExists(beProjectForm.getName(), prj.getId())) {
+            if (errors == null) errors = new ActionErrors();
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.budgetExport.notUniqueProjectName"));
+        }
 
-        DbUtil.saveOrUpdateProject(prj);
-
-        return mapping.findForward("projectList");
+        ActionForward fwd = null;
+        if (errors == null || errors.isEmpty()) {
+            DbUtil.saveOrUpdateProject(prj);
+            fwd = mapping.findForward("projectList");
+        } else {
+            saveErrors(request, errors);
+            fwd = mapping.findForward("forward");
+        }
+        return fwd;
     }
 
     public ActionForward edit(ActionMapping mapping, ActionForm form,

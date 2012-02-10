@@ -1,18 +1,19 @@
 package org.digijava.module.budgetexport.action;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.form.BEMapRuleForm;
-import org.digijava.module.budgetexport.form.BEProjectForm;
 import org.digijava.module.budgetexport.util.DbUtil;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,7 +74,8 @@ public class AddEditDeleteMapRule extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEMapRuleForm beMapRuleForm = (BEMapRuleForm) form;
-
+        ActionErrors errors = null;
+        
         AmpBudgetExportMapRule mapRule = null;
         //New
         if (beMapRuleForm.getId() == null || beMapRuleForm.getId().longValue() <= 0l) {
@@ -92,14 +94,31 @@ public class AddEditDeleteMapRule extends DispatchAction {
         mapRule.setName(beMapRuleForm.getName());
         mapRule.setHeader(beMapRuleForm.isHeader());
 
-        DbUtil.saveOrUpdateMapRule(mapRule);
 
-        StringBuilder fwdBuilder = new StringBuilder("/");
-        fwdBuilder.append(mapping.findForward("ruleList").getPath());
-        fwdBuilder.append("?id=");
-        fwdBuilder.append(beMapRuleForm.getCurProjectId());
-        ActionForward fwd = new ActionForward(fwdBuilder.toString());
-        fwd.setRedirect(true);
+        if (DbUtil.ruleWithNameExists(beMapRuleForm.getCurProjectId(), mapRule.getName(), mapRule.getId())) {
+            if (errors == null) errors = new ActionErrors();
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.budgetExport.notUniqueRuleName"));
+        }
+        if (DbUtil.ruleWithViewExists(beMapRuleForm.getCurProjectId(), mapRule.getAmpColumn().getExtractorView(), mapRule.getId())) {
+            if (errors == null) errors = new ActionErrors();
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.budgetExport.notUniqueRuleView"));
+        }
+
+        ActionForward fwd = null;
+        if (errors == null || errors.isEmpty()) {
+            DbUtil.saveOrUpdateMapRule(mapRule);
+            StringBuilder fwdBuilder = new StringBuilder("/");
+            fwdBuilder.append(mapping.findForward("ruleList").getPath());
+            fwdBuilder.append("?id=");
+            fwdBuilder.append(beMapRuleForm.getCurProjectId());
+            fwd = new ActionForward(fwdBuilder.toString());
+            fwd.setRedirect(true);
+        } else {
+            saveErrors(request, errors);
+            List<AmpColumns> cols = DbUtil.getAvailableColumns();
+            beMapRuleForm.setAvailColumns(cols);
+            fwd = mapping.findForward("forward");
+        }
         return fwd;
     }
 }

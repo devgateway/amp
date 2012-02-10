@@ -234,24 +234,102 @@ public class DbUtil {
     }
 
     @SuppressWarnings("unchecked")
-        public static List<AmpBudgetExportCSVItem> getRuleCSVItems(Long ruleId) throws DgException {
-            List<AmpBudgetExportCSVItem> retVal = null;
-            try {
-                Session sess = PersistenceManager.getRequestDBSession();
-                StringBuilder queryStr = new StringBuilder("from ");
-                queryStr.append(AmpBudgetExportCSVItem.class.getName());
-                queryStr.append(" csvItem where csvItem.rule.id=:RULE_ID");
+    public static List<AmpBudgetExportCSVItem> getRuleCSVItems(Long ruleId) throws DgException {
+        List<AmpBudgetExportCSVItem> retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpBudgetExportCSVItem.class.getName());
+            queryStr.append(" csvItem where csvItem.rule.id=:RULE_ID");
 
-                Query q = sess.createQuery(queryStr.toString());
+            Query q = sess.createQuery(queryStr.toString());
+            q.setLong("RULE_ID", ruleId);
+            retVal = q.list();
+
+
+        } catch (DgException ex) {
+            logger.debug("Unable to get Budget export rule CSV items from DB", ex);
+            throw ex;
+        }
+
+        return retVal;
+    }
+    
+    public static boolean projectExists (String projectName, Long projectId) throws DgException {
+        boolean retVal = false;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpBudgetExportProject.class.getName());
+            queryStr.append(" prj where prj.name=:PRJ_NAME");
+            if (projectId != null) {
+                queryStr.append(" and prj.id!=:PRJ_ID");
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            q.setCacheable(true);
+            q.setString("PRJ_NAME", projectName);
+            if (projectId != null) {
+                q.setLong("PRJ_ID", projectId);
+            }
+            retVal = q.list().size() > 0;
+
+
+        } catch (DgException ex) {
+            logger.debug("Unable to check project in DB", ex);
+            throw ex;
+        }
+        return retVal;
+    }
+    
+    public static boolean ruleWithNameExists (Long projectID, String ruleName, Long ruleId) throws DgException {
+        boolean retVal = false;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpBudgetExportMapRule.class.getName());
+            queryStr.append(" rule where rule.project.id=:PRJ_ID and rule.name=:RULE_NAME");
+            if (ruleId != null) {
+                queryStr.append(" and rule.id!=:RULE_ID");
+            }
+            Query q = sess.createQuery(queryStr.toString());
+            q.setCacheable(true);
+            q.setLong("PRJ_ID", projectID);
+            q.setString("RULE_NAME", ruleName);
+            if (ruleId != null) {
                 q.setLong("RULE_ID", ruleId);
-                retVal = q.list();
+            }
+            retVal = q.list().size() > 0;
+        } catch (DgException ex) {
+            logger.debug("Unable to check rule in DB", ex);
+            throw ex;
+        }
+        return retVal;
+    }
 
-
-            } catch (DgException ex) {
-                logger.debug("Unable to get Budget export rule CSV items from DB", ex);
-                throw ex;
+    public static boolean ruleWithViewExists (Long projectID, String viewName, Long ruleId) throws DgException {
+        boolean retVal = false;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("from ");
+            queryStr.append(AmpBudgetExportMapRule.class.getName());
+            queryStr.append(" rule where rule.project.id=:PRJ_ID and rule.ampColumn.extractorView=:VIEW_NAME");
+            if (ruleId != null) {
+                queryStr.append(" and rule.id!=:RULE_ID");
             }
 
-            return retVal;
+            Query q = sess.createQuery(queryStr.toString());
+            q.setCacheable(true);
+            q.setLong("PRJ_ID", projectID);
+            q.setString("VIEW_NAME", viewName);
+            if (ruleId != null) {
+                q.setLong("RULE_ID", ruleId);
+            }
+            retVal = q.list().size() > 0;
+        } catch (DgException ex) {
+            logger.debug("Unable to check rule in DB", ex);
+            throw ex;
         }
+        return retVal;
+    }
+    
 }

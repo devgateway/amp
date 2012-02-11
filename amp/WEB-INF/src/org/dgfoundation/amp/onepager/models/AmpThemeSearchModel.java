@@ -18,7 +18,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 
 /**
  * @author aartimon@dginternational.org since Oct 22, 2010
@@ -51,12 +53,20 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				
 				Criteria crit = session.createCriteria(AmpTheme.class);
 				crit.setCacheable(true);
-				getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
-				if (input.trim().length() > 0)
-					crit.add(getTextCriterion("name", input));
-				
-				//if(!isExactMatch())
-				//	crit.add(Restrictions.eq("parentThemeId",def));
+				//The following line was commented out because it added only the parent hierarchy in the list.
+				//getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
+				if (input.trim().length() > 0){
+					Object o = getTextCriterion("name", input);
+					if (o instanceof SimpleExpression){
+						crit.add(((SimpleExpression)o).ignoreCase());
+					}
+					else{
+						crit.add((Criterion)o);
+					}
+				}
+
+				if(!isExactMatch())
+					crit.add(Restrictions.eq("parentThemeId",def));
 
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

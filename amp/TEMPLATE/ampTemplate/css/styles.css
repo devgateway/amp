@@ -1225,6 +1225,8 @@ padding:2px 4px;
 .workspacelist{background:url(../images/arrow-014E86.gif) no-repeat center left #f2f2f2;padding:3px;margin-bottom:1px;font-size:12px;text-decoration:none;height:20px;line-height:20px;background-position:5px 7px;text-indent:20px;width:50%;}
 .workspacelist a{font-size:11px;text-decoration:none;display:block;}
 .workspacelist a:hover{text-decoration:underline;}
+div.budget-table{float:left;}
+div.oterlinkstable{float:right;}
 div.budget-table table{width:610px;}
-td.budget-table{font-size:12px;padding:5px;text-align:center;}
-td.budget-table a{font-size:12px;}
+td.budget-table{font-size:10px;padding:5px;text-align:center;}
+div.budgetcontainer{border-right: 1px dashed #C5C6CB;border-left: 1px dashed #C5C6CB;margin:0px 15px;padding:5px;}

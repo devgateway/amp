@@ -6,7 +6,9 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<div class="budgetcontainer">
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Sector Manager</span>
+	<h1 class="subtitle-blue">Budget export manager</h1> 
 <digi:instance property="beMapRuleForm"/>
 	
 <digi:form action="/addEditDeleteMapRule.do?action=save" method="post">
@@ -42,5 +44,7 @@
 			</td>
 		</tr>
 	</table>	
-</div>	
+ </div>
+        <div style="clear:both;"></div>
+        </div>
 </digi:form>

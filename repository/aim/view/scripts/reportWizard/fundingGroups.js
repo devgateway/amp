@@ -70,6 +70,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
                 , 'Capital - Expenditure'
+                , 'Project Title'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

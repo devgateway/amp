@@ -20,7 +20,7 @@
 				<tr>
 					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Name</td>
 					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Description</td>
-                    			<td class="box-title" style="background:#d7eafd;text-align:center;"colspan="3"></td>
+          <td class="box-title" style="background:#d7eafd;text-align:center;"colspan="4"></td>
 				</tr>
 					<logic:iterate name="beBudgetExportForm" property="projects" id="project">
 						<tr>
@@ -37,7 +37,13 @@
 								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>">Delete</a>&nbsp;]
 							</td>
 							<td class="budget-table">
-								[&nbsp;<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>">Mapping rules</a>&nbsp;]
+								[&nbsp;<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>">Mapping Rules</a>&nbsp;]
+							</td>
+							
+							<td class="budget-table">
+								[&nbsp;<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${project.ampReportId}&projectId=${project.id}">
+											<digi:trn>Show Report</digi:trn>
+										</a>&nbsp;]
 							</td>
 						</tr>
 					</logic:iterate>

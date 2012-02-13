@@ -30,13 +30,13 @@
 		<table style="border-collapse:collapse;" border="1" width="100%">
 			<tbody>
 				<tr>
-					<td width="300">
+					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="300">
 						AMP Label
 					</td>
-					<td width="300">
+					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="300">
 						External code/label
 					</td>
-					<td width="20">
+					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="20">
 						Matching
 					</td>
 				</tr>

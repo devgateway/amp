@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,8 +24,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -62,13 +67,15 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				Set<AmpOrgRole> allOrgRoles = setModel.getObject();
 				Set<AmpOrgRole> specificOrgRoles = new HashSet<AmpOrgRole>();  
 				
-				
-				Iterator<AmpOrgRole> it = allOrgRoles.iterator();
-				while (it.hasNext()) {
-					AmpOrgRole ampOrgRole = (AmpOrgRole) it.next();
-					if (ampOrgRole.getRole().getAmpRoleId().compareTo(specificRole.getAmpRoleId()) == 0)
-						specificOrgRoles.add(ampOrgRole);
+				if(allOrgRoles != null){
+					Iterator<AmpOrgRole> it = allOrgRoles.iterator();
+					while (it.hasNext()) {
+						AmpOrgRole ampOrgRole = (AmpOrgRole) it.next();
+						if (ampOrgRole.getRole().getAmpRoleId().compareTo(specificRole.getAmpRoleId()) == 0)
+							specificOrgRoles.add(ampOrgRole);
+					}
 				}
+				
 				
 				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
 				Collections.sort(ret, new Comparator<AmpOrgRole>() {
@@ -94,6 +101,21 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			}
 		};
 		add(uniqueCollectionValidationField);
+		
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
+		final AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpOrgRole>(
+				"relOrgPercentageTotal", listModel, "relOrgPercentageTotal") {
+			@Override
+			public Number getPercentage(AmpOrgRole item) {
+				return item.getPercentage();
+			}
+		};
+		percentageValidationField.setIndicatorAppender(iValidator);
+		add(percentageValidationField);
+
 
 		list = new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
@@ -105,7 +127,11 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						new PropertyModel<String>(item.getModel(), "additionalInfo")));
 				
 				AmpOrganisation o= item.getModelObject().getOrganisation();
-				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));			
+				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));	
+				
+				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");
+				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
+				item.add(percentageField);
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField(
 						"delRelOrg", "Delete Related Organisation") {
@@ -123,6 +149,25 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		};
 		list.setReuseItems(true);
 		add(list);
+		
+		
+		add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+			@Override
+			public void setPercentage(AmpOrgRole loc, int val) {
+				loc.setPercentage((double) val);
+			}
+
+			@Override
+			public int getPercentage(AmpOrgRole loc) {
+				return (int)((double)loc.getPercentage());
+			}
+
+			@Override
+			public boolean itemInCollection(AmpOrgRole item) {
+				return true; //all items displayed in the same list
+			}
+
+		});
 
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("search","Search Organizations",AmpOrganisationSearchModel.class) {
 			@Override
@@ -136,6 +181,10 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				ampOrgRole.setOrganisation(choice);
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
+				if(list.size()>0)
+					ampOrgRole.setPercentage(0d);
+				else 
+					ampOrgRole.setPercentage(100d);
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();

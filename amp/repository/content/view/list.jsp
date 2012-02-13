@@ -150,10 +150,10 @@ $(document).ready(function(){
                           <td align="center" class="inside">
                           <c:choose>
                             <c:when test="${content.isHomepage eq true}">
-                            	Yes
+                            	<digi:trn>Yes</digi:trn>
                             </c:when>
                             <c:otherwise>
-                            	No
+                            	<digi:trn>No</digi:trn>
                             </c:otherwise>
                           </c:choose>
                           </td>

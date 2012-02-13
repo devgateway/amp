@@ -41,9 +41,7 @@
 							</td>
 							
 							<td class="budget-table">
-								[&nbsp;<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${project.ampReportId}&projectId=${project.id}">
-											<digi:trn>Show Report</digi:trn>
-										</a>&nbsp;]
+								[&nbsp;<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${project.ampReportId}&projectId=${project.id}"><digi:trn>Show Report</digi:trn></a>&nbsp;]
 							</td>
 						</tr>
 					</logic:iterate>

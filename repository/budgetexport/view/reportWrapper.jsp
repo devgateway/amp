@@ -10,10 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<div style="float: left;">
 <jsp:include page="/aim/viewNewAdvancedReport.do" >
-	<jsp:param value="2048" name="ampReportId"/>
+	<jsp:param value="${param.ampReportId}" name="ampReportId"/>
 	<jsp:param value="reset" name="view"/>
 	<jsp:param value="false" name="widget"/>
 </jsp:include>
-</div>

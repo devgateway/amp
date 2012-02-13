@@ -341,8 +341,10 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select report.ampReportId, report.name from ");
             queryStr.append(AmpReports.class.getName());
-            queryStr.append(" report");
+            queryStr.append(" report where report.budgetExporter=:budgetExporter");
+            
             Query q = sess.createQuery(queryStr.toString());
+            q.setBoolean("budgetExporter", true);
             
             List <Object[]> tmpList = q.list();
 

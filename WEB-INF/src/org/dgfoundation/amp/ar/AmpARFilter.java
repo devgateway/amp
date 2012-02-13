@@ -285,6 +285,8 @@ public class AmpARFilter extends PropertyListable {
 	
 	private Set<AmpCategoryValue> projectImplementingUnits = null; 
 	
+	private boolean budgetExport		= false;
+	
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
@@ -304,6 +306,8 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			
+			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
 			
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
@@ -325,9 +329,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpApplicationSettings tempSettings = null;
 		
-		if ( tm.getTeamId()== null )
+		if ( tm.getTeamId()== null ){
 			tm	= null;
-		
+		}
 		if (tm != null) {
 			this.setAccessType(tm.getTeamAccessType());
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
@@ -926,7 +930,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
-		if (ampTeams != null && ampTeams.size() > 0)
+		if (  !this.budgetExport && ampTeams != null && ampTeams.size() > 0)
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);

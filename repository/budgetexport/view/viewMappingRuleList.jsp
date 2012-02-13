@@ -56,6 +56,11 @@
 		</logic:present>
 		<tr>
 			<td colspan="8" style="text-align:center;" >
+				<strong>
+					<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">
+						<digi:trn>Show Report</digi:trn>
+					</a>
+				</strong>&nbsp;&nbsp;
 				<a href="/budgetexport/addEditDeleteMapRule.do?action=add&curProjectId=<bean:write name="beMapingForm" property="id"/>">Add new rule</a>
 			</td>		
 		</tr>

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class BEMappingForm extends ActionForm {
     Long id;
+    Long ampReportId;
     List <AmpBudgetExportMapRule> rules;
 
     public Long getId() {
@@ -29,4 +30,19 @@ public class BEMappingForm extends ActionForm {
     public void setRules(List<AmpBudgetExportMapRule> rules) {
         this.rules = rules;
     }
+
+	/**
+	 * @return the ampReportId
+	 */
+	public Long getAmpReportId() {
+		return ampReportId;
+	}
+
+	/**
+	 * @param ampReportId the ampReportId to set
+	 */
+	public void setAmpReportId(Long ampReportId) {
+		this.ampReportId = ampReportId;
+	}
+    
 }

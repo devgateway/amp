@@ -742,6 +742,9 @@
                 <page>printPreviewPopupLayout</page>
                  <page>printViewPopupLayout</page>
             </module>
+            <module name="budgetexport">
+            	<page>reportWrapper</page>
+            </module>
 		</page-group>
 		<page-group masterLayout="reportsLayout" tile="body">
 			<module name="aim">

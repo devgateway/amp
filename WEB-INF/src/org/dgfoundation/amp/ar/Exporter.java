@@ -64,6 +64,22 @@ public abstract class Exporter {
 
 	public Exporter() {
 	}
+	
+	
+
+	/**
+	 * @return the parent
+	 */
+	public Exporter getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(Exporter parent) {
+		this.parent = parent;
+	}
 
 	/**
 	 * method implemented by any exporter, that creates the required objects that can be displayed in output. 

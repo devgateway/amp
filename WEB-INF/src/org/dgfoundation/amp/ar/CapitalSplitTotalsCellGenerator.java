@@ -18,8 +18,8 @@ import org.digijava.module.aim.dbentity.AmpReports;
  */
 public class CapitalSplitTotalsCellGenerator extends SyntheticCellGenerator {
 	
-	private CapitalExpenditureCellGenerator eGenerator;
-	private CapitalCellGenerator cGenerator;
+	protected CapitalExpenditureCellGenerator eGenerator;
+	protected CapitalCellGenerator cGenerator;
 	
 	/**
 	 * @param metaDataName

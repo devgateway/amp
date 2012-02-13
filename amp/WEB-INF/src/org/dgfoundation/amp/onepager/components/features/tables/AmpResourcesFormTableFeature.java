@@ -73,6 +73,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
 				ArrayList<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
 				
+				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 				Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
 				while (it.hasNext()) {
 					AmpActivityDocument d = (AmpActivityDocument) it
@@ -80,8 +81,6 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					//check if marked for delete
 					if (delItems.contains(d))
 						continue;
-					
-					AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 					
 					Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), session.getHttpSession());
 					NodeWrapper nw = new NodeWrapper(node);
@@ -107,11 +106,9 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					td.setFileName(nw.getName());
 					td.setLabels(nw.getLabels());
 					td.setContentType(nw.getContentType());
-					
+
 					ret.add(td);
-					DocumentManagerUtil.logoutJcrSessions( session.getHttpSession());
 				}
-				
 				ret.addAll(newItems);
 				
 				return ret;
@@ -120,6 +117,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 
 		list = new ListView<TemporaryDocument>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
+			
+			@Override
+			protected void onAfterRender() {
+				super.onAfterRender();
+				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+				DocumentManagerUtil.logoutJcrSessions( session.getHttpSession());
+			}
+			
 			@Override
 			protected void populateItem(final ListItem<TemporaryDocument> item) {
 				if (item.getModel() == null && item.getModelObject() == null){

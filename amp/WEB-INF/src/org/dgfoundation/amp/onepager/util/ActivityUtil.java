@@ -461,7 +461,15 @@ public class ActivityUtil {
 			while (it.hasNext()) {
 				AmpActivityDocument tmpDoc = (AmpActivityDocument) it
 				.next();
-				a.getActivityDocuments().remove(tmpDoc);
+				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
+				while (it2.hasNext()) {
+					AmpActivityDocument existDoc = (AmpActivityDocument) it2
+							.next();
+					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
+						it2.remove();
+						break;
+					}
+				}
 			}
 		}
 		

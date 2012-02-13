@@ -19,6 +19,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -40,25 +41,8 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpLineMinistryObservation>> setModel=new PropertyModel<Set<AmpLineMinistryObservation>>(am,"lineMinistryObservations");
-		final ListView<AmpLineMinistryObservation> list;
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpLineMinistryObservation>());
-		
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpLineMinistryObservation issues = new AmpLineMinistryObservation();
-				issues.setName(new String(""));
-				issues.setObservationDate(new Date());
-				issues.setLineMinistryObservationMeasures(new HashSet());
-				issues.setActivity(am.getObject());
-				setModel.getObject().add(issues);
-				target.addComponent(this.getParent());
-			}
-		};
-		add(addbutton);
-
-		IModel<List<AmpLineMinistryObservation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel,new AmpLineMinistryObservation.LineMinistryObservationComparator());
 		
 		final List<Class> classTree = new ArrayList<Class>();
 		final Map<Class, String> setName = new HashMap<Class, String>();
@@ -72,10 +56,11 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
 		labelName.put(AmpLineMinistryObservationMeasure.class, "Measure");
 		labelName.put(AmpLineMinistryObservationActor.class, "Actor");
 
-		list = new ListView<AmpLineMinistryObservation>("list", listModel) {
+		final ListEditor<AmpLineMinistryObservation> list = new ListEditor<AmpLineMinistryObservation>("list", setModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
-			protected void populateItem(final ListItem<AmpLineMinistryObservation> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpLineMinistryObservation> item) {
 				try {
 					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpLineMinistryObservation.class, 0, "Regional Obsevation Field");
 					aitp.setOutputMarkupId(true);
@@ -85,8 +70,20 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
 				}
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
-	}
 
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AmpLineMinistryObservation issues = new AmpLineMinistryObservation();
+				issues.setName(new String(""));
+				issues.setObservationDate(new Date());
+				issues.setLineMinistryObservationMeasures(new HashSet());
+				issues.setActivity(am.getObject());
+				list.addItem(issues);
+				target.addComponent(this.getParent());
+			}
+		};
+		add(addbutton);
+	}
 }

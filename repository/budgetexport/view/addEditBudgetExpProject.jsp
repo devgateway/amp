@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Sector Manager</span>
-	<h1 class="subtitle-blue">Budget editor</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Add/Edit Budget Export Project</span>
+	<h1 class="subtitle-blue">Add/Edit Budget Export Project</h1> 
 <digi:instance property="beProjectForm"/>
 	
 <digi:form action="/addEditDeleteProject.do?action=save" method="post">
@@ -44,62 +44,7 @@
 			</td>
 		</tr>
 	</table>	
-    </div>	<div class="otherlinkstable">
-        
-								<table align="center" cellpadding="0" cellspacing="0" width="120" border="0">	
-							<tbody><tr>
-								<td>
-									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="100">
-										<tbody><tr>
-											<td bgcolor="#c9c9c7" class="box-title">
-												Other links
-											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width="17">
-												&nbsp;
-											</td>
-										</tr>
-									</tbody></table>
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#ffffff" class="box-border">
-									<table cellpadding="5" cellspacing="1" width="100%">
-										
-										<tbody><tr>
-											<td>
-											
-												
-												
-												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
-												
-												<a href="#" title="Click here to Add a Sector">Add Budget</a>
-											</td>
-										</tr>
-										
-										
-										<tr>
-											<td>
-												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
-												
-												<a href="#" title="Click here to the Schemes">View Budgets</a>
-											</td>
-										</tr>
-										
-										<tr>
-											<td>
-												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
-												
-												<a href="#" title="Click here to goto Admin Home">Admin Home</a>
-											</td>
-										</tr>
-										<!-- end of other links -->
-									</tbody></table>
-								</td>
-							</tr>
-						</tbody></table>
-								
-        </div>
+    </div>	
     <div style="clear:both;"></div>
     </div>
 </digi:form>

@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Sector Manager</span>
-	<h1 class="subtitle-blue">Mapping rules</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Manage Mapping Rules</span>
+	<h1 class="subtitle-blue">Mapping Rules</h1> 
 <digi:instance property="beMapingForm"/>
 	<div style="padding:15px;" class="budget-table">
 <digi:form action="/showMapingRuleList" method="post">
@@ -54,21 +54,12 @@
 					</logic:iterate>
 			</logic:notEmpty>
 		</logic:present>
-		<tr>
-			<td colspan="8" style="text-align:center;" >
-				<strong>
-					<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">
-						<digi:trn>Show Report</digi:trn>
-					</a>
-				</strong>&nbsp;&nbsp;
-				<a href="/budgetexport/addEditDeleteMapRule.do?action=add&curProjectId=<bean:write name="beMapingForm" property="id"/>">Add new rule</a>
-			</td>		
-		</tr>
+
 	</table>
     </div>
     <div class="otherlinkstable">
         
-								<table align="center" cellpadding="0" cellspacing="0" width="120" border="0">	
+						<table align="center" cellpadding="0" cellspacing="0" width="120" border="0">	
 							<tbody><tr>
 								<td>
 									<!-- Other Links -->
@@ -95,26 +86,33 @@
 												
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="#" title="Click here to Add a Sector">Add Budget</a>
+												<a href="/budgetexport/addEditDeleteMapRule.do?action=add&curProjectId=<bean:write name="beMapingForm" property="id"/>" title="Click here to Add a Rule">Add New Rule</a>
 											</td>
 										</tr>
 										
 										
-										<tr>
-											<td>
-												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
-												
-												<a href="#" title="Click here to the Schemes">View Budgets</a>
-											</td>
-										</tr>
 										
 										<tr>
 											<td>
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="#" title="Click here to goto Admin Home">Admin Home</a>
+												<a href="/aim/admin.do" title="Click here to goto Admin Home">Admin Home</a>
 											</td>
 										</tr>
+										
+										<tr>
+											<td>
+												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
+												
+												<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">
+											<digi:trn>Show Report</digi:trn>
+										</a>
+											</td>
+										</tr>
+										
+										
+										
+										
 										<!-- end of other links -->
 									</tbody></table>
 								</td>
@@ -123,5 +121,5 @@
 								
         </div>
      <div style="clear:both;"></div>
+     </digi:form>
         </div>
-</digi:form>

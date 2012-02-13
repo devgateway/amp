@@ -46,6 +46,7 @@ public class MapActions extends DispatchAction {
     private static final String AMP_ENTITY_LIST_SESSION_ATTR = "AMP_ENTITY_LIST_SESSION_ATTR";
     private static final String AMP_MAPPED_ENTITY_LIST = "AMP_MAPPED_ENTITY_LIST";
     private static final String CURRENT_MAPPING_RULE = "CURRENT_MAPPING_RULE";
+    private static final String CSV_ITEMS = "CSV_ITEMS";
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {

@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -188,11 +189,18 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 
+		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
+		if ( this.request != null ) {
+			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.request.getSession() );
+		}
 		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
 		
-		for (ArConstants.SyntheticColumnsMeta scm: ArConstants.syntheticColumns) {
+		
+		for (ArConstants.SyntheticColumnsMeta scm:  possibleSyntColMeta) {
 			SyntheticCellGenerator generator	= scm.getGenerator();
 			if ( generator.checkIfApplicabale(reportMetadata)  ) {
+				if ( this.request != null )
+					generator.setSession(this.request.getSession() );
 				syntCellGenerators.add(generator);
 			}
 		}

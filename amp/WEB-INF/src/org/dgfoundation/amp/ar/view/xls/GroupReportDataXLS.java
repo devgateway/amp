@@ -58,21 +58,16 @@ public class GroupReportDataXLS extends XLSExporter {
 		GroupReportData grd = (GroupReportData) item;
 	
 		
-		//show Headings:		
-		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
-		headings.setAutoSize(this.isAutoSize());
-		headings.generate();
+		this.showHeadings();
+		
+		this.createTrailCellsCase1();
 
-		//		trail cells:
-		if ((grd != null) && ((GroupReportData)grd.getParent() != null) && ((GroupReportData)grd.getParent()).getLevelDepth() != 0){
-			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
-			trails2.generate();
-		}
+
 		//iterate the data
 		Iterator i = grd.getItems().iterator();
 		while (i.hasNext()) {
 			Viewable element = (Viewable) i.next();
-			element.invokeExporter(this);
+			this.invokeChildExporter(element);
 		}
 		
 		/*rowId.inc();
@@ -88,11 +83,37 @@ public class GroupReportDataXLS extends XLSExporter {
 		//cell.setCellValue("xx");
 		//makeColSpan(grd.getTotalDepth());
 
-		if ((grd.getParent() == null) || ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
+		this.createTrailCellsCase2();
+		
+	}
+	
+	protected void invokeChildExporter( Viewable element) {
+		element.invokeExporter(this);
+	}
+	
+	protected void showHeadings () {
+		GroupReportData grd = (GroupReportData) item;
+		//show Headings:		
+		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
+		headings.setAutoSize(this.isAutoSize());
+		headings.generate();
+	}
+	
+	protected void createTrailCellsCase1 () {
+		//		trail cells:
+		GroupReportData grd = (GroupReportData) item;
+		if ((grd != null) && ((GroupReportData)grd.getParent() != null) && ((GroupReportData)grd.getParent()).getLevelDepth() != 0){
 			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
 			trails2.generate();
 		}
 		
+	}
+	protected void createTrailCellsCase2 () {
+		GroupReportData grd = (GroupReportData) item;
+		if ((grd.getParent() == null) || ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
+			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
+			trails2.generate();
+		}
 	}
 
 }

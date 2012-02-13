@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
@@ -87,6 +89,8 @@ public abstract class SyntheticCellGenerator {
 	public abstract double computeAmount (double originalAmount, Set metaData); 
 	
 	public abstract Collection<MetaInfo> syntheticMetaInfo ();
+	
+	public void setSession ( HttpSession session) {}
 	
 
 	/**

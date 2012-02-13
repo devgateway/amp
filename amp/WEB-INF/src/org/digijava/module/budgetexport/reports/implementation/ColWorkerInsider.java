@@ -37,8 +37,8 @@ public class ColWorkerInsider {
 	}
 	
 	public void prepareEncoder() {
-		String exportType		= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE);
-		this.encoder			= new Encoder(exportType, this.viewName);
+		String projectIdStr		= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_PROJECT_ID);
+		this.encoder			= new Encoder(projectIdStr, this.viewName);
 	}
 
 }

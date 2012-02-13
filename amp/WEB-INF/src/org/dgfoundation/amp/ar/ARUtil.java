@@ -21,8 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -30,9 +34,13 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
+import org.dgfoundation.amp.ar.view.xls.ColumnReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
+import org.dgfoundation.amp.ar.workers.TrnTextColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -57,6 +65,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.budgetexport.reports.implementation.BudgetCategAmountColWorker;
+import org.digijava.module.budgetexport.reports.implementation.BudgetColumnReportDataXLS;
+import org.digijava.module.budgetexport.reports.implementation.BudgetGroupReportDataXLS;
 import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextColWorker;
 import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
@@ -127,21 +137,32 @@ public final class ARUtil {
 		try {
 			HttpSession session		= request.getSession();
 			String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
-			if (budgetTypeReport != null ) {
-				if (TextColWorker.class.equals(c))
-					c 	= BudgetTextColWorker.class;
-				if (MetaTextColWorker.class.equals(c))
-					c 	= BudgetMetaTextColWorker.class;
-				if (CategAmountColWorker.class.equals(c) )
-					c	= BudgetCategAmountColWorker.class;
-			}
 			
-			return ARUtil.getConstrByParamNo(c, paramNo);
+			return getConstrByParamNo(c, paramNo, budgetTypeReport != null );
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			return ARUtil.getConstrByParamNo(c, paramNo);
 		}
+	}
+	
+	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses) {
+			if ( useBudgetClasses ) {
+				if (TextColWorker.class.equals(c))
+					c 	= BudgetTextColWorker.class;
+				if (TrnTextColWorker.class.equals(c))
+					c 	= BudgetTextColWorker.class;
+				if (MetaTextColWorker.class.equals(c))
+					c 	= BudgetMetaTextColWorker.class;
+				if (CategAmountColWorker.class.equals(c) )
+					c	= BudgetCategAmountColWorker.class;
+				if ( GroupReportDataXLS.class.equals(c) )
+					c	= BudgetGroupReportDataXLS.class;
+				if ( ColumnReportDataXLS.class.equals(c) )
+					c	= BudgetColumnReportDataXLS.class;
+			}
+			
+			return ARUtil.getConstrByParamNo(c, paramNo);
 	}
 	
 	public static Constructor getConstrByParamNo(Class c, int paramNo) {
@@ -542,5 +563,31 @@ public final class ARUtil {
 
 	private static void cleanTextCell(TextCell cell) {
 		cell.setValue(DataExchangeUtils.convertHTMLtoChar((String)cell.getValue()));
+	}
+	
+	public static List<SyntheticColumnsMeta> getSyntheticGeneratorList (HttpSession session) {
+		String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
+		if (budgetTypeReport != null ) {
+			return BudgetExportConstants.syntheticColumns;
+		}
+		else 
+			return
+				ArConstants.syntheticColumns;
+	}
+	
+	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+			IntWrapper colId, Long ownerId, GroupReportData rd) {
+		if (session != null ) {
+			String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
+			if (budgetTypeReport != null ) {
+				GroupReportDataXLS grd	= new BudgetGroupReportDataXLS(wb, sheet, row, rowId,
+						colId, null, rd);
+				return grd;
+			}
+		}
+		GroupReportDataXLS grd	= new GroupReportDataXLS(wb, sheet, row, rowId,
+		        							colId, null, rd);
+		
+		return grd;
 	}
 }

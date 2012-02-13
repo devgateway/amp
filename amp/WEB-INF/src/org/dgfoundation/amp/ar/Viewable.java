@@ -10,6 +10,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer
  * name for each view modes (types). A viewer is responsible for showing the contents of the cell to the end user. 
@@ -79,6 +82,10 @@ public abstract class Viewable implements Cloneable {
 	 * @param parent
 	 */
 	public void invokeExporter(Exporter parent) {
+			invokeExporter(parent, false);
+	}
+	
+	public void invokeExporter(Exporter parent, boolean useBudgetClasses) {
 		// try to instantiate the Generator
 		try {
 			// get the exporter class for this Viewable
@@ -86,7 +93,7 @@ public abstract class Viewable implements Cloneable {
 			Class c = Class.forName(viewer);
 			// get the first constructor - it SHOULD be the one that receives an
 			// Exporter object (parent)
-			Constructor cons = ARUtil.getConstrByParamNo(c,2);
+			Constructor cons	= ARUtil.getConstrByParamNo(c,2,useBudgetClasses);
 			// instantiate an exporter object with reference to the parent
 			ARUtil.getConstrByParamNo(c,2);
 			Exporter exp = (Exporter) cons.newInstance(new Object[] { parent,

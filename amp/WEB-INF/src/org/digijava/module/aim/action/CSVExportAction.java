@@ -82,7 +82,7 @@ public class CSVExportAction
 	
 	    HSSFRow row = sheet.createRow(rowId.intValue());
 	
-	    GroupReportDataXLS grdx = new GroupReportDataXLS(wb, sheet, row, rowId,
+	    GroupReportDataXLS grdx = ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
 	        colId, null, rd);
 	
 	    grdx.setMetadata(r);

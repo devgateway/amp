@@ -27,7 +27,7 @@ public class CapitalExpenditureCellGenerator extends SyntheticCellGenerator {
 	public Collection<MetaInfo> syntheticMetaInfo() {
 		ArrayList<MetaInfo> ret	= new ArrayList<MetaInfo>();
 		
-		MetaInfo mi				= new MetaInfo(ArConstants.COLUMN_CAPITAL_EXPENDITRURE, "Capital");
+		MetaInfo mi				= new MetaInfo(ArConstants.COLUMN_CAPITAL_EXPENDITRURE, "Expenditure");
 		ret.add(mi);
 		
 		return ret;

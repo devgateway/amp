@@ -89,6 +89,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 	private Set<AmpFilterData> filterDataSet;
 	
 	private Boolean allowEmptyFundingColumns;
+	
+	private Boolean budgetExporter = false;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -409,6 +411,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 		this.activityLevel = activityLevel;
 	}
 
+	
 //	public void setAmpPage(AmpPages ampPage) {
 //		this.ampPage = ampPage;
 //	}
@@ -417,6 +420,20 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 //		return ampPage;
 //	}
 	
+
+	/**
+	 * @return the budgetExporter
+	 */
+	public Boolean getBudgetExporter() {
+		return budgetExporter;
+	}
+
+	/**
+	 * @param budgetExporter the budgetExporter to set
+	 */
+	public void setBudgetExporter(Boolean budgetExporter) {
+		this.budgetExporter = budgetExporter;
+	}
 
 	public Set<AmpDesktopTabSelection> getDesktopTabSelections() {
 		return desktopTabSelections;

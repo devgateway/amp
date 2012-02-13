@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -82,6 +83,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		compTypes.setOutputMarkupId(true);
+		compTypes.setRequired(true);
 		compTypes.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -99,7 +101,19 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
+		name.setRequired(true);
 		name.add(nameOnChange);
+		
+		name.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				compTypes.invalid();
+				feedbackContainer.setVisible(true);
+				feedbackLabel.setDefaultModelObject(noTypeMsg);
+			//	target.   Semantic validator
+			}
+		});
+		
 		add(name);
 
 		ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){

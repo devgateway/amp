@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Sector Manager</span>
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Add/Edit Mapping Rule</span>
 	<h1 class="subtitle-blue">Budget export manager</h1> 
 <digi:instance property="beMapRuleForm"/>
 	
@@ -40,11 +40,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<html:submit value="Save"/>
+					<html:submit value="Save"/>
 			</td>
 		</tr>
 	</table>	
  </div>
-        <div style="clear:both;"></div>
-        </div>
-</digi:form>
+ <div style="clear:both;"></div>
+	</digi:form>
+</div>

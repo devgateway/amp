@@ -7,14 +7,13 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Sector Manager</span>
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Budget export manager</span>
 	<h1 class="subtitle-blue">Budget export manager</h1> 
 <digi:instance property="beBudgetExportForm"/>
 
     
 <digi:form action="/showProjectList.do" method="post">
 <div style="padding:15px;" class="budget-table">
-
 	<table style="border-collapse:collapse;" border="0"style="margin:25px;">
 		<logic:present name="beBudgetExportForm" property="projects">
 			<logic:notEmpty name="beBudgetExportForm" property="projects">
@@ -44,11 +43,15 @@
 					</logic:iterate>
 			</logic:notEmpty>
 		</logic:present>
-		<tr>
-			<td colspan="5" align="right" class="budget-table">
-				<a href="/budgetexport/addEditDeleteProject.do?action=add">Add new project</a>
-			</td>		
-		</tr>
+		<logic:present name="beBudgetExportForm" property="projects">
+			<logic:empty name="beBudgetExportForm" property="projects">
+				<tr><td>No Projects</td></tr>
+			</logic:empty>
+		</logic:present>
+		<logic:notPresent name="beBudgetExportForm" property="projects">
+			<tr><td>No Projects</td></tr>
+		</logic:notPresent>
+		
 	</table>		
         </div>
         <div class="otherlinkstable">
@@ -80,24 +83,14 @@
 												
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="#" title="Click here to Add a Sector">Add Budget</a>
+												<a href="/budgetexport/addEditDeleteProject.do?action=add" title="Click here to Add a Sector">Add Project</a>
 											</td>
 										</tr>
-										
-										
 										<tr>
 											<td>
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="#" title="Click here to the Schemes">View Budgets</a>
-											</td>
-										</tr>
-										
-										<tr>
-											<td>
-												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
-												
-												<a href="#" title="Click here to goto Admin Home">Admin Home</a>
+												<a href="/aim/admin.do" title="Click here to goto Admin Home">Admin Home</a>
 											</td>
 										</tr>
 										<!-- end of other links -->
@@ -108,5 +101,5 @@
 								
         </div>
         <div style="clear:both;"></div>
+        </digi:form>
         </div>
-</digi:form>

@@ -97,7 +97,7 @@ public class TranslatorWorker {
 
     private final static Timestamp expTimestamp = new Timestamp(10000);
     private boolean caseSensitiveKeys = true;
-    //private TrnAccessUpdateQueue timeStampQueue = TrnAccessUpdateQueue.getQueue();
+    private TrnAccessUpdateQueue timeStampQueue = TrnAccessUpdateQueue.getQueue();
     private Site ampSite = null;
 
     // Factory methods
@@ -458,7 +458,7 @@ public class TranslatorWorker {
             session = PersistenceManager.getSession();
             Message message = (Message) session.load(Message.class, mesageKey);
             message.setKeyWords(keyWords);
-            //updateTimeStamp(message);
+            updateTimeStamp(message);
             return message;
         }
         catch (ObjectNotFoundException onfe) {
@@ -477,21 +477,7 @@ public class TranslatorWorker {
                          ",locale=" + locale, sqle);
             throw new WorkerException(sqle);
         }
-        finally {
-            try {
-                if (session != null) {
-                	
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. siteId="
-                             + siteId + ", key = " + key +
-                             ",locale=" + locale, e);
-                throw new WorkerException(e);
-            }
-        }
-
+        
     }
 
     /**
@@ -1195,9 +1181,9 @@ public class TranslatorWorker {
      * @see TrnAccessUpdateQueue
      * @see TrnAccesTimeSaver
      */
-//    protected void updateTimeStamp(Message message){
-//    	timeStampQueue.put(message);
-//    }
+	protected void updateTimeStamp(Message message) {
+		timeStampQueue.put(message);
+	}
     
     /**
      * Saves message in db.

@@ -1,5 +1,9 @@
 package org.digijava.kernel.translator.util;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -54,17 +58,24 @@ public class TrnAccesTimeSaver implements Runnable {
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			session.update(message);
+			//since we are not interested in precious time: we are interesting if this  message was accessed
+			Calendar cal = Calendar.getInstance();
+		    cal.set(Calendar.HOUR_OF_DAY, 0);
+		    cal.set(Calendar.MINUTE, 0);
+		    cal.set(Calendar.SECOND, 0);
+		    cal.set(Calendar.MILLISECOND, 0);
+		    Date currentDate = cal.getTime();
+
+			if(message.getLastAccessed()==null||message.getLastAccessed().before(currentDate)){
+				Message msg = (Message) session.load(Message.class, message);
+				msg.setLastAccessed(new Timestamp(currentDate.getTime()));
+				session.update(msg);
+			}
+			
 			//logger.info("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale()+" Thread name="+Thread.currentThread().getName());
 			
 		} catch (Exception e) {
 			logger.error(e);		
-		}finally{
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception e3) {
-				logger.error("cannot release db session in translation access time saver",e3);
-			}
 		}
 	}
 	

@@ -2,8 +2,8 @@ package org.digijava.kernel.translator.util;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
@@ -17,7 +17,7 @@ import org.digijava.kernel.entity.Message;
 public class TrnAccessUpdateQueue {
 	private static TrnAccessUpdateQueue _instance = null;
 	private HashMap<Message,Timestamp> map = new HashMap<Message,Timestamp>();
-	private Queue<Message> queue = new LinkedList<Message>();
+	private BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
 	private static Logger logger = Logger.getLogger(TrnAccessUpdateQueue.class);
 	public static final String ALLOWED_THREAD_NAME = "pool-1-thread-1";
 	
@@ -48,13 +48,12 @@ public class TrnAccessUpdateQueue {
 	 * will be updated and it will not save same message twice. 
 	 * @param message
 	 */
-	public synchronized void put(Message message){
-		//4 the moment we are interestd to know if a tag was accessed at all or not.
-		if (message.getLastAccessed()==null && !map.containsKey(message)){
-			queue.add(message);
-		}
-		map.put(message,new Timestamp(System.currentTimeMillis()));
-		notify();
+	public void put(Message message){
+			try {
+				queue.put(message);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+			}
 	}
 	
 	/**
@@ -65,21 +64,15 @@ public class TrnAccessUpdateQueue {
 	 * @return translation message
 	 * @throws InterruptedException
 	 */
-	public synchronized Message get() throws InterruptedException {
-		if (!Thread.currentThread().getName().equals(ALLOWED_THREAD_NAME)){
-			logger.warn("Other thread entered translation queue, it may be blocked. Name of the thread is "+Thread.currentThread().getName());
-		}
-		while (queue.isEmpty()) {
-			wait();
-		}
-		Message message = queue.poll();
+	public Message get() throws InterruptedException {
+		return queue.take();
 		//it may be null if notify() was called from other method, not from put(), for example when shutting down saver thread.
-		if (message != null){
+		/*if (message != null){
 			Timestamp time = map.remove(message);
 			message.setLastAccessed(time);
 			return message;
 		}
-		return null;
+		return null;*/
 	}
 	
 	/**
@@ -88,8 +81,8 @@ public class TrnAccessUpdateQueue {
 	 * it will be latest version of the message and queue version will not overwrite or will not repeat save. 
 	 * @param message
 	 */
-	public synchronized void remove(Message message){
+	/*public synchronized void remove(Message message){
 		map.remove(message);
 		queue.remove(message);
-	}
+	}*/
 }

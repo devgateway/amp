@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -51,13 +53,13 @@ import org.digijava.kernel.security.DigiPolicy;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.service.WebappServiceContext;
+import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.util.AccessLogger;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.translation.util.HashKeyPatch;
-import org.hibernate.engine.SessionFactoryImplementor;
 
 /**
  * Parses digi.xml configuration file,
@@ -80,6 +82,8 @@ public class ConfigLoaderListener
     
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
+    private static ExecutorService exec ;
+	private static TrnAccesTimeSaver tats;
     
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
     		int indexOf = completeProductVersion.indexOf(versionPrefix);
@@ -146,7 +150,11 @@ public class ConfigLoaderListener
             
             // patches translations to hash code keys if this is not already done. 
             HashKeyPatch.patchTranslationsIfNecessary();
-            
+			tats = new TrnAccesTimeSaver();
+			exec = Executors.newSingleThreadExecutor();
+			exec.execute(tats);
+			
+          
             PersistenceManager.getSession().getTransaction().commit();
         
         }
@@ -308,6 +316,7 @@ public class ConfigLoaderListener
             PersistenceManager.cleanup();
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
+			exec.shutdownNow();
             ServiceManager.getInstance().shutdown(0);
          
             

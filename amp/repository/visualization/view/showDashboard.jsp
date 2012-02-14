@@ -382,19 +382,22 @@ function initializeGlobalVariables(){
 													<c:forEach
 														items="${visualizationform.filter.orgGroupWithOrgsList}"
 														var="item">
+														<c:set var="orgGrp">
+															<c:out value="${item.mainEntity.orgGrpName}"/>
+														</c:set>
 														<li><c:if
 																test="${visualizationform.filter.dashboardType eq '1' }">
 																<input type="radio" name="org_grp_check"
-																	title="${item.mainEntity.orgGrpName}"
+																	title="${orgGrp}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
 															</c:if> <c:if
 																test="${visualizationform.filter.dashboardType ne '1' }">
 																<input type="checkbox" name="org_grp_check"
-																	title="${item.mainEntity.orgGrpName}"
+																	title="${orgGrpe}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span>${item.mainEntity.orgGrpName}
+															</c:if> <span>${orgGrp}
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -877,7 +880,9 @@ function initializeGlobalVariables(){
 		  	<td align=right>
 		     <html:select property="filter.orgGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-		         <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+		         <c:forEach var="orgGrp" items="${visualizationform.filter.orgGroups}">
+		         	<html:option value="${orgGrp.ampOrgGrpId}"><c:out value="${orgGrp.orgGrpName}"/></html:option>
+		         </c:forEach>
 		     </html:select>
 		     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
@@ -970,7 +975,9 @@ function initializeGlobalVariables(){
 		  	<td align=right>
 		     <html:select property="filter.orgGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-		         <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+		          <c:forEach var="orgGrp" items="${visualizationform.filter.orgGroups}">
+		         	<html:option value="${orgGrp.ampOrgGrpId}"><c:out value="${orgGrp.orgGrpName}"/></html:option>
+		         </c:forEach>
 		     </html:select>
 		     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>

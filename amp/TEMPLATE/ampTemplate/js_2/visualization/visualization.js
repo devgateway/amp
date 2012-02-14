@@ -1248,6 +1248,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("organization_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==3) {
@@ -1275,6 +1276,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("sub_sector_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==2) {
@@ -1302,6 +1304,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("zone_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	

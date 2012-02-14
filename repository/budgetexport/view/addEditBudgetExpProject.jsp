@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Add/Edit Budget Export Project</span>
-	<h1 class="subtitle-blue">Add/Edit Budget Export Project</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="<digi:trn>Click here to goto Project List</digi:trn>"><digi:trn>Budget Export Projects</digi:trn></a>&nbsp;&gt;&nbsp;<digi:trn>Add/Edit Budget Export Project</digi:trn></span>
+	<h1 class="subtitle-blue"><digi:trn>Add/Edit Budget Export Project</digi:trn></h1> 
 <digi:instance property="beProjectForm"/>
 	
 <digi:form action="/addEditDeleteProject.do?action=save" method="post">
@@ -17,19 +17,19 @@
 <div style="padding:15px;" class="budget-table">
 	<table>
 		<tr>
-			<td>Name</td>
+			<td><digi:trn>Name</digi:trn></td>
 			<td>
 				<html:text name="beProjectForm" property="name"/>
 			</td>
 		</tr>
 				<tr>
-			<td>Description</td>
+			<td><digi:trn>Description</digi:trn></td>
 			<td>
 				<html:text name="beProjectForm" property="description"/>
 			</td>
 		</tr>
 		<tr>
-			<td>Report</td>
+			<td><digi:trn>Report</digi:trn></td>
 			<td>
 				
 				<bean:define id="availReports" name="beProjectForm" property="availReports"/>

@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Add/Edit Mapping Rule</span>
-	<h1 class="subtitle-blue">Budget export manager</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="<digi:trn>Click here to goto Project List</digi:trn>"><digi:trn>Budget Export Projects</digi:trn></a>&nbsp;&gt;&nbsp;<digi:trn>Add/Edit Mapping Rule</digi:trn></span>
+	<h1 class="subtitle-blue"><digi:trn>Budget export manager</digi:trn></h1> 
 <digi:instance property="beMapRuleForm"/>
 	
 <digi:form action="/addEditDeleteMapRule.do?action=save" method="post">
@@ -18,13 +18,13 @@
 <div style="padding:25px;" class="budget-table">
 	<table>
 		<tr>
-			<td>Name</td>
+			<td><digi:trn>Name</digi:trn></td>
 			<td>
 				<html:text name="beMapRuleForm" property="name"/>
 			</td>
 		</tr>
 		<tr>
-			<td>AMP Column</td>
+			<td><digi:trn>AMP Column</digi:trn></td>
 			<td>
 				<bean:define id="availCols" name="beMapRuleForm" property="availColumns"/>
 				<html:select name="beMapRuleForm" property="ampColumnId">
@@ -33,25 +33,25 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Has Header</td>
+			<td><digi:trn>Has Header</digi:trn></td>
 			<td>
 				<html:checkbox name="beMapRuleForm" property="header"/>
 			</td>
 		</tr>
 		<tr>
-			<td>Allow "None" Mapping</td>
+			<td><digi:trn>Allow "None" Mapping</digi:trn></td>
 			<td>
 				<html:checkbox name="beMapRuleForm" property="allowNone"/>
 			</td>
 		</tr>
 		<tr>
-			<td>Allow "All" Mapping</td>
+			<td><digi:trn>Allow "All" Mapping</digi:trn></td>
 			<td>
 				<html:checkbox name="beMapRuleForm" property="allowAll"/>
 			</td>
 		</tr>
 		<tr>
-			<td>CSV Column Delimiter</td>
+			<td><digi:trn>CSV Column Delimiter</digi:trn></td>
 			<td>
 				<html:select name="beMapRuleForm" property="csvColDelimiter">
 					<html:option value="0">Coma Separated</html:option>

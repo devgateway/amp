@@ -50,6 +50,9 @@ public class AddEditDeleteMapRule extends DispatchAction {
         beMapRuleForm.setAmpColumnId(rule.getAmpColumn().getColumnId());
         beMapRuleForm.setName(rule.getName());
         beMapRuleForm.setHeader(rule.isHeader());
+        beMapRuleForm.setCsvColDelimiter(rule.getCsvColDelimiter());
+        beMapRuleForm.setAllowAll(rule.isAllowAllItem());
+        beMapRuleForm.setAllowNone(rule.isAllowNoneItem());
 
 
         return mapping.findForward("forward");
@@ -93,6 +96,9 @@ public class AddEditDeleteMapRule extends DispatchAction {
 
         mapRule.setName(beMapRuleForm.getName());
         mapRule.setHeader(beMapRuleForm.isHeader());
+        mapRule.setCsvColDelimiter(beMapRuleForm.getCsvColDelimiter());
+        mapRule.setAllowAllItem(beMapRuleForm.isAllowAll());
+        mapRule.setAllowNoneItem(beMapRuleForm.isAllowNone());
 
 
         if (DbUtil.ruleWithNameExists(beMapRuleForm.getCurProjectId(), mapRule.getName(), mapRule.getId())) {

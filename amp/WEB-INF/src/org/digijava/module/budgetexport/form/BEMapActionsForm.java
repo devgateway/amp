@@ -26,10 +26,15 @@ public class BEMapActionsForm extends ActionForm {
     private List<HierarchyListable> ampEntities;
     private List<AmpBudgetExportCSVItem> csvItems;
     private List<AmpEntityMappedItem> ampEntityMappedItems;
-    
-    private FormFile upload;
 
+
+    private List<HierarchyListable> additionalItems; //for All/None options
+
+
+    private FormFile upload;
     private boolean noReload;
+    int delimiter;
+    
 
     public Long getId() {
         return id;
@@ -109,5 +114,21 @@ public class BEMapActionsForm extends ActionForm {
 
     public void setAmpEntityMappedItems(List<AmpEntityMappedItem> ampEntityMappedItems) {
         this.ampEntityMappedItems = ampEntityMappedItems;
+    }
+
+    public List<HierarchyListable> getAdditionalItems() {
+        return additionalItems;
+    }
+
+    public void setAdditionalItems(List<HierarchyListable> additionalItems) {
+        this.additionalItems = additionalItems;
+    }
+
+    public int getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(int delimiter) {
+        this.delimiter = delimiter;
     }
 }

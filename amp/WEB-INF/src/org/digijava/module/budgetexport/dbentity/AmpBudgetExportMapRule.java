@@ -12,6 +12,9 @@ import java.util.List;
  * Time: 5:32 PM
  */
 public class AmpBudgetExportMapRule {
+    public static final int CSV_COL_DELIMITER_COMA = 0;
+    public static final int CSV_COL_DELIMITER_TAB = 1;
+    
     private Long id;
     private String name;
     private AmpBudgetExportProject project;
@@ -19,6 +22,10 @@ public class AmpBudgetExportMapRule {
     private AmpColumns ampColumn;
     private List<AmpBudgetExportMapItem> items;
     private List<AmpBudgetExportCSVItem> csvItems;
+    private int csvColDelimiter;
+
+    private boolean allowNoneItem;
+    private boolean allowAllItem;
 
     //Not persistent fields
     private int totalAmpEntityCount;
@@ -97,4 +104,27 @@ public class AmpBudgetExportMapRule {
         return csvItems != null ? csvItems.size() : 0;
     }
 
+    public int getCsvColDelimiter() {
+        return csvColDelimiter;
+    }
+
+    public void setCsvColDelimiter(int csvColDelimiter) {
+        this.csvColDelimiter = csvColDelimiter;
+    }
+
+    public boolean isAllowNoneItem() {
+        return allowNoneItem;
+    }
+
+    public void setAllowNoneItem(boolean allowNoneItem) {
+        this.allowNoneItem = allowNoneItem;
+    }
+
+    public boolean isAllowAllItem() {
+        return allowAllItem;
+    }
+
+    public void setAllowAllItem(boolean allowAllItem) {
+        this.allowAllItem = allowAllItem;
+    }
 }

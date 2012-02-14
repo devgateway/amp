@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Budget export manager</span>
-	<h1 class="subtitle-blue">Budget export manager</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Budget Export Manager</span>
+	<h1 class="subtitle-blue">Budget Export Manager</h1> 
 <digi:instance property="beBudgetExportForm"/>
 
     

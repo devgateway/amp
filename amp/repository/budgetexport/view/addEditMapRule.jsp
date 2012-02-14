@@ -33,9 +33,30 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Has header</td>
+			<td>Has Header</td>
 			<td>
 				<html:checkbox name="beMapRuleForm" property="header"/>
+			</td>
+		</tr>
+		<tr>
+			<td>Allow "None" Mapping</td>
+			<td>
+				<html:checkbox name="beMapRuleForm" property="allowNone"/>
+			</td>
+		</tr>
+		<tr>
+			<td>Allow "All" Mapping</td>
+			<td>
+				<html:checkbox name="beMapRuleForm" property="allowAll"/>
+			</td>
+		</tr>
+		<tr>
+			<td>CSV Column Delimiter</td>
+			<td>
+				<html:select name="beMapRuleForm" property="csvColDelimiter">
+					<html:option value="0">Coma Separated</html:option>
+					<html:option value="1">Tab Separated</html:option>
+				</html:select>
 			</td>
 		</tr>
 		<tr>

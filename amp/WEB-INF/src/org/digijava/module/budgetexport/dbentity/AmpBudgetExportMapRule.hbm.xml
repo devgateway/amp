@@ -11,6 +11,11 @@
 		<property name="name" column="name" type="java.lang.String"/>
         <property name="header" column="has_header" type="boolean"/>
 
+        <property name="allowAllItem" column="allow_all" type="boolean"/>
+        <property name="allowNoneItem" column="allow_none" type="boolean"/>
+
+        <property name="csvColDelimiter" column="csv_col_delimiter" type="int"/>
+
         <many-to-one name="project" column="project" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject" cascade="none"/>
         <many-to-one name="ampColumn" column="amp_column" class="org.digijava.module.aim.dbentity.AmpColumns" cascade="none"/>
 

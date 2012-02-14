@@ -2,6 +2,7 @@ package org.digijava.module.budgetexport.util;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.budgetexport.adapter.DummyAmpEntity;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
@@ -20,12 +21,23 @@ import java.util.*;
  */
 public class BudgetExportUtil {
     private static final String CSV_ROW_DELIMITER = "\n";
-    private static final String CSV_COL_DELIMITER = ",";
+    private static final String CSV_COL_DELIMITER_COMA = ",";
+    private static final String CSV_COL_DELIMITER_TAB = "\t";
 
-    public static Map<String, String> parseCSV (String csvContent, boolean hasHeader) {
+    public static Map<String, String> parseCSV (String csvContent, int delimiter, boolean hasHeader) {
         Map<String, String> retVal = new HashMap<String, String> ();
+        String delimiterStr = null;
+
+        if (delimiter == AmpBudgetExportMapRule.CSV_COL_DELIMITER_COMA) {
+            delimiterStr = CSV_COL_DELIMITER_COMA;
+        } else if (delimiter == AmpBudgetExportMapRule.CSV_COL_DELIMITER_TAB) {
+            delimiterStr = CSV_COL_DELIMITER_TAB;
+        }
+
+        
         StringTokenizer rows = new StringTokenizer(csvContent, CSV_ROW_DELIMITER, false);
 
+        
         //Skip header row
         if (rows.hasMoreElements() && hasHeader) {
             rows.nextToken();
@@ -35,8 +47,10 @@ public class BudgetExportUtil {
             String row = rows.nextToken();
 
             if (row.indexOf("\"") < 0) { //skip for now
-                StringTokenizer cols = new StringTokenizer(row, CSV_COL_DELIMITER, false);
-                retVal.put(cols.nextToken(), cols.nextToken());
+                StringTokenizer cols = new StringTokenizer(row, delimiterStr, false);
+                String code = cols.nextToken().trim();
+                String label = cols.nextToken().trim();
+                retVal.put(code, label);
             }
         }
         return  retVal;
@@ -206,15 +220,40 @@ public class BudgetExportUtil {
     
     public static List<AmpEntityMappedItem> getAmpEntityMappedItems (AmpBudgetExportMapRule rule) throws DgException {
         List<AmpEntityMappedItem> retVal = new ArrayList<AmpEntityMappedItem>();
-        MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
-        List<HierarchyListable> ampEntityList = adapter.getAllObjects();
 
-        List<AmpBudgetExportMapItem> mapItems = rule.getItems();
-        Collections.sort(ampEntityList, new Comparator<HierarchyListable>() {
+        /*
+        if (rule.isAllowAllItem()) {
+            AmpEntityMappedItem allOpt = new AmpEntityMappedItem();
+            allOpt.setAmpEntity(new DummyAmpEntity(new Long(-1), "All"));
+            retVal.add(allOpt);
+        }
+        if (rule.isAllowNoneItem()) {
+            AmpEntityMappedItem allOpt = new AmpEntityMappedItem();
+            allOpt.setAmpEntity(new DummyAmpEntity(new Long(-2), "None"));
+            retVal.add(allOpt);
+        } */
+
+        MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
+
+        List<HierarchyListable> tmpList = adapter.getAllObjects();
+
+
+        Collections.sort(tmpList, new Comparator<HierarchyListable>() {
             public int compare(HierarchyListable o1, HierarchyListable o2) {
                 return o1.getLabel().compareTo(o2.getLabel());
             }
         });
+
+        List<HierarchyListable> ampEntityList = new ArrayList<HierarchyListable>();
+        if (rule.isAllowAllItem()) {
+            ampEntityList.add(new DummyAmpEntity(new Long(-1), "All"));
+        }
+        if (rule.isAllowNoneItem()) {
+            ampEntityList.add(new DummyAmpEntity(new Long(-2), "None"));
+        }
+        ampEntityList.addAll(tmpList);
+
+        List<AmpBudgetExportMapItem> mapItems = rule.getItems();
 
         for (HierarchyListable ampEntity : ampEntityList) {
             AmpEntityMappedItem ampEntityMappedItem = new AmpEntityMappedItem();

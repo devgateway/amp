@@ -14,6 +14,7 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.importers.CSVImporter;
 import org.digijava.module.aim.util.HierarchyListable;
+import org.digijava.module.budgetexport.adapter.DummyAmpEntity;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
@@ -28,6 +29,7 @@ import org.digijava.module.budgetexport.util.DbUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,16 +65,13 @@ public class MapActions extends DispatchAction {
             beMapActionsForm.setRule(rule);
 
             List<AmpEntityMappedItem> ampEntityMappedItems = BudgetExportUtil.getAmpEntityMappedItems(rule);
+
             request.getSession().setAttribute(AMP_MAPPED_ENTITY_LIST, ampEntityMappedItems);
-            //beMapActionsForm.setAmpEntityMappedItems(ampEntityMappedItems);
-
-
-
 
             MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
+
             List<HierarchyListable> ampEntityList = adapter.getAllObjects();
             request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
-
             beMapActionsForm.setAmpEntities(ampEntityList);
 
 
@@ -89,6 +88,19 @@ public class MapActions extends DispatchAction {
         beMapActionsForm.setRule((AmpBudgetExportMapRule)request.getSession().getAttribute(CURRENT_MAPPING_RULE));
         beMapActionsForm.setMapItems((List<AmpBudgetExportMapItem>)request.getSession().getAttribute(TMP_MAP_SESSION_ATTR));
         beMapActionsForm.setAmpEntityMappedItems((List<AmpEntityMappedItem>)request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST));
+
+        /*
+        if (beMapActionsForm.getRule().isAllowAllItem() ||
+                beMapActionsForm.getRule().isAllowNoneItem()) {
+            List additionalItems = new ArrayList();
+            if (beMapActionsForm.getRule().isAllowAllItem()) {
+                additionalItems.add(new DummyAmpEntity(new Long(-1), "All"));
+            }
+            if (beMapActionsForm.getRule().isAllowNoneItem()) {
+                additionalItems.add(new DummyAmpEntity(new Long(-2), "None"));
+            }
+            beMapActionsForm.setAdditionalItems(additionalItems);
+        } */
 
         return mapping.findForward("forward");
     }
@@ -141,16 +153,30 @@ public class MapActions extends DispatchAction {
     public ActionForward upload(ActionMapping mapping, ActionForm form,
                     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
-
+        request.setCharacterEncoding("UTF-8");
         AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
 
         FormFile file = beMapActionsForm.getUpload();
 
+        /*
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(file.getInputStream(), writer, "UTF-8");
+        String csvContent = writer.toString();
+        */
 
-        String csvContent = new String(file.getFileData(), "UTF-8");
-        
+        StringBuilder strBld = new StringBuilder();
+        InputStream is = file.getInputStream();
+        int b;
+        while ((b = is.read()) != -1) {
+            strBld.append((char)b);
+        }
+
+        String str = new String(strBld.toString().getBytes(), "UTF-8");
+        /*
         Map<String, String> csvMap = BudgetExportUtil.parseCSV(csvContent, rule.isHeader());
-
+          */
+        
+        Map<String, String> csvMap = BudgetExportUtil.parseCSV(new String(file.getFileData(), "UTF-8"),rule.getCsvColDelimiter(), rule.isHeader());
         
         Set <Map.Entry<String, String>> mapEntrySet = csvMap.entrySet();
         Iterator<Map.Entry<String, String>> mapEntrySetIt = mapEntrySet.iterator();
@@ -180,6 +206,7 @@ public class MapActions extends DispatchAction {
     public ActionForward autocomplete(ActionMapping mapping, ActionForm form,
                                       HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         response.setContentType("text/xml");
+        response.setCharacterEncoding("UTF-8");
         String searchStr = request.getParameter("searchStr");
         String searchIn = request.getParameter("searchIn");
         boolean searchCodes = searchIn != null && searchIn.equalsIgnoreCase("code");
@@ -188,6 +215,7 @@ public class MapActions extends DispatchAction {
 
 
         XMLDocument responceXml = new XMLDocument();
+        responceXml.setCodeset("UTF-8");
         XML rootNode = new XML("result");
         responceXml.addElement(rootNode);
         List<AmpBudgetExportCSVItem> searchResults = BudgetExportUtil.searchCsvItems(rule.getCsvItems(), searchStr, searchCodes);
@@ -200,7 +228,11 @@ public class MapActions extends DispatchAction {
             rootNode.addElement(resultItem);
 
         }
-        responceXml.output(response.getOutputStream());
+        
+        String xmlContent = responceXml.toString();
+        
+        //responceXml.output(response.getOutputStream());
+        response.getWriter().print(xmlContent);
         return null;
     }
     

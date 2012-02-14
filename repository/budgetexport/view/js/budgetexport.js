@@ -1,4 +1,6 @@
 function uploadFile(obj) {
+	
+		obj.form.setAttribute("accept-charset", "UTF-8");
 		obj.form.action=obj.form.action + "?action=upload";
 		obj.form.submit();
 		
@@ -61,9 +63,9 @@ function uploadFile(obj) {
 				var code = result.attributes.getNamedItem("code").value;
 				var label = result.childNodes[0].nodeValue;
 				
-				componentSrc.push("<tr><td nowrap><div class='autosuggest_dropdown_item' onClick='setManualMapping(this, ");
+				componentSrc.push("<tr><td nowrap><div class='autosuggest_dropdown_item' onClick='setManualMapping(this, \"");
 				componentSrc.push(code);
-				componentSrc.push(",\"");
+				componentSrc.push("\",\"");
 				componentSrc.push(label);
 				componentSrc.push("\")'>(");
 				componentSrc.push(code);

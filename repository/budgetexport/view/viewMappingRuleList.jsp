@@ -17,37 +17,37 @@
 		<logic:present name="beMapingForm" property="rules">
 			<logic:notEmpty name="beMapingForm" property="rules">
 				<tr class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Name</td>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">AMP Column</td>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Has header</td>
-					<td colspan="3" class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">&nbsp;</td>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Total/Mapped</td>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">CSV items</td>
+					<td nowrap class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Name</td>
+					<td nowrap class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">AMP Column</td>
+					<td nowrap class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Header</td>
+					<td nowrap colspan="3" class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">&nbsp;</td>
+					<td nowrap class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Total/Mapped</td>
+					<td nowrap class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">CSV items</td>
 				</tr>
 					<logic:iterate name="beMapingForm" property="rules" id="rule">
 						<tr>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								<bean:write name="rule" property="name"/>
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								<bean:write name="rule" property="ampColumn.columnName"/>
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								<bean:write name="rule" property="header"/>
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								[&nbsp;<a href="/budgetexport/addEditDeleteMapRule.do?action=edit&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>">Edit</a>&nbsp;]
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								[&nbsp;<a href="/budgetexport/addEditDeleteMapRule.do?action=delete&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>">Delete</a>&nbsp;]
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								[&nbsp;<a href="/budgetexport/mapActions.do?action=view&ruleId=<bean:write name="rule" property="id"/>&projectId=<bean:write name="beMapingForm" property="id"/>">Manage map</a>&nbsp;]
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								(<bean:write name="rule" property="totalAmpEntityCount"/>/<bean:write name="rule" property="mappedAmpEntityCount"/>)
 							</td>
-							<td class="budget-table">
+							<td nowrap class="budget-table">
 								<bean:write name="rule" property="csvItemCount"/>
 							</td>
 						</tr>
@@ -80,7 +80,7 @@
 									<table cellpadding="5" cellspacing="1" width="100%">
 										
 										<tbody><tr>
-											<td>
+											<td nowrap>
 											
 												
 												
@@ -93,7 +93,7 @@
 										
 										
 										<tr>
-											<td>
+											<td nowrap>
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
 												<a href="/aim/admin.do" title="Click here to goto Admin Home">Admin Home</a>
@@ -101,7 +101,7 @@
 										</tr>
 										
 										<tr>
-											<td>
+											<td nowrap>
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
 												<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">

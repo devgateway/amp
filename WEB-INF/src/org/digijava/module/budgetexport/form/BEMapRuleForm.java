@@ -17,6 +17,10 @@ public class BEMapRuleForm extends ActionForm {
     private boolean header;
     private Long ampColumnId;
     private List<AmpColumns> availColumns;
+    private int csvColDelimiter;
+
+    private boolean allowNone;
+    private boolean allowAll;
 
     public Long getId() {
         return id;
@@ -64,5 +68,29 @@ public class BEMapRuleForm extends ActionForm {
 
     public void setAvailColumns(List<AmpColumns> availColumns) {
         this.availColumns = availColumns;
+    }
+
+    public int getCsvColDelimiter() {
+        return csvColDelimiter;
+    }
+
+    public void setCsvColDelimiter(int csvColDelimiter) {
+        this.csvColDelimiter = csvColDelimiter;
+    }
+
+    public boolean isAllowNone() {
+        return allowNone;
+    }
+
+    public void setAllowNone(boolean allowNone) {
+        this.allowNone = allowNone;
+    }
+
+    public boolean isAllowAll() {
+        return allowAll;
+    }
+
+    public void setAllowAll(boolean allowAll) {
+        this.allowAll = allowAll;
     }
 }

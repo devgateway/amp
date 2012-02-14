@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;Budget Export Manager</span>
-	<h1 class="subtitle-blue">Budget Export Manager</h1> 
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>&nbsp;&gt;&nbsp;<digi:trn>Budget Export Manager</digi:trn></span>
+	<h1 class="subtitle-blue"><digi:trn>Budget Export Manager</digi:trn></h1> 
 <digi:instance property="beBudgetExportForm"/>
 
     
@@ -18,8 +18,8 @@
 		<logic:present name="beBudgetExportForm" property="projects">
 			<logic:notEmpty name="beBudgetExportForm" property="projects">
 				<tr>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Name</td>
-					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;">Description</td>
+					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;"><digi:trn>Name</digi:trn></td>
+					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;"><digi:trn>Description</digi:trn></td>
           <td class="box-title" style="background:#d7eafd;text-align:center;"colspan="4"></td>
 				</tr>
 					<logic:iterate name="beBudgetExportForm" property="projects" id="project">
@@ -31,13 +31,13 @@
 								<bean:write name="project" property="description"/>
 							</td>
 							<td class="budget-table">
-								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=edit&id=<bean:write name="project" property="id"/>">Edit</a>&nbsp;]
+								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=edit&id=<bean:write name="project" property="id"/>"><digi:trn>Edit</digi:trn></a>&nbsp;]
 							</td class="budget-table">
 							<td class="budget-table">
-								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>">Delete</a>&nbsp;]
+								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>"><digi:trn>Delete</digi:trn></a>&nbsp;]
 							</td>
 							<td class="budget-table">
-								[&nbsp;<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>">Mapping Rules</a>&nbsp;]
+								[&nbsp;<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>"><digi:trn>Mapping Rules</digi:trn></a>&nbsp;]
 							</td>
 							
 							<td class="budget-table">
@@ -67,7 +67,7 @@
 									<table cellpadding="0" cellspacing="0" width="100">
 										<tbody><tr>
 											<td bgcolor="#c9c9c7" class="box-title">
-												Other links
+												<digi:trn>Other links</digi:trn>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width="17">
 												&nbsp;
@@ -87,14 +87,14 @@
 												
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="/budgetexport/addEditDeleteProject.do?action=add" title="Click here to Add a Sector">Add Project</a>
+												<a href="/budgetexport/addEditDeleteProject.do?action=add" title="<digi:trn>Click here to Add a Sector</digi:trn>"><digi:trn>Add Project</digi:trn></a>
 											</td>
 										</tr>
 										<tr>
 											<td>
 												<img src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif" height="10" width="15">
 												
-												<a href="/aim/admin.do" title="Click here to goto Admin Home">Admin Home</a>
+												<a href="/aim/admin.do" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>
 											</td>
 										</tr>
 										<!-- end of other links -->

@@ -16,8 +16,8 @@
 <digi:ref href="/repository/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />	
 	
 <div class="budgetcontainer">
-	<span class="crumb"><a href="/aim/admin.do" class="comment" title="Click here to goto Admin Home">Admin Home</a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="Click here to goto Project List">Budget Export Projects</a>&nbsp;&gt;&nbsp;Manage Mapings</span>
-	<h1 class="subtitle-blue">Manage Mappings</h1>
+	<span class="crumb"><a href="/aim/admin.do" class="comment" title="<digi:trn>Click here to goto Admin Home</digi:trn>"><digi:trn>Admin Home</digi:trn></a>&nbsp;&gt;&nbsp;<a href="/budgetexport/showProjectList.do" class="comment" title="<digi:trn>Click here to goto Project List</digi:trn>"><digi:trn>Budget Export Projects</digi:trn></a>&nbsp;&gt;&nbsp;<digi:trn>Manage Mapings</digi:trn></span>
+	<h1 class="subtitle-blue"><digi:trn>Manage Mappings</digi:trn></h1>
 	
 	
 <digi:form action="/mapActions.do" method="post" enctype="multipart/form-data">
@@ -32,13 +32,13 @@
 			<tbody>
 				<tr>
 					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="300">
-						AMP Label
+						<digi:trn>AMP Label</digi:trn>
 					</td>
 					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="300">
-						External code/label
+						<digi:trn>External Code/Label</digi:trn>
 					</td>
 					<td class="box-title" style="background:#d7eafd;text-align:center;padding:3px;" width="20">
-						Matching
+						<digi:trn>Matching</digi:trn>
 					</td>
 				</tr>
 				<logic:present name="beMapActionsForm" property="ampEntityMappedItems">
@@ -92,15 +92,15 @@
 				<tr>
 					<td colspan="3" align="left">
 						<table width="100%"><tr><td align="left">
-							<input type="button" class="button" value="Automatic matching" onClick="automatch(this)">
-							<input type="button" class="button" value="Save" onClick="saveMapping(this)"/>	
+							<input type="button" class="button" value="<digi:trn>Automatic matching</digi:trn>" onClick="automatch(this)">
+							<input type="button" class="button" value="<digi:trn>Save</digi:trn>" onClick="saveMapping(this)"/>	
 						</td><td align="right">
 							<logic:present name="beMapActionsForm" property="rule.csvItems">
 								<bean:size name="beMapActionsForm" property="rule.csvItems" id="csvItemCount"/>
-								CSV Items uploaded for current rule (<bean:write name="csvItemCount"/>)
+								<digi:trn>CSV Items uploaded for current rule</digi:trn> (<bean:write name="csvItemCount"/>)
 							</logic:present>
 							<html:file name="beMapActionsForm" property="upload" styleClass="button"/>
-							<input type="button" class="button" value="Upload" onClick="uploadFile(this)"/>	
+							<input type="button" class="button" value="<digi:trn>Upload</digi:trn>" onClick="uploadFile(this)"/>	
 						</td></tr></table>
 					</td>
 				</tr>

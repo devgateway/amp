@@ -104,16 +104,6 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		name.setRequired(true);
 		name.add(nameOnChange);
 		
-		name.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				compTypes.invalid();
-				feedbackContainer.setVisible(true);
-				feedbackLabel.setDefaultModelObject(noTypeMsg);
-			//	target.   Semantic validator
-			}
-		});
-		
 		add(name);
 
 		ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){

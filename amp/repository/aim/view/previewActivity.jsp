@@ -227,7 +227,7 @@ function collapseAll() {
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is beeing edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
 		        </font>
 		     </td>
 	     </tr>           

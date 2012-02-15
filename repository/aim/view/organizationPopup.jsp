@@ -88,6 +88,9 @@
 		<logic:notEmpty name="org" property="additionalInformation" >
 			(${org.additionalInformation})
 		</logic:notEmpty></u>]
+		<logic:notEmpty name="org" property="percentage" >
+			<bean:write name="org" property="percentage"/> %
+		</logic:notEmpty>
 	</div>
 	<c:if test="${onClickText!=''}">
 	   -&gt; <a style="cursor:pointer; text-decoration:underline; color: blue" onclick="${onClickText}" >

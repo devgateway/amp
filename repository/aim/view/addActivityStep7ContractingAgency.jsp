@@ -24,8 +24,7 @@
 									<tr><td><field:display name="Contracting Agency" feature="Contracting Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
-												id="conAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+												<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies" id="conAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
 													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
@@ -37,9 +36,15 @@
 															<td align="left" width="49%">
 																<bean:write name="conAgency" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Contracting Agency Department/Division"  feature="Contracting Agency">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.conOrgToInfo(${conAgency.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
+																	<digi:trn>Percentage</digi:trn> : <html:text property="agencies.conOrgPercentage(${conAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

@@ -205,7 +205,7 @@
 													</option>
 												</c:forEach>
 												</select>&nbsp;
-												<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
+												<input type="text"  name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -280,7 +280,7 @@
 													<c:out value="${currency.currencyName}" />
 													</option>
 												</c:forEach>
-												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
+												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>"  
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
@@ -355,7 +355,7 @@
 													<c:out value="${currency.currencyName}" />
 													</option>
 												</c:forEach>
-												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
+												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>"  
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -464,7 +464,7 @@ function addCommitments() {
 		 }%>
 	
 	s += "</select>&nbsp;";
-	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
+	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text' >&nbsp;";
 	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
@@ -511,7 +511,7 @@ function addDisbursement() {
 		 }%>
 	
 	s += "</select>&nbsp;";
-	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
+	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text' >&nbsp;";
 	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
@@ -558,7 +558,7 @@ function addExpenditure() {
 		 }%>
 	
 	s += "</select>&nbsp;";
-	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
+	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text' >&nbsp;";
 	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 

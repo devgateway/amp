@@ -230,7 +230,7 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:addEditActivityDueDate">Due Date:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
+			<html:text  property="dueDate" styleClass="inp-text"/>
 				<a onClick="pickDate(this,document.aimEUActivityForm.dueDate)">
 				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>

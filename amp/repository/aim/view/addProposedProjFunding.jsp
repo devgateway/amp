@@ -134,7 +134,7 @@
                         </td>
                         <field:display name="Proposed Project Date" feature="Proposed Project Cost">
 	                        <td valign="center" align="center">
-	                          <html:text property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
+	                          <html:text property="funding.proProjCost.funDate" styleId="funDate"  style="width:100px;"/>
 	                        </td>
 	                        <td valign="center" align="center">
 	            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>

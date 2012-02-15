@@ -24,7 +24,7 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
@@ -232,8 +232,8 @@ function collapseAll() {
 		     </td>
 	     </tr>           
 	     <tr>
-	         <td>
-	             &nbsp;
+	         <td>&nbsp;
+	             
 	         </td>
 	     </tr>
 	</table>
@@ -247,11 +247,12 @@ function collapseAll() {
 </c:if>
 <c:if test="${aimEditActivityForm.activityExists!='no'}">
 
-	<div class="activity_preview_header">
+	<div class="activity_preview_header" >
 	  <table width="990" border="0" cellpadding="0" cellspacing="0">
 	  <tr>
 	    <td width="710">
 	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
+            <div style="clear:both;"></div>
 	    </td>
 	    <td width=130>
 	    	<div class="l_sm">
@@ -259,6 +260,7 @@ function collapseAll() {
 			 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
 			</gs:test>
 	    	</div>
+            <div style="clear:both;"></div>
 	    </td>
 	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
 	    <td align=right>

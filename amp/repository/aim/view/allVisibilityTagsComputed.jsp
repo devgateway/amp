@@ -257,7 +257,7 @@
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
-<field:display name="Actual Approval Date" feature="Planning"></field:display> 
+<field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
 <field:display name="Actual Start Date" feature="Planning"></field:display> 
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display> 

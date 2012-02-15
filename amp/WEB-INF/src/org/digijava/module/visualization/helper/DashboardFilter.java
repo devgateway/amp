@@ -29,6 +29,7 @@ public class DashboardFilter {
     private Long currencyId;
     private Long currencyIdQuickFilter;
     private Boolean workspaceOnly;
+    private Boolean workspaceOnlyQuickFilter;
     private Boolean showMonochrome;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
@@ -378,12 +379,20 @@ public class DashboardFilter {
         this.years = years;
     }
     
-     public Boolean getWorkspaceOnly() {
+    public Boolean getWorkspaceOnly() {
         return workspaceOnly;
     }
 
     public void setWorkspaceOnly(Boolean workspaceOnly) {
         this.workspaceOnly = workspaceOnly;
+    }
+    
+    public Boolean getWorkspaceOnlyQuickFilter() {
+        return workspaceOnlyQuickFilter;
+    }
+
+    public void setWorkspaceOnlyQuickFilter(Boolean workspaceOnlyQuickFilter) {
+        this.workspaceOnlyQuickFilter = workspaceOnlyQuickFilter;
     }
     /*
     public String getOrgGroupName() {

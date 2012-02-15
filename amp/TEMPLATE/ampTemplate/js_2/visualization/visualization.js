@@ -697,6 +697,10 @@ var callbackApplyFilterCall = {
 
 function callbackApplyFilter(e){
 	panelLoaded = false;
+	if (document.getElementById("workspaceOnlyQuickFilter")!=null){
+		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;
+		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
+	}
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
@@ -782,6 +786,7 @@ function applyFilterPopin(e){
 	}
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	

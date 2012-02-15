@@ -836,6 +836,15 @@ function initializeGlobalVariables(){
 	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%">
+		<c:if test="${!visualizationform.filter.fromPublicView}">
+			<tr>
+				<td colspan="2" style="padding-bottom: 2px;"><html:checkbox property="filter.workspaceOnlyQuickFilter"
+						styleId="workspaceOnlyQuickFilter">
+						<digi:trn>Show Only Data From This Workspace</digi:trn>
+					</html:checkbox>
+				</td>
+			</tr>
+		</c:if>
 		<tr>
 			<td><digi:trn>Type of Funding</digi:trn>:
 		 	</td>

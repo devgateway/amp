@@ -39,9 +39,15 @@
 															<td align="left" width="49%">
 																<bean:write name="exAgency" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Executing Agency Department/Division"  feature="Executing Agency">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.executingOrgToInfo(${exAgency.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+																	<digi:trn>Percentage</digi:trn> : <html:text property="agencies.executingOrgPercentage(${exAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

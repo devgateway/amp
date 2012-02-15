@@ -37,9 +37,15 @@
 															<td align="left" width="49%">
 																<bean:write name="regGroups" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Regional Group Department/Division"  feature="Regional Group">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.regOrgToInfo(${regGroups.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																<field:display name="Regional Group Percentage"  feature="Regional Group">
+																	<digi:trn>Percentage</digi:trn> : <html:text property="agencies.regOrgPercentage(${regGroups.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

@@ -37,9 +37,15 @@
 															<td align="left" width="49%" >
 																<bean:write name="impAgency" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Implementing Agency Department/Division"  feature="Implementing Agency">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.impOrgToInfo(${impAgency.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
+																	<digi:trn>Percentage</digi:trn> : <html:text property="agencies.impOrgPercentage(${impAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

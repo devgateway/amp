@@ -19,6 +19,7 @@ public class RelOrganization implements Comparable{
 	private String budgetOrgCode;
 	private Long orgId;
 	private String additionalInformation;
+	private Double percentage;
 
 	
 	public Long getOrgId() {
@@ -160,5 +161,13 @@ public class RelOrganization implements Comparable{
 			}			
 		}
 	}
-	
+
+	public Double getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(Double percentage) {
+		this.percentage = percentage;
+	}
+
 }

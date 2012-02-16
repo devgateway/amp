@@ -193,10 +193,10 @@ if(event!=null){
 				logger.debug(" updating Scheme");
 				String editId = (String) request.getParameter("editSchemeId");
 				Long Id;
-				AmpSectorScheme ampscheme = new AmpSectorScheme();
 				if(editId == null || "".equals(editId))
 					Id = new Long((String)session.getAttribute("ampSecSchemeId"));
 				else Id = new Long(editId);
+				AmpSectorScheme ampscheme = DbUtil.getAmpSectorSchemeById(Id);
 				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
 				logger.debug(" the code is ...."+ sectorsForm.getSecSchemeCode());
 				logger.debug(" this is the id......" + Id);
@@ -239,7 +239,7 @@ if(event!=null){
 				session.setAttribute("managingSchemes",null);
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
-				ampscheme.setAmpSecSchemeId(Id);
+				//ampscheme.setAmpSecSchemeId(Id);
 				ARUtil.clearDimension(SectorDimension.class);
 				DbUtil.update(ampscheme);
 				logger.debug(" updated!!");

@@ -76,6 +76,7 @@ import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -2921,6 +2922,29 @@ public class DbUtil {
 			}
         }
     }
+    
+    public static AmpSectorScheme getAmpSectorSchemeById(Long schemeId) {
+        Session session = null;
+        Query q = null;
+        AmpSectorScheme scheme = new AmpSectorScheme();
+        String queryString = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = " select sch from " + AmpSectorScheme.class.getName() + " sch where sch.ampSecSchemeId=:schemeId";
+            q = session.createQuery(queryString);
+            q.setLong("schemeId", schemeId);
+            Iterator itr = q.list().iterator();
+            if (itr.hasNext()) {
+            	scheme = (AmpSectorScheme) itr.next();
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get AmpSectorScheme  from database " + ex.getMessage());
+        }
+        return scheme;
+    }
+
     
     /**
      * general function to save/update object

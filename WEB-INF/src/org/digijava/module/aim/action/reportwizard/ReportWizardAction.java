@@ -155,6 +155,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setPublicReport(false);
 		myForm.setAllowEmptyFundingColumns(false);
 		myForm.setUseFilters(false);
+		myForm.setBudgetExporter(false);
 		
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
@@ -198,6 +199,14 @@ public class ReportWizardAction extends MultiAction {
 			myForm.setDesktopTab( true );
 		}
 		
+		if ( ! "true".equals(request.getAttribute("editedBudgetExporter")) ) {
+			String budgetExporter		= request.getParameter("budgetExporter");
+			if ( "true".equals(budgetExporter) ) 
+				myForm.setBudgetExporter(true);
+			else 
+				myForm.setBudgetExporter(false);
+		}
+		
 		if ( myForm.getDesktopTab() )
 			return mapping.findForward("showTab");
 		else
@@ -225,6 +234,14 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setPublicReport( ampReport.getPublicReport() );
 		myForm.setHideActivities( ampReport.getHideActivities() );
 		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+		
+		if ( ampReport.getBudgetExporter() != null && ampReport.getBudgetExporter() ) {
+			myForm.setBudgetExporter(true);
+			request.setAttribute("editedBudgetExporter", "true");
+		}
+		else
+			myForm.setBudgetExporter(false);
+		myForm.setAllowEmptyFundingColumns( ampReport.getBudgetExporter()==null?false:ampReport.getBudgetExporter() );
 		
 		if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("donor");
@@ -304,6 +321,11 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
 		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );
+		
+		if ( myForm.getBudgetExporter() != null && myForm.getBudgetExporter() )
+			ampReport.setBudgetExporter(true);
+		else
+			ampReport.setBudgetExporter(false);
 		
 		if ( myForm.getReportId() != null ) {
 				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )

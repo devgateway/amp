@@ -41,6 +41,8 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean allowEmptyFundingColumns	= false;
 	private String projecttitle= "Project Title";
 	
+	private Boolean budgetExporter = false;
+	
 	public String getProjecttitle() {
 		return projecttitle;
 	}
@@ -193,6 +195,20 @@ public class ReportWizardForm extends ActionForm {
 
 	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
+	}
+
+	/**
+	 * @return the budgetExporter
+	 */
+	public Boolean getBudgetExporter() {
+		return budgetExporter;
+	}
+
+	/**
+	 * @param budgetExporter the budgetExporter to set
+	 */
+	public void setBudgetExporter(Boolean budgetExporter) {
+		this.budgetExporter = budgetExporter;
 	}
 	
 }

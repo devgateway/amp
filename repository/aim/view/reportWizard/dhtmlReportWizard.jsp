@@ -157,7 +157,8 @@
 		selectedHiers						= new Array();
 		selectedMeas						= new Array();
 		
-		
+		if ( "true" == "${myForm.budgetExporter}" )	
+			NormalReportManager.prototype.maxHierarchies	= 5;
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
@@ -567,10 +568,15 @@
 						<tr>
 							<td colspan="3">
 								<span id="hierarchiesMust" style="visibility: hidden;">
-								<font color="red">* 
-									<digi:trn key="rep:wizard:hint:notmorehierarchies">
-										You cannot select more than 3 hierarchies
-									</digi:trn>
+								<font color="red">*
+									<c:choose> 
+										<c:when test="${myForm.budgetExporter }">
+											<digi:trn>You cannot select more than 5 hierarchies</digi:trn>
+										</c:when>
+										<c:otherwise>
+											<digi:trn>You cannot select more than 3 hierarchies</digi:trn>
+										</c:otherwise>
+									</c:choose>
 								</font>
 								</span>
 								<br>

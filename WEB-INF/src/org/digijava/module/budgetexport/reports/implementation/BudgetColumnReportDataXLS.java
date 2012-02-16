@@ -10,11 +10,13 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.xls.ColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.TrailCellsXLS;
 
 /**
  * @author alex
@@ -85,6 +87,15 @@ public class BudgetColumnReportDataXLS extends ColumnReportDataXLS {
 	}
 	
 	@Override
-	protected void createTrailCells() {;}
+	protected void createTrailCells() {
+		ColumnReportData crd 	= (ColumnReportData) item;
+		
+		Boolean summary			= crd.getReportMetadata().getHideActivities(); 
+		if ( summary != null && summary ) {
+			ColumnReportData columnReport = (ColumnReportData) item;
+			BudgetTrailCellsXLS trails = new BudgetTrailCellsXLS(this, columnReport);
+			trails.generate();
+		}
+	}
 
 }

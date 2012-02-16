@@ -99,8 +99,8 @@ public class BudgetTrailCellsXLS extends TrailCellsXLS {
 				HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());
 				cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell2.setCellValue("");
+				colId.inc();
 			}
-			colId.inc();
 		
 		}
 		

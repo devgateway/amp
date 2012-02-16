@@ -1641,146 +1641,149 @@ public class SaveActivity extends Action {
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
-			//Do the checks here
-			if(FeaturesUtil.isVisibleField("Beneficiary Agency Percentage", ampContext)){
-				if (eaForm.getAgencies().getBenOrgPercentage()!= null && eaForm.getAgencies().getBenOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getBenOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("BenOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.BenOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter beneficiary agency  percentage",locale,siteId)));
-							break;
+			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
+				//Do the checks here
+				if(FeaturesUtil.isVisibleField("Beneficiary Agency Percentage", ampContext)){
+					if (eaForm.getAgencies().getBenOrgPercentage()!= null && eaForm.getAgencies().getBenOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getBenOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("BenOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.BenOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter beneficiary agency  percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
 						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
+						if (totalPercentage != 100)
+							errors.add("BenOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.benOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Beneficiary Agency percentages must be 100",locale,siteId)));
 					}
-					if (totalPercentage != 100)
-						errors.add("BenOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.benOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Beneficiary Agency percentages must be 100",locale,siteId)));
+				}
+				
+				if(FeaturesUtil.isVisibleField("Implementing Agency Percentage", ampContext)){
+					if (eaForm.getAgencies().getImpOrgPercentage()!= null && eaForm.getAgencies().getImpOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getImpOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("impOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.impOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Implementing Agency percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("implOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.implOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Implementing Agency percentages must be 100",locale,siteId)));
+					}
+				}
+				
+				if(FeaturesUtil.isVisibleField("Contracting Agency Percentage", ampContext)){
+					if (eaForm.getAgencies().getConOrgPercentage()!= null && eaForm.getAgencies().getConOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getConOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("contOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.contOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Contracting Agency percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("contOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.contOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Contracting Agency percentages must be 100",locale,siteId)));
+					}
+				}
+				
+				if(FeaturesUtil.isVisibleField("Executing Agency Percentage", ampContext)){
+					if (eaForm.getAgencies().getExecutingOrgPercentage()!= null && eaForm.getAgencies().getExecutingOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getExecutingOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("execOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.execOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Executing Agency percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("execOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.execOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Executing Agency percentages must be 100",locale,siteId)));
+					}
+				}
+				
+				if(FeaturesUtil.isVisibleField("Regional Group Percentage", ampContext)){
+					if (eaForm.getAgencies().getRegOrgPercentage()!= null && eaForm.getAgencies().getRegOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getRegOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("regOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.regOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Regional Group percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("regOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.regOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Regional Group Percentages must be 100",locale,siteId)));
+					}
+				}
+				
+				if(FeaturesUtil.isVisibleField("Responsible Organization Percentage", ampContext)){
+					if (eaForm.getAgencies().getRespOrgPercentage()!= null && eaForm.getAgencies().getRespOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getRespOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("resOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.resOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Responsible Organization percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("resOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.resOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Responsible Organization Percentages must be 100",locale,siteId)));
+					}
+				}
+				
+				if(FeaturesUtil.isVisibleField("Sector Group Percentage", ampContext)){
+					if (eaForm.getAgencies().getSectOrgPercentage()!= null && eaForm.getAgencies().getSectOrgPercentage().size() > 0) {
+						Iterator<String> ppIt = eaForm.getAgencies().getSectOrgPercentage().values().iterator();
+						Double totalPercentage = 0d;
+						while (ppIt.hasNext()) {
+							String percent = ppIt.next() ;
+							if (null == percent|| "".equals(percent)) {
+								errors.add("sectOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.sectOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Sector Group percentage",locale,siteId)));
+								break;
+							}
+							
+							Double percentage = new Double(percent);
+							totalPercentage += percentage;
+						}
+						if (totalPercentage != 100)
+							errors.add("sectOrgPercentageSumWrong",
+									new ActionMessage("error.aim.addActivity.sectOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Sector Group Percentages must be 100",locale,siteId)));
+					}
 				}
 			}
 			
-			if(FeaturesUtil.isVisibleField("Implementing Agency Percentage", ampContext)){
-				if (eaForm.getAgencies().getImpOrgPercentage()!= null && eaForm.getAgencies().getImpOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getImpOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("impOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.impOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Implementing Agency percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("implOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.implOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Implementing Agency percentages must be 100",locale,siteId)));
-				}
-			}
-			
-			if(FeaturesUtil.isVisibleField("Contracting Agency Percentage", ampContext)){
-				if (eaForm.getAgencies().getConOrgPercentage()!= null && eaForm.getAgencies().getConOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getConOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("contOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.contOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Contracting Agency percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("contOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.contOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Contracting Agency percentages must be 100",locale,siteId)));
-				}
-			}
-			
-			if(FeaturesUtil.isVisibleField("Executing Agency Percentage", ampContext)){
-				if (eaForm.getAgencies().getExecutingOrgPercentage()!= null && eaForm.getAgencies().getExecutingOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getExecutingOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("execOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.execOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Executing Agency percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("execOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.execOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Executing Agency percentages must be 100",locale,siteId)));
-				}
-			}
-			
-			if(FeaturesUtil.isVisibleField("Regional Group Percentage", ampContext)){
-				if (eaForm.getAgencies().getRegOrgPercentage()!= null && eaForm.getAgencies().getRegOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getRegOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("regOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.regOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Regional Group percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("regOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.regOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Regional Group Percentages must be 100",locale,siteId)));
-				}
-			}
-			
-			if(FeaturesUtil.isVisibleField("Responsible Organization Percentage", ampContext)){
-				if (eaForm.getAgencies().getRespOrgPercentage()!= null && eaForm.getAgencies().getRespOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getRespOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("resOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.resOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Responsible Organization percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("resOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.resOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Responsible Organization Percentages must be 100",locale,siteId)));
-				}
-			}
-			
-			if(FeaturesUtil.isVisibleField("Sector Group Percentage", ampContext)){
-				if (eaForm.getAgencies().getSectOrgPercentage()!= null && eaForm.getAgencies().getSectOrgPercentage().size() > 0) {
-					Iterator<String> ppIt = eaForm.getAgencies().getSectOrgPercentage().values().iterator();
-					Double totalPercentage = 0d;
-					while (ppIt.hasNext()) {
-						String percent = ppIt.next() ;
-						if (null == percent|| "".equals(percent)) {
-							errors.add("sectOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.sectOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Sector Group percentage",locale,siteId)));
-							break;
-						}
-						
-						Double percentage = new Double(percent);
-						totalPercentage += percentage;
-					}
-					if (totalPercentage != 100)
-						errors.add("sectOrgPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.sectOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Sector Group Percentages must be 100",locale,siteId)));
-				}
-			}
 			end:
 			if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error
@@ -1802,6 +1805,7 @@ public class SaveActivity extends Action {
 			// agencies
 			AmpRole role = DbUtil.getAmpRole(Constants.EXECUTING_AGENCY);
 			Iterator itr = eaForm.getAgencies().getExecutingAgencies().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation tmp= (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole=new AmpOrgRole();
@@ -1818,7 +1822,13 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
+					
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1826,6 +1836,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getImpAgencies() != null && eaForm.getAgencies().getImpAgencies().size()>0) { // implementing agencies
 			AmpRole role = DbUtil.getAmpRole(Constants.IMPLEMENTING_AGENCY);
 			Iterator itr = eaForm.getAgencies().getImpAgencies().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1842,7 +1853,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1850,6 +1866,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getBenAgencies() != null && eaForm.getAgencies().getBenAgencies().size()>0) { // beneficiary agencies
 			AmpRole role = DbUtil.getAmpRole(Constants.BENEFICIARY_AGENCY);
 			Iterator itr = eaForm.getAgencies().getBenAgencies().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1866,7 +1883,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1874,6 +1896,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getConAgencies() != null && eaForm.getAgencies().getConAgencies().size()>0) { // contracting agencies
 			AmpRole role = DbUtil.getAmpRole(Constants.CONTRACTING_AGENCY);
 			Iterator itr = eaForm.getAgencies().getConAgencies().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1890,7 +1913,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1898,6 +1926,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getRegGroups() != null && eaForm.getAgencies().getRegGroups().size()>0) { // regional groups
 			AmpRole role = DbUtil.getAmpRole(Constants.REGIONAL_GROUP);
 			Iterator itr = eaForm.getAgencies().getRegGroups().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1914,7 +1943,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1922,6 +1956,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getSectGroups() != null && eaForm.getAgencies().getSectGroups().size()>0) { // sector groups
 			AmpRole role = DbUtil.getAmpRole(Constants.SECTOR_GROUP);
 			Iterator itr = eaForm.getAgencies().getSectGroups().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1938,7 +1973,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1947,6 +1987,7 @@ public class SaveActivity extends Action {
 			// Organization
 			AmpRole role = DbUtil.getAmpRole(Constants.REPORTING_AGENCY);
 			Iterator itr = eaForm.getAgencies().getReportingOrgs().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1963,7 +2004,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}
@@ -1971,6 +2017,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getAgencies().getRespOrganisations() != null && eaForm.getAgencies().getRespOrganisations().size()>0) { // Responsible Organisation
 			AmpRole role = DbUtil.getAmpRole(Constants.RESPONSIBLE_ORGANISATION);
 			Iterator itr = eaForm.getAgencies().getRespOrganisations().iterator();
+			boolean assignWholePercentage = true;
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -1987,7 +2034,12 @@ public class SaveActivity extends Action {
 				if(percentage != null && percentage.length() > 0){
 					ampOrgRole.setPercentage(new Double(percentage));
 				}else{
-					ampOrgRole.setPercentage(100d);
+					if(assignWholePercentage){
+						assignWholePercentage=false;
+						ampOrgRole.setPercentage(100d);
+					}else{
+						ampOrgRole.setPercentage(0d);
+					}
 				}
 				orgRole.add(ampOrgRole);
 			}

@@ -4133,34 +4133,45 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long selConAgencies[];
 		private Collection<AmpOrganisation> conAgencies;
 		private HashMap<String, String> conOrgToInfo;
+        private HashMap<String, String> conOrgPercentage;
+
 
 		private Collection<AmpOrganisation> executingAgencies;
 		private Long selExAgencies[];
 		private HashMap<String, String> executingOrgToInfo;
+        private HashMap<String, String> executingOrgPercentage;
+
 
 		private Collection<AmpOrganisation> impAgencies;
 		private Long selImpAgencies[];
 		private HashMap<String, String> impOrgToInfo;
+        private HashMap<String, String> impOrgPercentage;
 
 		private Collection<AmpOrganisation> regGroups;
 		private Long selRegGroups[];
 		private HashMap<String, String> regOrgToInfo;
+        private HashMap<String, String> regOrgPercentage;
+
 
 		private Collection<AmpOrganisation> reportingOrgs;
 		private Long selReportingOrgs[];
 		private HashMap<String, String> repOrgToInfo;
+        private HashMap<String, String> repOrgPercentage;
 
 		private Collection<AmpOrganisation> sectGroups;
 		private Long selSectGroups[];
 		private HashMap<String, String> sectOrgToInfo;
+        private HashMap<String, String> sectOrgPercentage;
 
 		private Collection<AmpOrganisation> benAgencies;
 		private Long selBenAgencies[];
 		private HashMap<String, String> benOrgToInfo;
+        private HashMap<String, String> benOrgPercentage;
 
 		private Collection<AmpOrganisation> respOrganisations;
 		private Long selRespOrganisations[];
 		private HashMap<String, String> respOrgToInfo;
+        private HashMap<String, String> respOrgPercentage;
 
 		private int item;
 
@@ -4362,6 +4373,71 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setRespOrgToInfo(HashMap<String, String> respOrgToInfo) {
 			this.respOrgToInfo = respOrgToInfo;
+		}
+
+		public HashMap<String, String> getConOrgPercentage() {
+			return conOrgPercentage;
+		}
+
+		public void setConOrgPercentage(HashMap<String, String> conOrgPercentage) {
+			this.conOrgPercentage = conOrgPercentage;
+		}
+
+		public HashMap<String, String> getExecutingOrgPercentage() {
+			return executingOrgPercentage;
+		}
+
+		public void setExecutingOrgPercentage(
+				HashMap<String, String> executingOrgPercentage) {
+			this.executingOrgPercentage = executingOrgPercentage;
+		}
+
+		public HashMap<String, String> getImpOrgPercentage() {
+			return impOrgPercentage;
+		}
+
+		public void setImpOrgPercentage(HashMap<String, String> impOrgPercentage) {
+			this.impOrgPercentage = impOrgPercentage;
+		}
+
+		public HashMap<String, String> getRegOrgPercentage() {
+			return regOrgPercentage;
+		}
+
+		public void setRegOrgPercentage(HashMap<String, String> regOrgPercentage) {
+			this.regOrgPercentage = regOrgPercentage;
+		}
+
+		public HashMap<String, String> getRepOrgPercentage() {
+			return repOrgPercentage;
+		}
+
+		public void setRepOrgPercentage(HashMap<String, String> repOrgPercentage) {
+			this.repOrgPercentage = repOrgPercentage;
+		}
+
+		public HashMap<String, String> getSectOrgPercentage() {
+			return sectOrgPercentage;
+		}
+
+		public void setSectOrgPercentage(HashMap<String, String> sectOrgPercentage) {
+			this.sectOrgPercentage = sectOrgPercentage;
+		}
+
+		public HashMap<String, String> getBenOrgPercentage() {
+			return benOrgPercentage;
+		}
+
+		public void setBenOrgPercentage(HashMap<String, String> benOrgPercentage) {
+			this.benOrgPercentage = benOrgPercentage;
+		}
+
+		public HashMap<String, String> getRespOrgPercentage() {
+			return respOrgPercentage;
+		}
+
+		public void setRespOrgPercentage(HashMap<String, String> respOrgPercentage) {
+			this.respOrgPercentage = respOrgPercentage;
 		}
 
 		

@@ -1855,6 +1855,11 @@ function collapseAll() {
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}"/>)</b>										
 										</logic:notEmpty>
+										 <field:display name="Responsible Organization Percentage"  feature="Responsible Organization">
+ 	 	 	 		                         <logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
+												<c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
+ 	 	 	 								</logic:notEmpty> 
+ 	 	 	 							</field:display>
 									</li>
 								</ul>
 							</logic:iterate>						</td>
@@ -1883,6 +1888,11 @@ function collapseAll() {
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})">
 										<b>(<c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}"/>)</b>									
 									</logic:notEmpty>
+									<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 								</li>
 							</ul>
 						</logic:iterate>					
@@ -1912,6 +1922,11 @@ function collapseAll() {
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}"/>)</b>										
 										</logic:notEmpty>
+										<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 									</li>
 								</ul>
 							 </logic:iterate>						
@@ -1940,7 +1955,12 @@ function collapseAll() {
 										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}"/>)</b>
-										</logic:notEmpty><
+										</logic:notEmpty>
+										<field:display name="Beneficiary Agency  Percentage"  feature="Beneficiary Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty> 
+																		</field:display>
 									</li>
 								</ul>
 							</logic:iterate>						
@@ -1970,6 +1990,11 @@ function collapseAll() {
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}"/> )</b>										
 										</logic:notEmpty>
+										<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 									</li>
 								</ul>
 							</logic:iterate>						
@@ -2000,6 +2025,11 @@ function collapseAll() {
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})">
 										<b>(<c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}"/> )</b>									
 									</logic:notEmpty>
+									<field:display name="Sector Group Percentage"  feature="Sector Group">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 								</li>
 							</ul>
 						</logic:iterate></td>
@@ -2027,6 +2057,11 @@ function collapseAll() {
 												<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})" name="aimEditActivityForm">
 													<b>(<c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}"/>)</b>												
 												</logic:notEmpty>
+												<field:display name="Regional Group Percentage"  feature="Regional Group">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
+																	  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
+																	</logic:notEmpty> 
+																</field:display>
 											</li>
 										</ul>
 									</logic:iterate>								</td>

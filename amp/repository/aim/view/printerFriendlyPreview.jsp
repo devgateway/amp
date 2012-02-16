@@ -1835,17 +1835,30 @@ body {background:none;}
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
-													id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> 
-																<bean:write name="respOrg" property="name" />
-																<c:set var="tempOrgId" scope="page">${respOrg.ampOrgId}</c:set>
-																<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
-																	<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
-																	(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
-																	</logic:notEmpty>
-																</field:display>
-															</li></ul>
+													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"	id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="respOrg" property="name" />
+																			<c:set var="tempOrgId" scope="page">${respOrg.ampOrgId}</c:set>
+																			<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
+																				<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
+																				(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
+																				</logic:notEmpty>
+																			</field:display>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Responsible Organization Percentage"  feature="Responsible Organization">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty> 
+																		</field:display>	
+																	</td>
+																</tr>
+															</table>
+															
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1858,17 +1871,29 @@ body {background:none;}
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies"
-													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> 
-																<bean:write name="execAgencies" property="name" />
+													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies" id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="execAgencies" property="name" />
 																<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
 																<field:display name="Executing Agency Additional Info"  feature="Executing Agency">
 																	<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})" >
 																	(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
 																	</logic:notEmpty> 
 																</field:display>
-															</li></ul>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																</field:display>	
+																	</td>
+																</tr>
+															</table>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1883,15 +1908,30 @@ body {background:none;}
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
 													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> 
-																	<bean:write name="impAgencies" property="name" />
+														<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="impAgencies" property="name" />
 																	<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
 																	<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
 																		(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
 																		</logic:notEmpty> 
 																	</field:display>
-															</li></ul>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
+																	
+																	</td>
+																</tr>
+															</table>
+													
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1906,15 +1946,29 @@ body {background:none;}
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																<ul><li> 
-																		<bean:write name="benAgency" property="name" />
+															<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="benAgency" property="name" />
 																		<c:set var="tempOrgId">${benAgency.ampOrgId}</c:set>
 																		<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})" >
 																			(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> ) 
 																			</logic:notEmpty>
 																		</field:display>
-																</li></ul>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Beneficiary Agency  Percentage"  feature="Beneficiary Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty> 
+																		</field:display>
+																	
+																	</td>
+																</tr>
+															</table>
 														</logic:iterate>
 														</td></tr>
 													</table>
@@ -1928,15 +1982,29 @@ body {background:none;}
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> 
-																<bean:write name="conAgencies" property="name" />
+														<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="conAgencies" property="name" />
 																<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
 																	<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
 																		(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
 																		</logic:notEmpty> 
 																	</field:display>
-														</li></ul>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
+																	
+																	</td>
+																</tr>
+															</table>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1953,15 +2021,28 @@ body {background:none;}
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
 														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> 
-																	<bean:write name="sectGroup" property="name" />
-																	<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
-																	<field:display name="Sector Group Additional Info"  feature="Sector Group">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
-																		(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> ) 
-																		</logic:notEmpty>
-																	</field:display>
-															</li></ul>
+															<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="sectGroup" property="name" />
+																			<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
+																			<field:display name="Sector Group Additional Info"  feature="Sector Group">
+																				<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
+																				(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> ) 
+																				</logic:notEmpty>
+																			</field:display>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Sector Group Percentage"  feature="Sector Group">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty> 
+																		</field:display>																	
+																	</td>
+																</tr>
+															</table>
 														</logic:iterate>
 														</td></tr>
 													</table>											
@@ -1976,15 +2057,28 @@ body {background:none;}
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> 
-																<bean:write name="regGroup" property="name" />
+														<table width="100%">
+																<tr>
+																	<td width="85%">
+																		<ul><li>  
+																			<bean:write name="regGroup" property="name" />
 																<c:set var="tempOrgId">${regGroup.ampOrgId}</c:set>
 																<field:display name="Regional Group Additional Info"  feature="Regional Group">
 																	<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
 																		(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
 																	</logic:notEmpty> 
 																</field:display>
-														</li></ul>
+																			</li></ul>
+																	</td>
+																	<td width="15%" align="right">
+																		<field:display name="Regional Group Percentage"  feature="Regional Group">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
+																	  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
+																	</logic:notEmpty> 
+																</field:display>																	
+																	</td>
+																</tr>
+															</table>
 													</logic:iterate>
 													</td></tr>
 												</table>

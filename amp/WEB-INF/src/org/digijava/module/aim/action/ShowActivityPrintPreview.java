@@ -852,6 +852,16 @@ public class ShowActivityPrintPreview
                 eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
                 eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
                 eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
+                
+                eaForm.getAgencies().setExecutingOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setImpOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setBenOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setConOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setRepOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setSectOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setRegOrgPercentage(new HashMap<String, String>());
+ 	 	 	 	eaForm.getAgencies().setRespOrgPercentage(new HashMap<String, String>());
+
 
                 Collection relOrgs = ActivityUtil.getOrgRole(activity.getAmpActivityId());
                 if (relOrgs != null) {
@@ -869,6 +879,9 @@ public class ShowActivityPrintPreview
                     	executingAgencies.add(organisation);
                     	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                    		  	eaForm.getAgencies().getExecutingOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	 if(orgRole.getPercentage() != null ){
+                      		  eaForm.getAgencies().getExecutingOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                      	  	}
                     }
                     else if (role.getRoleCode().equals(
                         Constants.IMPLEMENTING_AGENCY)
@@ -876,6 +889,9 @@ public class ShowActivityPrintPreview
                     	impAgencies.add(organisation);
                     	   if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                            	eaForm.getAgencies().getImpOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	   if(orgRole.getPercentage() != null ){
+                        		  eaForm.getAgencies().getImpOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                        	  }
                     }
                     else if (role.getRoleCode().equals(
                         Constants.BENEFICIARY_AGENCY)
@@ -883,6 +899,9 @@ public class ShowActivityPrintPreview
                       benAgencies.add(organisation);
                       if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                   		  eaForm.getAgencies().getBenOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                      if(orgRole.getPercentage() != null ){
+                  		  eaForm.getAgencies().getBenOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                  	  }
                     }
                     else if (role.getRoleCode().equals(
                         Constants.CONTRACTING_AGENCY)
@@ -890,6 +909,9 @@ public class ShowActivityPrintPreview
                     	conAgencies.add(organisation);
                     	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                      		  eaForm.getAgencies().getConOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	 if(orgRole.getPercentage() != null ){
+                    		  eaForm.getAgencies().getConOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                    	  }
                     }
                     else if (role.getRoleCode().equals(
                         Constants.REPORTING_AGENCY)
@@ -897,6 +919,9 @@ public class ShowActivityPrintPreview
                     	reportingOrgs.add(organisation);
                     	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                      		  eaForm.getAgencies().getRepOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	 if(orgRole.getPercentage() != null ){
+                    		  eaForm.getAgencies().getRepOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                    	  }
                     } 
                     else if (role.getRoleCode().equals(
                             Constants.RESPONSIBLE_ORGANISATION)
@@ -904,6 +929,9 @@ public class ShowActivityPrintPreview
                         	respOrganisations.add(organisation);
                         	if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                       		  eaForm.getAgencies().getRespOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                        	if(orgRole.getPercentage() != null ){
+                        		  eaForm.getAgencies().getRespOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                        	  	}
                      } 
                     else if (role.getRoleCode().equals(
                             Constants.SECTOR_GROUP)
@@ -911,6 +939,9 @@ public class ShowActivityPrintPreview
                     	sectGroups.add(DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId()));
                     	 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                     		  eaForm.getAgencies().getSectOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                    	 if(orgRole.getPercentage() != null ){
+                   		  eaForm.getAgencies().getSectOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                   	 } 
                     	 
                    } else if (role.getRoleCode().equals(
                            Constants.REGIONAL_GROUP)
@@ -918,6 +949,9 @@ public class ShowActivityPrintPreview
                 	   regGroups.add(organisation);
                 	   if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                  		  eaForm.getAgencies().getRegOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
+                	   if(orgRole.getPercentage() != null ){
+                  		  eaForm.getAgencies().getRegOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                  	  }
                   }
 
                   }

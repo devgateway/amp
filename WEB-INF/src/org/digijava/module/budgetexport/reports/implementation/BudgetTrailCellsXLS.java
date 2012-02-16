@@ -93,7 +93,7 @@ public class BudgetTrailCellsXLS extends TrailCellsXLS {
 		//the first column will be under the hierarchy cell
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			if (element!=null && this.isTotalCostCell(element) ){
+			if (element!=null && !this.isTotalCostCell(element) ){
 				element.invokeExporter(this);
 			}else if (!metadata.getHideActivities()){
 				HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());

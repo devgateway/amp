@@ -2907,7 +2907,6 @@ function collapseAll() {
 	
 	$("#mapPreviewThumbnail").click(function (obj) {
 		$("#zoomMapContainer").css("left", obj.pageX - 250 + "px").css("top", obj.pageY - 250 + "px").css("display", "block");
-		console.log (obj);
 	});
 	
 	

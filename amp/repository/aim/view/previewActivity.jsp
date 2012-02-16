@@ -1019,14 +1019,14 @@ function collapseAll() {
 						</logic:notEmpty>
 						
 						<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-							<a href="javascript:showZoomedMap(true)">
+							<div id="mapPreviewThumbnail" style="cursor:pointer;">
 								<c:if test="${aimEditActivityForm.location.levelIdx==1}">
 									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 								</c:if>
 								<c:if test="${aimEditActivityForm.location.levelIdx>1}">
 									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=3&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 								</c:if>
-							</a>
+							</div>
 							<div id="zoomMapContainer" style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;" z-index="9999">
 								<a href="javascript:showZoomedMap(false)">
 									<c:if test="${aimEditActivityForm.location.levelIdx==1}">
@@ -2903,5 +2903,13 @@ function collapseAll() {
 		success:responseSuccess, 
 		failure:responseFailure 
 	}; 
+	
+	
+	$("#mapPreviewThumbnail").click(function (obj) {
+		$("#zoomMapContainer").css("left", obj.pageX - 250 + "px").css("top", obj.pageY - 250 + "px").css("display", "block");
+		console.log (obj);
+	});
+	
+	
 	
 </script>

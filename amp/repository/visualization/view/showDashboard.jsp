@@ -293,13 +293,19 @@ function initializeGlobalVariables(){
 														styleId="workspace_only">
 														<digi:trn>Show Only Data From This Workspace</digi:trn>
 													</html:checkbox>
-													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+													<c:set var="translation">
+														<digi:trn>Dashboards will show only data from activities of current workspace.</digi:trn>
+													</c:set>
+													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
 													<br />
 												</c:if>
 												<hr />
 												<br />
 												<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn>
-												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<c:set var="translation">
+													<digi:trn>What data will show the ODA Historical Trend graph.</digi:trn>
+												</c:set>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/><br />
 												<html:checkbox property="filter.commitmentsVisible"
 													styleId="commitments_visible">
 													<digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
@@ -324,7 +330,10 @@ function initializeGlobalVariables(){
 												<hr />
 												<br />
 												<digi:trn>What data should the dashboard show?</digi:trn>
-												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+												<c:set var="translation">
+													<digi:trn>What type of funding the dashboard should use.</digi:trn>
+												</c:set>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/><br />
 												<html:radio property="filter.transactionTypeFilter"
 													styleId="transaction_type_0" value="0">
 													<digi:trn>Commitments</digi:trn>
@@ -833,7 +842,10 @@ function initializeGlobalVariables(){
 	<legend><span class=legend_label><digi:trn>Quick Filter</digi:trn></span></legend>
 <!--	<html:checkbox property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox>-->
 	<hr />
-	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="<digi:trn>Show all charts in grayscale</digi:trn>" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+	<c:set var="translation">
+		<digi:trn>Show all charts in grayscale for print purposes</digi:trn>
+	</c:set>
+	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="${translation}" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%">
 		<c:if test="${!visualizationform.filter.fromPublicView}">

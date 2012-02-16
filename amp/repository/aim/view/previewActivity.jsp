@@ -1094,7 +1094,7 @@ function collapseAll() {
 		<span class=legend_label id="nationalplanlink" style="cursor: pointer;">
 			<digi:trn>National Plan</digi:trn></span>	
 		</legend>
-	<div id="programdiv">
+	<div id="nationalplandiv">
 		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
@@ -2783,7 +2783,7 @@ function collapseAll() {
 		  });
 	});
 	$("#nationalplanlink").click(function() {
-		  $("div#nationalplan").toggle('slow', function() {
+		  $("div#nationalplandiv").toggle('slow', function() {
 		  });
 	});
 	$("#regionalfundinglink").click(function() {
@@ -2832,25 +2832,31 @@ function collapseAll() {
 		  });
 	});
 	$("#collapseall").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv").toggle('slow');
-			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
+		var showOrHide;  
+		  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		showOrHide=false;
 		  	  }else{
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		showOrHide=true;
 		  	  }
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	
 	$("#collapseall_1").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv").toggle('slow');
+		var showOrHide;  
 			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		showOrHide=false;
 		  	  }else{
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		showOrHide=true;
 		  	  }
+			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	
 	//Change map URLs to popin

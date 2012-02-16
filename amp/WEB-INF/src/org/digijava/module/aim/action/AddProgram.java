@@ -296,7 +296,7 @@ public class AddProgram
 				program.setProgramPercentage(100f);
 				return;
 			} else {
-				if (program.getProgramPercentage()==100f){
+				if (program.getProgramPercentage()== null || program.getProgramPercentage()==100f){
 					program.setProgramPercentage(0f);
 					return;
 				} 

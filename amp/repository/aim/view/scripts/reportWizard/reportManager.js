@@ -1,6 +1,9 @@
 function NormalReportManager () {
 	;
 }
+
+NormalReportManager.prototype.maxHierarchies	= 3;
+
 NormalReportManager.prototype.enableTab		= function (tabIndex) {
 	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps ) {
 		var tab			= YAHOO.amp.reportwizard.tabView.getTab(tabIndex);
@@ -130,7 +133,7 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 		this.enableTab(3);
 	}
 	
-	if ( items.length > 3 ) {
+	if ( items.length > this.maxHierarchies ) {
 		hierarchiesMustEl					= document.getElementById("hierarchiesMust");
 		hierarchiesMustEl.style.visibility	= "";
 		this.disableTab(3);

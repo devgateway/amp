@@ -47,11 +47,16 @@ public class BudgetGroupReportDataXLS extends GroupReportDataXLS {
 	
 	@Override
 	protected void showHeadings () {
-		super.showHeadings();
+		GroupReportData grd = (GroupReportData) item;
+		//show Headings:		
+		BudgetReportHeadingsXLS headings=new BudgetReportHeadingsXLS(this,grd.getFirstColumnReport());
+		headings.setAutoSize(this.isAutoSize());
+		headings.generate();
 	}
 	
 	@Override
 	protected void createTrailCellsCase1 () {
+		
 	}
 	
 	@Override

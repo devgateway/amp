@@ -34,7 +34,7 @@
 								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=edit&id=<bean:write name="project" property="id"/>"><digi:trn>Edit</digi:trn></a>&nbsp;]
 							</td class="budget-table">
 							<td class="budget-table">
-								[&nbsp;<a href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>"><digi:trn>Delete</digi:trn></a>&nbsp;]
+								[&nbsp;<a class="delete_confirm" href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>"><digi:trn>Delete</digi:trn></a>&nbsp;]
 							</td>
 							<td class="budget-table">
 								[&nbsp;<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>"><digi:trn>Mapping Rules</digi:trn></a>&nbsp;]
@@ -107,3 +107,12 @@
         <div style="clear:both;"></div>
         </digi:form>
         </div>
+
+<script language="javascript">
+	$('.delete_confirm').click(function (obj) {
+		if (!confirm ("Are you shure you want to delete budget export project ?")) {
+			obj.preventDefault();
+		}
+	});
+</script>
+	

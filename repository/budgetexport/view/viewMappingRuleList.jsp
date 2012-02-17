@@ -39,7 +39,7 @@
 								[&nbsp;<a href="/budgetexport/addEditDeleteMapRule.do?action=edit&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>"><digi:trn>Edit</digi:trn></a>&nbsp;]
 							</td>
 							<td nowrap class="budget-table">
-								[&nbsp;<a href="/budgetexport/addEditDeleteMapRule.do?action=delete&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>"><digi:trn>Delete</digi:trn></a>&nbsp;]
+								[&nbsp;<a class="delete_confirm" href="/budgetexport/addEditDeleteMapRule.do?action=delete&id=<bean:write name="rule" property="id"/>&curProjectId=<bean:write name="beMapingForm" property="id"/>"><digi:trn>Delete</digi:trn></a>&nbsp;]
 							</td>
 							<td nowrap class="budget-table">
 								[&nbsp;<a href="/budgetexport/mapActions.do?action=view&ruleId=<bean:write name="rule" property="id"/>&projectId=<bean:write name="beMapingForm" property="id"/>"><digi:trn>Manage map</digi:trn></a>&nbsp;]
@@ -123,3 +123,11 @@
      <div style="clear:both;"></div>
      </digi:form>
         </div>
+
+<script language="javascript">
+	$('.delete_confirm').click(function (obj) {
+		if (!confirm ("Are you shure you want to delete budget export mapping ?")) {
+			obj.preventDefault();
+		}
+	});
+</script>

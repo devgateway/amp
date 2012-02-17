@@ -490,9 +490,12 @@ function collapseAll() {
 			
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;<br />
-				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b><hr />
+				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b>
+				<hr />
+				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
 				<b>${aimEditActivityForm.identification.statusReason}</b>
 				<hr />
+				</c:if>
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
@@ -500,8 +503,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
 					<b><c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
 					<digi:edit key="${objKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
@@ -513,7 +516,7 @@ function collapseAll() {
 									 
 										<digi:trn>Objective Assumption</digi:trn>:&nbsp;<br />								
 										<b><bean:write name="comment" property="comment" />
-</b>									<hr>
+</b>									<hr/>
 								</logic:iterate>
 							</logic:equal>
 							<logic:equal name="comments" property="key" value="Objective Verification">
@@ -533,10 +536,11 @@ function collapseAll() {
 										 
 											<digi:trn>Objective Objectively Verifiable Indicators</digi:trn>:&nbsp;	<br />									
 											<b><bean:write name="comment" property="comment"/></b>
+											<hr />
 									</logic:iterate>
 								</logic:equal>
 							</module:display>
-						</logic:iterate><hr />
+						</logic:iterate>
 					</logic:present>
 			</module:display>
 			
@@ -545,8 +549,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.description!=null}">
 					<b><c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
 					<digi:edit key="${descKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
@@ -554,8 +558,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.projectComments!=null}">
 					<b><c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
 					<digi:edit key="${projcomKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 					
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -572,8 +576,8 @@ function collapseAll() {
 						<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
 					</bean:define>
 					<b><digi:edit key="${lessonsLearnedKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 					
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
@@ -704,8 +708,8 @@ function collapseAll() {
 				<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>:&nbsp;<br />
 					<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/></b>
-						<hr />
 					</c:if> 
+					<hr />
 			</module:display>
 			
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -714,16 +718,16 @@ function collapseAll() {
 				<digi:trn>Project Implementing Unit</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/></b>
-					<hr>
 				</c:if> 
+				<hr/>
 			</field:display>
 					 
 			<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 				<digi:trn>A.C. Chapter</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 					 
 			<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
@@ -735,41 +739,41 @@ function collapseAll() {
 				<digi:trn>Procurement System</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 								
 			<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
 				<digi:trn>Reporting System</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/></b>
-					<hr />
 				</c:if> 
+				<hr />
 			</module:display>
 								
 			<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
 				<digi:trn>Audit System</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/></b>
-					<hr />	
 				</c:if> 
+				<hr />	
 			</module:display>
 				
 			<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
 				<digi:trn>Institutions</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/></b>
-					<hr />
 				</c:if>
+				<hr />
 			</module:display>
 							
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<field:display name="Project Category" feature="Identification">
 				<digi:trn>Project Category</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>
-					<hr />	
+					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>	
 				</c:if>
+				<hr />
 			</field:display>
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -870,7 +874,6 @@ function collapseAll() {
 	<!-- INDETIFICATION SECTION 2 -->
 	<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 	<field:display feature="Identification" name="Organizations and Project ID">
-		<hr>
 		<digi:trn>Organizations and Project IDs</digi:trn>:&nbsp;<br />
 		<c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
 			<table cellSpacing=2 cellPadding=2 border="0">
@@ -900,7 +903,7 @@ function collapseAll() {
 		<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
 			<b><digi:trn key="aim:yes">Yes</digi:trn></b>
 		</c:if>
-		
+		<hr/>
 	</module:display>
 	<!-- END INDETIFICATION SECTION 2 -->
 	</div>

@@ -102,7 +102,21 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List<AmpActivityContact> implExecutingAgencyContacts;
     
     
-    /**
+    //0 displayAddDefaultProgram = "true" & displayAddProgram = "false";
+    //1 displayAddDefaultProgram = "false" & displayAddProgram = "true";
+    //2 displayAddDefaultProgram = "true" & displayAddProgram = "true";
+	private Integer displayProgram = new Integer(0);
+	
+	
+    public Integer getDisplayProgram() {
+		return displayProgram;
+	}
+
+	public void setDisplayProgram(Integer displayProgram) {
+		this.displayProgram = displayProgram;
+	}
+
+	/**
      * This collection represents the list of surveys available in the Paris Indicator page.
      */
     private Collection<SurveyFunding> surveyFundings = null;

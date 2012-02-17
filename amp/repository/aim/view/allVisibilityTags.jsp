@@ -256,6 +256,7 @@
 <feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
 <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
 <feature:display name="NGO Form" module="Organization Manager"></feature:display>
+<feature:display name="Organization Form" module="Organization Manager"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>
@@ -1035,6 +1036,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Mandatory Indicator For Recipients" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form"></field:display>
+<field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 
 <!--  -->
 <module:display name="Visualization Dashboards"></module:display>

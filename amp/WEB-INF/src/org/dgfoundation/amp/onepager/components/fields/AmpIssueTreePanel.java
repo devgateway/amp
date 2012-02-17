@@ -138,7 +138,19 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 					target.addComponent(this.getParent());
 				}
 			};
+			
+			
 			add(addLink);
+			
+			// AMP-11750
+			String title ="";
+			if (tree.size() > level + 1){				
+				title = labelName.get(tree.get(level+ 1));
+			}
+			title = TranslatorUtil.getTranslation("Add "+  title + ":");
+			Label addTitle = new Label("addTitle", title);						
+			add(addTitle);
+			
 		}
 		else{
 			WebMarkupContainer addImg = new WebMarkupContainer("add");
@@ -149,6 +161,12 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 			wmc.add(new WebMarkupContainer("issue"));
 			wmc.setVisible(false);
 			add(wmc);
+			
+			WebMarkupContainer addTitle = new WebMarkupContainer("addTitle");			
+			addTitle.setVisible(false);
+			add(addTitle);
 		}
+		
+
 	}
 }

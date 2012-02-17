@@ -519,10 +519,14 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
-            StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from " 
-            		+ AmpActivity.class.getName() 
-            		+ " aa where aa.team in (select at.ampTeamId from " 
-            		+ AmpTeam.class.getName() + " at where at.parentTeamId is null and at.type='Management')");
+            StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from ");
+            publicwhere.append(AmpActivity.class.getName());
+            publicwhere.append(" aa where aa.team in (select at.ampTeamId from ");
+            publicwhere.append(AmpTeam.class.getName());
+            publicwhere.append(" at where (at.parentTeamId is null and at.accessType='Management') ");
+            publicwhere.append(" or (at.parentTeamId.parentTeamId is null and at.parentTeamId.accessType='Management'))");
+
+
             
             if (sectorId > -1) {
             	StringBuffer whereCaluse = getLongIdsWhereclause(subSectorIds);

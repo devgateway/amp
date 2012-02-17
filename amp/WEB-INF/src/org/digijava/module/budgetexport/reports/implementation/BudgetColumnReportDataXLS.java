@@ -10,10 +10,13 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.view.xls.ColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.TrailCellsXLS;
@@ -83,7 +86,8 @@ public class BudgetColumnReportDataXLS extends ColumnReportDataXLS {
 	
 	@Override
 	protected void invokeChildExporter( Viewable element) {
-		element.invokeExporter(this, true);
+		if ( ! isTotalCostColumn(element) )
+			element.invokeExporter(this, true);
 	}
 	
 	@Override
@@ -96,6 +100,18 @@ public class BudgetColumnReportDataXLS extends ColumnReportDataXLS {
 			BudgetTrailCellsXLS trails = new BudgetTrailCellsXLS(this, columnReport);
 			trails.generate();
 		}
+	}
+	
+	private boolean isTotalCostColumn(Viewable elem) {
+		if ( elem instanceof Column ) {
+			Column column		= (Column) elem;
+			String colName		= column.getName(metadata.getHideActivities());
+			if ( ArConstants.COLUMN_TOTAL.equals(colName) ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

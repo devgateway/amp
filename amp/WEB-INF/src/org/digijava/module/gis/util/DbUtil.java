@@ -30,7 +30,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.mortbay.jetty.servlet.SessionManager;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -522,7 +522,7 @@ public class DbUtil {
             StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from " 
             		+ AmpActivity.class.getName() 
             		+ " aa where aa.team in (select at.ampTeamId from " 
-            		+ AmpTeam.class.getName() + " at where parentTeamId is not null)");
+            		+ AmpTeam.class.getName() + " at where at.parentTeamId is null and at.type='Management')");
             
             if (sectorId > -1) {
             	StringBuffer whereCaluse = getLongIdsWhereclause(subSectorIds);
@@ -531,7 +531,8 @@ public class DbUtil {
                 qs.append(" sec where sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(") and sec.activityId in (" + publicwhere);
-                qs.append(") and sec.activityId.team is not null");
+                qs.append(") and sec.activityId.team is not null and sec.activityId.draft=false and");
+                qs.append(" sec.activityId.approvalStatus='approved'");
                 qs.append(" and sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(")");

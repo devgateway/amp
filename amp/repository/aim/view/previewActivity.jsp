@@ -634,11 +634,12 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
-				<digi:trn >Purpose</digi:trn><br />
+				<digi:trn >Purpose</digi:trn>:<br />
 				<c:if test="${aimEditActivityForm.identification.purpose!=null}">
 					<b><c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
 					<digi:edit key="${objKey}"></digi:edit></b>
 				</c:if>
+				<hr/>
 				<logic:present name="aimEditActivityForm" property="coments.allComments">
 					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<hr>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
@@ -802,11 +803,13 @@ function collapseAll() {
 				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.budgetCV}"/></b>
 			</c:otherwise>
 		</c:choose>
+		<hr/>
 		<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 			<field:display name="Project Code" feature="Budget">
 				<digi:trn key="aim:actProjectCode">Project Code</digi:trn>:<br />
 				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
 			</field:display>
+			<hr/>
 		</c:if>
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:<br />
@@ -867,6 +870,7 @@ function collapseAll() {
 					</c:if>
 				</c:forEach>
 			</c:if>
+			<hr/>
 		</module:display>
 	</feature:display>
 	<!-- END BUDGET SECTION -->

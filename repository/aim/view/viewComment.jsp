@@ -13,7 +13,6 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="aimEditActivityForm" />
 <digi:context name="digiContext" property="context"/>
-<digi:form action="/viewComment.do" method="post">
 <html:hidden property="comments.actionFlag"  styleId="actionFlag"/>
 <html:hidden property="comments.ampCommentId"  styleId="ampCommentId"/>
 <html:hidden property="editAct" />
@@ -58,13 +57,13 @@
 												</td>
 											</tr>
 											<TR bgcolor="#f4f4f2">
-												<TD colspan="3" width="90%">
-													<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
+												<TD colspan="3" width="100%">
+													<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
 														<TR>
 															<TD width="100%">
-																<html:textarea name="comment" property="comment" cols="60" rows="3" readonly="true" style="border:0px"/>
+																<html:textarea name="comment" property="comment" cols="105" rows="3" readonly="true" style="border:0px"/>
 																<br>
-																[<a href="javascript:message('edit','<c:out value="${sno}" />')"><digi:trn key="aim:editComment">Edit</digi:trn></a>]
+																[<a style="color: 0x999999;" href="javascript:message('edit','<c:out value="${sno}" />')"><digi:trn key="aim:editComment">Edit</digi:trn></a>]
 																[<a href="javascript:message('delete','<c:out value="${sno}" />')"><digi:trn key="aim:deleteComment">Delete</digi:trn></a>]
 															</TD>
 														</TR>
@@ -81,7 +80,7 @@
 												<c:if test="${aimEditActivityForm.comments.actionFlag == 'create'}"><digi:trn key="aim:addCommentText">Add your comment here</digi:trn></c:if>
 												<c:if test="${aimEditActivityForm.comments.actionFlag == 'edit'}"><digi:trn key="aim:editCommentText">Edit your comment here</digi:trn></c:if>
 												<br>
-												<html:textarea name="aimEditActivityForm" property="comments.commentText" styleId="commentText" cols="60" rows="3" />
+												<html:textarea name="aimEditActivityForm" property="comments.commentText" styleId="commentText" cols="105" rows="3" />
 												<br>
 													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="javascript:mycheck()">
 													<input type="button"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu" onclick="javascript:myclear()">
@@ -97,4 +96,3 @@
 				</td>
 			</tr>
 		</table>
-</digi:form>

@@ -125,11 +125,20 @@ public final class FMUtil {
 		return false;
 	}
 
-	public static final boolean isFmVisible(Component c) {
+	public static final boolean isFmVisible(Component c) { 
+		LinkedList<FMInfo> fmInfoPath;
 		try {
-			LinkedList<FMInfo> fmInfoPath = getFmPath(c);
+			fmInfoPath = getFmPath(c);
 			String fmPathString = getFmPathString(fmInfoPath);
 			AmpFMConfigurable fmc = (AmpFMConfigurable) c;
+			return isFmVisible(fmPathString, fmc.getFMType());
+		} catch (PathException handledByIsFmEnabled) {
+		} 
+		return true;
+	}
+	
+	public static final boolean isFmVisible(String fmPathString, AmpFMTypes fmType) {
+		try {
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 
 			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -140,14 +149,14 @@ public final class FMUtil {
 			if(ampTreeVisibility!=null){
 //				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
 					//Feature is disabled on purpose we should show it
-				AmpObjectVisibility visObj = getObjVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType());
+				AmpObjectVisibility visObj = getObjVisibilityTree(ampTreeVisibility, fmPathString, fmType);
 				if(visObj == null)
 				{
 					logger.info("Not found in tree: " + fmPathString);
 					return true;
 				}
 				else{
-					return checkIsVisible(ampTreeVisibility, fmPathString, fmc.getFMType()); 
+					return checkIsVisible(ampTreeVisibility, fmPathString, fmType); 
 					//return checkIsVisible(visObj); 
 				}
 			}
@@ -155,7 +164,6 @@ public final class FMUtil {
 				//Can't find ampTreeVisibility in context, all components enabled!
 				return true;
 			}
-		} catch (PathException handledByIsFmEnabled) {
 		} catch (Exception handledByIsFmEnabled) {
 		}
 		//Error case: component disabled, but should be viewable
@@ -509,6 +517,8 @@ public final class FMUtil {
 		}
 		return null;
 	}
+	
+	
 	
 	public static LinkedList<FMInfo> getFmPath(Component c) throws PathException {
 		Component visitor = c;

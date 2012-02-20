@@ -6,15 +6,19 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
+import java.util.LinkedList;
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.FMInfo;
+import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.onepager.util.FMUtil.PathException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-
-import sun.util.logging.resources.logging;
 
 /**
  * Tab wrapper for AmpCommentPanel to be used with AjaxTabbedPanel
@@ -29,6 +33,7 @@ public class AmpCommentTab<T extends AmpFieldPanel<?>> extends AbstractTab {
 	private Class<AmpCommentPanel> panelClass;
 	private String fmName;
 	private IModel<AmpActivityVersion> activityModel;
+	private Component parent;
 
 	@Override
 	public Panel getPanel(String panelId) {
@@ -56,6 +61,24 @@ public class AmpCommentTab<T extends AmpFieldPanel<?>> extends AbstractTab {
 		this.panelClass = panelClass;
 		this.fmName = fmName;
 		this.activityModel = activityModel;
+	}
+
+	@Override
+	public boolean isVisible() {
+		if (((AmpAuthWebSession)Session.get()).isFmMode())
+			return true;
+		try {
+			LinkedList<FMInfo> path = FMUtil.getFmPath(parent);
+			path.add(new FMInfo(AmpFMTypes.MODULE, fmName));
+			String pathString = FMUtil.getFmPathString(path);
+			return FMUtil.isFmVisible(pathString, AmpFMTypes.MODULE);
+		} catch (PathException ignored) {
+		}
+		return super.isVisible();
+	}
+	
+	public void setParent(Component parent) {
+		this.parent = parent;
 	}
 	
 }

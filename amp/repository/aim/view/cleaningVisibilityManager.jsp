@@ -15,7 +15,9 @@
 	}
 
 </script>
-
+<h1 class="admintitle"><digi:trn key="aim:featureManager">
+							Feature Manager
+						</digi:trn></h1>
 <digi:instance property="aimVisibilityManagerForm" />
 
 <!--  AMP Admin Logo -->
@@ -39,9 +41,7 @@
 							Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:featureManager">
-							Feature Manager
-						</digi:trn>
+						
 					</td>
 					<!-- End navigation -->
 				</tr>

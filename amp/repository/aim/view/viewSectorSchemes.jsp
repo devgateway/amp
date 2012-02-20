@@ -25,6 +25,7 @@
      document.aimAddSectorForm.submit();
  }
 </script>
+<h1 class="admintitle">Sector manager</h1>
 <digi:instance property="aimAddSectorForm" />
 <digi:form action="/getSectorSchemes.do" method="post">
 <digi:context name="digiContext" property="context" />
@@ -73,17 +74,10 @@
 					<table width="100%" cellpadding="0" cellspacing="0" border="0">
 					<tr><td noWrap width=750 vAlign="top">
 						<table cellpadding="1" cellspacing="1" width="100%" valign="top">
-							<tr bgColor=#ffffff>
-								<td vAlign="top" width="100%" class="report">
+							<tr bgColor=#ffffff >
+								<td vAlign="top" width="100%" class="report"style="border-top:1px solid #ccc;">
 
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left class="inside">
-									<thead>
-										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" >
-											<!-- Table title -->
-											<digi:trn key="aim:schemes"><b style="font-size:12px;">Schemes</b></digi:trn>
-											<!-- end table title -->
-										</td></tr>
-										</thead>
 													<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
@@ -175,7 +169,7 @@
 					<td noWrap  vAlign="top" style="width:250px;">
 						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
-								<td>
+								<td style="border-bottom:1px solid #ccc;">
 									<!-- Other Links -->
 									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>

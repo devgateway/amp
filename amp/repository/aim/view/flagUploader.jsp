@@ -246,6 +246,7 @@ function deleteFlag(id) {
 <!-- End of Logo -->
 
 
+ <h1 class="admintitle"> <digi:trn key="aim:flagUploaderSelector"> Flag uploader/selector</digi:trn></h1>
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center" border="0">
 
@@ -289,17 +290,7 @@ function deleteFlag(id) {
 
           <td height=16 valign="center" width=571>
 
-            <span class=subtitle-blue style="font-size:12px; font-weight:bold">
-
-              <digi:trn key="aim:flagUploaderSelector">
-
-             <center> Flag uploader/selector</center>
-			<hr />
-
-              </digi:trn>
-
-            </span>
-
+           
           </td>
 
         </tr>

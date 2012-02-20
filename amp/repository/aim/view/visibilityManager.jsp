@@ -21,7 +21,12 @@
 	}
 
 </script>
-
+	<h1 class="admintitle">
+						<digi:trn key="aim:featureManager">
+							Feature Manager
+						</digi:trn>
+						</h1>
+						
 <digi:instance property="aimVisibilityManagerForm" />
 
 <!--  AMP Admin Logo -->
@@ -52,12 +57,7 @@
 				</tr>-->
 				<tr>
 					<td height=16 valign="center" width=571 colspan=2 align="center">
-						<span class=subtitle-blue>
-						<digi:trn key="aim:featureManager">
-							<b>Feature Manager</b>
-						</digi:trn>
-						</span>
-						<hr />
+					
 					</td>
 				</tr>
 				<tr>
@@ -102,13 +102,13 @@
 				
 				<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0" style="font-size:12px;">
 								<tr>
-									<td>
+									<td style="border-bottom:1px solid #ccc;">
 										<!-- Other Links -->
 										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title style="font-size:12px;">
 													<digi:trn key="aim:otherLinks">
-													<b style="padding-left:5px;">Other links</b>
+													Other links
 													</digi:trn>
 												</td>
 												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
@@ -117,10 +117,10 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#ffffff class=box-border>
+									<td bgColor=#ffffff style="border-right:1px solid #ccc;">
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
-												<td class="inside">
+												<td >
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:clickToManageTemplates">Click here to Manage the Templates </digi:trn>
@@ -132,7 +132,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td class="inside">
+												<td >
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
@@ -144,7 +144,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td class="inside">
+												<td >
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
@@ -159,7 +159,7 @@
 											
 									
 											<tr>
-												<td class="inside">
+												<td >
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>

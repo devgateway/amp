@@ -716,3 +716,4 @@ a:HOVER.hoverUnderline {text-decoration: underline;}
 #currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
 td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}
 html.ie li#yui-gen5{width:85px;padding-top:-3px;}
+h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 5px 0px;border-bottom:1px dotted #cccccc;margin:0px 0px 10px 0px;}

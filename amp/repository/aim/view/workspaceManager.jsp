@@ -353,7 +353,7 @@
             var second=false;
             <c:if test="${not empty aimWorkspaceForm.currentPage}">
             this.myDataTable.subscribe('postRenderEvent',function(oArgs){
-			if(second){
+			if(second){ 
 			    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
 			    showTeamDetails(${aimWorkspaceForm.selectedWs},null);
 			    second=false;
@@ -1037,7 +1037,7 @@
 </script> 
 
 <DIV id="TipLayer"	style="absolute;z-index:1000;"></DIV>
-
+<h1 class="admintitle">Workspace manager</h1>
 
 <digi:context name="digiContext" property="context" />
 

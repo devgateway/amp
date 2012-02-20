@@ -105,6 +105,9 @@
         }
     }
 </script>
+   <h1 class="admintitle">
+                                <digi:trn key="aim:jobManager">Job Manager</digi:trn>
+                            </h1>
 <digi:form action="/quartzJobManager.do" method="post">
     <html:hidden name="quartzJobManagerForm" property="name" styleId="hdnName" />
     <html:hidden name="quartzJobManagerForm" property="action" styleId="hdnAction" />
@@ -130,13 +133,7 @@
                         </td>
                         <!-- End navigation -->
                     </tr>
-                    <tr>
-                        <td colspan="6" style="height:53px;width:320px;">
-                            <span class="subtitle-blue">
-                                <digi:trn key="aim:jobManager">Job Manager</digi:trn>
-                            </span>
-                        </td>
-                    </tr>
+                
                     <tr>
                         <td colspan="6">
                             <digi:errors />

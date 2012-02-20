@@ -9,7 +9,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -20,9 +19,6 @@ import org.dgfoundation.amp.onepager.helper.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Basic class for AMP components. This component wraps a feature manager connectivity, receiving
@@ -40,7 +36,6 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected IndicatingAjaxLink visibleFmButton;
 	protected IndicatingAjaxLink enabledFmButton;
 	protected AjaxCheckBox cascadeFmToChildren;
-	protected Label cascadeFmToChildrenLabel;
 	
 	protected boolean ignoreFmVisibility = false;
 	protected boolean ignoreFmButtonsVisibility = false;
@@ -164,12 +159,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		
 		cascadeFmToChildren.setOutputMarkupId(true);
 		cascadeFmToChildren.setVisible(false);
+		cascadeFmToChildren.add(new AttributeModifier("title", new Model("Cascade to children")));
 		add(cascadeFmToChildren);
-		
-		cascadeFmToChildrenLabel= new Label("cascadeFmToChildrenLabel","Cascade to children");
-		cascadeFmToChildrenLabel.setVisible(false);
-		add(cascadeFmToChildrenLabel);
-		
 		
 		enabledFmButton.setOutputMarkupId(true);
 		enabledFmButton.setVisible(false);
@@ -265,14 +256,15 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		if (!ignoreFmVisibility)
 			setVisible(fmMode?true:fmVisible);
 		
-		enabledFmButton.add(new AttributeModifier("value", new Model((fmEnabled?"Disable":"Enable")+ " "+getShorterFmName())));
-		visibleFmButton.add(new AttributeModifier("value", new Model((fmVisible?"Hide":"Show")+ " "+getShorterFmName())));
+		enabledFmButton.add(new AttributeModifier("title", new Model((fmEnabled?"Disable":"Enable")+ " "+getFMName())));
+		enabledFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/images/" + (fmEnabled?"bullet_green.gif":"bullet_red.gif"))));
+		visibleFmButton.add(new AttributeModifier("title", new Model((fmVisible?"Hide":"Show")+ " "+getFMName())));
+		visibleFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/" + (fmVisible?"ok_ico.gif":"not_ok_ico.gif"))));
 		
 		if(fmMode && !ignoreFmButtonsVisibility) {
 			visibleFmButton.setVisible(true);
 			enabledFmButton.setVisible(true);
 			cascadeFmToChildren.setVisible(true);
-			cascadeFmToChildrenLabel.setVisible(true);
 			String style="border: 1px dashed #9E334D; padding: 4px;";
 			fmBorder.add(new AttributeModifier("style", true, new Model(style)));
 		}

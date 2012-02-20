@@ -1221,6 +1221,8 @@ public class ReportsFilterPicker extends MultiAction {
 		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousands());
+		arf.setAmountinmillion(filterForm.getAmountinmillions());
+		
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
@@ -1260,6 +1262,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSecondarySectors(null);
         filterForm.setSelectedTertiarySectors(null);
 		filterForm.setAmountinthousands(false);
+		filterForm.setAmountinmillions(false);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
 		if (tempSettings != null) {
@@ -1307,6 +1310,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
 		filterForm.setAmountinthousands(null);
+		filterForm.setAmountinmillions(null);
 	}
 
 	private Integer getDefaultStartYear(HttpServletRequest request) {

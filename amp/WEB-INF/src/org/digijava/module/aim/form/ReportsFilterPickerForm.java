@@ -150,7 +150,16 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
 	private Boolean amountinthousands;
+	private Boolean amountinmillions;
 	
+	public Boolean getAmountinmillions() {
+		return amountinmillions;
+	}
+
+	public void setAmountinmillions(Boolean amountsinmillions) {
+		this.amountinmillions = amountsinmillions;
+	}
+
 	private String resetFormat;
 	
 	private Boolean sourceIsReportWizard;
@@ -374,6 +383,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			if (request.getParameter("applyFormat")!=null){
 				this.customUseGrouping=false;
 				this.amountinthousands=false;
+				this.amountinmillions=false;
 			}else{
 				this.selectedDonnorAgency=null;
 				this.selectedRisks = null;

@@ -158,7 +158,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						if(translatedCellValue.compareTo("")==0)
 							cell.setCellValue(cellValue + "III");
 						else 
-							cell.setCellValue(translatedCellValue + "GGG");
+							cell.setCellValue(translatedCellValue);
 
 						if(rowsp>1) makeRowSpan(rowsp-1,true);
 						

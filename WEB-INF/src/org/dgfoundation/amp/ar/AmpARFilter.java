@@ -265,6 +265,15 @@ public class AmpARFilter extends PropertyListable {
 
 	private DecimalFormat currentFormat = null;
 	private Boolean amountinthousand;
+	private Boolean amountinmillion;
+	public final Boolean getAmountinmillion() {
+		return amountinmillion;
+	}
+
+	public final void setAmountinmillion(Boolean amountinmillion) {
+		this.amountinmillion = amountinmillion;
+	}
+
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	private String accessType=null;

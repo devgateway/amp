@@ -174,6 +174,13 @@ session.setAttribute("progressValue", counter);
 								Amounts are in thousands (000)
 							</digi:trn>
 	           			<%}%>
+	           			
+	           			<%	                	
+	                	if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	               			<digi:trn key="rep:pop:AllAmount">
+								Amounts are in millions (000 000)
+							</digi:trn>
+	           			<%}%>
 						
 						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
@@ -441,6 +448,13 @@ session.setAttribute("progressValue", counter);
 					Amounts are in thousands (000)
 				</digi:trn>
 	           	<%}%>
+				
+	           <%	                	
+	            if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	               			<digi:trn key="rep:pop:AllAmount">
+								Amounts are in millions (000 000)
+							</digi:trn>
+   			   <%}%>				
 				
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />

@@ -89,6 +89,14 @@
 		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
 		 </td>
 	  </tr>
+	  <tr>
+		<td height="18" align="right" nowrap="nowrap">
+			<digi:trn key="aim:formatPicket:Amountinmillions">Amount in millions</digi:trn> &nbsp;
+		</td>
+		<td height="18" colspan="2" nowrap="nowrap">
+		 	<html:checkbox property="amountinmillions" styleId="customAmountinMillions"  onchange ="initFormatPopup();" />
+		 </td>
+	  </tr>
 	<tr>
 			<td width="40%" height="18" align="right" nowrap="nowrap" ><digi:trn key="aim:formatPicket:Example">Example</digi:trn>
 		  &nbsp;</td>

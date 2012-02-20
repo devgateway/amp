@@ -263,7 +263,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		
 		if(fmMode && !ignoreFmButtonsVisibility) {
 			visibleFmButton.setVisible(true);
-			enabledFmButton.setVisible(true);
+			//enabledFmButton.setVisible(true);
 			cascadeFmToChildren.setVisible(true);
 			String style="border: 1px dashed #9E334D; padding: 4px;";
 			fmBorder.add(new AttributeModifier("style", true, new Model(style)));

@@ -712,10 +712,14 @@ public class GroupColumn extends Column {
 				continue;
 			}
 			if ( checkFunding && col.getItems().size() == 1 ) {
-				Column child 	= (Column) col.getItems().get(0);
-				if ( ArConstants.COLUMN_FUNDING.equals(child.name) )
-					iter.remove();
-				continue;
+				Object childObj=col.getItems().get(0);
+				if(childObj instanceof Column){
+					Column child 	= (Column) col.getItems().get(0);
+					if ( ArConstants.COLUMN_FUNDING.equals(child.name) )
+						iter.remove();
+					continue;
+				}
+				
 			}
 			if ( col.removeEmptyChildren(false) ) {
 				if (col instanceof GroupColumn)

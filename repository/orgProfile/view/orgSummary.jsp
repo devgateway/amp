@@ -227,7 +227,7 @@
                         <c:if test="${empty organization.orgUrl}">
                             <digi:trn>Not Available</digi:trn>
                         </c:if>
-                        ${organization.orgUrl}
+                        <c:out  value="${organization.orgUrl}"></c:out>                        
                     </c:when>
                     <c:otherwise>
                         <digi:trn>Not Applicable</digi:trn>
@@ -288,34 +288,34 @@
                     <c:if test="${not empty orgContact.primaryContact && orgContact.primaryContact==true}">
                         <tr>
                             <td class="tdClass" nowrap>
-                                ${orgContact.contact.lastname}
+                            	<c:out value="${orgContact.contact.lastname}"></c:out>                                
                             </td>
                             <td class="tdClass" nowrap>
-                                ${orgContact.contact.name}
+                            	<c:out value="${orgContact.contact.name}"></c:out>                                
                             </td>
                                     <td class="tdClass" nowrap>
                                         <c:forEach var="property" items="${orgContact.contact.properties}">
                                             <c:if test="${property.name=='contact email'}">
-                                                <div>${property.value}</div>
+                                                <div><c:out value="${property.value}"></c:out></div>
                                             </c:if>
                                         </c:forEach>
                                     </td>
                             <td class="tdClass">
                                         <c:forEach var="property" items="${orgContact.contact.properties}">
                                             <c:if test="${property.name=='contact phone'}">
-                                                <div>${property.value}</div>
+                                                <div><c:out value="${property.value}"></c:out></div>
                                             </c:if>
                                         </c:forEach>
                                     </td>
                                     <td class="tdClass">
                                         <c:forEach var="property" items="${orgContact.contact.properties}">
                                             <c:if test="${property.name=='contact fax'}">
-                                                <div>${property.value}</div>
+                                                <div><c:out value="${property.value}"></c:out></div>
                                             </c:if>
                                         </c:forEach>
                                     </td>
                                     <td class="tdClass">
-                                ${orgContact.contact.title}&nbsp;
+                                    <div><c:out value="${orgContact.contact.title}"></c:out></div>&nbsp;
                             </td>
                         </tr>
                     </c:if>
@@ -328,7 +328,7 @@
                 <td>
                     <c:if test="${empty organization.contactPersonName}">
                         <digi:trn>Not Available</digi:trn>
-                    </c:if>${organization.contactPersonName}&nbsp;
+                    </c:if><c:out value="${organization.contactPersonName}"></c:out>&nbsp;
                 </td>
             </tr>
             <tr>
@@ -343,7 +343,7 @@
                 <td width="30%"><digi:trn>Contact Email</digi:trn>:</td>
                 <td>
                     <c:if test="${empty organization.email}"><digi:trn>Not Available</digi:trn></c:if>
-                    ${organization.email}&nbsp;
+                    <c:out value="${organization.email}"></c:out>&nbsp;
                 </td>
             </tr>
         </table>

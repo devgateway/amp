@@ -49,6 +49,14 @@ function setprogram() {
 	document.BudgetManagerForm.submit();
 }
 
+function onDelete() {
+	<c:set var="translation">
+		<digi:trn key="aim:ConfirmDeleteSector">Delete this Sector ?</digi:trn>
+	</c:set>
+		var flag = confirm("${translation}");
+		return flag;
+	}
+
 </script>
 
 <digi:form action="/BudgetManager.do" method="post">

@@ -41,4 +41,17 @@ public class ColWorkerInsider {
 		this.encoder			= new Encoder(projectIdStr, this.viewName);
 	}
 
+
+	/**
+	 * @return the encoder
+	 */
+	public MappingEncoder getEncoder() {
+		return encoder;
+	}
+
+
+
+	
+	
+
 }

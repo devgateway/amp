@@ -24,9 +24,10 @@ import org.dgfoundation.amp.ar.view.xls.TrailCellsXLS;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.budgetexport.util.MappingEncoder;
 
 /**
- * @author alex
+ * @author Alex
  *
  */
 public class BudgetTrailCellsXLS extends TrailCellsXLS {
@@ -118,6 +119,19 @@ public class BudgetTrailCellsXLS extends TrailCellsXLS {
 			int pos = modifiedName.indexOf(':'); 
 			if (pos >= 0)
 				modifiedName = modifiedName.substring(pos + 1).trim();
+			
+			if ( rd.getSplitterCell() != null && rd.getSplitterCell().getColumn() != null 
+					&& rd.getSplitterCell().getColumn().getWorker() != null ) {
+				MappingEncoder enc		= rd.getSplitterCell().getColumn().getWorker().getEncoder();
+				if ( enc != null) { 
+					if ( enc.overwritesEverythingWithDefaultString() )
+						modifiedName	= enc.overwriterString();
+					else if	(modifiedName.toLowerCase().contains(ArConstants.UNALLOCATED.toLowerCase()) )
+						modifiedName	= enc.encode(modifiedName);
+					
+				}
+			}
+			
 			
 			list.add(0, modifiedName );
 			ex		= ex.getParent();

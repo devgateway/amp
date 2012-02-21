@@ -56,4 +56,11 @@ public class BudgetTextColWorker extends TextColWorker {
 //		this.encoder			= new Encoder(exportType, this.viewName);
 //	}
 
+	@Override
+	public MappingEncoder getEncoder () {
+		if ( insider != null )
+			return insider.getEncoder();
+		return null;
+	}
+	
 }

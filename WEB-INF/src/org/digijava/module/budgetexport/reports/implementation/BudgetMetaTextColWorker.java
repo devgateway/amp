@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
+import org.digijava.module.budgetexport.util.MappingEncoder;
 
 /**
  * @author Alex Gartner
@@ -38,6 +39,13 @@ public class BudgetMetaTextColWorker extends MetaTextColWorker {
 	@Override
 	public void setSession(HttpSession session) {
 		this.insider.setSession( session );
+	}
+	
+	@Override
+	public MappingEncoder getEncoder () {
+		if ( insider != null )
+			return insider.getEncoder();
+		return null;
 	}
 	
 }

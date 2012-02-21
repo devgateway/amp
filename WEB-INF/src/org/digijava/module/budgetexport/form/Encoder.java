@@ -18,6 +18,8 @@ public class Encoder implements MappingEncoder {
 	String viewName; //column
 	Map<String, String> mapColumn;
 	String projectIdStr;
+	
+	String overwriterString;
 
 	
 	
@@ -26,6 +28,10 @@ public class Encoder implements MappingEncoder {
 		this.viewName 		= viewName;
 		this.projectIdStr	= projectIdStr;
 		this.mapColumn 		= this.retrieveMap();
+		
+		this.overwriterString	= null;
+		if ( this.mapColumn != null )
+			this.overwriterString	= this.mapColumn.get("All");
 	}
 
 
@@ -39,9 +45,13 @@ public class Encoder implements MappingEncoder {
 		if ( originalString == null ) return null;
 		
 		if ( this.mapColumn == null ) return  originalString;
-		
 		 
 		String ret	= mapColumn.get(originalString);
+		
+		if ( ret == null && originalString.toLowerCase().contains("unallocated") )
+			ret		= mapColumn.get("None");
+				
+		
 		if ( ret == null )
 			return originalString; //.hashCode() + "";
 		
@@ -59,6 +69,24 @@ public class Encoder implements MappingEncoder {
 			e.printStackTrace();
 		}
 		return new HashMap<String, String>();
+	}
+
+
+
+	@Override
+	public boolean overwritesEverythingWithDefaultString() {
+		if ( this.overwriterString != null ) {
+			return true;
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public String overwriterString() {
+		// TODO Auto-generated method stub
+		return this.overwriterString;
 	}
 
 }

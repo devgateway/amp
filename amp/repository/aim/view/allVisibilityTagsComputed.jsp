@@ -746,6 +746,10 @@
 <feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
 <feature:display name="Public Resources" module="Content Repository"></feature:display>
+<feature:display name="Add Resources" module="Content Repository"></feature:display>
+<field:display name="Create From Template" feature="Add Resources"></field:display>
+<field:display name="Add Web Link" feature="Add Resources"></field:display>
+<field:display name="Upload Doc" feature="Add Resources"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

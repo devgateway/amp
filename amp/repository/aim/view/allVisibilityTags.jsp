@@ -109,6 +109,10 @@
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
 <feature:display name="Public Resources" module="Content Repository"></feature:display>
 <feature:display name="Shared Resources" module="Content Repository"></feature:display>
+<feature:display name="Add Resources" module="Content Repository"></feature:display>
+<field:display name="Create From Template" feature="Add Resources"></field:display>
+<field:display name="Add Web Link" feature="Add Resources"></field:display>
+<field:display name="Upload Doc" feature="Add Resources"></field:display>
 
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 

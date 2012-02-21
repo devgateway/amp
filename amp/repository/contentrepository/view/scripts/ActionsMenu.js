@@ -40,6 +40,7 @@ ActionsMenu.prototype.render=function (){
 		var ownType=this.ownerType;
 		var teamView=this.teamView;
 		// add resources link
+		if(uploadDocenalbe){
 		var addResLinkEl	= "<a  style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";
 		addResLinkEl+='<span>'+ uploadDoc +'</span>'; // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :(		
 		addResLinkEl+="</a>";		
@@ -62,8 +63,10 @@ ActionsMenu.prototype.render=function (){
 		var hr1 = document.createElement("hr");
 		hr1.height = '1px';
 		divEl.appendChild(hr1);
+		}
 		
 		//add web url link
+		if (addWebLinkenable){
 		var addUrlLinkEl	= "<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";
 		addUrlLinkEl+='<span>'+ addWebLink +'</span>';
 		addUrlLinkEl+="</a>";
@@ -86,9 +89,9 @@ ActionsMenu.prototype.render=function (){
 		var hr2 = document.createElement("hr");
 		hr2.height = '1px';
 		divEl.appendChild(hr2);
-		
-		//if(this.teamView!=null && ! this.teamView){
+		}
 			//create from template link
+		if(createfromtemplateenable){
 			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";
 			createFromTemplateLinkEl+='<span>'+createFromTemplate+'</span>';
 			createFromTemplateLinkEl+="</a>";
@@ -104,8 +107,7 @@ ActionsMenu.prototype.render=function (){
 			};
 			createActionDiv(createFromTempldivEl,createFromTemplateLinkEl,clickActionsForTemplate);
 			divEl.appendChild(createFromTempldivEl);		
-			
-		//}
+		}
 	
 	
 	divEl.style.backgroundColor="white";

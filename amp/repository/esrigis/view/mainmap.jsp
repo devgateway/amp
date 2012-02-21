@@ -285,7 +285,7 @@
       	<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
-						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Tools</digi:trn></td>
+						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Navigation</digi:trn></td>
 						<td id="filterbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
 						
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
@@ -342,7 +342,7 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		<div class='legendHeader' id="fakecolor">Color reference<br/><hr/></div>
- 		<div id="pointsLegend" class="legendContent" style="left:15px;width: auto;"></div>
+ 		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
        

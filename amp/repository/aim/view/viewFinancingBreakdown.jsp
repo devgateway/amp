@@ -188,6 +188,12 @@ function initPopin() {
 
 window.onload=initPopin();
 
+function viewChanges(){
+	openNewWindow(650,200);
+	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+	popupPointer.document.location.href = "<%= showLog %>?activityId=${aimEditActivityForm.activityId}";
+}
+
 function expandAll() {
    
 	$("img[id$='_minus']").show();

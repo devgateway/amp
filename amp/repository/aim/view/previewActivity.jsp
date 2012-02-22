@@ -95,10 +95,10 @@ function toggleGroup(group_id){
 	$('#act_'+group_id).toggle('fast');
 }
 
-function viewChanges(){
+function viewChanges(id){
 	openNewWindow(650,200);
 	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
-	popupPointer.document.location.href = "<%= showLog %>?activityId=${aimEditActivityForm.activityId}";
+	popupPointer.document.location.href = "<%= showLog %>?activityId=" + id;
 }
 
 function expandAll() {
@@ -2921,7 +2921,7 @@ function collapseAll() {
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
 											<logic:present name="isUserLogged" scope="session">
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges()">
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges(${aimEditActivityForm.activityId})">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
 											</html:button>
 											</logic:present>										

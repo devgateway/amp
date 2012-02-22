@@ -174,41 +174,42 @@ function collapseAll() {
 
 <%
 	Long actId = (Long) request.getAttribute("actId");
-	String url = "/aim/viewIndicatorValues.do?ampActivityId=" + actId
-			+ "&tabIndex=6";
+	String url = "/aim/viewIndicatorValues.do?ampActivityId=" + actId+ "&tabIndex=6";
 	String actPerfChartFileName = null;
-	try {
-		actPerfChartFileName = ChartGenerator
-				.getActivityPerformanceChartFileName(actId, session,
-						new PrintWriter(out), 370, 450, url, true,
-						request);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
 	String actPerfChartUrl = null;
-	if (actPerfChartFileName != null) {
-		actPerfChartUrl = request.getContextPath()
-				+ "/aim/DisplayChart.img?filename="
-				+ actPerfChartFileName;
-	}
-
-	String actRiskChartFileName = null;
-	try {
-
-		actRiskChartFileName = ChartGenerator
-				.getActivityRiskChartFileName(actId, session,
-						new PrintWriter(out), 370, 350, url, request);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
 	String actRiskChartUrl = null;
-
-	if (actRiskChartFileName != null) {
-		actRiskChartUrl = request.getContextPath()
-				+ "/aim/DisplayChart.img?filename="
-				+ actRiskChartFileName;
+	String actRiskChartFileName = null;
+	if(actId != null ){
+		
+		try {
+			actPerfChartFileName = ChartGenerator
+					.getActivityPerformanceChartFileName(actId, session,
+							new PrintWriter(out), 370, 450, url, true,
+							request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (actPerfChartFileName != null) {
+			actPerfChartUrl = request.getContextPath()+ "/aim/DisplayChart.img?filename="+ actPerfChartFileName;
+		}
+	
+		
+		try {
+	
+			actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(actId, session,new PrintWriter(out), 370, 350, url, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+	
+		if (actRiskChartFileName != null) {
+			actRiskChartUrl = request.getContextPath()
+					+ "/aim/DisplayChart.img?filename="
+					+ actRiskChartFileName;
+		}
 	}
+	
 %>
 
 <digi:context name="digiContext" property="context" />
@@ -239,7 +240,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 <c:if test="${aimEditActivityForm.activityExists=='no'}">
-	<div class="activity_preview_header">
+	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may be no longer exists in the system. </digi:trn></li>
 		</ul>	

@@ -8,7 +8,9 @@
 
 <digi:instance property="gisWidgetPlacesForm" />
 <digi:form action="/widgetplaces.do">
-
+<h1 class="admintitle">
+			<span class="subtitle-blue"><digi:trn key="gis:widgetPlaceMan:pageHeader">Widget Place Manager</digi:trn></span>
+</h1>
 <table width="60%" border="0" cellpadding="15">
 	<!--<tr>
 		<td>
@@ -23,11 +25,7 @@
 			</span>
 		</td>
 	</tr>-->
-	<tr>
-		<td>
-			<span class="subtitle-blue"><digi:trn key="gis:widgetPlaceMan:pageHeader">Widget Place Manager</digi:trn></span>
-		</td>
-	</tr>
+
 	<tr>
 		<td>
 		

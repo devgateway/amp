@@ -20,7 +20,9 @@
 	}
 //-->
 </script>
-
+<h1 class="admintitle">
+			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetManager:pageHeader">Indicator chart widget Manager</digi:trn></span>
+</h1>
 <digi:instance property="gisIndicatorChartForm" />
 <digi:form action="/indicatorchartwidgets.do">
 
@@ -39,11 +41,7 @@
 			</span>
 		</td>
 	</tr>-->
-	<tr>
-		<td style="padding-top:10px; padding-bottom:10px;">
-			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetManager:pageHeader">Indicator chart widget Manager</digi:trn></span>
-		</td>
-	</tr>
+
 	<tr>
 		<td style="padding-bottom:10px;">
 			<a href="/widget/indicatorchartwidgets.do~actType=create"><digi:trn key="gis:indicatorchartwidgets:createNew"><b>Create new widget</b></digi:trn></a>

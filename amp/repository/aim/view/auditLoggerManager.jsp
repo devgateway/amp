@@ -134,6 +134,8 @@ function toggleSettings(){
 	}
 }
 </script>
+
+<h1 class="admintitle"><digi:trn key="aim:AuditLoggerManager">Audit Logger Manager</digi:trn></h1> 
 <digi:instance property="aimAuditLoggerManagerForm" />
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -161,15 +163,6 @@ function toggleSettings(){
 						</digi:trn>					
 						</td>
 					<!-- End navigation -->
-				</tr>
-				<tr>
-					<td height=16 valign="center" width=758>
-						<span class=subtitle-blue>
-						<digi:trn key="aim:AuditLoggerManager">
-							Audit Logger Manager						
-						</digi:trn>
-					  </span>				  
-					</td>
 				</tr>
 				<tr bgcolor="#ffffff">
 				  <td valign="top">

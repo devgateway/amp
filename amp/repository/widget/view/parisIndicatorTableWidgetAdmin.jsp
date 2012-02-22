@@ -12,36 +12,16 @@
     }
 
 </script>
-
+<h1 class="admintitle">
+                <span class="subtitle-blue"><digi:trn>Paris Indicator Table Manager</digi:trn></span>
+</h1>
 <digi:instance property="piTableWidgetForm" />
 <digi:form action="/piTableWidgetManager.do~actType=viewAll">
 
-
+<digi:errors/>
 
     <table width="60%" border="0" cellpadding="15">
-        <!--<tr>
-            <td>
-                <span class="crumb">
-                    <c:set var="translation">
-                        <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-                    </c:set>
-                    <html:link  href="/aim/admin.do" styleClass="comment" title="${translation}" >
-                        <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-                    </html:link>&nbsp;&gt;&nbsp;
-                    <digi:trn>Paris Indicator Table Manager</digi:trn>
-                </span>
-            </td>
-			</tr>-->
-            <tr>
-                <td>
-                    <digi:errors/>
-                </td>
-            </tr>
-        <tr>
-            <td>
-                <span class="subtitle-blue"><digi:trn>Paris Indicator Table Manager</digi:trn></span>
-            </td>
-        </tr>
+
         <tr>
             <td>
                 <a href="/widget/piTableWidgetManager.do~actType=create"><digi:trn>Create New Paris Indicator Table Widget</digi:trn></a>

@@ -102,7 +102,7 @@ function exportXSL(){
 
 
 
-
+<h1 class="admintitle">Currencey manager</h1>
 <digi:instance property="aimCurrencyForm" />
 <digi:form action="/currencyManager.do">
 
@@ -131,20 +131,10 @@ function exportXSL(){
 											</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:currencyManager">
 						Currency Manager
 						</digi:trn> </span>
-										<div class="adminicon">
-											<img
-												src="/TEMPLATE/ampTemplate/img_2/adminicons/currencymanager.jpg" />
-										</div></td>
+										</td>
 									<!-- End navigation -->
 								</tr>
-								<tr>
-									<td colspan="2" height=25 align="center" width=1000
-										bgcolor="#c7d4db"><span class=subtitle-blue> <digi:trn
-												key="aim:currencyManager">
-												<b style="font-size: 12px;">Currency Manager</b>
-											</digi:trn>
-									</span> <digi:errors /></td>
-								</tr>
+								
 								<tr>
 									<td align="left" colspan=5>
 										<jsp:include
@@ -479,7 +469,7 @@ function exportXSL(){
 											</tr>
 											<tr>
 												<td align=center>
-													<hr /> <!-- Other links -->
+													 <!-- Other links -->
 													<table cellSpacing="1" cellPadding="2" vAlign="top">
 														<tr>
 															<td align="left" bgcolor="#ffffff"
@@ -497,7 +487,7 @@ function exportXSL(){
 										<table align="center" cellpadding="0" cellspacing="0"
 											width="90%" border="0">
 											<tr>
-												<td>
+												<td style="border-bottom:1px solid #ccc;">
 													<!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100">
 														<tr>

@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-
+<h1 class="admintitle">Code Chapter Importer</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -35,12 +35,7 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
-						<digi:trn>Code Chapitre Importer</digi:trn>
-						</span>
-					</td>
-				</tr>
+				
 					<tr><td>
 					
 					<digi:instance property="importChaptersForm" />

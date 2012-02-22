@@ -22,6 +22,9 @@
 	}
 	
 </script>
+<h1 class="admintitle">
+			<span class="subtitle-blue"><digi:trn key="gis:ResultsDashboardDataManager:pageHeader">Results Dashboard Data Manager</digi:trn></span>
+	</h1>
 <digi:instance property="gisIndicatorSectorRegionForm" />
 <digi:form action="/indSectRegManager.do~actType=viewAll">
 <html:hidden name="gisIndicatorSectorRegionForm" property="selectedPage"/>
@@ -46,11 +49,7 @@
                         <digi:errors/>
                     </td>
                 </tr>
-	<tr>
-		<td>
-			<span class="subtitle-blue"><digi:trn key="gis:ResultsDashboardDataManager:pageHeader">Results Dashboard Data Manager</digi:trn></span>
-		</td>
-	</tr>
+
 	<tr>
 		<td>
 			<a href="/widget/indSectRegManager.do~actType=create"><digi:trn key="gis:indicatorSectorRegionManager:createNew">Create new Indicator</digi:trn></a>

@@ -190,6 +190,11 @@
             return valid;
         }
 </script>
+<h1 class="admintitle">
+						<digi:trn>
+								<b style="font-size:12px;">Resources Label Manager</b>
+							</digi:trn>
+					</h1>
 <bean:define id="myForm" toScope="request" name="crLabelManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
@@ -206,21 +211,13 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						
-						
 						<digi:trn>
 							Resources Label Manager
 						</digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
-					<td height="25" align=center width="1000" bgcolor=#c7d4db>
-						<digi:trn>
-								<b style="font-size:12px;">Resources Label Manager</b>
-							</digi:trn>
-						</td>
-				</tr>
+			
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<digi:errors />

@@ -8,6 +8,7 @@
 
 
 <div style="margin:0 auto;width:1000px;">
+<h1 class="admintitle">Paris Indicator reports</h1>
 <digi:instance property="aimViewAhSurveisForm" />
 
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -51,15 +52,7 @@
                     <tr>
                       <td bgColor=#ffffff class=box-border>
                         <table border="0" cellPadding=3 cellSpacing=5 class=box-border width="100%" >
-                          <tr bgColor=#dddddb>
-                            <td bgColor=#dddddb align="center" height="20">
-                              <b>
-                                <digi:trn key="aim:parisIndcReportsList">
-                                List of Paris Indicator reports
-                                </digi:trn>
-                              </b>
-                            </td>
-                          </tr>
+                       
                           <c:if test="${empty aimViewAhSurveisForm.surveis}">
                             <tr>
                               <td>

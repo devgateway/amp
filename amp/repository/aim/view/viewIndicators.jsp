@@ -109,6 +109,7 @@ a.itr:hover {
     document.aimViewIndicatorsForm.submit();
 }
 </script>
+<h1 class="admintitle">Indicator manager</h1>
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">
@@ -136,13 +137,7 @@ a.itr:hover {
             </td>
           </tr>-->
 						<%-- End navigation --%>
-						<tr>
-							<td height="16" vAlign="center" width="100%"><span
-								class="subtitle-blue"> <digi:trn
-										key="aim:nIndicatorManager">
-                Indicator Manager
-                </digi:trn> </span></td>
-						</tr>
+						
 						<tr>
 							<td vAlign="center" width="100%"><jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>

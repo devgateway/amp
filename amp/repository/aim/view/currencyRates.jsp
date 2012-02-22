@@ -170,7 +170,7 @@ function fnSubmit() {
 	}
 
 </script>
-
+<h1 class="admintitle">Exchange Rates</h1>
 <digi:errors/>
 <digi:instance property="aimCurrencyRateForm" />
 
@@ -204,23 +204,11 @@ function fnSubmit() {
 						<digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
 						</span>
 					</td>
-					<!-- End navigation -->
-				</tr>
-				<tr>
-					<td colspan="2" height=25 valign="center" bgcolor=#c7d4db align=center><span class=subtitle-blue>
-						<digi:trn>
-							<b>Exchange Rates</b>
-						</digi:trn>
-						</span>
-					</td>
 				</tr>
 				<tr>
 					<td noWrap width="750" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left" style="margin-top:10px;">
-							<tr><td>
-								<!-- Filters -->
-
-								<table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
+							<tr><td><table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
 								<tr><td>
 								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>
@@ -514,7 +502,7 @@ function fnSubmit() {
 									<table align="center" cellpadding="0" cellspacing="0" width="90%"
 												border="0">
 												<tr>
-													<td><!-- Other Links -->
+													<td style="border-bottom:1px solid #ccc;"><!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px; margin-top:10px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn

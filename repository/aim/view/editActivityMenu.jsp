@@ -267,10 +267,10 @@ function initPopin() {
 	myPanel.render(document.body);
 }
 
-function viewChanges(){
+function viewChanges(id){
 	openNewWindow(650,200);
 	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
-	popupPointer.document.location.href = "<%= showLog %>?activityId=${aimEditActivityForm.activityId}";
+	popupPointer.document.location.href = "<%= showLog %>?activityId=" + id;
 }
 
 function expandAll() {

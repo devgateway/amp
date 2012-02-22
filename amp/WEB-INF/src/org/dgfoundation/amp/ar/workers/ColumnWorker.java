@@ -13,7 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
@@ -69,7 +69,7 @@ public abstract class ColumnWorker {
 	
 	protected ResultSetMetaData rsmd;
 	
-	protected HashSet<String> columnsMetaData;
+	protected HashMap<String,String> columnsMetaData;
 	
 	
 	protected boolean extractor;
@@ -173,10 +173,12 @@ public abstract class ColumnWorker {
 			
 			int colsCount=rsmd.getColumnCount()+1;
 			
-			columnsMetaData=new HashSet<String>();
+			columnsMetaData=new HashMap<String,String>();
 			
 			for (int i=1; i < colsCount;i++){
-			    columnsMetaData.add(rsmd.getColumnName(i).toLowerCase());
+//				if ( viewName.equals("v_donor_funding")) 
+//					logger.info(i + " - " + rsmd.getColumnLabel(i).toLowerCase() );
+			    columnsMetaData.put(rsmd.getColumnLabel(i).toLowerCase(), rsmd.getColumnName(i).toLowerCase());
 			}
 			rs.last();
 			int rsSize=rs.getRow();			

@@ -625,9 +625,12 @@ public class AddAmpActivity extends Action {
           return mapping.findForward("addActivityStep13");
       }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
-
-		 return showStep9(mapping, request, session, teamMember, eaForm, logframepr,
-				action);
+    	  if(eaForm.getActivityExists().equalsIgnoreCase("yes")){
+    		  return showStep9(mapping, request, session, teamMember, eaForm, logframepr,action);
+    	  }else{
+    		  return mapping.findForward("preview");
+    	  }
+		 
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page     
     	  return showStep10(mapping, eaForm);

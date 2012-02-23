@@ -67,15 +67,18 @@ public class TrnAccesTimeSaver implements Runnable {
 		    Date currentDate = cal.getTime();
 
 			if(message.getLastAccessed()==null||message.getLastAccessed().before(currentDate)){
-				Message msg = (Message) session.load(Message.class, message);
-				msg.setLastAccessed(new Timestamp(currentDate.getTime()));
-				session.update(msg);
+				Message msg = (Message) session.get(Message.class, message);
+				// for newly created messages the last access time is set in the save method
+				if (msg != null) {
+					msg.setLastAccessed(new Timestamp(currentDate.getTime()));
+					session.update(msg);
+				}
 			}
 			
 			//logger.info("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale()+" Thread name="+Thread.currentThread().getName());
 			
 		} catch (Exception e) {
-			logger.error(e);		
+			logger.error("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale());		
 		}
 	}
 	

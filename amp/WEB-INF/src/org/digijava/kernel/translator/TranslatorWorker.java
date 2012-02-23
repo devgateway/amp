@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1210,8 +1211,10 @@ public class TranslatorWorker {
             
             if (!isKeyExpired(message.getKey())) {
                 message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
+                message.setLastAccessed(message.getCreated());
             } else {
                 message.setCreated(new Timestamp( -1000));
+                message.setLastAccessed(message.getCreated());
             }
             
             //Remove from queue if this message is there because here we are doing same.
@@ -1990,4 +1993,26 @@ public class TranslatorWorker {
 		return newString;
 	}
 	
+	public boolean deleteMessages(Date date) throws WorkerException {
+
+		Session ses = null;
+		String queryString = "delete Message msg where msg.lastAccessed is null or msg.lastAccessed <=:stamp";
+		boolean recreateLuceneIndex=false;
+
+		try {
+			ses = PersistenceManager.getRequestDBSession();
+			int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
+			if(deletedEntities>0){
+				recreateLuceneIndex=true;
+			}
+		}catch (HibernateException e) {
+			logger.error("Error getting translations", e);
+			throw new WorkerException("Error getting translations", e);
+		} catch (DgException e) {
+			logger.error("Error getting translations", e);
+			throw new WorkerException("Error getting translations", e);
+		}
+		return recreateLuceneIndex;
+	}
+
 }

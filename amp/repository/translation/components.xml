@@ -8,6 +8,7 @@
     <page page="translator" name="translatorLayout" title="Translator Interface" />
     <page page="importExportBody" name="importExportLayout" title="Inport/Export Translations" />
     <page page="newAdvancedTrans" name="newAdvTranslationLayout" title="Advanced Translation" />
+    <page page="trnCleanupManager" name="translationCleanupLayout" title="Translation cleanup" />
 </secondary-pages>
 <module>
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>

@@ -12,6 +12,7 @@
     <form-bean name="translatorForm" type="org.digijava.module.translation.form.TranslatorForm" />
     <form-bean name="importExportForm" type="org.digijava.module.translation.form.ImportExportForm" />
     <form-bean name="newAdvancedTrnForm" type="org.digijava.module.translation.form.NewAdvancedTrnForm" />
+    <form-bean name="translationCleanupForm" type="org.digijava.module.translation.form.TranslationCleanupForm" />
   </form-beans>
   <action-mappings>
     <!-- Action mappings added by Shamanth -->
@@ -112,6 +113,9 @@
     </action>
     <action name="importExportForm" type="org.digijava.module.translation.action.ImportExportTranslations" scope="request" path="/translation/importexport">
       <forward name="forward" path="/showLayout.do?layout=importExportLayout" />
+    </action>
+     <action name="translationCleanupForm" type="org.digijava.module.translation.action.TranslationCleanupManager" scope="session" path="/translation/msgCleanupManager">
+      <forward name="forward" path="/showLayout.do?layout=translationCleanupLayout" />
     </action>
   </action-mappings>
 </struts-config>

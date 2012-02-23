@@ -157,6 +157,11 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 }
 
 SaveReportEngine.prototype.saveReport	= function () {
+	var title = getReportTitle();
+	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
+        alert("Tags are not allowed on name.");
+        return;
+	}
 	if ( this.titlePanel != null )
 		this.titlePanel.hide();
 	this.divEl.style.visibility		= "";

@@ -302,8 +302,8 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 					<tr><td noWrap width=600 vAlign="top">
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
-								<td vAlign="top" width="100%">
-									&nbsp;
+								<td vAlign="top" width="100%">&nbsp;
+									
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -679,8 +679,8 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>
@@ -695,8 +695,8 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>
@@ -706,7 +706,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do">
 												<digi:trn key="aim:teams">
@@ -716,7 +716,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/roles.do">
 												<digi:trn key="aim:roles">
@@ -726,7 +726,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/updateRole.do">
 												<digi:trn key="aim:addRole">
@@ -736,7 +736,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do">
 												<digi:trn key="aim:AmpAdminHome">

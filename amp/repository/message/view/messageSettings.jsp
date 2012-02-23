@@ -86,9 +86,8 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 		}
 	}
 </script>
-
-
-	<TABLE align="center" border="0" cellPadding=0 cellSpacing=0 width="1000">
+	<h1 class="admintitle"><digi:trn>Message Settings</digi:trn></h1> 
+	<TABLE align="center" border="0" cellPadding=0 cellSpacing=0 width="1000" >
 		<TR>
 			<TD valign="top">
 				<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
@@ -108,11 +107,9 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									</td>
 								</tr>--><%-- End navigation --%>
 								<TR>
-									<TD width=750>
-										<TABLE border="0" cellPadding="3" cellSpacing="3" width="100%" rules="all" class="inside" style="font-size:12px;">											
-											<tr>
-												<td colspan="4" align="center" height=25 bgcolor=#c7d4db><digi:trn><b>Message Settings</b></digi:trn> </td>
-											</tr>
+									<TD width=750 >
+										<TABLE border="0" cellPadding="3" cellSpacing="3" width="100%" rules="all" class="inside" style="font-size:12px;border-top:1px solid #cccccc;">											
+										
 											<tr>
 												<td align="center" class="inside" bgcolor=#F2F2F2 style="font-size:11px; color:#666666;"><digi:trn><b>Setting</b></digi:trn> </td>
 												<td align="center" class="inside" bgcolor=#F2F2F2 style="font-size:11px; color:#666666;"><digi:trn><b>Current Value</b></digi:trn></td>
@@ -175,7 +172,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 												<td align="center" class="inside"><input type="button" class="buttonx" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
 											</tr>
 											<tr>
-												<td colspan="4" align="right">
+												<td colspan="4" align="right" style="border:1px solid #cccccc;text-align:center;">
 													<c:set var="saveAllBtn"><digi:trn>Save All</digi:trn></c:set>
 													<input type="button" value="${saveAllBtn}" class="buttonx" onclick="saveAll()" />
 												</td>
@@ -186,7 +183,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									<td  vAlign="top">
 										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
-												<td>
+												<td style="border-bottom:1px solid #cccccc;">
 													<!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>
@@ -204,7 +201,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=3 cellspacing="1" width="100%" class="inside">
+													<table cellPadding=3 cellspacing="1" width="100%" class="inside" >
 														<tr>
 															<td class="inside">
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -22,9 +23,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -84,6 +83,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		compTypes.setOutputMarkupId(true);
+		compTypes.setRequired(true);
 		compTypes.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -101,10 +101,31 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
+		name.setRequired(true);
 		name.add(nameOnChange);
+		
 		add(name);
 
-		AmpDeleteLinkField delbutton = new AmpDeleteLinkField(
+		ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AmpComponent comp = componentModel.getObject();
+				//Remove all fundings from fundings set
+				if (componentsFundingsSetModel.getObject() != null){
+					Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
+					while (it.hasNext()) {
+						AmpComponentFunding cf = (AmpComponentFunding) it
+								.next();
+						if (cf.getComponent().equals(comp))
+							it.remove();
+					}
+				}
+				super.onClick(target);
+			}
+		};
+		add(delButton);
+		
+		/*AmpDeleteLinkField delbutton = new AmpDeleteLinkField(
 				"deleteComponent", "Delete Component") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
@@ -125,7 +146,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		add(delbutton);
-		
+		*/
 		feedbackContainer = new WebMarkupContainer("feedbackContainer");
 		feedbackLabel = new Label("feedbackLabel", new Model(defaultMsg));
 		feedbackLabel.setOutputMarkupId(true);
@@ -142,6 +163,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		boolean update = updateVisibility(componentModel);
 		if (update){
 			//target.addComponent(this);
+			target.addComponent(feedbackContainer);
 			target.addComponent(componentFundingSection);
 			target.appendJavascript(OnePagerUtil.getToggleChildrenJS(componentFundingSection));
 		}

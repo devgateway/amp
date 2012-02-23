@@ -15,10 +15,32 @@
 <script language="javascript" type="text/javascript">
 
 function goAction(value){
-	var submitForm=true;
+	var submitForm=true;	
+	
   	if(value!=null){
 	  	if(value=='save'){
 	  		submitForm=validateUserInfo();		  
+	  	}
+	  	
+	  	if (value == 'delOrgs'){
+	  		var msg='<digi:trn>Please select at least one organization ! </digi:trn>';
+	  		var assignedOrgs = $("input[id^='verOrg_']");
+	  		var orgsSelected = 0;
+	  		if(assignedOrgs == null || assignedOrgs.length ==0){ //
+	  			alert(msg);
+	  			return false;
+	  		}else{
+	  			for(var i=0;i<assignedOrgs.length;i++){
+	  	            if(assignedOrgs[i].checked){
+	  	            	orgsSelected++;
+	  	            	break;
+	  	            }
+	  	        }
+	  			if(orgsSelected == 0){
+	  				alert(msg);
+	  				return false;
+	  			}
+	  		}
 	  	}
 	  	if(submitForm==true){
 	  		document.getElementById("event").value=value;
@@ -26,6 +48,7 @@ function goAction(value){
 	  	}    	
   	}
 }
+
 function resetPasswordFields(){
   document.umViewEditUserForm.newPassword.value='';
   document.umViewEditUserForm.confirmNewPassword.value=''
@@ -328,10 +351,10 @@ function isInvalid(field){
     font-weight: bold; color:#000;"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
                                                                         <td>
 	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-    	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs">
+    	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
         		                                                                    <tr>
                 	                                                                    <td width="2%">
-                                                                                             <html:multibox name="umViewEditUserForm" property="selAssignedOrgs">
+                                                                                             <html:multibox name="umViewEditUserForm" property="selAssignedOrgs" styleId="verOrg_${ind}">
                                                                                                      <bean:write name="org" property="ampOrgId" scope="page"/>
                                                                                              </html:multibox>
                     	                                                                 </td>
@@ -384,18 +407,25 @@ function isInvalid(field){
 																		</td>
 																	</tr>
 																	<tr>
+																		<td align="right"  class="formCheckContainer">
+																			<digi:trn>Assign to Workspace</digi:trn>
+																		</td>
+																		<td class="f-names" align="left">
+																			<html:checkbox property="addWorkspace" styleClass="inp-text"></html:checkbox>
+																		</td>
+																	</tr>
+																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
 																	<tr>
-																	    <td  class="addUserButContainer" width="380" height="30" colspan="2" align="center"style="font-size: 11px;
-    font-weight: bold; color:#000;">
+																	    <td  class="addUserButContainer" width="380" height="30" colspan="2" align="center"style="font-size: 11px; font-weight: bold; color:#000;">
                                                               				<c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:saveButton" jsFriendly="true">Save</digi:trn>
+																                <digi:trn jsFriendly="true">Save</digi:trn>
 																              </c:set>
 																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																
 																              <c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:cancelButton" jsFriendly="true">
+																                <digi:trn jsFriendly="true">
 																                Cancel
 																                </digi:trn>
 																              </c:set>

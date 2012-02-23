@@ -40,8 +40,7 @@ import org.apache.struts.validator.ValidatorForm;
  * @version 1.0
  */
 
-public class AddUserForm
-    extends ValidatorForm {
+public class AddUserForm  extends ValidatorForm {
 	private Collection assignedWorkspaces;
 	private boolean addWorkspace;
 	private Long teamId;
@@ -574,6 +573,11 @@ public class AddUserForm
 	public void setAssignedWorskpaces(Collection assignedWorkspaces) {
 		this.assignedWorkspaces = assignedWorkspaces;
 	}
+	
+	public void setAssignedWorkspaces(Collection assignedWorkspaces) {
+		this.assignedWorkspaces = assignedWorkspaces;
+	}
+
 	public Long getTeamMemberId() {
 		return teamMemberId;
 	}

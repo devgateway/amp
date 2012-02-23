@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12348</jira>
+	<keyword>Budget</keyword>
+	<author>Diego</author>
+	<description>adding missing budget views </description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				CREATE OR REPLACE VIEW v_vote AS
+				SELECT a.amp_activity_id AS amp_activity_id,a.vote AS vote 
+	  			FROM 
+	    			amp_activity a 
+	  			WHERE 
+	    			trim(both from a.vote) != '';
+	
+				CREATE OR REPLACE VIEW v_subvote AS
+	 			SELECT a.amp_activity_id AS amp_activity_id,a.subVote AS subVote 
+	  			FROM 
+	    		amp_activity a 
+	  			WHERE 
+					trim(both from a.subVote) != '';
+    		</lang>
+		</script>
+	</apply>
+</tns:patch>

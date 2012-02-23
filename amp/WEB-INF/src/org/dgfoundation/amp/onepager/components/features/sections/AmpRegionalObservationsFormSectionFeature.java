@@ -19,6 +19,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -40,24 +41,9 @@ public class AmpRegionalObservationsFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpRegionalObservation>> setModel=new PropertyModel<Set<AmpRegionalObservation>>(am,"regionalObservations");
-		final ListView<AmpRegionalObservation> list;
+		final ListEditor<AmpRegionalObservation> list;
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpRegionalObservation>());
-		
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpRegionalObservation issues = new AmpRegionalObservation();
-				issues.setName(new String(""));
-				issues.setObservationDate(new Date());
-				issues.setRegionalObservationMeasures(new HashSet());
-				issues.setActivity(am.getObject());
-				setModel.getObject().add(issues);
-				target.addComponent(this.getParent());
-			}
-		};
-		add(addbutton);
-		IModel<List<AmpRegionalObservation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel,new AmpRegionalObservation.RegionalObservationComparator());
 		
 		final List<Class> classTree = new ArrayList<Class>();
 		final Map<Class, String> setName = new HashMap<Class, String>();
@@ -71,10 +57,11 @@ public class AmpRegionalObservationsFormSectionFeature extends
 		labelName.put(AmpRegionalObservationMeasure.class, "Measure");
 		labelName.put(AmpRegionalObservationActor.class, "Actor");
 
-		list = new ListView<AmpRegionalObservation>("list", listModel) {
+		list = new ListEditor<AmpRegionalObservation>("list", setModel, new AmpRegionalObservation.RegionalObservationComparator()) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
-			protected void populateItem(final ListItem<AmpRegionalObservation> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpRegionalObservation> item) {
 				try {
 					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpRegionalObservation.class, 0, "Regional Obsevation Field");
 					aitp.setOutputMarkupId(true);
@@ -84,8 +71,21 @@ public class AmpRegionalObservationsFormSectionFeature extends
 				}
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
+
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AmpRegionalObservation issues = new AmpRegionalObservation();
+				issues.setName(new String(""));
+				issues.setObservationDate(new Date());
+				issues.setRegionalObservationMeasures(new HashSet());
+				issues.setActivity(am.getObject());
+				list.addItem(issues);
+				target.addComponent(this.getParent());
+			}
+		};
+		add(addbutton);
 	}
 
 }

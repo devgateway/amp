@@ -90,8 +90,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>
@@ -101,7 +101,7 @@
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do" title="Click here to view Workspace Manager" >
 												<digi:trn key="aim:workspaceManager">
@@ -111,7 +111,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/updateWorkspace.do" title="Click here to Add Teams" >
 												<digi:trn key="aim:addTeams">
@@ -122,7 +122,7 @@
 										</tr>
 										
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do" title="Click here to goto Admin Home" >
 												<digi:trn key="aim:AmpAdminHome">

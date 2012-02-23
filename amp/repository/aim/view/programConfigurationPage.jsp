@@ -31,8 +31,7 @@
     }
 
 </script>
-
-
+<h1 class="admintitle">Configuration settings</h1>
 <digi:instance  property="aimActivityProgramSettingsForm"/>
 
 
@@ -63,15 +62,7 @@
 <!-- </tr> -->
 
 
-<tr>
-<td height=25 valign="center" width=571 align=center bgcolor=#c7d4db> 
- 
-<span class=subtitle-blue style="padding-top:0px;padding-bottom:0px">
-						<digi:trn key="aim:adminconfigurationsettings"><b>Configuration Settings
-						</b></digi:trn>
-	  </span>
-	</td>
-</tr>
+
 <tr>
 					<td height=16 valign="center" width=571>
 						<digi:errors />
@@ -79,7 +70,7 @@
   </tr>
 <tr>
 <tr>
-<td>
+<td style="border-top:1px solid #cccccc;">
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" class="inside">
 <tr>
 <td class="inside"><b><digi:trn key="aim:programNameSetting">The Name of the Setting</digi:trn></b></td>

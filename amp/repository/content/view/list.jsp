@@ -94,6 +94,7 @@ $(document).ready(function(){
 });
 
 </script>
+<h1 class="admintitle"> Content manager</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>
@@ -150,10 +151,10 @@ $(document).ready(function(){
                           <td align="center" class="inside">
                           <c:choose>
                             <c:when test="${content.isHomepage eq true}">
-                            	Yes
+                            	<digi:trn>Yes</digi:trn>
                             </c:when>
                             <c:otherwise>
-                            	No
+                            	<digi:trn>No</digi:trn>
                             </c:otherwise>
                           </c:choose>
                           </td>

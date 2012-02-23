@@ -566,6 +566,7 @@
     </td>
   </tr>
   </module:display>
+   <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION">
     <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
@@ -577,6 +578,7 @@
  	 	</digi:link>   
     </td>
   </tr>
+  </module:display>
 </table>
 
 	</div></td>

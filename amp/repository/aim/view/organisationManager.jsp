@@ -63,6 +63,7 @@
 	-->
 
 </script>
+<h1 class="admintitle">Organization manager</h1>
 <digi:instance property="aimOrgManagerForm" />
 
 <digi:context name="digiContext" property="context" />
@@ -432,16 +433,8 @@
 															</digi:link>
 																		<jsp:useBean id="urlParamsLast" type="java.util.Map"
 																			class="java.util.HashMap" />
-																		<c:if
-																			test="${aimOrgManagerForm.pagesSize > aimOrgManagerForm.pagesToShow}">
-																			<c:set target="${urlParamsLast}" property="page"
-																				value="${aimOrgManagerForm.pagesSize -1}" />
-																		</c:if>
-																		<c:if
-																			test="${aimOrgManagerForm.pagesSize < aimOrgManagerForm.pagesToShow}">
 																			<c:set target="${urlParamsLast}" property="page"
 																				value="${aimOrgManagerForm.pagesSize}" />
-																		</c:if>
 																		<c:set target="${urlParamsLast}"
 																			property="orgSelReset" value="false" />
 																		<c:set var="translation">
@@ -516,7 +509,7 @@
 															<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
 																<c:if test="${aimOrgManagerForm.currentAlpha!=''}">
 																	<digi:trn key="aim:organMan:alphaFilterNote">
-															Click on viewAll to see all existing organizations.
+															Click on view All to see all existing organizations.
 														</digi:trn>
 																</c:if>
 															</c:if>

@@ -49,7 +49,7 @@ if (onDelete()){
   <!--  AMP Admin Logo -->
   <jsp:include page="teamPagesHeader.jsp"  />
   <!-- End of Logo -->
-
+<h1 class="admintitle">Component types manager</h1>
 
   <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
     <tr>
@@ -73,18 +73,11 @@ if (onDelete()){
             <!-- End navigation -->
          <!--  </tr> -->
           <tr>
-           <c:set var="title">
-           <digi:trn key="aim:componentTypesTitle">Component Types Manager</digi:trn>
-          </c:set>
-
-            <td height=16 valign="center" width=571 colspan="5"><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
-      </td>
+        
+            <td align="center" width=571 colspan="5"><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
+    	  </td>
           </tr>
-          <tr>
-            <td height=16 valign="center" width=571 colspan="5">
-              <digi:errors />
-            </td>
-          </tr>
+      
           <tr>
             <td noWrap width="100%" vAlign="top" colspan=5>
             
@@ -166,14 +159,12 @@ if (onDelete()){
 <td noWrap vAlign="top">
   <table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
     <tr>
-      <td>
+      <td style="border-bottom:1px solid #ccc;">
         <!-- Other Links -->
         <table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
           <tr>
             <td bgColor=#c9c9c7>
-              <digi:trn key="aim:otherLinks">
-              <b style="padding-left:5px;">Other links</b>
-              </digi:trn>
+              <digi:trn key="aim:otherLinks">Other links</digi:trn>
             </td>
             <td background="module/aim/images/corner-r.gif" height="17" width=17></td>
           </tr>

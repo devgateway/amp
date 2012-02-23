@@ -151,7 +151,11 @@ border-right: 1px solid rgb(208, 208, 208);
  var uploadDoc="<digi:trn jsFriendly='true'>Upload Doc</digi:trn>";
  var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
  var createFromTemplate="<digi:trn jsFriendly='true'>Create From Template</digi:trn>";
-function setHoveredTable(tableId, hasHeaders) {
+ var createfromtemplateenable = false;
+ var addWebLinkenable = false;
+ var uploadDocenalbe=false;
+ 
+ function setHoveredTable(tableId, hasHeaders) {
 	var tableElement = document.getElementById(tableId);
 	if(tableElement){
     var className = 'Hovered',
@@ -405,6 +409,21 @@ function setHoveredTable(tableId, hasHeaders) {
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true, trnObj);
 
 </script>
+<field:display name="Create From Template" feature="Add Resources">
+	<script type="text/javascript">
+		createfromtemplateenable=true;
+	</script>
+</field:display>
+<field:display name="Add Web Link" feature="Add Resources">
+	<script type="text/javascript">
+		 addWebLinkenable = true;
+	</script>
+</field:display>
+<field:display name="Upload Doc" feature="Add Resources">
+	<script type="text/javascript">
+		var uploadDocenalbe=true;
+	</script>
+</field:display>
 
 <!-- BREADCRUMP START -->
 <div class="breadcrump">

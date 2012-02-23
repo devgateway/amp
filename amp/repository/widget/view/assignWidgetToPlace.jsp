@@ -91,8 +91,10 @@
 					</td>
 					<td>
 						<html:select name="gisWidgetPlacesForm" property="widgetId">
-							<html:option value="-1">&nbsp;</html:option>
-							<html:optionsCollection name="gisWidgetPlacesForm" property="widgets" label="widgetCombinedName" value="widgetId"/>
+							<html:option value="-1"><digi:trn>None</digi:trn></html:option>
+							<logic:present name="gisWidgetPlacesForm" property="widgets">
+								<html:optionsCollection name="gisWidgetPlacesForm" property="widgets" label="widgetCombinedName" value="widgetId"/>
+							</logic:present>
 						</html:select>
 					</td>
 					<td>

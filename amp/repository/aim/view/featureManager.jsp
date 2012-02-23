@@ -45,7 +45,7 @@
 
 <!-- End of Logo -->
 
-
+		<h1 class="admintitle"><digi:trn key="aim:featureManager">Feature Manager</digi:trn></h1>
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 
@@ -97,15 +97,7 @@
 
 					<td height=16 valign="center" width=571>
 
-						<span class=subtitle-blue>
-
-						<digi:trn key="aim:featureManager">
-
-							Feature Manager
-
-						</digi:trn>
-
-						</span>
+				
 
 					</td>
 

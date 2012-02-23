@@ -7,14 +7,11 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.Output;
-
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Persister class for Components
@@ -27,6 +24,26 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	private String description;
 	private java.sql.Timestamp creationdate;
 	private String code;
+	
+	public static class AmpComponentComparator implements Comparator<AmpComponent>{
+		@Override
+		public int compare(AmpComponent o1, AmpComponent o2) {
+			return staticCompare(o1, o2);
+		}
+		
+		public static int staticCompare(AmpComponent o1, AmpComponent o2) {
+			if (o1 == null)
+				return 1;
+			if (o2 == null)
+				return -1;
+			if (o2.getTitle() == null)
+				return -1;
+			if (o1.getTitle() == null)
+				return 1;
+			int ret = o1.getTitle().compareTo(o2.getTitle());
+			return ret;
+		}
+	}
 	
 	//private String type;
 	private AmpComponentType type;
@@ -82,19 +99,8 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	/**
 	 * A simple string comparison to sort components by title
 	 */
-	
 	public int compareTo(AmpComponent o) {
-		try {
-			if (this.title.compareToIgnoreCase(o.title) > 0) {
-				return 1;
-			} else if (this.title.compareToIgnoreCase(o.title) == 0) {
-				return -0;
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			return -1;
-		}
-		return -1;
+		return AmpComponentComparator.staticCompare(this, o);
 	}	
 	
 	@Override
@@ -182,5 +188,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+	@Override
+	public String toString() {
+		return title;
 	}
 }

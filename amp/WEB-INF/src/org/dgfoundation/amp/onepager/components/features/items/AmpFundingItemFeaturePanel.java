@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.TreeSet;
+
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -110,7 +112,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				newOrgSelect.setVisible(true);
-				target.addComponent(newOrgSelect.getParent());
+				MarkupContainer tmpParent = newOrgSelect.getParent();
+				target.addComponent(tmpParent);
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(tmpParent));
 			}
 		};
 		add(changeFundingOrg);

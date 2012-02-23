@@ -81,6 +81,9 @@ public class AddSector extends Action {
 				String locale = navigationLanguage.getCode();
 				if(addSectorForm.getLevelType().equals("scheme"))
 				{
+					AmpSectorScheme ampSch = SectorUtil.getAmpSectorScheme(new Long(schemeId));
+					String parentName = ampSch.getSecSchemeName();
+					String parentCode = ampSch.getSecSchemeCode();
 					logger.debug("level 1inside event if    value of schemeId============="+schemeId);
 					if(!checkSectorNameAndCode(addSectorForm))
 					{
@@ -97,7 +100,7 @@ public class AddSector extends Action {
 						return mapping.findForward("levelFirstSectorAdded");
 					}
 					int sectorStatus = existSectorNameOrCode(addSectorForm.getSectorName(), addSectorForm.getSectorCodeOfficial(), SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
-					if(sectorStatus == 1) {
+					if(sectorStatus == 1 || parentName.equalsIgnoreCase(addSectorForm.getSectorName())) {
 						//error the sector name exists
 						Collection schemeGot = SectorUtil.getEditScheme(new Integer((String)session.getAttribute("Id")));
 						addSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
@@ -117,7 +120,7 @@ public class AddSector extends Action {
 						}
 						return mapping.findForward("levelFirstSectorAdded");
 					}
-					if(sectorStatus == 2){
+					if(sectorStatus == 2 || parentCode.equalsIgnoreCase(addSectorForm.getSectorCodeOfficial())){
 						//error the sector code exists
 						Collection schemeGot = SectorUtil.getEditScheme(new Integer((String)session.getAttribute("Id")));
 						addSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
@@ -179,6 +182,10 @@ public class AddSector extends Action {
 					Long id = new Long(schemeId);
 					Long parentId = id;//new Long(id);
 
+					AmpSector ampSec = SectorUtil.getAmpSector(id);
+					String parentName = ampSec.getName();
+					String parentCode = ampSec.getSectorCodeOfficial();
+					
 					if(!checkSectorNameAndCode(addSectorForm))
 					{
 						addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
@@ -194,7 +201,7 @@ public class AddSector extends Action {
 					}
 					
 					int sectorStatus = existSectorNameOrCode(addSectorForm.getSectorName(), addSectorForm.getSectorCodeOfficial(),SectorUtil.getAllChildSectors(id));
-					if(sectorStatus == 1) {
+					if(sectorStatus == 1 || parentName.equalsIgnoreCase(addSectorForm.getSectorName())) {
 						//error the sub-sector name exists
 						addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = addSectorForm.getSubSectors();
@@ -215,7 +222,7 @@ public class AddSector extends Action {
 						return mapping.findForward("levelSecondSectorAdded");
 					}
 					
-					if(sectorStatus == 2) {
+					if(sectorStatus == 2 || parentCode.equalsIgnoreCase(addSectorForm.getSectorCodeOfficial())) {
 						//error the sub-sector code exists
 						addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = addSectorForm.getSubSectors();

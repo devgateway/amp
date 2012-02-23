@@ -392,9 +392,9 @@
 
 							</tr>
 
-							<tr><td bgColor=#f4f4f2>
+							<tr><td bgColor=#f4f4f2>&nbsp;
 
-								&nbsp;
+								
 
 							</td></tr>
 
@@ -424,9 +424,9 @@
 
 											</td>
 
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 
-												&nbsp;
+												
 
 											</td>
 
@@ -468,7 +468,7 @@
 
 										<tr>
 
-											<td>
+											<td class="inside">
 
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 

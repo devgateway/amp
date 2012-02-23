@@ -22,7 +22,7 @@
 				<bean:define id="liClassString" toScope="page" value="class='dhtmlgoodies_sheet.gif'"/>
 			</logic:empty>
 			<li id="lid-${label.uuid}" ${liClassString} >
-				<a  class="atree" id="aid-${label.uuid}" style="color: ${label.color};background-color: ${label.backgroundColor}">${label.name}</a>
+				<a  class="atree" id="aid-${label.uuid}" style="-moz-border-radius:3px;border-radius: 3px;padding:3px;color: ${label.color};background-color: ${label.backgroundColor}">${label.name}</a>
 				 <c:if test="${label.type=='FOLDER_LABEL' }">
 					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 						title="Add Label" 

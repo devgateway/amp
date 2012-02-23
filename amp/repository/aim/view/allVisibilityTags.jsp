@@ -62,6 +62,7 @@
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
@@ -108,6 +109,10 @@
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
 <feature:display name="Public Resources" module="Content Repository"></feature:display>
 <feature:display name="Shared Resources" module="Content Repository"></feature:display>
+<feature:display name="Add Resources" module="Content Repository"></feature:display>
+<field:display name="Create From Template" feature="Add Resources"></field:display>
+<field:display name="Add Web Link" feature="Add Resources"></field:display>
+<field:display name="Upload Doc" feature="Add Resources"></field:display>
 
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
@@ -255,6 +260,7 @@
 <feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
 <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
 <feature:display name="NGO Form" module="Organization Manager"></feature:display>
+<feature:display name="Organization Form" module="Organization Manager"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>
@@ -329,7 +335,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Updated On" feature="Identification"></field:display> 
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 
-<field:display name="Actual Approval Date" feature="Planning" ></field:display> 
+<field:display name="Actual Approval Date" feature="Planning" ></field:display>
+<field:display name="Actual Completion Date" feature="Planning"></field:display> 
 <field:display name="Final Date for Disbursements Comments" feature="Planning"></field:display>
 <field:display name="Current Completion Date Comments" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
@@ -1033,6 +1040,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Mandatory Indicator For Recipients" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form"></field:display>
+<field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 
 <!--  -->
 <module:display name="Visualization Dashboards"></module:display>

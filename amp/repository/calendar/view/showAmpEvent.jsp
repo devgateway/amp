@@ -1247,7 +1247,7 @@ function removeGuest(obj) {
 						<div class="msg_grp_name">
 							
 							<html:multibox property="selectedAtts" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
-							<div class="msg_lbl">---${team.name}---</div>
+							<div class="msg_lbl">---<c:out value="${team.name}"/>---</div>
 						</div>
 						<div class="msg_grp_mem_name">
 							<c:forEach var="tm" items="${team.members}">

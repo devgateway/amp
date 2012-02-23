@@ -174,9 +174,13 @@ function collapseAll() {
 
 <%
 	Long actId = (Long) request.getAttribute("actId");
-	String url = "/aim/viewIndicatorValues.do?ampActivityId=" + actId
-			+ "&tabIndex=6";
+	String url = "/aim/viewIndicatorValues.do?ampActivityId=" + actId+ "&tabIndex=6";
 	String actPerfChartFileName = null;
+	String actPerfChartUrl = null;
+	String actRiskChartUrl = null;
+	String actRiskChartFileName = null;
+	if(actId != null ){
+		
 	try {
 		actPerfChartFileName = ChartGenerator
 				.getActivityPerformanceChartFileName(actId, session,
@@ -185,30 +189,27 @@ function collapseAll() {
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	String actPerfChartUrl = null;
+		
 	if (actPerfChartFileName != null) {
-		actPerfChartUrl = request.getContextPath()
-				+ "/aim/DisplayChart.img?filename="
-				+ actPerfChartFileName;
+			actPerfChartUrl = request.getContextPath()+ "/aim/DisplayChart.img?filename="+ actPerfChartFileName;
 	}
 
-	String actRiskChartFileName = null;
+		
 	try {
 
-		actRiskChartFileName = ChartGenerator
-				.getActivityRiskChartFileName(actId, session,
-						new PrintWriter(out), 370, 350, url, request);
+			actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(actId, session,new PrintWriter(out), 370, 350, url, request);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 
-	String actRiskChartUrl = null;
 
 	if (actRiskChartFileName != null) {
 		actRiskChartUrl = request.getContextPath()
 				+ "/aim/DisplayChart.img?filename="
 				+ actRiskChartFileName;
 	}
+	}
+	
 %>
 
 <digi:context name="digiContext" property="context" />
@@ -227,19 +228,19 @@ function collapseAll() {
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is beeing edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
 		        </font>
 		     </td>
 	     </tr>           
 	     <tr>
-	         <td>
-	             &nbsp;
+	         <td>&nbsp;
+	             
 	         </td>
 	     </tr>
 	</table>
 </logic:present>
 <c:if test="${aimEditActivityForm.activityExists=='no'}">
-	<div class="activity_preview_header">
+	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may be no longer exists in the system. </digi:trn></li>
 		</ul>	
@@ -252,6 +253,7 @@ function collapseAll() {
 	  <tr>
 	    <td width="710">
 	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
+            <div style="clear:both;"></div>
 	    </td>
 	    <td width=130>
 	    	<div class="l_sm">
@@ -259,6 +261,7 @@ function collapseAll() {
 			 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
 			</gs:test>
 	    	</div>
+            <div style="clear:both;"></div>
 	    </td>
 	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
 	    <td align=right>
@@ -488,9 +491,12 @@ function collapseAll() {
 			
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;<br />
-				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b><hr />
+				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b>
+				<hr />
+				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
 				<b>${aimEditActivityForm.identification.statusReason}</b>
 				<hr />
+				</c:if>
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
@@ -498,8 +504,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
 					<b><c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
 					<digi:edit key="${objKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
@@ -511,7 +517,7 @@ function collapseAll() {
 									 
 										<digi:trn>Objective Assumption</digi:trn>:&nbsp;<br />								
 										<b><bean:write name="comment" property="comment" />
-</b>									<hr>
+</b>									<hr/>
 								</logic:iterate>
 							</logic:equal>
 							<logic:equal name="comments" property="key" value="Objective Verification">
@@ -531,10 +537,11 @@ function collapseAll() {
 										 
 											<digi:trn>Objective Objectively Verifiable Indicators</digi:trn>:&nbsp;	<br />									
 											<b><bean:write name="comment" property="comment"/></b>
+											<hr />
 									</logic:iterate>
 								</logic:equal>
 							</module:display>
-						</logic:iterate><hr />
+						</logic:iterate>
 					</logic:present>
 			</module:display>
 			
@@ -543,8 +550,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.description!=null}">
 					<b><c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
 					<digi:edit key="${descKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 			
 			<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
@@ -552,8 +559,8 @@ function collapseAll() {
 				<c:if test="${aimEditActivityForm.identification.projectComments!=null}">
 					<b><c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
 					<digi:edit key="${projcomKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 					
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -570,8 +577,8 @@ function collapseAll() {
 						<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
 					</bean:define>
 					<b><digi:edit key="${lessonsLearnedKey}"></digi:edit></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 					
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
@@ -628,11 +635,12 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
-				<digi:trn >Purpose</digi:trn><br />
+				<digi:trn >Purpose</digi:trn>:<br />
 				<c:if test="${aimEditActivityForm.identification.purpose!=null}">
 					<b><c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
 					<digi:edit key="${objKey}"></digi:edit></b>
 				</c:if>
+				<hr/>
 				<logic:present name="aimEditActivityForm" property="coments.allComments">
 					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<hr>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
@@ -702,8 +710,8 @@ function collapseAll() {
 				<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>:&nbsp;<br />
 					<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/></b>
-						<hr />
 					</c:if> 
+						<hr />
 			</module:display>
 			
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -712,16 +720,16 @@ function collapseAll() {
 				<digi:trn>Project Implementing Unit</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/></b>
-					<hr>
 				</c:if> 
+				<hr/>
 			</field:display>
 					 
 			<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 				<digi:trn>A.C. Chapter</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 					 
 			<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
@@ -733,32 +741,32 @@ function collapseAll() {
 				<digi:trn>Procurement System</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 								
 			<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
 				<digi:trn>Reporting System</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/></b>
-					<hr />
 				</c:if> 
+					<hr />
 			</module:display>
 								
 			<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
 				<digi:trn>Audit System</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/></b>
-					<hr />	
 				</c:if> 
+					<hr />	
 			</module:display>
 				
 			<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
 				<digi:trn>Institutions</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/></b>
-					<hr />
 				</c:if>
+					<hr />
 			</module:display>
 							
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -766,8 +774,8 @@ function collapseAll() {
 				<digi:trn>Project Category</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>
-					<hr />	
 				</c:if>
+					<hr />	
 			</field:display>
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -796,11 +804,13 @@ function collapseAll() {
 				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.budgetCV}"/></b>
 			</c:otherwise>
 		</c:choose>
+		<hr/>
 		<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 			<field:display name="Project Code" feature="Budget">
 				<digi:trn key="aim:actProjectCode">Project Code</digi:trn>:<br />
 				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
 			</field:display>
+			<hr/>
 		</c:if>
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:<br />
@@ -861,6 +871,7 @@ function collapseAll() {
 					</c:if>
 				</c:forEach>
 			</c:if>
+			<hr/>
 		</module:display>
 	</feature:display>
 	<!-- END BUDGET SECTION -->
@@ -868,7 +879,6 @@ function collapseAll() {
 	<!-- INDETIFICATION SECTION 2 -->
 	<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 	<field:display feature="Identification" name="Organizations and Project ID">
-		<hr>
 		<digi:trn>Organizations and Project IDs</digi:trn>:&nbsp;<br />
 		<c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
 			<table cellSpacing=2 cellPadding=2 border="0">
@@ -898,7 +908,7 @@ function collapseAll() {
 		<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
 			<b><digi:trn key="aim:yes">Yes</digi:trn></b>
 		</c:if>
-		
+		<hr/>
 	</module:display>
 	<!-- END INDETIFICATION SECTION 2 -->
 	</div>
@@ -1017,14 +1027,14 @@ function collapseAll() {
 						</logic:notEmpty>
 						
 						<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-							<a href="javascript:showZoomedMap(true)">
+							<div id="mapPreviewThumbnail" style="cursor:pointer;">
 								<c:if test="${aimEditActivityForm.location.levelIdx==1}">
 									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 								</c:if>
 								<c:if test="${aimEditActivityForm.location.levelIdx>1}">
 									<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=3&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 								</c:if>
-							</a>
+							</div>
 							<div id="zoomMapContainer" style="display: none; border: 1px solid black; position: absolute; left: 0px; top: 0px;" z-index="9999">
 								<a href="javascript:showZoomedMap(false)">
 									<c:if test="${aimEditActivityForm.location.levelIdx==1}">
@@ -1092,7 +1102,7 @@ function collapseAll() {
 		<span class=legend_label id="nationalplanlink" style="cursor: pointer;">
 			<digi:trn>National Plan</digi:trn></span>	
 		</legend>
-	<div id="programdiv">
+	<div id="nationalplandiv">
 		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
@@ -2816,7 +2826,7 @@ function collapseAll() {
 		  });
 	});
 	$("#nationalplanlink").click(function() {
-		  $("div#nationalplan").toggle('slow', function() {
+		  $("div#nationalplandiv").toggle('slow', function() {
 		  });
 	});
 	$("#regionalfundinglink").click(function() {
@@ -2865,25 +2875,31 @@ function collapseAll() {
 		  });
 	});
 	$("#collapseall").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow');
+		var showOrHide;  
 			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		showOrHide=false;
 		  	  }else{
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		showOrHide=true;
 		  	  }
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	
 	$("#collapseall_1").click(function() {
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv").toggle('slow');
+		var showOrHide;  
 			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		showOrHide=false;
 		  	  }else{
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		showOrHide=true;
 		  	  }
+			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	
 	//Change map URLs to popin
@@ -2930,5 +2946,12 @@ function collapseAll() {
 		success:responseSuccess, 
 		failure:responseFailure 
 	}; 
+	
+	
+	$("#mapPreviewThumbnail").click(function (obj) {
+		$("#zoomMapContainer").css("left", obj.pageX - 250 + "px").css("top", obj.pageY - 250 + "px").css("display", "block");
+	});
+	
+	
 	
 </script>

@@ -1,10 +1,14 @@
 package org.dgfoundation.amp.onepager.yui.contacts;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
+import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -43,6 +47,20 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		}
 
 		return choiceValues.toArray(new String[0][0]);
+	}
+	@Override
+	protected AmpContact getSelectedChoice(String input) {
+		try {
+			AmpContactSearchModel newInstance = new AmpContactSearchModel(input, modelParams);
+			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
+			Collection<AmpContact> choices = newInstance.getObject();
+			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
+			return choices.iterator().next();
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} 
 	}
 
 	@Override

@@ -13,6 +13,7 @@ function submitForm(mode) {
 	permissionMapForm.submit();
 }
 </script>
+<h1 class="admintitle"><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h1>
 	<html:hidden property="mode" />
 	<digi:errors />
 	<div class="breadcrump">
@@ -39,7 +40,7 @@ function submitForm(mode) {
 		  				<tr>
 		    				<td valign="top" width="712">
 								<table class="inside" width="712" cellpadding="0" cellspacing="0" border="1">
-									<tr><td colspan="4" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header"><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></td></tr>
+						
 									<tr>
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;">Assign a global permission to the entire class</b>

@@ -81,11 +81,13 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				spanEl.id			= divId;
 				spanEl.style.color					= label.color;
 				spanEl.style.backgroundColor		= label.backgroundColor;
-				spanEl.style.padding				= "1px";
+				spanEl.style.padding				= "3px";
 				spanEl.style.cursor					= "pointer";
 				spanEl.style.verticalAlign			= "middle";
 				spanEl.setAttribute("class","resource_label")
-				
+				spanEl.style.borderRadius = '3px';
+				spanEl.style.MozBorderRadius = '3px';
+
 				divEl.appendChild(inputEl);
 				divEl.appendChild(spanEl);
 				divEl.style.padding	= "2px";

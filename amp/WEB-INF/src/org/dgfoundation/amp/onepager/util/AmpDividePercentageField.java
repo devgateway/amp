@@ -3,12 +3,14 @@ package org.dgfoundation.amp.onepager.util;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.wicket.Component;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+
+
 
 public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	
@@ -17,11 +19,15 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	private IModel<Set<T>> setModel;
 	private ListView<T> list;
 	
+	private AmpPercentageCollectionValidatorField<T> validationHiddenField;
+	
 	public AmpDividePercentageField(String id, String fmName,
-			String buttonCaption, IModel<Set<T>> setModel, ListView<T> list) {
+			String buttonCaption, IModel<Set<T>> setModel, ListView<T> list,
+			 AmpPercentageCollectionValidatorField<T> validationHiddenField) {
 		super(id, fmName, buttonCaption);
 		this.setModel = setModel;
 		this.list = list;
+		this.validationHiddenField=validationHiddenField;
 	}
 
 	@Override
@@ -62,20 +68,10 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			setPercentage(loc, getPercentage(loc) + delta);
 			dif = dif - delta;
 		}
+		
 		target.addComponent(list.getParent());
-		//This step is required for the validation of the new data
-		list.visitChildren(new IVisitor<Component>() {
-			@Override
-			public Object component(Component component) {
-				if (component instanceof AmpPercentageTextField){
-					AmpPercentageTextField aptf = (AmpPercentageTextField) component;
-					aptf.getTextContainer().modelChanged();
-				}
-				return Component.IVisitor.CONTINUE_TRAVERSAL;
-			}
-		});
-		//in order to redraw the list without validation errors
-		list.removeAll();
+		validationHiddenField.reloadValidationField(target);
+		
 	}
 	
 	public abstract void setPercentage(T item, int val);

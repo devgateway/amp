@@ -216,7 +216,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%" cellspacing=0 cellpadding=0>
                     <tr>
-                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong>Information</strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong><digi:trn>Information</digi:trn></strong> </td>
                     </tr>
                   </table></td>
               </tr>

@@ -201,7 +201,7 @@ function validate(){
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%">
 								
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												
 												<c:set var="clickToViewWorkspaceManager">
@@ -216,7 +216,7 @@ function validate(){
 										</tr>
 
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToAddTeams">
 												<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
@@ -229,7 +229,7 @@ function validate(){
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewRoles">
 												<digi:trn key="aim:clickToViewRoles">Click here to view Roles</digi:trn>
@@ -243,7 +243,7 @@ function validate(){
 										</tr>
 										
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

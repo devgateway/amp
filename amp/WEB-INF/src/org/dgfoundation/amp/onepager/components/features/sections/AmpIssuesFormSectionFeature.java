@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -38,35 +39,9 @@ public class AmpIssuesFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpIssues>> setModel=new PropertyModel<Set<AmpIssues>>(am,"issues");
-		final ListView<AmpIssues> list;
-
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpIssues>());
 		
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Issue", "Add Issue") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpIssues issues = new AmpIssues();
-				issues.setName(new String(""));
-				issues.setIssueDate(new Date());
-				issues.setMeasures(new HashSet());
-				issues.setActivity(am.getObject());
-				
-				setModel.getObject().add(issues);
-				target.addComponent(this.getParent());
-			}
-		};
-		add(addbutton);
-
-		IModel<List<AmpIssues>> listModel = new AbstractReadOnlyModel<List<AmpIssues>>() {
-			private static final long serialVersionUID = 3706184421459839210L;
-
-			@Override
-			public List<AmpIssues> getObject() {
-				return new ArrayList<AmpIssues>(setModel.getObject());
-			}
-		};
-	
 		final List<Class> classTree = new ArrayList<Class>();
 		final Map<Class, String> setName = new HashMap<Class, String>();
 		classTree.add(AmpIssues.class);
@@ -79,10 +54,11 @@ public class AmpIssuesFormSectionFeature extends
 		labelName.put(AmpMeasure.class, "Measure");
 		labelName.put(AmpActor.class, "Actor");
 
-		list = new ListView<AmpIssues>("list", listModel) {
+		final ListEditor<AmpIssues> list = new ListEditor<AmpIssues>("list", setModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
-			protected void populateItem(final ListItem<AmpIssues> item) {
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpIssues> item) {
 				try {
 					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpIssues.class, 0, "Issue Field");
 					aitp.setOutputMarkupId(true);
@@ -90,10 +66,25 @@ public class AmpIssuesFormSectionFeature extends
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 			}
 		};
-		list.setReuseItems(true);
 		add(list);
+		
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Issue", "Add Issue") {
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AmpIssues issues = new AmpIssues();
+				issues.setName(new String(""));
+				issues.setIssueDate(new Date());
+				issues.setMeasures(new HashSet());
+				issues.setActivity(am.getObject());
+				list.addItem(issues);
+				target.addComponent(this.getParent());
+			}
+		};
+		add(addbutton);
+
 	}
 
 }

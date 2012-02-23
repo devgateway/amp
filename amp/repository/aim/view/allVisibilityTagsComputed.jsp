@@ -11,7 +11,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <module:display name="ADMIN" parentModule="Messaging System"></module:display> 
-<module:display name="ADMINISTRATIVE SECTION"></module:display> 
+<module:display name="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -256,7 +257,7 @@
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
-<field:display name="Actual Approval Date" feature="Planning"></field:display> 
+<field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
 <field:display name="Actual Start Date" feature="Planning"></field:display> 
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display> 
@@ -745,6 +746,10 @@
 <feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
 <feature:display name="Public Resources" module="Content Repository"></feature:display>
+<feature:display name="Add Resources" module="Content Repository"></feature:display>
+<field:display name="Create From Template" feature="Add Resources"></field:display>
+<field:display name="Add Web Link" feature="Add Resources"></field:display>
+<field:display name="Upload Doc" feature="Add Resources"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

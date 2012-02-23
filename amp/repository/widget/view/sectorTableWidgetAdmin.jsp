@@ -12,7 +12,9 @@
     }
 
 </script>
-
+<h1 class="admintitle">
+                <span class="subtitle-blue"><digi:trn>Sector Table Manager</digi:trn></span>
+</h1>
 <digi:instance property="sectorTableWidgetForm" />
 <digi:form action="/sectorTableManager.do~actType=viewAll">
 
@@ -38,11 +40,7 @@
                     <digi:errors/>
                 </td>
             </tr>
-        <tr>
-            <td style="padding-top:10px; padding-bottom:10px;">
-                <span class="subtitle-blue"><digi:trn>Sector Table Manager</digi:trn></span>
-            </td>
-        </tr>
+    
         <tr>
             <td style="padding-top:10px; padding-bottom:10px;">
                 <a href="/widget/sectorTableManager.do~actType=create"><digi:trn><b>Create New Sector Table Widget</b></digi:trn></a>

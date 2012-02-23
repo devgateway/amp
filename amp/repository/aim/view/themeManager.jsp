@@ -142,7 +142,7 @@
 
     -->
 </script>
-
+<h1 class="admintitle"><digi:trn key="aim:listofPrograms">List of Programs</digi:trn></h1>
 <digi:errors/>
 <digi:instance property="aimThemeForm" />
 <digi:form action="/themeManager.do" method="post">
@@ -156,7 +156,7 @@
 
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 border="0" align=center>
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
+		<td align=left class=r-dotted-lg valign="top" width=750 border="0" >
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<!-- <tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
@@ -191,29 +191,25 @@
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					
-					<table width="100%" cellspacing="0" border="0">
-					<tr><td noWrap width=600 vAlign="top">
-						<table cellpadding="0" cellspacing="0" width="100%">
-							<tr bgColor=#ffffff>
-								<td vAlign="top" width="100%">
+					<table width="100%" cellspacing="0" border="0" >
+					<tr><td noWrap width=600 vAlign="top" >
+						<table cellpadding="0" cellspacing="0" width="100%" >
+							<tr bgColor=#ffffff >
+								<td vAlign="top" width="100%" >
 									<table width="100%" cellspacing="0" cellpadding="0" align=left>
 										<!-- AMP-1655 -->
 				<tr>
-					<td noWrap width="100%" vAlign="top">
+					<td noWrap width="100%" vAlign="top" >
 					<table width="100%" cellspacing="1" border="0" class="r-dotted-lg">
-					<tr><td noWrap width=600 vAlign="top">
+					<tr><td noWrap width=600 vAlign="top" >
 							<table cellpadding="1" cellspacing="1" width="100%">
 								<tr bgColor=#ffffff>
-									<td vAlign="top" width="100%">
-										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside">
+									<td vAlign="top" width="100%" style="border-top:1px solid #ccc;">
+										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >
 												<tr><td>
 													<digi:errors/>
 												</td></tr>
-												<tr><td bgColor=#c7d4db class=box-title height="25" align="center">
-														<digi:trn key="aim:listofPrograms">
-																<b>List of Programs</b>
-														</digi:trn>
-												</td></tr>
+										
 												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
 																	<tr>
 																		<td colspan="2" align="center">
@@ -266,7 +262,7 @@
 														</td>
 													</tr></c:if>
 											<tr>
-												<td class="inside">
+												<td class="inside" >
 												
 												<!-- AMP-2204 -->
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>

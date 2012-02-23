@@ -37,7 +37,7 @@ fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
-table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:11px;}
+table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:11px;border-top:none;}
 table.inside1, td.inside1 {border: 0; font-size:12px;}
 table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
@@ -362,7 +362,6 @@ td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;pa
 div.reg_form_container .f-names {color:#000000; font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
-#amphometext{width:750px; float:left;}
 #amphomesidebar{width:220px; float:right;}
 #Tab_Name td#reportsearchform {font-size: 11px;
     font-weight: bold;}
@@ -490,8 +489,11 @@ td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;pa
 div.reg_form_container .f-names {color:#000000; font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
-#amphometext{width:750px; float:left;}
+#amphometext{width:740px; float:left;}
+html.ie #amphometext, html.ie7 #amphometext, html.ie8 #amphometext, html.ie9 #amphometext{width:700px; float:left;}
+
 #amphomesidebar{width:220px; float:right;}
+html.ie #amphomesidebar{width:200px;}
 #Tab_Name td#reportsearchform {font-size: 11px;
     font-weight: bold;}
 #Tab_Name td#reportsearchform input {color: #767676;
@@ -695,14 +697,14 @@ html.ie .yui-ac-content {z-index:9999;}
 div.grayBorder {margin: 10px; padding: 8px;height: 98%; border:1px solid #CCCCCC}
 /* ACTIVITY WIDGET PREVIEW CLASSES */
 .activity_preview_name {font-size:18px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; width:690px; overflow:hidden; height:auto; margin-right:10px;}
-.activity_preview_header {background-color:#F0F0F0; height:45px; border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;}
+.activity_preview_header {background-color:#F0F0F0;  border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;padding:0px 0px 15px 0px;}
 .field_text_big {font-size:12px;}
 .toogle_open {text-align:right; margin-bottom:15px;}
 .toogle_open a {font-size:11px; font-weight:bold; color:#376091;}
 table#jobmanagertable td{border-bottom:1px solid #cccccc;padding:3px;color:#000;}
 td#jobcpanel a {font-weight:bold; padding:2px;}
 ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;font-weight:normal;}
-#identificationdiv {line-height:18px;}
+#identificationdiv {line-height:18px;font-family:arial;}
 #identificationdiv p {margin:0; padding:0;}
 #relateorgdiv ul {margin:0;}
 #donor_fund a {color:#000000; font-weight:bold;}
@@ -713,3 +715,5 @@ a:HOVER.hoverUnderline {text-decoration: underline;}
 .innerTabHeader{padding:0px 5px 0px 0px;}
 #currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
 td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}
+html.ie li#yui-gen5{width:85px;padding-top:-3px;}
+h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 5px 0px;border-bottom:1px dotted #cccccc;margin:0px 0px 10px 0px;}

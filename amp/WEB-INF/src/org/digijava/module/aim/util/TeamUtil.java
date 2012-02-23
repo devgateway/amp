@@ -2023,7 +2023,7 @@ public class TeamUtil {
             if(team.getAccessType().equalsIgnoreCase(
                 Constants.ACCESS_TYPE_MNGMT)) {
             	queryString	= "select count(*) from "+ AmpReports.class.getName()
-                				+ " r WHERE " + tabFilter + " 1";
+                				+ " r WHERE " + tabFilter + " 1=1";
             	qry			= session.createQuery(queryString);
             	if ( getTabs!=null )
            		  	qry.setBoolean("getTabs", getTabs);

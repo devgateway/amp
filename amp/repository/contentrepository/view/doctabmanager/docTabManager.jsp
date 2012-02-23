@@ -148,6 +148,7 @@ var trnObj		= {
 		
 	}
 </script>
+<h1 class="admintitle">Public Document Manager</h1>
 <digi:instance property="crDocTabManagerForm" />
 <bean:define id="myForm" toScope="request" name="crDocTabManagerForm" />
 
@@ -177,15 +178,7 @@ var trnObj		= {
 					</td>-->
 					<!-- End navigation -->
 				<!--</tr> -->
-				<tr>
-					<td height="25" width="1000" align=center bgcolor="#c7d4db">
-						
-							<digi:trn>
-								<b style="font-size:12px;">Public Document Manager</b>
-							</digi:trn>
-					
-					</td>
-				</tr>
+			
 				<tr>
 					<td height="16" vAlign="center" width="1000">
 						<digi:errors />

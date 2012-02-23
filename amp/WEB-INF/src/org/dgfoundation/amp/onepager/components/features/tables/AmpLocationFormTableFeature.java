@@ -22,10 +22,8 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -34,7 +32,6 @@ import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -42,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -68,7 +66,8 @@ public class AmpLocationFormTableFeature extends
 	public AmpLocationFormTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am,
 			final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
-			final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel)
+			final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel,
+			final IModel<Boolean> disablePercentagesForInternational)
 			throws Exception {
 		super(id, am, fmName);
 		setTitleHeaderColSpan(4);
@@ -78,7 +77,7 @@ public class AmpLocationFormTableFeature extends
 			setModel.setObject(new HashSet());
 
 		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
-		.getReadOnlyListModelFromSetModel(setModel);
+				.getReadOnlyListModelFromSetModel(setModel);
 	
 		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
 			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
@@ -87,9 +86,7 @@ public class AmpLocationFormTableFeature extends
 					return item.getLocationPercentage();
 				}
 		};
-		
 		add(percentageValidationField);
-		
 		
 		final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityLocation>(
 				"uniqueLocationsValidator", listModel, "uniqueLocationsValidator") {
@@ -105,9 +102,18 @@ public class AmpLocationFormTableFeature extends
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
+					
 				final MarkupContainer listParent = this.getParent();
 				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"locationPercentage");
-				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField);				
+				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField){
+					@Override
+					protected void onBeforeRender() {
+						super.onBeforeRender();
+						if (this.isEnabled()){
+							this.setEnabled(!disablePercentagesForInternational.getObject());
+						}
+					}
+				};				
 				item.add(percentageField);
 				item.add(new Label("locationLabel", item.getModelObject().getLocation().getLocation().getAutoCompleteLabel()));
 
@@ -193,7 +199,14 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+			@Override
+			protected void onBeforeRender() {
+				super.onBeforeRender();
+				if (this.isEnabled()){
+					this.setEnabled(!disablePercentagesForInternational.getObject());
+				}
+			}
 			@Override
 			public void setPercentage(AmpActivityLocation loc, int val) {
 				loc.setLocationPercentage((float) val);
@@ -234,10 +247,25 @@ public class AmpLocationFormTableFeature extends
 					DbUtil.add(ampLoc);
 				}
 				activityLocation.setLocation(ampLoc);
-				if(list.size()>0)
-					activityLocation.setLocationPercentage(0f);
-				else 
-					activityLocation.setLocationPercentage(100f); 
+				if (disablePercentagesForInternational.getObject()){
+					String cIso = null;
+					try {
+						cIso = FeaturesUtil.getDefaultCountryIso();
+					} catch (Exception e) {
+						logger.error(e);
+					}
+					AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+					if (choice.getId().longValue() == defCountry.getId().longValue())
+						activityLocation.setLocationPercentage(100f);
+					else
+						activityLocation.setLocationPercentage(0f);
+				}
+				else{
+					if(list.size()>0)
+						activityLocation.setLocationPercentage(0f);
+					else 
+						activityLocation.setLocationPercentage(100f); 
+				}
 
 				activityLocation.setActivity(am.getObject());
 				Set<AmpActivityLocation> set = setModel.getObject();

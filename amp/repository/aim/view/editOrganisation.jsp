@@ -549,7 +549,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     return false;
                 }
                 var budgetOrgCode= document.aimAddOrgForm.budgetOrgCode.value;
-                if (budgetOrgCode == null||budgetOrgCode.length == 0 ) {
+                var mandatoryBudgetOrganizationCode = document.getElementById('mandatoryBudgetOrganizationCode');
+                if (mandatoryBudgetOrganizationCode!= null && (budgetOrgCode == null||budgetOrgCode.length == 0)) {
                     alert('<digi:trn  jsFriendly="true">Please enter Budget Code for this Organization.</digi:trn>');
                     document.aimAddOrgForm.budgetOrgCode.focus();
                     return false;
@@ -674,7 +675,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         }
 
         function addGroup() {
-            openNewWindow(600, 400);
+            openNewWindow(600, 230);
     <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
             var id = document.aimAddOrgForm.ampOrgId.value;
             url = "<%= selectLoc %>?action=createGroup";
@@ -1720,8 +1721,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 </tr>
 
                 <tr>
-                    <td class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn><font
-                            size="2" color="#FF0000">*</font></td>
+                    <td class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn>
+                    <feature:display name="Organization Form" module="Organization Manager">
+                     <field:display name="Mandatory Budget Organization Code" feature="Organization Form">
+                    	<span id="mandatoryBudgetOrganizationCode"><font size="2" color="#FF0000">*</font></span>
+                     </field:display>
+                    </feature:display></td>
                     <td  height="30px"><html:text
                         property="budgetOrgCode" size="15" styleId="budgetOrgCode"/></td>
                 </tr>

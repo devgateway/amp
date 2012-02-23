@@ -68,7 +68,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 				cf.setAdjustmentType(Constants.ACTUAL);
 				cf.setComponent(componentModel.getObject());
 				cf.setTransactionAmount(0d);
-				cf.setTransactionDate(new Date());
+				cf.setTransactionDate(null);
 				cf.setTransactionType(transactionType);
 				cf.setAmpComponentFundingId(null);
 

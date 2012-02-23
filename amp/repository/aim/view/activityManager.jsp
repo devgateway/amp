@@ -115,7 +115,7 @@
 -->
 </script>
 
-
+<h1 class="admintitle">Activity manager</h1>
 <digi:instance property="aimActivityForm" />
 <digi:form action="/activityManager.do" method="post">
 <!--  AMP Admin Logo -->

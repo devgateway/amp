@@ -838,11 +838,11 @@ span.extContactDropdownEmail {
 										<div class="rec_group_container">
 											<div class="msg_grp_name" id="t:${team.id}">
 												<html:multibox property="receiversIds" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
-												<div class="msg_lbl"><span>---${team.name}---</span></div>
+												<div class="msg_lbl"><span>---<c:out value="${team.name}"/>---</span></div>
 											</div>
 											<c:forEach var="tm" items="${team.members}">
 													<div class="msg_grp_mem_name" id="m:${tm.memberId}">
-														<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" /><span>${tm.memberName}</span> <br/>
+														<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" /><span><c:out value="${tm.memberName}"/></span> <br/>
 													</div>													
 											</c:forEach>
 										</div>

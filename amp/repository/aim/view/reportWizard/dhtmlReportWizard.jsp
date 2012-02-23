@@ -271,7 +271,7 @@ body {
 	
 	<html:hidden name="aimReportWizardForm" property="projecttitle"/>
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
-	<bean:define id="member" name="currentMember" scope="session" />
+	<bean:define id="member" name="currentMember" scope="session" toScope="request" />
 	
 	<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv"></div>
 	

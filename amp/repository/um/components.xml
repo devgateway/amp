@@ -30,6 +30,7 @@
     <page page="addUser" name="umAddUser" title=" - Register User" />
     <page name="waitingUserConfirmation" title=" - Successfully registered user" />
     <page name="addWorkSpaceUser" title=" - Add user to workspace" />
+    <page name="assignWorkspaceToUser" title=" - Add user to workspace" />
 </secondary-pages>
 
 <module>

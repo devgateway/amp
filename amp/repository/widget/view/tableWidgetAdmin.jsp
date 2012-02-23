@@ -15,7 +15,9 @@
 	}
 //-->
 </script>
-
+<h1 class="admintitle">
+			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetList:pageTitle">Table Widget Manager</digi:trn></span>
+</h1>
 <digi:instance property="gisTableWidgetCreationForm" />
 <digi:form action="/adminTableWidgets?actType=list">
 
@@ -33,11 +35,7 @@
 			</span>
 		</td>
 	</tr>-->
-	<tr>
-		<td style="padding-bottom:10px; padding-top:10px;">
-			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetList:pageTitle">Table Widget Manager</digi:trn></span>
-		</td>
-	</tr>
+
 	<tr>
 		<td style="padding-bottom:10px;">
 			<digi:link  href="/adminTableWidgets.do?actType=create"><digi:trn key="gis:tableWidgetList:addNeLink"><b>Add new table widget</b></digi:trn></digi:link>

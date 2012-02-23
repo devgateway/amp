@@ -444,7 +444,9 @@ function resetToDefaults(){
 	
 	document.getElementById("commitments_visible").checked = true;
 	document.getElementById("disbursements_visible").checked = true;
-	document.getElementById("expenditures_visible").checked = true;
+	if (document.getElementById("expenditures_visible")!=null){
+		document.getElementById("expenditures_visible").checked = true;
+	}
 	if (document.getElementById("pledge_visible")!=null){
 		document.getElementById("pledge_visible").checked = true;
 	}
@@ -455,7 +457,9 @@ function resetToDefaults(){
 	
 	document.getElementById("transaction_type_0").checked = false;
 	document.getElementById("transaction_type_1").checked = true;
-	document.getElementById("transaction_type_2").checked = false;
+	if (document.getElementById("transaction_type_2")!=null){
+		document.getElementById("transaction_type_2").checked = false;
+	}
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
@@ -693,6 +697,10 @@ var callbackApplyFilterCall = {
 
 function callbackApplyFilter(e){
 	panelLoaded = false;
+	if (document.getElementById("workspaceOnlyQuickFilter")!=null){
+		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;
+		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
+	}
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
@@ -778,6 +786,7 @@ function applyFilterPopin(e){
 	}
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
@@ -1244,6 +1253,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("organization_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==3) {
@@ -1271,6 +1281,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("sub_sector_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==2) {
@@ -1298,6 +1309,7 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("zone_check",true);
 			}
 		}
+		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	

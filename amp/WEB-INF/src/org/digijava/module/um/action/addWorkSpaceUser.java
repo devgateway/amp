@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.form.AddUserForm;
+import org.digijava.module.um.util.UmUtil;
 
 public class addWorkSpaceUser extends Action{
 	private static Logger logger = Logger.getLogger(addWorkSpaceUser.class);
@@ -57,8 +58,7 @@ public class addWorkSpaceUser extends Action{
 			/* check if the user have entered an invalid user id */
 			if (user == null) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						"error.aim.addTeamMember.invalidUser"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.invalidUser"));
 				saveErrors(request, errors);
 	
 				return mapping.findForward("forward");	
@@ -78,8 +78,7 @@ public class addWorkSpaceUser extends Action{
 			if (ampTeam.getTeamLead() != null &&
 					ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
-						"error.aim.addTeamMember.teamLeadAlreadyExist"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamLeadAlreadyExist"));
 				saveErrors(request, errors);
 				return mapping.findForward("forward");			
 			}
@@ -87,11 +86,10 @@ public class addWorkSpaceUser extends Action{
 			/* check if user is already part of the selected team */
 			if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
-						"error.aim.addTeamMember.teamMemberAlreadyExist"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberAlreadyExist"));
 				saveErrors(request, errors);
 				logger.debug("Member is already existing");
-				return mapping.findForward("forward");			
+				return mapping.findForward("forward");
 			}
 			/*check if user is not admin; as admin he can't be part of a workspace*/
 			if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
@@ -102,36 +100,8 @@ public class addWorkSpaceUser extends Action{
 				return mapping.findForward("forward");
 			}
 			
-			AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upMemForm.getRole());
-			if (role != null) {
-				AmpTeamMember newMember = new AmpTeamMember();
-				newMember.setUser(user);
-				newMember.setAmpTeam(ampTeam);
-				newMember.setAmpMemberRole(role);
-				// add the default application settings for the user  
-				AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil
-						.getTeamAppSettings(ampTeam.getAmpTeamId());
-				AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
-				//newAppSettings.setTeam(ampAppSettings.getTeam());
-				newAppSettings.setTeam(newMember.getAmpTeam());
-				newAppSettings.setMember(newMember);
-				newAppSettings.setDefaultRecordsPerPage(ampAppSettings
-						.getDefaultRecordsPerPage());
-				newAppSettings.setCurrency(ampAppSettings.getCurrency());
-				newAppSettings.setFiscalCalendar(ampAppSettings
-						.getFiscalCalendar());
-				newAppSettings.setLanguage(ampAppSettings.getLanguage());
-				newAppSettings.setUseDefault(new Boolean(true));
-				Site site = RequestUtils.getSite(request);
-				try{
-					TeamUtil.addTeamMember(newMember,newAppSettings,site);
-					addWorkSpace(newMember, upMemForm);
-				}catch (Exception e){
-						e.printStackTrace();
-						logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
-								+ newMember.getAmpTeam().getName());
-				}
-			}
+			addWorkSpace(UmUtil.assignWorkspaceToUser(request, upMemForm.getRole(), user, ampTeam), upMemForm);
+			
 		}
 		return mapping.findForward("forward");
 	}

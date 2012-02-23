@@ -1763,7 +1763,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           else{
 				if (team.getAccessType().equals("Management")) {
 					oql += " and latestAct.draft=false and latestAct.approvalStatus ='approved' ";
-					oql += " and (";
 					List<AmpTeam> teams = new ArrayList<AmpTeam>();
 					DashboardUtil.getTeams(team, teams);
 					String relatedOrgs = "", teamIds = "";
@@ -1782,10 +1781,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					}
 					if (teamIds.length() > 1) {
 						teamIds = teamIds.substring(0, teamIds.length() - 1);
-						oql += " latestAct.team.ampTeamId in ( " + teamIds
+						oql += " and latestAct.team.ampTeamId in ( " + teamIds
 								+ ")";
 					}
-					oql +=")";
 
 				} else {
                oql += " and ( latestAct.team.ampTeamId =:teamId ) ";

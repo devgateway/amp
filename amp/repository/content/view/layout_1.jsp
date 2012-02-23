@@ -27,7 +27,7 @@
      
       
       </div>
-      <div id="amphomesidebar">
+      <div id="amphomesidebar" >
       <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
          <br/>

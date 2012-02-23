@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -96,5 +97,11 @@ public class AmpHeaderFooter extends WebPage {
 	public HttpSession getHttpSession(){
 		HttpSession session = getServletRequest().getSession();
 		return session;
+	}
+	
+	@Override
+	protected void setHeaders(WebResponse response) {
+		super.setHeaders(response);
+		response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
 	}
 }

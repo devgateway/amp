@@ -18,7 +18,6 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp"  />
 
-
 <script language="JavaScript">
 
 function chkNumeric(frmContrl){

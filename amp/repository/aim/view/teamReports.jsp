@@ -146,20 +146,43 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
         
         function resetSearch() {
-    		<digi:context name="searchOrg" property="context/module/moduleinstance/teamReportList.do"/>     
-    		url = "<%= searchOrg %>?reset=true";
-    		document.aimTeamReportsForm.action = url;
-    		document.aimTeamReportsForm.submit();
-    		 return true;
-
+        	var showReports = document.getElementById("showReportList").value;    		
+    		if(showReports == "true"){
+    			return submitReports('yes');
+    		}else if(showReports == "false"){
+    			return  submitTabs('yes');
+    		}
     	}
 
-    	function searchActivity(teamId) {
-    			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamReportList.do"/>			 
-    		     url = "<%= searchOrg %>";
-    		     document.aimTeamReportsForm.action = url;
-    		     document.aimTeamReportsForm.submit();
-    			 return true;
+    	function searchActivity(teamId) {    		
+    		var showReports = document.getElementById("showReportList").value;    		
+    		if(showReports == "true"){
+    			return submitReports('no');
+    		}else if(showReports == "false"){
+    			return  submitTabs('no');
+    		}	 
+    	}
+    	
+    	function submitTabs(reset){
+    		<digi:context name="lala" property="context/module/moduleinstance/teamDesktopTabList.do"/>
+    		url = "<%= lala %>";
+			if(reset=='yes'){
+    			url +="?reset=true";
+    		}
+			document.aimTeamReportsForm.action = url;   		    
+ 		    document.aimTeamReportsForm.submit();
+   		 	return true;
+    	}
+    	
+    	function submitReports(reset){
+    		 <digi:context name="lala" property="context/module/moduleinstance/teamReportList.do"/>
+    		 url = "<%= lala %>";
+    		 if(reset=='yes'){
+     			url +="?reset=true";
+     		 }
+			 document.aimTeamReportsForm.action = url;   		    
+  		     document.aimTeamReportsForm.submit();
+    		 return true;
     	}
 
 
@@ -171,7 +194,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <digi:form action="/updateTeamReports.do" method="post">
 <html:hidden property="addReport"/>
-<html:hidden property="showReportList"/>
+<html:hidden property="showReportList" styleId="showReportList"/>
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -573,9 +596,17 @@ function setHoveredTable(tableId, hasHeaders) {
 				                                                                                                     	<c:set var="translation">
 																															<digi:trn>Click here to goto Next Page</digi:trn>
 																														</c:set>
-																														<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
-					                                                                                                    	<c:out value="${page}"/>
-					                                                                                                    </digi:link>
+																														<c:if test="${aimTeamReportsForm.showReportList == true}">
+																															<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+						                                                                                                    	<c:out value="${page}"/>
+						                                                                                                    </digi:link>
+																														</c:if>
+																														<c:if test="${aimTeamReportsForm.showReportList == false}">
+																															<digi:link href="/teamDesktopTabList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+						                                                                                                    	<c:out value="${page}"/>
+						                                                                                                    </digi:link>
+																														</c:if>
+																														
 				                                                                                                     </c:if>
 																												  	
 																													|&nbsp;

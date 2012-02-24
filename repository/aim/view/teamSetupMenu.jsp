@@ -248,7 +248,7 @@ function putLoading(){
 							<c:if test="${selectedTab != '2'}">
 								<LI>
 									<span>
-									<digi:link href="/teamActivityList.do" name="urlParams">
+									<digi:link href="/teamActivityList.do~reset=true" name="urlParams">
 									<div title='<digi:trn key="aim:clickToViewActivities">Click here to view Activities</digi:trn>'>
 										<digi:trn key="aim:activities">Activities</digi:trn>
 									</div>
@@ -270,7 +270,7 @@ function putLoading(){
 						<c:if test="${selectedTab != '3'}">
 							<LI>
 								<span>
-								<digi:link href="/teamReportList.do"> 	
+								<digi:link href="/teamReportList.do~reset=true"> 	
 								<div title='<digi:trn key="aim:clickToViewReports">Click here to view reports</digi:trn>'>	
 									<digi:trn key="aim:workspaceReports">Reports</digi:trn>	
 								</div>
@@ -440,7 +440,7 @@ function putLoading(){
 							<LI>
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesMember">Click here to view member activities</digi:trn>'>
 									<span>
-									<digi:link href="/teamActivityList.do" name="urlParams">
+									<digi:link href="/teamActivityList.do~reset=true" name="urlParams">
 										<digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>
 									</digi:link>							
 									</span>
@@ -469,7 +469,7 @@ function putLoading(){
                                 <LI>
                                     <div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
                                         <span>
-                                        <digi:link href="/updateTeamActivity.do" name="urlParams">
+                                        <digi:link href="/updateTeamActivity.do~reset=true" name="urlParams">
                                             <digi:trn key="aim:unassignedactivities">
                                                 Unassigned Activities
                                             </digi:trn>
@@ -492,7 +492,7 @@ function putLoading(){
 							<LI>
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
 									<span>
-									<digi:link href="/teamReportList.do" name="urlParams">
+									<digi:link href="/teamReportList.do~reset=true" name="urlParams">
 										<digi:trn key="aim:assignedreports">Assigned</digi:trn>
 									</digi:link>							
 									</span>

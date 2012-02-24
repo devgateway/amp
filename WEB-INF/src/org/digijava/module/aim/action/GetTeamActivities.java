@@ -86,8 +86,20 @@ public class GetTeamActivities
                     }
                 } else if(tm != null) {
                     id = tm.getTeamId();
-                    if(tm.getAppSettings() != null)
-                        numRecords = tm.getAppSettings().getDefRecsPerPage();
+                    if(tm.getAppSettings() != null){
+                    	numRecords = tm.getAppSettings().getDefRecsPerPage();
+                    }
+                        
+                    //String appSettingsForPages = request.getParameter("appSettingsForPages");
+                    String reset = request.getParameter("reset");
+                    
+                    if(reset!=null && reset.equalsIgnoreCase("true")){
+                    	//taForm.setTempNumResults(-1);
+                    	taForm.setTempNumResults(numRecords==0?-1:numRecords);
+                    }
+                    if(taForm.getTempNumResults()!=-1){
+                    	numRecords = taForm.getTempNumResults();
+                    }
                 }
             }
             

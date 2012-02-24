@@ -106,6 +106,23 @@
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
+	
+	function resetSearch() {
+		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>     
+		url = "<%= searchOrg %>?reset=true";
+	     document.aimTeamActivitiesForm.action = url;
+	     document.aimTeamActivitiesForm.submit();
+		 return true;
+
+	}
+
+	function searchActivity(teamId) {
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>			 
+		     url = "<%= searchOrg %>";
+		     document.aimTeamActivitiesForm.action = url;
+		     document.aimTeamActivitiesForm.submit();
+			 return true;
+	}
 
 -->
 
@@ -228,6 +245,40 @@ function setHoveredTable(tableId, hasHeaders) {
 										<tr><td>
 											<digi:errors />
 										</td></tr>
+										<tr>
+											<td>
+												<table>
+													<tr>
+														<td nowrap="nowrap">
+															<digi:trn>Keyword</digi:trn>&nbsp;
+															<html:text property="keyword" styleClass="inp-text" />
+														</td>
+														<td width="120">
+															<digi:trn>Results</digi:trn>&nbsp;
+															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+																<html:option value="${aimTeamActivitiesForm.tempNumResults}">${aimTeamActivitiesForm.tempNumResults}</html:option>
+																<html:option value="10">10</html:option>
+																<html:option value="20">20</html:option>
+																<html:option value="50">50</html:option>
+																<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+															</html:select>
+														</td>
+														<td>
+															<c:set var="trnResetBtn">
+																<digi:trn>Reset</digi:trn>
+															</c:set>
+															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+														</td>
+														<td>					
+															<c:set var="trnGoBtn">
+																<digi:trn> GO </digi:trn>
+															</c:set>
+															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
 										<tr>
 											<td bgColor=#ffffff valign="top">
 												<table border=0 cellPadding=0 cellSpacing=0 width="100%">

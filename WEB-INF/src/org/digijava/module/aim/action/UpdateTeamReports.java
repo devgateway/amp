@@ -1,7 +1,9 @@
 package org.digijava.module.aim.action;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -20,6 +23,7 @@ import org.digijava.module.aim.util.TeamUtil;
 public class UpdateTeamReports extends Action {
 
 	private static Logger logger = Logger.getLogger(UpdateTeamReports.class);
+	private final static int FIRST_PAGE	= 1;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -47,6 +51,9 @@ public class UpdateTeamReports extends Action {
 		}
 
 		ReportsForm raForm = (ReportsForm) form;
+		if (raForm.getCurrentPage() == 0) {
+	          raForm.setCurrentPage(FIRST_PAGE);
+	    }
 
 		Long id = null;
 		TeamMember tm = null;
@@ -73,8 +80,51 @@ public class UpdateTeamReports extends Action {
 		}
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
-
-			Collection col = TeamUtil.getAllUnassignedTeamReports(id, tabs);
+			int defReportsPerPage=0;
+			if(tm.getAppSettings()!=null&&tm.getAppSettings().getDefReportsPerPage()!=0){
+            	defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();
+            }
+			
+			String reset = request.getParameter("reset");
+            
+            if(reset!=null && reset.equalsIgnoreCase("true")){
+            	//raForm.setTempNumResults(-1);
+            	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
+            	raForm.setKeyword(null);
+            }
+            if(raForm.getTempNumResults()!=-1){
+            	defReportsPerPage = raForm.getTempNumResults();
+            }
+            
+            Collection col = null;
+            Double totalPages=null;
+            
+			col = TeamUtil.getAllUnassignedTeamReports(id, tabs);
+			if(raForm.getKeyword() !=null && raForm.getKeyword().length()>0){
+				for (Iterator iterator = col.iterator(); iterator.hasNext();) {
+					AmpReports report = (AmpReports) iterator.next();
+					if(!report.getName().toLowerCase().contains(raForm.getKeyword().toLowerCase())){
+						iterator.remove();
+					}					
+				}
+			}
+			
+			if(defReportsPerPage!=0){
+				int curPage=raForm.getCurrentPage()-1;	            
+	            int size=col.size();
+	            int fromIndex = curPage*defReportsPerPage;
+	            int toIndex =fromIndex + defReportsPerPage;
+	            if(toIndex > col.size()){
+	            	toIndex = col.size();
+	            }
+	            col = ((List)col).subList(fromIndex, toIndex);
+	            totalPages=Math.ceil(1.0*size/defReportsPerPage);
+	        }else{
+	              //  col= TeamUtil.getAllUnassignedTeamReports(id, tabs);
+	                totalPages=new Double(FIRST_PAGE);
+	        }
+			
+			raForm.setTotalPages(totalPages.intValue());
 			raForm.setReports(col);
 			raForm.setTeamId(tm.getTeamId());
 			raForm.setAddReport(null);

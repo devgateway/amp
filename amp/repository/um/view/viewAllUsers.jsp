@@ -240,8 +240,8 @@ function banUser(txt) {
 																							items="${umViewAllUsersForm.pagedUsers}">
 																							<tr>
 																								<td height="30">
-																									${us.firstNames}&nbsp;${us.lastName}</td>
-																								<td height="30">${us.email}</td>
+																									 <c:out value="${us.firstNames}"/>&nbsp;<c:out value="${us.lastName}"/></td>
+																								<td height="30"><c:out value="${us.email}"/></td>
 																								<td height="30">
 																									<div>
 																										<c:if test="${!empty us.teamMembers}">
@@ -250,7 +250,7 @@ function banUser(txt) {
 																													items="${us.teamMembers}">
 																													<tr>
 																														<td nowrap><li>
-																																${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li>
+                                                                                                                                                                                                        <c:out value="${member.ampTeam.name}"/>&nbsp;( <c:out value="${member.ampMemberRole.role}"/>)&nbsp;&nbsp;</li>
 																														</td>
 
 																													</tr>

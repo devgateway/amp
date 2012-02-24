@@ -237,7 +237,7 @@ $(document).ready(function() {
          	<td>
           	<table cellpadding="6" cellspacing="6">
                <tr>
-               <td id="reportsearchform"><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
+                   <td id="reportsearchform"><c:choose><c:when test="${aimTeamReportsForm.showTabs}"><digi:trn>Tab Title</digi:trn></c:when><c:otherwise><digi:trn>Report Title</digi:trn></c:otherwise></c:choose>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
                </tr>
               </table>
              </td>

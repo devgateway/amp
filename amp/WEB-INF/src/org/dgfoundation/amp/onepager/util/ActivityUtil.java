@@ -242,10 +242,10 @@ public class ActivityUtil {
 			}
 		}
 		else{
-			if(draft){
-				a.setApprovalStatus(Constants.STARTED_STATUS);
-			}
-			else
+//			if(draft){
+//				a.setApprovalStatus(Constants.STARTED_STATUS);
+//			}
+//			else
 				if("validationOff".equals(validation)){
 					if(newActivity)
 						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);

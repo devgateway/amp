@@ -31,7 +31,7 @@
 							class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}"
 							name="sub_sector_check" title="${subSector.name}"
 							value="${subSector.ampSectorId}"
-							onclick="manageSectorEntities(this,${item.mainEntity.id});" /><span>${subSector.name}</span>
+							onclick="manageSectorEntities(this,${item.mainEntity.id});" /><span><c:out value="${subSector.name}"/></span>
 						</li>
 					</c:forEach>
 				</ul></li>

@@ -151,7 +151,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		add(list);
 		
 		
-		/*add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
 			@Override
 			public void setPercentage(AmpOrgRole loc, int val) {
 				loc.setPercentage((double) val);
@@ -167,7 +167,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				return true; //all items displayed in the same list
 			}
 
-		});*/
+		});
 
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("search","Search Organizations",AmpOrganisationSearchModel.class) {
 			@Override

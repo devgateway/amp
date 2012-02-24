@@ -82,7 +82,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	function listReports()
 	{
 		document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
-		document.aimTeamReportsForm.action="/updateTeamReports.do";
+		document.aimTeamReportsForm.action="/updateTeamReports.do?reset=true";
 		document.aimTeamReportsForm.submit();
 	}
 
@@ -144,6 +144,23 @@ function setHoveredTable(tableId, hasHeaders) {
 			return false;
 		}
 	}
+        
+        function resetSearch() {
+    		<digi:context name="searchOrg" property="context/module/moduleinstance/teamReportList.do"/>     
+    		url = "<%= searchOrg %>?reset=true";
+    		document.aimTeamReportsForm.action = url;
+    		document.aimTeamReportsForm.submit();
+    		 return true;
+
+    	}
+
+    	function searchActivity(teamId) {
+    			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamReportList.do"/>			 
+    		     url = "<%= searchOrg %>";
+    		     document.aimTeamReportsForm.action = url;
+    		     document.aimTeamReportsForm.submit();
+    			 return true;
+    	}
 
 
 -->
@@ -216,6 +233,44 @@ function setHoveredTable(tableId, hasHeaders) {
 										<tr><td>
 										<digi:errors />
 										</td></tr>
+										
+										<tr>
+											<td>
+												<table>
+													<tr>
+														<td nowrap="nowrap">
+															<digi:trn>Keyword</digi:trn>&nbsp;
+															<html:text property="keyword" styleClass="inp-text" />
+														</td>
+														<td width="120">
+															<digi:trn>Results</digi:trn>&nbsp;
+															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
+																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
+																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
+																</c:if>
+																<html:option value="10">10</html:option>
+																<html:option value="20">20</html:option>
+																<html:option value="50">50</html:option>
+																<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+															</html:select>
+														</td>
+														<td>
+															<c:set var="trnResetBtn">
+																<digi:trn>Reset</digi:trn>
+															</c:set>
+															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+														</td>
+														<td>					
+															<c:set var="trnGoBtn">
+																<digi:trn> GO </digi:trn>
+															</c:set>
+															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										
 										<tr>
 											<td valign="top">
 												<table width="100%">
@@ -505,27 +560,32 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                                                         <tr>
                                                                                                         <td>
                                                                                                 <!-- Revisit teamUtil.java, see AMP-5420 -->
-                                                                                                <!-- 
-                                                                                                <table border=0 style="float:left;">
-                                                                                                <tr>
-                                                                                                  <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
-                                                                                                    <td>
-                                                                                                    <c:if test="${aimTeamReportsForm.currentPage==page}">
-
-                                                                                                         <c:out value="${page}"/>
-
-                                                                                                    </c:if>
-                                                                                                      <c:if test="${aimTeamReportsForm.currentPage!=page}">
-                                                                                                     <digi:link href="/teamReportList.do?currentPage=${page}" >
-                                                                                                         <c:out value="${page}"/>
-                                                                                                          </digi:link>
-                                                                                                          </c:if>
-
-                                                                                                       </td>
-                                                                                                        </c:forEach>
-                                                                                                        </tr>
-                                                                                                </table>
-                                                                                                 -->
+                                                                                                <logic:notEmpty name="aimTeamReportsForm" property="totalPages">
+                                                                                                	<table>
+																										<tr>
+																											<td>
+																												<digi:trn>Pages :</digi:trn>
+																												<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+																												  	<c:if test="${aimTeamReportsForm.currentPage==page}">
+				                                                                                                         <c:out value="${page}"/>
+				                                                                                                    </c:if>
+				                                                                                                     <c:if test="${aimTeamReportsForm.currentPage!=page}">
+				                                                                                                     	<c:set var="translation">
+																															<digi:trn>Click here to goto Next Page</digi:trn>
+																														</c:set>
+																														<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+					                                                                                                    	<c:out value="${page}"/>
+					                                                                                                    </digi:link>
+				                                                                                                     </c:if>
+																												  	
+																													|&nbsp;
+																												</c:forEach>
+																											</td>
+																										</tr>
+																									</table>
+																								</logic:notEmpty>
+                                                                                                
+                                                                                                
                                                                                                 <a style="float:right;cursor:pointer;" onclick="window.scrollTo(0,0); return false"><digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span></a>
                                                                                             </td>
                                                                                             </tr>

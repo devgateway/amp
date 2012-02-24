@@ -64,10 +64,22 @@ public class UpdateTeamActivities extends Action {
 
 		int numRecords = 0;
 		int page = 0;
+		String reset = request.getParameter("reset");
 
 		if (session.getAttribute("currentMember") != null) {
 			id = tm.getTeamId();
 			numRecords = tm.getAppSettings().getDefRecsPerPage();
+			 
+			String appSettingsForPages = request.getParameter("appSettingsForPages");
+						
+             if(reset!=null && reset.equalsIgnoreCase("true")){
+            	 taForm.setTempNumResults(numRecords==0?-1:numRecords);
+            	 taForm.setKeyword(null);
+ 				 taForm.setPage(1);
+             }
+             if(taForm.getTempNumResults()!=-1){
+             	numRecords = taForm.getTempNumResults();
+             }
 		}
 
 		if (taForm.getSelActivities() != null && taForm.getRemoveActivity().equals("remove")) {
@@ -151,9 +163,9 @@ public class UpdateTeamActivities extends Action {
 			taForm.setAssignActivity(null);
 			return mapping.findForward("forward");
 		} else {
-			/* show all unassigned activities */
-
-			if (request.getParameter("page") == null) {
+			/* show all unassigned activities */			
+			
+			if ((reset!=null && reset.equalsIgnoreCase("true")) || request.getParameter("page") == null || Integer.parseInt(request.getParameter("page")) == 0) {
 				page = 1;
 			} else {
 				page = Integer.parseInt(request.getParameter("page"));
@@ -162,16 +174,15 @@ public class UpdateTeamActivities extends Action {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 
 			Collection col = null;
-			if (session.getAttribute("unassignedActivityList") == null) {
-				col = TeamUtil.getAllTeamAmpActivities(null,false,null);
+			if (session.getAttribute("unassignedActivityList") == null || (taForm.getKeyword()!=null && taForm.getKeyword().length()>0)|| (reset!=null && reset.equalsIgnoreCase("true"))) {
+				col = TeamUtil.getAllTeamAmpActivities(null,false,taForm.getKeyword());
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;
 				session.setAttribute("unassignedActivityList", col);
 			}
 			
-			Collection actList = (Collection) session
-					.getAttribute("unassignedActivityList");
+			Collection actList = (Collection) session.getAttribute("unassignedActivityList");
 
 			
 			Comparator acronymComp = new Comparator() {

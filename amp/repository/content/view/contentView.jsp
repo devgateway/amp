@@ -57,7 +57,7 @@
     }
 
 </script>
-test
+
 <c:set var="layout" value="${contentForm.layout}"/>
 <c:set var="htmlblock_1" value="${contentForm.htmlblock_1}"/>
 <c:set var="htmlblock_2" value="${contentForm.htmlblock_2}"/>

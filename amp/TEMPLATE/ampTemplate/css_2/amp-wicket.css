@@ -109,8 +109,8 @@ top_nav a {color:#FFFFFF;}
 .right_menu {margin-bottom:20px;}
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif); width:222px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:12px; font-weight:bold;}
-.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; }
-.right_menu_cont {padding:10px; font-size:11px;}
+.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; margin-top:0px;background:#fff;}
+.right_menu_cont {padding:10px; font-size:11px;margin-top:10px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;}
@@ -356,7 +356,7 @@ div.tabpanel div.tab-row a:hover {
 .feedbacklabel {
     font-weight: bold;
 }
-.feedbacklabel.info {
+.feedbacklabel.info { 
     color: green;
 }
 .feedbacklabel.error {
@@ -375,5 +375,9 @@ div.tabpanel div.tab-row a:hover {
 .sideMenuButtons {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 
 .quickListHighlight {background-color: #F2F2F2; border-bottom: 1px solid lightgray !important; border-right: 1px solid lightgray !important; color: white;}
-
+.padding-two-pixels{padding: 2px;}
+.onepager-pic-icon{position: relative; left: -3px; top: -14px; float: right; display: none;}
+.invisible-item{display: none;}
+.white-item{color: white;}
+.marginal-five{margin-right:5px;}
 /* -- ONE PAGER END -- */

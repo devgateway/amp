@@ -370,7 +370,7 @@
 						<c:forEach var="valId" items="${possibleVals.labelCategories[countCateg].labelsId}">
 							<category:getoptionvalue categoryValueId="${valId}"/> <br />
 						</c:forEach>
-						<div style="display: none">
+						<div  class="invisible-item">
 							<div id="labelPanel${usedCateg.keyName}${index.count-1}">
 								<div class="hd">Please select labels:</div>
 								<div class="bd" align="center">

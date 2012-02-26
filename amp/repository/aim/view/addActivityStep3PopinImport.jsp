@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
-<div id="popinImport" style="display: none" >
+<div id="popinImport" class="invisible-item" >
 	<div id="popinImportContent" class="content">
 	</div>
 </div>

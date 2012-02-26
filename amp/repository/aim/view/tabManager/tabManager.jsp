@@ -192,7 +192,7 @@
 
 </script>
 
-	<div id="tabManagerPanel" style="display: none">
+	<div id="tabManagerPanel" class="invisible-item">
 		<div class="hd" style="font-size: 8pt;">
 			<digi:trn key="aim:tabmanager:dtSelection">Desktop Tab Selection </digi:trn>
 		</div>

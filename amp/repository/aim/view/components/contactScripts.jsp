@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<div id="contactPopin" style="display: none">
+<div id="contactPopin" class="invisible-item">
     <div id="popinContactContent" class="content">
     </div>
 </div>

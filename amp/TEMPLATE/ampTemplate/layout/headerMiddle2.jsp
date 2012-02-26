@@ -30,7 +30,7 @@
 
         <!-- Stylesheet of AMP -->
         <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
- 		<div id="customAbout" style="display: none" class="content">
+ 		<div id="customAbout" class="invisible-item" class="content">
  			<jsp:include page="/repository/aim/view/helpAbout.jsp" />
  		</div>
 

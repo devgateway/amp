@@ -81,7 +81,7 @@
 
 
 </style>
-<div id="popin" style="display: none">
+<div id="popin" class="invisible-item">
     <div id="popinContent" class="content">
     </div>
 </div>

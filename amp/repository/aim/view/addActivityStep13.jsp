@@ -29,7 +29,7 @@
 <!--  -->
 
 
-<div id="myContract" style="display: none">
+<div id="myContract" class="invisible-item">
 	<div id="myContractContent" class="content">
 		<jsp:include page="/aim/editIPAContract.do?new=true" />
 	</div>

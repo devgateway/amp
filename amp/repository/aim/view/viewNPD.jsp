@@ -205,7 +205,7 @@ background-color:#FFFFFF;
 			class="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></a>
 		&nbsp;|&nbsp; <a class="l_sm" id="showGridLink"
 			href="javascript:showGridTable();"><digi:trn>View Table</digi:trn></a><a class="l_sm" id="hideGridLink"
-			href="javascript:hideGridTable();" style="display: none"><digi:trn>Hide Table</digi:trn></a></div>
+			href="javascript:hideGridTable();" class="invisible-item"><digi:trn>Hide Table</digi:trn></a></div>
 		</div>
 		</div>
 

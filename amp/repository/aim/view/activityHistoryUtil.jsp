@@ -1,5 +1,5 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<div id="myHistory" style="display: none">
+<div id="myHistory" class="invisible-item">
 	<div id="myHistoryContent" class="content">
 		===== ERROR =====
 	</div>

@@ -9,7 +9,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
-<div id="popin" style="display: none">
+<div id="popin" class="invisible-item">
     <div id="popinContent" class="content">
     </div>
 </div>

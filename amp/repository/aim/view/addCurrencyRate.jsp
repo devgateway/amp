@@ -29,7 +29,7 @@
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
 
-<div id="myContent" style="display: none">
+<div id="myContent" class="invisible-item">
 	<div id="myContentContent" class="content">
 	</div>
 </div>

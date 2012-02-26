@@ -110,7 +110,7 @@ session.setAttribute("progressValue", counter);
 		 <jsp:param name="init" value=""/>
 		</jsp:include>
 	</div>
-	<div id="myRange" style="display: none">
+	<div id="myRange" class="invisible-item">
 		<jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
 	</div>
 	<div id="customFormat" style="display: none;height: 372px;width: auto;">

@@ -1,5 +1,5 @@
 
-<!--<div id="myPOverviewframe" style="display: none">-->
+<!--<div id="myPOverviewframe" class="invisible-item">-->
 <!--	<div id="myPOverviewframeContent" class="content">-->
 <!--		===== ERROR =====-->
 <!--	</div>-->

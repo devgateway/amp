@@ -70,7 +70,7 @@
 								</td>
 								<td>
 									<bean:write name="documentData" property="notes" />
-									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
+									<a name="aDocumentUUID" class="invisible-item"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td>
 								

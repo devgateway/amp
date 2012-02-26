@@ -262,7 +262,7 @@ var trnObj		= {
 	</tr>
 </table>
 
-<div id="titlePanel" style="display: none">
+<div id="titlePanel" class="invisible-item">
 	<div class="hd" style="font-size: 8pt">
 		<digi:trn>Please enter a name for the filter</digi:trn>
 	</div>

@@ -242,7 +242,7 @@ function openPrinter(){
 </script>
 
 
-<div id="statementPopup" style="display: none">
+<div id="statementPopup" class="invisible-item">
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
@@ -266,7 +266,7 @@ function openPrinter(){
 	</table>
 </div>
 
-<div id="logoPopup" style="display: none">
+<div id="logoPopup" class="invisible-item">
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tr>
 			<td align="center"> 
@@ -290,7 +290,7 @@ function openPrinter(){
 	</table>
 </div>
 
-<div id="logoStatement" style="display: none" >
+<div id="logoStatement" class="invisible-item" >
 	<div align="center">
 			<digi:form action="<%=viewParamPDF%>" method="post" styleId="exportSettingsForm">			
 				<input type="hidden" name="viewParam" value="<%=viewParam%>" />

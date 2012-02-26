@@ -125,7 +125,7 @@
 								</td>
 								<td>
 									${documentData.cmDocType }
-									<a  id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
+									<a  id="aflag${documentData.uuid}" class="invisible-item">&nbsp;</a>
 								</td>
 								<td>
 									<c:set var="labelUUIDs" value="[" />
@@ -150,7 +150,7 @@
 									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='description'/>"));
 									</script> --%>
-									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
+									<a name="aDocumentUUID" class="invisible-item"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								
 								<%--

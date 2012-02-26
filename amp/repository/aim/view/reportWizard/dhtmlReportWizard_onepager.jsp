@@ -307,7 +307,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<div id="titlePanel" style="display: none">
+				<div id="titlePanel" class="invisible-item">
 					<div class="hd" style="font-size: 8pt;">
 						${plsEnterTitle}
 					</div>

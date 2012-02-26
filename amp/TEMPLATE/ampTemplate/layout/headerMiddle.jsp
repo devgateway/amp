@@ -20,13 +20,13 @@
 
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
-<div id="customAbout" style="display: none" class="content">
+<div id="customAbout" class="invisible-item" class="content">
 	<jsp:include page="/repository/aim/view/helpAbout.jsp" />
 </div>
 <!--</div>-->
 
 <div id="myUserFilterWrapper" style="display: none;" >
-	<div id="customUser" style="display: none" class="content" >
+	<div id="customUser" class="invisible-item" class="content" >
 		<jsp:include page="/repository/aim/view/workspacePopup.jsp" />
 	</div>
 </div>

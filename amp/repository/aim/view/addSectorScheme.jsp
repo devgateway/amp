@@ -12,8 +12,7 @@
 		var flag = confirm("Delete this Scheme?");
 		return flag;
 	}
-	function saveScheme() {
-		6/20/2006
+	function saveScheme() {		
 			<digi:context name="addScheme" property="context/module/moduleinstance/updateSectorSchemes.do?event=saveScheme" />
 			document.aimAddSectorForm.action = "<%= addScheme%>";
 			document.aimAddSectorForm.target = "_self";

@@ -145,7 +145,7 @@ if(event!=null){
 				if(checkSectorNameCodeIsNull(sectorsForm)){
 					//request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the scheme is empty. Please enter a title and a code for the scheme.",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode"));
 	        		if (errors.size() > 0)
 	        			{
 	        				saveErrors(request, errors);
@@ -157,7 +157,7 @@ if(event!=null){
 				if(existScheme(sectorsForm) == 1){
 					request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the scheme already exist in database. Please enter another title",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle"));
 	        		if (errors.size() > 0)
         			{
         				saveErrors(request, errors);
@@ -169,7 +169,7 @@ if(event!=null){
 				if(existScheme(sectorsForm) == 2){
 					request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the scheme already exist in database. Please enter another code",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode"));
 	        		if (errors.size() > 0)
         			{
         				saveErrors(request, errors);
@@ -204,7 +204,7 @@ if(event!=null){
 				if(checkSectorNameCodeIsNull(sectorsForm)){
 					request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the scheme is empty. Please enter a title and a code for the scheme.",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode"));
 	        		if (errors.size() > 0)
         			{
         				saveErrors(request, errors);
@@ -216,7 +216,7 @@ if(event!=null){
 				if(existSchemeForUpdate(sectorsForm,Id) == 1){
 					request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the scheme already exist in database. Please enter another title",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle"));
 	        		if (errors.size() > 0)
         			{
         				saveErrors(request, errors);
@@ -228,7 +228,7 @@ if(event!=null){
 				if(existSchemeForUpdate(sectorsForm,Id) == 2){
 					request.setAttribute("event", "view");
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the scheme already exist in database. Please enter another code",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode"));
 	        		if (errors.size() > 0)
         			{
         				saveErrors(request, errors);

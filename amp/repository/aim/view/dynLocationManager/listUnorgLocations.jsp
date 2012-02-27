@@ -18,9 +18,9 @@
 		<bean:define id="locCV" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
 	
 		<li id="lid-${loc.id}" class="dhtmlgoodies_sheet.gif" >
-			<a  class="atree" id="aid-${loc.id}">${loc.name}</a> 
+			<a  class="atree" id="aid-${loc.id}"><c:out value="${loc.name}"/></a> 
 			<span style="display: none;">${locCV.index}</span> 
-			<span class="spantree">[${locCV.value }]</span>
+			<span class="spantree">[<c:out value="${locCV.value }"/>]</span>
 			
 			<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
 					onclick="editLocation(${loc.id})" />

@@ -23,9 +23,9 @@
 				<bean:define id="liClassString" toScope="page" value="class='dhtmlgoodies_sheet.gif'"/>
 			</logic:empty>
 			<li id="lid-${loc.id}" ${liClassString} >
-				<a  class="atree" id="aid-${loc.id}">${loc.name}</a> 
+				<a  class="atree" id="aid-${loc.id}"><c:out value="${loc.name}"/></a> 
 				<span style="display: none;">${locCV.index}</span> 
-				<span class="spantree">[<digi:trn>${locCV.value }</digi:trn>]</span>
+				<span class="spantree">[<digi:trn><c:out value="${locCV.value }"/></digi:trn>]</span>
 				<c:if test="${locCV.index < myForm.numOfLayers - 1}">
 					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 						title="Add ${locCV.ampCategoryClass.possibleValues[locCV.index+1].value}" 

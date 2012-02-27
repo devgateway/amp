@@ -226,6 +226,7 @@ body {
 	margin:0;
 	padding:0;
 }
+
 </style>
 
 <!-- BREADCRUMP START -->
@@ -324,7 +325,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<div id="titlePanel" class="invisible-item">
+				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>

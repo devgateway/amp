@@ -380,4 +380,5 @@ div.tabpanel div.tab-row a:hover {
 .invisible-item{display: none;}
 .white-item{color: white;}
 .marginal-five{margin-right:5px;}
+.invisible-item-hidden{visibility: hidden;}
 /* -- ONE PAGER END -- */

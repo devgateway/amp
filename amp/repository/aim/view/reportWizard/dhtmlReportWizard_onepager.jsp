@@ -174,7 +174,7 @@
 <c:set var="disableFundingType">false</c:set>
 <c:if test="${!empty aimReportWizardForm.reportId}">
 	<c:set var="disableFundingType">true</c:set>
-</c:if>
+</c:if>zzcxc
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.reportwizard");
@@ -277,7 +277,7 @@ body {
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
 	<bean:define id="member" name="currentMember" scope="session" toScope="request" />
 	
-	<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv"></div>
+	<div style="color: red; text-align: center; " id="savingReportDiv"></div>
 	
 	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
 		<table width="1000" border="0" cellspacing="0" cellpadding="0">
@@ -307,7 +307,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<div id="titlePanel" class="invisible-item">
+				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt;">
 						${plsEnterTitle}
 					</div>

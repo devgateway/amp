@@ -504,7 +504,7 @@ $(document).ready(function() {
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 	                              <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 							                              									<b>
-							                              										<p style="max-width: 400px;white-space: normal" title="${report.name}">
+							                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
 																									<c:if test="${fn:length(report.name) > 120}" >
 																										<c:out value="${fn:substring(report.name, 0, 120)}" />...
 																									</c:if>
@@ -517,12 +517,12 @@ $(document).ready(function() {
 						                          									</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
-																                            <p style="max-width: 400px;white-space: normal" title="${report.name}">
+																                            <p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
 																								<c:if test="${fn:length(report.name) > 120}" >
 																									<c:out value="${fn:substring(report.name, 0, 120)}" />...
 																								</c:if>
 																								<c:if test="${fn:length(report.name) < 120}" >
-																									<c:out value="${report.name}" />
+																									<c:out value="${report.name}"/>
 																								</c:if>
 															                                </p>  
 						                              									</b>

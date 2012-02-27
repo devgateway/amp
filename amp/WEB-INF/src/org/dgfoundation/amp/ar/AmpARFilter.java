@@ -705,8 +705,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			if("Management".equals(this.getAccessType()))
 				APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("
 					+ Util.toCSString(activityStatus) + ")";
-			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
-				+ Constants.APPROVED_STATUS + "'";
+			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ('"
+				+ Constants.APPROVED_STATUS + "','"+ Constants.STARTED_APPROVED_STATUS +"')";
 		
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("

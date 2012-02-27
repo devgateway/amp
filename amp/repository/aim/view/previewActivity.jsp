@@ -787,7 +787,7 @@ function collapseAll() {
 	<!-- BUDGET SECTION -->
 	<!-- MISSING FIELD IN THE NEW ACTIVITY FORM -->
 	
-	<feature:display name="Budget" module="Project ID and Planning">
+	
 		<module:display name="/Activity Form/Identification/Activity Budget" parentModule="/Activity Form/Identification">
 		<c:choose>
 			<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
@@ -825,7 +825,35 @@ function collapseAll() {
 			</logic:iterate>
 		</c:if>
 		</module:display>
-			
+		
+		<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
+			<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<digi:trn>FY</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Project Code">
+				<digi:trn>Project Code</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program">
+				<digi:trn>Sub-Program</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote">
+				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Vote">
+				<digi:trn>Vote</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+				<br />
+			</module:display>
+		</module:display>
+		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">
 			
 			<digi:trn>Budget Classification</digi:trn>:<br />
@@ -873,7 +901,7 @@ function collapseAll() {
 			</c:if>
 			<hr/>
 		</module:display>
-	</feature:display>
+	
 	<!-- END BUDGET SECTION -->
 	
 	<!-- INDETIFICATION SECTION 2 -->

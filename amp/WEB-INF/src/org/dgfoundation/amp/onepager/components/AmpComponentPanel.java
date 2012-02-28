@@ -35,6 +35,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected WebMarkupContainer fmBorder;
 	protected IndicatingAjaxLink visibleFmButton;
 	protected IndicatingAjaxLink enabledFmButton;
+	protected IndicatingAjaxLink upButton;
+	protected IndicatingAjaxLink downButton;
+	protected IndicatingAjaxLink foldButton;
 	protected AjaxCheckBox cascadeFmToChildren;
 	
 	protected boolean ignoreFmVisibility = false;
@@ -167,8 +170,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		add(enabledFmButton);
 		
 		
-		
-		IndicatingAjaxLink upButton = new IndicatingAjaxLink("upButton") {
+		upButton = new IndicatingAjaxLink("upButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
@@ -181,7 +183,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			}
 		};
 		add(upButton);
-		IndicatingAjaxLink downButton = new IndicatingAjaxLink("downButton") {
+		
+		downButton = new IndicatingAjaxLink("downButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
@@ -194,7 +197,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			}
 		};
 		add(downButton);
-		IndicatingAjaxLink foldButton = new IndicatingAjaxLink("foldButton") {
+		
+		foldButton = new IndicatingAjaxLink("foldButton") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
@@ -205,11 +209,13 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			}
 		};
 		add(foldButton);
+
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
-			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
-			if (tmpos != null)
-				foldButton.add(new AttributeModifier("value", new Model((tmpos.isFolded()?"Unfold":"Fold"))));
+			upButton.add(new AttributeModifier("title", new Model("Up")));
+			upButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/up.png")));		
+			downButton.add(new AttributeModifier("title", new Model("Down")));
+			downButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/down.png")));		
 		}
 		else{
 			upButton.setVisible(false);	
@@ -257,9 +263,18 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			setVisible(fmMode?true:fmVisible);
 		
 		enabledFmButton.add(new AttributeModifier("title", new Model((fmEnabled?"Disable":"Enable")+ " "+getFMName())));
-		enabledFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/images/" + (fmEnabled?"bullet_green.gif":"bullet_red.gif"))));
+		enabledFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmEnabled?"enable.png":"disable.png"))));
 		visibleFmButton.add(new AttributeModifier("title", new Model((fmVisible?"Hide":"Show")+ " "+getFMName())));
-		visibleFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/" + (fmVisible?"ok_ico.gif":"not_ok_ico.gif"))));
+		visibleFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmVisible?"alt_enable.png":"alt_disable.png"))));
+
+		
+		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
+			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
+			if (tmpos != null){
+				foldButton.add(new AttributeModifier("title", new Model((tmpos.isFolded()?"Unfold":"Fold"))));
+				foldButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/"+(tmpos.isFolded()?"fold.png":"unfold.png"))));		
+			}
+		}
 		
 		if(fmMode && !ignoreFmButtonsVisibility) {
 			visibleFmButton.setVisible(true);

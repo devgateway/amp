@@ -719,8 +719,8 @@
 												<c:forEach var="contact" items="${addressbookForm.probablyDuplicatedContacs}">
 													<tr>
 														<td class="inside" width=25><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
-														<td class="inside">${contact.name}</td>
-														<td class="inside">${contact.lastname}</td>
+														<td class="inside"><c:out value="${contact.name}"></c:out></td>
+														<td class="inside"><c:out value="${contact.lastname}"></c:out></td>
 														<td class="inside">
 															<ul style="margin:0;">
 																<c:forEach var="property" items="${contact.properties}">
@@ -733,10 +733,10 @@
 														<td class="inside">
 															<ul style="margin:0;">
 																<c:forEach var="contactOrg" items="${contact.organizationContacts}">
-																	<li>${contactOrg.organisation.name}</li>
+																	<li><c:out value="${contactOrg.organisation.name}"/> </li>
 																</c:forEach>
 																<c:if test="${not empty contact.organisationName}">
-																	<li>${contact.organisationName}</li>
+																	<li><c:out value="${contact.organisationName}"/></li>
 																</c:if>
 															</ul>
 														</td>

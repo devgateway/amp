@@ -2082,7 +2082,7 @@ public class ChartWidgetUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and act.approvalStatus ='approved' ";
+                qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
             }
             qr += " and (";
             for (AmpTeam tm : teams) {

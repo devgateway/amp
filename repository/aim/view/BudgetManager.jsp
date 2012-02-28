@@ -49,14 +49,7 @@ function setprogram() {
 	document.BudgetManagerForm.submit();
 }
 
-function onDelete() {
-	<c:set var="translation">
-		<digi:trn key="aim:ConfirmDeleteSector">Delete this Sector ?</digi:trn>
-	</c:set>
-		var flag = confirm("${translation}");
-		return flag;
-	}
-
+var enterBinder	= new EnterHitBinder('saveBudgetBtn');
 </script>
 
 <digi:form action="/BudgetManager.do" method="post">
@@ -107,7 +100,7 @@ function onDelete() {
 							</tr>
 							<tr>
 								<td colspan="3" align="center"> 
-									<html:button property="submitButton" onclick="validatesector();">
+									<html:button property="submitButton" onclick="validatesector();" styleId="saveBudgetBtn">
 										<digi:trn>Add Sector</digi:trn>
 									</html:button>
 								</td>	

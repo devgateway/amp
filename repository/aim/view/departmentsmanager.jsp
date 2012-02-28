@@ -40,6 +40,7 @@ function Edit(id) {
 	document.DepartmentsManagerForm.submit();
 }
 
+var enterBinder	= new EnterHitBinder('saveDeptsBtn');
 -->
 </script>
 
@@ -91,7 +92,7 @@ function Edit(id) {
 							</tr>
 							<tr>
 								<td colspan="3" align="center"> 
-									<html:button property="submitButton" onclick="validatesector();">
+									<html:button property="submitButton" onclick="validatesector();" styleId="saveDeptsBtn">
 										<digi:trn>Add</digi:trn>
 									</html:button>
 								</td>	

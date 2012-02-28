@@ -20,6 +20,8 @@
 			document.aimAddSectorForm.submit();
 	
 	}
+	
+	 var enterBinder	= new EnterHitBinder('addSectSchemeBtn');
 </script>
 
 <digi:instance property="aimAddSectorForm" />
@@ -97,7 +99,7 @@
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-														<input  type="button" name="addBtn" value="Save" onclick="saveScheme()">
+														<input  type="button" name="addBtn" value="Save" onclick="saveScheme()" id="addSectSchemeBtn">
 														<td>
 													</tr>
 											</table>

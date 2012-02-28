@@ -96,6 +96,8 @@
     function closeWindow(){
       window.close();
     }
+    
+    var enterBinder	= new EnterHitBinder('addActProgram');
 	-->
 </script>
 
@@ -212,10 +214,11 @@ Default Program
 										<table cellPadding=5>
 											<tr>
 
-												<td><html:button styleClass="dr-menu"
-													property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
-													<digi:trn key="btn:add">Add</digi:trn>
-												</html:button></td>
+												<td>													
+													<html:button styleId="addActProgram" styleClass="dr-menu" property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
+														<digi:trn>Add</digi:trn>
+													</html:button>
+												</td>
 												<td><html:button styleClass="dr-menu"
 													property="submitButton" onclick="resetResults()">
 													<digi:trn key="btn:reset">Reset</digi:trn>

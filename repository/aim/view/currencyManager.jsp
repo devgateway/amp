@@ -89,6 +89,8 @@ function submitPages(){
 	}
 		
 }
+
+var enterBinder	= new EnterHitBinder('currencyFilterBtn');
 </script>
 
 
@@ -167,7 +169,7 @@ function submitPages(){
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="applyFilter()"/>
+                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="applyFilter()" id="currencyFilterBtn"/>
 										</td>
 									</tr>
 								</table>

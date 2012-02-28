@@ -49,6 +49,8 @@
 		return true;
 	}
 
+	var enterBinder	= new EnterHitBinder('searchBtn');
+	
 	-->
 
 </script>
@@ -103,7 +105,7 @@
 					</td>
 					<td width="210">
 						<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
-						<html:text property="keyword" styleClass="inp-text" />
+						<html:text property="keyword" styleClass="inp-text" styleId="keyWordTextField"/>
 					</td>
 					<td width="120">
 						<digi:trn key="aim:results">Results</digi:trn>&nbsp;
@@ -126,7 +128,7 @@
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()">
+                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()" id="searchBtn">
 					</td>
 				</tr>
 				<tr>

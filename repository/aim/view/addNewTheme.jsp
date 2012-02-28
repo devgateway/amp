@@ -320,7 +320,7 @@
 				<tr bgColor=#ffffff><td height="30" colspan="3"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="3">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" id="addBtn" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
 				</tr>	
@@ -332,5 +332,7 @@
 <script language="JavaScript">
 	<!--
 	if(document.aimThemeForm.event.value=='close') closeProgram();
+	
+	var enterBinder	= new EnterHitBinder('addBtn');
 	-->
 </script>

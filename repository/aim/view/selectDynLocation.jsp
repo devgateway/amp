@@ -30,6 +30,9 @@
 	function closeWindow() {
 		window.close();
 	}
+	
+	var enterBinder	= new EnterHitBinder('addLocationBtn');
+	
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -122,8 +125,7 @@
 												disabled="true"
 											</c:if> 
 											
-											type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
-											onclick="submitForm()">
+											type="button" value="<digi:trn>Add</digi:trn>" class="dr-menu" onclick="submitForm()" id="addLocationBtn">
 										</td>
 										<td>
 											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">

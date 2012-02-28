@@ -19,7 +19,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
-
 <div id="mySector" style="display: none">
 	<div id="mySectorContent" class="content">
 	</div>
@@ -258,6 +257,7 @@
 		}
 		else{
 			alert("Please, select a sector firts!");
+			return false;
 		}
 	}
 	function resetSectors(){
@@ -449,7 +449,12 @@
 	    document.aimEditActivityForm.submit();
 	    return true;
 	}
+	
 
+
+	var enterBinder	= new EnterHitBinder('addSectorBtn');
+	enterBinder.map(["keyWordTextField"], "seachSectorBtn");
+	//teamFPanel.bind('keyWordTextField','seachSectorBtn');
 	-->
 
 </script>

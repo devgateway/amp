@@ -2111,7 +2111,7 @@ public class ChartWidgetUtil {
     
     public static String getTeamQueryManagement() {
         String qr = "";
-        qr += " and act.draft=false and act.approvalStatus ='approved' ";
+        qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
         qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
         

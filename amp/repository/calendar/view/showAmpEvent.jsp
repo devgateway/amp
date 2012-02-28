@@ -671,8 +671,9 @@ function addOrganisation(orgId, orgName){
 		  		list.options[i].selected = true;
 		  	}
 		}
+			
 
-		if (validateDates()){ 
+		if (validateDates() && validateText()){ 
 			document.getElementById('hdnMethod').value = 'save';
 			<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
 	//		document.calendarEventForm.action = "<%=sendEvent %>";
@@ -712,7 +713,22 @@ function validateDates(){
 	}
 	return true;
 }
-	
+
+function validateText(){
+	var title = document.getElementById("titleMax").value;
+   	var decription = document.getElementById("descMax").value; 
+   	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+   	
+    if (regexp.exec(title)!=title){
+		alert ("<digi:trn jsFriendly='true'>Please, for title use only letters, digits, '_', () and space.</digi:trn>");
+        return false;
+	}
+	if (regexp.exec(decription)!=decription){
+		alert ("<digi:trn jsFriendly='true'>Please, for description use only letters, digits, '_', () and space.</digi:trn>");
+        return false;
+	}
+	return true;
+}
   function setMethod(mth){
     var h=document.getElementById("hdnMethod");
     if(h!=null){

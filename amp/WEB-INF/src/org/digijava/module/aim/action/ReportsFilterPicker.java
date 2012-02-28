@@ -133,11 +133,20 @@ public class ReportsFilterPicker extends MultiAction {
 
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+		if (tempSettings == null)
+			if (teamMember != null)
+				tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		
 		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
 		if ( existingFilter != null ) { 
 			FilterUtil.populateForm(filterForm, existingFilter);
 			request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+			filterForm.setCalendar(existingFilter.getCalendarType()==null ? tempSettings.getFiscalCalendar().getAmpFiscalCalId() : existingFilter.getCalendarType().getAmpFiscalCalId());
+			filterForm.setCurrency(existingFilter.getCurrency()==null ? tempSettings.getCurrency().getAmpCurrencyId() : existingFilter.getCurrency().getAmpCurrencyId());
+		} else {
+			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 		}
 
 		Long ampTeamId = null;

@@ -99,6 +99,7 @@
 		return fixedTrim
 	}
 
+	var enterBinder	= new EnterHitBinder('addFiscalCalBtn');
 </script>
 
 <digi:instance property="aimAddFiscalCalForm" />
@@ -252,7 +253,7 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="45%" align="right">
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()" styleId="addFiscalCalBtn">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					</td>

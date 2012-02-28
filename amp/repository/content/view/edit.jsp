@@ -401,7 +401,7 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit><digi:trn>Save</digi:trn></html:submit>
+		<html:submit styleId="saveContent"><digi:trn>Save</digi:trn></html:submit>
 		</div>
       </td>
   </tr>
@@ -524,5 +524,6 @@ function validateUpload(){
 	return true;
 }
 
+var enterBinder	= new EnterHitBinder('saveContent');
 </script>
 </digi:form>

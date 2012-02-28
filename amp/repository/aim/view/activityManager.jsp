@@ -104,6 +104,9 @@
 
 	}	
 	
+	var enterBinder	= new EnterHitBinder('');
+	enterBinder.map(["keywordText"], "searchActBtn");	
+	
 -->
 </script>
 
@@ -160,7 +163,7 @@
 													<tr>
 														<td width="195">
 															<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" />
+															<html:text property="keyword" styleClass="inp-text" styleId="keywordText"/>
 														</td>
 														<td width="120">
 															<digi:trn key="aim:results">Results</digi:trn>&nbsp;
@@ -183,7 +186,7 @@
 									                    <c:set var="trnGoBtn">
 									                      <digi:trn key="aim:btnGo"> GO </digi:trn>
 									                    </c:set>
-									                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity()">
+									                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity()" id="searchActBtn">
 														</td>
 													</tr>
 												</table>

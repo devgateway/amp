@@ -5,13 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
 <script language="JavaScript">
 
-
-
 	function optionChanged(flag) {
-
-
 
 		if (flag == 'otype') {
 
@@ -180,6 +177,7 @@
 		return true;
 	}
 
+	var enterBinder	= new EnterHitBinder('registerUserBtn');
 
 </script>
 
@@ -368,7 +366,7 @@
               <td align="left" colspan="3"><c:set var="btnSubmit">
                   <digi:trn key="btn:submit">Submit</digi:trn>
                 </c:set>
-                <html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate();"/>
+                <html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate();" styleId="registerUserBtn"/>
               </td>
             </tr>
             <tr>

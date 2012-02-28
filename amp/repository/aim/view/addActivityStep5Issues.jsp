@@ -22,6 +22,10 @@
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
 
+<script type="text/javascript">
+var enterBinder	= new EnterHitBinder('addIssuesBtn');
+</script>
+
 <!-- dynamic tooltip -->
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>

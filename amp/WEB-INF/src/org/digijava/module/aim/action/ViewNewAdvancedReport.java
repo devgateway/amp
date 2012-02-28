@@ -93,7 +93,7 @@ public class ViewNewAdvancedReport extends Action {
 			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
 		}	
 		
-		
+		boolean resetSettings = request.getParameter("resetSettings")==null? false : ("true".equals(request.getParameter("resetSettings"))? true : false);
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
 		if(progressValue == null)
@@ -210,6 +210,10 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
+		if (resetSettings){
+			filter.setCalendarType(null); //reset the calendar type to take the type from ws settings by default.
+			filter.setCurrency(null);
+		}
 		
 		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
 			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 

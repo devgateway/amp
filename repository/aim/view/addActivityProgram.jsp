@@ -191,12 +191,14 @@ Default Program
 									<c:forEach var="prgLevels" varStatus="varSt"
 										items="${aimEditActivityForm.programs.programLevels}">
 										<tr>
-											<td width="120" align="right"><c:if
-												test="${varSt.count==1}">
+											<td width="120" align="right">
+											<c:if test="${varSt.count==1}">
 												<digi:trn key="aim:programScheme">Program scheme</digi:trn>
-											</c:if> <c:if test="${varSt.count!=1}">
+											</c:if> 
+											<c:if test="${varSt.count!=1}">
 												<digi:trn key="aim:subProgramLevel">Sub program level </digi:trn>${varSt.count-1}
-                            </c:if></td>
+                           				 	</c:if>
+                           				 	</td>
 											<td id="slo${varSt.count}"><html:select
 												property="programs.selPrograms" onchange="reloadProgram(this)"
 												styleClass="inp-text" >
@@ -208,16 +210,17 @@ Default Program
 										</tr>
 									</c:forEach>
 
-
 									<tr>
 										<td align="center" colspan=2>
 										<table cellPadding=5>
 											<tr>
 
-												<td>													
+												<td>&nbsp;
+												<c:if test="${aimEditActivityForm.displayProgram ==1 || aimEditActivityForm.displayProgram==2}">												
 													<html:button styleId="addActProgram" styleClass="dr-menu" property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
 														<digi:trn>Add</digi:trn>
 													</html:button>
+												</c:if>
 												</td>
 												<td><html:button styleClass="dr-menu"
 													property="submitButton" onclick="resetResults()">
@@ -230,17 +233,27 @@ Default Program
 											</tr>
 											<c:if test="${enableDefaultProgram != null}">
 											<tr>
-												<td colspan="3" align="center">
-												<html:button styleClass="dr-menu"
-													property="submitButton" onclick="addDefaultProgram()">
-													<digi:trn key="btn:addDefault">Add default program</digi:trn>
-												</html:button>
+												<td colspan="3" align="center">&nbsp;
+													<c:if test="${aimEditActivityForm.displayProgram ==0 || aimEditActivityForm.displayProgram==2}">
+														<html:button styleClass="dr-menu"
+															property="submitButton" onclick="addDefaultProgram()">
+															<digi:trn key="btn:addDefault">Add default program</digi:trn>
+														</html:button>
+													</c:if>
 												</td>	
 											</tr>										
 											</c:if>
 										</table>
 										</td>
 									</tr>
+											<tr>
+												<td colspan="4" align="left">
+													<c:if test="${aimEditActivityForm.displayProgram ==0}">
+														<font color="#ff0000"><digi:trn key="aim:">Default Program already selected. If you want to select a program please remove the Default Program already added in activity.</digi:trn>
+														</font>
+													</c:if>
+												</td>
+											</tr>
 								</c:if>
 							</table>
 							</td>

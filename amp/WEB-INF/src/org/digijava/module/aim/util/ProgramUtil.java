@@ -1764,8 +1764,8 @@ public class ProgramUtil {
                     Query qry = session.createQuery(queryString);
                     programSettings=qry.list();
                     if( programSettings==null|| programSettings.size()==0){
-               programSettings=createDefaultAmpActivityProgramSettingsList();
-               }
+                    	programSettings=createDefaultAmpActivityProgramSettingsList();
+                    }
 
 
             } catch (Exception ex) {

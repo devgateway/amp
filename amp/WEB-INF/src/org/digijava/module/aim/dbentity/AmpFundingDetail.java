@@ -60,12 +60,10 @@ public class AmpFundingDetail implements Serializable
         
         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            if(percent==null||percent==0){
-            this.transactionAmount=transactionAmount;
+            if (percent == null) {
+                percent = 0f;
             }
-            else{
-                this.transactionAmount=transactionAmount*percent/100;
-            }
+            this.transactionAmount = transactionAmount * percent / 100;
         }
         
         // used in org profile for indicator 4

@@ -46,9 +46,18 @@ public class AddProgram
     AmpActivityProgramSettings parent=null;
     switch(settingsId){
       case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaform.getPrograms().getNationalSetting(); break;
-          case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=eaform.getPrograms().getPrimarySetting(); break;
-              case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=eaform.getPrograms().getSecondarySetting(); break;
+      case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=eaform.getPrograms().getPrimarySetting(); break;
+      case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=eaform.getPrograms().getSecondarySetting(); break;
     }
+    Integer displayFlag = 0;
+    
+    //0 displayAddDefaultProgram = "true" & displayAddProgram = "false";
+    //1 displayAddDefaultProgram = "false" & displayAddProgram = "true";
+    //2 displayAddDefaultProgram = "true" & displayAddProgram = "true";
+    
+    displayFlag = checkDisplayDefaultProgramButton(settingsId, eaform);
+    eaform.setDisplayProgram(displayFlag);
+    
     if (selectedThemeId == null && opStatus == null && strLevel == null) {
 
       if (parent == null || parent.getDefaultHierarchy() == null) {
@@ -272,7 +281,46 @@ public class AddProgram
     return mapping.findForward("forward");
   }
 
-  private List<AmpTheme> getThenmes(Long parentid) throws DgException{
+  private Integer checkDisplayDefaultProgramButton(int settingsId, EditActivityForm eaform) {
+	// TODO Auto-generated method stub
+	  Integer result = 0;
+	  List<AmpActivityProgram> programs = new ArrayList<AmpActivityProgram>();
+	  switch(settingsId)
+	  {
+  		case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: if (eaform.getPrograms().getNationalPlanObjectivePrograms() != null) programs = eaform.getPrograms().getNationalPlanObjectivePrograms(); break;
+  		case ProgramUtil.PRIMARY_PROGRAM_KEY: if (eaform.getPrograms().getPrimaryPrograms() != null) programs =  eaform.getPrograms().getPrimaryPrograms(); break;
+  		case ProgramUtil.SECONDARY_PROGRAM_KEY: if (eaform.getPrograms().getSecondaryPrograms() != null) programs =  eaform.getPrograms().getSecondaryPrograms(); break;
+	  }
+  //0 displayAddDefaultProgram = "true" & displayAddProgram = "false";
+  //1 displayAddDefaultProgram = "false" & displayAddProgram = "true";
+  //2 displayAddDefaultProgram = "true" & displayAddProgram = "true";
+	  if(programs == null || programs.size() == 0){
+//		  displayAddDefaultProgram = "true";
+//		  displayAddProgram = "true";
+		  result = 2;
+	  }
+	  
+	  if(programs!=null && programs.size()>0){
+		  for (Iterator it = programs.iterator(); it.hasNext();) {
+			  AmpActivityProgram actProgram = (AmpActivityProgram) it.next();
+			  if(actProgram.getProgram().getParentThemeId()==null)
+				  {
+//				  	displayAddDefaultProgram = "true";
+//				  	displayAddProgram = "false";
+				  result = 0;
+				  }
+			  else
+			  {
+//				  	displayAddDefaultProgram = "false";
+//				  	displayAddProgram = "true";
+				  result = 1;
+			  }
+		}
+	  }
+	  return result;
+}
+
+private List<AmpTheme> getThenmes(Long parentid) throws DgException{
     ArrayList<AmpTheme> prl = new ArrayList<AmpTheme>(ProgramUtil.getSubThemes(parentid));
     return prl;
   }
@@ -296,7 +344,7 @@ public class AddProgram
 				program.setProgramPercentage(100f);
 				return;
 			} else {
-				if (program.getProgramPercentage()==100f){
+				if (program.getProgramPercentage()== null || program.getProgramPercentage()==100f){
 					program.setProgramPercentage(0f);
 					return;
 				} 

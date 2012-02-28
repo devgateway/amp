@@ -259,6 +259,7 @@ dojo.addOnLoad(init);
  * @param evt
  */
 function doBuffer(evt) {
+	map.infoWindow.hide();
 	if (searchactive && searchdistance) {
 		showLoading();
 		map.graphics.clear();
@@ -545,7 +546,7 @@ function MapFind(activity) {
 				if(location.lon != '' && location.lat != '')
 					var pt = new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid" : 4326}));
 				else{
-					console.log(location.name +' '+ activity.activityname);
+					//console.log(location.name +' '+ activity.activityname);
 					return true;
 				}
 			}
@@ -1044,9 +1045,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
 
-	dojo
-			.forEach(
-					activity.structures,
+	dojo.forEach(activity.structures,
 					function(structure) {
 						var sms = new esri.symbol.PictureMarkerSymbol(
 								'/esrigis/structureTypeManager.do~action=displayIcon~id='

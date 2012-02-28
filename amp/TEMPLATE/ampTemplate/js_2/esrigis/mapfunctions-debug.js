@@ -32,6 +32,7 @@ var structureson;
 var maxExtent;
 var basemap;
 var structureGraphicLayer;
+var highlightson;
 /*---- Search  ----*/
 var searchactive = new Boolean();
 var searchdistance;
@@ -771,31 +772,37 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
-	showLoading();
-	implementationLevel[0].mapField = COUNTY;
-	implementationLevel[1].mapField = DISTRICT;
-	locations = new Array();
-	closeHide("highlightLegend");
-	$('#hlight').attr('onclick', '').unbind('click');
-	$('#hlightz').attr('onclick', '').unbind('click');
-
-	var xhrArgs = {
-		url : "/esrigis/datadispatcher.do?showhighlights=true&level="
-				+ implementationLevel[level].name,
-		handleAs : "json",
-		load : function(jsonData) {
-			// For every item we received...
-			dojo.forEach(jsonData, function(location) {
-				locations.push(location);
-			});
-			MapFindLocation(implementationLevel[level]);
-		},
-		error : function(error) {
-			// Error handler
-		}
-	};
-	// Call the asynchronous xhrGet
-	var deferred = dojo.xhrGet(xhrArgs);
+	if (highlightson){
+		closeHide("highlightLegend");
+		highlightson =false;
+	}else{
+		showLoading();
+		implementationLevel[0].mapField = COUNTY;
+		implementationLevel[1].mapField = DISTRICT;
+		locations = new Array();
+		closeHide("highlightLegend");
+		$('#hlight').attr('onclick', '').unbind('click');
+		$('#hlightz').attr('onclick', '').unbind('click');
+	
+		var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?showhighlights=true&level="
+					+ implementationLevel[level].name,
+			handleAs : "json",
+			load : function(jsonData) {
+				// For every item we received...
+				dojo.forEach(jsonData, function(location) {
+					locations.push(location);
+				});
+				MapFindLocation(implementationLevel[level]);
+			},
+			error : function(error) {
+				// Error handler
+			}
+		};
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+		highlightson = true;
+	}
 }
 
 var currentLevel;

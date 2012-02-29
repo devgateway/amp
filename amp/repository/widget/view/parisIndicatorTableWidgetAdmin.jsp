@@ -43,7 +43,7 @@
                     <c:forEach var="piTable" items="${piTableWidgetForm.piTableWidgets}" varStatus="stat">
                         <tr>
                             <td nowrap="nowrap">
-                                ${piTable.name}
+                                <c:out value="${piTable.name}"></c:out>
                             </td>
 
                             <td nowrap="nowrap">

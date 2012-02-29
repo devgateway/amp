@@ -133,7 +133,7 @@ table tr td {font-size:11px;}
                 <digi:trn>Workspace Name</digi:trn>
               </c:set>
               <span title="${translation}">                
-                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>	
+                	<strong style="color:#FFFFFF"><c:out value="${teamMember.teamName}"/></strong>	
               </span>              
 			 	
 		</div>

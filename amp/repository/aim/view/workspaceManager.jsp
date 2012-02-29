@@ -238,7 +238,7 @@
                     children+='<ul>';
                     for(var i=0;i<childrenWorkspaces.length;i++){
                         var childrenWorkspace=childrenWorkspaces[i];
-                        children+='<li>'+childrenWorkspace.name+'</li>';
+                        children+='<li>'+childrenWorkspace.name.replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;")+'</li>';
                     }
                     children+='</ul>';
                 }
@@ -249,13 +249,13 @@
                     compOrgs+='<ul>';
                     for(var i=0;i<childrenOrganizations.length;i++){
                         var childOrg=childrenOrganizations[i];
-                        compOrgs+='<li>'+childOrg.name+'</li>';
+                        compOrgs+='<li>'+childOrg.name.replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;") +'</li>';
                     }
                     compOrgs+='</ul>';
                 }
-                var name=oRecord.getData( 'name' ).replace("\'", "\\'");
+                var name=oRecord.getData( 'name' ).replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;");
                 elCell.innerHTML =
-                    oRecord.getData( 'name' ) 
+                    name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                     '<ul>'+
                     '<li><digi:trn>'+oRecord.getData( 'accessType' )+'</digi:trn></li>'+

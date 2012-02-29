@@ -42,7 +42,7 @@
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-min.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-min.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
    	
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -380,10 +380,10 @@
         	</table>
         </div>
         <!-- Data Source -->
-        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;overflow-y: scroll;"> 
+        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;"> 
         	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
         	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
-        	<table id="sourcecontent" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+        	<table id="sourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		<tbody>
 					<tr>
 						<td valign="top" style="font-weight: bolder;">
@@ -391,6 +391,9 @@
 						</td>
 						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Activity Id</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;">
+							<digi:trn>Donors</digi:trn>
 						</td>
 						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Commitments</digi:trn>
@@ -401,6 +404,11 @@
 					</tr>
 				</tbody>
         	</table>
+        	<div style="overflow-y: scroll;height: 350px;">
+        	<table id="sourcecontent" width="97%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		
+        	</table>
+        	</div>
         </div>
         <!-- Search Structures-->
         <div id="distancediv" class="searchContent">

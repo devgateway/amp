@@ -524,7 +524,8 @@ public class DbUtil {
             publicwhere.append(" aa where aa.team in (select at.ampTeamId from ");
             publicwhere.append(AmpTeam.class.getName());
             publicwhere.append(" at where (at.parentTeamId is null and at.accessType='Management') ");
-            publicwhere.append(" or (at.parentTeamId.parentTeamId is null and at.parentTeamId.accessType='Management'))");
+            publicwhere.append(" or (at.parentTeamId.parentTeamId is null and at.parentTeamId.accessType='Management'");
+            publicwhere.append(" and at.accessType!='Management'))");
 
 
             
@@ -536,7 +537,7 @@ public class DbUtil {
                 qs.append(whereCaluse);
                 qs.append(") and sec.activityId in (" + publicwhere);
                 qs.append(") and sec.activityId.team is not null and sec.activityId.draft=false and");
-                qs.append(" sec.activityId.approvalStatus='approved'");
+                qs.append(" sec.activityId.approvalStatus in ('approved', 'startedapproved'");
                 qs.append(" and sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(")");

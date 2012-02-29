@@ -234,10 +234,11 @@ public class OrgProfileUtil {
                 }
                 
                 if (showOnlyApprovedActivities) {
-					queryString += ActivityUtil.getApprovedActivityQueryString("act");
-				}
+                    queryString += ChartWidgetUtil.getTeamQueryManagement();
+                } else {
+                    queryString += ChartWidgetUtil.getTeamQuery(member);
+                }
                 
-                queryString += ChartWidgetUtil.getTeamQuery(member);
                 qry = session.createQuery(queryString);
                 qry.setDate("startDate", startDate);
                 qry.setDate("endDate", endDate);
@@ -300,9 +301,10 @@ public class OrgProfileUtil {
             }
             
             if (showOnlyApprovedActivities) {
-				queryString += ActivityUtil.getApprovedActivityQueryString("act");
-			}
-            
+                queryString += ChartWidgetUtil.getTeamQueryManagement();
+            } else {
+                queryString += ChartWidgetUtil.getTeamQuery(member);
+            }
             Query qry = session.createQuery(queryString);
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
@@ -462,11 +464,6 @@ public class OrgProfileUtil {
                 queryString += " and loc.id in (:locations) ";
 
             }
-
-            if (filter.getShowOnlyApprovedActivities()) {
-				queryString += ActivityUtil.getApprovedActivityQueryString("act");
-			}
-
             if (orgIds == null) {
                 if (orgGroupId != -1) {
                     queryString += ChartWidgetUtil.getOrganizationQuery(true, orgIds);
@@ -762,8 +759,7 @@ public class OrgProfileUtil {
         }
         queryString += " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType"
                 + "  and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
-        queryString += ChartWidgetUtil.getTeamQuery(teamMember);
-
+       
         if (orgIds == null) {
             if (orgGroupId != null && orgGroupId != -1) {
                 queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
@@ -773,9 +769,12 @@ public class OrgProfileUtil {
         }
 
         if (showOnlyApprovedActivities) {
-			queryString += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-        
+            queryString += ChartWidgetUtil.getTeamQueryManagement();
+        }
+        else{
+             queryString += ChartWidgetUtil.getTeamQuery(teamMember);
+        }
+     
         // specified survyes
         queryString += " and ah.ampAHSurveyId in (" + condition + ")";
         if (locationCondition) {

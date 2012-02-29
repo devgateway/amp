@@ -4452,9 +4452,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		return department;
         }
       
-	public static String getApprovedActivityQueryString(String label) {
+	/*public static String getApprovedActivityQueryString(String label) {
 		String query = null;
 		query = " AND " + label + ".draft = false AND " + label + ".approvalStatus LIKE 'approved' ";
 		return query;
-	}
+	}*/
 } // End

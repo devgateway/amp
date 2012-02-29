@@ -338,7 +338,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpApplicationSettings tempSettings = null;
 		
-		if ( tm.getTeamId()== null ){
+		if (tm == null || tm.getTeamId() == null ) {
 			tm	= null;
 		}
 		if (tm != null) {

@@ -1039,13 +1039,16 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getSession();
+			Locale oldLoc=(Locale)session.get(Locale.class, locale.getCode());
+			oldLoc.setAvailable(locale.isAvailable());
+			oldLoc.setLeftToRight(locale.getLeftToRight());
 
 //beginTransaction();
 			if (locale.getMessageLangKey() == null) {
 				locale.setMessageLangKey("ln:" + locale.getCode());
 			}
 
-			session.update(locale);
+			session.update(oldLoc);
 
 			//tx.commit();
 

@@ -57,7 +57,7 @@
 	</c:otherwise>
 </c:choose>
  
-<div id="saveTitlePanel" class="invisible-item">
+<div id="saveTitlePanel" style="display:none">
 	<div class="hd" style="font-size: 8pt">
 		${plsEnterTitle}
 	</div>

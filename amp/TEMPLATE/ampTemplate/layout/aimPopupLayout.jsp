@@ -36,6 +36,12 @@
      .selector_type_cont {padding: 5px;}
 	.buttonx,.dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 	.buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;}
+	.invisible-item{display: none;}
+.white-item{color: white;}
+.marginal-five{margin-right:5px;}
+a {
+color: #376091;
+}
 	</style>
 </head>
 <body bgcolor="#ffffff">

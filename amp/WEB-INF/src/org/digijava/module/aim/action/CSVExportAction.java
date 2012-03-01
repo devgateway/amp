@@ -93,57 +93,60 @@ public class CSVExportAction
 	      rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
 	    }
 	
-	    //show title+desc
-	    rowId.inc();
-	    colId.reset();
-	    row = sheet.createRow(rowId.shortValue());
-	    HSSFCell cell = row.createCell(colId.shortValue());
-	
-	    Site site = RequestUtils.getSite(request);
-	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-	
-	    String siteId=site.getSiteId();
-	    String locale=navigationLanguage.getCode();	
+//	    //show title+desc
+//	    rowId.inc();
+//	    colId.reset();
+//	    row = sheet.createRow(rowId.shortValue());
+//	    HSSFCell cell = row.createCell(colId.shortValue());
+//	
+//	    Site site = RequestUtils.getSite(request);
+//	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+//	
+//	    String siteId=site.getSiteId();
+//	    String locale=navigationLanguage.getCode();	
+//	    
+//	    String translatedNotes = "";
+//	    if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+//	    	translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
+//	    }
+//		if ("".equalsIgnoreCase(translatedNotes)) {
+//		    translatedNotes = AmpReports.getNote(session);
+//		}
+//	    
+//		
+//	    cell.setCellValue(translatedNotes + "\n");
+//	    
+//	    grdx.makeColSpan(rd.getTotalDepth(),false);
+//	    rowId.inc();
+//	    colId.reset();
+//	
+//	    row = sheet.createRow(rowId.shortValue());
+//	    cell = row.createCell(colId.shortValue());
+//	    
+//	  	
+//		String translatedReportName="Report Name:";
+//		String translatedReportDescription="Description:";
+//		try{	
+//			translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
+//			translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
+//		}catch (WorkerException e){;}
+//	
+//	    cell.setCellValue(translatedReportName+": " + r.getName());
+//	
+//	    grdx.makeColSpan(rd.getTotalDepth(),false);
+//	    rowId.inc();
+//	    colId.reset();
+//	
+//	    row = sheet.createRow(rowId.shortValue());
+//	    cell = row.createCell(colId.shortValue());
+//	    cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
+//	
+//	    grdx.makeColSpan(rd.getTotalDepth(),false);
+//	    rowId.inc();
+//	    colId.reset();
 	    
-	    String translatedNotes = "";
-	    if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
-	    	translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
-	    }
-		if ("".equalsIgnoreCase(translatedNotes)) {
-		    translatedNotes = AmpReports.getNote(session);
-		}
+	    grdx.createHeaderNameAndDescription(request);
 	    
-		
-	    cell.setCellValue(translatedNotes + "\n");
-	    
-	    grdx.makeColSpan(rd.getTotalDepth(),false);
-	    rowId.inc();
-	    colId.reset();
-	
-	    row = sheet.createRow(rowId.shortValue());
-	    cell = row.createCell(colId.shortValue());
-	    
-	  	
-		String translatedReportName="Report Name:";
-		String translatedReportDescription="Description:";
-		try{	
-			translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
-			translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-		}catch (WorkerException e){;}
-	
-	    cell.setCellValue(translatedReportName+": " + r.getName());
-	
-	    grdx.makeColSpan(rd.getTotalDepth(),false);
-	    rowId.inc();
-	    colId.reset();
-	
-	    row = sheet.createRow(rowId.shortValue());
-	    cell = row.createCell(colId.shortValue());
-	    cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
-	
-	    grdx.makeColSpan(rd.getTotalDepth(),false);
-	    rowId.inc();
-	    colId.reset();
 	    grdx.setAutoSize(false);
 	    grdx.generate();
 	    

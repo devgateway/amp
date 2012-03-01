@@ -133,6 +133,10 @@ public class ReportsFilterPicker extends MultiAction {
 
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
+		if (teamMember != null && teamMember.getTeamId() == null )
+			teamMember = null;
+		
 		if ( teamMember != null ) {
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			if (tempSettings == null)

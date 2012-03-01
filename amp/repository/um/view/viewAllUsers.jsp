@@ -250,7 +250,7 @@ function banUser(txt) {
 																													items="${us.teamMembers}">
 																													<tr>
 																														<td nowrap><li>
-                                                                                                                                                                                                        <c:out value="${member.ampTeam.name}"/>&nbsp;( <c:out value="${member.ampMemberRole.role}"/>)&nbsp;&nbsp;</li>
+                                                                                                                                                                                                        <c:out value="${member.ampTeam.name}"/>&nbsp;( <digi:trn><c:out value="${member.ampMemberRole.role}"/></digi:trn>)&nbsp;&nbsp;</li>
 																														</td>
 
 																													</tr>

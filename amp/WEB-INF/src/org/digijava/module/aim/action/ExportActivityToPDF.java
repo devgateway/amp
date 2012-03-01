@@ -1457,14 +1457,6 @@ public class ExportActivityToPDF extends Action {
 	//cuts <p> and </p> tags from editTag value
 	private String processEditTagValue(HttpServletRequest request,String editTagKey) throws Exception {
 		String result=getEditTagValue(request,editTagKey);
-		if(result!=null){
-			result=result.replaceAll("\\<.*?>","");
-            result=result.replaceAll("&lt;", "<");
-			result = result.replaceAll("&gt;",">");
-            result = result.replaceAll("&amp;","&");
-            result = result.replaceAll("&rsquo;","'");
-            
-		}
 		
 		return ExportActivityToPdfUtil.unhtmlentities(result);
 	}

@@ -7,13 +7,14 @@ import java.util.Set;
 
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
 public class AmpActivity extends Permissible implements Comparable<AmpActivity>, Serializable,
-		LoggerIdentifiable {
+		LoggerIdentifiable, HierarchyListable {
 
 	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
@@ -1779,4 +1780,28 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.regionalObservations = regionalObservations;
 	}
 
+    @Override
+    public String getLabel() {
+        return this.name;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String getUniqueId() {
+        return String.valueOf(this.ampActivityId);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String getAdditionalSearchString() {
+        return this.name;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Collection<? extends HierarchyListable> getChildren() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int getCountDescendants() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

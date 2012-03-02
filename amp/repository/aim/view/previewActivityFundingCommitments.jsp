@@ -35,12 +35,12 @@
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff">
 								<field:display name="Adjustment Type Commitment" feature="Commitments">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 							</field:display>
 							</td>
@@ -95,13 +95,13 @@
 	</tr>
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF">
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 							</module:display>
 							</td>
@@ -164,13 +164,13 @@
         <logic:iterate name="funding" property="fundingDetails"
                 id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                 <logic:equal name="fundingDetail" property="transactionType" value="0">
-                        <logic:equal name="fundingDetail" property="adjustmentType" value="2">
+                        <logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Pipeline">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF">
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 							</module:display>
 							</td>

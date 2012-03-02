@@ -66,6 +66,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
@@ -2557,11 +2558,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 							.getTransactionAmount());
 					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
 							.getCurrencyCode());
-					if(detail.getAdjustmentType() == Constants.ACTUAL&&transactionYear==currentYear){
+					if(detail.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) &&transactionYear==currentYear){
 						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.EXPENDITURE){
 							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
 									detail.getTransactionType(),
-									detail.getAdjustmentType(),
+									detail.getAdjustmentTypeName(),
 									transactionAmount, transationDate,
 									currency, null);
 							actualExpDisbMeasures.add(actualDisbFundingDet);
@@ -2596,11 +2597,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 							.getTransactionAmount());
 					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
 							.getCurrencyCode());
-					if(detail.getAdjustmentType() == Constants.ACTUAL&&transactionYear==currentYear){
+					if(detail.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) &&transactionYear==currentYear){
 						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.COMMITMENT){
 							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
 									detail.getTransactionType(),
-									detail.getAdjustmentType(),
+									detail.getAdjustmentTypeName(),
 									transactionAmount, transationDate,
 									currency, null);
 							actualCommDisbMeasures.add(actualDisbFundingDet);

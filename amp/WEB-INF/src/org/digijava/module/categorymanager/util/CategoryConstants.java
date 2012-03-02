@@ -78,6 +78,10 @@ public class CategoryConstants {
 	public static final String ACTIVITY_BUDGET_NAME			= "Activity Budget";
 	public static final String ACTIVITY_BUDGET_KEY			= "activity_budget";
 	
+	public static final String ADJUSTMENT_TYPE_NAME			= "Adjustment Type";
+	public static final String ADJUSTMENT_TYPE_KEY			= "adjustment_type";
+	
+	
 	//--- IPA Contracting Step 13
 	
 	//Activity Category
@@ -148,6 +152,14 @@ public class CategoryConstants {
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On Budget", true);
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off Budget", true);
+
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ACTUAL = 
+		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Actual", true);
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PLANNED = 
+		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Planned", true);
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PIPELINE = 
+			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", true);
+	 
 	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

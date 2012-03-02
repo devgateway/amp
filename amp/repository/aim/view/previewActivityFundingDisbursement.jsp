@@ -33,13 +33,13 @@
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">
 									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-										<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+										<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 									</digi:trn>
 								</module:display>
 							</td>
@@ -99,13 +99,13 @@
 	<!-- Start Actual Disbursements -->
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
 									parentModule="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table">	
 										<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-											<b><bean:write name="fundingDetail" property="adjustmentTypeName" /></b>
+											<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 										</digi:trn>
 								</module:display>
 							</td>

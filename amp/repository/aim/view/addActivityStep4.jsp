@@ -441,7 +441,7 @@ else {
 																								<!-- L2 START-->
 																								<tr bgcolor="#ffffff">
 																									<field:display name="Actual/Planned Commitments" feature="Regional Funding">
-                                                                                                   		<td><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
+                                                                                                   		<td><digi:trn key="aim:${commitment.adjustmentTypeName.value}"><c:out value="${commitment.adjustmentTypeName.value}"/></digi:trn></td>
                                                                                                     </field:display>
 																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>
@@ -480,7 +480,7 @@ else {
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L3 START-->
 																								<tr bgcolor="#ffffff">
-																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
+																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><digi:trn key="aim:${disbursement.adjustmentTypeName.value}"><c:out value="${disbursement.adjustmentTypeName.value}"/></digi:trn>
 																									</td></field:display>
 																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>
@@ -521,7 +521,7 @@ else {
 																								<!-- L4 START-->
 																								<tr bgcolor="#ffffff">
 																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding">
-                                                                                                    <td><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
+                                                                                                    <td><digi:trn key="aim:${expenditure.adjustmentTypeName.value}"><c:out value="${expenditure.adjustmentTypeName.value}"/></digi:trn>
 																									</td></field:display>
 																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>

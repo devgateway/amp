@@ -767,7 +767,7 @@
                                                                                         <td width="50">
                                                                                         <field:display name="Adjustment Type Commitment" feature="Commitments"></field:display>
                                                                                           <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
 																							</digi:trn>
                                                                                         </td>
                                                                                         <td width="120" align="right">
@@ -826,7 +826,7 @@
                                                                                     <td width="50">
 	                                                                                    <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders"></field:display>
     	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-                                                                                                <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                                <bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
                                                                                                 </digi:trn>
                                                                                     </td>
 
@@ -876,7 +876,7 @@
 																										<td width="50">
 																											<field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display>
 																												<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-																													<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																													<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
 																												</digi:trn>
 																										</td>
 																										<td width="120" align="right">
@@ -934,7 +934,7 @@
 																									<td width="50">
 																									<field:display name="Adjustment Type Expenditure" feature="Expenditures"></field:display>
 																										<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-																											<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																											<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
 																										</digi:trn>
 																									</td>
 																									<td width="120" align="right">

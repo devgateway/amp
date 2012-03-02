@@ -93,8 +93,8 @@
 			type="org.digijava.module.aim.helper.FundingDetail">
 			<logic:equal name="fundingDetail" property="transactionType"
 				value="4">
-				<logic:equal name="fundingDetail" property="adjustmentType"
-					value="1">
+				<logic:equal name="fundingDetail" property="adjustmentTypeName.value"
+					value="Actual">
 
 					<tr bgcolor="#ffffff">
 
@@ -103,7 +103,7 @@
 							feature="Disbursement Orders">
 							<digi:trn
 								key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-								<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								<bean:write name="fundingDetail" property="adjustmentTypeName.value" />
 							</digi:trn>
 						</field:display></td>
 						<td width="25%" align="right" bgcolor="#ffffff"><field:display

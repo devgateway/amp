@@ -2,8 +2,8 @@ package org.digijava.module.dataExchange.util;
 
 public class DataExchangeConstants {
 
-	public static String ADJUSTMENT_TYPE_ACTUAL = "Actual";
-	public static String ADJUSTMENT_TYPE_PLANNED = "Planned";
+//	public static String ADJUSTMENT_TYPE_ACTUAL = "Actual";
+//	public static String ADJUSTMENT_TYPE_PLANNED = "Planned";
 	
 	public static String ORG_ROLE_REPORTING_AGENCY = "Reporting Agency";
 	public static String ORG_ROLE_FUNDING_AGENCY = "Funding Agency";

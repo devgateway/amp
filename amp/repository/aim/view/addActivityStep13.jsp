@@ -696,12 +696,14 @@
 			                                                           <c:forEach  items="${contract.disbursements}" var="disbursement" >
 			                                                               <tr>
 			                                                                   <td align="center" valign="top">
-			                                                                       <c:if test="${disbursement.adjustmentType==0}">
-		                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
-			                                                                       </c:if>
-			                                                                       <c:if test="${disbursement.adjustmentType==1}">
-		                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
-			                                                                       </c:if>
+			                                                                   
+			                                                                        <digi:trn>${disbursement.adjustmentTypeName.value}</digi:trn> 
+<%-- 			                                                                       <c:if test="${disbursement.adjustmentType==0}"> --%>
+<%-- 		                                                                             <digi:trn key="aim:actual">Actual</digi:trn> --%>
+<%-- 			                                                                       </c:if> --%>
+<%-- 			                                                                       <c:if test="${disbursement.adjustmentType==1}"> --%>
+<%-- 		                                                                             <digi:trn key="aim:planned">Planned</digi:trn> --%>
+<%-- 			                                                                       </c:if> --%>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                       ${disbursement.amount}
@@ -743,12 +745,14 @@
 			                                                           		<c:if test="${fundingDetail.transactionType == 1}">
 			                                                               <tr>
 			                                                                   <td align="center" valign="top">
-			                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
-		                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
-			                                                                       </c:if>
-			                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
-		                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
-			                                                                       </c:if>
+		                                                                             <digi:trn key="aim:actual">${fundingDetail.adjustmentTypeName.value}</digi:trn>
+			                                                                   
+<%-- 			                                                                       <c:if test="${fundingDetail.adjustmentType==0}"> --%>
+<%-- 		                                                                             <digi:trn key="aim:actual">Actual</digi:trn> --%>
+<%-- 			                                                                       </c:if> --%>
+<%-- 			                                                                       <c:if test="${fundingDetail.adjustmentType==1}"> --%>
+<%-- 		                                                                             <digi:trn key="aim:planned">Planned</digi:trn> --%>
+<%-- 			                                                                       </c:if> --%>
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                       ${fundingDetail.transactionAmount}

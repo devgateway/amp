@@ -44,6 +44,8 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ShowAddComponent extends Action {
 
@@ -294,14 +296,7 @@ public class ShowAddComponent extends Action {
 						if (fd != null) {
 							switch (num) {
 							case 1:
-								fd.setAdjustmentType(Integer.parseInt(val));
-								if (fd.getAdjustmentType() == 1) {
-									fd.setAdjustmentTypeName("Actual");
-								} else if (fd.getAdjustmentType() == 0) {
-									fd.setAdjustmentTypeName("Planned");
-                                } else if (fd.getAdjustmentType() == 2) {
-                                    fd.setAdjustmentTypeName("Pipeline");
-                                }
+								fd.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY, Long.parseLong(val)) );
 								break;
 							case 2:
 								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
@@ -335,13 +330,8 @@ public class ShowAddComponent extends Action {
 						if (fd != null) {
 							switch (num) {
 							case 1:
-								fd.setAdjustmentType(Integer.parseInt(val));
-								logger.debug("Adjustment type = " + fd.getAdjustmentType());
-								if (fd.getAdjustmentType() == 1) {
-									fd.setAdjustmentTypeName("Actual");
-								} else if (fd.getAdjustmentType() == 0) {
-									fd.setAdjustmentTypeName("Planned");
-								}
+								fd.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY, Long.parseLong(val)) );
+								logger.debug("Adjustment type = " + fd.getAdjustmentTypeName().getValue());
 								break;
 							case 2:
 								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
@@ -375,13 +365,8 @@ public class ShowAddComponent extends Action {
 						if (fd != null) {
 							switch (num) {
 							case 1:
-								fd.setAdjustmentType(Integer.parseInt(val));
-								logger.debug("Adjustment type = " + fd.getAdjustmentType());
-								if (fd.getAdjustmentType() == 1) {
-									fd.setAdjustmentTypeName("Actual");
-								} else if (fd.getAdjustmentType() == 0) {
-									fd.setAdjustmentTypeName("Planned");
-								}
+								fd.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY, Long.parseLong(val)) );
+								logger.debug("Adjustment type = " + fd.getAdjustmentTypeName().getValue());
 								break;
 							case 2:
 								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));

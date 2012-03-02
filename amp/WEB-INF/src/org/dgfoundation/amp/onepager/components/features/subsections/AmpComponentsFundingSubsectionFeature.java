@@ -20,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author aartimon@dginternational.org
@@ -65,7 +67,11 @@ public class AmpComponentsFundingSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpComponentFunding cf = new AmpComponentFunding();
 				cf.setActivity(activityModel.getObject());
-				cf.setAdjustmentType(Constants.ACTUAL);
+				try {
+					cf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+				} catch (Exception e) {
+					logger.error("", e);
+				}
 				cf.setComponent(componentModel.getObject());
 				cf.setTransactionAmount(0d);
 				cf.setTransactionDate(null);

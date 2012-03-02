@@ -886,7 +886,7 @@ window.onload=autosum;
 																										<td align="center">
 																											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 																												<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-																													<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																													<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
 																												</digi:trn>
 																											</field:display>
 																										</td>
@@ -966,7 +966,7 @@ window.onload=autosum;
 							<html:hidden property="${contractDisbursement}" value="${id}"/>
 							&nbsp;
 							<html:multibox property="selContractDisbursements" value="${idx.count}"/>
-							<html:select indexed="true" name="contractDisbursement" property="adjustmentType">
+							<html:select indexed="true" name="contractDisbursement" property="adjustmentTypeName.index">
 								<html:option value="0"><digi:trn key="aim:ipa:popup:actual"> Actual</digi:trn></html:option>
 								<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
 							</html:select>

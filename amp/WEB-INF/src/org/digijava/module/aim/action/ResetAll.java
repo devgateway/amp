@@ -442,19 +442,8 @@ public class ResetAll extends Action
 						{
 							AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr.next();
 							FundingDetail fundingDetail = new FundingDetail();
-							int adjType = fundDet.getAdjustmentType().intValue();
-							fundingDetail.setAdjustmentType(adjType);
-							if (adjType == Constants.PLANNED)
-							{
-								fundingDetail.setAdjustmentTypeName("Planned");
-							}
-							else if (adjType == Constants.ACTUAL)
-							{
-								fundingDetail.setAdjustmentTypeName("Actual");
-                            } else if (adjType == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-                                fundingDetail.setAdjustmentTypeName("Pipeline");
-                            }
-							
+							fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
+														
 							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE)
 							{
 								fundingDetail.setClassification(fundDet.getExpCategory());

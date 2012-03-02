@@ -188,13 +188,13 @@
 											</tr>
 											<tr>
 												<td>
-													<select name="<%=field1%>" class="inp-text">
-														<c:if test="${comm.adjustmentType == 1}">
+													<select name="<%=field1%>" class="inp-text">													
+														<c:if test="${comm.adjustmentTypeName.value == 'Actual'}">
 															<option value="1" selected="selected"><digi:trn
 																key="aim:actual">Actual</digi:trn></option>
 															<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 														</c:if>
-														<c:if test="${comm.adjustmentType == 0}">
+														<c:if test="$${comm.adjustmentTypeName.value == 'Planned'}">
 															<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
 															<option value="0" selected="selected"><digi:trn
 																key="aim:planned">Planned</digi:trn></option>

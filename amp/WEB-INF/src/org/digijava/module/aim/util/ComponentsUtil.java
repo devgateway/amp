@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -569,11 +570,11 @@ public class ComponentsUtil {
             if (fundingDetail.getExchangeRate() != null && fundingDetail.getExchangeRate() != 0) {
                 exchangeRate = fundingDetail.getExchangeRate();
             }
-            if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 0) {
+            if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) ) {
                 montoProgramado += fundingDetail.getTransactionAmount() / exchangeRate;
-            } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 1) {
+            } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                 montoReprogramado += fundingDetail.getTransactionAmount() / exchangeRate;
-            } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType() == 1) {
+            } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                 montoEjecutado += fundingDetail.getTransactionAmount() / exchangeRate;
             }
             yearInfo.put("MontoProgramado", montoProgramado);

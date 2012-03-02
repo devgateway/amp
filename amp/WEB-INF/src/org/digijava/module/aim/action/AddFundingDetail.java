@@ -28,6 +28,8 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 //import au.com.bytecode.opencsv.CSVReader;
@@ -166,7 +168,11 @@ public class AddFundingDetail extends Action {
 
                }
 		fundingDetail.setCurrencyCode(currCode);
-		fundingDetail.setAdjustmentType(Constants.ACTUAL);
+		try {
+			fundingDetail.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+		} catch (Exception e) {
+			logger.error("", e);
+		}
         fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setIndex(fundingDetails.size());
 		fundingDetail.setReportingDate(new Date(System.currentTimeMillis()));
@@ -202,8 +208,8 @@ public class AddFundingDetail extends Action {
 						if (nextLine[0].equals("commitment")) fundingDetail.setTransactionType(Constants.COMMITMENT);
 						if (nextLine[0].equals("disbursement")) fundingDetail.setTransactionType(Constants.DISBURSEMENT);
 						if (nextLine[0].equals("expenditure")) fundingDetail.setTransactionType(Constants.EXPENDITURE);
-						if (nextLine[1].equals("actual")) fundingDetail.setAdjustmentType(Constants.ACTUAL);
-						if (nextLine[1].equals("planned")) fundingDetail.setAdjustmentType(Constants.PLANNED);
+						if (nextLine[1].equals("actual")) fundingDetail.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+						if (nextLine[1].equals("planned")) fundingDetail.setAdjustmentTypeName(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED));
 						BigDecimal fundingAmount = FormatHelper.parseBigDecimal(nextLine[2]);
 						fundingDetail.setTransactionAmount(fundingAmount.toPlainString());
 						fundingDetail.setCurrencyCode(nextLine[3]);

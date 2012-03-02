@@ -14,10 +14,19 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import com.sun.istack.logging.Logger;
 
 public class FundingCalculationsHelper {
+	
+	private static Logger logger = Logger.getLogger(FundingCalculationsHelper.class); 
 
 	List<FundingDetail> fundDetailList = new ArrayList<FundingDetail>();
 
@@ -91,8 +100,14 @@ public class FundingCalculationsHelper {
 		while (fundDetItr.hasNext()) {
 
 			AmpFundingDetail fundDet = fundDetItr.next();
-			int adjType = 1;
-			if(fundDet.getAdjustmentType() != null) adjType=fundDet.getAdjustmentType().intValue();
+			AmpCategoryValue adjType=null;
+			try {
+				adjType = CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.info("", e);
+			}
+			if(fundDet.getAdjustmentType() != null) adjType=fundDet.getAdjustmentType();
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 
@@ -102,7 +117,7 @@ public class FundingCalculationsHelper {
 				fundingDetail.setUseFixedRate(true);
 			}
 			fundingDetail.setIndexId(indexId++);
-			fundingDetail.setAdjustmentType(adjType);
+			fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
 			fundingDetail.setContract(fundDet.getContract());
 
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
@@ -132,8 +147,8 @@ public class FundingCalculationsHelper {
 			}
 			
 			// TOTALS
-			if (adjType == Constants.PLANNED) {
-				fundingDetail.setAdjustmentTypeName("Planned");
+			if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {
+				//fundingDetail.setAdjustmentTypeName("Planned");
 				if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
 					totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
 					totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
@@ -151,9 +166,9 @@ public class FundingCalculationsHelper {
 					totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
 					totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
 				}
-			} else if (adjType == Constants.ACTUAL) {
+			} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 
-				fundingDetail.setAdjustmentTypeName("Actual");
+				//fundingDetail.setAdjustmentTypeName("Actual");
 				if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 					totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
 					totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
@@ -170,8 +185,8 @@ public class FundingCalculationsHelper {
 					totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
 					totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
 				}
-            } else if (adjType == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-                fundingDetail.setAdjustmentTypeName("Pipeline");
+            } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+               // fundingDetail.setAdjustmentTypeName("Pipeline");
                 if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
                 	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
                     totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
@@ -186,7 +201,7 @@ public class FundingCalculationsHelper {
 		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
 
 	}
-	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode, int transactionType, int adjustmentType) {
+	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode, int transactionType, AmpCategoryValue adjustmentType) {
 		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
@@ -194,11 +209,18 @@ public class FundingCalculationsHelper {
 
 		while (fundDetItr.hasNext()) {
 
+			
 			AmpFundingDetail fundDet = fundDetItr.next();
-			int adjType = 1;
-			if(fundDet.getAdjustmentType() != null) adjType=fundDet.getAdjustmentType().intValue();
+			AmpCategoryValue adjType = null;
+			try {
+				adjType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.info("", e);
+			}
+			if(fundDet.getAdjustmentType() != null) adjType=   fundDet.getAdjustmentType();
 
-			if(adjType == adjustmentType && fundDet.getTransactionType().intValue() == transactionType){
+			if(adjType.equals(adjustmentType) && fundDet.getTransactionType().intValue() == transactionType){
 				FundingDetail fundingDetail = new FundingDetail();
 				fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 
@@ -208,7 +230,7 @@ public class FundingCalculationsHelper {
 					fundingDetail.setUseFixedRate(true);
 				}
 				fundingDetail.setIndexId(indexId++);
-				fundingDetail.setAdjustmentType(adjType);
+				fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
 				fundingDetail.setContract(fundDet.getContract());
 
 				java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
@@ -238,8 +260,8 @@ public class FundingCalculationsHelper {
 				}
 				
 				// TOTALS
-				if (adjType == Constants.PLANNED) {
-					fundingDetail.setAdjustmentTypeName("Planned");
+				if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+					//fundingDetail.setAdjustmentTypeName("Planned");
 					if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
 						totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
 						totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
@@ -257,9 +279,9 @@ public class FundingCalculationsHelper {
 						totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
 						totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
 					}
-				} else if (adjType == Constants.ACTUAL) {
+				} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 
-					fundingDetail.setAdjustmentTypeName("Actual");
+					//fundingDetail.setAdjustmentTypeName("Actual");
 					if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 						totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
 						totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
@@ -276,8 +298,8 @@ public class FundingCalculationsHelper {
 						totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
 						totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
 					}
-	            } else if (adjType == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-	                fundingDetail.setAdjustmentTypeName("Pipeline");
+	            } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())) {
+	               // fundingDetail.setAdjustmentTypeName("Pipeline");
 	                if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 	                	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
 	                    totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());

@@ -513,9 +513,7 @@ public class ExportBuilder {
 	private void buildLocationFunding(LocationFundingType lFundingType, AmpRegionalFunding ampfunding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 //		LocationFundingType retValue = objectFactory.createLocationFundingType();
 		
-		String fDetailType = (ampfunding.getAdjustmentType() == 1) ? 
-				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
-					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
+		String fDetailType = ampfunding.getAdjustmentType().getValue();
 		
 		FundingDetailType fDetail = buildFundingDetail(fDetailType, ampfunding.getTransactionDate(), 
 				ampfunding.getTransactionAmount().longValue(), ampfunding.getCurrency().getCurrencyCode());
@@ -798,9 +796,7 @@ public class ExportBuilder {
 	}	
 
 	private FundingDetailType buildFundingDetail(AmpFundingDetail detail) throws AmpExportException{
-		String fDetailType = (detail.getAdjustmentType() == 1) ? 
-				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
-					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
+		String fDetailType = detail.getAdjustmentType().getValue(); 
 		long amount = 0;
 		
 		if (detail.getTransactionAmount() != null){
@@ -825,7 +821,7 @@ public class ExportBuilder {
 			throw new AmpExportException(msg, e, AmpExportException.ACTIVITY_FORMAT);
 		}
 
-		return buildFundingDetail(fDetail.getAdjustmentTypeName(), getDate(fDetail.getTransactionDate()), amount, fDetail.getCurrencyCode());
+		return buildFundingDetail(fDetail.getAdjustmentTypeName().getValue(), getDate(fDetail.getTransactionDate()), amount, fDetail.getCurrencyCode());
 	}
 
 	private Date getDate(String stringDate) throws AmpExportException{

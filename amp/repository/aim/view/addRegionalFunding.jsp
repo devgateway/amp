@@ -182,11 +182,11 @@
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
-													<c:if test="${comm.adjustmentType == 1}">
+													<c:if test="${comm.adjustmentTypeName.index == 1}">
 														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
-													<c:if test="${comm.adjustmentType == 0}">
+													<c:if test="${comm.adjustmentTypeName.index == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
@@ -258,11 +258,11 @@
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
-													<c:if test="${comm.adjustmentType == 1}">
+													<c:if test="${comm.adjustmentTypeName.index == 1}">
 														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
-													<c:if test="${comm.adjustmentType == 0}">
+													<c:if test="${comm.adjustmentTypeName.index == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
@@ -333,11 +333,11 @@
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
-													<c:if test="${comm.adjustmentType == 1}">
+													<c:if test="${comm.adjustmentTypeName.index == 1}">
 														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
-													<c:if test="${comm.adjustmentType == 0}">
+													<c:if test="${comm.adjustmentTypeName.index == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					

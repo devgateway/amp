@@ -7,6 +7,8 @@ import java.util.Date;
 
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 /**
@@ -19,7 +21,8 @@ public class FundingDetail implements Serializable, Comparable
 	private long indexId;
 	private boolean checked;
 	private int transactionType;
-	private int adjustmentType;
+	//private int adjustmentType;
+	
 	public Date getReportingDate() {
 		return reportingDate;
 	}
@@ -29,8 +32,7 @@ public class FundingDetail implements Serializable, Comparable
 	}
 
 	private Date reportingDate;
-	private String adjustmentTypeName;
-	private String adjustmentTypeNameTrimmed;
+	private AmpCategoryValue adjustmentTypeName;
 	private String transactionDate;
 	private String transactionAmount;
 	private Long reportingOrganizationId;
@@ -98,13 +100,14 @@ public class FundingDetail implements Serializable, Comparable
 	}
 
 
-	public int getAdjustmentType() {
-		return adjustmentType;
-	}
-
-	public void setAdjustmentType(int adjustmentType) {
-		this.adjustmentType = adjustmentType;
-	}
+//	public int getAdjustmentType() {
+//		return adjustmentType;
+//	}
+//
+//	public void setAdjustmentType(int adjustmentType) {
+//		this.adjustmentType = adjustmentType;	
+//		this.adjustmentTypeName = CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ADJUSTMENT_TYPE_KEY, new Long(this.adjustmentType));
+//	}
 
 	public boolean isChecked() {
 		return checked;
@@ -171,16 +174,22 @@ public class FundingDetail implements Serializable, Comparable
 		this.reportingOrganizationId = reportingOrganizationId;
 	}
 
-	public String getAdjustmentTypeName() {
+	public AmpCategoryValue getAdjustmentTypeName() {
 		return adjustmentTypeName;
 	}
 
 	public String getAdjustmentTypeNameTrimmed(){
-		return adjustmentTypeName.replaceAll(" ","");
+		return adjustmentTypeName.getValue().replaceAll(" ","");
 	}
 
-	public void setAdjustmentTypeName(String adjustmentTypeName) {
+	public void setAdjustmentTypeName(AmpCategoryValue adjustmentTypeName) {
 		this.adjustmentTypeName = adjustmentTypeName;
+//		if (adjustmentTypeName==null) {
+//			this.adjustmentType = -1;
+//		} else {
+//			this.adjustmentType = adjustmentTypeName.getId().intValue();
+//		}
+		
 	}
 
 	public String getTransactionAmount() {

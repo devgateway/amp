@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.dgfoundation.amp.Util;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class FundingValidator {
 	
@@ -26,7 +27,7 @@ public class FundingValidator {
 				Date dt1 = DateConversion.getDate(fd1.getTransactionDate());
 				Date dt2 = DateConversion.getDate(fd2.getTransactionDate());
 				if (((dt1 == null)&&(dt2 == null))||(dt1.equals(dt2))) {
-					return fd2.getAdjustmentType() - fd1.getAdjustmentType();
+					return fd2.getAdjustmentTypeName().compareTo(fd1.getAdjustmentTypeName());
 				} else {
 					return (dt1.compareTo(dt2));
 				}
@@ -112,7 +113,7 @@ public class FundingValidator {
 			newFd.setCurrencyCode(fd.getCurrencyCode());
 			newFd.setTransactionAmount(fd.getTransactionAmount());
 			newFd.setTransactionDate(fd.getTransactionDate());
-			if (fd.getAdjustmentType() == Constants.ACTUAL) {
+			if (fd.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 				list1.add(newFd);
 			}
 		}

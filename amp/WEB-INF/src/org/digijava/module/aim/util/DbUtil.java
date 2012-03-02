@@ -6055,9 +6055,9 @@ public class DbUtil {
                                                 while (itr5.hasNext()) {
                                                     fd = (AmpFundingDetail) itr5.next();
                                                     if (fd.getTransactionType().intValue() == 1) {
-                                                        if (fd.getAdjustmentType().intValue() == 0)
+                                                        if (fd.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) )
                                                             planned += fd.getTransactionAmount().floatValue();
-                                                        else if (fd.getAdjustmentType().intValue() == 1)
+                                                        else if (fd.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
                                                             actual += fd.getTransactionAmount().floatValue();
                                                     }
                                                 }

@@ -2514,15 +2514,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           while (compFundIterator.hasNext()) {
             AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
             FundingDetail fd = new FundingDetail();
-            fd.setAdjustmentType(cf.getAdjustmentType().intValue());
-            if (fd.getAdjustmentType() == Constants.PLANNED) {
-              fd.setAdjustmentTypeName("Planned");
-            }
-            else if(fd.getAdjustmentType() == Constants.ACTUAL) {
-                fd.setAdjustmentTypeName("Actual");
-            } else if (fd.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-            	fd.setAdjustmentTypeName("Pipeline");
-            }
+            fd.setAdjustmentTypeName(cf.getAdjustmentType());
+ 
             fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());
             fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
@@ -4738,7 +4731,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                     transAmt *= 1000;
                 }
                 double exchangeRate=(helperFdet.getFixedExchangeRate()!=null)?FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() ):Util.getExchange(detCurr.getCurrencyCode(), dt);
-                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, exchangeRate);
+                
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentTypeName(), transAmt, date, detCurr, exchangeRate);
                 ampFundDets.add(fundDet);
             }
         }

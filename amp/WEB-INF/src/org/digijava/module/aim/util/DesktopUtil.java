@@ -173,7 +173,7 @@ public class DesktopUtil {
 								Iterator fdItr = funding.getFundingDetails().iterator();
 								while (fdItr.hasNext()) {
 									AmpFundingDetail fd = (AmpFundingDetail) fdItr.next();
-									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL &&
+									if (fd.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) &&
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
@@ -282,7 +282,7 @@ public class DesktopUtil {
 								Iterator fdItr = funding.getFundingDetails().iterator();
 								while (fdItr.hasNext()) {
 									AmpFundingDetail fd = (AmpFundingDetail) fdItr.next();
-									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL &&
+									if (fd.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())  &&
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());

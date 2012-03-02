@@ -45,6 +45,9 @@ import fi.joensuu.joyds1.calendar.EthiopicCalendar;
 import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class DashboardUtil {
 	
@@ -320,10 +323,17 @@ public class DashboardUtil {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
 			DecimalWraper fundingCal = null;
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, Constants.ACTUAL);
+			AmpCategoryValue adjustmentType = null;
+			try {
+				adjustmentType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				logger.error("AdjustmenType is unknown.");
+			}
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, adjustmentType);
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, Constants.ACTUAL);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, adjustmentType);
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());

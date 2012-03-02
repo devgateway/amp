@@ -11,13 +11,14 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
 	
 	private Long ampRegionalFundingId;
 	private AmpActivityVersion activity;
 	private Integer transactionType;
-	private Integer adjustmentType;
+	private AmpCategoryValue adjustmentType;
 	private Date transactionDate;
 	private Date reportingDate;
 	private Double transactionAmount;
@@ -43,13 +44,13 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 	/**
 	 * @return Returns the adjustmentType.
 	 */
-	public Integer getAdjustmentType() {
+	public AmpCategoryValue getAdjustmentType() {
 		return adjustmentType;
 	}
 	/**
 	 * @param adjustmentType The adjustmentType to set.
 	 */
-	public void setAdjustmentType(Integer adjustmentType) {
+	public void setAdjustmentType(AmpCategoryValue adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
 	/**
@@ -227,7 +228,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 		out.getOutputs().add(new Output(null, new String[] { " Trn: " }, new Object[] { transactionType }));
 		out.getOutputs().add(
 				new Output(null, new String[] { " Value: " }, new Object[] {
-						(this.adjustmentType.intValue() == 0) ? " Planned - " : " Actual - ", this.transactionAmount,
+						" " + this.adjustmentType.getValue() + " - ", this.transactionAmount,
 						" ", this.currency, " - ", this.transactionDate }));
 		return out;
 	}

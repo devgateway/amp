@@ -139,10 +139,10 @@ public class PIReport7 extends PIAbstractReport {
 								boolean[] showColumn = PIUtils.getSurveyAnswers(PIConstants.PARIS_INDICATOR_REPORT_7,
 										auxAmpAhsurvey);
 
-								if (auxFundingDetail.getAdjustmentType().intValue() == Constants.ACTUAL
+								if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())
 										&& showColumn[0]) {
 									column = 2;
-								} else if (auxFundingDetail.getAdjustmentType().intValue() == Constants.PLANNED
+								} else if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())
 										&& showColumn[1]) {
 									column = 1;
 								}

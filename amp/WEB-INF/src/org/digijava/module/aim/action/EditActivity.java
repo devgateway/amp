@@ -1391,7 +1391,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 .next();
 
             double disb = 0;
-            if (ampRegFund.getAdjustmentType().intValue() == 1 &&
+            if (ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())  &&
                 ampRegFund.getTransactionType().intValue() == 1)
               disb = ampRegFund.getTransactionAmount().
                   doubleValue();
@@ -1404,16 +1404,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                       disb);
 
             FundingDetail fd = new FundingDetail();
-            fd.setAdjustmentType(ampRegFund.getAdjustmentType()
-                                 .intValue());
-            if (fd.getAdjustmentType() == 1) {
-              fd.setAdjustmentTypeName("Actual");
-            }
-            else if (fd.getAdjustmentType() == 0) {
-              fd.setAdjustmentTypeName("Planned");
-            } else if (fd.getAdjustmentType() == 2) {
-              fd.setAdjustmentTypeName("Pipeline");
-            }
+			fd.setAdjustmentTypeName(ampRegFund.getAdjustmentType());
+
+//            fd.setAdjustmentType(ampRegFund.getAdjustmentType()
+//                                 .intValue());
+           
             fd.setCurrencyCode(ampRegFund.getCurrency()
                                .getCurrencyCode());
             fd.setCurrencyName(ampRegFund.getCurrency()
@@ -2268,22 +2263,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 				double disb = 0;
 				
-				if (ampCompFund.getAdjustmentType().intValue() == 1 && ampCompFund.getTransactionType().intValue() == 1) 
+				if (ampCompFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) 
+						&& ampCompFund.getTransactionType().intValue() == 1) 
 				disb = ampCompFund.getTransactionAmount().doubleValue();
 
 				eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
 				
 				FundingDetail fd = new FundingDetail();
-				
-				fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
-				
-				if (fd.getAdjustmentType() == 1) {
-					fd.setAdjustmentTypeName("Actual");
-				} else if (fd.getAdjustmentType() == 0) {
-					fd.setAdjustmentTypeName("Planned");
-                } else if (fd.getAdjustmentType() == 2) {
-                    fd.setAdjustmentTypeName("Pipeline");
-                }
+				fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType() );
+			
+			//	fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
 		
 				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 				

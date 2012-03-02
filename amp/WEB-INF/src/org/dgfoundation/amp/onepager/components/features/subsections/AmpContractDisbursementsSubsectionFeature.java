@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +39,10 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -68,10 +72,30 @@ public class AmpContractDisbursementsSubsectionFeature extends
 			@Override
 			protected void populateItem(final ListItem<IPAContractDisbursement> item) {
 				IModel<IPAContractDisbursement> model = item.getModel();
+				
+				Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY);
+				ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
+				for(AmpCategoryValue categoryValue: funding_type_values)
+				{
+					metaInfoList.add( new MetaInfo<Integer>(categoryValue.getValue(), categoryValue.getIndex()));
+				}
+				
+					
+				MetaInfo<Integer>[] metainfoArray = metaInfoList.toArray(new MetaInfo[]{}); 	
+//					new MetaInfo[] { new MetaInfo<Integer>("Actual",Constants.ACTUAL), 
+//					new MetaInfo<Integer>("Planned" ,Constants.PLANNED),  
+//					new MetaInfo<Integer>("Pipeline",Constants.ADJUSTMENT_TYPE_PIPELINE )};
+				
+				
+				
+//				AmpGroupFieldPanel<MetaInfo<Integer>> adjType = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
+//						new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model, "adjustmentType"), OnePagerConst.adjustmentTypes),
+//						Arrays.asList(OnePagerConst.adjustmentTypes),
+//						"Adjustment Type", true, false, new AmpMetaInfoRenderer<Integer>());
+				
 				AmpGroupFieldPanel<MetaInfo<Integer>> adjType = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
-						new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model, "adjustmentType"), OnePagerConst.adjustmentTypes),
-						Arrays.asList(OnePagerConst.adjustmentTypes),
-						"Adjustment Type", true, false, new AmpMetaInfoRenderer<Integer>());
+						new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model, "adjustmentType"),metainfoArray),
+						metaInfoList, CategoryConstants.ADJUSTMENT_TYPE_NAME, true, false, new AmpMetaInfoRenderer<Integer>());
 				item.add(adjType);
 				
 				AmpFundingAmountComponent<IPAContractDisbursement> funding = new AmpFundingAmountComponent<IPAContractDisbursement>("fundingAmount",

@@ -1202,7 +1202,7 @@ public class ExportActivityToPDF extends Action {
 									if(fundingDetail.getContract()!=null && contract.getContractName().equals(fundingDetail.getContract().getContractName()) && fundingDetail.getTransactionType()==1){
 										adjType=new PdfPCell();
 										adjType.setBorder(0);
-										adjType.addElement(new Paragraph(fundingDetail.getAdjustmentType()==1?"Planned":"Actual",plainFont));
+										adjType.addElement(new Paragraph(fundingDetail.getAdjustmentTypeName().getValue(),plainFont));
 										fundDisbursmentsInnerTable.addCell(adjType);
 										
 										PdfPCell amount=new PdfPCell();
@@ -2214,7 +2214,7 @@ public class ExportActivityToPDF extends Action {
 						if(funding.getFundingDetails()!=null){
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()==0){
-									if(fd.getAdjustmentType()==0){
+									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
 										PdfPCell plCommCell2=new PdfPCell();
 										plCommCell2.setBorder(0);
 										plCommCell2.setBackgroundColor(new Color(221,221,221));
@@ -2249,7 +2249,7 @@ public class ExportActivityToPDF extends Action {
 							
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()==0){
-									if(fd.getAdjustmentType()==1){
+									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
 										PdfPCell actCommCell2=new PdfPCell();
 										actCommCell2.setBorder(0);
 										actCommCell2.setBackgroundColor(new Color(221,221,221));
@@ -2289,7 +2289,7 @@ public class ExportActivityToPDF extends Action {
 									if(FeaturesUtil.isVisibleField("Planned Disbursement Preview", ampContext)){									
 										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 											if(fd.getTransactionType()==1){
-												if(fd.getAdjustmentType()==0){
+												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
 													PdfPCell plDisbCell2=new PdfPCell();
 													plDisbCell2.setBorder(0);
 													plDisbCell2.setBackgroundColor(new Color(221,221,221));
@@ -2323,7 +2323,7 @@ public class ExportActivityToPDF extends Action {
 									if(FeaturesUtil.isVisibleField("Adjustment Type Disbursement", ampContext)){
 										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 											if(fd.getTransactionType()==1){
-												if(fd.getAdjustmentType()==1){
+												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
 													PdfPCell plDisbCell2=new PdfPCell();
 													plDisbCell2.setBorder(0);
 													plDisbCell2.setBackgroundColor(new Color(221,221,221));
@@ -2360,7 +2360,7 @@ public class ExportActivityToPDF extends Action {
 							if(funding.getFundingDetails()!=null){
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
-										if(fd.getAdjustmentType()==0){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
 											PdfPCell plDisbCell2=new PdfPCell();
 											plDisbCell2.setBorder(0);
 											plDisbCell2.setBackgroundColor(new Color(221,221,221));
@@ -2391,7 +2391,7 @@ public class ExportActivityToPDF extends Action {
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
-										if(fd.getAdjustmentType()==1){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
 											PdfPCell plDisbCell2=new PdfPCell();
 											plDisbCell2.setBorder(0);
 											plDisbCell2.setBackgroundColor(new Color(221,221,221));
@@ -2427,7 +2427,7 @@ public class ExportActivityToPDF extends Action {
 							if(funding.getFundingDetails()!=null){
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
-										if(fd.getAdjustmentType()==1){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
 											PdfPCell plDisbCell2=new PdfPCell();
 											plDisbCell2.setBorder(0);
 											plDisbCell2.setBackgroundColor(new Color(221,221,221));
@@ -2625,7 +2625,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell innerCell=new PdfPCell();
 		if(FeaturesUtil.isVisibleField(fmFields[0], ampContext)){
 			innerCell.setBorder(0);
-			innerCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName(),locale,siteId),plainFont));
+			innerCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont));
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
 		}
@@ -2761,7 +2761,7 @@ public class ExportActivityToPDF extends Action {
 		for (FundingDetail fd : listToIterate) {
 			if(FeaturesUtil.isVisibleField(fmFields[0], ampContext)){
 				cell=new PdfPCell();
-				paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName(),locale,siteId),plainFont);
+				paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont);
 				cell.addElement(paragraph);
 				cell.setBorder(0);
 				fdTable.addCell(cell);
@@ -2817,7 +2817,7 @@ public class ExportActivityToPDF extends Action {
 		fdTable.getDefaultCell().setBorder(0);
 		for (FundingDetail fd : listToIterate) {			
 			cell=new PdfPCell();
-			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName(),locale,siteId),plainFont);
+			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
 			fdTable.addCell(cell);

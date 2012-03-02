@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * Helper class for RegionalFundings manipulation
@@ -69,22 +70,17 @@ public class RegionalFundingsHelper {
 			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
 			fd.setTransactionAmount(FormatHelper.formatNumber(amt));
 			fd.setCurrencyCode(currCode);
-			fd.setAdjustmentType(regFund.getAdjustmentType().intValue());
-			if (fd.getAdjustmentType() == Constants.PLANNED) {
-				fd.setAdjustmentTypeName("Planned");
+			//fd.setAdjustmentType(regFund.getAdjustmentType().intValue());
+			if (fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {				
 				amt = 0;
-			} else if (fd.getAdjustmentType() == Constants.ACTUAL) {
-				fd.setAdjustmentTypeName("Actual");
-            } else if (fd.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-                fd.setAdjustmentTypeName("Pipeline");
-            }
+			} 
 			
 			if (fd.getTransactionType() == Constants.COMMITMENT) {
 				if (rf.getCommitments() == null) {
 					rf.setCommitments(new ArrayList());
 				}
 				rf.getCommitments().add(fd);
-				if (fd.getAdjustmentType() == Constants.ACTUAL) {
+				if (fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 					amt += rf.getTotCommitments();
 					rf.setTotCommitments(amt);						
 				}
@@ -93,7 +89,7 @@ public class RegionalFundingsHelper {
 					rf.setDisbursements(new ArrayList());
 				}
 				rf.getDisbursements().add(fd);
-				if (fd.getAdjustmentType() == Constants.ACTUAL) {
+				if (fd.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 					amt += rf.getTotDisbursements();
 					rf.setTotDisbursements(amt);						
 				}					
@@ -102,7 +98,7 @@ public class RegionalFundingsHelper {
 					rf.setExpenditures(new ArrayList());
 				}
 				rf.getExpenditures().add(fd);
-				if (fd.getAdjustmentType() == Constants.ACTUAL) {
+				if (fd.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 					amt += rf.getTotExpenditures();
 					rf.setTotExpenditures(amt);						
 				}					

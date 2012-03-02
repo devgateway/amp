@@ -1534,7 +1534,7 @@ function collapseAll() {
 													parentModule="/Activity Form/Components/Component/">
 													<td width="50" bgcolor="#f0f0f0">
 														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
-															<b><c:out value="${fd.adjustmentTypeName}" /></b>
+															<b><c:out value="${fd.adjustmentTypeName.value}" /></b>
 														</digi:trn>													
 													</td>
 												</module:display>
@@ -2594,12 +2594,14 @@ function collapseAll() {
 												<c:forEach items="${contract.disbursements}" var="disbursement">
 													<tr>
 														<td align="left" valign="top">
-															<c:if test="${disbursement.adjustmentType==0}">
-																<b><digi:trn key="aim:actual">Actual</digi:trn></b>
-															</c:if> 
-															<c:if test="${disbursement.adjustmentType==1}">
-																<b><digi:trn key="aim:planned">Planned</digi:trn></b>
-															</c:if>														
+			                                                   <digi:trn>${contract.adjustmentTypeName.value}</digi:trn>
+														
+<%-- 															<c:if test="${disbursement.adjustmentType==0}"> --%>
+<%-- 																<b><digi:trn key="aim:actual">Actual</digi:trn></b> --%>
+<%-- 															</c:if>  --%>
+<%-- 															<c:if test="${disbursement.adjustmentType==1}"> --%>
+<%-- 																<b><digi:trn key="aim:planned">Planned</digi:trn></b> --%>
+<%-- 															</c:if>														 --%>
 														</td>
 														<td align="left" valign="top">
 															<b>${disbursement.amount}</b>														
@@ -2651,12 +2653,14 @@ function collapseAll() {
 														<c:if test="${fundingDetail.transactionType == 1}">
 															<tr>
 																<td align="center" valign="top">
-																	<c:if test="${fundingDetail.adjustmentType==0}">
-																		<digi:trn key="aim:actual">Actual</digi:trn>
-																	</c:if> 
-																	<c:if test="${fundingDetail.adjustmentType==1}">
-																		<digi:trn key="aim:planned">Planned</digi:trn>
-																	</c:if>																
+<%-- 			                                                   <digi:trn>${fundingDetail.adjustmentTypeName.value}</digi:trn> --%>
+																
+<%-- 																	<c:if test="${fundingDetail.adjustmentType==0}"> --%>
+<%-- 																		<digi:trn key="aim:actual">Actual</digi:trn> --%>
+<%-- 																	</c:if>  --%>
+<%-- 																	<c:if test="${fundingDetail.adjustmentType==1}"> --%>
+<%-- 																		<digi:trn key="aim:planned">Planned</digi:trn> --%>
+<%-- 																	</c:if>																 --%>
 																</td>
 																<td align="center" valign="top">
 																	<b>${fundingDetail.transactionAmount}</b>																

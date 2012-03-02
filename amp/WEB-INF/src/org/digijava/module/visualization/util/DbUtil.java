@@ -39,6 +39,9 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
@@ -1044,7 +1047,7 @@ public class DbUtil {
     }
 
     public static DecimalWraper calculateDetails(DashboardFilter filter, List<AmpFundingDetail> fundingDets,
-            int transactionType,int adjustmentType){
+            int transactionType,AmpCategoryValue adjustmentType){
         DecimalWraper total = null;
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -1054,21 +1057,21 @@ public class DbUtil {
         cal.doCalculations(fundingDets, currCode, transactionType, adjustmentType);
         switch (transactionType) {
             case Constants.EXPENDITURE:
-                if (Constants.PLANNED == adjustmentType) {
+                if (CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey().equals(adjustmentType.getValue()) ) {
                     total = cal.getTotPlannedExp();
                 } else {
                     total = cal.getTotActualExp();
                 }
                 break;
             case Constants.DISBURSEMENT:
-                if (Constants.ACTUAL == adjustmentType) {
+                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue())) {
                     total = cal.getTotActualDisb();
                 } else {
                     total = cal.getTotPlanDisb();
                 }
                 break;
             default:
-                if (Constants.ACTUAL == adjustmentType) {
+                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue())) {
                     total = cal.getTotActualComm();
                 } else {
                     total = cal.getTotPlannedComm();

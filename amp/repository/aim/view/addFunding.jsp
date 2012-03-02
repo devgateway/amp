@@ -777,12 +777,12 @@
 												<td valign="bottom" align="center">
 													<c:set var="index" value="${index+1}"/>
 													<c:if test="${aimEditActivityForm.identification.statusId==1}">
-														<html:select name="fundingDetail" indexed="true" property="adjustmentType"  disabled="${contentDisabled}" styleClass="inp-text">
+														<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index"  disabled="${contentDisabled}" styleClass="inp-text">
 															<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 														</html:select>
 	                                                </c:if>	
 												<c:if test="${aimEditActivityForm.identification.statusId!=1}">
-													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
+													<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" styleClass="inp-text"  disabled="${contentDisabled}">
 														<html:option value="<%=new Integer(Constants.ACTUAL).toString()%>"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 														<field:display name="Pipeline" feature="Commitments">
@@ -1011,7 +1011,7 @@
 											</c:if>
 												<td valign="center" align="center">
 													<c:set var="index" value="${index+1}"/>
-													<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}" styleClass="inp-text">
+													<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" disabled="${contentDisabled}" styleClass="inp-text">
 														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													</html:select>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
@@ -1225,12 +1225,12 @@
 											<td valign="middle">
 												<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.identification.statusId==1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 											<c:if test="${aimEditActivityForm.identification.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" disabled="${contentDisabled}" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
@@ -1454,12 +1454,12 @@
 										<td valign="bottom" align="center">
 											<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.identification.statusId==1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 											<c:if test="${aimEditActivityForm.identification.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentTypeName.index" styleClass="inp-text" disabled="${contentDisabled}">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn useKey="true" key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>

@@ -133,7 +133,7 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 
 							// Check the funding details type.
 							if (auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-								if (auxFundingDetail.getAdjustmentType().intValue() == Constants.ACTUAL) {
+								if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 									auxRow = new PIReport5aRow();
 
 									// Check survey answers for this

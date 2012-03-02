@@ -1893,7 +1893,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         <td valign="bottom" class="tdClass"><c:set var="index"
                                                value="${index+1}" /> <html:select
                                                name="fundingDetail" indexed="true"
-                                               property="adjustmentType" styleClass="inp-text">
+                                               property="adjustmentTypeName.index" styleClass="inp-text">
                                                 <html:option value="0">
                                                     <digi:trn>Planned</digi:trn>
                                                 </html:option>

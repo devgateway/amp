@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 
@@ -626,7 +627,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				break;
 			}
 			if (!error) {
-				String adjustment = (auxDetail.getAdjustmentType().intValue() == 0) ? "Planned" : "Actual";
+				String adjustment = auxDetail.getAdjustmentType().getValue();
 				auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
 				auxOutDetail.getOutputs().add(
 						new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",

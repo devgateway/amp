@@ -1125,7 +1125,7 @@ public class SaveActivity extends Action {
 								AmpFundingDetail ampFundDet = new AmpFundingDetail();
 								ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 								// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
-								ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
+								ampFundDet.setAdjustmentType(fundDet.getAdjustmentTypeName());
 								ampFundDet.setReportingDate(fundDet.getReportingDate());
 								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet.getTransactionDate()));
 								boolean useFixedRate = false;
@@ -1374,8 +1374,7 @@ public class SaveActivity extends Action {
 										.getTransactionAmount())));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
-						ampRegFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
+						ampRegFund.setAdjustmentType(fd.getAdjustmentTypeName());
 						if(regionFlag){
 							regFundings.add(ampRegFund);
 						}
@@ -1425,8 +1424,7 @@ public class SaveActivity extends Action {
 										.getTransactionAmount())));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
-						ampRegFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
+						ampRegFund.setAdjustmentType(fd.getAdjustmentTypeName());
 						if(regionFlag){
 							regFundings.add(ampRegFund);
 						}
@@ -1477,8 +1475,7 @@ public class SaveActivity extends Action {
 										.getTransactionAmount())));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
-						ampRegFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
+						ampRegFund.setAdjustmentType(fd.getAdjustmentTypeName());
 						if(regionFlag){
 							regFundings.add(ampRegFund);
 						}
@@ -3204,8 +3201,7 @@ public class SaveActivity extends Action {
 						ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
-						ampCompFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
+						ampCompFund.setAdjustmentType(fd.getAdjustmentTypeName());
 						ampCompFund.setComponent(ampComp);
 						
 						activity.getComponentFundings().add(ampCompFund);

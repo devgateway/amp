@@ -154,7 +154,7 @@ function projectFiche(id)
 													<c:forEach var="comm" items="${rd.commitments}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
-																<c:out value="${comm.adjustmentTypeName}"/>
+																<c:out value="${comm.adjustmentTypeName.value}"/>
 															</TD>
 							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>
@@ -203,7 +203,7 @@ function projectFiche(id)
 													<c:forEach var="comm" items="${rd.disbursements}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
-																<c:out value="${comm.adjustmentTypeName}"/>
+																<c:out value="${comm.adjustmentTypeName.value}"/>
 															</TD>
 							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>
@@ -252,7 +252,7 @@ function projectFiche(id)
 													<c:forEach var="comm" items="${rd.expenditures}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
-																<c:out value="${comm.adjustmentTypeName}"/>
+																<c:out value="${comm.adjustmentTypeName.value}"/>
 															</TD>
 							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>

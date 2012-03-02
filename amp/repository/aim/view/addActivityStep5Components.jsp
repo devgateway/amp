@@ -169,7 +169,7 @@
 																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
 																					<tr bgcolor="#ffffff">
 																						<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td>
-																							<digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td></field:display>
+																							<digi:trn key="aim:${commitment.adjustmentTypeName.value}"><c:out value="${commitment.adjustmentTypeName.value}"/></digi:trn></td></field:display>
 																						<field:display name="Components Amount Commitments" feature="Activity - Component Step"><td align="left">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
@@ -251,7 +251,7 @@
 																				<!-- L4 START-->
 																				<tr bgcolor="#ffffff">
 																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td>
-																						<digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
+																						<digi:trn key="aim:${expenditure.adjustmentTypeName.value}"><c:out value="${expenditure.adjustmentTypeName.value}"/></digi:trn>
 																					</td></field:display>
 																					<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
 																					<td align="left">

@@ -682,7 +682,7 @@ public class IatiActivityWorker {
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 			ampFundDet.setTransactionType(new Integer(transactionType));
 			ampFundDet.setTransactionDate(tDate);
-			ampFundDet.setAdjustmentType(new Integer(adjustmentType));
+			ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType)));
 			ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(currencyCode));
 			
 			//TODO how are the amounts? in thousands?

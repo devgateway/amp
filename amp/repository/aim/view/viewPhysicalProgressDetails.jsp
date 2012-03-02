@@ -139,7 +139,7 @@ method="post">
 																	<logic:iterate name="component" property="commitments" id="comm">
 																	<TR bgcolor="#ffffff">
 																		<TD width="70">
-																			<digi:trn key="aim:fundingOfTheComponent:${comm.adjustmentTypeName}"><bean:write name="comm" property="adjustmentTypeName"/></digi:trn>
+																			<digi:trn key="aim:fundingOfTheComponent:${comm.adjustmentTypeName.value}"><bean:write name="comm" property="adjustmentTypeName"/></digi:trn>
 																		</TD>
 																		<TD width="80" align="center">
 																			<bean:write name="comm" property="transactionDate"/>
@@ -170,7 +170,7 @@ method="post">
 																	<logic:iterate name="component" property="disbursements" id="disb">
 																	<TR bgcolor="#ffffff">
 																		<TD width="70">
-																			<digi:trn key="aim:fundingOfTheComponent:${disb.adjustmentTypeName}"><bean:write name="disb" property="adjustmentTypeName"/></digi:trn>
+																			<digi:trn key="aim:fundingOfTheComponent:${disb.adjustmentTypeName.value}"><bean:write name="disb" property="adjustmentTypeName"/></digi:trn>
 																		</TD>
 																		<TD width="80" align="center">
 																			<bean:write name="disb" property="transactionDate"/>
@@ -202,7 +202,7 @@ method="post">
 																	<logic:iterate name="component" property="expenditures" id="exp">
 																	<TR bgcolor="#ffffff">
 																		<TD width="70">
-																			<digi:trn key="aim:fundingOfTheComponent:${exp.adjustmentTypeName}"><bean:write name="exp" property="adjustmentTypeName"/></digi:trn>
+																			<digi:trn key="aim:fundingOfTheComponent:${exp.adjustmentTypeName.value}"><bean:write name="exp" property="adjustmentTypeName"/></digi:trn>
 																		</TD>
 																		<TD width="80" align="center">
 																			<bean:write name="exp" property="transactionDate"/>

@@ -34,6 +34,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
@@ -82,13 +83,16 @@ public class FundingAdded extends Action {
 				FundingDetail fundDet = (FundingDetail) itr.next();
 				//
 				double amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
-				if (( fundDet.getTransactionType() == Constants.COMMITMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+				if (( fundDet.getTransactionType() == Constants.COMMITMENT )&&
+						(fundDet.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 					totalComms	+= amount;
 				else 
-					if (( fundDet.getTransactionType() == Constants.DISBURSEMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+					if (( fundDet.getTransactionType() == Constants.DISBURSEMENT )&&
+							(fundDet.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 							totalDisbs	+= amount;
 					else 
-						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&
+								(fundDet.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 							totalExps	+= amount;
 			}
 //			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
@@ -176,13 +180,7 @@ public class FundingAdded extends Action {
 								.getReportingOrganizationId());
 						fundDet.setReportingOrganizationName(org.getName());
 					}
-					if (fundDet.getAdjustmentType() == Constants.PLANNED)
-						fundDet.setAdjustmentTypeName("Planned");
-					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
-						fundDet.setAdjustmentTypeName("Actual");
-                    } else if (fundDet.getAdjustmentType() == Constants.ADJUSTMENT_TYPE_PIPELINE) {
-                    	fundDet.setAdjustmentTypeName("Pipeline");
-                    }
+					
 					//
 					fundDetails.add(fundDet);
 				}
@@ -215,7 +213,7 @@ public class FundingAdded extends Action {
 						FundingDetail fundDetItr2 = (FundingDetail) fundItr2.next();
 						if(j>i)
 						{
-							if((fundDetItr2.getAdjustmentTypeName().equalsIgnoreCase(fundDetItr1.getAdjustmentTypeName()))&&
+							if((fundDetItr2.getAdjustmentTypeName().getValue().equalsIgnoreCase(fundDetItr1.getAdjustmentTypeName().getValue()))&&
 							(fundDetItr2.getCurrencyCode().equalsIgnoreCase(fundDetItr1.getCurrencyCode()))&&
 							(fundDetItr2.getTransactionAmount().equalsIgnoreCase(fundDetItr1.getTransactionAmount()))&&
 							(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
@@ -272,13 +270,16 @@ public class FundingAdded extends Action {
 							while ( iterDet.hasNext() ) {
 								FundingDetail detail		= iterDet.next();
 								double amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
-								if (( detail.getTransactionType() == Constants.COMMITMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
+								if (( detail.getTransactionType() == Constants.COMMITMENT )&&
+										(detail.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 											totalComms	+= amount;
 								else 
-									if (( detail.getTransactionType() == Constants.DISBURSEMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
+									if (( detail.getTransactionType() == Constants.DISBURSEMENT )&&
+											(detail.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 											totalDisbs	+= amount;
 									else 
-										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&(detail.getAdjustmentType()==Constants.ACTUAL))
+										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&
+												(detail.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())))
 											totalExps	+= amount;
 							}
 						}

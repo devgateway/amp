@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,6 +25,9 @@ import org.dgfoundation.amp.onepager.models.AmpTrTypeLocationRegionalFundingDeta
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -49,11 +54,18 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 
 	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(
 			IModel<AmpRegionalFunding> model) {
+		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("funding_type");
+		ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
+		for(AmpCategoryValue categoryValue: funding_type_values)
+		{
+			metaInfoList.add( new MetaInfo<Integer>(categoryValue.getValue(), categoryValue.getIndex()));
+		}
+		MetaInfo<Integer>[] metainfoArray = metaInfoList.toArray(new MetaInfo[]{}); 
+		
 		return new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
 				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
-						"adjustmentType"), OnePagerConst.adjustmentTypes),
-				Arrays.asList(OnePagerConst.adjustmentTypes),
-				"Adjustment Type", true, false,
+						"adjustmentType"), metainfoArray),metaInfoList,
+				CategoryConstants.ADJUSTMENT_TYPE_NAME, true, false,
 				new AmpMetaInfoRenderer<Integer>());
 	}
 

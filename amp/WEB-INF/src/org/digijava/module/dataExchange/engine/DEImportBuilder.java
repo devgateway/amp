@@ -828,7 +828,8 @@ public class DEImportBuilder {
 
 	
 	private void addRegionalFundingDetailsToSet( List<FundingDetailType> fundings, Set regFundings, AmpActivity activity, int transactionType, AmpCategoryValueLocations ampCVLoc) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
+		
 		for (Iterator it = fundings.iterator(); it.hasNext();) {
 			FundingDetailType fdt = (FundingDetailType) it.next();
 			AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
@@ -836,10 +837,17 @@ public class DEImportBuilder {
 			ampRegFund.setTransactionType(new Integer(transactionType));
 			ampRegFund.setCurrency(CurrencyUtil.getCurrencyByCode(fdt.getCurrency()));
 			ampRegFund.setRegionLocation(ampCVLoc);
+			
+			try {
 			if( Constants.IDML_PLAN.equals(fdt.getType()) ) 
-				ampRegFund.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.PLANNED));
+				ampRegFund.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(  CategoryConstants.ADJUSTMENT_TYPE_PLANNED));
 			if( Constants.IDML_ACTUAL.equals(fdt.getType()) ) 
-				ampRegFund.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.ACTUAL));
+				ampRegFund.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+			}catch(Exception ex)
+			{
+				logger.error("", ex); 
+			}
+			
 			ampRegFund.setTransactionAmount(new Double(	fdt.getAmount().doubleValue()));
 			ampRegFund.setTransactionDate(DataExchangeUtils.XMLGregorianDateToDate(fdt.getDate()));
 			regFundings.add(ampRegFund);
@@ -1658,11 +1666,9 @@ public class DEImportBuilder {
 	
 			ampFundDet.setTransactionType(new Integer(transactionType));
 			ampFundDet.setTransactionDate(DataExchangeUtils.XMLGregorianDateToDate(fundDet.getDate()));
-			if( Constants.IDML_PLAN.equals(fundDet.getType()) ) 
-				ampFundDet.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.PLANNED));
-			if( Constants.IDML_ACTUAL.equals(fundDet.getType()) ) 
-				ampFundDet.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.ACTUAL));
 			
+			ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY, new Long(fundDet.getType())));
+						
 			//TODO mapping the currencies!!! ??
 			ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrency()));
 			
@@ -1688,12 +1694,16 @@ public class DEImportBuilder {
 		acf.setTransactionType(new Integer(transactionType));
 		
 		acf.setTransactionDate(DataExchangeUtils.XMLGregorianDateToDate(fundingDetailType.getDate()));
-		
+			
+		try{
 		if( Constants.IDML_PLAN.equals(fundingDetailType.getType()) ) 
-			acf.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.PLANNED));
+			acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(  CategoryConstants.ADJUSTMENT_TYPE_PLANNED));
 		if( Constants.IDML_ACTUAL.equals(fundingDetailType.getType()) ) 
-			acf.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.ACTUAL));
-		
+			acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+		} catch(Exception ex) {
+			
+			logger.error("", ex);
+		}
 		//TODO mapping the currencies!!! ??
 		acf.setCurrency(CurrencyUtil.getCurrencyByCode(fundingDetailType.getCurrency()));
 		

@@ -42,9 +42,9 @@ $(document).ready(function(){
 	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
 	Wicket.Ajax.Request.prototype.stateChangeCallback = function(){
 	    var t = this.transport;
-	    if (t != null) {
+	    if (t != null && t.readyState != 1) {
 	       var tmp = t.getResponseHeader("Ajax-Location"); 
-	       if (tmp != null){
+	       if (typeof(tmp) != "undefined" && tmp != null){
 	          window.onbeforeunload=null;
 	       }
 	    }

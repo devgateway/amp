@@ -4,28 +4,24 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+
 import java.util.Set;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
-import org.dgfoundation.amp.onepager.models.AmpMetaInfoRenderer;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
+import org.digijava.module.aim.action.EditActivity;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 12, 2010
@@ -33,6 +29,8 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public abstract class AmpDonorFormTableFeaturePanel extends
 	AmpFundingFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
 
+	 private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
+	
 	protected IModel<Set<AmpFundingDetail>> parentModel;
 	protected IModel<Set<AmpFundingDetail>> setModel;
 	
@@ -55,16 +53,39 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		setModel = new AmpTransactionTypeDonorFundingDetailModel(parentModel, transactionType);
 	}
 
-	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(
+
+	protected AmpCategoryGroupFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model) {
-		AmpGroupFieldPanel<MetaInfo<Integer>> groupFieldPanel = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
-				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
-						"adjustmentType"), OnePagerConst.adjustmentTypes),
-				Arrays.asList(OnePagerConst.adjustmentTypes),
-				"Adjustment Type", true, false,
-				new AmpMetaInfoRenderer<Integer>());
-		groupFieldPanel.getChoiceContainer().setRequired(true);
-		return groupFieldPanel;
+		try{
+		// --------------
+			AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
+						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+						 false, false, true);
+		adjustmentTypes.getChoiceContainer().setRequired(true);
+		return adjustmentTypes;
+		}catch(Exception e)
+		{
+			logger.error("AmpCategoryGroupFieldPanel initialization failed");
+		}
+		return null;
+		//-----------------------
+		
+//		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("funding_type");
+//		ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
+//		for(AmpCategoryValue categoryValue: funding_type_values)
+//		{
+//			metaInfoList.add( new MetaInfo<Integer>(categoryValue.getValue(), categoryValue.getIndex()));
+//		}
+//		MetaInfo<Integer>[] metainfoArray = metaInfoList.toArray(new MetaInfo[]{}); 
+//		AmpGroupFieldPanel<MetaInfo<Integer>> groupFieldPanel = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
+//				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
+//						"adjustmentType"), metainfoArray), metaInfoList,
+//				"Adjustment Type", true, false,
+//				new AmpMetaInfoRenderer<Integer>());
+//		groupFieldPanel.getChoiceContainer().setRequired(true);
+		
 	}
 
 	protected AmpFundingAmountComponent getFundingAmountComponent(

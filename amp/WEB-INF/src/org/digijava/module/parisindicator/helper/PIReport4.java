@@ -133,7 +133,7 @@ public class PIReport4 extends PIAbstractReport {
 
 							// Check the funding details type.
 							if (auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-								if (auxFundingDetail.getAdjustmentType().intValue() == Constants.ACTUAL) {
+								if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 									auxRow = new PIReport4Row();
 
 									// Check survey answers for this

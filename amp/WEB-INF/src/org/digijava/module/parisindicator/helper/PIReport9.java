@@ -136,7 +136,7 @@ public class PIReport9 extends PIAbstractReport {
 
 							// Check the funding details type.
 							if (auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT
-									&& auxFundingDetail.getAdjustmentType().intValue() == Constants.ACTUAL) {
+									&& auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
 
 								auxRow = new PIReport9Row();
 								// Check survey answers for this AmpAhsurvey.

@@ -27,14 +27,14 @@
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName"/></b>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
 								</digi:trn>
 							</module:display>
 							</td>
@@ -90,14 +90,14 @@
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 	<!--Actual-->
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
-			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
 
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
 							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName"/></b>
+									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
 								</digi:trn>
 							</module:display>
 							</td>

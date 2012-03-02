@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
@@ -52,7 +53,9 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 	public static final int MTEFPROJECTION = 3 ;
 	 */
 	private Integer transactionType ;
-	private Integer adjustmentType ;
+	
+	private AmpCategoryValue adjustmentType ;
+
 	private Date transactionDate ;
 	private Date transactionDate2 ;
 	private Date reportingDate;
@@ -88,7 +91,7 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         public AmpFundingDetail(){}
         
         
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if(percent==null||percent==0){
             this.transactionAmount=transactionAmount;
@@ -98,7 +101,7 @@ public class AmpFundingDetail implements Serializable, Cloneable {
             }
         }
         
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if((percent1==null||percent1==0)&&(percent2==null||percent2==0)){
             this.transactionAmount=transactionAmount;
@@ -117,19 +120,19 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         }
         
         // used in org profile for indicator 4
-         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
+         public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             this.transactionAmount=transactionAmount*OrgProfileUtil.getQ4Value(ahsureyId);
      
         }
           // used in org profile 
-         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+         public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             this.transactionAmount=transactionAmount;
             
         }
          
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
             this.transactionType=transactionType;
             this.adjustmentType=adjustmentType;
             this.transactionDate=transactionDate;
@@ -167,7 +170,8 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         /**
 		 * @return
 		 */
-		public Integer getAdjustmentType() {
+		public AmpCategoryValue getAdjustmentType() {
+			
 			return adjustmentType;
 		}
 
@@ -234,7 +238,7 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 		/**
 		 * @param i
 		 */
-		public void setAdjustmentType(Integer i) {
+		public void setAdjustmentType(AmpCategoryValue i) {
 			adjustmentType = i;
 		}
 

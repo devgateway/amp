@@ -1309,7 +1309,7 @@ body {background:none;}
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
 																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
-																										<c:out value="${fd.adjustmentTypeName}"/>	
+																										<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>
 																																															</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1342,7 +1342,7 @@ body {background:none;}
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
 																									<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
-																										<c:out value="${fd.adjustmentTypeName}"/>	
+																										<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>																						</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
@@ -1373,7 +1373,7 @@ body {background:none;}
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
 																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
-																										<c:out value="${fd.adjustmentTypeName}"/>	
+																										<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>
 																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1446,7 +1446,7 @@ body {background:none;}
 																							<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step">
 																							<td width="50" bgcolor="#ffffff">
 																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
-																									<c:out value="${fd.adjustmentTypeName}"/>	
+																									<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>
 																							</td>
 																							</field:display>
@@ -1484,7 +1484,7 @@ body {background:none;}
 																							<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step">
 																							<td width="50" bgcolor="#ffffff">
 																							<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
-																								<c:out value="${fd.adjustmentTypeName}"/>	
+																								<c:out value="${fd.adjustmentTypeName.value}"/>	
 																							</digi:trn>								
 																							</td>
 																							</field:display>
@@ -1522,7 +1522,7 @@ body {background:none;}
 																							<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step">
 																							<td width="50">
 																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
-																									<c:out value="${fd.adjustmentTypeName}"/>	
+																									<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">

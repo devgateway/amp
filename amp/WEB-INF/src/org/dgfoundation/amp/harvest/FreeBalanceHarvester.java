@@ -31,6 +31,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -308,7 +310,7 @@ public class FreeBalanceHarvester {
 					acf.setExpenditureCategory(compFundName);
 					acf.setCurrency(curr);
 					acf.setComponent(ac);
-					acf.setAdjustmentType(new Integer(Constants.ACTUAL));
+					acf.setAdjustmentType(CategoryManagerUtil.addValueToCategory(CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()));
 					acf.setTransactionType(new Integer(trType));
 					acf.setReportingOrganization(o);
 					if(!date.trim().equals(""))

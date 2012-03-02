@@ -65,10 +65,10 @@
 				<c:forEach var="wi" items="${gisIndicatorChartForm.widgets}" varStatus="stat">
 					<tr>
 						<td nowrap="nowrap" class="inside">
-							${wi.name}
+							<c:out value="${wi.name}"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
-						 	${wi.indicator.indicator.name}
+						 	<c:out value="${wi.indicator.indicator.name}"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
 							<a href="/widget/indicatorchartwidgets.do~actType=edit~widgetId=${wi.id}">

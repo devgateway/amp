@@ -559,7 +559,10 @@ public class DocumentManagerUtil {
 		} catch (MalformedURLException e) {
 			if ( !urlString.startsWith("http://") )
 				return processUrl("http://"+urlString, formBean);
-			formBean.addError("error.contentrepository.addFile.malformedWebLink", "Error adding new document. Web link is malformed.");
+			
+			if(formBean!=null){
+				formBean.addError("error.contentrepository.addFile.malformedWebLink", "Error adding new document. Web link is malformed.");
+			}			
 
 			e.printStackTrace();
 			return null;

@@ -30,6 +30,7 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
@@ -101,6 +102,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 	}
             		
             		if(tmp.getWebLink() != null){
+            			tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(),null));
             			tmp.setFileName(tmp.getWebLink());
                 	}            	
                 	

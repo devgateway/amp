@@ -497,7 +497,7 @@ border-right: 1px solid rgb(208, 208, 208);
 			                	
 			                	</td>
 						</tr>
-						<tr class="invisible-item" id="tr_url">
+						<tr id="tr_url" style="display: none">
 							<td>
 								<div class="t_sm"><b><digi:trn>URL (ex. www.exemple.com)</digi:trn>:</b><font color="red">*</font></div>
 							</td>

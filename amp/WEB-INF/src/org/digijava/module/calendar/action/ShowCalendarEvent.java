@@ -317,12 +317,14 @@ public class ShowCalendarEvent extends Action {
 	            		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
 	            			ceform.setActionButtonsVisible(true);
 	            		}else if(ceform.isPrivateEvent()){
+	            			if(selattendeess!=null){
 	            			for (String attendee : selattendeess) {
 	    						if(attendee.startsWith("m:") && attendee.substring(attendee.indexOf(":")+1).equals(mem.getMemberId().toString())){
 	    							ceform.setActionButtonsVisible(true);
 	    							break;
 	    						}
 	    					}
+	            			}
 	            		}
                     }
         		}        		

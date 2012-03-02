@@ -1336,7 +1336,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                                     </html:multibox>
                                                                                 </td>
                                                                                 <td align="left">
-                                                                                     ${recipients.organization.name}
+                                                                                     <c:out value="${recipients.organization.name}" />
                                                                                 </td>
                                                                                  <td align="left">
                                                                                      <html:textarea name="recipients" indexed="true" property="description"  cols="40" rows="2"/>
@@ -1420,7 +1420,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                 </td>
                                                                 <td>
                                                                     <c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
-                                                                    	[${ancestorLoc}]
+                                                                    	[ <c:out value="${ancestorLoc}"/>]
                                                                     </c:forEach>
                                                                 </td>
 
@@ -1781,17 +1781,17 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </html:multibox>
                                     </td>
                                     <td>
-                                        [${sector.sectorScheme}]
+                                        [ <c:out value="${sector.sectorScheme}"/>]
                                         <c:if test="${!empty sector.sectorName}">
-                                            [${sector.sectorName}]
+                                            [ <c:out value="${sector.sectorName}"/>]
                                         </c:if>
 
                                         <c:if test="${!empty sector.subsectorLevel1Name}">
-	                                                                            [${sector.subsectorLevel1Name}]
+	                                                                            [ <c:out value="${sector.subsectorLevel1Name}"/>]
                                         </c:if>
 
                                         <c:if test="${!empty sector.subsectorLevel2Name}">
-	                                                                            [${sector.subsectorLevel2Name}]
+	                                                                            [ <c:out value="${sector.subsectorLevel2Name}"/>]
                                         </c:if>
 
                                     </td>
@@ -2029,35 +2029,35 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                                                </html:multibox>
 								                                            </td>
 								                                            <td class="tdClass" nowrap>
-								                                                ${orgCont.contact.lastname}
+								                                                <c:out value="${orgCont.contact.lastname}"/>
 								                                            </td>
 								                                            <td class="tdClass" nowrap>
-								                                                ${orgCont.contact.name}
+								                                                <c:out value="${orgCont.contact.name}"/>
 								                                            </td>
 								                                            <td class="tdClass" nowrap>
 								                                            	<c:forEach var="email" items="${orgCont.contact.properties}">
 																					<c:if test="${email.name=='contact email'}">
-																						<div>${email.value}</div>
+																						<div> <c:out value="${email.value}"/></div>
 																					</c:if>
 																				</c:forEach>
 								                                            </td>
 								                                            <td class="tdClass">
 								                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
 																					<c:if test="${phone.name=='contact phone'}">                                                                                     
-                                                                                        <div><c:if test="${not empty phone.phoneCategory}"><digi:trn>${phone.phoneCategory}</digi:trn></c:if>${phone.actualPhoneNumber}</div>
+                                                                                        <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
 																					</c:if>
 																				</c:forEach>
 								                                            </td>
 								                                            <td class="tdClass">
 								                                                <c:forEach var="phone" items="${orgCont.contact.properties}">
 																					<c:if test="${phone.name=='contact fax'}">
-																						<div>${phone.value}</div>
+																						<div> <c:out value="${phone.value}"/></div>
 																					</c:if>
 																				</c:forEach>
 								                                            </td>
 								                                            <td class="tdClass">
 								                                                <c:if test="${not empty orgCont.contact.title}">
-								                                                   <digi:trn> ${orgCont.contact.title.value}</digi:trn>
+								                                                   <digi:trn><c:out value="${orgCont.contact.title.value}"/></digi:trn>
 								                                                </c:if>
 								                                            </td>
 								                                            <td>

@@ -70,7 +70,7 @@
 										<span title="${contact.name}">${fn:substring(contact.name,0,12)}...</span> 	
 									</c:when>
 									<c:otherwise>
-											${contact.name}
+											<c:out value="${contact.name}"/>
 									</c:otherwise>
 									</c:choose>
 							</td>
@@ -80,7 +80,7 @@
 										<span title="${contact.lastname}">${fn:substring(contact.lastname,0,12)}...</span> 	
 									</c:when>
 									<c:otherwise>
-											${contact.lastname}
+											<c:out value="${contact.lastname}"/>
 									</c:otherwise>
 									</c:choose>
 							</td>
@@ -93,7 +93,7 @@
 										<li title="${email.value}">${fn:substring(email.value,0,16)}...</li> 	
 									</c:when>
 									<c:otherwise>
-										<li>${email.value}</li>
+										<li><c:out value="${email.value}"/></li>
 									</c:otherwise>
 									</c:choose>
 									</c:if>
@@ -108,7 +108,7 @@
 										<li title="${contact.organisationName}">${fn:substring(contact.organisationName,0,10)}...</li> 	
 									</c:when>
 									<c:otherwise>
-										<li>${contact.organisationName}</li>
+										<li><c:out value="${contact.organisationName}"/></li>
 									</c:otherwise>
 								</c:choose>
 								
@@ -119,7 +119,7 @@
 										<li title="${contOrg.organisation.name}">${fn:substring(contOrg.organisation.name,0,10)}...</li> 	
 									</c:when>
 									<c:otherwise>
-										<li>${contOrg.organisation.name}</li>
+										<li><c:out value="${contOrg.organisation.name}"/></li>
 									</c:otherwise>
 								</c:choose>
 										
@@ -135,7 +135,7 @@
 										<li title="${phone.actualPhoneNumber}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.actualPhoneNumber,0,10)}...</li> 	
 									</c:when>
 									<c:otherwise>
-										<li><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${phone.actualPhoneNumber}</li>
+										<li><digi:trn><c:out value="${phone.phoneCategory}"/></digi:trn>&nbsp;<c:out value="${phone.actualPhoneNumber}"/></li>
 									</c:otherwise>
 									</c:choose>
 										

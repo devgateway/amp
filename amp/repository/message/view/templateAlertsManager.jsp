@@ -193,7 +193,7 @@ div.fakefile2 input{
 					<td noWrap width="100%" vAlign="top">
 						<table align="center" cellPadding="0" cellSpacing="0" width="90%" border="0">
 							<tr>
-								<td>
+								<td style="border-bottom:1px solid #cccccc;">
 									<!-- Other Links -->
 									<table cellPadding="0" cellSpacing="0" width="100" style="font-size:12px;">
 										<tr>

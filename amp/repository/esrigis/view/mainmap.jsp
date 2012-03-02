@@ -42,7 +42,7 @@
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-min.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-min.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
    	
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -244,7 +244,10 @@
             value = "<digi:trn>Organization Group</digi:trn>";
             return value;
          }
-        
+        if(text == "Others") {
+            value = "<digi:trn>Others</digi:trn>";
+            return value;
+         }
         return text;
     	}
 	
@@ -341,8 +344,8 @@
 		<div id="filterdiv" style="position:absolute;z-Index:100;top:50px;display: none;cursor: pointer;left:50%">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
- 		<div class='legendHeader' id="fakecolor">Color reference<br/><hr/></div>
- 		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
+ 		<div class='legendHeader' id="fakecolor">Donor Legend<br/><hr/></div>
+ 		<div id="pointsLegend" class="legendContent" style="rigth:10px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
        

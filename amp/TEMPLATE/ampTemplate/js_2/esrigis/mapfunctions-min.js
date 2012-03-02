@@ -187,14 +187,17 @@ function showLegendClusterDonor(pointSymbolBank){var htmlDiv="";htmlDiv+="<div o
 +"<div class='legendContentValue' style='background-color:rgba("
 +pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 +");' ></div>"+"</div>"
-+"<div class='legendContentLabel'>"
-+donorArray[i].donorname+" </div><br/>";}}else{for(var i=0;i<10;i++){htmlDiv+="<div class='legendContentContainer'>"
++"<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
++donorArray[i].donorCode+" </div><br/>";}}else{for(var i=0;i<10;i++){htmlDiv+="<div class='legendContentContainer'>"
 +"<div class='legendContentValue' style='background-color:rgba("
 +pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 +");' ></div>"+"</div>"
-+"<div class='legendContentLabel'>"
-+donorArray[i].donorname+" </div><br/>";}}
-htmlDiv+="</div>";$('#pointsLegend').html(htmlDiv);$('#pointsLegend').show('slow');var dnd=new dojo.dnd.Moveable(dojo.byId("pointsLegend"));}
++"<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
++donorArray[i].donorCode+" </div><br/>";}}
+htmlDiv+="<div class='legendContentContainer'>"
++"<div class='legendContentValue' style='background-color:rgba('0,0,0');'></div></div>"
++"<div class='legendContentLabel' title='"+translate('Others')+"'>"
++translate('Others')+" </div><br/>";htmlDiv+="</div>";$('#pointsLegend').html(htmlDiv);$('#pointsLegend').show('slow');var dnd=new dojo.dnd.Moveable(dojo.byId("pointsLegend"));}
 var results=new Array();function sendText(value){var xhrArgs={url:"/esrigis/datadispatcher.do?getmedia=true&searchtext="+value,handleAs:"json",sync:true,load:function(jsonData){dojo.forEach(jsonData.response.datalayer.locations,function(location){results.push(location);});placemedia();},error:function(error){console.log(error);}}
 var deferred=dojo.xhrGet(xhrArgs);}
 function placemedia(){for(var int=0;int<results.length;int++){var pt=new esri.geometry.Point(results[int].latitude,results[int].longitude,map.spatialReference);var sms=new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));var attr={"Temp":"Temporal Attribute"};var infoTemplate=new esri.InfoTemplate("");var pgraphic=new esri.Graphic(pt,sms,attr,infoTemplate);map.graphics.add(pgraphic);}}

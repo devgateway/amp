@@ -1297,8 +1297,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ "<div class='legendContentValue' style='background-color:rgba("
 					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 					+ ");' ></div>" + "</div>"
-					+ "<div class='legendContentLabel'>"
-					+ donorArray[i].donorname + " </div><br/>";
+					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
+					+ donorArray[i].donorCode + " </div><br/>";
 		}
 	} else {
 		for ( var i = 0; i < 10; i++) {
@@ -1306,10 +1306,16 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ "<div class='legendContentValue' style='background-color:rgba("
 					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 					+ ");' ></div>" + "</div>"
-					+ "<div class='legendContentLabel'>"
-					+ donorArray[i].donorname + " </div><br/>";
+					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
+					+ donorArray[i].donorCode + " </div><br/>";
 		}
 	}
+	
+	htmlDiv += "<div class='legendContentContainer'>"
+		+ "<div class='legendContentValue' style='background-color:rgba('0,0,0');'></div></div>"
+		+ "<div class='legendContentLabel' title='"+translate('Others')+"'>"
+		+ translate('Others') + " </div><br/>";
+	
 	htmlDiv += "</div>";
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');

@@ -343,18 +343,18 @@
 															<digi:link href="/organisationSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
 																&gt;
 															</digi:link>
-															<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-															<c:if test="${aimOrgManagerForm.pagesSize > aimOrgManagerForm.pagesToShow}">
-																<c:set target="${urlParamsLast}" property="page" value="${aimOrgManagerForm.pagesSize -1}"/>
-															</c:if>
-															<c:if test="${aimOrgManagerForm.pagesSize < aimOrgManagerForm.pagesToShow}">
-																<c:set target="${urlParamsLast}" property="page" value="${aimOrgManagerForm.pagesSize}"/>
-															</c:if>
-															<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-															<c:set var="translation">
-															<digi:trn key="aim:lastpage">Last Page</digi:trn>
-															</c:set>
-															<digi:link href="/organisationSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+																		<jsp:useBean id="urlParamsLast" type="java.util.Map"
+																			class="java.util.HashMap" />
+																		<c:set target="${urlParamsLast}" property="page"
+																			value="${aimOrgManagerForm.pagesSize}" />
+																		<c:set target="${urlParamsLast}"
+																			property="orgSelReset" value="false" />
+																		<c:set var="translation">
+																			<digi:trn key="aim:lastpage">Last Page</digi:trn>
+																		</c:set>
+																		<digi:link href="/organisationSearch.do"
+																			style="text-decoration=none" name="urlParamsLast"
+																			title="${translation}">
 																&gt;&gt;  
 															</digi:link>
 															&nbsp;&nbsp;

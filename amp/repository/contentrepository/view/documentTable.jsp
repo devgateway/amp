@@ -54,10 +54,10 @@
 									<digi:trn>Pub</digi:trn>
 								</c:set>
 							</logic:equal>
-							<bean:define id="escapedDescription">(<digi:trn>none</digi:trn>)</bean:define>
-							<logic:notEmpty name="documentData" property="escapedAmpDescription">
-								<bean:define id="escapedDescription"> ${documentData.escapedAmpDescription} </bean:define>
-							</logic:notEmpty>
+							<c:set var="escapedDescription"><c:out escapeXml="true" value="${documentData.escapedAmpDescription}" /></c:set>
++							<c:if test="${ empty documentData.escapedAmpDescription }">
++								<c:set var="escapedDescription">(<digi:trn>none</digi:trn>)</c:set>
++							</c:if>
 							<tr>
 								<td>
 									<c:choose>

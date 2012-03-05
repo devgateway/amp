@@ -3013,6 +3013,90 @@ function collapseAll() {
 									</field:display>
 									</logic:iterate>
 									</logic:notEmpty>
+									<feature:display name="Regional Observations" module="Regional Observations">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
+											<img id="regObs_plus"  onclick="toggleGroup('regObs')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="regObs_minus" onclick="toggleGroup('regObs')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>														
+												<digi:trn>Regional Observations</digi:trn>														
+											</td>
+											<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+											<div id="regObs_dots">...</div>
+															<div id="act_regObs" style="display: none;">
+											<TABLE width="100%" cellPadding="0" cellSpacing="1" vAlign="top" align="center" bgColor=#dddddd>
+	   	         
+
+																<c:forEach var="obs" items="${aimEditActivityForm.observations.issues}" >
+																	<TR bgcolor="#f4f4f2"><TD width="100%" bgcolor="#F4F4F2" align="center">
+																		<TABLE width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="center" bgColor=#f4f4f2>
+																			<TR>
+																				<TD width="100%" vAlign="top" align="left">
+																					<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
+																						<TR bgcolor="#dfdfdf">
+																							<TD>
+																								<font color="#0000ff"><digi:trn>Observation:</digi:trn> </font>
+																								<c:out value="${obs.name}"/>		
+																								&nbsp;
+																								<c:out value="${obs.issueDate}"/>														
+																							</TD>
+																						</TR>
+																						<logic:empty name="obs" property="measures">
+																							<TR>
+																								<TD align="center">
+																									<font color="red">
+																										<digi:trn key="aim:noMeasures">No measures</digi:trn>
+																									</font>
+																								</TD>
+																							</TR>
+																						</logic:empty>
+																							<c:forEach var="measure" items="${obs.measures}" >
+																								<TR>
+																									<TD>
+																										<TABLE width="95%" cellPadding="2" cellSpacing="1" vAlign="top" align="center" bgcolor="#dddddd">
+																											<TR bgcolor="#f6f6f6">
+																												<TD>
+																													<font color="#0000ff"><digi:trn key="aim:measure">Measure</digi:trn>: </font>
+																													<c:out value="${measure.name}"/>
+																												</TD>
+																											</TR>
+																											<logic:empty name="measure" property="actors">
+																												<TR bgcolor="#ffffff">
+																													<TD align="center">
+																														<font color="red"><digi:trn key="aim:noActors">No actors</digi:trn></font>
+																													</TD>
+																												</TR>
+																											</logic:empty>
+																											
+																												<TR bgcolor="#ffffff">
+																													<TD>
+																														<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
+																															<c:forEach var="actor" items="${measure.actors}" >
+																																<TR bgcolor="#ffffff">
+																																	<TD>
+		                                                                                        										<font color="#0000ff"><digi:trn>Actor</digi:trn>: </font>
+																																		<c:out value="${actor.name}"/>
+																																	</TD>
+																																</TR>
+																															</c:forEach>
+																														</TABLE>
+																													</TD>
+																												</TR>
+																											
+																										</TABLE>
+																									</TD>
+																								</TR>
+																						</c:forEach>
+																					</TABLE>
+																				</TD>
+																			</TR>
+																		</TABLE>
+																	</TD>
+																</TR>
+															</c:forEach>
+													</TABLE>
+											</div></td>
+										</tr>
+									</feature:display>
 									<c:if test="${aimEditActivityForm.isPreview != 2}">
 										<c:if test="${aimEditActivityForm.pageId == 1}">
 										<tr><td bgcolor="#f0f0f0" align="center" colspan="2">

@@ -36,6 +36,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -108,6 +109,7 @@ public class PIUseCase {
 					new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div", 
 							rootFinancingInstrument, "selectedFinancingIstruments");
 			form.getFinancingInstrumentsElements().add(finInstrElement);
+			HierarchyListableUtil.changeTranslateable(finInstrElement.getRootHierarchyListable(), false);
 		}
 		if(form.getDonorElements()==null||form.getDonorElements().isEmpty()){
 			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
@@ -118,6 +120,7 @@ public class PIUseCase {
 	 	 	rootOrgGroup.setChildren( donorGroups );
 	 	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
 	 	 	form.getDonorElements().add(donorGroupElement);
+	 	 	HierarchyListableUtil.changeTranslateable(donorGroupElement.getRootHierarchyListable(), false);
 	 	 	
 	 	 	Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
 	 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
@@ -126,7 +129,7 @@ public class PIUseCase {
 	 	 	rootDonors.setChildren( donors );
 	 	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonors");
 	 	 	form.getDonorElements().add(donorsElement);
-			
+	 	 	HierarchyListableUtil.changeTranslateable(donorsElement.getRootHierarchyListable(), false);
 		}
 		if (form.getSectorStatusesElements()==null||form.getSectorStatusesElements().isEmpty()) { 
 			form.setSectorStatusesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
@@ -150,6 +153,7 @@ public class PIUseCase {
 		 	 	rootAmpSectors.setChildren(ampSectors);
 		 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
 		 	 	form.getSectorStatusesElements().add(sectorsElement);
+		 	 	HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
 		 	 	}
 		 	 	
 		 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
@@ -160,6 +164,7 @@ public class PIUseCase {
 		 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
 		 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSectors");
 		 	 		form.getSectorStatusesElements().add(secondarySectorsElement);
+		 	 		HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
 		 	 	}
 
 		        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
@@ -170,11 +175,10 @@ public class PIUseCase {
 		 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
 		 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedSectors");
 		 	 		form.getSectorStatusesElements().add(tertiarySectorsElement);
+		 	 		HierarchyListableUtil.changeTranslateable(tertiarySectorsElement.getRootHierarchyListable(), false);
 		 	 	}
+		        
 		}
- 	 	
-		
-	
 		return form;
 	}
 

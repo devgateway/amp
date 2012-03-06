@@ -174,7 +174,7 @@
 <c:set var="disableFundingType">false</c:set>
 <c:if test="${!empty aimReportWizardForm.reportId}">
 	<c:set var="disableFundingType">true</c:set>
-</c:if>zzcxc
+</c:if>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.reportwizard");

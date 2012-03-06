@@ -257,7 +257,7 @@
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
-			alert("Please, select a sector firts!");
+			alert("Please, select a sector first!");
 		}
 	}
 	function resetSectors(){

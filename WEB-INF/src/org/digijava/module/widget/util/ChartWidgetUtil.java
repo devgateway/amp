@@ -404,34 +404,33 @@ public class ChartWidgetUtil {
         TextTitle subTitle=null;
         String titleType="";
         if (filter.getTransactionType() == 0) {
-            titleType = " commitments in";
+            titleType = "Commitments";
         } else {
-            titleType = " disbursements in";
+            titleType = "Disbursements";
         }
         switch (widgetType) {
 
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
-                dataset = ChartWidgetUtil.getPledgesCommDisbExpDataset(filter, opt);
-                String currencyTranslated = TranslatorWorker.translateText(filter.getCurrName(), opt.getLangCode(), opt.getSiteId());
-                subTitle = new TextTitle(currencyTranslated, subTitleFont);
+                dataset = ChartWidgetUtil.getPledgesCommDisbExpDataset(filter, opt);   
+                subTitle = new TextTitle(filter.getCurrCode(), subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, false);
-                titleType = "Actual" + titleType + " " + filter.getCurrName();
+                titleType = "Actual" + " "+ titleType;
                 titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
-                subTitle = new TextTitle(titleType, subTitleFont);
+                subTitle = new TextTitle(titleType+" ("+filter.getCurrCode()+")", subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
-                titleType = "Actual" + titleType + " " + filter.getCurrName();
+                titleType = "Actual" + " "+ titleType ;
                 titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
-                subTitle = new TextTitle( titleType ,subTitleFont);
+                subTitle = new TextTitle( titleType+" ("+filter.getCurrCode()+")" ,subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
-                titleType = "Actual vs Planned" +titleType + " " + filter.getCurrName();
+                titleType = "Actual vs Planned" +" "+titleType;
                 dataset = ChartWidgetUtil.getAidPredictiblityDataset(filter,opt);
                 titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
-                subTitle = new TextTitle(titleType,subTitleFont);
+                subTitle = new TextTitle(titleType+" ("+filter.getCurrCode()+")" ,subTitleFont);
                 break;
 
         }
@@ -869,13 +868,13 @@ public class ChartWidgetUtil {
 		String transTypeName = "";
 		switch (filter.getTransactionType()) {
 		case org.digijava.module.aim.helper.Constants.COMMITMENT:
-			transTypeName = "Commitment in";
+			transTypeName = "Commitment";
 			break;
 		case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
-			transTypeName = "Disbursement in";
+			transTypeName = "Disbursement";
 			break;
 		}
-        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName+" "+filter.getCurrName(), opt.getLangCode(), opt.getSiteId());
+        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
         dataset.sortByKeys(SortOrder.ASCENDING);
         chart = ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
 		chart.setBackgroundPaint(new Color(255,255,255,0));
@@ -883,7 +882,7 @@ public class ChartWidgetUtil {
 		if (title != null) {
 			title.setFont(titleFont);
 		}
-        TextTitle subTitle = new TextTitle(transTypeNameTrn,subTitleFont);
+        TextTitle subTitle = new TextTitle(transTypeNameTrn+" ("+filter.getCurrCode()+")",subTitleFont);
         Long fiscalCalendarId=filter.getFiscalCalendarId();
         AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
         TextTitle subTitleDate=null;

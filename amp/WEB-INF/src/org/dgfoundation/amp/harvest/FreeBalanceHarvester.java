@@ -310,7 +310,7 @@ public class FreeBalanceHarvester {
 					acf.setExpenditureCategory(compFundName);
 					acf.setCurrency(curr);
 					acf.setComponent(ac);
-					acf.setAdjustmentType(CategoryManagerUtil.addValueToCategory(CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()));
+					acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
 					acf.setTransactionType(new Integer(trType));
 					acf.setReportingOrganization(o);
 					if(!date.trim().equals(""))

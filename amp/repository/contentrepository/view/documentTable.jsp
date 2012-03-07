@@ -102,9 +102,10 @@
 												style="cursor:pointer; color: blue; font-size: 12px">  
 										</c:when>
 										<c:otherwise>
-											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
-												onClick="downloadFile('${documentData.nodeVersionUUID}');"
+											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" onClick="downloadFile('${documentData.uuid}');"  
 												style="cursor:pointer; color: #222222; font-size: 12px">
+												<!-- onClick="downloadFile('${documentData.nodeVersionUUID}');"  I think no need for nodeVersionUUID parameter. it shuld match the download link from Actions menu-->
+												
 										</c:otherwise>
 									</c:choose>
 										 <bean:write name="documentData" property="name" />
@@ -176,7 +177,7 @@
 								</td>
 								 --%>
 								
-								
+									<!-- ACTIONS -->
 									<td>
 									 		<c:set var="translation">
 												<digi:trn>Click here to see possible actions</digi:trn>

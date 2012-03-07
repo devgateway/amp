@@ -15,6 +15,7 @@
 
 
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%>
+<%@include file="documentManagerDivHelper.jsp" %>
 
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -745,4 +746,3 @@ border-right: 1px solid rgb(208, 208, 208);
 	<digi:trn>Shared Resources</digi:trn>
 </c:set>
 	
-<%@include file="documentManagerDivHelper.jsp" %>

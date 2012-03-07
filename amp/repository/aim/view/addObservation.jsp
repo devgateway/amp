@@ -44,7 +44,7 @@
 											<tr>
 												<td align="right"><digi:trn key="aim:dateOfobservation">Date of Observation</digi:trn>&nbsp;</td>
 										      	<td>
-										      		<html:text property="observations.issueDate" size="10" styleId="observationDate" styleClass="inp-text" /> 
+										      		<html:text property="observations.issueDate" size="10" readonly="true" styleId="observationDate" styleClass="inp-text" /> 
 													<a id="clear1" href="javascript:clearDate(document.getElementById('observationDate'), 'clear1')">
 			 	    									<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 													</a>

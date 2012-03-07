@@ -52,7 +52,7 @@ function selectCalendarType(view, type) {
                                 <table cellpadding="0" cellspacing="0">
                                 	<tr>
                                     	<td nowrap="nowrap">
-                                    		<html:text styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate" style="width:80px"/>
+                                    		<html:text styleId="customViewStartDate" readonly="true" name="calendarViewForm" property="customViewStartDate" style="width:80px"/>
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear1" href="javascript:clearDate(document.calendarViewForm.customViewStartDate, 'clear1')" style="text-decoration:none">
@@ -107,7 +107,7 @@ function selectCalendarType(view, type) {
                                 <table cellpadding="0" cellspacing="0">
                                 	<tr>
                                     	<td nowrap="nowrap">
-                                    		<html:text styleId="customViewEndDate" name="calendarViewForm" property="customViewEndDate" style="width:80px"/>
+                                    		<html:text styleId="customViewEndDate" readonly="true" name="calendarViewForm" property="customViewEndDate" style="width:80px"/>
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear2" href="javascript:clearDate(document.calendarViewForm.customViewEndDate, 'clear2')" style="text-decoration:none">

@@ -37,7 +37,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	
-	final String  EXPRESSION = "^((https?|ftp|file|)://|www\\.)[^\\s]+$";
+	final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?]+$";
 	
 	private WebMarkupContainer webLinkFeedbackContainer;
 	private Label webLinkFeedbackLabel;
@@ -179,6 +179,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 				if (!matcher.find()){
 					urlFormatValid = false;
 				}else{
+					if(!resource.getWebLink().contains("://"))
+						resource.setWebLink("http://" + resource.getWebLink());
 					urlFormatValid = true;
 				}
 			}			

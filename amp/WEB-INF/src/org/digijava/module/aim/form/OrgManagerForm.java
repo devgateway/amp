@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class OrgManagerForm
     extends ActionForm {
@@ -26,7 +27,7 @@ private String keyword;
   private String currentAlpha;
   private boolean startAlphaFlag;
   private Collection cols = null;
-  private Collection pagedCol = null;
+  private Collection<AmpOrganisation> pagedCol = null;
   private Collection colsAlpha = null;
   private Collection pages = null;
   private String[] alphaPages = null;
@@ -40,6 +41,24 @@ private String keyword;
   private int pagesSize;
   private int offset;
   private String sortBy;
+  private boolean active;
+  private Long orgId;
+
+  public Long getOrgId() {
+	return orgId;
+}
+
+public void setOrgId(Long orgId) {
+	this.orgId = orgId;
+}
+
+public boolean isActive() {
+		return active;
+  }
+
+  public void setActive(boolean active) {
+		this.active = active;
+  }
   
   public String getSortBy() {
 	return sortBy;
@@ -213,14 +232,14 @@ public OrgManagerForm() {
   /**
    * @return Returns the pagedCol.
    */
-  public Collection getPagedCol() {
+  public Collection<AmpOrganisation> getPagedCol() {
     return pagedCol;
   }
 
   /**
    * @param pagedCol The pagedCol to set.
    */
-  public void setPagedCol(Collection pagedCol) {
+  public void setPagedCol(Collection<AmpOrganisation> pagedCol) {
     this.pagedCol = pagedCol;
   }
 

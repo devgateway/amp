@@ -1,5 +1,7 @@
 	package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -15,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -42,6 +47,48 @@ public class OrganisationManager
     logger.debug("In organisation manager action");
 
     OrgManagerForm eaForm = (OrgManagerForm) form;
+    String changeOrganizationStatus=request.getParameter("changeOrganizationStatus");
+		if (changeOrganizationStatus != null
+				&& Boolean.parseBoolean(changeOrganizationStatus)) {
+
+			Long orgId = eaForm.getOrgId();
+			boolean active = eaForm.isActive();
+			response.setContentType("text/xml");
+			OutputStreamWriter outputStream = new OutputStreamWriter(
+					response.getOutputStream(), "UTF-8");
+			PrintWriter out = new PrintWriter(outputStream, true);
+
+			try {
+				AmpOrganisation organization = DbUtil.changeStatus(orgId,
+						active);
+				for(AmpOrganisation org: eaForm.getPagedCol()){
+					if(org.getAmpOrgId().equals(orgId)){
+						org.setActive(active);
+						break;
+					}		
+				}
+				StringBuilder xml = new StringBuilder();
+				xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				xml.append("<result>");
+				xml.append("<orgId>");
+				xml.append(organization.getAmpOrgId());
+				xml.append("</orgId>");
+				xml.append("<active>");
+				xml.append(organization.getActive());
+				xml.append("</active>");
+				xml.append("</result>");
+				out.println(xml);
+				out.close();
+				outputStream.close();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+
+			}
+			
+
+			return null;
+		}
 
     if (request.getParameter("orgSelReset") != null
         && request.getParameter("orgSelReset").equals("false")) {
@@ -235,4 +282,5 @@ public class OrganisationManager
 
     return mapping.findForward("forward");
   }
+	
 }

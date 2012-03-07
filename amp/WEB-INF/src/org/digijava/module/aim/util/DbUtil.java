@@ -860,6 +860,21 @@ public class DbUtil {
         }
         return list;
     }
+    public static AmpOrganisation changeStatus(Long id, boolean active) {
+        Session session = null;
+        AmpOrganisation organization =null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            organization = (AmpOrganisation) session.load(AmpOrganisation.class, id);
+        	organization.setActive(active);
+        	session.update(organization);
+        } catch (Exception ex) {
+            logger.error("Unable to get organisation from database", ex);
+        }
+        logger.debug("Getting organisation successfully ");
+        return organization;
+    }
 
     public static AmpOrganisation getOrganisation(Long id) {
         Session session = null;
@@ -3019,6 +3034,7 @@ public class DbUtil {
                 String receiptLegPersonalityAct = org.getReceiptLegPersonalityAct();
                 Set<AmpDepartments> departments =org.getDepartments();
                 Set<AmpBudgetSector> budgetsectors = org.getBudgetsectors();
+
               
                 org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());
                 org.setName(name);
@@ -3050,7 +3066,8 @@ public class DbUtil {
                 org.setLineMinRegDate(lineMinRegDate);
                 org.setReceiptLegPersonalityAct(receiptLegPersonalityAct);
                 org.setOtherInformation(otherInformation);
-                org.setLineMinRegNumber(lineMinRegNumber);                
+                org.setLineMinRegNumber(lineMinRegNumber); 
+  
 
                 if(org.getLocations()==null){
                     org.setLocations(new HashSet<AmpOrgLocation>());
@@ -3121,6 +3138,9 @@ public class DbUtil {
                     org.getOrganizationContacts().clear();
 
                 }
+            }
+            else{
+            	org.setActive(Boolean.TRUE); // make newly saved org active
             }
         
            /**

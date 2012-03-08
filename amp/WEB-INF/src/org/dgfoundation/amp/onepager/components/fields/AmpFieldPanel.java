@@ -19,9 +19,11 @@ import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavio
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.FeedbackLabel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.digijava.kernel.translator.util.TrnUtil;
 
 /**
  * Component to be extended directly by AMP Field Types. An AMP field contains a
@@ -50,7 +52,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected void initFormComponent(FormComponent<?> fc) {
 		formComponent = fc;
 		feedbackLabel.setComponent(fc);
-		fc.setLabel(new Model<String>(fmName));		
+		fc.setLabel(new Model<String>(TranslatorUtil.getTranslatedText(fmName)));		
 		fc.add(visualErrorBehavior());
 	}
 	

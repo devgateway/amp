@@ -1,20 +1,21 @@
-	YAHOOAmp = YAHOO;
-		
-    var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
-		width:"800px",
-		height:"400px",
-	    fixedcenter: true,
-	    constraintoviewport: true,
-	    underlay:"none",
-	    close:true,
-	    visible:false,
-	    modal:true,
-	    draggable:true,
-	    context: ["showbtn", "tl", "bl"] 
-	    }
-	     );
-	
+//	YAHOOAmp = YAHOO;
+//		
+    
 	function initScriptsLogframe() {
+		myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
+			width:"800px",
+			height:"400px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"] 
+		    }
+		     );
+		
 		var msgP5='\n<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>';
 		myPanelLogframe.setHeader(msgP5);
 		myPanelLogframe.setBody("");
@@ -23,6 +24,7 @@
 	}
 	
 	function showPLogframe() {
+		initScriptsLogframe();
 		var content = document.getElementById("myPLogframeContent");
 		var element5 = document.getElementById("myPLogframe"); 
 		var loading='\n<digi:trn>Loading...</digi:trn>';
@@ -76,10 +78,3 @@
         showPLogframe();
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
 	}
-	
-	var currentLogframe = window.onload;
-	window.onload = function() {
-        currentLogframe.apply(currentLogframe);
-   	};
-	initScriptsLogframe();
-

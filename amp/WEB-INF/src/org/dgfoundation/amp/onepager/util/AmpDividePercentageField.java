@@ -19,15 +19,11 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	private IModel<Set<T>> setModel;
 	private ListView<T> list;
 	
-	private AmpPercentageCollectionValidatorField<T> validationHiddenField;
-	
 	public AmpDividePercentageField(String id, String fmName,
-			String buttonCaption, IModel<Set<T>> setModel, ListView<T> list,
-			 AmpPercentageCollectionValidatorField<T> validationHiddenField) {
+			String buttonCaption, IModel<Set<T>> setModel, ListView<T> list) {
 		super(id, fmName, buttonCaption);
 		this.setModel = setModel;
 		this.list = list;
-		this.validationHiddenField=validationHiddenField;
 	}
 
 	@Override
@@ -68,10 +64,8 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			setPercentage(loc, getPercentage(loc) + delta);
 			dif = dif - delta;
 		}
-		
+		list.removeAll();
 		target.addComponent(list.getParent());
-		validationHiddenField.reloadValidationField(target);
-		
 	}
 	
 	public abstract void setPercentage(T item, int val);

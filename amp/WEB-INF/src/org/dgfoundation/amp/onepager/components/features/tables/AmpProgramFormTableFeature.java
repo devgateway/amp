@@ -134,7 +134,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		add(list);
 
 
-		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
 			public void setPercentage(AmpActivityProgram loc, int val) {
 				loc.setProgramPercentage((float) val);

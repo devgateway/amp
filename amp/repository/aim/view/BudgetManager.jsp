@@ -13,7 +13,6 @@
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
 <script language="JavaScript" type="text/javascript">
-<!--
 function addBudgetsector(){
         <digi:context name="Url" property="context/module/moduleinstance/BudgetManager.do?new=true" />
         document.BudgetManagerForm.target = "_self";

@@ -16,7 +16,7 @@
 <c:set var="reportDataNameVar">
     <bean:write name="reportData" property="name"/>
 </c:set>
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover="this.title='${reportDataNameVar}'" onmouseout="this.title='${depthRelatVar}'">
 <td class="report_inside" width="25">
 &nbsp;
 </td>

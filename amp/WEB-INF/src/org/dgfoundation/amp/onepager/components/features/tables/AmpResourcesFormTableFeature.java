@@ -15,6 +15,7 @@ import javax.jcr.Node;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -157,6 +158,8 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				String webLink = item.getModelObject().getWebLink();
 				
 				if (webLink!=null && webLink.length()>0 ){
+					if (!webLink.startsWith("http"))
+						webLink = "http://" + webLink;
 					ExternalLink link = new ExternalLink("download", new Model<String>(webLink));
 					item.add(link);
 					WebMarkupContainer downloadLinkImg = new WebMarkupContainer("downloadImage");

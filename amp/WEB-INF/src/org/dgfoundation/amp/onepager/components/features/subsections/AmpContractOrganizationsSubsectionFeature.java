@@ -95,7 +95,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return choice.getAcronymAndName();
 			}
 
 			@Override

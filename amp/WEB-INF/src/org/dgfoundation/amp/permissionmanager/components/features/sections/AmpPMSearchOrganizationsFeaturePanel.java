@@ -79,8 +79,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				//return choice.getAcronymAndName();
-				return choice.getName();
+				return choice.getAcronymAndName();
 			}
 
 			@Override

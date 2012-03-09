@@ -101,7 +101,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchFundingOrgs","Search Funding Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return choice.getAcronymAndName();
 			}
 
 			@Override

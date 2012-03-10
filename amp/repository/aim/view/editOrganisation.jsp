@@ -2216,7 +2216,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Description</digi:trn></td>
         <td width="500px" height="30px">
-            <html:textarea property="description" styleId="description"/>
+            <html:textarea property="description" styleId="description" style="width:400px;	height:100px;margin-bottom:10px;"/>
         </td>
     </tr>
     

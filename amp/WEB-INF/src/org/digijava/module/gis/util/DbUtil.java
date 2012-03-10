@@ -516,7 +516,7 @@ public class DbUtil {
             }
         }
 
-        List<AmpTeam> topLevelManagementWscs = getTopLevelManagmentTeams();
+        /*List<AmpTeam> topLevelManagementWscs = getTopLevelManagmentTeams();
         List<AmpTeam> allManagementTeams = new ArrayList<AmpTeam>();
         for (AmpTeam topLevelTeam : topLevelManagementWscs) {
             allManagementTeams.add(topLevelTeam);
@@ -532,7 +532,7 @@ public class DbUtil {
                 parentTeamWhereclause.append(", ");
             }
 
-        }
+        }*/
 
         List retVal = null;
         Session session = null;
@@ -543,9 +543,10 @@ public class DbUtil {
             publicwhere.append(AmpActivity.class.getName());
             publicwhere.append(" aa where aa.team in (select at.ampTeamId from ");
             publicwhere.append(AmpTeam.class.getName());
-            publicwhere.append(" at where at.parentTeamId in (");
-            publicwhere.append(parentTeamWhereclause);
-            publicwhere.append("))");
+            publicwhere.append(" at where at.parentTeamId is not null");
+            publicwhere.append(")");
+            publicwhere.append(" and aa.approvalStatus in ('approved', 'startedapproved')");
+            publicwhere.append(" and aa.draft=false");
 
 
             
@@ -569,12 +570,14 @@ public class DbUtil {
                 //qs.append(") and sec.activityId in (" + publicwhere);
                 qs.append(")");
                 qs.append(" and sec.activityId.team.parentTeamId in (");
-                qs.append(parentTeamWhereclause);
+                qs.append("select at.ampTeamId from ");
+                qs.append(AmpTeam.class.getName());
+                qs.append(" at where at.parentTeamId is not null");
                 qs.append(")");
                 //qs.append(" and (sec.activityId.team.parentTeamId is null or sec.activityId.team.parentTeamId.parentTeamId is null)");
                 //qs.append(" or (sec.activityId.team.parentTeamId.parentTeamId is null and sec.activityId.team.parentTeamId.accessType='Management' and sec.activityId.team.accessType!='Management'))");
                 qs.append(" and sec.activityId.draft=false");
-                //qs.append(" and sec.activityId.approvalStatus in ('approved', 'startedapproved')");
+                qs.append(" and sec.activityId.approvalStatus in ('approved', 'startedapproved')");
 
                 q = session.createQuery(qs.toString());
            } else {

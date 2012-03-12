@@ -3521,6 +3521,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					+ " OR fundingDetail.ampDonorOrgId.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + ") "
 					+ " OR orgRole.organisation.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + "))"
 					+ " and ampAct.team is not null "
+					+ " and (ampAct.approvalStatus like '"+Constants.APPROVED_STATUS+"' or ampAct.approvalStatus like '"+Constants.STARTED_APPROVED_STATUS+"')"
 					+ " order by ampAct.ampActivityId desc";
 			}
 			else

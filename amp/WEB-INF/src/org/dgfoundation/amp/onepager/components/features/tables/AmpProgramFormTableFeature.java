@@ -163,7 +163,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			protected String getChoiceValue(AmpTheme choice) {
 				//transientBoolean used internally to flag the default theme
 				if (choice.isTransientBoolean())
-					return "<b>" +TranslatorUtil.getTranslatedText("Default program") + ":</b> " + choice.getName();
+					return BOLD_DELIMITER_START +TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + choice.getName();
 				else
 					return choice.getName();
 			}

@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -57,7 +58,7 @@ public class TrnAccesTimeSaver implements Runnable {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			
 			//since we are not interested in precious time: we are interesting if this  message was accessed
 			Calendar cal = Calendar.getInstance();
 		    cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -65,21 +66,39 @@ public class TrnAccesTimeSaver implements Runnable {
 		    cal.set(Calendar.SECOND, 0);
 		    cal.set(Calendar.MILLISECOND, 0);
 		    Date currentDate = cal.getTime();
-
-			if(message.getLastAccessed()==null||message.getLastAccessed().before(currentDate)){
+		    if(message.getLastAccessed()==null||message.getLastAccessed().before(currentDate)){
+		    	session	= PersistenceManager.openNewSession();
 				Message msg = (Message) session.get(Message.class, message);
 				// for newly created messages the last access time is set in the save method
 				if (msg != null) {
+					tx = session.beginTransaction();
 					msg.setLastAccessed(new Timestamp(currentDate.getTime()));
 					session.update(msg);
+					tx.commit();
+					TranslatorWorker.getInstance("").refresh(msg);
 				}
 			}
 			
 			//logger.info("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale()+" Thread name="+Thread.currentThread().getName());
 			
-		} catch (Exception e) {
-			logger.error("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale());		
-		}
+		}  catch (Exception e) {
+			logger.error("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale());	
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Roll back failed");
+                }
+            }
+        } finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed", ex1);
+                }
+            }
+        }
 	}
 	
 	

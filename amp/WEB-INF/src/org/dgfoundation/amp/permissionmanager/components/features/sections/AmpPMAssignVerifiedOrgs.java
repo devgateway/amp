@@ -78,8 +78,18 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		final AmpAutocompleteFieldPanel<AmpOrganisation> autoComplete = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchVerifiedOrgs", "Search Verified Organizations",AmpOrganisationSearchModel.class) {
 
 			@Override
-			protected String getChoiceValue(AmpOrganisation choice){
-				return choice.getAcronymAndName();
+			protected String getChoiceValue(AmpOrganisation choice) {
+				return choice.getName();
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 
 			@Override

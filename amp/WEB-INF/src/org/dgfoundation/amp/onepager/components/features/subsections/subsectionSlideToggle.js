@@ -45,10 +45,10 @@ $(document).ready(function(){
 		$(this).siblings("div:first").slideToggle();
 		return false;
 		});
-//	var mainContentTop = $('#mainContent').offset().top - 23;
-//	var mainContentLeft = $('#mainContent').offset().left + 800;
-//	$('#rightMenu').css('top', mainContentTop + "px");
-//	$('#rightMenu').css('left', mainContentLeft + "px");
+	var mainContentTop = $('#mainContent').offset().top - 23;
+	var mainContentLeft = $('#mainContent').offset().left + 800;
+	$('#rightMenu').css('top', mainContentTop + "px");
+	$('#rightMenu').css('left', mainContentLeft + "px");
 
 	adjustQuickLinks();
 	$('#rightMenu').css('display', 'block');

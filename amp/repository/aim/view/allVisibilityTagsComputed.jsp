@@ -611,6 +611,7 @@
 <field:display name="Projection Name" feature="MTEF Projections"></field:display> 
 <field:display name="Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Proposed Completion Date" feature="Planning"></field:display> 
+<field:display name="Duration of Project" feature="Planning"></field:display> 
 <field:display name="Closing Dates" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
@@ -725,6 +726,8 @@
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information"></field:display> 
 <field:display name="Undisbursed Funds" feature="Funding Information"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display> 
+<field:display name="Delivery rate" feature="Funding Information"></field:display> 
+<field:display name="Consumption rate" feature="Funding Information"></field:display> 
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 

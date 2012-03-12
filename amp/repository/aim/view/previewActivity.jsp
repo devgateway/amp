@@ -389,14 +389,20 @@ function collapseAll() {
 		         </c:if>
 			<hr/>
 			</module:display>
-			<digi:trn>Duration of project</digi:trn>: <br/>
-			<b>${aimEditActivityForm.planning.projectPeriod }</b>
-			<hr/>
-			<digi:trn>Delivery rate</digi:trn>:<br/>
-			<b> ${aimEditActivityForm.funding.deliveryRate}</b>
-			<hr/>
-			<digi:trn>Consumption rate</digi:trn>:<br/>
-			<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
+			<field:display name="Duration of Project" feature="Planning">
+				<digi:trn>Duration of project</digi:trn>: <br/>
+				<b>${aimEditActivityForm.planning.projectPeriod }</b>
+				<hr/>
+			</field:display>
+			<field:display name="Delivery rate" feature="Funding Information">
+				<digi:trn>Delivery rate</digi:trn>:<br/>
+				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
+				<hr/>
+			</field:display> 
+			<field:display name="Consumption rate" feature="Funding Information">
+				<digi:trn>Consumption rate</digi:trn>:<br/>
+				<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
+			</field:display>
 	</fieldset>	
 	<fieldset>
 	<legend>
@@ -1010,8 +1016,9 @@ function collapseAll() {
 			<digi:trn>Current Completion Date</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		</module:display>
 		<hr>
-		<digi:trn>Duration of project</digi:trn>:&nbsp;
-		<b>${aimEditActivityForm.planning.projectPeriod }</b>	</div>	
+		<field:display name="Duration of Project" feature="Planning"> 
+			<digi:trn>Duration of project</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.projectPeriod }</b>	</div>	</field:display>
 </fieldset>
 </module:display>
 

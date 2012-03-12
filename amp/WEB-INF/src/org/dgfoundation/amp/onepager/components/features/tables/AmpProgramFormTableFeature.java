@@ -13,6 +13,8 @@ import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -80,6 +82,10 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			}
 		};
 
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
 		
 		final AmpPercentageCollectionValidatorField<AmpActivityProgram> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivityProgram>(
 				"programPercentageTotal", listModel, "programPercentageTotal") {
@@ -88,7 +94,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				return item.getProgramPercentage();
 			}
 		};
-		
+		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 		
 		
@@ -99,7 +105,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				return t.getProgram().getName();
 		 	}	
 		};
-		
+		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
 		
 		list = new ListView<AmpActivityProgram>("listProgs", listModel) {

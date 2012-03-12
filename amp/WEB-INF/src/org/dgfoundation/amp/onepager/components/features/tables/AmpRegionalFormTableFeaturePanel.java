@@ -54,7 +54,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 
 	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(
 			IModel<AmpRegionalFunding> model) {
-		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("funding_type");
+		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("adjustment_type");
 		ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
 		for(AmpCategoryValue categoryValue: funding_type_values)
 		{

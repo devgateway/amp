@@ -55,9 +55,9 @@
 								</c:set>
 							</logic:equal>
 							<c:set var="escapedDescription"><c:out escapeXml="true" value="${documentData.escapedAmpDescription}" /></c:set>
-+							<c:if test="${ empty documentData.escapedAmpDescription }">
-+								<c:set var="escapedDescription">(<digi:trn>none</digi:trn>)</c:set>
-+							</c:if>
+							<c:if test="${ empty documentData.escapedAmpDescription }">
+								<c:set var="escapedDescription">(<digi:trn>none</digi:trn>)</c:set>
+							</c:if>
 							<tr>
 								<td>
 									<c:choose>

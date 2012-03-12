@@ -432,10 +432,12 @@
 																title="${translation}">
 														&gt;&gt; 
 													</digi:link>
-													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-												</c:if> <c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn
-															key="aim:of">of</digi:trn>&nbsp;<c:out
-															value="${aimActivityForm.totalPages}"></c:out></td>
+													</c:if> &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;  
+													<digi:trn>Page</digi:trn>&nbsp;
+													<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;
+													<digi:trn>of</digi:trn>&nbsp;
+													<c:out value="${aimActivityForm.totalPages}"></c:out>
+													</td>
 														<td width="20%" align="right"><c:set
 															var="trnDeleteSelectedBtn">
 															<digi:trn>Delete Selected Activities</digi:trn>

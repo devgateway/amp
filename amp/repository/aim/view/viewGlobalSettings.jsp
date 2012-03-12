@@ -373,7 +373,7 @@ function setIndex(index){
 			                                          	<digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
 			                                        </c:set>
 			
-			                                        <html:option value="${global.key}"><digi:trn key='aim:globalsettings:${fn:replace(fn:substring(global.value, 0, 50), " ", "_")}'>${global.value}</digi:trn></html:option>
+			                                        <html:option value="<c:out value='${global.key}'/>"><digi:trn key='aim:globalsettings:${fn:replace(fn:substring(global.value, 0, 50), " ", "_")}'><c:out value="${global.value}"/></digi:trn></html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
 			                                    <%

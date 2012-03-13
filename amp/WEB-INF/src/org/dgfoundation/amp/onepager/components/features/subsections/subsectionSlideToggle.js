@@ -50,7 +50,7 @@ $(document).ready(function(){
 	$('#rightMenu').css('top', mainContentTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 
-	adjustQuickLinks();
+	//adjustQuickLinks();
 	$('#rightMenu').css('display', 'block');
 	enableComputateVisibleSections = true;
 	if (onepagerMode)

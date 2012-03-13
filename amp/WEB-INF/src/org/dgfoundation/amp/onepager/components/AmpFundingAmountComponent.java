@@ -57,7 +57,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			}
 		};
 		amount.getTextContainer().setRequired(true);
-		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
+		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("9")));
 		add(amount);
 		
 		
@@ -77,6 +77,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
 				model, propertyDate), fmDate,true);
 		date.getDate().setRequired(true);
+		date.getDate().add(new AttributeModifier("size", true, new Model<String>("4")));
 		add(date);
 		setRenderBodyOnly(true);
 	}

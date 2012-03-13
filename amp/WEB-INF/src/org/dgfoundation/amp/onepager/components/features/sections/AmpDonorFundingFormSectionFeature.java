@@ -81,16 +81,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				}
 				item.add(fundingItemFeature);
 
-				String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
 				
-				item.add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						super.onClick(target);
-						target.addComponent(AmpDonorFundingFormSectionFeature.this);
-						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-					}
-				});
 
 			}
 		};

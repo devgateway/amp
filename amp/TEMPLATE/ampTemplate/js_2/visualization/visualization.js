@@ -35,7 +35,10 @@ function initializePage(){
 		       $E.on(cancelLink, 'click', function(e, o){
 		           o.self.loadingPanel.hide();
 		           o.self.cancelEvent.fire();
-		           window.stop();
+		           if(navigator.appName == "Microsoft Internet Explorer")
+			           window.document.execCommand('Stop');
+		           else
+			           window.stop();
 		       }, {self:this});
 		       loadingPanel.appendToBody(document.createElement('br'));
 		       loadingPanel.appendToBody(cancelLink);
@@ -746,8 +749,11 @@ var callbackUpdateLoadingPanel = {
 		       $E.on(cancelLink, 'click', function(e, o){
 		           loadingPanel.loadingPanel.hide();
 		           loadingPanel.cancelEvent.fire();
-		           window.stop();
-		       }, {self:this});
+		           if(navigator.appName == "Microsoft Internet Explorer")
+			           window.document.execCommand('Stop');
+		           else
+			           window.stop();
+		           }, {self:this});
 		       loadingPanel.loadingPanel.appendToBody(document.createElement('br'));
 		       loadingPanel.loadingPanel.appendToBody(cancelLink);
 		       $D.setStyle(loadingPanel.body, 'text-align', 'center');

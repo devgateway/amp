@@ -1474,7 +1474,7 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)   ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1552,7 +1552,7 @@ public class ChartWidgetUtil {
         } else {
             oql += getOrganizationQuery(false, orgIds);
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.id=:configId ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)     and config.id=:configId ";
         
         
         if(filter.getFromPublicView() == true){
@@ -1754,7 +1754,7 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.id=:configId  ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)    and config.id=:configId  ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);

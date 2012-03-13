@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
 
@@ -48,7 +50,11 @@ public class AmpCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 			String fmName, boolean hideLabel) {
 		super(id, model, fmName, hideLabel);
 		newLine.setVisible(false);
-		checkBox = new CheckBox("checkbox", model);
+		checkBox = new AjaxCheckBox("checkbox", model){
+			@Override
+			protected void onUpdate(AjaxRequestTarget arg0) {
+			}
+		};
 		add(checkBox);
 	}
 
@@ -58,7 +64,6 @@ public class AmpCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 	 */
 	public AmpCheckBoxFieldPanel(String id, String fmName) {
 		this(id, null, fmName, false);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

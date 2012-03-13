@@ -749,6 +749,7 @@ var callbackUpdateLoadingPanel = {
 		       $E.on(cancelLink, 'click', function(e, o){
 		           loadingPanel.loadingPanel.hide();
 		           loadingPanel.cancelEvent.fire();
+		           panelLoaded = true
 		           if(navigator.appName == "Microsoft Internet Explorer")
 			           window.document.execCommand('Stop');
 		           else

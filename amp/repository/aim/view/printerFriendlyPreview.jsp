@@ -396,22 +396,22 @@ body {background:none;}
 											<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 											<br />
 										</module:display>
-										<module:display name="/Activity Form/Identification/Budget Extras/Project Code"  parentModule="/Activity Form/Identification/Budget Extras/">
+										<module:display name="/Activity Form/Identification/Budget Extras/Project Code"  parentModule="/Activity Form/Identification/Budget Extras">
 											<digi:trn>Project Code</digi:trn>:&nbsp;
 											<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
 											<br />
 										</module:display>
-										<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program"  parentModule="/Activity Form/Identification/Budget Extras/">
+										<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program"  parentModule="/Activity Form/Identification/Budget Extras">
 											<digi:trn>Sub-Program</digi:trn>:&nbsp;
 											<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
 											<br />
 										</module:display>
-										<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras/">
+										<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 											<digi:trn>Sub-Vote </digi:trn>:&nbsp;
 											<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
 											<br />
 										</module:display>
-										<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras/">
+										<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 											<digi:trn>Vote</digi:trn>:&nbsp;
 											<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
 											<br />

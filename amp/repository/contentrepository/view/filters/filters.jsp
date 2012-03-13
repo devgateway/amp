@@ -49,7 +49,7 @@
 					<select name="filterOwners" class="dropdwn_sm" style="width: 250px;">
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="item" items="${myFilterValues.possibleOwners}">
-							<option value="${item}">${item}</option>
+							<option value="${item}"><c:out value="${item}"></c:out> </option>
 						</c:forEach>
 					</select>
 				</td>
@@ -60,7 +60,7 @@
 					<select name="filterTeamIds" class="dropdwn_sm" style="width: 250px;">
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="kvItem" items="${myFilterValues.possibleTeams}">
-							<option value="${kvItem.key}">${kvItem.value}</option>
+							<option value="${kvItem.key}"><c:out value="${kvItem.value}"></c:out> </option>
 						</c:forEach>
 					</select>
 				</td>

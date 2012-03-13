@@ -9,7 +9,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script defer src="ie_onload.js" type="text/javascript"></script>
 <script language="JavaScript">
 
 function onDelete() {

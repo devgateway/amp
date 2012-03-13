@@ -948,17 +948,17 @@ function initializeGlobalVariables(){
 		<c:choose>
 						<c:when test="${config.name=='Primary'}">
 							<field:display name="Primary Sector" feature="Sectors">
-							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Secondary'}">
 							<field:display name="Secondary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Tertiary'}">
 							<field:display name="Tertiary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 		</c:choose>
@@ -1043,17 +1043,17 @@ function initializeGlobalVariables(){
 		<c:choose>
 						<c:when test="${config.name=='Primary'}">
 							<field:display name="Primary Sector" feature="Sectors">
-							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Secondary'}">
 							<field:display name="Secondary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Tertiary'}">
 							<field:display name="Tertiary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 		</c:choose>

@@ -7,7 +7,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<script defer src="ie_onload.js" type="text/javascript"></script>
 <script language="JavaScript">
 
 function onDelete() {

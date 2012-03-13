@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <!-- Dependencies -->
@@ -868,6 +869,7 @@ function removeGuest(obj) {
 	}
 	return null;
 }
+
 </script>
 
 
@@ -1291,6 +1293,18 @@ function removeGuest(obj) {
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">
+				<c:if test="${!empty calendarEventForm.selectedAttsCol}">
+                    <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                        <c:if test="${fn:startsWith(attendee.value, 'g:')}">
+                       		<div class="msg_added_cont">	
+								<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>
+								${attendee.label}
+								<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="g:${attendee.value}">
+							</div>
+                        </c:if>
+                    </c:forEach>
+                    
+                  </c:if>
 				</div>
 			</td>
     </tr>

@@ -179,7 +179,7 @@ public class ShowCalendarEvent extends Action {
                         selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), slAtts[i]));
                     }
                 } else if (slAtts[i].startsWith("g:")) {
-                    selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(2), slAtts[i]));
+                    selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(slAtts[i].lastIndexOf("g:")+2), slAtts[i].substring(slAtts[i].lastIndexOf("g:"))));
                 }
                     else if (slAtts[i].startsWith("guest")) {
                          String guest="---"+TranslatorWorker.translateText("Guest", langCode, siteId)+"---";

@@ -355,7 +355,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
          fd.transaction_type AS transaction_type,
          fd.adjustment_type AS adjustment_type,
          fd.transaction_date AS transaction_date,
-         fd.transaction_amount *
+         fd.transaction_amount * (
+         
          coalesce(rc.location_percentage, 100) / 100 *
          coalesce(pp.program_percentage, 100) / 100 *
          coalesce(sp.program_percentage, 100) / 100 *
@@ -363,8 +364,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
          coalesce(secs.sector_percentage,100) / 100 *
          coalesce(psub.sector_percentage,100) / 100 *
          coalesce(ssub.sector_percentage,100) / 100 *
-
-         s.sector_percentage / 100 AS transaction_amount,
+         coalesce(s.sector_percentage,100) / 100) AS transaction_amount,
+         
          d.name AS donor_name,
          c.currency_code AS currency_code,
          cval.id AS terms_assist_id,
@@ -421,7 +422,7 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
        join amp_org_group b on d.org_grp_id = b.amp_org_grp_id
        join amp_org_type ot on b.org_type = ot.amp_org_type_id
        join amp_category_value cval2 on f.financing_instr_category_value = cval2.id
-       join cached_v_sectors s on aa.amp_activity_id = s.amp_activity_id
+       left join cached_v_sectors s on aa.amp_activity_id = s.amp_activity_id
        left join cached_v_sub_sectors psub on aa.amp_activity_id = psub.amp_activity_id
        left join cached_v_secondary_sectors secs on aa.amp_activity_id = secs.amp_activity_id
        left join cached_v_secondary_sub_sectors ssub on aa.amp_activity_id = ssub.amp_activity_id

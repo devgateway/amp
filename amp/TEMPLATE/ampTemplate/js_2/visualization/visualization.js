@@ -722,14 +722,25 @@ function callbackApplyFilter(e){
 
 	loadingPanel.loadingPanel.setBody("");
 	refreshLoadingPanel();
-
-	document.getElementById("filterOrgGroups").innerHTML = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
-	document.getElementById("filterOrganizations").innerHTML = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-	document.getElementById("filterSectorConfiguration").innerHTML = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
-	document.getElementById("filterSectors").innerHTML = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
-	document.getElementById("filterRegions").innerHTML = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
-	document.getElementById("filterStartYear").innerHTML = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
-	document.getElementById("filterEndYear").innerHTML = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
+	if(document.body.innerText){
+		document.getElementById("filterOrgGroups").innerText = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+		document.getElementById("filterOrganizations").innerText = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSectorConfiguration").innerText = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSectors").innerText = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterRegions").innerText = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterStartYear").innerText = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
+		document.getElementById("filterEndYear").innerText = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
+	}
+	else
+	{
+		document.getElementById("filterOrgGroups").textContent = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+		document.getElementById("filterOrganizations").textContent = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSectorConfiguration").textContent = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSectors").textContent = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterRegions").textContent = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterStartYear").textContent = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
+		document.getElementById("filterEndYear").textContent = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
+	}
 
 }
 var panelLoaded = false;

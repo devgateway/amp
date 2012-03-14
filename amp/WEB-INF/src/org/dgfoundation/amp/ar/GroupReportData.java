@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.digijava.module.aim.helper.KeyValue;
 
 /**
  * 
@@ -360,6 +361,20 @@ public class GroupReportData extends ReportData {
 
 	public List getLevelSorters() {
 		if(parent==null) return levelSorters; else return parent.getLevelSorters();
+	}
+	
+	@Override
+	public List<KeyValue> getLevelSorterPaths() {
+		List<MetaInfo> levelSorters		= this.getLevelSorters();
+		List<KeyValue> ret						= new ArrayList<KeyValue>();
+		if ( levelSorters != null ) {
+			for (MetaInfo metaInfo : levelSorters) {
+				String key		= "/" + metaInfo.getCategory().replace("--", "/");
+				KeyValue kv		= new KeyValue(key, metaInfo.getValue().toString() );
+				ret.add(kv);
+			}
+		}
+		return ret;
 	}
 
 	public void importLevelSorters(Map sorterMap, int levels) {

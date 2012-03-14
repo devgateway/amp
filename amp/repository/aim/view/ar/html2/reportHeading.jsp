@@ -39,9 +39,9 @@
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
 					<c:if test="${levelId==hIdx}">
 						<c:set var="hSortOrder">${sorter.value}</c:set>
-						<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/up_red.gif</c:set>
+						<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/up_red${levelId}.gif</c:set>
 						<c:if test="${sorter.value=='descending'}">
-							<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/down_red.gif</c:set>
+							<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/down_red${levelId}.gif</c:set>
 						</c:if>
 					</c:if>
 				</logic:iterate>
@@ -127,7 +127,7 @@
 			             </c:otherwise>
 	              	</c:choose>
 	            </logic:notEqual>
-            
+            	${column.namePath }
 	            <c:if test="${column.namePath == columnReport.sorterColumn}">
 	            	<logic:equal name="columnReport" property="sortAscending" value="false">
 	                	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
@@ -136,6 +136,18 @@
 	                	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	              	</logic:equal>
 	            </c:if>
+	            <c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath">
+	            	<c:if test="${column.namePath == sorterPath.key}">
+	            		<c:choose>
+	            			<c:when test="${ sorterPath.value == 'ascending'}">
+	            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red.gif" align="absmiddle" border="0"/>
+	            			</c:when>
+	            			<c:otherwise>
+	            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red.gif" align="absmiddle" border="0"/>
+	            			</c:otherwise>
+	            		</c:choose>
+	            	</c:if>
+	            </c:forEach>
 	         </td>
           </logic:equal>
           
@@ -169,7 +181,7 @@
 	            			</digi:trn>
 						</html:link>
 		  			  
-	            
+	          
 					<c:if test="${subColumn.namePath == columnReport.sorterColumn}">
 	        			<logic:equal name="columnReport" property="sortAscending" value="false">
 	                		<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
@@ -178,6 +190,18 @@
 	                		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	            		</logic:equal>
 	       			</c:if>
+	       			 <c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath" varStatus="status" >
+		            	<c:if test="${subColumn.namePath == sorterPath.key}">
+		            		<c:choose>
+		            			<c:when test="${ sorterPath.value == 'ascending'}">
+		            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>
+		            			</c:when>
+		            			<c:otherwise>
+		            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red${status.count-1}.gif" align="absmiddle" border="0"/>
+		            			</c:otherwise>
+		            		</c:choose>
+		            	</c:if>
+		            </c:forEach>
 	     		</c:otherwise>
 	     		</c:choose>
 	     	 <%

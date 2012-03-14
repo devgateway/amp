@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.helper.KeyValue;
 
 /**
  * 
@@ -588,7 +589,7 @@ public class ColumnReportData extends ReportData {
 	public int getNumOfHierarchyRows() {
 		return 1;
 	}
-
+	
 
 	@Override
 	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
@@ -636,7 +637,12 @@ public class ColumnReportData extends ReportData {
 	}	
 
 
-
+	@Override
+	public List<KeyValue> getLevelSorterPaths() {
+		if ( this.parent != null )
+			return parent.getLevelSorterPaths();
+		else return null;
+	}
 	
 
 

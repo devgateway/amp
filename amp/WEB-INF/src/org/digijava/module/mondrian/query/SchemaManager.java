@@ -70,6 +70,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Primary_Program#", TranslatorWorker.translateText(MoConstants.PRIMARY_PROGRAMS, locale, siteId));
 			shema = shema.replaceAll("#Secondary_Program#", TranslatorWorker.translateText(MoConstants.SECONDARY_PROGRAMS, locale, siteId));
 			shema = shema.replaceAll("#Primary_Sector#", TranslatorWorker.translateText(MoConstants.PRIMARY_SECTOR, locale, siteId));
+			shema = shema.replaceAll("#Secondary_Sector#", TranslatorWorker.translateText(MoConstants.SECONDARY_SECTOR, locale, siteId));
 			shema = shema.replaceAll("#Donor_Dates#", TranslatorWorker.translateText(MoConstants.DONOR_DATES, locale, siteId));
 			shema = shema.replaceAll("#Regions#", TranslatorWorker.translateText(MoConstants.REGIONS, locale, siteId));
 			shema = shema.replaceAll("#Status#", TranslatorWorker.translateText(MoConstants.STATUS, locale, siteId));
@@ -80,6 +81,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Terms_of_Assistance#", TranslatorWorker.translateText(MoConstants.TERMS_OF_ASSISTANCE, locale, siteId));
 			shema = shema.replaceAll("#National_Program#", TranslatorWorker.translateText(MoConstants.NATIONAL_PROGRAM, locale, siteId));
 			shema = shema.replaceAll("#Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SECTORS, locale, siteId));
+			shema = shema.replaceAll("#Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SUB_SECTORS, locale, siteId));
 			shema = shema.replaceAll("#Currency#", TranslatorWorker.translateText(MoConstants.CURRENCY, locale, siteId));
 			
 			shema = shema.replaceAll("#All_Activities#", TranslatorWorker.translateText(MoConstants.ALL_ACTIVITIES, locale, siteId));
@@ -96,6 +98,8 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#All_Financing_Instrument#", TranslatorWorker.translateText(MoConstants.ALL_FINANCING_INTRUMENT, locale, siteId));
 			shema = shema.replaceAll("#All_Terms_of_Assistance#", TranslatorWorker.translateText(MoConstants.ALL_TERMS_OF_ASSISTANCE, locale, siteId));
 			shema = shema.replaceAll("#All Sub-Sectors#", TranslatorWorker.translateText(MoConstants.ALL_SUB_SECTORS, locale, siteId));
+			shema = shema.replaceAll("#All Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.ALL_SUB_SUB_SECTORS, locale, siteId));
+			
 			shema = shema.replaceAll("#All Currencies#", TranslatorWorker.translateText(MoConstants.ALL_CURRENCIES, locale, siteId));
 			
 			shema = shema.replaceAll("#Activity_Count#", TranslatorWorker.translateText(MoConstants.ACTIVITY_COUNT, locale, siteId));

@@ -10,6 +10,7 @@ public final class MoConstants {
 	public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
 	//Dimensions
 	public static String PRIMARY_SECTOR = "Primary Sector";
+	public static String SECONDARY_SECTOR = "Secondary Sector";
 	public static String ACTIVITY = "Activity";
 	public static String DONOR_DATES = "Donor Dates";
 	public static String REGIONS = "Regions";
@@ -23,7 +24,8 @@ public final class MoConstants {
 	public static  String TERMS_OF_ASSISTANCE= "Terms of Assistance";
 	public static  String NATIONAL_PROGRAM= "National Program";
 	public static String SECTORS= "Sectors";
-	public static String SUB_SECTORS = "Sub-Sectors";
+	public static String SUB_SECTORS = "Primary Sector Sub-Sectors";
+	public static String SUB_SUB_SECTORS = "Primary Sector Sub-Sub-Sectors";
 	public static String CURRENCY = "currency";
 	public static String YEAR = "Year";
 	
@@ -40,6 +42,7 @@ public final class MoConstants {
 	public static String ALL_FINANCING_INTRUMENT= "All Financing Instruments";
 	public static String ALL_TERMS_OF_ASSISTANCE= "All Terms of Assistance";
 	public static String ALL_SUB_SECTORS = "All Sub-Sectors";
+	public static String ALL_SUB_SUB_SECTORS = "All Sub-Sub-Sectors";
 	public static String ALL_CURRENCIES = "All Currencies";
 	
 	//Measures

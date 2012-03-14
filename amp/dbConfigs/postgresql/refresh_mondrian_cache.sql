@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS cached_v_status CASCADE;
+DROP TABLE IF EXISTS cached_v_status CASCADE;
 CREATE TABLE cached_v_status AS SELECT * FROM v_status CASCADE;
 DROP TABLE IF EXISTS cached_v_donors;
 CREATE TABLE cached_v_donors AS SELECT * FROM v_donors;

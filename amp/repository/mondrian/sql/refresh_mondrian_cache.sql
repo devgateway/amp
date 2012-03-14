@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS cached_v_status CASCADE;
+DROP TABLE IF EXISTS cached_v_status CASCADE;
 CREATE TABLE cached_v_status AS SELECT * FROM v_status CASCADE;
 DROP TABLE IF EXISTS cached_v_donors;
 CREATE TABLE cached_v_donors AS SELECT * FROM v_donors;
@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS cached_v_physical_description;
 CREATE TABLE cached_v_physical_description AS SELECT * FROM v_physical_description;
 DROP TABLE IF EXISTS cached_v_sub_sectors;
 CREATE TABLE cached_v_sub_sectors AS SELECT * FROM v_sub_sectors;
-DROP TABLE IF EXISTS cached_v_psub_sub_sectors;
+DROP TABLE IF EXISTS cached_v_sub_sub_sectors;
 CREATE TABLE cached_v_sub_sub_sectors AS SELECT * FROM v_sub_sectors;
 
 DROP TABLE IF EXISTS cached_v_nationalobjectives_level_0;
@@ -262,7 +262,7 @@ CREATE INDEX idx_psub_id ON cached_v_sub_sectors (amp_sector_id);
 CREATE INDEX idx_psub_per ON cached_v_sub_sectors (sector_percentage);
 
 CREATE INDEX idx_psubsub_activity ON cached_v_sub_sub_sectors (amp_activity_id);
-CREATE INDEX idx_psubsub_name ON cached_v_sub_sub_sectors (sectorname);
+CREATE INDEX idx_psubsub_name ON cached_v_sub_sub_sectors (name);
 CREATE INDEX idx_psubsub_id ON cached_v_sub_sub_sectors (amp_sector_id);
 CREATE INDEX idx_psubsub_per ON cached_v_sub_sub_sectors (sector_percentage);
 

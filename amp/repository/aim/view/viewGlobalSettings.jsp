@@ -368,19 +368,25 @@ function setIndex(index){
 			                                      				key2 = key2.substring(0, 50);
 			                                      		}
 			                                      	%>
+			                                     
+
 			                                      	<c:set var="newKey"><%=key2%></c:set>
-			                                        <c:set var="globSettings">
-			                                          	<digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
-			                                        </c:set>
-																					<html:option value="${global.key}">
-																						<digi:trn
-																							key='aim:globalsettings:${fn:replace(fn:substring(global.value, 0, 50), " ", "_")}'>
+			                                        
+																				<html:option value="${global.key}">
+																					<c:choose>
+																						<c:when test="${globalSett.valueTranslatable}">
+																							<digi:trn>
+																								<c:out value="${global.value}" />
+																							</digi:trn>
+																						</c:when>
+																						<c:otherwise>
 																							<c:out value="${global.value}" />
-																						</digi:trn>
-																					</html:option>
+																						</c:otherwise>
+																					</c:choose>
+																				</html:option>
 
 
-												</logic:iterate>
+																			</logic:iterate>
 			                                    </html:select>
 			                                    <%
 			                                    	}

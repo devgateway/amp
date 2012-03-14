@@ -217,14 +217,14 @@
 		        };        
 		        
 		        var myColumnDefs = [
-		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true,className:"inside"},
-		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true,className:"inside"},
-		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false,className:"inside"},
-		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false,className:"inside"},
-		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true,className:"inside"},
-		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false,className:"inside"},
-		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false,className:"inside"},
-		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
+		            {key:"title", label:"<digi:trn>Title</digi:trn>", sortable:true,className:"inside"},
+		            {key:"name", label:"<digi:trn>Name</digi:trn>", sortable:true,className:"inside"},
+		            {key:"email", label:"<digi:trn>Email</digi:trn>", sortable:false,className:"inside"},
+		            {key:"organizations", label:"<digi:trn>Organisations</digi:trn>", sortable:false,className:"inside"},
+		            {key:"function", label:"<digi:trn>Function</digi:trn>", sortable:true,className:"inside"},
+		            {key:"phones", label:"<digi:trn>Phone</digi:trn>", sortable:false,className:"inside"},
+		            {key:"faxes", label:"<digi:trn>Fax</digi:trn>", sortable:false,className:"inside"},
+		            {key:"actions", label:"<digi:trn>Actions</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
 		  
 		        var div = document.getElementById('errors');
@@ -473,7 +473,7 @@
 																		</td>
 																		<td align="left" valign="top" width="30px">
 																			<c:set var="trn">
-																				<digi:trn>find</digi:trn>
+																				<digi:trn>Find</digi:trn>
 																			</c:set>
 																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>																			
 																		</td>

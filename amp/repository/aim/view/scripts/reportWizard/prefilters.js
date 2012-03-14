@@ -1,10 +1,12 @@
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
-				savingDataMessage, cannotSaveFiltersMessage, doReset) {
+				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName) {
 	this.connectionFailureMessage	= connectionFailureMessage;
 	this.filterProblemsMessage		= filterProblemsMessage;
 	this.loadingDataMessage			= loadingDataMessage;
 	this.savingDataMessage			= savingDataMessage;
 	this.cannotSaveFiltersMessage	= cannotSaveFiltersMessage;
+        this.settingsPanelName=settingsPanelName;
+        this.filterPanelName=filterPanelName;
 	
 	this.resetString				= "&doreset=true";
 	if ( !doReset )
@@ -77,6 +79,7 @@ Filters.prototype.showFilters	= function() {
 
 	this.filterPanel.cfg.setProperty("height", "482px" );
 	this.filterPanel.cfg.setProperty("width", "870px" );
+        this.settingsPanel.setHeader(this.filterPanelName);
 	this.filterPanel.center();
 	this.filterPanel.show();
 	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
@@ -88,6 +91,7 @@ Filters.prototype.showSettings	= function() {
 	this.saveFilters	= new SaveFilters(this, true);
 	var element = document.getElementById("customFormat");
 	element.style.display = "inline";
+        this.settingsPanel.setHeader(this.settingsPanelName);
 	this.settingsPanel.setBody(element);
 	this.settingsPanel.center();
 	this.settingsPanel.show();

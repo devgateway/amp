@@ -42,12 +42,15 @@ $(document).ready(function(){
 	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
 	Wicket.Ajax.Request.prototype.stateChangeCallback = function(){
 	    var t = this.transport;
-	    if (t != null) {
+	    try{
+	    if (t != null ) {
 	       var tmp = t.getResponseHeader("Ajax-Location"); 
-	       if (tmp != null){
-	          window.onbeforeunload=null;
-	       }
+	       if (typeof(tmp) != "undefined" && tmp != null){
+		          window.onbeforeunload=null;
+		       }
 	    }
+	    }catch(ignore){};
+	    
 	    return oldAjaxRequestCallback.call(this);    
 	};
 

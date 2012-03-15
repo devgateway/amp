@@ -214,7 +214,9 @@ NormalReportManager.prototype.disableTab	= function (tabIndex) {
 		if ( !tab.get("disabled") ) {
 			tab.set("disabled", true);
 			var labelEl		= document.getElementById( YAHOO.amp.reportwizard.tabLabels[tabIndex] );
-			(new YAHOO.util.Element(labelEl)).replaceClass('unsel', 'disabled');
+                        if(labelEl!=null){
+                            (new YAHOO.util.Element(labelEl)).replaceClass('unsel', 'disabled');
+                        }
 		}
 	}
 	
@@ -430,13 +432,13 @@ function TabReportManager() {
 TabReportManager.prototype.checkColumns	= function () {
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
-	
 	if ( items.length > 0 && items.length <= 3 ) {
 		columnsMustEl	= document.getElementById("columnsMust");
 		columnsMustEl.style.visibility="hidden";
 		columnsLimitEl	= document.getElementById("columnsLimit");
 		columnsLimitEl.style.visibility="hidden";
 		this.enableTab(2);
+                this.enableSave();
 		return true;
 	}
 	else {
@@ -452,6 +454,7 @@ TabReportManager.prototype.checkColumns	= function () {
 		else
 			columnsLimitEl.style.visibility="hidden";
 		this.disableTab(2);
+                this.disableSave();
 		return false;
 	}
 }

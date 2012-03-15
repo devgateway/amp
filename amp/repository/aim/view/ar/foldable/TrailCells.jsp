@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
@@ -43,8 +44,16 @@
       	 </div>
 	<% } else { %>
         <b class="desktop_project_name">
-        	<bean:write name="reportData" property="name"/>
-        	(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
+            <c:choose>
+            <c:when test="${fn:length(reportData.name)>25}">
+            <span title='<c:out value="${reportData.name}"/>' >
+                <c:out value="${fn:substring(reportData.name,0,25)}"/>...
+            </span>
+            </c:when>
+            <c:otherwise>
+                <bean:write name="reportData" property="name"/>
+            </c:otherwise>
+        </c:choose>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
         </b>
     <% } %> 
 </td>

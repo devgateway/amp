@@ -45,6 +45,13 @@
 <c:set var="translation8">
 	<digi:trn key="cm:warningDeleteLabelCategory">Are you sure you want to remove this label category ?</digi:trn>
 </c:set>
+<c:set var="translation9">
+	<digi:trn>Please, for title use only letters, digits, '_', () and space.</digi:trn>
+</c:set>
+
+<c:set var="translation10">
+	<digi:trn>Please enter key for category value</digi:trn>
+</c:set>
 
 <script type="text/javascript">
 	labelPanels					= new Array();
@@ -97,8 +104,25 @@
             alert ("${translation2}");
             return false;
         } 
-        document.forms["cmCategoryManagerForm"].submitPressed.value	= "true";
-        document.cmCategoryManagerForm.submit();
+        if(validateText()==true){
+        	document.forms["cmCategoryManagerForm"].submitPressed.value	= "true";
+            document.cmCategoryManagerForm.submit();
+        }else{
+        	return false;
+        }
+        
+    }
+    
+    function validateText(){
+    	var catValueKeys = $('input[id^="field"]');
+    	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+    	for (var i=0;i<catValueKeys.length;i++){    		
+    		if(catValueKeys[i].value!='' && regexp.exec(catValueKeys[i].value)!=catValueKeys[i].value){
+    			alert("${translation9}");
+    			return false;
+    		}
+    	}
+    	return true;
     }
 	function deleteField(id, deleteId, undoId,disabeledId) {
 		field							= document.getElementById(id) ;
@@ -295,7 +319,7 @@
 					<logic:notEmpty name="myForm" property="usedCategories">
 					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">
 						<td style="font-size: x-small; font-weight: bold; text-align: center;" class="inside">
-							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryName(usedCateg.getKeyName()) %>">${usedCateg.name}</digi:trn>
+							<digi:trn><c:out value="${usedCateg.name}"></c:out></digi:trn>
 							<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return delLabelCategory(${usedCateg.id})" 
 								title="<digi:trn key='cm:categoryManagerDeleteLabelCategory'>Delete Label Category</digi:trn>">
 								<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" class="toolbar" style="height: 10px;" />
@@ -357,8 +381,8 @@
 				<td style="text-align: center;" class="inside">
 					<c:choose>
 						<c:when test="${pVal.id!=null && pVal.id!=0}">
-							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryValue(pVal.getValue(), myForm.getKeyName() ) %>">
-								${pVal.value}
+							<digi:trn>
+								<c:out value="${pVal.value}"></c:out> 
 							</digi:trn>
 						</c:when>
 						<c:otherwise>&nbsp;</c:otherwise>
@@ -455,11 +479,9 @@
 		</table>
 		<br />
 		<center>
-		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buttonx">
+		<button type="button" onclick="return doSubmit();" style="vertical-align:bottom; padding: 1px;" class="buttonx">
 			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
-			<digi:trn key="aim:categoryManagerSubmit">
-					Submit
-			</digi:trn>
+			<digi:trn>Submit</digi:trn>
 		</button></center>
 	</digi:form>
 				</td>

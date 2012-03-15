@@ -811,13 +811,7 @@ function collapseAll() {
 			</c:otherwise>
 		</c:choose>
 		<hr/>
-		<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
-			<field:display name="Project Code" feature="Budget">
-				<digi:trn key="aim:actProjectCode">Project Code</digi:trn>:<br />
-				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
-			</field:display>
-			<hr/>
-		</c:if>
+		
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:<br />
 			<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
@@ -838,9 +832,14 @@ function collapseAll() {
 				<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 				<br />
 			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Project Code</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
+			<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Vote</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+				<br />
+			</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
 				<br />
 			</module:display>
 			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
@@ -848,14 +847,9 @@ function collapseAll() {
 				<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
 				<br />
 			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Vote</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+			<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Project Code</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
 				<br />
 			</module:display>
 		</module:display>

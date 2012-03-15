@@ -241,7 +241,6 @@ public class ReportWizardAction extends MultiAction {
 		}
 		else
 			myForm.setBudgetExporter(false);
-		myForm.setAllowEmptyFundingColumns( ampReport.getBudgetExporter()==null?false:ampReport.getBudgetExporter() );
 		
 		if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("donor");
@@ -372,7 +371,7 @@ public class ReportWizardAction extends MultiAction {
 					continue;
 				}
 			}
-			if ( numOfCols == numOfHiers ) {
+			if ( numOfCols == numOfHiers && (ampReport.getHideActivities() == null || !ampReport.getHideActivities()) ) {
 				for ( AmpColumns tempCol: availableCols ) {
 					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
 						if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {

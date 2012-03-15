@@ -218,9 +218,9 @@
 																												    <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
 																													<c:forEach var="team" items="${messageForm.teamMapValues}">
 																														<logic:notEmpty name="team" property="members">
-																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
+																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---<c:out value="${team.name}"></c:out>---</option>
 																                                                			<c:forEach var="tm" items="${team.members}">
-																                                                				<option value="m:${tm.memberId}" id="t:${team.id}" style="font:italic;font-size:11px;">${tm.memberName}</option>
+																                                                				<option value="m:${tm.memberId}" id="t:${team.id}" style="font:italic;font-size:11px;"><c:out value="${tm.memberName}"></c:out></option>
 																                                                			</c:forEach>
 																														</logic:notEmpty>											                                                		
 																                                                	</c:forEach>

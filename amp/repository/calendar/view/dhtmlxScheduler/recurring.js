@@ -237,8 +237,9 @@ scheduler._rec_temp = [];
 scheduler.attachEvent("onEventLoading",function(ev){
 	if (ev.event_pid!=0)
 		scheduler._rec_markers[ev.event_length*1000]=ev;
-	if (ev.rec_type)
+	if (ev.rec_type){
 		ev.rec_pattern = ev.rec_type.split("#")[0];
+		}
 	return true;
 })
 scheduler.attachEvent("onEventIdChange",function(id,new_id){
@@ -459,11 +460,10 @@ scheduler.transpose_type = function(type){
 scheduler.repeat_date=function(ev,stack,non_render,from,to){
 	from = from||this._min_date;
 	to = to||this._max_date;
-	
-	var td = new Date(ev.start_date.valueOf())
+	var td = new Date(ev.start_date.valueOf());
 	this.transpose_type(ev.rec_pattern);
 	scheduler.date["transpose_"+ev.rec_pattern](td, from);
-	while (td<ev.start_date || (td.valueOf()+ev.event_length*1000)<=from.valueOf()) 
+	while (td<ev.start_date || (td.valueOf()+ev.event_length*1000)<=from.valueOf())
 		td = this.date.add(td,1,ev.rec_pattern);
 	while (td < to && td < ev.end_date){
 		var ch = this._rec_markers[td.valueOf()];
@@ -487,9 +487,31 @@ scheduler.repeat_date=function(ev,stack,non_render,from,to){
 			
 		} else 
 			if (non_render) stack.push(ch);
-			
 		td = this.date.add(td,1,ev.rec_pattern);
-	}		
+	}	
+}
+
+scheduler.is_in_date=function(ev,date,from,to){
+	from = from||this._min_date;
+	to = to||this._max_date;
+	date=this.date.add(date,-1,"day");
+	var td = new Date(ev.start_date.valueOf());
+	td.setHours(0, 0, 0, 0);
+	this.transpose_type(ev.rec_pattern);
+	scheduler.date["transpose_"+ev.rec_pattern](td, from);
+	while (td < to && td < ev.end_date){
+		if (td.getUTCDate()==date.getUTCDate()){
+			return true;
+		} else {
+			if (ev.event_length && ev.event_length>86400){//event more than a day long
+				if (date>=td && date<=this.date.add(td,(ev.event_length/86400),"day")){
+					return true;
+				}
+			}
+		}
+		td = this.date.add(td,1,ev.rec_pattern);
+	}	
+	return false;
 }
 
 scheduler.getEvents = function(from,to){

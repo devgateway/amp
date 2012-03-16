@@ -71,7 +71,7 @@
 		
 			<c:if test="${!empty searchform.keyword}">
 				<div class="search_results_header"><digi:trn>Search results for</digi:trn> "<span
-					class="green_text">${searchform.keyword}</span>"</div>
+					class="green_text"><c:out value="${searchform.keyword}"></c:out></span>"</div>
 			<c:set var="keywordClasses">
 				help_search txt_sm_b
 			</c:set>

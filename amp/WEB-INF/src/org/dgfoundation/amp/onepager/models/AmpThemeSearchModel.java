@@ -65,9 +65,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 					}
 				}
 
-				if(!isExactMatch())
-					crit.add(Restrictions.eq("parentThemeId",def));
-
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 				if (maxResults != null && maxResults != 0)
@@ -76,7 +73,22 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				List<AmpTheme> themes = new ArrayList<AmpTheme>();
 
 				themes = crit.list();
-				ret.addAll((Collection<? extends AmpTheme>) createTreeView(themes));
+				if(!isExactMatch()){
+					//This code avoids mixing programs. Individual AmpTheme objects are connected to AmpActivityProgramSettings through ONLY the root AmpTheme
+					//as default hierarchy.
+					ArrayList<AmpTheme> sameProgramThemes = new ArrayList<AmpTheme>();
+					for(AmpTheme theme : themes){
+						AmpTheme parentTheme = theme.getRootTheme();
+						if(parentTheme.getAmpThemeId().equals(def.getAmpThemeId())){
+							sameProgramThemes.add(theme);
+						}
+					}
+					ret.addAll((Collection<? extends AmpTheme>) createTreeView(sameProgramThemes));
+				}
+				else
+				{
+					ret.addAll((Collection<? extends AmpTheme>) createTreeView(themes));
+				}
 
 				if (isExactMatch())
 					return ret;

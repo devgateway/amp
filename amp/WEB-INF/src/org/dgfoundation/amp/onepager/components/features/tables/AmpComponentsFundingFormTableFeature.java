@@ -18,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
@@ -25,6 +26,9 @@ import org.dgfoundation.amp.onepager.models.AmpMetaInfoRenderer;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -76,12 +80,22 @@ public class AmpComponentsFundingFormTableFeature extends
 			@Override
 			protected void populateItem(final ListItem<AmpComponentFunding> item) {
 				IModel<AmpComponentFunding> model = item.getModel();
-				item.add(new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
-						new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
-						"adjustmentType"), OnePagerConst.adjustmentTypesShort),
-						Arrays.asList(OnePagerConst.adjustmentTypesShort),
-						"Adjustment Type", true, false,
-						new AmpMetaInfoRenderer<Integer>()));
+					try{
+						AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+							"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
+									new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+									CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+									 false, false, true);
+					adjustmentTypes.getChoiceContainer().setRequired(true);
+					
+					item.add(adjustmentTypes);
+					}catch(Exception e)
+					{
+						logger.error("AmpCategoryGroupFieldPanel initialization failed");
+					}
+					
+				
+				
 				
 				item.add(new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
 						model, "Amount", "transactionAmount", "Currency",

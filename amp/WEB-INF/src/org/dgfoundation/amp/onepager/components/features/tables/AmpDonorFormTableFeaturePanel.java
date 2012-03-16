@@ -57,7 +57,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	protected AmpCategoryGroupFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model) {
 		try{
-		// --------------
+		
 			AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
 				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
@@ -70,21 +70,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			logger.error("AmpCategoryGroupFieldPanel initialization failed");
 		}
 		return null;
-		//-----------------------
-		
-//		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("funding_type");
-//		ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
-//		for(AmpCategoryValue categoryValue: funding_type_values)
-//		{
-//			metaInfoList.add( new MetaInfo<Integer>(categoryValue.getValue(), categoryValue.getIndex()));
-//		}
-//		MetaInfo<Integer>[] metainfoArray = metaInfoList.toArray(new MetaInfo[]{}); 
-//		AmpGroupFieldPanel<MetaInfo<Integer>> groupFieldPanel = new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
-//				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
-//						"adjustmentType"), metainfoArray), metaInfoList,
-//				"Adjustment Type", true, false,
-//				new AmpMetaInfoRenderer<Integer>());
-//		groupFieldPanel.getChoiceContainer().setRequired(true);
+
 		
 	}
 

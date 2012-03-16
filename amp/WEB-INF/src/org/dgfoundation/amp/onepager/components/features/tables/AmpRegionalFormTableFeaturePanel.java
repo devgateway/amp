@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
@@ -52,22 +53,24 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 				transactionType,cvLocationModel);
 	}
 
-	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(
+	protected AmpCategoryGroupFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpRegionalFunding> model) {
-		Collection<AmpCategoryValue> funding_type_values= CategoryManagerUtil.getAmpCategoryValueCollectionByKey("adjustment_type");
-		ArrayList<MetaInfo<Integer>> metaInfoList = new ArrayList<MetaInfo<Integer>>();
-		for(AmpCategoryValue categoryValue: funding_type_values)
-		{
-			metaInfoList.add( new MetaInfo<Integer>(categoryValue.getValue(), categoryValue.getIndex()));
-		}
-		MetaInfo<Integer>[] metainfoArray = metaInfoList.toArray(new MetaInfo[]{}); 
+		try{
 		
-		return new AmpGroupFieldPanel<MetaInfo<Integer>>("adjustmentType",
-				new AmpMetaInfoModel<Integer>(new PropertyModel<Integer>(model,
-						"adjustmentType"), metainfoArray),metaInfoList,
-				CategoryConstants.ADJUSTMENT_TYPE_NAME, true, false,
-				new AmpMetaInfoRenderer<Integer>());
+			AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
+						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+						 false, false, true);
+		adjustmentTypes.getChoiceContainer().setRequired(true);
+		return adjustmentTypes;
+		}catch(Exception e)
+		{
+			logger.error("AmpCategoryGroupFieldPanel initialization failed");
+		}
+		return null;
 	}
+	
 
 	protected AmpFundingAmountComponent getFundingAmountComponent(
 			IModel<AmpRegionalFunding> model) {

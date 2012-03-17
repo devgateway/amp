@@ -127,7 +127,7 @@
 			             </c:otherwise>
 	              	</c:choose>
 	            </logic:notEqual>
-            	${column.namePath }
+            	
 	            <c:if test="${column.namePath == columnReport.sorterColumn}">
 	            	<logic:equal name="columnReport" property="sortAscending" value="false">
 	                	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>

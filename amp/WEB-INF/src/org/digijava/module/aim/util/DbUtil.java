@@ -6586,10 +6586,19 @@ public class DbUtil {
 
 
     public static class HelperUserNameComparator implements Comparator {
+    	private Order order;
+    	public HelperUserNameComparator(Order order){
+    		this.order=order;
+    		
+    	}
         public int compare(Object obj1, Object obj2) {
             User user1 = (User) obj1;
             User user2 = (User) obj2;
-            return user1.getName().compareTo(user2.getName());
+            int result=user1.getName().compareToIgnoreCase(user2.getName());
+            if(Order.DESC.equals(order)){
+            	 result*=-1;
+            }
+           return result;
         }
     }
     /**
@@ -6597,13 +6606,24 @@ public class DbUtil {
      * @author dare
      *
      */
-    public static class HelperEmailComparator implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            User user1 = (User) obj1;
-            User user2 = (User) obj2;
-            return user1.getEmail().compareTo(user2.getEmail());
-        }
-    }
+	public static class HelperEmailComparator implements Comparator {
+		private Order order;
+
+		public HelperEmailComparator(Order order) {
+			this.order = order;
+
+		}
+
+		public int compare(Object obj1, Object obj2) {
+			User user1 = (User) obj1;
+			User user2 = (User) obj2;
+			int result = user1.getEmail().compareToIgnoreCase(user2.getEmail());
+			if (Order.DESC.equals(order)) {
+				result *= -1;
+			}
+			return result;
+		}
+	}
 
     public static class HelperTrnCountryNameComparator implements Comparator<CountryBean> {
         Locale locale;
@@ -6975,4 +6995,31 @@ public class DbUtil {
     
         }
     }
+	public enum UserManagerSorting {
+		NAMEASCENDING, NAMEDESCENDING,
+		EMAILASCENDING, EMAILDESCENDING
+	}
+	public enum Order {
+		ASC,DESC
+	}
+	
+	public static Comparator sortUsers(UserManagerSorting criteria){
+		Comparator comparator=null;
+		switch (criteria) {
+		case NAMEASCENDING:
+			comparator=new HelperUserNameComparator(Order.ASC);
+			break;
+		case NAMEDESCENDING:
+			comparator=new HelperUserNameComparator(Order.DESC);
+			break;
+		case EMAILASCENDING:
+			comparator=new HelperEmailComparator(Order.ASC);
+			break;
+		case EMAILDESCENDING:
+			comparator=new HelperEmailComparator(Order.DESC);
+			break;
+		}
+		return comparator;
+		
+	}
 }

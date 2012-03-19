@@ -47,7 +47,7 @@ ${fn:length(aimNPDForm.selYears)*3+1}
 		<c:if test="${!empty aimNPDForm.indicators}">
 			<c:forEach var="indRow" items="${aimNPDForm.indicators}">
 				<tr>
-					<td class="inside normal"><span title="${indRow.description}">${indRow.name}</span>
+					<td class="inside normal"><span title="${indRow.description}"><c:out value="${indRow.name}"/></span>
 					</td>
 					<c:forEach var="val" items="${indRow.values}">
 						<td class="inside">${val.baseValue}</td>

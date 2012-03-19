@@ -204,6 +204,15 @@ YAHOO.namespace("YAHOO.amp");
 			alert('<digi:trn jsFriendly="true">Please Enter lastname</digi:trn>');
 			return false;
 		}
+		if (notAchievedMaxAllowed('email')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('phone')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('fax')) {
+			return false;
+		}
 		//check emails. At least one email should exist
 		var emails=$("input[id^='email_']");
         if(emails!=null){

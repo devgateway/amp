@@ -5,26 +5,24 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.time.Duration;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.validators.AmpUniqueComponentTitleValidator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -35,47 +33,44 @@ import org.digijava.module.aim.util.ComponentsUtil;
  * @author aartimon@dginternational.org
  * since Oct 28, 2010
  */
-public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeaturePanel {
+public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFeaturePanel {
 	private boolean titleSelected;
 	private boolean typeSelected;
 	private WebMarkupContainer feedbackContainer;
 	private Label feedbackLabel;
-	private WebMarkupContainer componentFundingSection;
 
-	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please choose a component type and an unique title");
-	static final private String noTypeMsg = "*" + TranslatorUtil.getTranslatedText("Please choose a component type");
-	static final private String noTitleMsg = "*" + TranslatorUtil.getTranslatedText("Please choose an unique title");
-
-	
 	/**
 	 * @param id
 	 * @param componentsFundingsSetModel 
 	 * @param componentFundingSection 
 	 * @param fmName
+	 * @param contractNameLabel 
 	 * @param am
 	 * @throws Exception
 	 */
 	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
-			final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, WebMarkupContainer componentFundingSection, String fmName) throws Exception{
-		super(id, activityModel,fmName, true);
-		setTitleHeaderColSpan(5);
-		
-		this.componentFundingSection = componentFundingSection;
+			final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, String fmName, final Label componentNameLabel) throws Exception{
+		super(id, fmName, activityModel);
 		
 		final IModel<Set<AmpComponent>> setModel = new PropertyModel<Set<AmpComponent>>(activityModel, "components");
 
-		final DropDownChoice<AmpComponentType> compTypes = new DropDownChoice<AmpComponentType>(
-				"compTypes", new PropertyModel<AmpComponentType>(componentModel, "type"), 
-				new LoadableDetachableModel<List<AmpComponentType>>() {
-					@Override
-					protected List<AmpComponentType> load() {
-						return new ArrayList(ComponentsUtil.getAmpComponentTypes());
-					}
-					
-				},
-				new ChoiceRenderer("name")){
+
+		AmpSelectFieldPanel<AmpComponentType> compTypes = new AmpSelectFieldPanel<AmpComponentType>("type", new PropertyModel<AmpComponentType>(componentModel, "type"),
+					new LoadableDetachableModel<List<AmpComponentType>>() {
+						@Override
+						protected List<AmpComponentType> load() {
+							return new ArrayList(ComponentsUtil.getAmpComponentTypes());
+						}
+					}, "Component Type", false, false, new ChoiceRenderer<AmpComponentType>("name")){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
-			protected boolean isDisabled(AmpComponentType object, int index, String selected) {
+			public boolean dropDownChoiceIsDisabled(
+					AmpComponentType object,
+					int index,
+					String selected) {
 				if (object.getSelectable())
 					return false;
 				else
@@ -83,128 +78,25 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 			}
 		};
 		compTypes.setOutputMarkupId(true);
-		compTypes.setRequired(true);
-		compTypes.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, componentModel);
-			}
-			});
+		compTypes.getChoiceContainer().setRequired(true);
+		compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model("max-width: 300px"), ";"));
 		add(compTypes);
 		
-		final TextField<String> name = new TextField<String>("name", new PropertyModel<String>(componentModel, "title"));
+		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), "Component Title");
 		name.setOutputMarkupId(true);
-		OnChangeAjaxBehavior nameOnChange = new OnChangeAjaxBehavior() {
+		name.getTextContainer().setRequired(true);
+		name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, componentModel);
+				target.addComponent(componentNameLabel);
 			}
-		};
-		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
-		name.setRequired(true);
-		name.add(nameOnChange);
-		
+		});
+		name.getTextContainer().add(new AmpUniqueComponentTitleValidator());
 		add(name);
 
-		ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpComponent comp = componentModel.getObject();
-				//Remove all fundings from fundings set
-				if (componentsFundingsSetModel.getObject() != null){
-					Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
-					while (it.hasNext()) {
-						AmpComponentFunding cf = (AmpComponentFunding) it
-								.next();
-						if (cf.getComponent().equals(comp))
-							it.remove();
-					}
-				}
-				super.onClick(target);
-			}
-		};
-		add(delButton);
-		
-		/*AmpDeleteLinkField delbutton = new AmpDeleteLinkField(
-				"deleteComponent", "Delete Component") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpComponent comp = componentModel.getObject();
-				setModel.getObject().remove(comp);
-				
-				//Remove all fundings from fundings set
-				if (componentsFundingsSetModel.getObject() != null){
-					Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
-					while (it.hasNext()) {
-						AmpComponentFunding cf = (AmpComponentFunding) it
-								.next();
-						if (cf.getComponent().equals(comp))
-							it.remove();
-					}
-				}
-				target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));
-			}
-		};
-		add(delbutton);
-		*/
-		feedbackContainer = new WebMarkupContainer("feedbackContainer");
-		feedbackLabel = new Label("feedbackLabel", new Model(defaultMsg));
-		feedbackLabel.setOutputMarkupId(true);
-		updateVisibility(componentModel);
-		feedbackContainer.add(feedbackLabel);
-		feedbackContainer.setOutputMarkupId(true);
-		add(feedbackContainer);
+		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
+		add(description);
 
-		
-	}
-
-
-	protected void handleChanges(AjaxRequestTarget target, IModel<AmpComponent> componentModel) {
-		boolean update = updateVisibility(componentModel);
-		if (update){
-			//target.addComponent(this);
-			target.addComponent(feedbackContainer);
-			target.addComponent(componentFundingSection);
-			target.appendJavascript(OnePagerUtil.getToggleChildrenJS(componentFundingSection));
-		}
-	}
-	
-	protected boolean updateVisibility(IModel<AmpComponent> componentModel){
-		AmpComponent comp = componentModel.getObject();
-		boolean oldTypeSelected = typeSelected;
-		boolean oldTitleSelected = titleSelected;
-		if (comp.getType() == null)
-			typeSelected = false;
-		else
-			typeSelected = true;
-		
-		if (comp.getTitle() == null || comp.getTitle() == "")
-			titleSelected = false;
-		else
-			titleSelected = true;
-
-		if (typeSelected && titleSelected){
-			feedbackContainer.setVisible(false);
-			componentFundingSection.setVisible(true);
-		}
-		else{
-			feedbackContainer.setVisible(true);
-			componentFundingSection.setVisible(false);
-			if (!typeSelected && !titleSelected){
-				feedbackLabel.setDefaultModelObject(defaultMsg);
-			}
-			else{
-				if (!typeSelected)
-					feedbackLabel.setDefaultModelObject(noTypeMsg);
-				else
-					feedbackLabel.setDefaultModelObject(noTitleMsg);
-			}
-		}
-		
-		if ((oldTitleSelected == titleSelected) && (oldTypeSelected == typeSelected))
-			return false;
-		else
-			return true;
 	}
 
 }

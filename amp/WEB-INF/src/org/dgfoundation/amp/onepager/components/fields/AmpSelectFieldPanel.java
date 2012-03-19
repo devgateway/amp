@@ -29,6 +29,10 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 	public AbstractChoice<?, T> getChoiceContainer() {
 		return choiceContainer;
 	}
+	
+	public boolean dropDownChoiceIsDisabled(T object, int index, String selected){
+		return false;
+	}
 
 	public AmpSelectFieldPanel(String id, IModel<T> model,
 			IModel<? extends List<? extends T>> choicesList, String fmName,
@@ -36,7 +40,11 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 			IChoiceRenderer<? super T> renderer) {
 		super(id, fmName, hideLabel);
 		choiceContainer = new DropDownChoice<T>("choice", model, choicesList,
-				renderer).setNullValid(nullValid);
+				renderer){
+			protected boolean isDisabled(T object, int index, String selected) {
+				return dropDownChoiceIsDisabled(object, index, selected);
+			};
+		}.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
 	}

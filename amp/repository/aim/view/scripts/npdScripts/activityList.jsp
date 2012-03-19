@@ -190,29 +190,28 @@ function getActivities(){
 		var lastTR = document.createElement('TR');
 
 		var lastTD = document.createElement('TD');
-		lastTD.className="inside";
+		lastTD.className="inside_inner_title";
 		lastTD.colSpan=4;
 		lastTD.align='right';
 		lastTD.innerHTML='<strong>'+strTotal+' </strong>';
 		lastTR.appendChild(lastTD);
 
 		var propSumTD = document.createElement('TD');
-		propSumTD.className="inside";
+		propSumTD.className="inside_inner_title";
 		propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" module="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
 		lastTR.appendChild(propSumTD);
 
 		
 
 		var actSumTD = document.createElement('TD');
-		actSumTD.className="inside";
+		actSumTD.className="inside_inner_title";
 		actSumTD.innerHTML=root.getAttribute('actualSum');
 		lastTR.appendChild(actSumTD);
 
         var actDisbSumtTD = document.createElement('TD');
-        actDisbSumtTD.className="inside";
+        actDisbSumtTD.className="inside_inner_title";
 		actDisbSumtTD.innerHTML=root.getAttribute('actualDisbSum');
 		lastTR.appendChild(actDisbSumtTD);
-
 		tbody.appendChild(lastTR);
 		
 

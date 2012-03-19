@@ -535,21 +535,22 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +
 					"amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") ) AND draft<>true ";
+				+ ") ";
+				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
 		else{
 			
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") "
-				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") )" ;
+				+ ") ";
+				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") )" ;
 		}
 		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 			+ Util.toCSString(ampTeams)
-			+ ") "
-			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			+ Util.toCSString(ampTeams) + ") )" ;
+			+ ") ";
+			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			//+ Util.toCSString(ampTeams) + ") )" ;
 			
 
 	// computed workspace filter -- append it to the team filter so normal

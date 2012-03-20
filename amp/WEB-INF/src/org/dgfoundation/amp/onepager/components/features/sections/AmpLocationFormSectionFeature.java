@@ -39,6 +39,36 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 	 */
 	private static final long serialVersionUID = 8671173324087460636L;
 
+	private void checkDisablePercentages(AmpCategorySelectFieldPanel implementationLevel, AmpCategorySelectFieldPanel implementationLocation, Model<Boolean> disablePercentagesForInternational){
+		disablePercentagesForInternational.setObject(false);
+		/**
+		 * When implementation level is international and implementation location is country
+		 * we need to set the percentage for the default country to 100% and the rest of the 
+		 * percentages to 0%
+		 */
+		AmpCategoryValue implLevel = null;
+		AmpCategoryValue implLocValue = null;
+		if (implementationLevel.getChoiceModel() != null){
+			Set<AmpCategoryValue> tmp = implementationLevel.getChoiceModel().getObject();
+			if (tmp.size() == 1)
+				implLevel = tmp.iterator().next();
+		}
+		if (implementationLocation.getChoiceModel() != null){
+			Set<AmpCategoryValue> tmp = implementationLocation.getChoiceModel().getObject();
+			if (tmp.size() == 1)
+				implLocValue = tmp.iterator().next();
+		}
+		
+		if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
+				implLevel!=null && implLocValue!=null &&
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
+				)
+			disablePercentagesForInternational.setObject(true);
+
+		
+	}
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -62,6 +92,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
 		add(implementationLevel);
 
+		final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
 		final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
 				"implementationLocation",
 				CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
@@ -72,9 +103,15 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 				CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
 				null, implementationLevel.getChoiceModel(), AmpFMTypes.MODULE);
 		implementationLocation.setOutputMarkupId(true);
+		implementationLocation.getChoiceContainer().add(
+				new AjaxFormComponentUpdatingBehavior("onchange") {
+					@Override
+					protected void onUpdate(AjaxRequestTarget arg0) {
+						checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
+					}
+				});
 		add(implementationLocation);
 
-		final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
 		final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
 				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, 
 				implementationLocation, implementationLevel, disablePercentagesForInternational);
@@ -90,7 +127,6 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						target.addComponent(implementationLocation);
-						disablePercentagesForInternational.setObject(false);
 						String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
 								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
 						if ("false".equals(mixedImplementationLocation)){
@@ -101,34 +137,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
 								target.addComponent(locationsTable);
 							}
-							
-							/**
-							 * When implementation level is international and implementation location is country
-							 * we need to set the percentage for the default country to 100% and the rest of the 
-							 * percentages to 0%
-							 */
-							AmpCategoryValue implLevel = null;
-							AmpCategoryValue implLocValue = null;
-							if (implementationLevel.getChoiceModel() != null){
-								Set<AmpCategoryValue> tmp = implementationLevel.getChoiceModel().getObject();
-								if (tmp.size() == 1)
-									implLevel = tmp.iterator().next();
-							}
-							if (implementationLocation.getChoiceModel() != null){
-								Set<AmpCategoryValue> tmp = implementationLocation.getChoiceModel().getObject();
-								if (tmp.size() == 1)
-									implLocValue = tmp.iterator().next();
-							}
-							
-							if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
-									implLevel!=null && implLocValue!=null &&
-									CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-									CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
-									)
-								disablePercentagesForInternational.setObject(true);
-
 						}
-
+						checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
 					}
 				});
 

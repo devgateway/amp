@@ -1146,7 +1146,7 @@ public class ExportActivityToPDF extends Action {
 								for (IPAContractDisbursement ipaDisb : (Set<IPAContractDisbursement>)contract.getDisbursements()) {
 									PdfPCell adjType=new PdfPCell();
 									adjType.setBorder(0);
-									adjType.addElement(new Paragraph(ipaDisb.getAdjustmentType().intValue()==1?"Planned":"Actual",plainFont));
+									adjType.addElement(new Paragraph(ipaDisb.getAdjustmentType().getValue(),plainFont));
 									disbursmentsInnerTable.addCell(adjType);
 									
 									PdfPCell amount=new PdfPCell();

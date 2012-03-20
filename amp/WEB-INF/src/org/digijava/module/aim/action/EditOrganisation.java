@@ -212,7 +212,7 @@ public class EditOrganisation extends DispatchAction {
               while (it.hasNext()) {
                   AmpPledge e = it.next();
                   Pledge fund = new Pledge();
-                  fund.setAdjustmentType(e.getAdjustmentType().intValue());
+                  fund.setAdjustmentType(e.getAdjustmentType());
                   fund.setAmount(String.valueOf(e.getAmount()));
                   fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
                   fund.setProgram(e.getProgram());
@@ -1192,7 +1192,7 @@ public class EditOrganisation extends DispatchAction {
               while (itr.hasNext()) {
                   Pledge el = itr.next();
                   AmpPledge pledge = new AmpPledge();
-                  pledge.setAdjustmentType(new Integer(el.getAdjustmentType()));
+                  pledge.setAdjustmentType(el.getAdjustmentType());
                   pledge.setAmount(FormatHelper.parseDouble(el.getAmount()));
                   AmpCurrency c = CurrencyUtil.getCurrencyByCode(el.getCurrencyCode());
                   pledge.setCurrency(c);

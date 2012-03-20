@@ -1,17 +1,20 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 public class Pledge {
 	private long indexId;
 	private long dbId;
 	private String date;
 	private String amount;
 	private String currencyCode;
-	private int adjustmentType ;
+	private AmpCategoryValue  adjustmentType;
+	
 	private String program;
-	public int getAdjustmentType() {
+	public AmpCategoryValue getAdjustmentType() {
 		return adjustmentType;
 	}
-	public void setAdjustmentType(int adjustmentType) {
+	public void setAdjustmentType(AmpCategoryValue adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
 	public String getAmount() {

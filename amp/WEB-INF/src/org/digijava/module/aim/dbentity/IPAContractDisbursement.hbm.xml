@@ -9,7 +9,7 @@
 				<param name="sequence">IPA_CONTRACT_DISBURSEMENT_seq</param>
 			</generator>
 		</id>
-		<property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" />
+		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />

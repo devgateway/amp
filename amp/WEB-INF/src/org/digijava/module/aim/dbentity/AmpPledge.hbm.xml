@@ -9,12 +9,13 @@
 				<param name="sequence">AMP_PLEDGES_seq</param>
 			</generator>
 		</id>
-
-		<property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" />
+		
 		<property name="date" column="date_" type="java.util.Date" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			
 		<property name="program" column="program" type="java.lang.String" />
 
 	</class>

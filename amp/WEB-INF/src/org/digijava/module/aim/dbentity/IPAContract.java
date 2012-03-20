@@ -643,7 +643,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 				IPAContractDisbursement auxDisb = iterDisb.next();
 				out.getOutputs().add(
 						new Output(null, new String[] { "<br />", "Disbursements:&nbsp;" }, new Object[] {
-								(auxDisb.getAdjustmentType() == 0 ? "Actual" : "Planned"), " - ", auxDisb.getAmount(),
+								auxDisb.getAdjustmentType().getValue(), " - ", auxDisb.getAmount(),
 								" - ", auxDisb.getCurrency(), " - ", auxDisb.getDate() }));
 			}
 		}

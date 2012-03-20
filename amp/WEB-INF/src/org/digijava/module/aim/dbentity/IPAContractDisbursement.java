@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -19,7 +20,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class IPAContractDisbursement implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4688757182074104911L;
 	private Long id;
-	private Integer adjustmentType;
+	private AmpCategoryValue adjustmentType;
 	private Double amount;
 	private AmpCurrency currency;
 	private Date date;
@@ -64,10 +65,10 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
         public void setCurrCode(String currCode) {
            currency= CurrencyUtil.getCurrencyByCode(currCode);
         }
-	public Integer getAdjustmentType() {
+	public AmpCategoryValue getAdjustmentType() {
 		return adjustmentType;
 	}
-	public void setAdjustmentType(Integer adjustmentType) {
+	public void setAdjustmentType(AmpCategoryValue adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
 	public Double getAmount() {

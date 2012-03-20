@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpPledge implements Serializable{
 	/**
@@ -14,12 +15,12 @@ public class AmpPledge implements Serializable{
 	private Date date;
 	private Double amount;
 	private AmpCurrency currency;
-	private Integer adjustmentType ;
+	private AmpCategoryValue adjustmentType ;
 	private String program;
-	public Integer getAdjustmentType() {
+	public AmpCategoryValue getAdjustmentType() {
 		return adjustmentType;
 	}
-	public void setAdjustmentType(Integer adjustmentType) {
+	public void setAdjustmentType(AmpCategoryValue adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
 	public Double getAmount() {

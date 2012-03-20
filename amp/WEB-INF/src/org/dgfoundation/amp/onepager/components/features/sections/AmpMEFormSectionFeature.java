@@ -201,8 +201,11 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			}
 		};
+		final WebMarkupContainer sectorContainer=new WebMarkupContainer("meSectorContainer");
+		sectorContainer.setOutputMarkupId(true);
 		list.setReuseItems(true);
-		add(sectorList);
+		sectorContainer.add(sectorList);
+		
 		
 		final AmpMinSizeCollectionValidationField<AmpSector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpSector>(
 				"minSizeSectorsValidator", sectorListModel, "minSizeSectorsValidator");
@@ -210,7 +213,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		//add(minSizeCollectionValidationField);
 
 
-		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName,AmpSectorSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search Sectors For " + fmName,AmpSectorSearchModel.class) {			
 
 			private static final long serialVersionUID = 1227775244079125152L;
 
@@ -224,7 +227,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				sectorSetModel.getObject().add(choice);
 				list.removeAll();
                                 indicatorFeedbackContainer.setVisible(false);
-				target.addComponent(list.getParent());
+				target.addComponent(sectorContainer);
                                 target.addComponent(indicatorFeedbackContainer);
 			}
 
@@ -244,7 +247,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
 		searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
-		add(searchSectors);
+		sectorContainer.add(searchSectors);
+		add(sectorContainer);
 		
 		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.MODULE) {
 			@Override

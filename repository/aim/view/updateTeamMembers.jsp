@@ -206,7 +206,7 @@ function validate(){
 												<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
 												</c:set>
 												<digi:link href="/workspaceManager.do" title="${clickToViewWorkspaceManager}" >
-												<digi:trn key="aim:workspaceManager">
+												<digi:trn>
 													Workspace Manager
 												</digi:trn>
 												</digi:link>

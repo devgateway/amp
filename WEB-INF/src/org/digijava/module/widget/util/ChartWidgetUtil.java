@@ -1157,10 +1157,10 @@ public class ChartWidgetUtil {
         }
         oql += " and config.name='Primary' and act.team is not null ";
         
-        if (showOnlyApprovedActivities) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-        
+         if (showOnlyApprovedActivities) {
+            oql += getTeamQueryManagement();
+        }
+               
         Session session = PersistenceManager.getRequestDBSession();
         //search for grouped data
         @SuppressWarnings(value = "unchecked")
@@ -1221,9 +1221,6 @@ public class ChartWidgetUtil {
                     oql += getTeamQuery(teamMember);
                 }
                 
-                if (filter.getShowOnlyApprovedActivities()) {
-                	oql += ActivityUtil.getApprovedActivityQueryString("act");
-                }
                 
                 Session session = PersistenceManager.getRequestDBSession();
                 Query query = session.createQuery(oql);
@@ -1289,9 +1286,6 @@ public class ChartWidgetUtil {
                 oql += " and loc.id in (:locations) ";
             }
             
-            if (filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
-			}
             
             oql+=" order by loc.parentCategoryValue";
             Session session = PersistenceManager.getRequestDBSession();
@@ -1479,7 +1473,7 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)   ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1499,9 +1493,6 @@ public class ChartWidgetUtil {
         
         oql += " and actloc is NULL ";
 
-        if (filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
         
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
@@ -1560,11 +1551,8 @@ public class ChartWidgetUtil {
         } else {
             oql += getOrganizationQuery(false, orgIds);
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.id=:configId ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)     and config.id=:configId ";
         
-        if (filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
         
         if(filter.getFromPublicView() == true){
             oql += getTeamQueryManagement();
@@ -1765,7 +1753,7 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.id=:configId  ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)    and config.id=:configId  ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1787,11 +1775,7 @@ public class ChartWidgetUtil {
         if (locationCondition) {
             oql += " and loc.id in (:locations) ";
         }
-        
-        if (filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-        
+              
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
@@ -1910,9 +1894,6 @@ public class ChartWidgetUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
 
-        if (filter.getShowOnlyApprovedActivities()) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
         if(filter.getFromPublicView()){
             oql += getTeamQueryManagement();
         }
@@ -2081,7 +2062,7 @@ public class ChartWidgetUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and act.approvalStatus ='approved' ";
+                qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
             }
             qr += " and (";
             for (AmpTeam tm : teams) {
@@ -2110,7 +2091,7 @@ public class ChartWidgetUtil {
     
     public static String getTeamQueryManagement() {
         String qr = "";
-        qr += " and act.draft=false and act.approvalStatus ='approved' ";
+        qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
         qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
         
@@ -2161,95 +2142,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-    @SuppressWarnings("unchecked")
-    public static DecimalWraper getFunding(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, String currCode, boolean isComm, TeamMember tm, Long regionId, Long[] zoneIds, boolean showOnlyApprovedActivities) throws DgException {
-        String oql = "";
-        boolean regionCondition = regionId != null && regionId != -1;
-        boolean zoneCondition = zoneIds != null && (zoneIds.length > 0 || zoneIds[0] == -1);
-        Collection<Long> zones = new ArrayList<Long>();
-        if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-            for (Long zoneId : zoneIds) {
-                zones.add(zoneId);
-            }
-
-        } else {
-            if (regionCondition && zoneIds != null && zoneIds[0] == -1) {
-                AmpCategoryValueLocations region = LocationUtil.getAmpCategoryValueLocationById(regionId);
-                if (region.getChildLocations() != null) {
-                    for (AmpCategoryValueLocations child : region.getChildLocations()) {
-                        zones.add(child.getId());
-                    }
-                }
-            }
-        }
-        if (regionCondition) {
-            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
-        } else {
-            oql = "select fd ";
-        }
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-        if (regionCondition) {
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        }
-
-        oql += " where  fd.adjustmentType = 1 ";
-        if (orgIds == null) {
-            if (orgGroupId != -1) {
-                oql += getOrganizationQuery(true, orgIds);
-            }
-        } else {
-            oql += getOrganizationQuery(false, orgIds);
-        }
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += getTeamQuery(tm);
-        if (zoneCondition) {
-            oql += " and loc.id in (:zones) ";
-        } else {
-            if (regionCondition) {
-                oql += " and loc.id=:regionId ";
-            }
-        }
-
-        if (showOnlyApprovedActivities) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-
-        Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
-        try {
-            Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
-            if (orgIds == null && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
-            if (zoneCondition) {
-                query.setParameterList("zones", zones);
-            } else {
-                if (regionId != null && regionId != -1) {
-                    query.setLong("regionId", regionId);
-                }
-            }
-            fundingDets = query.list();
-            /*the objects retuned by query  and   selected currency
-            are passed doCalculations  method*/
-            FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(fundingDets, currCode);
-            if (isComm) {
-                return cal.getTotActualComm();
-            } else {
-                return cal.getTotActualDisb();
-            }
-
-        } catch (Exception e) {
-            logger.error(e);
-            throw new DgException(
-                    "Cannot load sector fundings by donors from db", e);
-        }
-    }
+    
 
     public static Double convert(Double amount, AmpCurrency originalCurrency) {
         try {

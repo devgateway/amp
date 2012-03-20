@@ -188,6 +188,11 @@
     <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
         showDevinfo = true;
     </feature:display>
+    
+    var isPublic = false;
+    <logic:present parameter="public">
+			isPublic = true;
+		</logic:present>
 </script>
 
 
@@ -205,6 +210,8 @@
 <c:if test="${isDevInfoMode==''}">
 <c:set var="isDevInfoMode">false</c:set>
 </c:if>
+
+
 
 
 <div class="filter_wnd_background_holder" style="display:none;">

@@ -30,7 +30,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 <table id="permissionsList">
 <thead>
-<tr><td>Name</td><td>Permissibles</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
+<tr><td><digi:trn>Name</digi:trn></td><td><digi:trn>Permissibles</digi:trn></td><td><digi:trn>Permission Type</digi:trn></td><td><digi:trn>Contents</digi:trn></td><td><digi:trn>Linked With</digi:trn></td><td><digi:trn>Change Permission</digi:trn></td></tr>
 </thead>
 <logic:iterate id="perm" name="allPermissions" scope="request">
 <tr>
@@ -39,17 +39,17 @@ ${fn:replace(message,quote,escapedQuote)}
 <td><bean:write name="perm" property="class.simpleName"/></td>
 <td>
 <logic:equal name="perm" property="class.simpleName" value="GatePermission">
-<b>Actions:</b>
+<b><digi:trn>Actions</digi:trn>:</b>
 <bean:write name="perm" property="actions"/>
 <br/>
-<b>Gate Init:</b>
+<b><digi:trn>Gate Init</digi:trn>:</b>
 <bean:write name="perm" property="gateTypeName"/>
 <br/>
-<b>Gate Parameters:	</b>
+<b><digi:trn>Gate Parameters</digi:trn>:	</b>
 <bean:write name="perm" property="gateParameters"/>
 </logic:equal>
 <logic:equal name="perm" property="class.simpleName" value="CompositePermission">
-<b>Permissions:</b>
+<b><digi:trn>Permissions</digi:trn>:</b>
 <bean:write name="perm" property="permissions"/>
 </logic:equal>
 </td>
@@ -76,7 +76,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </table>
 <div align="left">&nbsp;&nbsp;
 <digi:link href="/managePerm.do?new" title="NEW">
-<digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission
+<digi:img src="module/gateperm/images/add.gif" border="0" /><digi:trn>Add New Permission</digi:trn>
 </digi:link>
 
 </div>

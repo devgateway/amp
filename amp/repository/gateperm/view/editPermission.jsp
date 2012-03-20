@@ -17,12 +17,12 @@ function submitForm(mode) {
 <digi:errors/>
 
 <table>
-<tr><td align="right">Name: </td><td><html:text property="name"/></td></tr>
+<tr><td align="right"><digi:trn>Name</digi:trn>: </td><td><html:text property="name"/></td></tr>
 
-<tr><td align="right">Description: </td><td><html:textarea property="description"/></td></tr>
+<tr><td align="right"><digi:trn>Description</digi:trn>: </td><td><html:textarea property="description"/></td></tr>
 
 
-<tr><td align="right">Permission Type: </td><td>
+<tr><td align="right"><digi:trn>Permission Type</digi:trn>: </td><td>
 <logic:equal name="permissionForm" property="id" value="0">
 <html:select property="type" onchange="submitForm('type')">
 <html:option value="Gate">Gate</html:option>
@@ -41,15 +41,15 @@ function submitForm(mode) {
 <html:hidden property="id"/>
 
 <logic:equal name="permissionForm" property="type" value="Gate">
-<tr><td align="right">Actions:</td><td>
+<tr><td align="right"><digi:trn>Actions</digi:trn>:</td><td>
 <html:select property="actions" multiple="true">
 <html:optionsCollection property="_availableActions" value="wrappedInstance" label="wrappedInstance"/>
 </html:select>
 </td></tr>
 
-<tr><td align="right">Gate Init:</td><td>
+<tr><td align="right"><digi:trn>Gate Init</digi:trn>:</td><td>
 <html:select property="gateTypeName" onchange="submitForm('gate')">
-<html:option value="unselected">--Select--</html:option>
+<html:option value="unselected">--<digi:trn>Select</digi:trn>--</html:option>
 <html:optionsCollection property="_availableGateTypes" value="name" label="simpleName"/>
 </html:select>
 </td></tr>
@@ -64,19 +64,19 @@ function submitForm(mode) {
 
 
 <logic:equal name="permissionForm" property="type" value="Composite">	
-<tr><td align="right">Permissions:</td><td>
+<tr><td align="right"><digi:trn>Permissions</digi:trn>:</td><td>
 <html:select property="permissions" multiple="true" size="20">
 <html:optionsCollection property="_availablePermissions" value="id" label="name"/>
 </html:select>
 </td></tr>	
 
-<tr><td align="right">Intersection:</td><td>
+<tr><td align="right"><digi:trn>Intersection</digi:trn>:</td><td>
 <html:checkbox property="intersection"></html:checkbox>
 </td></tr>
 </logic:equal>
 
 <logic:notEmpty name="permissionForm" property="gateParameters">
-<tr><td align="right">Parameters:</td><td>
+<tr><td align="right"><digi:trn>Parameters</digi:trn>:</td><td>
 <table>
 <logic:iterate id="gateParameter" name="permissionForm" property="gateParameters">
 <tr><td align="right">
@@ -91,8 +91,8 @@ function submitForm(mode) {
 	
 	
 <tr><td align="right"> </td><td>
-<html:button property="save" onclick="submitForm('save')">Save</html:button>
-<html:cancel property="list">Cancel</html:cancel>
+<html:button property="save" onclick="submitForm('save')"><digi:trn>Save</digi:trn></html:button>
+<html:cancel property="list"><digi:trn>Cancel</digi:trn></html:cancel>
 
 </td></tr>
 

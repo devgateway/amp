@@ -219,7 +219,7 @@
 </script>
 <digi:instance property="umAddUserForm" />
 
-<digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
+<digi:form action="/registerUser.do" method="post">
 
 	<html:hidden property="orgType" />
 

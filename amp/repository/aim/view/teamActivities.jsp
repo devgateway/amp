@@ -363,6 +363,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																<tr>
 																	<td align="center">
                                                                     <br />
+																		<html:hidden name="aimTeamActivitiesForm" property="teamId"/>												
 																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
 																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
 																		</html:submit>

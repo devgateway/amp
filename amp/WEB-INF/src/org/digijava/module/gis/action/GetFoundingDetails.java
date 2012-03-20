@@ -506,7 +506,7 @@ public class GetFoundingDetails extends Action {
                                 get(key);
                         XML regionData = new XML("region");
                         regionData.addAttribute("reg-code", key);
-                        regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().intValue()));
+                        regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
                         regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
                         regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
                         root.addElement(regionData);

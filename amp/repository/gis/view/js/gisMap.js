@@ -1748,7 +1748,9 @@
 			var donorId = document.getElementById('donorsCombo').value;
 		
 			var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId + "&curWorkspaceOnly=" + onlyCurWS;
-			//alert(regRepUrl);
+			if (isPublic) {
+				regRepUrl += "&public=true";
+			}
 			var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 			
 			popup.focus();

@@ -886,10 +886,56 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         	}
         	return retValue;
         }
-
+       
+       
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
+<style>
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
+}
+
+.yui-skin-sam span.yui-pg-first,
+.yui-skin-sam span.yui-pg-previous,
+.yui-skin-sam span.yui-pg-next,
+.yui-skin-sam span.yui-pg-last {
+display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+margin-left: 2px;
+padding-right: 7px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.resource_box {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    font-size: 12px;
+    padding: 10px;
+}
+</style>
 
 <digi:instance property="aimAddOrgForm" />
 <digi:context name="digiContext" property="context" />

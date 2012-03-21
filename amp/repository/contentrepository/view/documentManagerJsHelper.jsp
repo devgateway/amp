@@ -98,6 +98,7 @@ font-weight : bold;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 
 
@@ -672,7 +673,7 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	
 	var tableTemplateElement		= document.getElementById("tableTemplate");
 	
-	newDiv.innerHTML				= tableTemplateElement.innerHTML + "<br />" + "<br />";
+	newDiv.innerHTML				= tableTemplateElement.innerHTML ;
 	
 	var otherDocumentsDivElement	= document.getElementById(otherDocumentsDiv);
 
@@ -862,10 +863,11 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 	
 	trEls	= datatable.getSelectedRows();
 	
+	
 	var vector_length		= result.length;
 	for (i=0; i<trEls.length; i++) {
 		//alert(i);
-		var divDocumentUUID	= getElementByNameFromList ( "aDocumentUUID", trEls[i].getElementsByTagName("a") );
+		var divDocumentUUID	= getElementByNameFromList ( "aDocumentUUID", $('#'+trEls[i]).find("a") );
 		//alert("adding:" + divDocumentUUID + " uuid: " + divDocumentUUID.innerHTML);
 		//alert(result.length + i);
 		result[vector_length + i]	= divDocumentUUID.innerHTML;

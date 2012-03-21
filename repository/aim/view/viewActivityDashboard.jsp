@@ -167,7 +167,7 @@ function projectFiche(id)
 	}
 
 	function initPopin() {
-		var msg='\n<digi:trn>Activity Preview</digi:trn>';
+		var msg="\n<digi:trn>Activity Preview</digi:trn>";
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {

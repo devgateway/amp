@@ -59,6 +59,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		final IModel<TemporaryDocument> td = new Model(new TemporaryDocument());
 		
 		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title");
+		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
 		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
 		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
@@ -66,6 +67,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		FileUploadField file = new FileUploadField("file", new PropertyModel<FileUpload>(td, "file"));
 		file.setOutputMarkupId(true);
 		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
+		webLink.setTextContainerDefaultMaxSize();
 		webLink.setVisible(false);
 		webLink.setOutputMarkupId(true);
 		

@@ -44,6 +44,7 @@ public class AmpContractBasicSubsectionFeature extends
 				target.addComponent(contractNameLabel);
 			}
 		});
+		name.setTextContainerDefaultMaxSize();
 		add(name);
 
 		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(model, "description"), "Contract Description", false, false, false);

@@ -37,9 +37,13 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 				}
 			}
 		});
+		vote.setTextContainerDefaultMaxSize();
 		add(vote);
+		subVote.setTextContainerDefaultMaxSize();
 		add(subVote);
+		subProgram.setTextContainerDefaultMaxSize();
 		add(subProgram);
+		projectCode.setTextContainerDefaultMaxSize();
 		add(projectCode);
 	}
 }

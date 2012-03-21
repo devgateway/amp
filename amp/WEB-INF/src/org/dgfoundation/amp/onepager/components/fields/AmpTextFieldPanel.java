@@ -7,6 +7,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
@@ -16,11 +18,19 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 
 	private static final long serialVersionUID = 611374046300554626L;
+	public static int DEFAULT_MAX_SIZE=255;
 	protected TextField<T> textContainer;
 
 
 	public TextField<T> getTextContainer() {
 		return textContainer;
+	}
+	
+	public void setTextContainerMaxSize(int maxSize) {
+		 getTextContainer().add((IValidator<T>) new StringValidator.MaximumLengthValidator(maxSize));
+	}
+	public void setTextContainerDefaultMaxSize() {
+		setTextContainerMaxSize(DEFAULT_MAX_SIZE);
 	}
 
 	/**

@@ -83,6 +83,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 		add(compTypes);
 		
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), "Component Title");
+		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
 		name.getTextContainer().setRequired(true);
 		name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){

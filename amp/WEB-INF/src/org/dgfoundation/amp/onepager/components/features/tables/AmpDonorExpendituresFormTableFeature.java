@@ -45,6 +45,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 								item.getModel(), "expCategory"),
 						"Expenditure Classification",true);
 				classification.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
+				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);
 				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {

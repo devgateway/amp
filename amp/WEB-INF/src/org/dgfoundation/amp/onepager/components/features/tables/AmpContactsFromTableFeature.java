@@ -153,14 +153,20 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     
                     AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",true);
                     name.getTextContainer().setRequired(true);
+                    name.setTextContainerDefaultMaxSize();
                     item.add(name);
                     AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true);
                     lastname.getTextContainer().setRequired(true);
+                    lastname.setTextContainerDefaultMaxSize();
                     item.add(lastname);
                     AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",true,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
-                    item.add(new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",true));
-                    item.add(new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",true));
+                    AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",true);
+                    function.setTextContainerDefaultMaxSize();
+                    item.add(function);
+                    AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",true);
+                    organisationName.setTextContainerDefaultMaxSize();
+                    item.add(organisationName);
                     
                     AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);
                     contactOrganizations.setOutputMarkupId(true);

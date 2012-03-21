@@ -142,6 +142,7 @@ public class AmpLocationFormTableFeature extends
 						new PropertyModel<String>(item.getModel(), "latitude"), "Latitude", true, true);
 				latitude.getTextContainer().add(latitudeValidator);
 				latitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
+				latitude.setTextContainerDefaultMaxSize();
 				item.add(latitude);
 
 				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
@@ -158,6 +159,7 @@ public class AmpLocationFormTableFeature extends
 				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 
 						new PropertyModel<String>(item.getModel(), "Longitude"), "Longitude", true, true);
 				longitude.getTextContainer().add(longitudeValidator);
+				longitude.setTextContainerDefaultMaxSize();
 				longitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
 				item.add(longitude);
 				

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,6 +20,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -48,7 +48,6 @@ import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
-import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -2595,5 +2594,30 @@ public class TeamUtil {
  	 		}
  	 	}
  	 	return retValue;
+    }
+    
+    public static boolean hasUserAccessToActivity(Long actId, HttpServletRequest request){
+        Session session = null;
+        Query qry = null;
+
+        HttpSession httpSession = request.getSession();
+        TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
+        
+        String qryStr;
+        try {
+        	session = PersistenceManager.getRequestDBSession();
+        	
+        	
+        	qryStr = "select count(*) from " + AmpActivity.class.getName() + " act " + "where (act.team=:teamId) and (act.ampActivityId=:actId)";
+        	qry = session.createQuery(qryStr);
+        	qry.setLong("teamId", tm.getTeamId());
+        	qry.setLong("actId", actId);
+        	Integer acts = (Integer) qry.list().get(0);
+        	if (acts > 0)
+        		return true;
+        } catch(Exception e) {
+        	logger.debug("cannot get acts "+e.getMessage());
+        }
+    	return false;
     }
 }

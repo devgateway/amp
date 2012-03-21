@@ -207,7 +207,7 @@ public class CalendarUtil {
 						 CalendarItem calItme = (CalendarItem) itritm.next();
 						 xml+="<text>"+calItme.getTitle()+"</text>";
 						 if(calItme.getDescription() != null){
-							 xml+="<details>"+calItme.getDescription()+"</details>";
+							 xml+="<details>"+calItme.getDescription().replaceAll("<", " ").replaceAll(">", " ")+"</details>";
 						 }else{
 						 	xml+="<details>"+"No Description"+"</details>";
 						 }

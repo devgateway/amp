@@ -223,9 +223,7 @@
                     		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
                     			<p style="max-width: 250px;white-space: normal" title="${report.name}">
 									<a href="/mondrian/showreport.do?id=${report.id}&pagename=query" title="${report.name}">
-									<digi:trn key="${report.name}">
-										${report.name}
-									</digi:trn>
+										<c:out value="${report.name}"/>
 									</a>
 	                       		</p> 		
                      		</td>
@@ -471,9 +469,7 @@
                     		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
                     			<p style="max-width: 250px;white-space: normal" title="${report.name}">
 									<a href="/mondrian/showreport.do?id=${report.id}&pagename=query" title="${report.name}">
-									<digi:trn key="${report.name}">
-										${report.name}
-									</digi:trn>
+										<c:out value="${report.name}"/>
 									</a>
 	                       		</p> 		
                      		</td>

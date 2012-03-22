@@ -515,7 +515,7 @@ public class ExportToWord extends Action {
 
                                     RtfCell orgCell = new RtfCell();
                                     orgCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                    orgCell.addElement(new Paragraph(orgName, OrgProfileUtil.PLAINFONT));
+                                    orgCell.addElement(new Paragraph((filter.getOrgIds()!=null&&filter.getOrgIds().length>1)?orgName+" ( "+OrgProfileUtil.getOrgNamesText(filter.getOrgIds())+")":orgName, OrgProfileUtil.PLAINFONT));
                                     orgSummaryTbl.addCell(orgCell);
 
                                     RtfCell orgAcrTitleCell = new RtfCell();
@@ -1202,8 +1202,7 @@ public class ExportToWord extends Action {
                     }
                 }
             }
-            String footerText = OrgProfileUtil.getFooterText(langCode, siteId, filter);
-            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
+            HeaderFooter footer = new HeaderFooter(new Phrase(TranslatorWorker.translateText("Page", langCode, siteId)+": "), true);
             doc.setFooter(footer);
             doc.close();
             response.setContentLength(baos.size());

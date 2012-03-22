@@ -1270,24 +1270,16 @@ public class OrgProfileUtil {
 
     }
 
-    public static String getFooterText(String langCode, String siteId, FilterHelper filter) throws WorkerException {
-        String footerText = TranslatorWorker.translateText("Selected organizations", langCode, siteId) + ": ";
-        if (filter.getOrgIds() != null) {
-            for (Long id : filter.getOrgIds()) {
-                AmpOrganisation org = DbUtil.getOrganisation(id);
-                footerText += org.getName() + ", ";
-            }
-            if (footerText.length() > 0) {
-                footerText = footerText.substring(0, footerText.length() - 2);
-            }
-        } else {
-            footerText += TranslatorWorker.translateText("All", langCode, siteId);
-        }
-        if (filter.getOrgGroupId() != null && filter.getOrgGroupId() != -1) {
-            footerText += " " + TranslatorWorker.translateText("from", langCode, siteId) + " " + filter.getOrgGroup().getOrgGrpName();
-        }
-        return footerText;
-    }
+	public static String getOrgNamesText(Long orgsId[]) throws WorkerException {
+		StringBuilder names = new StringBuilder();
+		for (Long id : orgsId) {
+			AmpOrganisation org = DbUtil.getOrganisation(id);
+			names.append(org.getName());
+			names.append(", ");
+		}
+		names.deleteCharAt(names.length() - 2);
+		return names.toString();
+	}
 
     public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
         Date date;

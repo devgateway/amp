@@ -205,6 +205,7 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		if (tm ==null)
 		{
+			filter.setPublicView(true);
 			filter.setApproved(true);
 			filter.setDraft(true);
 		}

@@ -40,7 +40,7 @@ FilterWrapper.prototype.labelsToHTML	= function(text) {
 		}
 	}
 	else
-		ret += "none";
+		ret += nonetext;
 	
 	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
 	return ret;

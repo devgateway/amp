@@ -89,9 +89,7 @@ public class ExportToPDF extends Action {
             Boolean monochrome = (Boolean) request.getAttribute("orgProfileMonochrome");
             HttpSession session = request.getSession();
             FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
-            String footerText = OrgProfileUtil.getFooterText(langCode, siteId, filter);
-            HeaderFooter footer = new HeaderFooter(new Phrase(footerText), false);
-            footer.setBorder(0);
+            HeaderFooter footer = new HeaderFooter(new Phrase(TranslatorWorker.translateText("Page", langCode, siteId)+": "), true);
             doc.setFooter(footer);
             doc.open();
             com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
@@ -522,7 +520,7 @@ public class ExportToPDF extends Action {
                                     orgSummaryTbl.addCell(orgTitleCell);
 
                                     PdfPCell orgCell = new PdfPCell();
-                                    orgCell.addElement(new Paragraph(orgName, OrgProfileUtil.PLAINFONT));
+                                    orgCell.addElement(new Paragraph((filter.getOrgIds()!=null&&filter.getOrgIds().length>1)?orgName+" ( "+OrgProfileUtil.getOrgNamesText(filter.getOrgIds())+")":orgName, OrgProfileUtil.PLAINFONT));
                                     orgSummaryTbl.addCell(orgCell);
 
                                     PdfPCell orgAcrTitleCell = new PdfPCell();
@@ -1025,6 +1023,7 @@ public class ExportToPDF extends Action {
                        
                       
                         if (orgSummaryTbl != null) {
+                        	orgSummaryTbl.setSplitLate(false);
                             doc.add(orgSummaryTbl);
                             doc.add(new Paragraph(" "));
                         }

@@ -169,14 +169,14 @@ session.setAttribute("progressValue", counter);
 					<span  style="color: red;font-family: Arial;font-size: 10px;">
 						<%
 	                	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
+	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in thousands (000)
 							</digi:trn>
 	           			<%}%>
 	           			
 	           			<%	                	
-	                	if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==2){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in millions (000 000)
 							</digi:trn>
@@ -443,14 +443,14 @@ session.setAttribute("progressValue", counter);
 			<span style="color: red;font-family: Arial;padding-right: 5px">
 				<%
 	            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
+	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
 	            <digi:trn key="rep:pop:AllAmount">
 					Amounts are in thousands (000)
 				</digi:trn>
 	           	<%}%>
 				
 	           <%	                	
-	            if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==2){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in millions (000 000)
 							</digi:trn>

@@ -281,16 +281,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		if (filter.getAmountinthousand()==null) {
-			filter.setAmountinthousand(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+			if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
+				filter.setAmountinthousand(1);
+			else 
+				filter.setAmountinthousand(0);
 		} 
 		
-		if ( filter.getAmountinmillion()!=null && filter.getAmountinmillion()){
+		if (filter.getAmountinthousand()==2){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d*0.001d);
 			}
-		} else
-		
-		if (filter.getAmountinthousand()){
+		} else if (filter.getAmountinthousand()==1){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d);
 			}

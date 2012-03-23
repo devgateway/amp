@@ -169,7 +169,7 @@ public class RegisterUser extends Action {
 				}
 				
 				String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
-				String cri = '\n'+'\t'+'\t'+cri1;
+				String cri = ""+'\n'+'\t'+'\t'+cri1;
 				String pti = ""+'\n'+'\n'+ pti1;
 				
 				DbUtil.registerUser(user);

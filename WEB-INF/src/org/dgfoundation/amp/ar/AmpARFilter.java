@@ -264,7 +264,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
-	private Boolean amountinthousand;
+	private Integer amountinthousand;
 	private Boolean amountinmillion;
 	public final Boolean getAmountinmillion() {
 		return amountinmillion;
@@ -1762,11 +1762,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		this.unallocatedLocation = unallocatedLocation;
 	}
 	
-	public Boolean getAmountinthousand() {
+	public Integer getAmountinthousand() {
 		return amountinthousand;
 	}
 
-	public void setAmountinthousand(Boolean amountinthousand) {
+	public void setAmountinthousand(Integer amountinthousand) {
 		this.amountinthousand = amountinthousand;
 	}
 

@@ -15,11 +15,11 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=1000>
 	<tr>
 		<td  width="5%">&nbsp;
 		</td>
-		<td align=left vAlign=top width="60%"><br>
+		<td align=left vAlign=top width="40%"><br>
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
@@ -39,7 +39,7 @@
 				</tr>			
 				<tr>
 					<td width="3%">&nbsp;</td>				
-					<td align=center class=f-names noWrap width="40%">
+					<td align=center class=f-names noWrap >
 						<b>
 						<digi:trn key="aim:changePasswordSuccess">
 						Successfully changed password
@@ -52,7 +52,7 @@
 		</td>
 		<td  width="5%">&nbsp;
 		</td>
-		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top width="5%">
+		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top width="60%">
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
 		        <td class=r-dotted-lg-buttom vAlign=top><br/>

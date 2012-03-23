@@ -34,6 +34,7 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -262,12 +263,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
 			@Override
 			protected void respond(final AjaxRequestTarget target) {
-				String selectedString = RequestCycle.get().getRequest()
-						.getParameter("selectedString");
+				String selectedString = RequestCycle.get().getRequest().getParameter("selectedString");
 				// hide loading icon:
 				target.appendJavascript("YAHOO.util.Dom.get('"
 						+ indicator.getMarkupId() + "').style.display = 'none';");
-				CHOICE choice = getSelectedChoice(selectedString);
+				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
 				onSelect(target, choice);
 			}
 		};

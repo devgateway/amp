@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
@@ -108,7 +109,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpIndicator choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override

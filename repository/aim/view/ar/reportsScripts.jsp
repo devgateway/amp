@@ -479,7 +479,7 @@ function ResetCustom() {
 	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
 	aimReportsFilterPickerForm3.customGroupSize.value = 3;
 	//alert(aimReportsFilterPickerForm3.amountinthousands.checked);
-	aimReportsFilterPickerForm3.customAmountinThousands.value = 0;
+	aimReportsFilterPickerForm3.customAmountinThousands.checked = false;
 	initFormatPopup();
 	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
 	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;

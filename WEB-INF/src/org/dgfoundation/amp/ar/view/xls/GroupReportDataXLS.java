@@ -230,11 +230,8 @@ public class GroupReportDataXLS extends XLSExporter {
 			String translatedReportName="Report Name:";
 			String translatedReportDescription="Description:";			
 			try{	
-				if (arf.getAmountinthousand()!=0){
-					if (arf.getAmountinthousand()==1)
-			    		translatedNotes=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
-					else
-						translatedNotes=TranslatorWorker.translateText("Amounts are in millions (000 000)",locale,siteId);
+				if (arf.getAmountinthousand()){
+			    	translatedNotes=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
 				    if("".equalsIgnoreCase(translatedNotes)){
 				    	translatedNotes=AmpReports.getNote(session);    
 				    }

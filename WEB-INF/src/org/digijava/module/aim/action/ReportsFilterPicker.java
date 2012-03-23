@@ -109,10 +109,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		if (ampReportId!=null) {
 			if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
-				if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-					filterForm.setAmountinthousands(1);
-				else 
-					filterForm.setAmountinthousands(0);
+				filterForm.setAmountinthousands(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 			}
 		}
 		
@@ -1279,7 +1276,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
         filterForm.setSelectedTertiarySectors(null);
-		filterForm.setAmountinthousands(0);
+		filterForm.setAmountinthousands(false);
 		filterForm.setAmountinmillions(false);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
@@ -1327,7 +1324,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomUseGrouping(null);
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
-		filterForm.setAmountinthousands(0);
+		filterForm.setAmountinthousands(null);
 		filterForm.setAmountinmillions(null);
 	}
 

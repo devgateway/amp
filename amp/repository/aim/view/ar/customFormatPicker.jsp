@@ -83,18 +83,10 @@
 	  </tr>
 	  <tr>
 		<td height="18" align="right" nowrap="nowrap">
-			<digi:trn key="aim:formatPicket:OriginalValues">Original Values</digi:trn> &nbsp;
-		</td>
-		<td height="18" colspan="2" nowrap="nowrap">
-		 	<html:radio value="0" property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
-		 </td>
-	  </tr>
-	  <tr>
-		<td height="18" align="right" nowrap="nowrap">
 			<digi:trn key="aim:formatPicket:Amountinthousands">Amount in thousands</digi:trn> &nbsp;
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
-		 	<html:radio value="1" property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
+		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
 		 </td>
 	  </tr>
 	  <tr>
@@ -102,7 +94,7 @@
 			<digi:trn key="aim:formatPicket:Amountinmillions">Amount in millions</digi:trn> &nbsp;
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
-		 	<html:radio value="2" property="amountinthousands" styleId="customAmountinMillions"  onchange ="initFormatPopup();" />
+		 	<html:checkbox property="amountinmillions" styleId="customAmountinMillions"  onchange ="initFormatPopup();" />
 		 </td>
 	  </tr>
 	<tr>

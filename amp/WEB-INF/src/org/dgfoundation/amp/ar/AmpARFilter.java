@@ -373,6 +373,10 @@ public class AmpARFilter extends PropertyListable {
 					teams.add(ampReport.getOwnerId().getAmpTeam());
 					teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
 					this.setAmpTeams(teams);
+					Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
+					if (teamAO != null && teamAO.size() > 0){
+						this.setTeamAssignedOrgs(teamAO);
+					}
 				}else{
 					teams.add(-1);
 					this.setAmpTeams(teams);

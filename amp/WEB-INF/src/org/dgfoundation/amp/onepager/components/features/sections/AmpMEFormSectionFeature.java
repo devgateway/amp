@@ -222,7 +222,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpSector choice){
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override

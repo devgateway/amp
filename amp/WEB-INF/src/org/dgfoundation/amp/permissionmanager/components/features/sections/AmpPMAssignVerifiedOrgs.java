@@ -79,7 +79,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return org.digijava.module.aim.util.DbUtil.filter(choice.getName());
 			}
 			
 			@Override

@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -179,7 +180,7 @@ public class AmpSectorsFormTableFeature extends
 
 			@Override
 			protected String getChoiceValue(AmpSector choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override

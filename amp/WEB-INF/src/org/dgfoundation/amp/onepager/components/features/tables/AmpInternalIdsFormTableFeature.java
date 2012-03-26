@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -93,7 +94,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 			
 			@Override

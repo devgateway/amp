@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -163,9 +164,9 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			protected String getChoiceValue(AmpTheme choice) {
 				//transientBoolean used internally to flag the default theme
 				if (choice.isTransientBoolean())
-					return BOLD_DELIMITER_START +TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + choice.getName();
+					return BOLD_DELIMITER_START +TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + DbUtil.filter(choice.getName());
 				else
-					return choice.getName();
+					return DbUtil.filter(choice.getName());
 			}
 
 			@Override

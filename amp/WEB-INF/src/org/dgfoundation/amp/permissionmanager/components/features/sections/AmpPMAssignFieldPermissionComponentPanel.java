@@ -38,6 +38,7 @@ import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.PermissionMap;
 
@@ -118,7 +119,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final AmpAutocompleteFieldPanel<AmpObjectVisibility> autoComplete = new AmpAutocompleteFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", AmpPMObjectVisibilitySearchModel.class) {
 			@Override
 			protected String getChoiceValue(AmpObjectVisibility choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {

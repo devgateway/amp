@@ -368,12 +368,12 @@ function popup(mylink, windowname)
                                     <c:set var="translation">
                                         <digi:trn>Get report in Excel format&nbsp;</digi:trn>
                                     </c:set>
-                                    <digi:link href="/xlsExport.do?ampReportId=${report.ampReportId}" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0"/></digi:link>
+                                    <digi:link href="/xlsExport.do?ampReportId=${report.ampReportId}&resetFilter=true" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0"/></digi:link>
                                     &nbsp;
                                     <c:set var="translation">
                                         <digi:trn>Get report in PDF format&nbsp;</digi:trn>
                                     </c:set>
-                                    <digi:link href="/pdfExport.do?ampReportId=${report.ampReportId}" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0"/></digi:link>
+                                    <digi:link href="/pdfExport.do?ampReportId=${report.ampReportId}&resetFilter=true" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0"/></digi:link>
                                     <feature:display name="Show Printer Friendly option" module="Public Reports">
 	                                    &nbsp;
 	                                    <c:set var="translation">

@@ -35,6 +35,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -53,16 +54,25 @@ public class CSVExportAction
                                HttpServletResponse response) throws java.lang.
       Exception {
 
+    HttpSession session = request.getSession();
+    AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	if(tm == null){
+		//Prepare filter for Public View export
+		if(arf==null) arf=new AmpARFilter();		
+		arf.setPublicView(true);
+		session.setAttribute(ArConstants.REPORTS_FILTER,arf);
+		if ("true".equals(request.getParameter("resetFilter"))){
+			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
+		}
+	}
     GroupReportData rd = ARUtil.generateReport(mapping, form, request,
                                                response);
 
     rd.setCurrentView(GenericViews.XLS);
-
-    HttpSession session = request.getSession();
-    
-    AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 	
-	if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
+    //To return data, we need to check whether there's a logged user or if the report is public
+	if (session.getAttribute("currentMember")!=null || rd.getReportMetadata().getPublicReport()){
 	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 	
 	    response.setContentType("application/vnd.ms-excel");

@@ -46,7 +46,7 @@ public class AmpContractFundingAllocationSubsectionFeature extends
 		AmpSelectFieldPanel<AmpCurrency> valueCurrency = new AmpSelectFieldPanel<AmpCurrency>("valueCurrency",
 				new PropertyModel<AmpCurrency>(model, "totalAmountCurrency"),
 				currencyList,
-				"Currency", true, false);
+				"Currency", false, false);
 		add(valueCurrency);
 		
 		add(new AmpEUAmountsComponent("EUAmounts", model, "EU Amounts"));

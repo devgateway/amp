@@ -54,6 +54,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -67,6 +68,18 @@ public class XLSExportAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
+	    HttpSession session = request.getSession();
+	    AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if(tm == null){
+			//Prepare filter for Public View export
+			if(arf==null) arf=new AmpARFilter();		
+			arf.setPublicView(true);
+			session.setAttribute(ArConstants.REPORTS_FILTER,arf);
+			if ("true".equals(request.getParameter("resetFilter"))){
+				request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
+			}
+		}
 
 		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
 				response);
@@ -74,10 +87,8 @@ public class XLSExportAction extends Action {
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
 		rd.setCurrentView(GenericViews.XLS);
-		HttpSession session = request.getSession();
-		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
-		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
+		if (session.getAttribute("currentMember")!=null ||  rd.getReportMetadata().getPublicReport()){
 	     response.setContentType("application/msexcel");
 	     	response.setHeader("Content-Disposition","attachment; filename="+ rd.getName().replace(" ","_") +".xls");
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;

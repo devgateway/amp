@@ -11,6 +11,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <style  type="text/css">
 <!--
@@ -442,6 +445,7 @@
 													</html:select></td>
 	
 											</tr>
+ 											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>
 												<td align="right" class="formCheckContainer"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
@@ -450,6 +454,7 @@
 														
 													</html:checkbox></td>
 											</tr>
+											</module:display>
 											<tr>
 												<td  width="3%">&nbsp;</td>
 												<td align="right"  class="formCheckContainer"><digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn></td>

@@ -25,7 +25,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -59,10 +58,15 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 
 			@Override
 			public List<AmpOrgRole> getObject() {
+				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>();
+				if (setModel == null)
+					return ret;
 				Set<AmpOrgRole> allOrgRoles = setModel.getObject();
 				Set<AmpOrgRole> specificOrgRoles = new HashSet<AmpOrgRole>();  
 				
 				
+				if (allOrgRoles == null)
+					return ret;
 				Iterator<AmpOrgRole> it = allOrgRoles.iterator();
 				while (it.hasNext()) {
 					AmpOrgRole ampOrgRole = (AmpOrgRole) it.next();
@@ -70,7 +74,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						specificOrgRoles.add(ampOrgRole);
 				}
 				
-				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
+				ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
 				Collections.sort(ret, new Comparator<AmpOrgRole>() {
 					@Override
 					public int compare(AmpOrgRole o1, AmpOrgRole o2) {

@@ -145,6 +145,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 		// add location table
 		
 		add(locationsTable);
+		checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
 	}
 
 }

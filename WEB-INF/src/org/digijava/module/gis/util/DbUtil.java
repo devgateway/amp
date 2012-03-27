@@ -15,6 +15,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -26,6 +27,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisSettings;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -329,9 +331,42 @@ public class DbUtil {
         }
         List retVal = null;
         Session session = null;
+        AmpTeam team=null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
+            List<AmpOrganisation> relatedOrgs = new ArrayList<AmpOrganisation>();
+            List<Long> teamIds = new ArrayList<Long>();
+            List<Long> relatedOrgsActivityIds=new ArrayList<Long>();
+
+			if (teamId != null) {
+				team = TeamUtil.getAmpTeam(teamId);
+				List<AmpTeam> teams = new ArrayList<AmpTeam>();
+				ChartWidgetUtil.getTeams(team, teams);
+				for (AmpTeam tm : teams) {
+					if (tm.getComputation() != null && tm.getComputation()) {
+						relatedOrgs.addAll(tm.getOrganizations());
+					}
+					teamIds.add(tm.getAmpTeamId());
+				}
+				if(relatedOrgs.size()>0){
+					StringBuilder relatedOrgsQr=new StringBuilder();
+					relatedOrgsQr.append(" select act.ampActivityId from  ");
+					relatedOrgsQr.append(AmpOrgRole.class.getName());
+					relatedOrgsQr.append(" role ");
+					relatedOrgsQr.append(" inner join role.activity act ");
+					relatedOrgsQr.append(" inner join role.organisation org ");
+					relatedOrgsQr.append(" inner join act.team tm ");
+					relatedOrgsQr.append(" where org in (:organizations)  ");
+					q = session.createQuery(relatedOrgsQr.toString());
+	                q.setParameterList("organizations", relatedOrgs);
+	                List<Long> activityIds=relatedOrgsActivityIds=q.list();
+	                if(activityIds!=null){
+	                	 relatedOrgsActivityIds=activityIds;
+	                }
+				}
+			}
+                
             if (sectorId > -1) {
 
                 StringBuffer whereCaluse = new StringBuffer();
@@ -361,8 +396,12 @@ public class DbUtil {
 
 
                 //Get only activities with regional and district locations
-                List actsToGet = getActIdsHavingRegionalAndDistrictLevels();
-                StringBuffer actWhereClause = new StringBuffer(" and sec.activityId.ampActivityId in (");
+                List actsToGet =getActIdsHavingRegionalAndDistrictLevels();
+                if(relatedOrgs.size()>0){
+                	actsToGet.retainAll(relatedOrgsActivityIds);
+                }
+               
+                StringBuffer actWhereClause = new StringBuffer(" act.ampActivityId in (");
                 Iterator <Long> it = actsToGet.iterator();
                 while (it.hasNext()) {
                     Long actId = it.next();
@@ -372,32 +411,50 @@ public class DbUtil {
                     }
                 }
                 actWhereClause.append(")");
-
-
-                StringBuffer qs = new StringBuffer("select distinct sec.activityId, sec.sectorPercentage from ");
+             
+                StringBuffer qs = new StringBuffer("select distinct act, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
-                qs.append(" sec where sec.activityId.draft=false and sec.sectorId in (");
+                qs.append(" sec inner join sec.activityId act ");
+                qs.append(" inner join act.team tm  ");
+                qs.append(" where sec.sectorId in ( ");
                 qs.append(whereCaluse);
                 qs.append(")");
-                qs.append(" and sec.activityId.team is not null ");
-                if (includeNational) {
-                    qs.append(actWhereClause);
-                }
-
+				qs.append(" and ");
+				qs.append("( ");
+				qs.append(actWhereClause);
+				if (teamId != null) {
+					if (relatedOrgs.size() > 0) {
+						qs.append(" or  ");
+					} else {
+						qs.append(" and ");
+					}
+					qs.append(" tm.ampTeamId in (:teamIds) ");
+				}
+				qs.append(")");
+                            
                 if (teamId != null) {
-                    qs.append(" and sec.activityId.team.ampTeamId = :TEAM_ID");
+                	if (team.getAccessType().equals("Management")) {
+                		qs.append(" and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
+    				}
+                	else{
+                		if (team.getComputation() != null && team.getComputation()&&team.getHideDraftActivities()!=null&&team.getHideDraftActivities()) {
+                			qs.append(" and act.draft=false ");
+                		}
+                	}
                 }
-
-
-
+                
                 q = session.createQuery(qs.toString());
                 if (teamId != null) {
-                    q.setLong("TEAM_ID", teamId);
+                    q.setParameterList("teamIds", teamIds);
                 }
+                
            } else {
                 //Get only activities with regional and district locations
-                List actsToGet = getActIdsHavingRegionalAndDistrictLevels();
-                StringBuffer whereClause = new StringBuffer(" and sec.activityId.ampActivityId in (");
+        	   	List actsToGet = getActIdsHavingRegionalAndDistrictLevels();
+                if(relatedOrgs.size()>0){
+                	actsToGet.retainAll(relatedOrgsActivityIds);
+                }
+                StringBuffer whereClause = new StringBuffer("  act.ampActivityId in (");
                 Iterator <Long> it = actsToGet.iterator();
                 while (it.hasNext()) {
                     Long actId = it.next();
@@ -410,17 +467,40 @@ public class DbUtil {
                 //q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec where sec.activityId.");
                 StringBuffer qs = new StringBuffer("select distinct sec.activityId, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
-                qs.append(" sec where sec.activityId.draft=false");
-                qs.append(whereClause);
+                qs.append(" sec inner join sec.activityId act ");
+                qs.append(" inner join act.team tm  ");
+                qs.append(" where  ");
+            	qs.append("( ");
+        		qs.append(whereClause);
+				if (teamId != null) {
+					if (relatedOrgs.size() > 0) {
+						qs.append(" or  ");
+					} else {
+						qs.append(" and ");
+					}
+					qs.append(" tm.ampTeamId in (:teamIds) ");
+				}
+        		qs.append(")");
+
 
                 if (teamId != null) {
-                    qs.append(" and sec.activityId.team.ampTeamId = :TEAM_ID");
+					if (team.getAccessType().equals("Management")) {
+						qs.append(" and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
+					} else {
+						if (team.getComputation() != null
+								&& team.getComputation()
+								&& team.getHideDraftActivities() != null
+								&& team.getHideDraftActivities()) {
+							qs.append(" and act.draft=false ");
+						}
+					}
                 }
 
                 q = session.createQuery(qs.toString());
                 if (teamId != null) {
-                    q.setLong("TEAM_ID", teamId);
+                    q.setParameterList("teamIds", teamIds);
                 }
+                
 
                 q = session.createQuery(qs.toString());
             }
@@ -476,6 +556,7 @@ public class DbUtil {
         }
         return retVal;
     }
+
 
     public static List getActIdsHavingFundings() {
         List<Long> retVal = null;

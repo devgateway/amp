@@ -51,7 +51,10 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 //				fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionType(Constants.COMMITMENT);
-				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
+				
+				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
+				if(fd.getAmpCurrencyId() == null)
+			     	fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				
 				//model.getObject().getFundingDetails().add(fd);
 				//commitsTableFeature.getList().removeAll();

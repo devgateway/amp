@@ -17,6 +17,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -25,11 +27,13 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
@@ -1348,4 +1352,17 @@ public class CurrencyUtil {
 		}*/
 	}
 
+	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {		 
+		 if(tm.getAppSettings().getCurrencyId()!= null)
+		    return getAmpcurrency(tm.getAppSettings().getCurrencyId());
+		return null;		
+	}
+		
+	public static AmpCurrency getWicketWorkspaceCurrency() {
+		TeamMember tm =  AmpAuthWebSession.getYourAppSession().getCurrentMember();
+		if(tm == null)
+			return null;
+		return getWorkspaceCurrency(tm);		
+	}
+	
 }

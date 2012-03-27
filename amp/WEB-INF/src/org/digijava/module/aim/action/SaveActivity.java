@@ -747,7 +747,11 @@ public class SaveActivity extends Action {
 							Location loc = itr.next();
 							// Not yet implemented.
 							//Double percentage=FormatHelper.parseDouble(loc.getPercent());
-							Double percentage = new Double(loc.getPercent());							
+							Double percentage = null;
+							if (loc.getPercent()==null || loc.getPercent().length()==0)
+								percentage = new Double(0);
+							else
+								percentage = new Double(loc.getPercent());							
 							if(percentage != null)
 								totalPercentage = totalPercentage.add(new BigDecimal(percentage));
 						}

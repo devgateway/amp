@@ -218,7 +218,6 @@ function collapseAll() {
 	<html:hidden property="editAct" />
 	<html:hidden property="identification.approvalStatus"styleId="approvalStatus"/>
 	<html:hidden property="workingTeamLeadFlag"styleId="workingTeamLeadFlag"/>
-	<logic:present name="currentMember" scope="session">
 	
 
 <!-- MAIN CONTENT PART START -->
@@ -263,6 +262,7 @@ function collapseAll() {
 	    	</div>
             <div style="clear:both;"></div>
 	    </td>
+		<logic:present name="currentMember" scope="session">
 	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
 	    <td align=right>
 	    	<c:set var="trn">
@@ -279,6 +279,7 @@ function collapseAll() {
 	    		<digi:trn key="aim:print">Print</digi:trn>
 	    	</a>
 	    </td>
+		</logic:present>
 	  </tr>
 	</table>
 	</div>
@@ -450,6 +451,7 @@ function collapseAll() {
     	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall">    
     </td>
     <td align=right>
+		<logic:present name="currentMember" scope="session">
 	    <c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
 	    <input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
 	    <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
@@ -465,7 +467,9 @@ function collapseAll() {
 					</logic:equal>
 				</field:display>
 			</feature:display>
-		</module:display>    </td>
+		</module:display>
+		</logic:present>    
+		</td>
   </tr>
   <tr>
       <td colspan="2" style="color:red;text-align: center">
@@ -2762,6 +2766,7 @@ function collapseAll() {
     	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall_1">    
     </td>
     <td align=right>
+		<logic:present name="currentMember" scope="session">
     	<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
     	<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
    		<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
@@ -2777,7 +2782,9 @@ function collapseAll() {
 					</logic:equal>
 				</field:display>
 			</feature:display>
-		</module:display>   	</td>
+		</module:display>   	
+		</logic:present>
+		</td>
   </tr>
 </table>
 </div></td>
@@ -2788,7 +2795,6 @@ function collapseAll() {
 
 
 <!-- MAIN CONTENT PART END -->
-	</logic:present>
 </digi:form>
 <script language="JavaScript">
 	$(document).ready(function(){

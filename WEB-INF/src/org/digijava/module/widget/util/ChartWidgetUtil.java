@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -2064,6 +2065,11 @@ public class ChartWidgetUtil {
             if (teamMember.getTeamAccessType().equals("Management")) {
                 qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
             }
+            else{
+            	if (team.getComputation() != null && team.getComputation()&&team.getHideDraftActivities()!=null&&team.getHideDraftActivities()) {
+        			qr+=" and act.draft=false ";
+        		}
+            }
             qr += " and (";
             for (AmpTeam tm : teams) {
                 if (tm.getComputation() != null && tm.getComputation()) {
@@ -2079,7 +2085,18 @@ public class ChartWidgetUtil {
             }
             if (relatedOrgs.length() > 1) {
                 relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
-                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+                StringBuilder relatedOrgsQr=new StringBuilder();
+                relatedOrgsQr.append(" or act.ampActivityId in (");
+				relatedOrgsQr.append(" select distinct orgAct.ampActivityId from  ");
+				relatedOrgsQr.append(AmpOrgRole.class.getName());
+				relatedOrgsQr.append(" role ");
+				relatedOrgsQr.append(" inner join role.activity orgAct ");
+				relatedOrgsQr.append(" inner join role.organisation org ");
+				relatedOrgsQr.append(" inner join orgAct.team tm ");
+				relatedOrgsQr.append(" where org in (");
+				relatedOrgsQr.append(relatedOrgs);
+				relatedOrgsQr.append("))");
+                qr += relatedOrgsQr.toString();
             }
             qr += ")";
 

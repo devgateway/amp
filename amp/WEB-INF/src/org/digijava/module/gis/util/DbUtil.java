@@ -351,7 +351,7 @@ public class DbUtil {
 				}
 				if(relatedOrgs.size()>0){
 					StringBuilder relatedOrgsQr=new StringBuilder();
-					relatedOrgsQr.append(" select act.ampActivityId from  ");
+					relatedOrgsQr.append(" select distinct act.ampActivityId from  ");
 					relatedOrgsQr.append(AmpOrgRole.class.getName());
 					relatedOrgsQr.append(" role ");
 					relatedOrgsQr.append(" inner join role.activity act ");

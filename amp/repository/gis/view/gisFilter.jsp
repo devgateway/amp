@@ -532,7 +532,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 							<div class="clear"></div>
 							<div class="tabSubmit">
 								<input type="button" class="buttonx" 
-									value="<digi:trn>Apply Filters to the Report</digi:trn>" onclick="applySectorFilter(this);"/>
+									value="<digi:trn>Apply Filters</digi:trn>" onclick="applySectorFilter(this);"/>
 								<input type="button"
 									class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 							</div>

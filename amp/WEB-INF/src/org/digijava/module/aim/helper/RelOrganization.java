@@ -139,26 +139,33 @@ public class RelOrganization implements Comparable{
 	
 	
 	public int compareTo(Object obj) {
-		
+		int compare=0;
 		if (!(obj instanceof RelOrganization)) 
 			throw new ClassCastException();
 		
 		RelOrganization org = (RelOrganization) obj;
 		if (this.orgName != null) {
 			if (org.orgName != null) {
-				return (this.orgName.trim().toLowerCase().
-						compareTo(org.orgName.trim().toLowerCase()));
+                            compare=this.orgName.trim().compareToIgnoreCase(org.orgName.trim());
+                            if(compare==0){
+                                compare=this.getRole().compareTo(org.getRole());
+                            }
+                            
 			} else {
-				return (this.orgName.trim().toLowerCase().
-						compareTo(""));
+                            compare=this.orgName.trim().compareToIgnoreCase("");
+			    if (compare == 0) {
+                                compare = this.getRole().compareTo(org.getRole());
+                            }
 			}
 		} else {
 			if (org.orgName != null) {
-				return ("".compareTo(org.orgName.trim().toLowerCase()));
-			} else {
-				return 0;
+                            compare="".compareToIgnoreCase(org.orgName.trim());
+			    if (compare == 0) {
+                                compare = this.getRole().compareTo(org.getRole());
+                            }
 			}			
 		}
+                return compare;
 	}
 	
 }

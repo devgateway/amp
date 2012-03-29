@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -55,6 +56,7 @@ public class AmpRegionalTransactionsSubsectionFeature extends
 				fd.setTransactionType(transactionType);
 				fd.setRegionLocation(cvLocationModel.getObject());
 				fd.setActivity(am.getObject());
+				fd.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				transactionsTableFeature.getListEditor().addItem(fd);
 				target.addComponent(transactionsTableFeature);
 			}

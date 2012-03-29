@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * @author aartimon@dginternational.org
@@ -68,6 +69,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 				cf.setAdjustmentType(Constants.ACTUAL);
 				cf.setComponent(componentModel.getObject());
 				cf.setTransactionAmount(0d);
+				cf.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				cf.setTransactionDate(null);
 				cf.setTransactionType(transactionType);
 				cf.setAmpComponentFundingId(null);

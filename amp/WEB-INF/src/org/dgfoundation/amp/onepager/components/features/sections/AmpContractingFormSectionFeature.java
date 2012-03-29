@@ -17,6 +17,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpContractsItemF
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * Contracting section
@@ -68,6 +69,7 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 				IPAContract comp = new IPAContract();
 				comp.setActivity(am.getObject());
 				//setModel.getObject().add(comp);
+				comp.setTotalAmountCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				list.addItem(comp);
 				target.addComponent(this.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));

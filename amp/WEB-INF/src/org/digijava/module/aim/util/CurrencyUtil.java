@@ -1355,13 +1355,14 @@ public class CurrencyUtil {
 	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {		 
 		 if(tm.getAppSettings().getCurrencyId()!= null)
 		    return getAmpcurrency(tm.getAppSettings().getCurrencyId());
-		return null;		
+		return CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ));		
 	}
 		
 	public static AmpCurrency getWicketWorkspaceCurrency() {
 		TeamMember tm =  AmpAuthWebSession.getYourAppSession().getCurrentMember();
 		if(tm == null)
-			return null;
+			return CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ));
+			
 		return getWorkspaceCurrency(tm);		
 	}
 	

@@ -180,9 +180,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				String s = (String)object;
 				
 				if (s.compareTo("A") == 0)
-					return "ascending";
+					return TranslatorUtil.getTranslation("Ascending");
 				else
-					return "descending";
+					return TranslatorUtil.getTranslation("Descending");
 			}
 		};
 		add(new DropDownChoice("indType", new PropertyModel(newInd, "type"), typeCol, cr));

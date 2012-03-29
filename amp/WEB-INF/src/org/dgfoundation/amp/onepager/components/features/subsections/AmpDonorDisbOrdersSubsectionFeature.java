@@ -116,8 +116,6 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 		//		fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.DISBURSEMENT_ORDER);
 				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
-				if(fd.getAmpCurrencyId() == null)
-			     	fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				Set fundingDetails = model.getObject().getFundingDetails();
 				fd.setDisbOrderId(generateNewDisbOrderId(fundingDetails));
 				disbOrdersTableFeature.getEditorList().addItem(fd);

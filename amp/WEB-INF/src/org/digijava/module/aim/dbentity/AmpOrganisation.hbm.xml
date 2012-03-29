@@ -148,7 +148,6 @@
                 <property name="orgBackground" column="org_background" type="java.lang.String" />
                 <property name="orgDescription" column="org_description" type="java.lang.String" />
                 <property name="lineMinRegNumber" column="line_min_reg_numb" type="java.lang.String" />
-                <property name="active" column="active" type="java.lang.Boolean" />
 
 	</class>
 

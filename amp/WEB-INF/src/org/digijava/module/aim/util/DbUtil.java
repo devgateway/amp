@@ -860,21 +860,7 @@ public class DbUtil {
         }
         return list;
     }
-    public static AmpOrganisation changeStatus(Long id, boolean active) {
-        Session session = null;
-        AmpOrganisation organization =null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            organization = (AmpOrganisation) session.load(AmpOrganisation.class, id);
-        	organization.setActive(active);
-        	session.update(organization);
-        } catch (Exception ex) {
-            logger.error("Unable to get organisation from database", ex);
-        }
-        logger.debug("Getting organisation successfully ");
-        return organization;
-    }
+  
 
     public static AmpOrganisation getOrganisation(Long id) {
         Session session = null;
@@ -3139,9 +3125,7 @@ public class DbUtil {
 
                 }
             }
-            else{
-            	org.setActive(Boolean.TRUE); // make newly saved org active
-            }
+           
         
            /**
             * contact information

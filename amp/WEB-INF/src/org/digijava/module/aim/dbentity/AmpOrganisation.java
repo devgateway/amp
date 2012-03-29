@@ -98,15 +98,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private String  lineMinRegNumber;
     
     private boolean translateable	= true;
-    private Boolean active;
-
-    public Boolean getActive() {
-		return active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
 
 	public String getLineMinRegNumber() {
         return lineMinRegNumber;

@@ -150,6 +150,7 @@
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
+                                                                            <html:radio property="classification" value="FUND"><digi:trn>FUND</digi:trn></html:radio><br>
                                                                             <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="buttonx"/>
                                                                             </fieldset>                                                                        </td>
 																	</tr>

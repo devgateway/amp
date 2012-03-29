@@ -41,24 +41,6 @@ private String keyword;
   private int pagesSize;
   private int offset;
   private String sortBy;
-  private boolean active;
-  private Long orgId;
-
-  public Long getOrgId() {
-	return orgId;
-}
-
-public void setOrgId(Long orgId) {
-	this.orgId = orgId;
-}
-
-public boolean isActive() {
-		return active;
-  }
-
-  public void setActive(boolean active) {
-		this.active = active;
-  }
   
   public String getSortBy() {
 	return sortBy;

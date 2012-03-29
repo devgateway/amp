@@ -57,58 +57,7 @@
         document.aimOrgManagerForm.target="_blank";
         document.aimOrgManagerForm.submit();
     }
-    function makeInactive(id) {
-    	var msg="<digi:trn jsFriendly='true'>Do you really want to make this organization inactive?</digi:trn>";
-    	if(confirm(msg)){
-       		var div=document.getElementById("org_status_"+id);
-    		div.innerHTML ="<img src= \"../ampTemplate/images/ajax-loader.gif\" border=\"0\" />";
-    		<digi:context name="changeStatus" property="context/module/moduleinstance/organisationManager.do" />
-        	var url="${changeStatus}";
-        	var params="&changeOrganizationStatus=true&orgId="+id+"&active=false"; 
-        	YAHOO.util.Connect.asyncRequest("POST", url, makeActiveCallBack , params);
-    	}
-    	
-    }
-
-    function makeActive(id) {
-    	var msg="<digi:trn jsFriendly='true'>Do you really want to make this organization active?</digi:trn>";
-    	if(confirm(msg)){
-    		var div=document.getElementById("org_status_"+id);
-    		div.innerHTML ="<img src= \"../ampTemplate/images/ajax-loader.gif\" border=\"0\" />";
-	    	<digi:context name="changeStatus" property="context/module/moduleinstance/organisationManager.do" />
-	    	var url="${changeStatus}";
-	    	var params="&changeOrganizationStatus=true&orgId="+id+"&active=true"; 
-	    	YAHOO.util.Connect.asyncRequest("POST", url, makeActiveCallBack , params);
-    	}
-    }
-    
-    var responseSuccessChangeStatus=function(o){
-        var response = o.responseXML;
-        var root = response.documentElement; 
-        var orgId = root.getElementsByTagName('orgId')[0].firstChild.nodeValue;
-        var active =root.getElementsByTagName('active')[0].firstChild.nodeValue;
-        var div=document.getElementById("org_status_"+orgId);
-        if(active=='true'){
-        	var tooltip='<digi:trn jsFriendly="true">Click here to make the organization inactive</digi:trn>';
-        	div.innerHTML ="<a href=\"javascript:makeInactive("+orgId+")\" title='"+tooltip+"'><img src= \"../ampTemplate/images/bullet_green.gif\" border=\"0\" /></a>";
-        }
-        else{
-        	var tooltip='<digi:trn jsFriendly="true">Click here to make the organization active</digi:trn>';
-        	div.innerHTML ="<a href=\"javascript:makeActive("+orgId+")\" title='"+tooltip+"'><img src= \"../ampTemplate/images/bullet_grey.gif\" border=\"0\"></a>";
-        }
-
-    }
-
-    var responseFailureChangeStatus=function(o){
-    	alert("<digi:trn jsFriendly='true'>Unable to change organization status</digi:trn>");
-    	return false;
-    }
-
-    var makeActiveCallBack={
-    	success: responseSuccessChangeStatus, 
-    	failure: responseFailureChangeStatus
-    }; 
-
+   
 
 
 
@@ -260,7 +209,6 @@
 																					class="inside">
 																					<thead>
 																						<tr>
-																						<td class="inside" bgcolor=#F2F2F2>&nbsp;</td>
 																							<td class="inside" bgcolor=#F2F2F2><c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																									<digi:link
@@ -360,34 +308,6 @@
 																							property="pagedCol" id="organisation"
 																							indexId="index">
 																							<tr>
-																							<td class="inside">
-																							<div id="org_status_${organisation.ampOrgId}">
-																										<c:choose>
-																											<c:when test="${organisation.active}">
-																												<c:set var="translation">
-																													<digi:trn>Click here to make the currency inactive</digi:trn>
-																												</c:set>
-																												<a
-																													href="javascript:makeInactive('${organisation.ampOrgId}')"
-																													title="${translation}"> <img
-																														src="../ampTemplate/images/bullet_green.gif"
-																														border="0" />
-																												</a>
-																											</c:when>
-																											<c:otherwise>
-																												<c:set var="translation">
-																													<digi:trn>Click here to make the currency Active</digi:trn>
-																												</c:set>
-																												<a
-																													href="javascript:makeActive('${organisation.ampOrgId}')"
-																													title="${translation}"> <img
-																														src="../ampTemplate/images/bullet_grey.gif"
-																														border="0" />
-																												</a>
-																											</c:otherwise>
-																										</c:choose>
-																									</div>
-																								</td>
 																								<td class="inside"><jsp:useBean
 																										id="urlParams" type="java.util.Map"
 																										class="java.util.HashMap" /> <c:set
@@ -582,34 +502,7 @@
 														<!-- end page logic for pagination -->
 													</table></td>
 											</tr>
-														<tr>
-															<td>
-																<table cellSpacing="1" cellPadding="2" vAlign="top"
-																	align="left">
-																	<tr>
-																		<td align="left" bgcolor="#ffffff" width="3">
-																		<img src= "../ampTemplate/images/bullet_green.gif" border="0"/>
-																		</td>
-																		<td align="left" bgcolor="#ffffff"
-																			style="font-size: 12px;"><digi:trn>Denotes an active organization</digi:trn>
-																		</td>
-																		<td align="left" bgcolor="#ffffff"><table
-																				cellspacing="1" cellpadding="2" valign="top"
-																				align="left">
-																				<tr>
-																					<td align="left" bgcolor="#ffffff" width="3">
-																					<img src= "../ampTemplate/images/bullet_grey.gif" border="0"/>
-																					</td>
-																					<td align="left" bgcolor="#ffffff"
-																						style="font-size: 12px;"><digi:trn>Denotes an inactive organization</digi:trn>
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-																</table>
-															</td>
-														</tr>
+														
 											<logic:notEmpty name="aimOrgManagerForm"
 												property="alphaPages">
 												<tr>

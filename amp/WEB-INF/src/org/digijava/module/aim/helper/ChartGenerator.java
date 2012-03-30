@@ -721,7 +721,7 @@ public class ChartGenerator {
                 Map<String,Integer> riskValues=new HashMap<String, Integer> ();
 
                 for (AmpIndicatorRiskRatings risk : col) {
-                    Integer count=riskCount.get(risk.getRatingValue());
+                    Integer count=riskCount.get(risk.getRatingName());
                     if (count==null){
                         //this is first one o the type
                         count=new Integer(1);
@@ -729,8 +729,8 @@ public class ChartGenerator {
                         //this is not first one so increment
                         count=new Integer(count+1);
                     }
-                    riskCount.put(String.valueOf(risk.getRatingValue()), count);
-                    riskValues.put(String.valueOf(risk.getRatingValue()), risk.getAmpIndRiskRatingsId().intValue());
+                    riskCount.put(risk.getRatingName(), count);
+                    riskValues.put(risk.getRatingName(), risk.getRatingValue());
                 }
 
                 Color seriesColors[] = new Color[col.size()];

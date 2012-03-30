@@ -93,8 +93,18 @@ public class TrnTag
     private String bodyText;
 
     private int max;
+    private Boolean invisibleLinks = null;
 
-    public TrnTag() {
+
+	public Boolean getInvisibleLinks() {
+		return invisibleLinks;
+	}
+
+	public void setInvisibleLinks(Boolean invisibleLinks) {
+		this.invisibleLinks = invisibleLinks;
+	}
+
+	public TrnTag() {
         args = new String[NUMBER_OF_PARAMETERS];
         linkAlwaysVisible = new Boolean(false);
         max = 0;
@@ -327,7 +337,7 @@ public class TrnTag
             site = RequestUtils.getSite(request);
         }
         // determine User permissions
-        if (showLinks) {
+        if (showLinks&& (invisibleLinks==null||!invisibleLinks)){
         	String relativeSourceURL = RequestUtils.getRelativeSourceURL(request).replaceFirst("/default/", "/");
 			try{
         	backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
@@ -544,6 +554,7 @@ public class TrnTag
 					&& (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
 				return translatorTag;
 			}
+           
 
             String actualType = getActualEditType();
 
@@ -615,6 +626,7 @@ public class TrnTag
         }
 
         String retVal = null;
+
 
         if(isUseKey()) {
             retVal = "<a href=\"" + getHref() +

@@ -137,7 +137,7 @@ CREATE TABLE cached_v_implementation_location AS SELECT * FROM v_implementation_
 DROP TABLE IF EXISTS cached_v_activity_creator;
 CREATE TABLE cached_v_activity_creator AS SELECT * FROM v_activity_creator;
 DROP TABLE IF EXISTS cached_v_activity_changed_by;
-CREATE TABLE cached_v_activity_changed_by AS SELECT * FROM v_activity_changed_by;
+CREATE TABLE cached_v_activity_changed_by AS SELECT * FROM v_activity_modified_by;
 DROP TABLE IF EXISTS cached_v_creation_date;
 CREATE TABLE cached_v_creation_date AS SELECT * FROM v_creation_date;
 DROP TABLE IF EXISTS cached_v_secondary_sectors;

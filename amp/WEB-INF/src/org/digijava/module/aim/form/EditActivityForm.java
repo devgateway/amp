@@ -452,7 +452,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long acChapter = new Long(0);
 		private String status = null;
 		private AmpTeamMember createdBy;
-		private AmpTeamMember updatedBy;
+		private AmpTeamMember modifiedBy;
 		private AmpTeamMember approvedBy;
 		private String createdDate;
 		private String updatedDate;
@@ -527,6 +527,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public Boolean getResetselectedFYs() {
 			return resetselectedFYs;
+		}
+
+		public AmpTeamMember getModifiedBy() {
+			return modifiedBy;
+		}
+
+		public void setModifiedBy(AmpTeamMember modifiedBy) {
+			this.modifiedBy = modifiedBy;
 		}
 
 		public void setResetselectedFYs(Boolean resetselectedFYs) {
@@ -721,15 +729,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setCreatedBy(AmpTeamMember createdBy) {
 			this.createdBy = createdBy;
-		}
-
-		public AmpTeamMember getUpdatedBy() {
-			return updatedBy;
-		}
-
-		public void setUpdatedBy(AmpTeamMember updatedBy) {
-			this.updatedBy = updatedBy;
-		}
+		}	
 
 		public AmpTeamMember getApprovedBy() {
 			return approvedBy;

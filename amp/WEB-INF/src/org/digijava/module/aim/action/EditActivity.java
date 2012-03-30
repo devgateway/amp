@@ -770,7 +770,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getCosting().setCosts(new ArrayList(activity.getCosts()));
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
-          eaForm.getIdentification().setUpdatedBy(activity.getUpdatedBy());
+          eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
          // eaForm.getIdentification().setBudget(activity.getBudget());
           AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);	
           eaForm.getIdentification().setBudgetCVOff(

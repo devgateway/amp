@@ -1135,8 +1135,8 @@ public class ShowActivityPrintPreview
                 if(activity.getCrisNumber()!=null)
                 	eaForm.getIdentification().setCrisNumber(activity.getCrisNumber().trim());
                 
-                if(activity.getUpdatedBy()!=null){
-                	eaForm.getIdentification().setUpdatedBy(activity.getUpdatedBy());
+                if(activity.getModifiedBy()!=null){
+                	eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
                 }
                 if(activity.getActivityCreator() != null) {
                     User usr = activity.getActivityCreator().getUser();
@@ -1218,7 +1218,7 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setActAthLastName(null);
                 eaForm.getIdentification().setActAthEmail(null);
                 eaForm.getIdentification().setActAthAgencySource(null);
-                eaForm.getIdentification().setUpdatedBy(null);
+                eaForm.getIdentification().setModifiedBy(null);
                 
                 eaForm.getIdentification().setProcurementSystem(null);
                 eaForm.getIdentification().setReportingSystem(null);

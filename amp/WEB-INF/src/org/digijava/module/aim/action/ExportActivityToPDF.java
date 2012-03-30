@@ -1264,8 +1264,8 @@ public class ExportActivityToPDF extends Action {
 			if(FeaturesUtil.isVisibleField("Activity Updated By", ampContext)){
 				columnName=TranslatorWorker.translateText("Activity Updated By",locale,siteId);
 				output="";
-				if(myForm.getIdentification().getUpdatedBy()!=null){
-					User user=myForm.getIdentification().getUpdatedBy().getUser();
+				if(myForm.getIdentification().getModifiedBy()!=null){
+					User user=myForm.getIdentification().getModifiedBy().getUser();
 					output=user.getFirstNames()+" "+user.getLastName()+"-"+user.getEmail();
 				}
 				createGeneralInfoRow(mainLayout,columnName,output);

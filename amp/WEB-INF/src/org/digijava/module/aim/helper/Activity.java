@@ -101,7 +101,7 @@ public class Activity
   private ProposedProjCost propProjCost;
   private String contractors;
   private Date updatedDate;
-  private AmpTeamMember updatedBy;
+  private AmpTeamMember modifiedBy;
 
   private String acChapter;
   private String accessionInstrument;
@@ -146,15 +146,17 @@ public class Activity
     this.acChapter = acChapter;
   }
 
-  public AmpTeamMember getUpdatedBy() {
-    return updatedBy;
-  }
 
-  public void setUpdatedBy(AmpTeamMember updatedBy) {
-    this.updatedBy = updatedBy;
-  }
 
-  public Date getUpdatedDate() {
+  public AmpTeamMember getModifiedBy() {
+	return modifiedBy;
+}
+
+public void setModifiedBy(AmpTeamMember modifiedBy) {
+	this.modifiedBy = modifiedBy;
+}
+
+public Date getUpdatedDate() {
     return updatedDate;
   }
 

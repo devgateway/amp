@@ -2282,7 +2282,7 @@ body {background:none;}
 									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedBy">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2291,9 +2291,9 @@ body {background:none;}
 											</b>				
 											</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.email}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>

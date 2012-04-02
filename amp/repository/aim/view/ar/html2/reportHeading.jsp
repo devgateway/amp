@@ -137,7 +137,7 @@
 	              	</logic:equal>
 	            </c:if>
 	            <c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath">
-	            	<c:if test="${column.namePath == sorterPath.key}">
+	            	<c:if test="${subColumn.namePath == sorterPath.key}">
 	            		<c:choose>
 	            			<c:when test="${ sorterPath.value == 'ascending'}">
 	            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red.gif" align="absmiddle" border="0"/>

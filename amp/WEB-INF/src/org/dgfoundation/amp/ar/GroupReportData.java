@@ -369,9 +369,14 @@ public class GroupReportData extends ReportData {
 		List<KeyValue> ret						= new ArrayList<KeyValue>();
 		if ( levelSorters != null ) {
 			for (MetaInfo metaInfo : levelSorters) {
-				String key		= "/" + metaInfo.getCategory().replace("--", "/");
-				KeyValue kv		= new KeyValue(key, metaInfo.getValue().toString() );
-				ret.add(kv);
+					if ( metaInfo != null ) {
+						String key		= "/" + metaInfo.getCategory().replace("--", "/");
+						KeyValue kv		= new KeyValue(key, metaInfo.getValue().toString() );
+						ret.add(kv);
+					}			
+					else {
+						logger.info("metainfo is null in groupreportdata " + this.getName() );
+					}
 			}
 		}
 		return ret;

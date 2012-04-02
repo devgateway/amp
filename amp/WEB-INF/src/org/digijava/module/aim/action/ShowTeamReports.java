@@ -119,7 +119,7 @@ public class ShowTeamReports extends Action {
 
 		int idx = 0;
 
-		if(pageSize != -1 && rf.getPage() * rf.getPageSize() < allReports.size()){
+		if(pageSize > 0 && rf.getPage() * rf.getPageSize() < allReports.size()){
 			idx =  rf.getPage() * rf.getPageSize();
 		}else{
 			idx = 0;
@@ -127,7 +127,7 @@ public class ShowTeamReports extends Action {
 		}
 
 		Double totalPages = 0.0;
-		if(pageSize != -1){
+		if(pageSize > 0){
 			Iterator iterator = allReports.iterator();
 			while(i<idx){
 				iterator.next();
@@ -190,9 +190,10 @@ public class ShowTeamReports extends Action {
 		} else {
 			rf.setCurrentMemberId(tm.getMemberId());
 			ApplicationSettings appSettings = tm.getAppSettings();
-			if (appSettings == null || appSettings.getDefReportsPerPage() == 0) {
+			if ( appSettings != null && appSettings.getDefReportsPerPage() == 0)
 				rf.setTotalPages(FIRST_PAGE);
-			} else {
+			
+			if (appSettings != null ) {
 				appSettingSet = true;
 			}
 

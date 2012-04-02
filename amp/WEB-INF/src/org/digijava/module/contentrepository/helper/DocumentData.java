@@ -387,4 +387,11 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		this.creatorEmail = creatorEmail;
 	}
 	
+	public String getGeneralLink(){
+		if ( webLink != null)
+			return webLink;
+		else
+			return "/contentrepository/downloadFile.do?uuid=" + uuid;
+	}
+	
 }

@@ -1820,11 +1820,14 @@ function collapseAll() {
 										<c:set var="translation">
 											<digi:trn>Click here to download document</digi:trn>
 										</c:set> 
-										<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
+										<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
 											onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'"
 											title="${translation}">
 											<img src="/repository/contentrepository/view/images/check_out.gif" border="0" >
-										</a> 
+										</a> --%>
+										<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
+											<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
+										</a>
 										<logic:notEmpty name="crDoc" property="description">
 											<br/>&nbsp;
 											<b><digi:trn>Description</digi:trn>:</b>&nbsp;

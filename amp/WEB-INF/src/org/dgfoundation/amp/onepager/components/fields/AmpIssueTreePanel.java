@@ -17,6 +17,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -148,7 +149,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 				title = labelName.get(tree.get(level+ 1));
 			}
 			title = TranslatorUtil.getTranslation("Add "+  title + ":");
-			Label addTitle = new Label("addTitle", title);						
+			Label addTitle = new TrnLabel("addTitle", title);						
 			add(addTitle);
 			
 		}

@@ -63,19 +63,17 @@ public class DashboardUtil {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
 		for (Iterator<AmpOrganisation> iterator = donorList.iterator(); iterator.hasNext();) {
 			AmpOrganisation ampOrg = (AmpOrganisation) iterator.next();
 			//Long[] oldIds = filter.getOrgIds();
 			Long[] ids = {ampOrg.getAmpOrgId()};
             DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setOrgIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             //filter.setOrgIds(oldIds);
-            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampOrg, total);
 		}
 		return sortByValue (map);
@@ -86,10 +84,8 @@ public class DashboardUtil {
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
 		for (Iterator<AmpActivityVersion> iterator = actList.iterator(); iterator.hasNext();) {
 			AmpActivityVersion ampActivity = (AmpActivityVersion) iterator.next();
@@ -97,9 +93,9 @@ public class DashboardUtil {
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setActivityId(ampActivity.getAmpActivityId());
 //			DecimalWraper fundingCal = DbUtil.getFundingByActivityId(ampActivity.getAmpActivityId(), currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL);
-			DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+			DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             //filter.setActivityId(oldActivityId);
-            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampActivity, total);
 		}
 		return sortByValue (map);
@@ -110,12 +106,10 @@ public class DashboardUtil {
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), Constants.ACTUAL, filter.getDecimalsToShow());
+        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
 		return sortByValue (map);
 	}
 	
@@ -128,10 +122,8 @@ public class DashboardUtil {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         // If there's just ONE location selected, let's find out if it's a Region or a Zone to decide to aggregate by Region or not
         boolean aggregateTopLevel = true;
         if(filter.getSelLocationIds().length == 1 && filter.getSelLocationIds()[0] != -1)
@@ -146,9 +138,9 @@ public class DashboardUtil {
 			Long[] ids = {location.getId()};
 			Long[] tempLocationsIds = filter.getSelLocationIds();
 			filter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 			filter.setSelLocationIds(tempLocationsIds);
-            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             //Get Top Level Zone/Region
             AmpCategoryValueLocations topLevelLocation = getTopLevelLocation(location);
             if(aggregateTopLevel){
@@ -179,18 +171,16 @@ public class DashboardUtil {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
 			Long[] ids = {sector.getAmpSectorId()};
 			//Save sector selection
 			Long[] tempArray = filter.getSelSectorIds();
 			filter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			filter.setSelSectorIds(tempArray);
             AmpSector topLevelSector = getTopLevelParent(sector);
             if(map.containsKey(topLevelSector)){
@@ -215,19 +205,17 @@ public class DashboardUtil {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear);
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
 			//Long[] oldIds = filter.getSectorIds();
 			Long[] ids = {sector.getAmpSectorId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             //filter.setSectorIds(oldIds);
-	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}
 		return sortByValue (map);
@@ -294,10 +282,10 @@ public class DashboardUtil {
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+
+		BigDecimal divideByDenominator;
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+
         request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
 		filter.setAllSectorList(allSectorList);
@@ -331,14 +319,14 @@ public class DashboardUtil {
 				logger.error("AdjustmenType is unknown.");
 			}
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, adjustmentType);
-			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, adjustmentType);
-			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
-			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
 		        form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
@@ -605,7 +593,12 @@ public class DashboardUtil {
 		return location;
 	}
 
-	public static BigDecimal getDividingDenominator(Boolean divideThousands, Boolean isProfile) {
+	public static BigDecimal getDividingDenominator(Boolean divideThousands, Boolean showInThousands, Boolean isProfile) {
+		//All information by default is shown in millions, unless the property filter.showInThousands is activated.
+		//If it's activated, then the dividing denominator should be 1000 instead of 1000000
+		//This has to take into account that the amounts could already be in thousands
+		//In this method, divideThousands holds the individual chart information if it's going to be divided again
+		
 		BigDecimal divideByDenominator;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
 			return new BigDecimal(1);
@@ -613,19 +606,39 @@ public class DashboardUtil {
 		else
 		{
 	        if(divideThousands == null) divideThousands = false;
-			if ("true"
+
+	        if ("true"
 					.equals(FeaturesUtil
 							.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-				if (divideThousands)
-					divideByDenominator = new BigDecimal(1000000);
-				else
-					divideByDenominator = new BigDecimal(1000);
+				
+	        	if(showInThousands){
+		        	if (divideThousands)
+						divideByDenominator = new BigDecimal(1000);
+					else
+						divideByDenominator = new BigDecimal(1);
+	        	}
+	        	else
+	        	{
+		        	if (divideThousands)
+						divideByDenominator = new BigDecimal(1000000);
+					else
+						divideByDenominator = new BigDecimal(1000);
+	        	}
 			}
 			else {
-		        if (divideThousands)
-		        	divideByDenominator=new BigDecimal(1000000000);
-		        else
-		        	divideByDenominator=new BigDecimal(1000000);
+	        	if(showInThousands){
+			        if (divideThousands)
+			        	divideByDenominator=new BigDecimal(1000000);
+			        else
+			        	divideByDenominator=new BigDecimal(1000);
+	        	}
+	        	else
+	        	{
+			        if (divideThousands)
+			        	divideByDenominator=new BigDecimal(1000000000);
+			        else
+			        	divideByDenominator=new BigDecimal(1000000);
+	        	}
 			}
 		}
 		return divideByDenominator;

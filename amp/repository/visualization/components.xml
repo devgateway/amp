@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <config>
 	<secondary-pages>
-		<page name="sectorDashboard" title="AMP Visualization Dashboard" />
-		<page name="donorDashboard" title="AMP Visualization Dashboard" />
-		<page name="regionDashboard" title="AMP Visualization Dashboard" />
-		<page name="showDashboard" title="AMP Visualization Dashboard" />
-		<page name="showProjectsList" title="AMP Visualization Dashboard" />
+		<page name="sectorDashboard" title="Visualization Dashboard" />
+		<page name="donorDashboard" title="Visualization Dashboard" />
+		<page name="regionDashboard" title="Visualization Dashboard" />
+		<page name="showDashboard" title="Visualization Dashboard" />
+		<page name="showProjectsList" title="Visualization Dashboard" />
 	</secondary-pages>
 	
 </config>

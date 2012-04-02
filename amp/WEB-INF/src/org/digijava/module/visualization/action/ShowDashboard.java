@@ -239,6 +239,9 @@ public class ShowDashboard extends Action {
 		if (filter.getDivideThousandsDecimalPlaces() == null) {
 			filter.setDivideThousandsDecimalPlaces(0);
 		}
+		if (filter.getShowAmountsInThousands() == null) {
+			filter.setShowAmountsInThousands(false);
+		}
 		//Initialize formatting information
 		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){
 			filter.setDecimalSeparator(FormatHelper.getDecimalSymbol());

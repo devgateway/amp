@@ -41,6 +41,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -269,7 +270,7 @@ public class DbUtil {
         oql += "   inner join act.sectors actSec ";
         oql += "   inner join actSec.classificationConfig config ";
 
-        oql += "  where fd.adjustmentType = 1 and config.id=:config";
+        oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
         oql += " inner join act.ampActivityGroup actGroup ";
         oql += " and fd.transactionType =:transactionType  ";
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
@@ -305,6 +306,7 @@ public class DbUtil {
         //    query.setLong("orgGroupId", orgGroupId);
         //}
         query.setLong("transactionType", transactionType);
+        query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
         List<AmpFundingDetail> fundingDets = query.list();
         return fundingDets;
 
@@ -373,7 +375,7 @@ public class DbUtil {
 	            if (sectorCondition) {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
-	            oql += "  where fd.adjustmentType = 1 and config.id=:config";
+	            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
                 oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -410,6 +412,7 @@ public class DbUtil {
 	            query.setDate("endDate", endDate);
 	            query.setLong("config", filter.getSelSectorConfigId());
                 query.setLong("transactionType", transactionType);
+                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	            locations = query.list();
 	        }
 	        catch (Exception e) {
@@ -466,7 +469,7 @@ public class DbUtil {
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
-	            oql += "  where fd.adjustmentType = 1";
+	            oql += "  where fd.adjustmentType.value =:adjustmentType";
                 oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -506,6 +509,7 @@ public class DbUtil {
 	            //}
                 query.setLong("transactionType", transactionType);
 	            query.setLong("configId", filter.getSelSectorConfigId());
+                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	
 	            sectors = query.list();
 	        }
@@ -557,7 +561,7 @@ public class DbUtil {
             if (sectorCondition) {
                 oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
             }
-            oql += "  where fd.adjustmentType = 1 and config.id=:config";
+            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
             oql += " and fd.transactionType =:transactionType  ";
             if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
                 if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -593,6 +597,7 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
+            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
             query.setLong("config", filter.getSelSectorConfigId());
             //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
             //    query.setLong("orgGroupId", orgGroupId);
@@ -682,7 +687,7 @@ public class DbUtil {
 	            if (sectorCondition) {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
-	            oql += "  where fd.adjustmentType = 1 and config.id=:config";
+	            oql += "  where fd.adjustmentType.value = :adjustmentType and config.id=:config";
                 oql += " and fd.transactionType =:transactionType  ";
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
@@ -718,7 +723,7 @@ public class DbUtil {
 	            query.setDate("endDate", endDate);
 	            query.setLong("config", filter.getSelSectorConfigId());
                 query.setLong("transactionType", transactionType);
-	            
+                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	            donors = query.list();
 	        }
 	        catch (Exception e) {
@@ -743,7 +748,7 @@ public class DbUtil {
     public static DecimalWraper getFunding(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType,int adjustmentType) throws DgException {
+            int transactionType, HardCodedCategoryValue adjustmentTypeActual) throws DgException {
         DecimalWraper total = null;
         String oql = "";
         String currCode = "USD";
@@ -796,10 +801,10 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
-        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         }
         else
-        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         	
 
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -865,7 +870,7 @@ public class DbUtil {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
             query.setLong("transactionType", transactionType);
-            query.setLong("adjustmentType",adjustmentType);
+            query.setString("adjustmentType",adjustmentTypeActual.getValueKey());
             
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
@@ -880,21 +885,21 @@ public class DbUtil {
             or actual Disbursement or  */
             switch (transactionType) {
                 case Constants.EXPENDITURE:
-                    if (Constants.PLANNED == adjustmentType) {
-                        total = cal.getTotPlannedExp();
-                    } else {
+                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualExp();
+                    } else {
+                        total = cal.getTotPlannedExp();
                     }
                     break;
                 case Constants.DISBURSEMENT:
-                    if (Constants.ACTUAL == adjustmentType) {
+                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualDisb();
                     } else {
                         total = cal.getTotPlanDisb();
                     }
                     break;
                 default:
-                    if (Constants.ACTUAL == adjustmentType) {
+                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualComm();
                     } else {
                         total = cal.getTotPlannedComm();
@@ -1057,10 +1062,10 @@ public class DbUtil {
         cal.doCalculations(fundingDets, currCode, transactionType, adjustmentType);
         switch (transactionType) {
             case Constants.EXPENDITURE:
-                if (CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey().equals(adjustmentType.getValue()) ) {
-                    total = cal.getTotPlannedExp();
-                } else {
+                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue()) ) {
                     total = cal.getTotActualExp();
+                } else {
+                    total = cal.getTotPlannedExp();
                 }
                 break;
             case Constants.DISBURSEMENT:
@@ -1081,7 +1086,7 @@ public class DbUtil {
     }
 	@SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
-            Date endDate, int transactionType,int adjustmentType, int decimalsToShow) throws DgException {
+            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator) throws DgException {
         
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
     	
@@ -1089,7 +1094,7 @@ public class DbUtil {
         String oql = "";
 
         oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f ";
-    	oql += "where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+    	oql += "where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
 
@@ -1100,7 +1105,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setLong("adjustmentType",adjustmentType);
+            query.setString("adjustmentType",adjustmentType.getValueKey());
             fundingDets = query.list();
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
@@ -1137,32 +1142,28 @@ public class DbUtil {
                 or actual Disbursement or  */
                 switch (transactionType) {
                     case Constants.EXPENDITURE:
-                        if (Constants.PLANNED == adjustmentType) {
-                            total = cal.getTotPlannedExp();
-                        } else {
+                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
                             total = cal.getTotActualExp();
+                        } else {
+                            total = cal.getTotPlannedExp();
                         }
                         break;
                     case Constants.DISBURSEMENT:
-                        if (Constants.ACTUAL == adjustmentType) {
+                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
                             total = cal.getTotActualDisb();
                         } else {
                             total = cal.getTotPlanDisb();
                         }
                         break;
                     default:
-                        if (Constants.ACTUAL == adjustmentType) {
+                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
                             total = cal.getTotActualComm();
                         } else {
                             total = cal.getTotPlannedComm();
                         }
                 }
-                BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-                    divideByMillionDenominator = new BigDecimal(1000);
-                }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
-                map.put(aav, total.getValue().divide(divideByMillionDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aav, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1247,7 +1248,7 @@ public class DbUtil {
     public static List<AmpActivityVersion> getActivityList(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType,int adjustmentType) throws DgException {
+            int transactionType,HardCodedCategoryValue adjustmentTypeActual) throws DgException {
         DecimalWraper total = null;
         String oql = "";
         List<AmpActivityVersion> activities = null;
@@ -1280,9 +1281,9 @@ public class DbUtil {
         }
 
         if (sectorCondition) {
-        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         } else {
-        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         }
         //oql += " where config.id=:config and fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -1343,7 +1344,7 @@ public class DbUtil {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
             query.setLong("transactionType", transactionType);
-            query.setLong("adjustmentType",adjustmentType);
+            query.setString("adjustmentType",adjustmentTypeActual.getValueKey());
             
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());

@@ -82,6 +82,7 @@ public class DashboardFilter {
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
     private Boolean showOnlyNonDraftActivities;
+    private Boolean showAmountsInThousands;
 
     private Long activityId;
     private int decimalsToShow;
@@ -776,6 +777,14 @@ public class DashboardFilter {
 
 	public Boolean getShowOnlyNonDraftActivities() {
 		return showOnlyNonDraftActivities;
+	}
+
+	public Boolean getShowAmountsInThousands() {
+		return showAmountsInThousands;
+	}
+
+	public void setShowAmountsInThousands(Boolean showAmountsInThousands) {
+		this.showAmountsInThousands = showAmountsInThousands;
 	}
 
 	

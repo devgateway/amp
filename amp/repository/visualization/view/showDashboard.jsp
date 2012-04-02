@@ -98,6 +98,7 @@ var trnShowFilterSetttings = "";
 var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
 var trnAllAmountsInMillions = "";
+var trnAllAmountsInThousands = "";
 var trnTitle = "";
 var trnName = "";
 var trnEmails = "";
@@ -173,6 +174,7 @@ function initializeTranslations(){
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
 	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
+	trnAllAmountsInThousands = "<digi:trn>All amounts in thousands</digi:trn>";
 	trnTitle = "<digi:trn>Title</digi:trn>";
 	trnName = "<digi:trn>Name</digi:trn>";
 	trnEmails = "<digi:trn>Emails</digi:trn>";
@@ -588,6 +590,12 @@ function initializeGlobalVariables(){
 														<html:optionsCollection property="filter.years"
 															label="wrappedInstance" value="wrappedInstance" />
 													</html:select></td>
+												<td><b><digi:trn>Show amounts in thousands</digi:trn>:</b>
+												</td>
+												<td>
+														<html:checkbox property="filter.showAmountsInThousands"
+																				styleId="show_amounts_in_thousands"/>
+													</td>
 											</tr>
 											<tr>
 												<td><b><digi:trn>Decimals to show</digi:trn>:</b>
@@ -776,6 +784,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.yearToCompare" styleId="yearToCompare"/>
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
+<html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
@@ -1833,90 +1842,6 @@ function initializeGlobalVariables(){
 </td>
 </tr>
 </table>
-<script language="Javascript">
-function initializeTranslations(){
-	trnPrimary = "<digi:trn jsFriendly='true'>Primary</digi:trn>";
-	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
-	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
-	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
-	trnCancel = '<digi:trn>Cancel</digi:trn>';
-	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
-	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
-	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
-	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
-	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
-	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
-	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
-	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
-	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
-	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
-	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
-	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
-	trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
-	trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
-	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
-	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
-	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
-	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
-	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
-	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
-	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
-	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
-	trnSubRegionProfile="<digi:trn jsFriendly='true'>Zone breakdown</digi:trn>";
-	trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
-	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
-	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
-	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
-	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
-	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
-	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
-	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
-	trnTitle = "<digi:trn>Title</digi:trn>";
-	trnName = "<digi:trn>Name</digi:trn>";
-	trnEmails = "<digi:trn>Emails</digi:trn>";
-	trnPhones = "<digi:trn>Phones</digi:trn>";
-	trnFaxes = "<digi:trn>Faxes</digi:trn>";
-	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
-	trnSave = "<digi:trn>Save</digi:trn>";
-	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
-	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
-	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
-	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
-	trnAllSectors = "<digi:trn jsFriendly='true'>ALL Sectors</digi:trn>"; 
-	trnMultipleSubSector = "<digi:trn jsFriendly='true'>Multiple Sub Sectors</digi:trn>"; 
-	trnAllSubSector = "<digi:trn jsFriendly='true'>ALL Sub Sectors</digi:trn>"; 
-	trnAllRegions ="<digi:trn jsFriendly='true'>ALL Regions</digi:trn>"; 
-	trnAllZones = "<digi:trn jsFriendly='true'>ALL Zones</digi:trn>"; 
-	trnMultipleZones = "<digi:trn jsFriendly='true'>Multiple Zones</digi:trn>";
-	trnODAGrowth = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn>"; 
-	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
-	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
-	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
-}
-function initializeGlobalVariables(){
-	//Other global variables
-	loadingPanel;
-	myTabs;
-	<digi:context name="url1" property="/visualization/pdfExport.do"/>
-	urlPdfExport = "${url1}";
-	<digi:context name="url2" property="/visualization/wordExport.do"/>
-	urlWordExport = "${url2}";
-	<digi:context name="url3" property="/visualization/excelExport.do"/>
-	urlExcelExport = "${url3}";
-	<digi:context name="url" property="context/visualization/saveOrgInfo.do"/>
-	urlSaveAdditional = "${url}";
-	<digi:context name="showList" property="context/module/moduleinstance/showProjectsList.do?" />
-	urlShowList = "${showList}";
-}
-
-</script>
 
 </digi:form>
 

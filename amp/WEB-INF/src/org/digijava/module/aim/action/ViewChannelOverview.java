@@ -359,6 +359,10 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setWrite(false);
 
 			formBean.setActivity(activity);
+			
+	        Collection<AmpTeamMember> members = TeamMemberUtil.getTeamMembers(activity.getActivityCreator().getUser().getEmail());
+	        formBean.setWorkspaces(members);
+
 			formBean.setCanView(true);
 
                         //set programs by setting name

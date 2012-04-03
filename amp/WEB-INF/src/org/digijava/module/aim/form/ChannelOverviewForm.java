@@ -8,6 +8,7 @@ import java.util.SortedSet;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.Location;
@@ -72,6 +73,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String environment;
 	private String minorities;
         private SortedSet<Location> sortedLocations;
+    private Collection<AmpTeamMember> workspaces;
 
 
     public Collection<FinancingBreakdown> getFinancingBreakdown() {
@@ -913,5 +915,13 @@ public String getAccessionInstrument() {
                 public void setSortedLocations(SortedSet<Location> sortedLocations) {
                     this.sortedLocations = sortedLocations;
                 }
+
+				public void setWorkspaces(Collection<AmpTeamMember> workspaces) {
+					this.workspaces = workspaces;
+				}
+
+				public Collection<AmpTeamMember> getWorkspaces() {
+					return workspaces;
+				}
 
 }

@@ -1283,7 +1283,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1324,7 +1324,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1386,7 +1386,7 @@ function initializeGlobalVariables(){
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1430,7 +1430,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent" style="height:460px;">
 					<div id="ODAGrowth">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1495,7 +1495,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictability">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1560,7 +1560,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidType">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1624,7 +1624,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FinancingInstrument">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1682,7 +1682,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="DonorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1742,7 +1742,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1802,7 +1802,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>

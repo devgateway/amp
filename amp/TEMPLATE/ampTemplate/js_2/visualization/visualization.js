@@ -689,6 +689,7 @@ function countSelected (selector){
 
 var callbackApplyFilterCall = {
 		  success: function(o) {
+			  loadingPanel.hide();
 			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();

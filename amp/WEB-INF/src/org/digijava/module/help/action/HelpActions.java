@@ -274,7 +274,7 @@ public class HelpActions extends DispatchAction {
 				buf.append("  <div class=\"bodyShort\" >");
 				String body = topic.getBody();
 				if (body != null && body.length()>100){
-					body = body.substring(0, 100)+"...";
+					body =body.substring(0, 100).replaceAll("\\<.*?\\>", "")+"...";
 				}
 				buf.append(body);
 				buf.append("  </div>");

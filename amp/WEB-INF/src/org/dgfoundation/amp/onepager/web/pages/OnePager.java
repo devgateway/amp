@@ -24,6 +24,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
@@ -108,7 +109,7 @@ public class OnePager extends AmpHeaderFooter {
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		session.reset();
 		
-		String activityId = (String) parameters.get("activity");
+		String activityId = (String) parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
 		boolean newActivity = false;
 		if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();
@@ -159,11 +160,12 @@ public class OnePager extends AmpHeaderFooter {
 			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
-					boolean ok = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey());
-					if (editLockRefresher.isEnabled() && !ok)
+					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
+					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED) 
 						getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
+					
 					if (DEBUG_ACTIVITY_LOCK){
-						if (!ok)
+						if (refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
 							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
 						else
 							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());

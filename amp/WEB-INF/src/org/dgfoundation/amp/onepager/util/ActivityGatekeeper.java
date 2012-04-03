@@ -11,15 +11,25 @@ public class ActivityGatekeeper {
 	private static HashMap<String, Long> userEditing = new HashMap<String, Long>();
 	private static Boolean lock = false;
 	private static final long LOCK_TIMEOUT = 5000; //ms
+	
+	public final static Integer REFRESH_LOCK_VALID = 0; //activity locked by current user
+	public final static Integer REFRESH_LOCK_LOCKED = 1; //activity locked by other user
+	public final static Integer REFRESH_LOCK_EXPIRED = 2; //activity lock expired on purpose (eg. fm mode change)
 
 	public static Duration getRefreshInterval(){
 		return Duration.milliseconds((long) (LOCK_TIMEOUT*0.7));
 	}
 	
 	private static void clearLists(String id){
-		timestamp.remove(id);
-		keycode.remove(id);
-		userEditing.remove(id);
+		synchronized (timestamp) {
+			timestamp.remove(id);
+			keycode.remove(id);
+			userEditing.remove(id);
+		}
+	}
+	
+	public static void pageModeChange(String id){
+		clearLists(id);
 	}
 
 	public static String lockActivity(String id, long userId){
@@ -45,14 +55,20 @@ public class ActivityGatekeeper {
 		return hash;
 	}
 	
-	public static boolean refreshLock(String id, String hash){
+	public static Integer refreshLock(String id, String hash, Long userId){
 		long currentTime = System.currentTimeMillis();
 		if (verifyLock(id, hash)){
 			timestamp.put(id, String.valueOf(currentTime));
-			return true;
+			return REFRESH_LOCK_VALID;
 		}
-		else
-			return false;
+		else{
+			if ((keycode.get(id) == null && timestamp.get(id) == null && userEditing.get(id) == null) ||
+				(keycode.get(id) != null && userEditing.get(id) == userId))
+				return REFRESH_LOCK_EXPIRED; //lock was cleared on purpose, page probably getting refreshed now
+			else
+				return REFRESH_LOCK_LOCKED;
+		}
+			
 	}
 	
 	public static boolean verifyLock(String id, String hash){

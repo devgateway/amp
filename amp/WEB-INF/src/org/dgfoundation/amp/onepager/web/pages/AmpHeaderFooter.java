@@ -71,6 +71,7 @@ public class AmpHeaderFooter extends WebPage {
 							GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
 				} catch (Exception ignored) {}
 				variables.put("onepagerMode", activityFormOnePager);
+				variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
 				return variables;
 			}
 		};

@@ -37,6 +37,7 @@ function resetFilter(){
 		resetElement(aimReportsFilterPickerForm.selectedPrimaryPrograms);
         resetElement(aimReportsFilterPickerForm.selectedSecondaryPrograms);
         resetElement(aimReportsFilterPickerForm.selectedBudgets);
+        resetElement(aimReportsFilterPickerForm.selectedWorkspaces);
         resetElement(aimReportsFilterPickerForm.selectedRisks);
         resetElement(aimReportsFilterPickerForm.regionSelected);
         resetElement(aimReportsFilterPickerForm.approvalStatusSelected);

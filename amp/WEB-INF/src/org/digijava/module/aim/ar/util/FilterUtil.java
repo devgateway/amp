@@ -226,6 +226,8 @@ public class FilterUtil {
 		
 		form.setSelectedStatuses( FilterUtil.getObjectsIds(filter.getStatuses()) ) ;
 
+		form.setSelectedWorkspaces( FilterUtil.getObjectsIds(filter.getWorkspaces()) ) ;
+
 		form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );
 		
 		form.setSelectedFinancingInstruments( FilterUtil.getObjectsIds(filter.getFinancingInstruments()) ); 

@@ -78,6 +78,7 @@ public class AmpARFilter extends PropertyListable {
 	private boolean justSearch=false;
 	private Long ampReportId;
 	private Set statuses = null;
+	private Set workspaces = null;
 	// private Set donors=null; //not used anymore
 	@PropertyListableIgnore
 	private Set sectors = null;
@@ -589,6 +590,9 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
 
+		String WORKSPACE_FILTER = "select amp_activity_id from amp_activity where amp_team_id IN ("
+			+ Util.toCSString(workspaces) + ")";
+
 		// String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE
 		// amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
 		// String PARENT_SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors
@@ -923,6 +927,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
+		if (workspaces != null && workspaces.size() > 0)
+			queryAppend(WORKSPACE_FILTER);
 		// if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if (sectors != null && sectors.size() != 0) {
 			queryAppend(SECTOR_FILTER);
@@ -1184,6 +1190,21 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	 */
 	public void setStatuses(Set statuses) {
 		this.statuses = statuses;
+	}
+
+	/**
+	 * @return Returns the workspaces.
+	 */
+	public Set getWorkspaces() {
+		return workspaces;
+	}
+
+	/**
+	 * @param workspaces
+	 *            The workspaces to set.
+	 */
+	public void setWorkspaces(Set workspaces) {
+		this.workspaces = workspaces;
 	}
 
 	@PropertyListableIgnore

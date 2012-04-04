@@ -51,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
@@ -68,6 +69,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -551,6 +553,28 @@ public class ReportsFilterPicker extends MultiAction {
 							rootActivityStatus, "selectedStatuses");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
+		if (true) { //Here needs to be a check to see if the field/feature is enabled
+			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+
+			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation();
+			rootCreators.setLabel("All");
+			rootCreators.setUniqueId("0");
+			rootCreators.setChildren( children );
+			Iterator<AmpTeam> it = creatorsList.iterator();
+			while(it.hasNext()){
+				AmpTeam ampTeam = it.next();
+				HierarchyListableImplementation creatorsDO	= new HierarchyListableImplementation();
+				creatorsDO.setLabel( ampTeam.getName() + "" );
+				creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
+				children.add(creatorsDO);
+			}
+			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
+					new GroupingElement<HierarchyListableImplementation>("Workspace", "filter_workspace_div", 
+							rootCreators, "selectedWorkspaces");
+			filterForm.getOtherCriteriaElements().add(activityStatusElement);
+		}
 		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
 			Collection<AmpCategoryValue> projectImplementingUnits	=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true, request);
 			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
@@ -904,6 +928,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+		filterForm.setSelectedWorkspaces(null);
 		filterForm.setSelectedSecondaryPrograms(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedNatPlanObj(null);
@@ -1234,6 +1259,18 @@ public class ReportsFilterPicker extends MultiAction {
 			AmpCategoryValue value 	= (AmpCategoryValue) session.load(AmpCategoryValue.class, statusId);
 			arf.getStatuses().add(value);
 		}
+		
+		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
+			arf.setWorkspaces(new HashSet());
+		else
+			arf.setWorkspaces(null);
+
+		for (int i = 0; filterForm.getSelectedWorkspaces() != null && i < filterForm.getSelectedWorkspaces().length; i++) {
+			Long workspaceId = Long.parseLong( filterForm.getSelectedWorkspaces()[i].toString() );
+			AmpTeam value 	= (AmpTeam) session.load(AmpTeam.class, workspaceId);
+			arf.getWorkspaces().add(value);
+		}
+
 		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)
 			arf.setProjectCategory(new HashSet());
 		else
@@ -1412,6 +1449,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+		filterForm.setSelectedWorkspaces(null);
 		filterForm.setSelectedNatPlanObj(null);
 		filterForm.setJustSearch(null);
 		filterForm.setSelectedPrimaryPrograms(null);

@@ -743,6 +743,28 @@ public class ReportsFilterPicker extends MultiAction {
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
+		if ( FeaturesUtil.isVisibleFeature("Multi Donor", ampContext)) {
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation rootMultiDonor	= new HierarchyListableImplementation();
+			rootMultiDonor.setLabel("All");
+			rootMultiDonor.setUniqueId("-1");
+			rootMultiDonor.setChildren( children );
+			HierarchyListableImplementation trueMulti	= new HierarchyListableImplementation();
+			trueMulti.setLabel( "Yes");
+			trueMulti.setUniqueId( "yes" );
+			children.add(trueMulti);
+			
+			HierarchyListableImplementation falseMulti	= new HierarchyListableImplementation();
+			falseMulti.setLabel( "No");
+			falseMulti.setUniqueId( "no" );
+			children.add(falseMulti);
+			
+			GroupingElement<HierarchyListableImplementation> lineMinRankElement	=
+					new GroupingElement<HierarchyListableImplementation>("Multiple Donors", "filter_multi_donor_div", 
+							rootMultiDonor, "selectedMultiDonor");
+			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
+		}
 		
 
 		/**
@@ -1353,6 +1375,12 @@ public class ReportsFilterPicker extends MultiAction {
 		} else {
 			arf.setBudget(null);
 		}
+		
+		if ( filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1 ) {
+			arf.setMultiDonor( (String) filterForm.getSelectedMultiDonor()[0] );
+		}
+		else
+			arf.setMultiDonor(null);
 
 		arf.setJustSearch(filterForm.getJustSearch()==null?false:filterForm.getJustSearch());
 
@@ -1428,6 +1456,7 @@ public class ReportsFilterPicker extends MultiAction {
         filterForm.setSelectedTertiarySectors(null);
         filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		filterForm.setAmountinthousands(false);
+		filterForm.setSelectedMultiDonor(null);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
 		if (tempSettings != null) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-12412</jira>
+    <keyword>donor</keyword>
+    <keyword>column</keyword>
+    <author>Alex</author>
+    <description>Adding multidonor as a column</description>
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+	CREATE OR REPLACE VIEW v_multi_donor AS  
+	 SELECT a.amp_activity_id, 
+		CASE
+			WHEN count(DISTINCT f.amp_donor_org_id) > 1 THEN 'yes'::text 
+			ELSE 'no'::text 
+		END AS value 
+	FROM  amp_activity a left outer join amp_funding f on (a.amp_activity_id=f.amp_activity_id) 
+	GROUP BY a.amp_activity_id; 
+
+	insert into amp_columns   
+   		(columnid,columnName,cellType,extractorView)  
+		values (nextval('amp_columns_seq'), 'Multi Donor', 'org.dgfoundation.amp.ar.cell.TrnTextCell','v_multi_donor');
+  
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

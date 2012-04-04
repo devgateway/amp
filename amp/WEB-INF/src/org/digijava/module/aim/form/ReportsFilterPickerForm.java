@@ -104,6 +104,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long ampReportId;
 	private Object[] lineMinRanks;
 	private Object[] planMinRanks;
+	private Object[] selectedMultiDonor;
 	private String text;
 	private String indexString;
 	private String searchMode;
@@ -400,6 +401,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.budgetNumber=null;
 				this.selectedArchivedStatus=new Object[]{"1"};
 				this.selectedProjectImplUnit=null;
+				this.selectedMultiDonor	= null;
 			}
 		}
 		
@@ -1048,6 +1050,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public String getSearchMode() {
 		return searchMode;
+	}
+
+	public Object[] getSelectedMultiDonor() {
+		return selectedMultiDonor;
+	}
+
+	public void setSelectedMultiDonor(Object[] selectedMultiDonor) {
+		this.selectedMultiDonor = selectedMultiDonor;
 	}	
 	
 	

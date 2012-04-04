@@ -132,6 +132,16 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private List secondaryPrograms;
 	private Set selectedSecondaryPrograms;
+	
+	private String multiDonor = null;
+
+	public String getMultiDonor() {
+		return multiDonor;
+	}
+
+	public void setMultiDonor(String multiDonor) {
+		this.multiDonor = multiDonor;
+	}
 
 	@PropertyListableIgnore
 	public List getNationalPlanningObjectives() {
@@ -650,6 +660,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
 		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
 	 	
+	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
+	 	
 	 	String REGION_SELECTED_FILTER = "";
 		if (unallocatedLocation != null) {
 			if (unallocatedLocation == true) {
@@ -1013,6 +1025,9 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		}
 		if (showArchived != null) {
 			queryAppend(ARCHIVED_FILTER);
+		}
+		if ( multiDonor != null ) {
+			queryAppend( MULTI_DONOR );
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);

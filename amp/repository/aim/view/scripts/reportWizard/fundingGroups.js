@@ -69,6 +69,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Government Approval Procedures'
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
+                , 'Multi Donor'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

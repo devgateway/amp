@@ -158,10 +158,10 @@
 							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
 						</feature:display>
 						<logic:present name="currentMember">
-							<digi:insert attribute="myLinks" />
-							<digi:insert attribute="myReports"/>
-							<digi:insert attribute="myMessages"/>
 							<digi:insert attribute="myLastVersions"/>
+							<digi:insert attribute="myReports"/>
+							<digi:insert attribute="myLinks" />
+							<digi:insert attribute="myMessages"/>
 						</logic:present>
 					</div>
 					</digi:secure>

@@ -187,8 +187,8 @@ function page (page, ampSelectedClass){
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside">
 								  		<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
-								  			<html:option value="-1"><digi:trn>Add new</digi:trn></html:option>
-        									<logic:iterate id="cls" name="field" property="sortedLabels">
+								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
+        									<logic:iterate id="cls" name="field" property="sortedLabels" >
 												<html:option value="${cls.key}">
 												${cls.value}
 												</html:option>

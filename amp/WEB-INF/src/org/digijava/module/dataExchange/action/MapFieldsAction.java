@@ -67,12 +67,16 @@ public class MapFieldsAction extends MultiAction {
 		if(actType!=null){
 			if("saveRecord".compareTo(actType) ==0)
 				if(fieldId != null && mappedId !=null){
-					saveMappedField(request,fieldId, mappedId, mappedValue);
+					{
+						saveMappedField(request,fieldId, mappedId, mappedValue);
+						mForm.setAllSelectedAmpValues(null);
+					}
 				}
 			if("saveAllRecords".compareTo(actType) ==0)
 			{
 				for (int i = 0; i < mForm.getSelectedFields().length; i++) {
 					saveMappedField(request,mForm.getSelectedFields()[i], mForm.getSelectedAmpIds()[i], mForm.getSelectedAmpValues()[i]);
+					mForm.setAllSelectedAmpValues(null);
 				}
 			}
 		}
@@ -244,7 +248,7 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
 		}
 		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampSectorId from " + AmpSector.class.getName()+ " f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)), f.ampSectorId  from " + AmpSector.class.getName()+ " f");
 		}
 		//type of assistance
 		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){

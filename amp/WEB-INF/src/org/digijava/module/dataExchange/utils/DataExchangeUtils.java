@@ -679,9 +679,37 @@ public class DataExchangeUtils {
 	}
 	
 	
+	
+	/*
+	 * AmpTheme obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpTheme.class.getName()
+                + " o where (TRIM(o.name)=:programName)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("programName", name.trim(), Hibernate.STRING);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpTheme) result.get(0);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception from getSectorByname(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	 */
+	
+	
 	public static AmpActivityGroup getAmpActivityGroupById(Long id) {
 		Session session = null;
 		AmpActivityGroup aag = null;
+		Query qry = null;
+        String queryString = null;
 		try {
 			//session = PersistenceManager.getSession();
 			session = PersistenceManager.getRequestDBSession();

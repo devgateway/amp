@@ -848,12 +848,12 @@ public class IatiActivityWorker {
 		for (Iterator it = iatiDescriptionList.iterator(); it.hasNext();) {
 			Description description = (Description) it.next();
 			if( description.getType()==null || "general".compareTo(description.getType().toLowerCase()) ==0 ){
-				String d = setEditorDescription(description , "amp-iati-desc-");
+				String d = setEditorDescription(description , "aim-iati-desc-");
 				//if(this.getLang().compareTo(description.getLang()) == 0)
 					a.setDescription(d);
 			}
 			if(description.getType() != null && "objectives".compareTo(description.getType().toLowerCase()) ==0 ){
-				String d = setEditorDescription(description , "amp-iati-obj-");
+				String d = setEditorDescription(description , "aim-iati-obj-");
 				//if(this.getLang().compareTo(description.getLang()) == 0)
 					a.setObjective(d);
 			}
@@ -879,7 +879,6 @@ public class IatiActivityWorker {
 			
 		return null;
 	}
-	
 	private Editor createEditor(String siteId, String key, String language){
 		Editor editor = new Editor();
 		editor.setSiteId(siteId);

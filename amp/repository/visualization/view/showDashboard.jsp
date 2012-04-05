@@ -60,6 +60,7 @@ var trnPrimary = "";
 var trnAll = "";
 var trnExportOptions = "";
 var trnAdvancedFilter = "";
+var trnInstallFlash = "";
 var trnCancel = "";
 var trnShowSettings = "";
 var trnHideSettings = "";
@@ -135,6 +136,7 @@ function initializeTranslations(){
 	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
 	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
+	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
@@ -636,6 +638,13 @@ function initializeGlobalVariables(){
 <table>
 <tr>
 <td>
+<div id="installFlashPopin" class="dialog" title="Export Options">
+	<div id="popinContent3" class="content" align="center">
+		<a href="http://www.adobe.com/go/getflashplayer" target="_blank" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
+			<digi:trn>To view the dashboards you'll need Flash Player plug in installed. Please click here to go to Adobe website to download and install. After the plug in is installed please restart the browser.</digi:trn>
+		</a>
+	</div>
+</div>
 <div id="exportPopin" class="dialog" title="Export Options">
 <div id="popinContent2" class="content">
 	<div id="exportDiv" class="yui-navset">
@@ -1839,6 +1848,7 @@ function initializeTranslations(){
 	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
 	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
+	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 

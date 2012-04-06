@@ -35,6 +35,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Struts action, which shows site's layout if "layout" parameter is set, then
@@ -63,8 +65,12 @@ public class ShowLayout
 
     String layout;
     layout = request.getParameter("layout") == null? "default" : request.getParameter("layout");
-
-
+		// dirty fix sorry, Mikheil :(
+		if (layout.equals("login")
+				&& FeaturesUtil
+						.getGlobalSettingValueBoolean(GlobalSettingsConstants.PUBLIC_PORTAL)) {
+			layout = "publicPortalLoginLayout";
+		}
     // Get tiles context or create new one if it does not exist
     ComponentContext context = ComponentContext.getContext(request);
     if (context == null) {

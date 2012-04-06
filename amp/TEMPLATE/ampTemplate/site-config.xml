@@ -225,6 +225,9 @@
 			<put-item name="footer"/>
 			<put-item name="body" module="um" instance="user"/>
 		</layout>
+		<layout name="publicPortalLoginLayout" file="publicPortalLogin.jsp">
+			<put-item name="footer" layout="footerLayout"/>
+		</layout>
 
 		<!-- AIM TAB LAYOUT -->
 

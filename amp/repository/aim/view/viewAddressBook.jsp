@@ -247,6 +247,7 @@
 <script language="JavaScript">
 	var msgDataError = '<digi:trn>Data error</digi:trn>';
 	var msgLoading	 = '<digi:trn>Loading...</digi:trn>';
+	var noData               = '<digi:trn>No Records found</digi:trn>';
 	
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		function initDynamicTable1() {	
@@ -320,7 +321,8 @@
 		            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
 		            paginator:myPaginator,
 		            MSG_ERROR:msgDataError,
-		            MSG_LOADING:msgLoading
+		            MSG_LOADING:msgLoading,
+		            MSG_EMPTY:noData
 		        };
 		    	 
 		        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);

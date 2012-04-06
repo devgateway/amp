@@ -364,31 +364,35 @@ public class EditOrganisation extends DispatchAction {
           return mapping.findForward("forward");
       }
 
-      Collection activities = DbUtil.getAllActivities();
-      Collection testFunding = ActivityUtil.getFundingByOrg(editForm.getAmpOrgId());
-      Iterator itr1 = activities.iterator();
+      Collection activities = DbUtil.getAllactivitiesRelatedToOrg(editForm.getAmpOrgId()); //DbUtil.getAllActivities();
+      int testFunding = ActivityUtil.getFundingByOrgCount(editForm.getAmpOrgId());
+      //Iterator itr1 = activities.iterator();
       boolean flag = false;
       boolean flag2 = false;
-      if (!testFunding.isEmpty()) {
+      if (testFunding > 0 ) {
           flag2 = true;
       }
-
-      while (itr1.hasNext()) {
-          AmpActivity testActivity;
-          testActivity = (AmpActivity) itr1.next();
-
-          //Collection testOrgrole = testActivity.getOrgrole();
-          Collection testOrgrole = ActivityUtil.getOrgRole(testActivity.getAmpActivityId());
-          Iterator itr2 = testOrgrole.iterator();
-
-          while (itr2.hasNext()) {
-              AmpOrgRole test = (AmpOrgRole) itr2.next();
-              if (test.getOrganisation().getAmpOrgId().equals(editForm.getAmpOrgId())) {
-                  flag = true;
-                  break;
-              }
-          }
+      
+      if(!activities.isEmpty()){
+    	  flag =true;
       }
+
+//      while (itr1.hasNext()) {
+//          AmpActivity testActivity;
+//          testActivity = (AmpActivity) itr1.next();
+//
+//          //Collection testOrgrole = testActivity.getOrgrole();
+//          Collection testOrgrole = ActivityUtil.getOrgRole(testActivity.getAmpActivityId());
+//          Iterator itr2 = testOrgrole.iterator();
+//
+//          while (itr2.hasNext()) {
+//              AmpOrgRole test = (AmpOrgRole) itr2.next();
+//              if (test.getOrganisation().getAmpOrgId().equals(editForm.getAmpOrgId())) {
+//                  flag = true;
+//                  break;
+//              }
+//          }
+//      }
       if (flag || flag2) {
           errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
           saveErrors(request, errors);
@@ -396,8 +400,8 @@ public class EditOrganisation extends DispatchAction {
           return mapping.findForward("forward");
       } else {
 
-          Collection activitiesCol = DbUtil.getAllOrgActivities(editForm.getAmpOrgId());
-          if (activitiesCol.size() > 0) {
+          int activitiesCount = DbUtil.getAllOrgActivitiesCount(editForm.getAmpOrgId());
+          if (activitiesCount > 0) {
               errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
 
               saveErrors(request, errors);
@@ -430,11 +434,17 @@ public class EditOrganisation extends DispatchAction {
               }
               ParisUtil.deleteAhSurvey(ahsurvey.getAmpAHSurveyId());
           }
+          
+//          if(org.getOrganizationContacts() != null){
+//        	  for (AmpOrganisationContact orgCont : org.getOrganizationContacts()) {
+//				ContactInfoUtil.deleteOrgContact(orgCont);
+//			}
+//          }
 
 
           //org.setSurvey(null);
           try {          	            	
-              DbUtil.delete(org);
+              DbUtil.deleteOrg(org);
           } catch (JDBCException e) {
               // this is a quick solution
               // due to there is a integrity referencial issue

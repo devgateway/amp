@@ -2489,6 +2489,30 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return orgroles;
   }
+  
+  public static int getFundingByOrgCount(Long id) {
+	    Session session = null;
+	    int orgrolesCount = 0;
+	    try {
+	      session = PersistenceManager.getSession();
+	      String queryString = "select count(*) from " + AmpFunding.class.getName() +" f " + "where (f.ampDonorOrgId=:orgId)";
+	      Query qry = session.createQuery(queryString);
+	      qry.setParameter("orgId", id, Hibernate.LONG);
+	      orgrolesCount = (Integer)qry.uniqueResult();
+	    }
+	    catch (Exception ex) {
+	      logger.error("Unable to get fundings for organization :" + ex);
+	    }
+	    finally {
+	      try {
+	        PersistenceManager.releaseSession(session);
+	      }
+	      catch (Exception ex2) {
+	        logger.error("releaseSession() failed ");
+	      }
+	    }
+	    return orgrolesCount;
+	  }
 
   public static Collection<Components> getAllComponents(Long id) {
     Collection<Components> componentsCollection = new ArrayList<Components>();

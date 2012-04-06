@@ -104,7 +104,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		var applyDivEl			= document.createElement("div");
 		var applySpanEl			= document.createElement("span");
 		
-		applySpanEl.innerHTML			= "Apply Labels";
+		applySpanEl.innerHTML			= applylabels;
 		applySpanEl.style.padding		= "1px";
 		applySpanEl.style.cursor		= "pointer";
 		

@@ -124,6 +124,8 @@
 
 
 <script type="text/javascript">
+	var applylabels = "<digi:trn>Apply Labels</digi:trn>";
+	var nonetext = "<digi:trn>none</digi:trn>";
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
 

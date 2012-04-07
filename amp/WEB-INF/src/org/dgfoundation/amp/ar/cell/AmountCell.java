@@ -407,6 +407,10 @@ public class AmountCell extends Cell {
 		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
 		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
 		
+		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
+		
 		columnPercent.put(sourceCol.getName(), percentage);
 		columnCellValue
 				.put(sourceCol.getName(), (Comparable) source.getValue());

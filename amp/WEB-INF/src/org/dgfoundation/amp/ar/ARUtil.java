@@ -530,7 +530,9 @@ public final class ARUtil {
 			Double percentage 		= mInfo.getValue();
 			return percentage;
 		}
-		throw new Exception("No percentage found it MetaTextCell " + mtc);
+		if ( mInfo == null)
+			throw new Exception("Percentage metainfo in MetaTextCell " + mtc + " is null");
+		throw new Exception("Percentage found in MetaTextCell " + mtc + " is " + mInfo.getValue() );
 	}
 	
 	public static double retrieveParentPercetage( Long ownerId, Cell splitterCell ) throws Exception {

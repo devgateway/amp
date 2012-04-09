@@ -59,15 +59,19 @@ public class SelectTeam extends Action {
         } else {
         	temp = request.getParameter("id");
         }
-        TeamMember currentTeamMember = (TeamMember)session.getAttribute("currentMember");
 
-        
         try {
-            Long id = new Long(Long.parseLong(temp));
+        	User user = RequestUtils.getUser(request);
+        	Long id = new Long(Long.parseLong(temp));
             AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);
+            
+            //AMP Security Issues - AMP-12638
+            if (member == null || member.getUser().getId() != user.getId()){
+            	session.invalidate();
+            	return mapping.findForward("forward");
+            }
 
             // ----------------------
-            User user = RequestUtils.getUser(request);
             Site site = RequestUtils.getSite(request);
             Subject subject = RequestUtils.getSubject(request);
             if (subject == null) {

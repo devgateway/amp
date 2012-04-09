@@ -60,6 +60,7 @@
 		return fixedTrim
 	}
 
+	var enterBinder	= new EnterHitBinder('saveOrgGrpBtn');
 </script>
 <div class="addOrgBox">
 	<div class="addOrgBoxInner">
@@ -162,7 +163,7 @@
 																	 --%>
 																	<div class="buttons">
 																			
-																						<html:button  styleClass="buttonx_sm" property="submitButton"  onclick="check()">
+																						<html:button  styleClass="buttonx_sm" property="submitButton" styleId="saveOrgGrpBtn" onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					

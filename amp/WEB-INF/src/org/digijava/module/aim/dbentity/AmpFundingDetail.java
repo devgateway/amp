@@ -90,12 +90,10 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         
         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            if(percent==null||percent==0){
-            this.transactionAmount=transactionAmount;
+            if (percent == null) {
+                percent = 0f;
             }
-            else{
-                this.transactionAmount=transactionAmount*percent/100;
-            }
+            this.transactionAmount = transactionAmount * percent / 100;
         }
         
         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){

@@ -258,6 +258,7 @@
 		}
 		else{
 			alert("Please, select a sector first!");
+			return false;
 		}
 	}
 	function resetSectors(){
@@ -450,6 +451,11 @@
 	    return true;
 	}
 
+
+
+	var enterBinder	= new EnterHitBinder('addSectorBtn');
+	enterBinder.map(["keyWordTextField"], "seachSectorBtn");
+	//teamFPanel.bind('keyWordTextField','seachSectorBtn');
 	-->
 
 </script>

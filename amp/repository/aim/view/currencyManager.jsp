@@ -90,6 +90,8 @@ function submitPages(){
 		
 }
 
+var enterBinder	= new EnterHitBinder('currencyFilterBtn');
+
 function exportXSL(){
     <digi:context name="exportUrl" property="context/module/moduleinstance/exportCurrencyManager2XSL.do"/>;
     document.aimCurrencyForm.action="${exportUrl}";
@@ -183,7 +185,7 @@ function exportXSL(){
 																		<td bgcolor="#f4f4f2"><c:set var="trnGoBtn">
 																				<digi:trn key="aim:goBtn"> Go </digi:trn>
 																			</c:set> <input type="button" value="${trnGoBtn}"
-																			class="buttonx" onclick="applyFilter()" /></td>
+																			class="buttonx" onclick="applyFilter()" id="currencyFilterBtn" /></td>
 																	</tr>
 																</table></td>
 														</tr>

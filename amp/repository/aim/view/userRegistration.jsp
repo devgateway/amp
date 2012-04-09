@@ -180,6 +180,7 @@
 		return true;
 	}
 
+	var enterBinder	= new EnterHitBinder('registerUserBtn');
 
 </script>
 <center>
@@ -333,7 +334,7 @@
               <td align="right" style="padding-top:20px;"><c:set var="btnSubmit">
                 <digi:trn key="btn:submit">Submit</digi:trn>
               </c:set>
-                <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();"/>
+                <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
              </td>
               <td align="left" style="padding-top:20px;">
               <c:set var="btnReset">

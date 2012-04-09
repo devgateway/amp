@@ -64,6 +64,7 @@
         $("input:radio").attr("checked", false);
     }
 
+	var enterBinder	= new EnterHitBinder('addOrgTypeBtn');
 </script>
 
 <digi:instance property="aimAddOrgTypeForm" />
@@ -162,7 +163,7 @@
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnSave">Save</digi:trn>
 																						</c:set>
-																						<input type="button" value="${translation}" class="buttonx" onclick="check()">																					
+																						<input type="button" value="${translation}" class="buttonx" onclick="check()" id="addOrgTypeBtn">																					
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnCancel">Cancel</digi:trn>
 																						</c:set>

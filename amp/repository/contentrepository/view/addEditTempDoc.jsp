@@ -336,7 +336,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 						<c:set var="trndel"><digi:trn>Remove Selected Fields</digi:trn></c:set>
 				    	<input type="button" style="font-family:verdana;font-size:11px;" class="buttonx" name="delValBtn" value="${trndel}" onclick="deleteFields()">
 				    	&nbsp;
-						<html:submit styleClass="buttonx" onclick="return validateDoc()"><digi:trn>Save Template</digi:trn></html:submit>					</td>
+						<html:submit styleClass="buttonx" onclick="return validateDoc()" styleId="saveTemplateBtn"><digi:trn>Save Template</digi:trn></html:submit>					</td>
 				</tr>
 			</table>
 		</td>

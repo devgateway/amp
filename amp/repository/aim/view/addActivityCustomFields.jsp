@@ -48,7 +48,7 @@
 															</c:when>
 															<c:when test="<%=customField instanceof DateCustomField%>">																
 																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].strDate" size="10"
-																styleId="customField${index}_input_text" styleClass="inp-text" readonly="true" />																
+																styleId="customField${index}_input_text" styleClass="inp-text"  />																
 																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>

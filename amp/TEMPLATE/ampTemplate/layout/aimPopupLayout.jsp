@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <html>
 <digi:base />
+<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 <head>
 			<%
 				String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");

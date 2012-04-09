@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12625</jira>
+	<keyword>Activity Form</keyword>
+	<author>Dare</author>
+	<description>Activity Creator is null for some activities. Need to have some value</description>
+	
+	<trigger type="all">
+      <condition type="appliedPatch">merge_activity_updatedBy_and_modifiedBy.xml</condition>
+  	</trigger>
+	
+	<apply>
+		<script>
+			<lang delimiter=";" type="sql">
+				CREATE OR REPLACE VIEW v_activity_modified_by AS  SELECT a.amp_activity_id as amp_activity_id,
+				u.FIRST_NAMES||' '||u.LAST_NAME||' ('||u.email||')'  as name,atm.user_ as user_id FROM amp_activity_version a, 
+				amp_team_member atm, dg_user u	WHERE atm.amp_team_mem_id=a.modified_by AND atm.user_=u.id ORDER BY amp_activity_id;
+				
+				update amp_columns set extractorView='v_activity_modified_by' where extractorView='v_activity_changed_by' ;
+				
+				drop view if exists v_activity_changed_by; 
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

@@ -1,0 +1,5 @@
+CREATE OR REPLACE VIEW `v_donor_type` AS select `f`.`amp_activity_id` AS `amp_activity_id`,`ot`.`org_type` AS `org_type`,`ot`.`amp_org_type_id` AS `org_type_id` from (((`amp_funding` `f` join `amp_organisation` `o`) join `amp_org_group` `gr` )join `amp_org_type` `ot`) where ((`f`.`amp_donor_org_id` = `o`.`amp_org_id`) and (`o`.`org_grp_id`=`gr`.`amp_org_grp_id`)and (`ot`.`amp_org_type_id` = `gr`.`org_type`)) order by `f`.`amp_activity_id`,`ot`.`org_type` ;
+delete from amp_report_column where columnId in (select columnid from amp_columns where columnName like 'Donor Type');
+delete from amp_report_hierarchy where columnId in (select columnid from amp_columns where columnName like 'Donor Type');
+delete from amp_columns where columnName like "Donor Type";
+insert into amp_columns (columnName,cellType,extractorView,relatedContentPersisterClass) values ("Donor Type","org.dgfoundation.amp.ar.cell.TextCell","v_donor_type","org.digijava.module.aim.dbentity.AmpOrgType");

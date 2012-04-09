@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:charts="org.axiis.charts.*"
+				xmlns:axiis="http://www.axiis.org/2009"
+				xmlns:series="org.axiis.charts.series.*"
+				xmlns:groupings="org.axiis.charts.groupings.*"
+				xmlns:degrafa="http://www.degrafa.com/2007"
+				xmlns:states="org.axiis.states.*"
+				xmlns:paint="org.axiis.paint.*"
+				xmlns:Examples="Examples.*"
+				xmlns:axis="org.axiis.charts.axis.*"
+				xmlns:labels="org.axiis.charts.labels.*"
+				backgroundGradientColors="[0xDDDDDD,0xDDDDDD]"
+				layout="absolute"
+				creationComplete="application1_creationCompleteHandler(event);"
+				>
+	
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)">
+	</mx:HTTPService>
+	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
+	<mx:Script>
+		<![CDATA[
+			import com.exportUtil.*;
+			
+			import flash.events.MouseEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.MoveEvent;
+			import mx.events.SliderEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
+			
+			import org.axiis.charts.groupings.BarCluster;
+			import org.axiis.data.DataSet;
+			import org.axiis.core.AxiisSprite;
+			import flash.events.MouseEvent;
+
+			private var xS:int; 
+			private var yS:int;
+			
+			private var ds:DataSet = new DataSet();
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
+			private var palette:Array = new Array();
+			private var yearsArray:Array = new Array();
+			private var yearsToCompareArray:Array = new Array();
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
+
+			/**
+			 * This example is using xml data read from the file system. 
+			 * In practical usage, you'ld have some data in a model that you want to display
+			 * that may be XML or may be in arrayCollections or arrays. In most cases, you'll
+			 * need to massage the data into a format that's suitable for the display you're
+			 * trying to achieve. 
+			 */
+			public function start():void
+			{
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				var maxValue:Number = 0;
+				var minValue:Number = 0;
+				var totalResults:Number = service.lastResult.organization.length;
+				var fillCategories:Boolean = false;
+				try {
+					maxValue =  service.lastResult.organization.value;
+					minValue = 0;
+					if (maxValue < 0){
+						minValue = maxValue;
+						maxValue = 0;
+					}
+				} catch (errObject:Error) {
+					for(var i:Number = 0; i < service.lastResult.organization.length; i++){
+						var currentValue:Number = service.lastResult.organization[i].value;
+						if (maxValue < currentValue) maxValue = currentValue;
+						if (minValue > currentValue) minValue = currentValue;
+					}
+				}
+				if (totalResults * 30 > 460){
+					mxc1.height = totalResults * 30;
+				} else {
+					mxc1.height = 460;
+				}
+				
+				if (maxValue > 100) maxValue = 100;
+				if (minValue < -100) minValue = -100; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
+				vScale.minValue = Math.round(minValue * 1.05);
+				haxis.maxScale = Math.round(maxValue * 1.05);
+				haxis.minScale = Math.round(minValue * 1.05);
+				 
+				dataProvider = service.lastResult.organization;
+				if("length" in service.lastResult.organization) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					if (dataField in service.lastResult[ODADataField]){
+						dc.visible = true;
+						messagePanel.visible = false;
+						sizePanel(0, 0);
+					} else {
+						dc.visible = false;
+						messagePanel.visible = true;
+						sizePanel(300, 200);
+					}
+				}
+				dc.invalidateDisplayList();
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray:Array = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				var showDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowDataLabel')}"));
+				var rotateDataLabel:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'RotateDataLabel')}"));
+				var dropdownCurrentTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DropdownCurrentTitle')}"));
+				var dropdownPreviousTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DropdownPreviousTitle')}"));
+				
+				//Get Global setting for the fonts
+				var globalFontFamily:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontFamily')}"));				
+				var globalFontSize:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontSize')}"));				
+				var globalFontWeight:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontWeight')}"));
+				
+				this.fontFamily = globalFontFamily;
+				this.fontSize = Number(globalFontSize);
+				this.fontWeight = globalFontWeight;
+				
+				chartLabel.text = title;
+				chartLabel.setStyle("fontSize", fontSize);
+				chartLabel.setStyle("fontFamily", globalFontFamily);
+				
+				currentComboLabel.text = dropdownCurrentTitle;
+				currentComboLabel.setStyle("fontSize", fontSize);
+				currentComboLabel.setStyle("fontFamily", globalFontFamily);
+				
+				previousComboLabel.text = dropdownPreviousTitle;
+				previousComboLabel.setStyle("fontSize", fontSize);
+				previousComboLabel.setStyle("fontFamily", globalFontFamily);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+				
+				
+				if(showDataLabel == "true")
+					myCluster.showDataLabel = true;
+				else
+					myCluster.showDataLabel = false;
+				
+
+				/*if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+				
+				if(rotateDataLabel == "true")
+					myCluster.dataLabelRotateAngle = -90;
+				else
+					myCluster.dataLabelRotateAngle = 0;
+				*/
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				//dc.visible = true;
+	
+			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}			
+			
+			private function captureSnapshot():void
+			{
+				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String = "/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8080";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+			}
+			
+			protected function myStack_preRenderHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+			}
+			protected function service_resultHandler(event:ResultEvent):void
+			{
+				start();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getODAGrowthGraphData";
+				var start:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8080";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				service.url = strProtocol + "//" + strDomain + strUrl;
+				
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				startYear = endYear-20; //it will show in the dropdown the 20 previous years to current end year.
+				for(var year:int = endYear; year > startYear; year--){
+					yearsArray.push(year);
+				}
+				startYear = endYear-10; //it will show in the dropdown the 10 previous years to selected year.
+				for(var year:int = endYear-1; year > startYear; year--){
+					yearsToCompareArray.push(year);
+				}
+				previousYear.selectedIndex = 0;
+				currentYear.selectedIndex = 0;
+				
+				var params:Object = {
+					"format" : "xml",
+					"typeofaid" : "true"};
+				params["previousYear"] = previousYear.selectedLabel;
+				params["currentYear"] = currentYear.selectedLabel;
+				
+				if(start == "true")
+					service.send(params);
+				try {
+					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
+				}
+				catch(errObject:Error){
+					//Fail silently when running standalone
+				}
+			}
+			
+			/**
+			 * The labelFunction property of the LineSeriesGroup, and other components, allow you to 
+			 * to determine how each to format each label the component displays
+			 */
+			private function axisLabel(obj:Object):String
+			{
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.useThousandsSeparator=true;
+				return formatter.format(obj);
+			}
+
+			private function dataTipLabelFunction(obj:Object):String
+			{
+				var label:String = obj.label;
+				var newlabel:String = "";
+				var labelArray:Array = label.split(" ");
+				for (var i:Number = 0; i < labelArray.length; i++){
+					newlabel = newlabel + labelArray[i] + " ";
+					if (i % 3 == 0)
+						newlabel = newlabel + "\r";
+				}
+				return "<b>" + newlabel + "</b>" + "\r" + obj.data.valueStr + " %";
+			}
+			
+			private function labelFunction(obj:Object):String
+			{
+				if(myCluster.showDataLabel == true)
+					return "<b>" + obj.valueStr + " % </b>";
+				else
+					return "";
+			}
+			public function refreshGraph():void
+			{
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+				
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var ignore:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Ignore')}"));
+				while(yearsArray.length > 0) {
+					yearsArray.pop();//remove the last item:
+				}
+				while(yearsToCompareArray.length > 0) {
+					yearsToCompareArray.pop();//remove the last item:
+				}
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				startYear = endYear-20; //it will show in the dropdown the 20 previous years to current end year.
+				for(var year:int = endYear; year > startYear; year--){
+					yearsArray.push(year);
+				}
+				startYear = endYear-10; //it will show in the dropdown the 10 previous years to selected year.
+				for(var year:int = endYear-1; year > startYear; year--){
+					yearsToCompareArray.push(year);
+				}
+				previousYear.selectedIndex = 0;
+				currentYear.selectedIndex = 0;
+				
+				var params = {
+					"format" : "xml",
+					"typeofaid" : "true",
+					"ignore" : ignore
+				};
+				params["previousYear"] = previousYear.selectedLabel;
+				params["currentYear"] = currentYear.selectedLabel;
+				service.send(params);
+			}
+			public function refreshGraphNoData():void
+			{
+				start();
+			}
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+			//Section added for Drag&drop of Title
+			
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
+			
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+
+			protected function combo_change(cmb:Number):void
+			{
+				if (cmb==2){
+					//endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+					endYear = Number(currentYear.selectedLabel);//this fill the combo of current year with all posible values
+					while(yearsToCompareArray.length > 0) {
+						yearsToCompareArray.pop();//remove the last item:
+					}
+					for(var year:int = endYear-1; year > endYear-10; year--){
+						yearsToCompareArray.push(year);
+					}
+					previousYear.selectedIndex = 0;
+				}
+				var params:Object = {
+					"format" : "xml",
+					"typeofaid" : "true"};
+				params["previousYear"] = previousYear.selectedLabel;
+				params["currentYear"] = currentYear.selectedLabel;
+				service.send(params);
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<!-- 
+	Provide nice background to chart 
+	-->
+	<mx:CurrencyFormatter currencySymbol=""
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
+	
+	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
+	<mx:Number id="prevYear"></mx:Number>
+	<mx:Object id="dataProvider"/>
+	<mx:String id="verticalField"/>
+	<mx:String id="dataField">value</mx:String>
+	<mx:String id="ODADataField">organization</mx:String>
+	<mx:String id="labelField">name</mx:String>
+	<mx:String id="childDataField">value</mx:String>
+	<mx:String id="childLabelField">label</mx:String>
+	<mx:Number id="percentGap">.02</mx:Number>
+	<axiis:NumericExpression id="labelLayout" value="1"></axiis:NumericExpression>
+	<mx:Resize id="resize" />
+	<mx:String id="fontFamily">Arial</mx:String>
+	<mx:Number id="fontSize">12</mx:Number>
+	<mx:String id="fontWeight">bold</mx:String>
+	<mx:String id="dataFontFamily">Arial</mx:String>
+	<mx:Number id="dataFontSize">12</mx:Number>
+	<mx:String id="dataFontWeight">bold</mx:String>
+	<mx:Number id="legendOffset">40</mx:Number>
+	
+	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0" maxLayout="{dc.width}"/>
+	
+	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
+			   horizontalCenter="0"
+			   width="634"
+			   height="500"
+			   dragEnter="dragEnterHandler(event);"
+			   dragDrop="dragDropHandler(event);"
+			   >
+	<axiis:DataCanvas top="50"
+					  bottom="70"
+					  width="{this.width}"
+					  id="dc"
+					  left="40"
+					  right="120"
+					 horizontalCenter="0">
+		<axiis:backgroundGeometries>
+			<axiis:HAxis
+				id="haxis"
+				x="20"
+				horizontalScale="{vScale}"
+				width="{dc.width}"
+				height="{dc.height}"
+				tickGap="20"
+				fontFamily="{fontFamily}"
+				fontSize="{fontSize}"
+				fontWeight="{fontWeight}"
+				showGridArea="true"
+				gridFill="{areaFill}"
+				showZeroLine="true" 
+				/>
+		</axiis:backgroundGeometries>
+		<axiis:layouts> 
+			<axiis:VBoxLayout id="hLayout"
+								  width="{dc.width}" 
+								  height="{dc.height}"
+								  dataProvider="{dataProvider}"
+								  dataField="{dataField}"
+								  labelField="{labelField}">
+				<axiis:layouts>
+				<axiis:BarCluster id="myCluster"
+									  width="{hLayout.currentReference.width}"
+									  height="{hLayout.currentReference.height*.73}"
+									  y="0"
+									  x="20"
+									  dataProvider="{hLayout.currentDatum}"
+									  dataField="{childDataField}"
+									  labelField="{childLabelField}"
+									  labelFunction="{labelFunction}"
+									  dataTipLabelFunction="{dataTipLabelFunction}"
+									  percentGap=".1"
+									  fill="{clusterFill}"
+									  stroke="{colStroke}"
+									  horizontalScale="{vScale}"
+									  dataFontColor="{outerPalette.currentColor}"
+									  fontColor="[0x000000]"
+									  fontFamily="{fontFamily}"
+									  fontSize="{fontSize}"
+									  fontWeight="{fontWeight}"
+									  dataFontFamily="{dataFontFamily}"
+									  dataFontSize="{dataFontSize}"
+									  dataFontWeight="{dataFontWeight}"
+									  showLabel="false"
+									  showDataLabel="true"
+									  />
+					<axiis:BarCluster id="myCluster2"
+									  width="{hLayout.currentReference.width}"
+									  height="{hLayout.currentReference.height*.73}"
+									  y="0"
+									  x="-80"
+									  dataProvider="{hLayout.currentDatum}"
+									  labelField="{labelField}"
+									  labelLayout="{labelLayout}"
+									  showValueLabel="false"
+									  percentGap="1"
+									  fill="{clusterFill}"
+									  stroke="{colStroke}"
+									  horizontalScale="{vScale}"
+									  dataFontColor="{outerPalette.currentColor}"
+									  fontColor="[0x000000]"
+									  fontFamily="{fontFamily}"
+									  fontSize="{fontSize}"
+									  fontWeight="{fontWeight}"
+									  dataFontFamily="{dataFontFamily}"
+									  dataFontSize="{dataFontSize}"
+									  dataFontWeight="{dataFontWeight}"
+									  dataTipLabelFunction="null"
+									  visible="true"/>
+				</axiis:layouts>
+			</axiis:VBoxLayout>
+		</axiis:layouts>
+		
+	</axiis:DataCanvas>
+	<mx:ComboBox dataProvider="{yearsToCompareArray}" id="previousYear" width="90" x="480" y="420" change="combo_change(1)"> 
+	</mx:ComboBox>
+	<mx:ComboBox dataProvider="{yearsArray}" id="currentYear" width="90" x="130" y="420" change="combo_change(2)"> 
+	</mx:ComboBox>
+	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
+	<mx:Label x="280" y="420" id="previousComboLabel" height="36" fontSize="12"/>
+	<mx:Label x="50" y="420" id="currentComboLabel" height="36" fontSize="12"/>
+	</mx:Canvas>
+	
+	<axiis:LayoutPalette layout="{hLayout}" colors="{palette}" id="outerPalette"/> 
+	<mx:Array id="palettes">
+		<axiis:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+	</mx:Array>
+	
+	<!--
+	A LinearGradientFill lets you specify a gradient fill
+	angle defines the transition across the content
+	A GradientStop defines the objects that control a transition as part of a gradient fill. Stops will be equally spaced unless ratio is specified
+	-->
+	
+	<mx:Array id="fills">
+		<degrafa:SolidFill id="areaFill" color="{0xEEEEEE}">
+		</degrafa:SolidFill>
+		<degrafa:LinearGradientFill id="clusterFill" angle="45">
+			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
+			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>
+		</degrafa:LinearGradientFill>
+		<degrafa:LinearGradientFill id="stackFill" angle="90">
+			<degrafa:GradientStop color="{outerPalette.currentColor}" alpha=".5"/>
+			<degrafa:GradientStop color="{outerPalette.currentColor | 0x333333}" alpha=".1"/>
+		</degrafa:LinearGradientFill>
+	</mx:Array> 
+	
+	<!--
+	LinearGradientStroke is gradient filled stroke as opposed to just one color. pixelHinting is used to hint strokes to full pixels.
+	SolidStroke is typicaly solid stroke. caps define line ends and can put additional lenght on a line. Useful where lines overlap
+	-->
+	
+	<mx:Array id="strokes">
+		<degrafa:LinearGradientStroke id="colStroke" pixelHinting="true" angle="45">
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".7"/>
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".3"/>
+		</degrafa:LinearGradientStroke>
+		<degrafa:SolidStroke 
+			color="0xFFFFFF" 
+			alpha=".3"/>
+		<degrafa:SolidStroke 
+			id="axisStroke" 
+			color="0x000000" 
+			pixelHinting="true"/>
+		<degrafa:SolidStroke
+			id="myStroke" 
+			color="{outerPalette.currentColor}" 
+			alpha=".5"/>
+		<degrafa:SolidStroke 
+			id="myStroke2"
+			color="{outerPalette.currentColor}"
+			alpha=".7"
+			weight="6"
+			caps="none"/>
+	</mx:Array>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Myriad Pro" fontWeight="bold" fontSize="14" color="black" text="No data to show"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	</mx:Panel>
+</mx:Application>

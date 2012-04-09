@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.gis.dbentity.GisMap" table="DG_GIS_MAP">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="long" unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">dg_gis_map_seq</param>
+			</generator>
+		</id>
+		<bag lazy="false" name="segments" cascade="all" inverse="true">
+			<key column="MAP" />
+			<one-to-many class="org.digijava.module.gis.dbentity.GisMapSegment" />
+		</bag>
+
+		<property name="mapCode" column="CODE" type="java.lang.String" />
+		<property name="mapName" column="NAME" type="java.lang.String" />
+		<property name="parentMapCode" column="PARENT_CODE" type="java.lang.String" />
+		<property name="mapLevel" column="MAP_LEVEL" type="int" />
+
+	</class>
+</hibernate-mapping>

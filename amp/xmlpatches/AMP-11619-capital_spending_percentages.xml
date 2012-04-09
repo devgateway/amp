@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-11619</jira>
+  <keyword>Donor Funding - Capital Spending Percentage</keyword>
+  <author>George</author>
+  <description>Sets new float field values in amp_funding (capital_spend_percent) to 0 (if they are null)</description>
+ 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+	update amp_funding set capital_spend_percent=0 where capital_spend_percent is null;
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

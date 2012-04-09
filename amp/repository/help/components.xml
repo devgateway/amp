@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<secondary-pages>
+    <page page="glossaryBodyTable" name="glossaryMain" title="Glossary" />
+    <page page="addGlossary" name="glossaryAdd" title="Glossary : Add" />
+    <page page="helpTopicPrintPreview" name="printPreview" title="Printer Friendly Preview" />
+    <page page="allhelpTopicsPrintPreview" name="allHelpPrintPreview" title="Printer Friendly Preview" />
+</secondary-pages>
+	
+ 	<module>
+ 		<teaser name="helpTopics" action="viewHelpTopics.do">
+			helpTopics.jsp
+		</teaser>
+	</module>
+</config>

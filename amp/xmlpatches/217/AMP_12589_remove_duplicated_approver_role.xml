@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-12589</jira>
+    <keyword>Workspace Manager</keyword>
+    <keyword>Approver Role</keyword>
+    <author>Mauricio Bertoli</author>
+    <description>remove duplicated approver</description>
+    <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+            	DELETE FROM amp_team_member_roles WHERE role='Workspace Approver' AND approver=false;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

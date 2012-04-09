@@ -1,0 +1,168 @@
+package org.digijava.module.esrigis.action;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.content.action.DisplayThumbnail;
+import org.digijava.module.content.dbentity.AmpContentItem;
+import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
+import org.digijava.module.content.form.ContentForm;
+import org.digijava.module.content.util.DbUtil;
+import org.digijava.module.esrigis.form.StructureTypeForm;
+import org.digijava.module.esrigis.helpers.DbHelper;
+
+public class StructureTypeManager extends DispatchAction {
+	private static Logger logger = Logger.getLogger(StructureTypeManager.class);
+
+	public ActionForward unspecified(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+		Collection<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+		sts = DbHelper.getAllStructureTypes();
+		request.setAttribute("structureTypesList", sts);
+		return mapping.findForward("list");
+	}
+
+	public ActionForward list(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+		Collection<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+		sts = DbHelper.getAllStructureTypes();
+		request.setAttribute("structureTypesList", sts);
+		return mapping.findForward("list");
+	}
+	public ActionForward displayIcon(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		String index = request.getParameter("id");
+
+		if (index != null) {
+				try {
+					Long structureTypeId = Long.parseLong(index);
+					AmpStructureType structureType = DbHelper.getStructureType(structureTypeId);
+					ServletOutputStream os = response.getOutputStream();
+					if (structureType.getIconFile() != null) {
+						response.setContentType(structureType.getIconFileContentType());
+						os.write(structureType.getIconFile());
+						os.flush();
+					}
+					else
+					{
+						BufferedImage bufferedImage = new BufferedImage(30, 30,
+								BufferedImage.TRANSLUCENT);
+						ImageIO.write(bufferedImage, "png", os);
+						os.flush();
+					}
+				} catch (NumberFormatException nfe) {
+					logger.error("Trying to parse " + index + " to int");
+				}
+		} else {
+			BufferedImage bufferedImage = new BufferedImage(30, 30,
+					BufferedImage.TRANSLUCENT);
+			ServletOutputStream os = response.getOutputStream();
+			ImageIO.write(bufferedImage, "png", os);
+			os.flush();
+		}
+		return null;
+	}
+
+	public ActionForward delete(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		if (request.getParameter("id") != null) {
+			Long structureTypeId = Long.parseLong(request.getParameter("id"));
+			AmpStructureType structureType = DbHelper.getStructureType(structureTypeId);
+			DbHelper.deleteStructureType(structureType);
+		}
+		return mapping.findForward("delete");
+	}
+
+	public ActionForward add(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		StructureTypeForm structureTypeForm = (StructureTypeForm) form;
+		Boolean isReset = Boolean.valueOf(request.getParameter("reset"));
+
+		if (isReset) {
+			structureTypeForm.setReset(true);
+			structureTypeForm.reset(mapping, request);
+//			request.getSession().removeAttribute("contentThumbnails");
+			structureTypeForm.setReset(false);
+		}
+		return mapping.findForward("addEdit");
+	}
+
+	public ActionForward edit(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+
+	{
+
+		StructureTypeForm StructureTypeForm = (StructureTypeForm) form;
+
+		if (request.getParameter("id") != null) {
+			Long structureTypeId = Long.parseLong(request.getParameter("id"));
+			AmpStructureType structureType = DbHelper.getStructureType(structureTypeId);
+			StructureTypeForm.setAmpStructureFormId(structureTypeId);
+			StructureTypeForm.setName(structureType.getName());
+//			StructureTypeForm
+//					.setContentThumbnails(contentItem.getContentThumbnails());
+//			request.getSession().setAttribute("contentThumbnails",
+//					StructureTypeForm.getContentThumbnails());
+		}
+		return mapping.findForward("addEdit");
+
+	}
+
+	public ActionForward save(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		StructureTypeForm structureTypeForm = (StructureTypeForm) form;
+		AmpStructureType structureType;
+		if (structureTypeForm.getAmpStructureFormId() != null
+				&& structureTypeForm.getAmpStructureFormId() > 0) {
+			structureType = DbHelper.getStructureType(structureTypeForm
+					.getAmpStructureFormId());
+		} else {
+			structureType = new AmpStructureType();
+		}
+
+		structureType.setName(structureTypeForm.getName());
+		structureType.setGraphicType(structureTypeForm.getGraphicType());
+		structureType.setIconFile(structureTypeForm.getIconFile().getFileData());
+		structureType.setIconFileContentType(structureTypeForm.getIconFile().getContentType());
+		
+//		contentItem.setContentThumbnails(StructureTypeForm.getContentThumbnails());
+//		if (StructureTypeForm.getContentThumbnailsRemoved() != null
+//				&& StructureTypeForm.getContentThumbnailsRemoved().size() > 0)
+//			DbHelper.removeThumbnails(contentItem,
+//					StructureTypeForm.getContentThumbnailsRemoved());
+		DbHelper.saveStructureType(structureType);
+
+		return mapping.findForward("save");
+
+	}
+
+}

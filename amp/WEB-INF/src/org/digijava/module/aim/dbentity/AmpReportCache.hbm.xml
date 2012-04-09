@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpReportCache" table="AMP_REPORT_CACHE">
+		<cache usage="read-write" />
+		<id name="ampReportId" column="amp_report_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_REPORT_CACHE_seq</param>
+			</generator>
+		</id>
+		<property name="ampActivityId" column="amp_activity_id" type="java.lang.Long" />
+		<property name="ampId" column="amp_id" type="java.lang.String" />
+		<property name="activityName" column="activity_name" type="java.lang.String" />
+		<property name="ampModalityId" column="amp_modality_id" type="java.lang.Long" />
+		<property name="modalityName" column="modality_name" type="java.lang.String" />
+		<property name="ampStatusId" column="amp_status_id" type="java.lang.Long" />
+		<property name="statusName" column="status_name" type="java.lang.String" />
+		<property name="termAssistName" column="term_assist_name" type="java.lang.String" />
+		<property name="donorName" column="donor_name" type="java.lang.String" />
+		<property name="ampDonorId" column="amp_donor_id" type="java.lang.Long" />
+		<property name="orgType" column="org_type" type="java.lang.String" />
+		<property name="ampFundingId" column="amp_funding_id" type="java.lang.Long" />
+		<property access="field" name="plannedCommitment" column="planned_commitment"
+			type="java.lang.Double" />
+		<property access="field" name="plannedDisbursement" column="planned_disbursement"
+			type="java.lang.Double" />
+		<property access="field" name="plannedExpenditure" column="planned_expenditure"
+			type="java.lang.Double" />
+		<property access="field" name="actualCommitment" column="actual_commitment"
+			type="java.lang.Double" />
+		<property access="field" name="actualDisbursement" column="actual_disbursement"
+			type="java.lang.Double" />
+		<property access="field" name="actualExpenditure" column="actual_expenditure"
+			type="java.lang.Double" />
+		<property name="currencyCode" column="currency_code" type="java.lang.String" />
+		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
+		<property name="actualCompletionDate" column="actual_completion_date" type="java.util.Date" />
+		<property name="plannedStartDate" column="planned_start_date" type="java.util.Date" />
+		<property name="plannedCompletionDate" column="planned_completion_date"
+			type="java.util.Date" />
+		<property name="fiscalYear" column="fiscal_year" type="java.lang.Integer" />
+		<property name="fiscalQuarter" column="fiscal_quarter" type="java.lang.Integer" />
+		<property name="ampTeamId" column="amp_team_id" type="java.lang.Long" />
+		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
+		<property name="ampLevelId" column="amp_level_id" type="java.lang.Long" />
+		<property name="levelName" column="level_name" type="java.lang.String" />
+		<property name="activityDescription" column="activity_description" type="text" />
+		<property name="ampComponentId" column="amp_component_id" type="java.lang.Long" />
+		<property name="componentName" column="component_name" type="java.lang.String" />
+		<property name="ampRegionId" column="amp_region_id" type="java.lang.Long" />
+		<property name="regionName" column="region_name" type="java.lang.String" />
+		<property name="reportType" column="report_type" type="java.lang.Long" />
+
+
+
+	</class>
+</hibernate-mapping>

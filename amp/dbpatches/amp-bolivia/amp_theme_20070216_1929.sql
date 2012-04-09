@@ -1,0 +1,47 @@
+INSERT INTO `amp_theme` (`amp_theme_id`,`theme_code`,`name`,`type`,`description`,`language`,`version`,`parent_theme_id`,`amp_activity_id`,`level`) VALUES 
+ (1,'NDP','National Development Plan','National','National Development Plan example',NULL,NULL,NULL,NULL,0),
+ (3,'L1S1','Level 1 Sub 1','Test Sub 1',NULL,NULL,NULL,1,NULL,0),
+ (6,'fff','deleted','Sector',NULL,NULL,NULL,NULL,NULL,1),
+ (18,'test','Health','test',NULL,NULL,NULL,1,NULL,1),
+ (19,'test1','Education','test1',NULL,NULL,NULL,1,NULL,1),
+ (20,'test2','Primary Education','test2',NULL,NULL,NULL,19,NULL,2),
+ (21,'test3','School Enrollment','test3',NULL,NULL,NULL,20,NULL,3),
+ (22,'test1','Primary Health Care','test1',NULL,NULL,NULL,18,NULL,2),
+ (23,'test2','Infrastructure','test2',NULL,NULL,NULL,1,NULL,1),
+ (24,'test2 2nd option','Secondary Education','test2 2nd option',NULL,NULL,NULL,19,NULL,2),
+ (54,'NSSDS','National Social Services Development Strategy','national','National strategy to improve health, education and access to water.',NULL,NULL,NULL,NULL,0),
+ (55,'123','Educacion','sector','educacion',NULL,NULL,54,NULL,1);
+INSERT INTO `amp_theme` (`amp_theme_id`,`theme_code`,`name`,`type`,`description`,`language`,`version`,`parent_theme_id`,`amp_activity_id`,`level`) VALUES 
+ (56,'1234','Salud','Sector','Salud',NULL,NULL,54,NULL,1),
+ (57,'12345','Promocion de la Salud','Politica','Promocion de la Salud',NULL,NULL,56,NULL,2),
+ (58,'123456','Recuperacion de la Responsibilidad del estado en la cultura de salud integral y la calida de vida','Estrategia','Recuperacion de la Responsibilidad del estado en la cultura de salud integral y la calida de vida',NULL,NULL,57,NULL,3),
+ (59,'0012','Articulacion de la salud y deporte','Programa','Articulacion de la salud y deporte',NULL,NULL,58,NULL,4),
+ (61,'001234','Proteccion Social','Sector','Proteccion Social',NULL,NULL,54,NULL,1),
+ (62,'DER','Emergency Relief','regional','Disaster Emergency Relief',NULL,NULL,NULL,NULL,0),
+ (67,'MDV/NRRP','NPRR - Maldives','National Reconstruction Plan','National Reconstruction Plan after Tsunami disaster',NULL,NULL,NULL,NULL,0),
+ (68,'NRRP/Housing','Housing','Shelter',NULL,NULL,NULL,67,NULL,1),
+ (69,'NRRP/Infra','Infrastructure','Infrastructure',NULL,NULL,NULL,67,NULL,1);
+INSERT INTO `amp_theme` (`amp_theme_id`,`theme_code`,`name`,`type`,`description`,`language`,`version`,`parent_theme_id`,`amp_activity_id`,`level`) VALUES 
+ (70,'NRRP/Liveli','Livelihood Restoration','livelihoods',NULL,NULL,NULL,67,NULL,1),
+ (71,'2','Test','2','Test',NULL,NULL,NULL,NULL,0),
+ (72,'1','testprogram','1',NULL,NULL,NULL,71,NULL,1),
+ (73,'2','Testsub1','2',NULL,NULL,NULL,72,NULL,2),
+ (74,'3','Testsub2','3',NULL,NULL,NULL,73,NULL,3),
+ (75,'3','Testsub3','3',NULL,NULL,NULL,74,NULL,4),
+ (76,'4','Testsub4','4',NULL,NULL,NULL,75,NULL,5),
+ (77,'5','Testsub5','5',NULL,NULL,NULL,76,NULL,6),
+ (78,'r','Testsub6','r',NULL,NULL,NULL,77,NULL,7),
+ (79,'7','Testsub7','7',NULL,NULL,NULL,78,NULL,8),
+ (80,'NPL','National Development Plan','National','National Development Plan 2004-2009',NULL,NULL,NULL,NULL,0),
+ (81,'1','program1','1',NULL,NULL,NULL,NULL,NULL,0),
+ (82,'2','program1','2',NULL,NULL,NULL,NULL,NULL,0),
+ (86,'123dan','dan test','dan',NULL,NULL,NULL,NULL,NULL,0),
+ (87,'1','Sub1','1',NULL,NULL,NULL,81,NULL,1),
+ (88,'1','Sub2','1',NULL,NULL,NULL,87,NULL,2);
+INSERT INTO `amp_theme` (`amp_theme_id`,`theme_code`,`name`,`type`,`description`,`language`,`version`,`parent_theme_id`,`amp_activity_id`,`level`) VALUES 
+ (89,'1','Sub2','1',NULL,NULL,NULL,88,NULL,3),
+ (90,'1','Sub3','1',NULL,NULL,NULL,89,NULL,4),
+ (91,'1','Sub4','1',NULL,NULL,NULL,90,NULL,5),
+ (92,'1','Sub5','1',NULL,NULL,NULL,91,NULL,6),
+ (93,'1','Sub6','123',NULL,NULL,NULL,92,NULL,7),
+ (94,'TD001','Testing delete','123',NULL,NULL,NULL,NULL,NULL,0);

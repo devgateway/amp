@@ -173,7 +173,7 @@ public class DataExchangeUtils {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by id";
+			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by f.iatiValues";
 			qry = session.createQuery(qryStr);
             qry.setParameter("ampClass", ampClass, Hibernate.STRING);
             if(startIndex!=-1)
@@ -1492,7 +1492,7 @@ public class DataExchangeUtils {
         try {
             session = PersistenceManager.getSession();
             String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
-                + " f";
+                + " f order by f.name asc";
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {

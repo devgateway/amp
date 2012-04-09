@@ -47,6 +47,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
@@ -362,7 +363,7 @@ public class IatiActivityWorker {
 		processPlanningStep(a,iatiActDateList);
 		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
 		processRelOrgsStep(a,iatiPartOrgList);
-		processActInternalIdsStep(a,iatiOtherIdList);
+		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
 		processBudgetStep(a,iatiBudgetList,iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
 		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList);
 		processLocationStep(a,iatiLocationList);
@@ -484,13 +485,16 @@ public class IatiActivityWorker {
 		a.getLocations().addAll(locations);
 		
 	}
-
 	private void processBudgetStep(AmpActivityVersion activity, ArrayList<Budget> iatiBudgetList, ArrayList<ReportingOrg> iatiRepOrgList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency) {
 		// TODO Auto-generated method stub
 		if(iatiBudgetList.isEmpty()) return;
-		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
-		JAXBElement<CodeReqType> iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
+		if(iatiDefaultFinanceType !=null && !iatiDefaultFinanceType.isEmpty())
+			iatiDefFinTypeLocal=iatiDefaultFinanceType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefAidTypeLocal = null;
+		if(iatiDefaultAidType !=null && !iatiDefaultAidType.isEmpty())
+			iatiDefAidTypeLocal =iatiDefaultAidType.iterator().next();
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
@@ -512,19 +516,40 @@ public class IatiActivityWorker {
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
 		
 		if(iatiTransactionList.isEmpty()) return;
-		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
-		JAXBElement<CodeReqType> iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
+		if(iatiDefaultFinanceType !=null && !iatiDefaultFinanceType.isEmpty())
+			iatiDefFinTypeLocal=iatiDefaultFinanceType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefAidTypeLocal = null;
+		if(iatiDefaultAidType !=null && !iatiDefaultAidType.isEmpty())
+			iatiDefAidTypeLocal =iatiDefaultAidType.iterator().next();
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
+		
+		//info regarding proposed project cost = sum of all actual commitments
+//		Date proposedProjectCostDate 			= null;
+//		Double proposedProjectCostAmount 		= new Double(0);
+//		String proposedProjectCostCurrency 	= null;
+		DEProposedProjectCost proposedProjectCost	= new DEProposedProjectCost();
+		
 		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiDefaultFundingOrgList);
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiDefaultFundingOrgList, 
+					proposedProjectCost);
 			if(f!=null)
 				fundings.add(f);
 		}
+		if(isValidString(proposedProjectCost.getCurrency()) )
+				proposedProjectCost.setCurrency(iatiDefaultCurrency);
+		activity.setCurrencyCode(proposedProjectCost.getCurrency());
+
+		if(proposedProjectCost.getDate() == null)
+			proposedProjectCost.setDate(new Date());
+		activity.setFunDate(proposedProjectCost.getDate());
+		
+		activity.setFunAmount(proposedProjectCost.getAmount());
 		
 		if(activity.getFunding() == null) 
 			activity.setFunding(new HashSet());
@@ -624,7 +649,7 @@ public class IatiActivityWorker {
 
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
-			String iatiDefaultCurrency, Set<AmpFunding> fundings, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
+			String iatiDefaultCurrency, Set<AmpFunding> fundings, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, DEProposedProjectCost ppc) {
 
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -741,7 +766,17 @@ public class IatiActivityWorker {
 				populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
 			else
 				if(("c".compareTo(transactionType) ==0))
-					populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+					{
+						populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+						if(!isValidString(ppc.getCurrency()))
+							ppc.setCurrency(currencyName);
+						if(ppc.getDate() == null)
+							ppc.setDate(tDate);
+						Double amount = ppc.getAmount();
+						amount+=currencyValue;
+						ppc.setAmount(amount);
+						
+					}
 			//the transaction is not C,D,E and will not be imported.
 				else return null;
 		
@@ -810,26 +845,40 @@ public class IatiActivityWorker {
 		
 	}
 	
-	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList) {
+	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList, ArrayList<ReportingOrg> iatiRepOrgList) {
 		// TODO Auto-generated method stub
-		if(iatiOtherIdList.isEmpty()) return;
 		Set<AmpActivityInternalId> internalIds = new HashSet<AmpActivityInternalId>();
-		for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
-			OtherIdentifier otherIdentifier = (OtherIdentifier) it.next();
+		if(iatiOtherIdList.isEmpty()) {
+			for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
+				OtherIdentifier otherIdentifier = (OtherIdentifier) it.next();
+				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+				actInternalId.setInternalId(otherIdentifier.getContent());
+				actInternalId.setAmpActivity(a);
+				
+				String orgName = otherIdentifier.getOwnerName();
+				String orgCode = otherIdentifier.getOwnerRef();
+				AmpOrganisation org = getAmpOrganization(orgName,lang,orgCode);
+				if(org != null)
+					actInternalId.setOrganisation(org);
+				internalIds.add(actInternalId);
+			}
+		}
+		AmpOrganisation ampOrg = null;
+		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
+		ampOrg = getAmpOrganization(printList(defaultReportingOrg.getContent()), this.getLang(), defaultReportingOrg.getRef());
+		//if there is no rep organization we can not assign the iatiID to no ampORG 
+		if(ampOrg!=null) {
 			AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-			actInternalId.setInternalId(otherIdentifier.getContent());
+			actInternalId.setInternalId(this.iatiID);
 			actInternalId.setAmpActivity(a);
-			
-			String orgName = otherIdentifier.getOwnerName();
-			String orgCode = otherIdentifier.getOwnerRef();
-			AmpOrganisation org = getAmpOrganization(orgName,lang,orgCode);
-			if(org != null)
-				actInternalId.setOrganisation(org);
+			actInternalId.setOrganisation(ampOrg);
 			internalIds.add(actInternalId);
 		}
+		if(internalIds==null || internalIds.isEmpty()) return;
 		
 		if(a.getInternalIds() == null) a.setInternalIds(new HashSet<AmpActivityInternalId>());
 		else a.getInternalIds().clear();
+		
 		a.getInternalIds().addAll(internalIds);
 		
 	}

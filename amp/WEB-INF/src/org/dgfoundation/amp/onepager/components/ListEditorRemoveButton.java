@@ -21,7 +21,10 @@ public class ListEditorRemoveButton extends ListEditorButton {
         }
  
         getList().remove(idx);
+        getEditor().updateModel();
         target.addComponent(getEditor().getParent());
         getEditor().remove(getItem());
+    
+       
 	}
 }

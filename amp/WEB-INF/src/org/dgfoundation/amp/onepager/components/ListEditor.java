@@ -41,6 +41,7 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 				items.size() - 1);
 		add(item);
 		onPopulateItem(item);
+		updateModel();
 	}
 
 	protected void onBeforeRender(){

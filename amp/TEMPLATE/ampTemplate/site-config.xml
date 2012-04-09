@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<<<<<<< .working
 <!ENTITY ampVersion "2.1">
 <!ENTITY buildDate "ALPHA">
-=======
-<!ENTITY ampVersion "2.0.17">
-<!ENTITY buildDate "29.03.2012">
->>>>>>> .merge-right.r17995
 ]>
 <site-config>
 	<site-layout>

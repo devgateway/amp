@@ -24,6 +24,7 @@ package org.digijava.module.editor.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -271,16 +272,21 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             try {
-            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
+            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
             		q.setString("siteId", siteId);
             		q.setString("editorKey", editorKey);
-            		q.setString("language", language);
+            		//q.setString("language", language);
             		@SuppressWarnings("unchecked")
 					Collection<Editor> edits=q.list();
-            		if (edits.size() > 0){
-            			return edits.iterator().next();
-            		}
-            		
+            		for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
+        				Editor editor = (Editor) iterator.next();
+        				if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
+        					item = editor;
+        					break;
+        				}else if (!"".equalsIgnoreCase(editor.getBody())){
+        					item= editor;
+        				}
+        			}
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -521,20 +527,26 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
 
             Query q = session.createQuery(
-                "select e.body from " +
-                Editor.class.getName() + " e " +
-                " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
+                "select e from " + Editor.class.getName() + " e " +
+                " where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
           //  q.setCacheable(true);
             q.setString("siteId", siteId);
             q.setString("editorKey", editorKey);
-            q.setString("language", language);
+            //q.setString("language", language);
 
             @SuppressWarnings("unchecked")
-			List<String> result = q.list();
-            if (result != null && (result.size() != 0)) {
-            	body = result.get(0);
-            }
+			List<Editor> result = q.list();
+            for (Iterator iterator = result.iterator(); iterator.hasNext();) {
+				Editor editor = (Editor) iterator.next();
+				if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
+					body = editor.getBody();
+					break;
+				}else if (!"".equalsIgnoreCase(editor.getBody())){
+					body = editor.getBody();
+				}
+			}
+
         }
         catch (Exception ex) {
             logger.debug("Unable to get editor from database", ex);

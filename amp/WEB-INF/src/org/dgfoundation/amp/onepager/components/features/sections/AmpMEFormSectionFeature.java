@@ -29,6 +29,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
@@ -41,8 +42,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
@@ -75,8 +78,20 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		if (am.getObject().getIndicators() == null){
 			am.getObject().setIndicators(new HashSet<IndicatorActivity>());
 		}
-		final AbstractReadOnlyModel<List<IndicatorActivity>> listModel = OnePagerUtil 
+		final IModel<List<IndicatorActivity>>  listModel = OnePagerUtil 
 				.getReadOnlyListModelFromSetModel(new PropertyModel(am, "indicators"));
+		
+		final AmpUniqueCollectionValidatorField<IndicatorActivity> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<IndicatorActivity>(
+				"uniqueMEValidator", listModel, "Unique MEs Validator") {
+
+			@Override
+			public Object getIdentifier(IndicatorActivity t) {
+				return t.getIndicator().getName();
+			}
+		};
+		add(uniqueCollectionValidationField);
+		
+		
 		
 		list = new ListView<IndicatorActivity>("list", listModel) {
 			@Override
@@ -90,6 +105,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						am.getObject().getIndicators().remove(item.getModelObject());
+						uniqueCollectionValidationField.reloadValidationField(target);
 						//setModel.getObject().remove(item.getModelObject());
 						list.removeAll();
 						target.addComponent(AmpMEFormSectionFeature.this);
@@ -102,22 +118,27 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setReuseItems(true);
 		add(list);
 		
+		
+		
 		final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators=new AmpAutocompleteFieldPanel<AmpIndicator>("search","Search Indicators",AmpMEIndicatorSearchModel.class) {			
 			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
 			protected String getChoiceValue(AmpIndicator choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpIndicator choice) {
-				IndicatorActivity ia = new IndicatorActivity();
-				ia.setActivity(am.getObject());
-				ia.setIndicator(choice);
-				am.getObject().getIndicators().add(ia);
-				//setModel.getObject().add(ia);
+
+					IndicatorActivity ia = new IndicatorActivity();
+					ia.setActivity(am.getObject());
+					ia.setIndicator(choice);
+					am.getObject().getIndicators().add(ia);
+					uniqueCollectionValidationField.reloadValidationField(target);
+				
+					//setModel.getObject().add(ia);
 				list.removeAll();
 				target.addComponent(list.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
@@ -136,11 +157,13 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpTextFieldPanel<String> indName = new AmpTextFieldPanel<String>("indName", new PropertyModel<String>(newInd, "name"), "Name", AmpFMTypes.MODULE);
 		//indName.getTextContainer().setRequired(true);
 		indName.setOutputMarkupId(true);
+		indName.setTextContainerDefaultMaxSize();
 		add(indName);
 		
 		add(new AmpTextAreaFieldPanel<String>("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.MODULE));
 		AmpTextFieldPanel<String> indCode = new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.MODULE);
 		//indCode.getTextContainer().setRequired(true);
+		indCode.setTextContainerDefaultMaxSize();
 		indCode.setOutputMarkupId(true);
 		add(indCode);
 		
@@ -157,9 +180,9 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				String s = (String)object;
 				
 				if (s.compareTo("A") == 0)
-					return "ascending";
+					return TranslatorUtil.getTranslation("Ascending");
 				else
-					return "descending";
+					return TranslatorUtil.getTranslation("Descending");
 			}
 		};
 		add(new DropDownChoice("indType", new PropertyModel(newInd, "type"), typeCol, cr));
@@ -201,8 +224,11 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			}
 		};
+		final WebMarkupContainer sectorContainer=new WebMarkupContainer("meSectorContainer");
+		sectorContainer.setOutputMarkupId(true);
 		list.setReuseItems(true);
-		add(sectorList);
+		sectorContainer.add(sectorList);
+		
 		
 		final AmpMinSizeCollectionValidationField<AmpSector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpSector>(
 				"minSizeSectorsValidator", sectorListModel, "minSizeSectorsValidator");
@@ -210,13 +236,13 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		//add(minSizeCollectionValidationField);
 
 
-		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search " + fmName,AmpSectorSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search Sectors For " + fmName,AmpSectorSearchModel.class) {			
 
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
 			protected String getChoiceValue(AmpSector choice){
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override
@@ -224,7 +250,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				sectorSetModel.getObject().add(choice);
 				list.removeAll();
                                 indicatorFeedbackContainer.setVisible(false);
-				target.addComponent(list.getParent());
+				target.addComponent(sectorContainer);
                                 target.addComponent(indicatorFeedbackContainer);
 			}
 
@@ -244,7 +270,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		searchSectors.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
 		searchSectors.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
-		add(searchSectors);
+		sectorContainer.add(searchSectors);
+		add(sectorContainer);
 		
 		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator", AmpFMTypes.MODULE) {
 			@Override

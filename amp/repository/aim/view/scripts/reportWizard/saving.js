@@ -167,8 +167,8 @@ SaveReportEngine.prototype.saveReport	= function () {
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
-	
-	var postString		= "reportTitle="+getReportTitle() + "&reportDescription="+getReportDescription() + "&reportPeriod="+getReportPeriod() + 
+
+	var postString		= "reportTitle="+encodeURIComponent(title)+ "&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +

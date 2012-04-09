@@ -74,7 +74,7 @@
 								<li>
 									<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
 										<span style="font-family: Arial; font-size: 12px;">
-											<digi:trn>${element.rootHierarchyListable.label}</digi:trn>
+											<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
 										</span>
 									<%@include file="hierarchyLister.jsp" %>
 								</li>

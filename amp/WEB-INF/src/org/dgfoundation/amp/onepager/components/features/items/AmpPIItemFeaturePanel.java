@@ -81,7 +81,17 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("orgSearch","Search Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 
 			@Override

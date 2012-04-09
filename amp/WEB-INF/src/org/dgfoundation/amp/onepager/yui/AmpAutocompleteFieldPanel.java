@@ -34,6 +34,7 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -49,7 +50,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		AmpFieldPanel<String> implements IAjaxIndicatorAware {
 
 	private static final long serialVersionUID = 1L;
-
+	public static final String ACRONYM_DELIMITER_START = "(";
+	private static final String ACRONYM_DELIMITER_STOP_PART = ")";
+	public static final String ACRONYM_DELIMITER_STOP = ACRONYM_DELIMITER_STOP_PART + " - ";
+	public static final String BOLD_DELIMITER_START = "<b>";
+	public static final String BOLD_DELIMITER_STOP = "</b> ";
+	
 	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
 	/**
@@ -257,12 +263,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
 			@Override
 			protected void respond(final AjaxRequestTarget target) {
-				String selectedString = RequestCycle.get().getRequest()
-						.getParameter("selectedString");
+				String selectedString = RequestCycle.get().getRequest().getParameter("selectedString");
 				// hide loading icon:
 				target.appendJavascript("YAHOO.util.Dom.get('"
 						+ indicator.getMarkupId() + "').style.display = 'none';");
-				CHOICE choice = getSelectedChoice(selectedString);
+				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
 				onSelect(target, choice);
 			}
 		};
@@ -312,6 +317,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	protected abstract void onSelect(AjaxRequestTarget target, CHOICE choice);
 	
+	protected boolean showAcronyms(){
+		return false;
+	}
+	
+	protected String getAcronym(CHOICE choice){
+		return null;
+	}
 	
 
 	// @Override
@@ -343,7 +355,18 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
-			choiceValues.add(new String[] { getChoiceValue(choice),
+			String choiceValue = getChoiceValue(choice);
+			if (showAcronyms()){
+				String acronym = getAcronym(choice);
+				if (acronym != null){
+					acronym = acronym.replace(ACRONYM_DELIMITER_START, " ");
+					acronym = acronym.replace(ACRONYM_DELIMITER_STOP_PART, " ");
+					acronym = acronym.trim();
+					choiceValue = ACRONYM_DELIMITER_START + acronym + ACRONYM_DELIMITER_STOP + choiceValue;
+				}
+			}
+				
+			choiceValues.add(new String[] { choiceValue,
 					choiceLevel != null ? choiceLevel.toString() : "0" });
 		}
 
@@ -396,6 +419,15 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
 		try {
+			
+			if (showAcronyms()){
+				input = input.substring(input.indexOf(ACRONYM_DELIMITER_STOP) + ACRONYM_DELIMITER_STOP.length());
+			}
+			
+			int extraInfoEnd = input.indexOf(BOLD_DELIMITER_STOP);
+			if (extraInfoEnd >= 0)
+				input = input.substring(extraInfoEnd + BOLD_DELIMITER_STOP.length());
+			
 			constructor = objectListModelClass.getConstructor(String.class,
 					Map.class);
 			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor

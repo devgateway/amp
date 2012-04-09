@@ -244,7 +244,10 @@
             value = "<digi:trn>Organization Group</digi:trn>";
             return value;
          }
-        
+        if(text == "Others") {
+            value = "<digi:trn>Others</digi:trn>";
+            return value;
+         }
         return text;
     	}
 	
@@ -341,8 +344,8 @@
 		<div id="filterdiv" style="position:absolute;z-Index:100;top:50px;display: none;cursor: pointer;left:50%">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
- 		<div class='legendHeader' id="fakecolor">Color reference<br/><hr/></div>
- 		<div id="pointsLegend" class="legendContent" style="left:15px;"></div>
+ 		<div class='legendHeader' id="fakecolor">Donor Legend<br/><hr/></div>
+ 		<div id="pointsLegend" class="legendContent" style="rigth:10px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
        
@@ -380,10 +383,10 @@
         	</table>
         </div>
         <!-- Data Source -->
-        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;overflow-y: scroll;"> 
+        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;"> 
         	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
         	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
-        	<table id="sourcecontent" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif">
+        	<table id="sourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		<tbody>
 					<tr>
 						<td valign="top" style="font-weight: bolder;">
@@ -391,6 +394,9 @@
 						</td>
 						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Activity Id</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;">
+							<digi:trn>Donors</digi:trn>
 						</td>
 						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Commitments</digi:trn>
@@ -401,6 +407,11 @@
 					</tr>
 				</tbody>
         	</table>
+        	<div style="overflow-y: scroll;height: 350px;">
+        	<table id="sourcecontent" width="97%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		
+        	</table>
+        	</div>
         </div>
         <!-- Search Structures-->
         <div id="distancediv" class="searchContent">

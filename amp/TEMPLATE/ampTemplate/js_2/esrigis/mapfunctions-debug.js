@@ -32,6 +32,7 @@ var structureson;
 var maxExtent;
 var basemap;
 var structureGraphicLayer;
+var highlightson;
 /*---- Search  ----*/
 var searchactive = new Boolean();
 var searchdistance;
@@ -138,9 +139,6 @@ function init() {
 	
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
-	// var dnd = new dojo.dnd.Moveable(dojo.byId("filterdiv"));
-	// var dnd = new dojo.dnd.Moveable(dojo.byId("sourcediv"));
-
 }
 
 /**
@@ -259,6 +257,7 @@ dojo.addOnLoad(init);
  * @param evt
  */
 function doBuffer(evt) {
+	map.infoWindow.hide();
 	if (searchactive && searchdistance) {
 		showLoading();
 		map.graphics.clear();
@@ -545,7 +544,7 @@ function MapFind(activity) {
 				if(location.lon != '' && location.lat != '')
 					var pt = new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid" : 4326}));
 				else{
-					console.log(location.name +' '+ activity.activityname);
+					//console.log(location.name +' '+ activity.activityname);
 					return true;
 				}
 			}
@@ -770,31 +769,37 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
-	showLoading();
-	implementationLevel[0].mapField = COUNTY;
-	implementationLevel[1].mapField = DISTRICT;
-	locations = new Array();
-	closeHide("highlightLegend");
-	$('#hlight').attr('onclick', '').unbind('click');
-	$('#hlightz').attr('onclick', '').unbind('click');
-
-	var xhrArgs = {
-		url : "/esrigis/datadispatcher.do?showhighlights=true&level="
-				+ implementationLevel[level].name,
-		handleAs : "json",
-		load : function(jsonData) {
-			// For every item we received...
-			dojo.forEach(jsonData, function(location) {
-				locations.push(location);
-			});
-			MapFindLocation(implementationLevel[level]);
-		},
-		error : function(error) {
-			// Error handler
-		}
-	};
-	// Call the asynchronous xhrGet
-	var deferred = dojo.xhrGet(xhrArgs);
+	if (highlightson){
+		closeHide("highlightLegend");
+		highlightson =false;
+	}else{
+		showLoading();
+		implementationLevel[0].mapField = COUNTY;
+		implementationLevel[1].mapField = DISTRICT;
+		locations = new Array();
+		closeHide("highlightLegend");
+		$('#hlight').attr('onclick', '').unbind('click');
+		$('#hlightz').attr('onclick', '').unbind('click');
+	
+		var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?showhighlights=true&level="
+					+ implementationLevel[level].name,
+			handleAs : "json",
+			load : function(jsonData) {
+				// For every item we received...
+				dojo.forEach(jsonData, function(location) {
+					locations.push(location);
+				});
+				MapFindLocation(implementationLevel[level]);
+			},
+			error : function(error) {
+				// Error handler
+			}
+		};
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+		highlightson = true;
+	}
 }
 
 var currentLevel;
@@ -1044,9 +1049,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
 
-	dojo
-			.forEach(
-					activity.structures,
+	dojo.forEach(activity.structures,
 					function(structure) {
 						var sms = new esri.symbol.PictureMarkerSymbol(
 								'/esrigis/structureTypeManager.do~action=displayIcon~id='
@@ -1294,8 +1297,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ "<div class='legendContentValue' style='background-color:rgba("
 					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 					+ ");' ></div>" + "</div>"
-					+ "<div class='legendContentLabel'>"
-					+ donorArray[i].donorname + " </div><br/>";
+					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
+					+ donorArray[i].donorCode + " </div><br/>";
 		}
 	} else {
 		for ( var i = 0; i < 10; i++) {
@@ -1303,10 +1306,16 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ "<div class='legendContentValue' style='background-color:rgba("
 					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
 					+ ");' ></div>" + "</div>"
-					+ "<div class='legendContentLabel'>"
-					+ donorArray[i].donorname + " </div><br/>";
+					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
+					+ donorArray[i].donorCode + " </div><br/>";
 		}
 	}
+	
+	htmlDiv += "<div class='legendContentContainer'>"
+		+ "<div class='legendContentValue' style='background-color:rgba('0,0,0');'></div></div>"
+		+ "<div class='legendContentLabel' title='"+translate('Others')+"'>"
+		+ translate('Others') + " </div><br/>";
+	
 	htmlDiv += "</div>";
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');

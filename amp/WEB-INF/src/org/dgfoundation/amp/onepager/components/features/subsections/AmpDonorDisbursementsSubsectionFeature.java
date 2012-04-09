@@ -56,7 +56,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
 			//	fd.setAdjustmentType(Constants.ACTUAL);
 //				fd.setTransactionDate(new Date(System.currentTimeMillis()));
-				fd.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
+				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
 				fd.setTransactionType(Constants.DISBURSEMENT);
 				disbursementsTableFeature.getEditorList().addItem(fd);
 			    disbursementsTableFeature.getEditorList().updateModel();

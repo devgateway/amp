@@ -1,6 +1,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<div id="myPLogframe" style="display: none">
+<div id="myPLogframe" class="invisible-item">
 	<div id="myPLogframeContent" class="content">
 		===== ERROR =====
 	</div>

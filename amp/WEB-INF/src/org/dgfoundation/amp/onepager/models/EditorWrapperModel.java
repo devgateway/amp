@@ -34,6 +34,7 @@ public class EditorWrapperModel extends Model<String> {
 		String valueStoredInActivityVal = "";
 
 		AmpAuthWebSession session = ((AmpAuthWebSession)Session.get()); 
+		AmpAuthWebSession wicketSession = ((AmpAuthWebSession)org.apache.wicket.Session.get());
 		
 		if(m.getObject() != null && !m.getObject().startsWith("aim-")){
 			//all editor keys start with "aim-" so it should be fine to 
@@ -51,7 +52,7 @@ public class EditorWrapperModel extends Model<String> {
 		}
 		else{
 			try {
-				Editor editor = DbUtil.getEditor(session.getSite().getSiteId(), keyModel.getObject(), session.getLocale().getLanguage());
+				Editor editor = DbUtil.getEditor(session.getSite().getSiteId(), keyModel.getObject(), wicketSession.getLocale().getLanguage());
 				if (editor != null){
 					this.setObject(editor.getBody());
 				}

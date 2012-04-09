@@ -478,7 +478,7 @@
 					messageListMarkup.push('<td id="msg_body_');
 	          		messageListMarkup.push(msgId);
 	          		messageListMarkup.push('"');
-	
+	          		var name=messages[i].getAttribute('name').replace(/</g,'&lt;').replace(/>/g, "&gt;");
 	            	if (messages[i].getAttribute('read') == "false") {
 		            	messageListMarkup.push(' class=inside valign="top">');
 		            	messageListMarkup.push('<a href=');
@@ -492,7 +492,8 @@
 	            		messageListMarkup.push(')');
 	            		messageListMarkup.push(' class="l_sm show_msg_link">');
 	            		messageListMarkup.push('<b class="show_msg_link">');
-		            	messageListMarkup.push(messages[i].getAttribute('name'));
+	            		
+		            	messageListMarkup.push(name);
 		            	messageListMarkup.push('</b>');
 	            	} else {
 	            		messageListMarkup.push('" class=inside>');
@@ -507,7 +508,7 @@
 	            		messageListMarkup.push(')');
 	            		messageListMarkup.push(' class="l_sm show_msg_link">');
 	            		 
-		            	messageListMarkup.push(messages[i].getAttribute('name'));
+		            	messageListMarkup.push(name);
 	            	}
 	            	messageListMarkup.push('</a>');
 	

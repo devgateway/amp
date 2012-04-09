@@ -13,6 +13,8 @@ import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -35,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -80,6 +83,10 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			}
 		};
 
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
 		
 		final AmpPercentageCollectionValidatorField<AmpActivityProgram> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivityProgram>(
 				"programPercentageTotal", listModel, "programPercentageTotal") {
@@ -88,7 +95,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				return item.getProgramPercentage();
 			}
 		};
-		
+		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 		
 		
@@ -99,7 +106,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				return t.getProgram().getName();
 		 	}	
 		};
-		
+		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
 		
 		list = new ListView<AmpActivityProgram>("listProgs", listModel) {
@@ -134,7 +141,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		add(list);
 
 
-		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
 			public void setPercentage(AmpActivityProgram loc, int val) {
 				loc.setProgramPercentage((float) val);
@@ -157,9 +164,9 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			protected String getChoiceValue(AmpTheme choice) {
 				//transientBoolean used internally to flag the default theme
 				if (choice.isTransientBoolean())
-					return "<b>" +TranslatorUtil.getTranslatedText("Default program") + ":</b> " + choice.getName();
+					return BOLD_DELIMITER_START +TranslatorUtil.getTranslatedText("Default program") + BOLD_DELIMITER_STOP + DbUtil.filter(choice.getName());
 				else
-					return choice.getName();
+					return DbUtil.filter(choice.getName());
 			}
 
 			@Override

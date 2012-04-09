@@ -1511,7 +1511,7 @@ public class EditOrganisation extends DispatchAction {
   private void putDocumentsInSession(HttpServletRequest request, AmpOrganisation ampOrg) {
       HashSet<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, AmpOrganisationDocument.SESSION_NAME, true);
       if (!"true".equals(request.getParameter(CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION))) {
-          UUIDs.clear();
+        //  UUIDs.clear();
       }
       if (ampOrg != null && ampOrg.getDocuments() != null && ampOrg.getDocuments().size() > 0) {
           Iterator<AmpOrganisationDocument> iter = ampOrg.getDocuments().iterator();

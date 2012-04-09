@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author dan
@@ -108,7 +109,17 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 
 			@Override

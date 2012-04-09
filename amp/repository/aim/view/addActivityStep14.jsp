@@ -15,7 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<div id="myDiv" style="display: none"></div>
+<div id="myDiv" class="invisible-item"></div>
 
 <style type="text/css">
 	.yui-panel .bd{

@@ -1,4 +1,9 @@
+<style>
+td.rightMenu{float: right; position: absolute; display:none; margin:0px 0px 0px 15px;}
+div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
+</style>
 <wicket:extend>
+<div style="margin:0 auto;width:1000px;">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>
 			<tr>
@@ -21,20 +26,20 @@
 					<div wicket:id="feedbackPanel" />
 					 </div>
 				<br />
-					<div id="rightMenu" style="float: right; position: fixed; display:none; margin:0px 0px 0px 15px;">
+					<div id="rightMenu" class="rightMenu" style="position: fixed;">
 							<div id="quickfloat" class="right_menu" style="margin:0px;">
 								<div onclick="$(this).siblings('div:first').slideToggle('normal', function () { if ($(this).is(':hidden')) {$('#qListLabel').html('+' + $('#qListLabel').html().substring(1));} else {$('#qListLabel').html('-' + $('#qListLabel').html().substring(1));}});" class="right_menu_header">
 								<div id="qListLabel" class="right_menu_header_cont">- <wicket:trn>Quick Links</wicket:trn></div>
 								</div>
-								<div id="qListItems" class="right_menu_box" style="margin-top:0px;background:#fff;">
-					            	<ul style="padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+								<div id="qListItems" class="right_menu_box" >
+					            	<ul style="padding: 0px; margin: 0px;">
 										<li class="tri" wicket:id="quickList">
 											<b><a class="hoverUnderline" wicket:id="quickName" href="#">Identification</a></b>
 										</li>
 					                </ul>
 								</div>
 							</div>
-							<div class="right_menu" style="margin-top:10px;">
+							<div class="right_menu" style="padding-top: 5px;">
 								<div class="right_menu_header">
 								<div class="right_menu_header_cont"><wicket:trn>Actions</wicket:trn></div>
 									<div style="display: none;">
@@ -43,16 +48,16 @@
 									</div>
 									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif" 
 										title=""
-										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										class="onepager-pic-icon"
 										onclick="switchOnepagerMode(); return true;"/>
 									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif" 
 										title=""
-										style="position: relative; left: -3px; top: -14px; float: right; display: none;"
+										class="onepager-pic-icon"
 										onclick="switchOnepagerMode(); return true;"/>	
 								</div>
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
-									<div style="padding: 2px;" wicket:id="saveAndSubmit" />
-									<div style="padding: 2px;" wicket:id="saveAsDraft" />
+									<div class="padding-two-pixels" wicket:id="saveAndSubmit" />
+									<div class="padding-two-pixels" wicket:id="saveAsDraft" />
 									<div id="saveAsDraftPanel" style="display:none">
 										<div class="hd" style="text-align: left">
 											<wicket:trn>Save as Draft</wicket:trn>
@@ -70,13 +75,13 @@
 												</input>
 											</span>
 									      	<br />
-									     	<span name="saveAsDraftPanelButton" style="padding: 2px;" wicket:id="saveAsDraftAction" />
-									     	<span style="padding: 2px;" wicket:id="saveAsDraftCanceld" />
+									     	<span name="saveAsDraftPanelButton" class="padding-two-pixels" wicket:id="saveAsDraftAction" />
+									     	<span class="padding-two-pixels" wicket:id="saveAsDraftCanceld" />
 									    </div>
 									    <div class="ft"></div>
 									</div>
-									<div style="padding: 2px;" wicket:id="logframe" />
-									<div style="padding: 2px;" wicket:id="preview" />
+									<div class="padding-two-pixels" wicket:id="logframe" />
+									<div class="padding-two-pixels" wicket:id="preview" />
 								</div>
 							</div>
 					</div>
@@ -90,9 +95,10 @@
 		</tbody>
 	</table>			
 	
-	<div id="myPLogframe" style="display: none">
+	<div id="myPLogframe" class="invisible-item">
 		<div id="myPLogframeContent" class="content">
 			===== ERROR =====
 		</div>
 	</div>
+    </div>
 </wicket:extend>

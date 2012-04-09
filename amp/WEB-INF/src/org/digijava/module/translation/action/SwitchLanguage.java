@@ -23,6 +23,7 @@
 package org.digijava.module.translation.action;
 
 import java.net.URLDecoder;
+import java.util.Enumeration;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -53,6 +54,14 @@ public class SwitchLanguage
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");
+        Enumeration en = request.getParameterNames();
+        while (en.hasMoreElements()) {
+            String paramName = (String) en.nextElement();
+            if (!paramName.equals("rfr")&&!paramName.equals("code")){
+            	referrerUrl = referrerUrl + "&" + paramName + "=" + request.getParameter(paramName);
+            }
+        }
+        
         if( referrerUrl != null )
             referrerUrl = URLDecoder.decode(referrerUrl, "UTF-8");
         else

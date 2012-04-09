@@ -71,7 +71,7 @@
 		
 			<c:if test="${!empty searchform.keyword}">
 				<div class="search_results_header"><digi:trn>Search results for</digi:trn> "<span
-					class="green_text">${searchform.keyword}</span>"</div>
+					class="green_text"><c:out value="${searchform.keyword}"></c:out></span>"</div>
 			<c:set var="keywordClasses">
 				help_search txt_sm_b
 			</c:set>
@@ -189,12 +189,12 @@
 											<a 
 												onclick="window.location='/contentrepository/downloadFile.do?uuid=${resource.uuid}'"
 												title="<digi:trn>Click here to download file</digi:trn>">
-											${resource.name}</a>
+											<c:out value="${resource.name}"></c:out> </a>
 										</c:when>
 										<c:otherwise>
 											<a href="${resource.webLink}"
 												title="Click here to follow link" target="_blank">
-											${resource.webLink}</a>
+											<c:out value="${resource.webLink}"></c:out> </a>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>

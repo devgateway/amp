@@ -150,7 +150,7 @@ var myTabsObject;
 		return false;
 	}
 
-	function setNewTab(url, label, labelComplete, id){
+	function setNewTab(url, labelComplete,label, id){
 		//Replace the tab with the new selection
 		if(replaceableTabObject != null)
 		{
@@ -159,7 +159,7 @@ var myTabsObject;
 
 		var objeto = document.createElement("DIV");
 	
-		objeto.innerHTML = label.replace("<", "&lt;").replace(">", "&gt;");
+		objeto.innerHTML = label.replace("<", "&lt;").replace(">", "&gt;")+'...';
 		objeto.id = "replaceableTab";
 
 		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
@@ -180,7 +180,7 @@ var myTabsObject;
 			{	
 			document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
 			}
-		document.getElementById(label).style.display = 'none';
+		document.getElementById(labelComplete).style.display = 'none';
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		startajaxtabs("MyTabs");

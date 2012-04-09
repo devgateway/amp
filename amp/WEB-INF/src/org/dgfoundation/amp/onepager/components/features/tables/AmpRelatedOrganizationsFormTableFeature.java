@@ -30,7 +30,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValida
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -64,6 +63,9 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 
 			@Override
 			public List<AmpOrgRole> getObject() {
+				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>();
+				if (setModel == null)
+					return ret;
 				Set<AmpOrgRole> allOrgRoles = setModel.getObject();
 				Set<AmpOrgRole> specificOrgRoles = new HashSet<AmpOrgRole>();  
 				
@@ -76,8 +78,10 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 					}
 				}
 				
+				if (allOrgRoles == null)
+					return ret;
 				
-				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
+				ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
 				Collections.sort(ret, new Comparator<AmpOrgRole>() {
 					@Override
 					public int compare(AmpOrgRole o1, AmpOrgRole o2) {
@@ -172,7 +176,17 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("search","Search Organizations",AmpOrganisationSearchModel.class) {
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getAcronymAndName();
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 
 			@Override

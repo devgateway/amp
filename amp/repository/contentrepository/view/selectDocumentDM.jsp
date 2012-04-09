@@ -21,11 +21,27 @@
 <bean:define id="tMembers" name="teamForm" property="myTeamMembers" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+  		  
+		
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 	
 <%@include file="documentManagerJsHelper.jsp" %>
 
 <script type="text/javascript">
 	function afterPageLoad(e) {		
+		
 		var showTheFollowingDocuments 	= 'ALL';
 		<c:if test="${myForm.showTheFollowingDocuments!=null}">
 			showTheFollowingDocuments		= '${myForm.showTheFollowingDocuments}';
@@ -42,11 +58,62 @@
 			windowHandler.populateWithPublicDocs();
 		}
 	}
-	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+	YAHOO.util.Event.on(window, "load", afterPageLoad);
 </script>	
 
-<br />
-<div id="otherDocumentsDiv">&nbsp;</div>
+<digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+
+<style>
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
+}
+
+.yui-skin-sam span.yui-pg-first,
+.yui-skin-sam span.yui-pg-previous,
+.yui-skin-sam span.yui-pg-next,
+.yui-skin-sam span.yui-pg-last {
+display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+margin-left: 2px;
+padding-right: 7px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.resource_box {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    font-size: 12px;
+    padding: 10px;
+}
+</style>
+
+
+
+<div id="otherDocumentsDiv" class="yui-skin-sam">&nbsp;</div>
 <input type="hidden" name="type" id="typeId"/>
 <html:button  styleClass="dr-menu" property="submitButton" onclick="saveSelectedDocuments()" >
 	<digi:trn>Submit this</digi:trn>
@@ -62,5 +129,4 @@
 	</a>
 </c:if>
 
-<%@include file="documentManagerDivHelper.jsp" %>
-	
+<%@include file="documentManagerDivHelper.jsp" %>	

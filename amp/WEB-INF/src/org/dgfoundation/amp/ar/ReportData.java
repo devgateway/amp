@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.KeyValue;
 
 /**
  * 
@@ -403,6 +404,8 @@ public abstract class ReportData extends Viewable {
 	public void setRowSpan(int rowSpan) {
 		this.rowSpan = rowSpan;
 	}
+	
+	public abstract List<KeyValue> getLevelSorterPaths();
 	
 	public abstract void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) ;
 	

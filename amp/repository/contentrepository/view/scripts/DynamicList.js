@@ -173,6 +173,7 @@ AbstractDynamicList.prototype.createReqString	= function () {
 }
 
 AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
+	debugger;
 	if ( this.fPanel == null) {
 		var divEl		= document.getElementById(divId);
 		
@@ -193,8 +194,13 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
 		YAHOO.util.Event.on(buttonEls[0],"click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1],"click", this.fPanel.hide, this.fPanel, true);
 	}else{
-		this.fPanel.hide();
-		this.fPanel = null;
+//		var isVisible = this.fPanel.get("visible");
+//		alert (isVisible);
+//		if ( isVisible )
+//			this.fPanel.hide();
+//		else
+			this.fPanel.show();
+//		this.fPanel = null;
 	}
 	return this.fPanel;
 }

@@ -54,10 +54,10 @@
 									<digi:trn>Pub</digi:trn>
 								</c:set>
 							</logic:equal>
-							<bean:define id="escapedDescription">(<digi:trn>none</digi:trn>)</bean:define>
-							<logic:notEmpty name="documentData" property="escapedAmpDescription">
-								<bean:define id="escapedDescription"> ${documentData.escapedAmpDescription} </bean:define>
-							</logic:notEmpty>
+							<c:set var="escapedDescription"><c:out escapeXml="true" value="${documentData.escapedAmpDescription}" /></c:set>
+							<c:if test="${ empty documentData.escapedAmpDescription }">
+								<c:set var="escapedDescription">(<digi:trn>none</digi:trn>)</c:set>
+							</c:if>
 							<tr>
 								<td>
 									<c:choose>
@@ -102,9 +102,10 @@
 												style="cursor:pointer; color: blue; font-size: 12px">  
 										</c:when>
 										<c:otherwise>
-											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
-												onClick="downloadFile('${documentData.nodeVersionUUID}');"
+											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" onClick="downloadFile('${documentData.uuid}');"  
 												style="cursor:pointer; color: #222222; font-size: 12px">
+												<!-- onClick="downloadFile('${documentData.nodeVersionUUID}');"  I think no need for nodeVersionUUID parameter. it shuld match the download link from Actions menu-->
+												
 										</c:otherwise>
 									</c:choose>
 										 <bean:write name="documentData" property="name" />
@@ -125,7 +126,7 @@
 								</td>
 								<td>
 									${documentData.cmDocType }
-									<a  id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
+									<a  id="aflag${documentData.uuid}" class="invisible-item">&nbsp;</a>
 								</td>
 								<td>
 									<c:set var="labelUUIDs" value="[" />
@@ -150,7 +151,7 @@
 									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='description'/>"));
 									</script> --%>
-									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
+									<a name="aDocumentUUID" class="invisible-item"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								
 								<%--
@@ -176,7 +177,7 @@
 								</td>
 								 --%>
 								
-								
+									<!-- ACTIONS -->
 									<td>
 									 		<c:set var="translation">
 												<digi:trn>Click here to see possible actions</digi:trn>

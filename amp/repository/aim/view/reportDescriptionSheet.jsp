@@ -106,14 +106,17 @@
 	<logic:iterate name="aimUpdateAppSettingsForm" property="reports" id="report" type="org.digijava.module.aim.dbentity.AmpReports"> 
 		<%
 			String descr	= report.getReportDescription();
+                        String repName=report.getName();
 			if ( descr != null ) {
 				descr			= descr.replaceAll("\n"," ");
 				descr			= descr.replaceAll("\r","");
+                                repName=repName.replaceAll("\\\\", "\\\\\\\\");
+                                descr=descr.replaceAll("\\\\", "\\\\\\\\");
 			}
 		%>
 		i							= <bean:write name="report" property="ampReportId" />;
 		YAHOO.reportsheet.jsReports[i]				= new Object();
-		YAHOO.reportsheet.jsReports[i].name			= '<bean:write name="report" property="name" />';
+		YAHOO.reportsheet.jsReports[i].name			='<c:out value="<%= repName %>"/>';
 		YAHOO.reportsheet.jsReports[i].description	= '<%= descr %>';
 		YAHOO.reportsheet.jsReports[i].id			= '<bean:write name="report" property="ampReportId" />';
 		YAHOO.reportsheet.jsReports[i].type			= '<bean:write name="report" property="type" />';

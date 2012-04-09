@@ -16,7 +16,7 @@
 
 <c:choose>
 	<c:when test="${aimReportWizardForm.duplicateName == true}">
-		<div style="display: none">duplicateName</div>
+		<div  class="invisible-item">duplicateName</div>
 		<digi:trn key="aim:reportwizard:duplicateName">There is already a report with the same name. Please choose a different one. </digi:trn>
 	</c:when>
 	<c:otherwise>

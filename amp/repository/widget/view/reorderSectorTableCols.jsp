@@ -110,7 +110,7 @@
                     <tr>
                         <td nowrap="nowrap" align="left"  style="font-weight:bold;font-size:14px">
 
-                            ${sectorTableWidgetForm.name}
+                            <c:out value="${sectorTableWidgetForm.name}"/>
 
                         </td>
                     </tr>

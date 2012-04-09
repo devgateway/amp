@@ -149,10 +149,16 @@
                         
                           <td class="inside" title="<c:out value="${relatedLink.activityName}" />">
 														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams2}" property="ampActivityId">
+														<c:set target="${urlParams2}" property="activityId">
 															<bean:write name="relatedLink" property="activityId" />
 														</c:set>
-														<digi:link href="/selectActivityTabs.do" name="urlParams2" title="${translation}" styleClass="l_sm">
+														<c:set target="${urlParams2}" property="public">
+															true
+														</c:set>
+														<c:set target="${urlParams2}" property="pageId">
+															2
+														</c:set>
+														<digi:link href="/viewActivityPreview.do" name="urlParams2" title="${translation}" styleClass="l_sm">
                               <c:if test="${fn:length(relatedLink.activityName) > 30}" >
                                   <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
                               </c:if>

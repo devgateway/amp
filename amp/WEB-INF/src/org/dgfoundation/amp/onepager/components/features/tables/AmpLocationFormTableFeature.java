@@ -11,6 +11,8 @@ import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -79,6 +81,11 @@ public class AmpLocationFormTableFeature extends
 		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 	
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
+		
 		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
 			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
 				@Override
@@ -86,6 +93,7 @@ public class AmpLocationFormTableFeature extends
 					return item.getLocationPercentage();
 				}
 		};
+		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 		
 		final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityLocation>(
@@ -95,7 +103,7 @@ public class AmpLocationFormTableFeature extends
 				return t.getLocation().getLocation().getAutoCompleteLabel();
 		 	}	
 		};
-
+		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
 		
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
@@ -134,6 +142,7 @@ public class AmpLocationFormTableFeature extends
 						new PropertyModel<String>(item.getModel(), "latitude"), "Latitude", true, true);
 				latitude.getTextContainer().add(latitudeValidator);
 				latitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
+				latitude.setTextContainerDefaultMaxSize();
 				item.add(latitude);
 
 				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
@@ -150,6 +159,7 @@ public class AmpLocationFormTableFeature extends
 				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 
 						new PropertyModel<String>(item.getModel(), "Longitude"), "Longitude", true, true);
 				longitude.getTextContainer().add(longitudeValidator);
+				longitude.setTextContainerDefaultMaxSize();
 				longitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
 				item.add(longitude);
 				
@@ -199,7 +209,7 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();

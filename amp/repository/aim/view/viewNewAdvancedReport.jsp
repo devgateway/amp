@@ -24,6 +24,17 @@
 .paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px; font-family:Arial, Helvetica, sans-serif;}
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .l_sm {font-size:11px; color:#376091;}
+.tab_opt {background-color:#F2F2F2;}
+.tab_opt_box {border:1px solid #EBEBEB;}
+.tab_opt_box_cont {padding:5px; font-size:11px; background-color:#FAFAFA;}
+.tab_opt_cont {padding:5px; font-size:11px; color:#CCCCCC;}
+.show_hide_setting {
+    float: right;
+    font-size: 11px;
+    padding: 5px;
+    width: 200px;
+    font-family:Arial, Helvetica, sans-serif;
+}
 </style>
 <!-- Individual YUI JS files --> 
 
@@ -110,7 +121,7 @@ session.setAttribute("progressValue", counter);
 		 <jsp:param name="init" value=""/>
 		</jsp:include>
 	</div>
-	<div id="myRange" style="display: none">
+	<div id="myRange" class="invisible-item">
 		<jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
 	</div>
 	<div id="customFormat" style="display: none;height: 372px;width: auto;">
@@ -204,10 +215,14 @@ session.setAttribute("progressValue", counter);
 	<logic:notEqual name="viewFormat" scope="request" value="print">
 	<tr>
 		<td>
-		<div style="margin-left:5px;;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
-	        
-            <span style="cursor:pointer;float:left;">
+		<div class="tab_opt_box">
+				<div class="show_hide_setting">
+	        		<b>
+	        			<a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a>
+	        		</b>
+	        	</div>
+	        	<div class="tab_opt">
+		        	<div class="tab_opt_cont">
             <logic:notEmpty name="reportMeta" property="hierarchies">
             	<c:if test="${!ReportsFilter.publicView}">
 	                <a class="settingsLink" style="color:#376091;" onClick="showSorter();">
@@ -245,9 +260,8 @@ session.setAttribute("progressValue", counter);
                 <digi:trn>Report Settings</digi:trn>
                 </a>
            
-            </span>
              &nbsp;<br>
-             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
@@ -275,6 +289,8 @@ session.setAttribute("progressValue", counter);
              <tr>
            </table>
            </div>
+    	</div>
+    	</div>
     	</div>
 	</td>
 	</tr>

@@ -35,11 +35,11 @@
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
     
-    <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
+   <!--  <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>
             <property name="patchesDir">patches</property>
     </service>
-	
+	 -->
 
 	&commonEntities;
 	

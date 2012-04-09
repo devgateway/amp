@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -151,7 +152,7 @@ public class AmpSectorsFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 		
-		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
 			public void setPercentage(AmpActivitySector loc, int val) {
 				loc.setSectorPercentage((float) val);
@@ -179,7 +180,7 @@ public class AmpSectorsFormTableFeature extends
 
 			@Override
 			protected String getChoiceValue(AmpSector choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
 
 			@Override

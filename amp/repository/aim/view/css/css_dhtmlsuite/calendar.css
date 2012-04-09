@@ -50,7 +50,7 @@
 	padding-left:2px;
 	cursor:pointer;
 	line-height:17px;
-
+	font-size:12px
 }
 .DHTMLSuite_calendarHeaderMonthAndYearOver{	/* Mouse over effect - month and year in the heading */
 	background-color:#FFF;
@@ -154,12 +154,14 @@
 .DHTMLSuite_calendar_monthView_headerCell{	/* Main div element for the days in a month */
 	background-color:#FFF;
 	border-bottom:1px solid #8eb9f3; 
+	font-size:12px
 }
 
 .DHTMLSuite_calendar_monthView_firstColumn{	/* First column - the week column */
 	background-color:#C3DAF9;
 	border-right:1px solid #8eb9f3; 
 	text-align:left;
+	font-size:12px
 }
 
 .DHTMLSuite_calendar_monthView td{	/* Default css for all the cells inside the calendar, i.e. week heading, label for the days, and the days */
@@ -168,16 +170,19 @@
 }
 .DHTMLSuite_calendar_monthView_headerSunday{	/* Sunday in the header */
 	color:red;
-	border-bottom:1px solid #8eb9f3; 
+	border-bottom:1px solid #8eb9f3;
+	font-size:12px 
 }
 .DHTMLSuite_calendar_monthView_daysInOtherMonths{	/* Days in previous or next month, i.e. before start of current displayed month or after days in the currently displayed month */
 	color:#999;
+	font-size:12px
 }
 .DHTMLSuite_calendar_monthView_daysInThisMonth{	/* Layout - ordinary days(mon-sat) in this month */
-	
+	font-size:12px
 }
 .DHTMLSuite_calendar_monthView_sundayInThisMonth{	/* Layout - sundays in current displayed month */
 	color:red;
+	font-size:12px
 }
 .DHTMLSuite_calendar_monthView_initialDate{	/* Inital set date, example: the date in an input field which you are populating with the calendar */
 	background-color:#8eb9f3;
@@ -188,6 +193,7 @@
 }
 .DHTMLSuite_calendar_monthView_currentDate{	/* Date of today */
 	background-color:#E2E2E2;
+	font-size:12px
 }
 /***************************************************
 *

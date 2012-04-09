@@ -113,7 +113,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentId(ampScheme.getAmpSecSchemeId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist for this scheme. Please enter another title",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongTitle"));
 		        		if (errors.size() > 0){ 
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");
@@ -133,7 +133,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentId(ampScheme.getAmpSecSchemeId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongCode", TranslatorWorker.translateText("The code of the sector already exist for this scheme. Please enter another code",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongCode"));
 		        		if (errors.size() > 0){
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");
@@ -213,7 +213,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongTitle", TranslatorWorker.translateText("The name of the sub sector already exist for this scheme. Please enter another title",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongTitle"));
 		        		if (errors.size() > 0){
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");
@@ -234,7 +234,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sector already exist for this scheme. Please enter another code",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongCode"));
 		        		if (errors.size() > 0) {
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");
@@ -322,7 +322,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSubSubSector.wrongTitle", TranslatorWorker.translateText("The name of the sub sub sector already exist for this scheme. Please enter another title",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSubSubSector.wrongTitle"));
 		        		if (errors.size() > 0){
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");
@@ -343,7 +343,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSubSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sub sector already exist for this scheme. Please enter another title",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSubSubSector.wrongCode"));
 		        		if (errors.size() > 0) {
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");

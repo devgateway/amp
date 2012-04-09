@@ -52,6 +52,7 @@ public class AmpContractDetailsSubsectionFeature extends
 		add(completion);
 		
 		AmpTextFieldPanel<String> contractorName = new AmpTextFieldPanel<String>("contractorName", new PropertyModel<String>(model, "contractingOrganizationText"), "Contractor Name");
+		contractorName.setTextContainerDefaultMaxSize();
 		add(contractorName);
 	}
 

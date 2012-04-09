@@ -111,7 +111,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	}
 	public String getEscapedAmpDescription() {
 		if (description != null) {
-			String ret = description.replace("'", "\\'").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n");
+			String ret = description.replace("'", "\\'").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n").replace("<", "&lt;").replace(">", "&gt;");
 			return ret; 
 		}
 		else

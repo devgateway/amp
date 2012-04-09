@@ -63,6 +63,9 @@
 <c:set var="filterPanelName">
 	<digi:trn key="rep:filter:filters">Filters</digi:trn>
 </c:set>
+<c:set var="settingsPanelName">
+	<digi:trn key="rep:filter:filters">Settings</digi:trn>
+</c:set>
 <c:set var="cannotSaveFiltersMessage">
 	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
 </c:set>
@@ -199,6 +202,7 @@
 									failureMessage: "${failureMessage}",
 									savingDataMessage: "${savingDataMessage}",
 									filterPanelName: "${filterPanelName}",
+                                                                        settingsPanelName: "${settingsPanelName}",
 									cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
 									savingRepTabMessage: "${savingMessage}",
 									previewFundingTrn: "${previewFundingNameTrn}",
@@ -226,6 +230,7 @@ body {
 	margin:0;
 	padding:0;
 }
+
 </style>
 
 <!-- BREADCRUMP START -->
@@ -324,7 +329,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<div id="titlePanel" style="display: none">
+				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>
@@ -347,5 +352,8 @@ body {
 	</c:if>
 </digi:form>
 <!-- MAIN CONTENT PART END -->
+<div id="customFormat" style="display:none; height: 372px;width: auto;">
+	<jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
+</div>
 
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>

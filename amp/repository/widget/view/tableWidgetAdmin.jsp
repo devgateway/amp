@@ -59,10 +59,10 @@
 				<c:forEach var="widgetTable" items="${gisTableWidgetCreationForm.tables}" varStatus="stat">
 					<tr>
 						<td class="inside">
-							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">${widgetTable.name}</html:link>
+							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}"><c:out value="${widgetTable.name}"/></html:link>
 						</td>
 						<td nowrap="nowrap" align=center class="inside">
-						 	${widgetTable.code}
+						 	<c:out value="${widgetTable.code}"/>
 						</td>
 						<td nowrap="nowrap" align=center class="inside">
 							<c:set var="titleEdit"><digi:trn key="gis:titleEdit">Edit</digi:trn></c:set>

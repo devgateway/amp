@@ -158,7 +158,7 @@ function changeEventTypesState(){
 	              					</div>
 	            				</td>
 	            				<td style="padding:5px;text-align:left;font-size:11px; width: 80px;" nowrap="nowrap">
-		             				<div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
+		             				<div style="white-space: nowrap;"><digi:trn><c:out value="${eventType.name}"></c:out></digi:trn></div> 
 	            				</td>
 	          				</tr>
 	        			</c:forEach>
@@ -166,7 +166,7 @@ function changeEventTypesState(){
 	    		</c:if>
 			</div>
 		</div>
-	</field:display>	
+	</field:display>
 	<div style="height:5px;font-family:Tahoma;">
 	&nbsp;
 	</div>

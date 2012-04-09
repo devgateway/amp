@@ -13,6 +13,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
@@ -24,6 +25,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProj
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -31,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -63,6 +66,17 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		orgLabel.setOutputMarkupId(true);
 		add(orgLabel);
 		
+		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
+		
+		add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				super.onClick(target);
+				target.addComponent(parent);
+				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
+			}
+		});
+		
 		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
@@ -86,8 +100,19 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("newOrgSelect","Replace Funding Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
 			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
+			}
+
 			@Override
 			public void onSelect(AjaxRequestTarget target,
 					AmpOrganisation choice) {

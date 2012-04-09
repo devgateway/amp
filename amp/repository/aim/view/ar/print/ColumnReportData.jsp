@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@page import="org.dgfoundation.amp.ar.Column"%>
 <%@page import="org.dgfoundation.amp.ar.cell.Cell"%>
 <bean:define id="metadata" name="reportMeta"
@@ -21,6 +22,28 @@
 	<% if (!("".equals(columnReport.getRepName()))){ %> : <digi:trn
 		key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
 	<% } %>
+	</td>
+</tr>
+<tr>
+	<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;" colspan="3">
+		<span  style="color: red;font-family: Arial;font-size: 10px;">
+			<%
+           	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+           	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
+          		<digi:trn key="rep:pop:AllAmount">
+					Amounts are in thousands (000)
+				</digi:trn>
+      		<%}%>
+						
+			<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+				<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+				<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
+			</logic:present>
+		</span>
+	</td>
+</tr>
+<tr>
+	<td>
 	</td>
 </tr>
 <!-- generate report data -->

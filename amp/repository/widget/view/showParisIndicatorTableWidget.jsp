@@ -38,6 +38,7 @@
                     donorGroupTD.innerHTML="";
                 }
                 else{
+                    alert(value);
                     donorGroupTD.innerHTML=value;
                 }
 
@@ -59,17 +60,17 @@
                 <select style="width: 150px;" name="parisInd" id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
                     <option value="-1"><digi:trn>Select Donor Group</digi:trn></option>
                     <c:forEach items="${showParisIndicatorTableForm.donorGroups}" var="donorGroup">
-                         <option value="${donorGroup.ampOrgGrpId}">${donorGroup.orgGrpName}</option>
+                         <option value="${donorGroup.ampOrgGrpId}"><c:out value="${donorGroup.orgGrpName}"></c:out></option>
                     </c:forEach>
                 </select>
             </td>
     </tr>
     <c:forEach items="${showParisIndicatorTableForm.parisIndicators}"    var="parisIndicatorInfo">
         <tr>      
-          <td><digi:trn>Indicator</digi:trn>&nbsp;${parisIndicatorInfo.parisIndicator.indicatorCode}</td>
-           <td><digi:trn>${parisIndicatorInfo.parisIndicator.name}</digi:trn></td>
-            <td>${parisIndicatorInfo.baseValue}</td>
-            <td>${parisIndicatorInfo.targetValue}</td>
+          <td><digi:trn>Indicator</digi:trn>&nbsp;<c:out value="${parisIndicatorInfo.parisIndicator.indicatorCode}"></c:out></td>
+           <td><digi:trn><c:out value="${parisIndicatorInfo.parisIndicator.name}"></c:out> </digi:trn></td>
+            <td><c:out value="${parisIndicatorInfo.baseValue}"></c:out></td>
+            <td><c:out value="${parisIndicatorInfo.targetValue}"></c:out></td>
            <c:choose>
                <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='8'}">
                    <td><digi:trn>N/A</digi:trn></td>

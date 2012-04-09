@@ -15,6 +15,7 @@
 
 
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%>
+<%@include file="documentManagerDivHelper.jsp" %>
 
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -497,7 +498,7 @@ border-right: 1px solid rgb(208, 208, 208);
 			                	
 			                	</td>
 						</tr>
-						<tr style="display: none" id="tr_url">
+						<tr id="tr_url" style="display: none">
 							<td>
 								<div class="t_sm"><b><digi:trn>URL (ex. www.exemple.com)</digi:trn>:</b><font color="red">*</font></div>
 							</td>
@@ -745,4 +746,3 @@ border-right: 1px solid rgb(208, 208, 208);
 	<digi:trn>Shared Resources</digi:trn>
 </c:set>
 	
-<%@include file="documentManagerDivHelper.jsp" %>

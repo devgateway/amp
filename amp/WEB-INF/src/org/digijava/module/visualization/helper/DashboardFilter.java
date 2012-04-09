@@ -12,8 +12,10 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class DashboardFilter {
@@ -324,7 +326,11 @@ public class DashboardFilter {
 
     public Long getCurrencyId() {
     	if (currencyId == null) {
-    		currencyId = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
+    		String defaultBaseCurrencyId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+    		if (defaultBaseCurrencyId != null && !defaultBaseCurrencyId.equals(""))
+    			currencyId = CurrencyUtil.getCurrencyByCode(defaultBaseCurrencyId).getAmpCurrencyId();
+    		else
+    			currencyId = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
 		}
         return currencyId;
     }
@@ -339,7 +345,11 @@ public class DashboardFilter {
 
     public Long getCurrencyIdQuickFilter() {
     	if (currencyIdQuickFilter == null) {
-    		currencyIdQuickFilter = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
+    		String defaultBaseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+    		if (defaultBaseCurrency != null && !defaultBaseCurrency.equals(""))
+    			currencyIdQuickFilter = CurrencyUtil.getCurrencyByCode(defaultBaseCurrency).getAmpCurrencyId();
+    		else
+    			currencyIdQuickFilter = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
 		}
         return currencyIdQuickFilter;
     }
@@ -439,13 +449,16 @@ public class DashboardFilter {
 
     }*/
       public String getCurrencyCode() {
-        String name = "USD";
-        if (currencyId != null && currencyId != -1) {
+  		String defaultBaseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+  		String name = "USD";
+		if (defaultBaseCurrency != null && !defaultBaseCurrency.equals(""))
+			name = defaultBaseCurrency;
+
+		if (currencyId != null && currencyId != -1) {
             AmpCurrency curr = CurrencyUtil.getAmpcurrency(currencyId);
             name = curr.getCurrencyCode();
         }
         return name;
-
     }
 
     public Long[] getSelSectorIds() {

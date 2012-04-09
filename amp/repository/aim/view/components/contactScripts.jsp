@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<div id="contactPopin" style="display: none">
+<div id="contactPopin" class="invisible-item">
     <div id="popinContactContent" class="content">
     </div>
 </div>
@@ -202,6 +202,15 @@ YAHOO.namespace("YAHOO.amp");
 		}
 		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value==''){
 			alert('<digi:trn jsFriendly="true">Please Enter lastname</digi:trn>');
+			return false;
+		}
+		if (notAchievedMaxAllowed('email')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('phone')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('fax')) {
 			return false;
 		}
 		//check emails. At least one email should exist

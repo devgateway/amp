@@ -396,7 +396,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											<tr bgcolor="#ffffff">
 												<td valign="middle" align="left" width="30%">												</td>
 												<td align="left" width="70%">
-													 <div id="newTitle" style="display: none">											
+													 <div id="newTitle" class="invisible-item">											
 													    <html:text property="pledgeTitleId" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
 													</div>												</td>	
 											</tr>
@@ -1274,15 +1274,6 @@ function removeFunding()
 		remBut.style.display="none";
 	}
 }
-
-function addRowDefault(){
-	if (numFund==0){
-		addFunding();
-	}
-}
-
-addRowDefault();
-
 
 function savePledge() {
 

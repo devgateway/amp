@@ -113,7 +113,7 @@ public class SelectTeam extends Action {
             ApplicationSettings appSettings = new ApplicationSettings();
             appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
             appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-            appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
+            appSettings.setDefReportsPerPage((ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage());
             appSettings.setCurrencyId(ampAppSettings.getCurrency()
                     .getAmpCurrencyId());
             if (ampAppSettings.getFiscalCalendar() == null) {

@@ -14,14 +14,25 @@
 
 <script type="text/javascript">
 	function addColumnToWidget(myForm){
-		myForm.target=window.opener.name;
-		myForm.submit();
-		window.close();
+		if (validateMandatories()){
+			myForm.target=window.opener.name;
+			myForm.submit();
+			window.close();
+		}
 	}
 	$(document).ready(function(){
 		var mainTextBox = document.getElementsByName('colName')[0];
 		mainTextBox.focus();
 	});
+
+	function validateMandatories(){
+		var name = ""+document.getElementsByName("colName")[0].value;
+		if (name==""){
+			alert('<digi:trn jsFriendly="true">Please add a name!</digi:trn>');
+			return false;
+		}
+		return true;
+	}
 </script>
 
 <style>

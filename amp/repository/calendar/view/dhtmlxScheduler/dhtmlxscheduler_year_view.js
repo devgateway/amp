@@ -234,12 +234,27 @@ scheduler.getEvents=function(E,D){
 	for(var B in this._events){
 		var C=this._events[B];
 		if(C&&C.start_date<D&&C.end_date>E){
-			A.push(C)
+			var td = new Date(D);
+			if (C.rec_type){
+				if (scheduler.is_in_date(C,D,this._min_date,this._max_date)){
+					if (!this.is_in_list(A,C)) A.push(C);
+				}
+			}else{
+				if (!this.is_in_list(A,C)) A.push(C);
+			}
 		}
 	}
-	return A
+	return A;
 };
 })();
+
+scheduler.is_in_list=function(A,C){
+	for(var B in A){
+		var D = A[B];
+		if (D.id == C.id.split("#")[0]) return true;
+	}
+	return false;
+}
 
 //
 //

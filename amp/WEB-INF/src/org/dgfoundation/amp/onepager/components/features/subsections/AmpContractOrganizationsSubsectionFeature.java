@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -95,7 +96,17 @@ public class AmpContractOrganizationsSubsectionFeature extends
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 
 			@Override

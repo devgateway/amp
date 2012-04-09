@@ -131,6 +131,13 @@ background-color:#FFFFFF;
     		div.appendChild(img);
     		parent.appendChild(div);
     	}
+    	function resetFilter(){
+    		$("#yearFrom").val("-1");
+    		$("#yearTo").val("-1");
+    		$("#selectedDonorsId").val("-1");
+    		$("#selectedStatusesId").val("-1");
+    		
+    	}
     
     
    
@@ -205,7 +212,7 @@ background-color:#FFFFFF;
 			class="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></a>
 		&nbsp;|&nbsp; <a class="l_sm" id="showGridLink"
 			href="javascript:showGridTable();"><digi:trn>View Table</digi:trn></a><a class="l_sm" id="hideGridLink"
-			href="javascript:hideGridTable();" style="display: none"><digi:trn>Hide Table</digi:trn></a></div>
+			href="javascript:hideGridTable();" class="invisible-item"><digi:trn>Hide Table</digi:trn></a></div>
 		</div>
 		</div>
 
@@ -254,17 +261,13 @@ background-color:#FFFFFF;
 					<div class="dashboard_filters"><digi:trn>Filter</digi:trn>:
 					<table width="50%" border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<td><c:set var="translation">
-								<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
-							</c:set> <category:showoptions firstLine="${translation}"
+							<td><category:showoptions
 								name="aimNPDForm" property="selectedStatuses"
 								keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>"
 								multiselect="true" size="5" ordered="true"
-								styleClass="inputx insidex" /></td>
+								styleClass="inputx insidex" styleId="selectedStatusesId"/></td>
 							<td><html:select multiple="true" size="5"
-								property="selectedDonors" styleClass="inputx insidex">
-								<option value="-1"><digi:trn
-									key="aim:npd:dropDownAnyDonor">Any Donor</digi:trn></option>
+								property="selectedDonors" styleClass="inputx insidex" styleId="selectedDonorsId">
 								<html:optionsCollection name="aimNPDForm" property="donors"
 									value="value" label="label" />
 							</html:select></td>
@@ -286,6 +289,7 @@ background-color:#FFFFFF;
 						<tr>
 						<td colspan="2" align="center">
 						<input type="button" class="buttonx_sm btn_save" style="width: auto;overflow: visible;" value="<digi:trn>Apply Filter</digi:trn>" onclick="applyFilter()"/>
+						<input type="button" class="buttonx_sm btn_save" style="width: auto;overflow: visible;" value="<digi:trn>Reset</digi:trn>" onclick="resetFilter()"/>
 						</td>
 						</tr>
 					</table>

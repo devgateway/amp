@@ -1725,7 +1725,52 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if (statusCode!=null && !"".equals(statusCode.trim())){
     	  oql+=" join  latestAct.categories as categories ";
       }
-      if(teamMember!=null&&teamMember.getComputation()!=null&&teamMember.getComputation()){
+      StringBuilder whereTeamStatement=new StringBuilder();
+      boolean relatedOrgsCriteria=false;
+      if (teamMember != null) {
+          //oql += " and " +getTeamMemberWhereClause(teamMember);
+    	  AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
+          if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
+              String ids = DashboardUtil.getComputationOrgsQry(team);
+              if(ids.length()>1){
+              ids = ids.substring(0, ids.length() - 1);
+              	whereTeamStatement.append("  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))");
+              }
+              relatedOrgsCriteria=true;
+          }
+          else{
+				if (team.getAccessType().equals("Management")) {
+					whereTeamStatement.append( " and latestAct.draft=false and latestAct.approvalStatus ='approved' ");
+					List<AmpTeam> teams = new ArrayList<AmpTeam>();
+					DashboardUtil.getTeams(team, teams);
+					String relatedOrgs = "", teamIds = "";
+					for (AmpTeam tm : teams) {
+						if (tm.getComputation() != null && tm.getComputation()) {
+							relatedOrgs += DashboardUtil
+									.getComputationOrgsQry(tm);
+							 relatedOrgsCriteria=true;
+						}
+						teamIds += tm.getAmpTeamId() + ",";
+					}
+					if (relatedOrgs.length() > 1) {
+						relatedOrgs = relatedOrgs.substring(0,
+								relatedOrgs.length() - 1);
+						whereTeamStatement.append("  and ( latestAct.team.ampTeamId ="+team.getAmpTeamId()+" or  role.organisation.ampOrgId in("
+								+ relatedOrgs + "))");
+					}
+					if (teamIds.length() > 1) {
+						teamIds = teamIds.substring(0, teamIds.length() - 1);
+						whereTeamStatement.append(" and latestAct.team.ampTeamId in ( " + teamIds
+								+ ")");
+					}
+
+				} else {
+					whereTeamStatement.append(" and ( latestAct.team.ampTeamId =:teamId ) ");
+          }
+          }
+        
+      }
+      if(relatedOrgsCriteria){
           oql+=" inner join latestAct.orgrole role ";
       }
       oql+=" where 1=1 ";
@@ -1750,47 +1795,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if (locationId != null) {
         oql += " and latestAct.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
       }
-      if (teamMember != null) {
-          //oql += " and " +getTeamMemberWhereClause(teamMember);
-    	  AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-          if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
-              String ids = DashboardUtil.getComputationOrgsQry(team);
-              if(ids.length()>1){
-              ids = ids.substring(0, ids.length() - 1);
-              oql += "  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
-              }
-          }
-          else{
-				if (team.getAccessType().equals("Management")) {
-					oql += " and latestAct.draft=false and latestAct.approvalStatus ='approved' ";
-					List<AmpTeam> teams = new ArrayList<AmpTeam>();
-					DashboardUtil.getTeams(team, teams);
-					String relatedOrgs = "", teamIds = "";
-					for (AmpTeam tm : teams) {
-						if (tm.getComputation() != null && tm.getComputation()) {
-							relatedOrgs += DashboardUtil
-									.getComputationOrgsQry(tm);
-						}
-						teamIds += tm.getAmpTeamId() + ",";
-					}
-					if (relatedOrgs.length() > 1) {
-						relatedOrgs = relatedOrgs.substring(0,
-								relatedOrgs.length() - 1);
-						oql += "  and ( latestAct.team.ampTeamId ="+team.getAmpTeamId()+" or  role.organisation.ampOrgId in("
-								+ relatedOrgs + "))";
-					}
-					if (teamIds.length() > 1) {
-						teamIds = teamIds.substring(0, teamIds.length() - 1);
-						oql += " and latestAct.team.ampTeamId in ( " + teamIds
-								+ ")";
-					}
-
-				} else {
-               oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
-          }
-          }
-        
-      }
+      oql+=whereTeamStatement.toString();
 	  return oql;
   }
 
@@ -3514,6 +3519,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					+ " OR fundingDetail.ampDonorOrgId.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + ") "
 					+ " OR orgRole.organisation.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + "))"
 					+ " and ampAct.team is not null "
+					+ " and (ampAct.approvalStatus like '"+Constants.APPROVED_STATUS+"' or ampAct.approvalStatus like '"+Constants.STARTED_APPROVED_STATUS+"')"
 					+ " order by ampAct.ampActivityId desc";
 			}
 			else

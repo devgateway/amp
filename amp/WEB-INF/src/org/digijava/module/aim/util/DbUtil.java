@@ -148,6 +148,28 @@ public class DbUtil {
        		return result;
 
        	}
+           
+           public static String deFilter(String text,boolean  acute) {
+          		String result = null;
+                       
+          		if (text != null) {
+          			result=text.replaceAll("&amp;","&");
+          			result = result.replaceAll("&gt;",">");
+          			result = result.replaceAll("&lt;","<");
+          			if(acute){
+          				result = result.replaceAll("&acute;","'");//"&acute;");
+          			}
+          			else{
+          				result = result.replaceAll("\'","'");//"&acute;");
+          			}
+          			result = result.replaceAll("&quot;","\"");
+          			
+          		}
+          		return result;
+
+          	}
+           
+           
 	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();

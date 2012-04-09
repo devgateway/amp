@@ -166,26 +166,41 @@ function filldatasourcetable(){
 	var table = document.getElementById("sourcecontent");
 	var rowCount = table.rows.length;
     var cell;
-    var element;
+    var strlength = 45;  // set to the number of characters you want to keep
+    var trimmedPathname;
+    var donors='';
+    
     for ( var int = 0; int < activitiesarray.length; int++) {
+    	donors='';
+    	for ( var x = 0; x < activitiesarray[int].donors.length; x++) {
+			if (donors == ''){
+				donors = activitiesarray[int].donors[x].donorCode;
+			}else{
+				donors = donors +', '+ activitiesarray[int].donors[x].donorCode;
+			}
+		}
+        
+    	trimmedPathname = activitiesarray[int].activityname.substring(0, Math.min(strlength,activitiesarray[int].activityname.length));
+
     	row = table.insertRow(rowCount + int);
     	cell = row.insertCell(0);
-    	var url = '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+activitiesarray[int].id+'~isPreview=1" target="_blank">'+activitiesarray[int].activityname+'</a>'
+    	var url = '<a title="'+activitiesarray[int].activityname+'"href="/aim/viewActivityPreview.do~pageId=2~activityId='+activitiesarray[int].id+'~isPreview=1" target="_blank" style="text-decoration:none;">'+trimmedPathname+'...</a>'
     	cell.innerHTML= url;
-    	
+    	cell.setAttribute("width","320px");
     	cell0 = row.insertCell(1);
     	cell0.innerHTML= activitiesarray[int].ampactivityid;
+    	cell0.setAttribute("width","220px");
     	
     	cell1 = row.insertCell(2);
+    	cell1.innerHTML= donors;
+    	cell1.setAttribute("width","120px");
+    	
+    	cell1 = row.insertCell(3);
     	cell1.innerHTML= activitiesarray[int].commitments;
     	
-    	cell3 = row.insertCell(3);
+    	cell3 = row.insertCell(4);
     	cell3.innerHTML= activitiesarray[int].disbursements;
-    	
-    	//cell4 = row.insertCell(4);
-    	//cell4.innerHTML= activitiesarray[int].expenditures;
-    	
-	}
+    }
 }
 
 function deleteRow(tableID) {

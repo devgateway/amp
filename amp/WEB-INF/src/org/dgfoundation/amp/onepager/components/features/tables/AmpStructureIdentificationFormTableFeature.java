@@ -89,6 +89,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 		name.setOutputMarkupId(true);
 		name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
+		name.setTextContainerDefaultMaxSize();
 //		OnChangeAjaxBehavior nameOnChange = new OnChangeAjaxBehavior() {
 //			@Override
 //			protected void onUpdate(AjaxRequestTarget target) {
@@ -115,6 +116,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 
 		final AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitude", new PropertyModel<String>(structureModel, "longitude"),"Structure Longitude", true, true);
 		longitude.setOutputMarkupId(true);
+		longitude.setTextContainerDefaultMaxSize();
 //		longitude.add(new OnChangeAjaxBehavior() {
 //			@Override
 //			protected void onUpdate(AjaxRequestTarget target) {
@@ -125,6 +127,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 		add(longitude);
 
 		final AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String>("latitude", new PropertyModel<String>(structureModel, "latitude"),"Structure Latitude", true, true);
+		latitude.setTextContainerDefaultMaxSize();
 		latitude.setOutputMarkupId(true);
 //		latitude.add(new OnChangeAjaxBehavior() {
 //			@Override
@@ -137,6 +140,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 
 		final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
 		shape.setOutputMarkupId(true);
+		shape.setTextContainerDefaultMaxSize();
 //		shape.add(new OnChangeAjaxBehavior() {
 //			@Override
 //			protected void onUpdate(AjaxRequestTarget target) {

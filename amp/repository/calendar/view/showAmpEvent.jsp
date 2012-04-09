@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <!-- Dependencies -->
@@ -118,7 +119,7 @@ span.extContactDropdownEmail {
 </style>
 
 
-<div id="popin" style="display: none">
+<div id="popin" class="invisible-item">
 	<div id="popinContent" class="content">
 	</div>
 </div>
@@ -671,8 +672,9 @@ function addOrganisation(orgId, orgName){
 		  		list.options[i].selected = true;
 		  	}
 		}
+			
 
-		if (validateDates()){ 
+		if (validateText() && validateDates()){ 
 			document.getElementById('hdnMethod').value = 'save';
 			<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
 	//		document.calendarEventForm.action = "<%=sendEvent %>";
@@ -712,7 +714,26 @@ function validateDates(){
 	}
 	return true;
 }
-	
+
+function validateText(){
+	var title = "" + document.getElementById("titleMax").value;
+   	var decription = "" + document.getElementById("descMax").value; 
+   	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+   	
+   	if (title==""){
+		alert ("<digi:trn jsFriendly='true'>Title can't be empty!</digi:trn>");
+        return false;
+	}
+	if (regexp.exec(title)!=title){
+		alert ("<digi:trn jsFriendly='true'>Please, for title use only letters, digits, '_', () and space.</digi:trn>");
+        return false;
+	}
+	if (decription != "" && regexp.exec(decription)!=decription){
+		alert ("<digi:trn jsFriendly='true'>Please, for description use only letters, digits, '_', () and space.</digi:trn>");
+        return false;
+	}
+	return true;
+}
   function setMethod(mth){
     var h=document.getElementById("hdnMethod");
     if(h!=null){
@@ -848,6 +869,7 @@ function removeGuest(obj) {
 	}
 	return null;
 }
+
 </script>
 
 
@@ -1271,6 +1293,18 @@ function removeGuest(obj) {
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">
+				<c:if test="${!empty calendarEventForm.selectedAttsCol}">
+                    <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
+                        <c:if test="${fn:startsWith(attendee.value, 'g:')}">
+                       		<div class="msg_added_cont">	
+								<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>
+								${attendee.label}
+								<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="g:${attendee.value}">
+							</div>
+                        </c:if>
+                    </c:forEach>
+                    
+                  </c:if>
 				</div>
 			</td>
     </tr>

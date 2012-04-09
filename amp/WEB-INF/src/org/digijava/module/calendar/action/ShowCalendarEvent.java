@@ -179,7 +179,7 @@ public class ShowCalendarEvent extends Action {
                         selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), slAtts[i]));
                     }
                 } else if (slAtts[i].startsWith("g:")) {
-                    selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(2), slAtts[i]));
+                    selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(slAtts[i].lastIndexOf("g:")+2), slAtts[i].substring(slAtts[i].lastIndexOf("g:"))));
                 }
                     else if (slAtts[i].startsWith("guest")) {
                          String guest="---"+TranslatorWorker.translateText("Guest", langCode, siteId)+"---";
@@ -317,12 +317,14 @@ public class ShowCalendarEvent extends Action {
 	            		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
 	            			ceform.setActionButtonsVisible(true);
 	            		}else if(ceform.isPrivateEvent()){
+	            			if(selattendeess!=null){
 	            			for (String attendee : selattendeess) {
 	    						if(attendee.startsWith("m:") && attendee.substring(attendee.indexOf(":")+1).equals(mem.getMemberId().toString())){
 	    							ceform.setActionButtonsVisible(true);
 	    							break;
 	    						}
 	    					}
+	            			}
 	            		}
                     }
         		}        		

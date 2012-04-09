@@ -32,7 +32,7 @@
 		
 	</b>
 	<br />
-	<digi:trn>To</digi:trn>: <b>${messageForm.receivesrsNameMail[0].userNeme}</b> (<a href="#" onClick="return false" class="view_all_recipients"><digi:trn>view all</digi:trn></a>)<br />
+	<digi:trn>To</digi:trn>: <b><c:out value="${messageForm.receivesrsNameMail[0].userNeme}"/></b> (<a href="#" onClick="return false" class="view_all_recipients"><digi:trn>view all</digi:trn></a>)<br />
 		<div class="msg_all" style="background-color: white; border: 1px solid #EBEBEB; display:none;">
 			<table border="0" cellspacing="1" cellpadding="1" width="100%" style="Font-size: 8pt;">
 				<tr><td width="50%">
@@ -45,7 +45,7 @@
 					<tr><td>
 						${recipient.userNameFiltered}
 					</td><td>
-						${recipient.teamName}
+						<c:out value="${recipient.teamName}"/>
 					</td></tr>
 				</c:forEach>
 			</table>
@@ -61,7 +61,7 @@
 
 </div>
 <div class="message_body">
-	${messageForm.description}
+	<c:out value="${messageForm.description}"/>
 </div>
 <c:if test="${not empty messageForm.sdmDocument}">
 		<%--
@@ -75,7 +75,7 @@
 					<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 					<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>																																														
 					<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${item.paragraphOrder}" name="urlParamsSort">
-						${item.contentTitle}
+						<c:out value="${item.contentTitle}"/>
 					</digi:link>
 					
 				

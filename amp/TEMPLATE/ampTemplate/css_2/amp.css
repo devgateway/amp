@@ -14,7 +14,10 @@ h1 {text-transform:uppercase;}
 .t_sm {font-size:11px; line-height:14px;}
 .t_mid {font-size:12px;}
 .t_sm_1 {font-size:9px; line-height:14px;}
-.l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;}
+.l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;}
+html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;}
+span.docTitle619{border:1px solid red;text-align:left;}
+
 .se` {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}
 .buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
@@ -37,13 +40,14 @@ fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
-table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:11px;border-top:none;}
+table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;border-top:none;}
 table.inside1, td.inside1 {border: 0; font-size:12px;}
 table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
-td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
+td.inside {margin: 0; padding: 4px; border:1px solid #b8b7b7;}
 td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #cccccc; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;padding:3px;}
+td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border-style: solid; font-size:11px;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
 .ins_title_reg {font-size:11px; color:#767676; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
 .ins_title_sm {font-size:9px; color:#767676;}
@@ -713,7 +717,11 @@ a.hoverUnderline {text-decoration: none;}
 a:focus.hoverUnderline {outline: 0px none blue !important;}
 a:HOVER.hoverUnderline {text-decoration: underline;}
 .innerTabHeader{padding:0px 5px 0px 0px;}
-#currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
+#currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;} 
 td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}
 html.ie li#yui-gen5{width:85px;padding-top:-3px;}
 h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 5px 0px;border-bottom:1px dotted #cccccc;margin:0px 0px 10px 0px;}
+.invisible-item{display: none;}
+.white-item{color: white;}
+.marginal-five{margin-right:5px;}
+.invisible-item-hidden{visibility: hidden;}

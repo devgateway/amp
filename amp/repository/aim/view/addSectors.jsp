@@ -20,7 +20,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
-<div id="mySector" style="display: none">
+<div id="mySector" class="invisible-item">
 	<div id="mySectorContent" class="content">
 	</div>
 </div>
@@ -257,7 +257,7 @@
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
-			alert("Please, select a sector firts!");
+			alert("Please, select a sector first!");
 		}
 	}
 	function resetSectors(){

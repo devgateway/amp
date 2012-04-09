@@ -13,7 +13,7 @@
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="addressbookForm"/>
-<div id="popin" style="display: none">
+<div id="popin" class="invisible-item">
     <div id="popinContent" class="content">
     </div>
 </div>
@@ -154,7 +154,7 @@
 	}
 
 	function saveContact(action){
-		if(validateInfo()){
+		if(validateInfo() ){
 			
 		    <digi:context name="addCont" property="context/addressBook.do?"/>
 		    var url="${addCont}";
@@ -203,6 +203,15 @@
 		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value.trim()==''){
 			msg='<digi:trn>Please Enter lastname</digi:trn>'
 			alert(msg);
+			return false;
+		}
+		if (notAchievedMaxAllowed('email')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('phone')) {
+			return false;
+		}
+		if (notAchievedMaxAllowed('fax')) {
 			return false;
 		}
 		//check emails. At least one email should exist
@@ -474,15 +483,15 @@
         function notAchievedMaxAllowed(dataName){
             var myArray=null;
             var msg='';
-            if(dataName=='email' && $("input[id^='email_']").length==3){
+            if(dataName=='email' && $("input[id^='email_']").length >= 3){
                 msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
             	alert(msg);
                 return false;
-            }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length==3){
+            }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length >= 3){
             	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
                 alert(msg);
             	return false;
-            }else if(dataName=='fax' && $("input[id^='fax_']").length==3){
+            }else if(dataName=='fax' && $("input[id^='fax_']").length >= 3){
             	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
                 alert(msg);
             	return false;
@@ -719,8 +728,8 @@
 												<c:forEach var="contact" items="${addressbookForm.probablyDuplicatedContacs}">
 													<tr>
 														<td class="inside" width=25><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
-														<td class="inside">${contact.name}</td>
-														<td class="inside">${contact.lastname}</td>
+														<td class="inside"><c:out value="${contact.name}"></c:out></td>
+														<td class="inside"><c:out value="${contact.lastname}"></c:out></td>
 														<td class="inside">
 															<ul style="margin:0;">
 																<c:forEach var="property" items="${contact.properties}">
@@ -733,10 +742,10 @@
 														<td class="inside">
 															<ul style="margin:0;">
 																<c:forEach var="contactOrg" items="${contact.organizationContacts}">
-																	<li>${contactOrg.organisation.name}</li>
+																	<li><c:out value="${contactOrg.organisation.name}"/> </li>
 																</c:forEach>
 																<c:if test="${not empty contact.organisationName}">
-																	<li>${contact.organisationName}</li>
+																	<li><c:out value="${contact.organisationName}"/></li>
 																</c:if>
 															</ul>
 														</td>

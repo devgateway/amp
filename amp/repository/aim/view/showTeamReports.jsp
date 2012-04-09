@@ -237,7 +237,7 @@ $(document).ready(function() {
          	<td>
           	<table cellpadding="6" cellspacing="6">
                <tr>
-               <td id="reportsearchform"><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
+                   <td id="reportsearchform"><c:choose><c:when test="${aimTeamReportsForm.showTabs}"><digi:trn>Tab Title</digi:trn></c:when><c:otherwise><digi:trn>Report Title</digi:trn></c:otherwise></c:choose>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
                </tr>
               </table>
              </td>
@@ -504,7 +504,7 @@ $(document).ready(function() {
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 	                              <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 							                              									<b>
-							                              										<p style="max-width: 400px;white-space: normal" title="${report.name}">
+							                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
 																									<c:if test="${fn:length(report.name) > 120}" >
 																										<c:out value="${fn:substring(report.name, 0, 120)}" />...
 																									</c:if>
@@ -517,12 +517,12 @@ $(document).ready(function() {
 						                          									</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
-																                            <p style="max-width: 400px;white-space: normal" title="${report.name}">
+																                            <p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
 																								<c:if test="${fn:length(report.name) > 120}" >
 																									<c:out value="${fn:substring(report.name, 0, 120)}" />...
 																								</c:if>
 																								<c:if test="${fn:length(report.name) < 120}" >
-																									<c:out value="${report.name}" />
+																									<c:out value="${report.name}"/>
 																								</c:if>
 															                                </p>  
 						                              									</b>

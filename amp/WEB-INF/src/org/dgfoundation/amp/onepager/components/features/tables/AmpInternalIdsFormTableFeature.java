@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -55,8 +56,10 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			@Override
 			protected void populateItem(final ListItem<AmpActivityInternalId> item) {
 				final MarkupContainer listParent=this.getParent();
-				item.add(new AmpTextFieldPanel<String>("internalId", new PropertyModel<String>(item.getModel(), 
-						"internalId"),"internalId",true));
+				AmpTextFieldPanel<String> internalId=new AmpTextFieldPanel<String>("internalId", new PropertyModel<String>(item.getModel(), 
+						"internalId"),"internalId",true);
+				
+				item.add(internalId);
 				
 				item.add(new Label("orgNameLabel", item.getModelObject()
 						.getOrganisation().getAcronymAndName()));			
@@ -91,7 +94,17 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
 			}
 			
 			@Override

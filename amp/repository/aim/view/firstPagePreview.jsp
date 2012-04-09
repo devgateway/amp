@@ -205,7 +205,7 @@ function initFileUploads() {
 				</tr>
 			</table>		
 
-			<div id="uploadThumbnailDiv" style="display: none">
+			<div id="uploadThumbnailDiv" class="invisible-item">
 				<div align="center">
 				<div id="uploadThumbnailErrorHolderDiv" style="font-size:11px; color: red"></div>
 				<digi:form action="/uploadThumbnail.do" method="post" enctype="multipart/form-data" >

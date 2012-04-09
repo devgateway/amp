@@ -207,19 +207,29 @@ function typeChanged(value){
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobManager.do?action=all" styleClass="comment" title="${translation}" >
                   <digi:trn>Job Manager</digi:trn>
-                </digi:link>
-                &nbsp;&gt;&nbsp;
-                <digi:trn>Add new job</digi:trn>
-              </span>
+                </digi:link> &nbsp;&gt;&nbsp;<c:choose>
+									<c:when test="${quartzJobManagerForm.editAction=='false'}">
+										<digi:trn>Add new job</digi:trn>
+									</c:when>
+									<c:otherwise>
+										<digi:trn>Edit job</digi:trn>
+									</c:otherwise>
+								</c:choose>
+						</span>
             </td>
             <!-- End navigation -->
           </tr>
           <tr>
-            <td style="height:53px;">
-              <span class="subtitle-blue">
-                <digi:trn>Add New Job</digi:trn>
-              </span>
-            </td>
+            <td style="height:53px;"><span class="subtitle-blue">
+								<c:choose>
+									<c:when test="${quartzJobManagerForm.editAction=='false'}">
+										<digi:trn>Add new job</digi:trn>
+									</c:when>
+									<c:otherwise>
+										<digi:trn>Edit job</digi:trn>
+									</c:otherwise>
+								</c:choose>
+						</span></td>
           </tr> 
           <tr>
           	<td>
@@ -494,11 +504,11 @@ function typeChanged(value){
               <c:set var="trn">
                 <digi:trn>Save</digi:trn>
               </c:set>
-              <input type="button" value="${trn}" onclick="saveJob()"/>
+              <input type="button" value="${trn}" onclick="saveJob()" class="buttonx"/>
               <c:set var="trnCan">
                 <digi:trn>Cancel</digi:trn>
               </c:set>
-              <input type="button" value="${trnCan}" onclick="cancel()"/>
+              <input type="button" value="${trnCan}" onclick="cancel()" class="buttonx"/>
             </td>
           </tr>
         </table>

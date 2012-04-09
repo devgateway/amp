@@ -94,21 +94,25 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
 					"budgetCodeProjectID", new PropertyModel<String>(am,
 							"budgetCodeProjectID"), "Budget Code Project ID", AmpFMTypes.MODULE);
+			budgetCodeProjectId.setTextContainerDefaultMaxSize();
 			add(budgetCodeProjectId);
 	
 			AmpTextFieldPanel<String> donorProjectCode = new AmpTextFieldPanel<String>(
 					"donorProjectCode", new PropertyModel<String>(am,
 							"projectCode"), "Donor Project Code", AmpFMTypes.MODULE);
+			donorProjectCode.setTextContainerDefaultMaxSize();
 			add(donorProjectCode);
 			
 			AmpTextFieldPanel<String> govAgreementNum = new AmpTextFieldPanel<String>(
 					"govAgreementNum", new PropertyModel<String>(am,
 							"govAgreementNumber"), "Government Agreement Number", AmpFMTypes.MODULE);
+			govAgreementNum.setTextContainerDefaultMaxSize();
 			add(govAgreementNum);
 	
 			AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
 					"crisNumber", new PropertyModel<String>(am,
 							"crisNumber"), "Cris Number", AmpFMTypes.MODULE);
+			govAgreementNum.setTextContainerDefaultMaxSize();
 			add(crisNumber);
 
 			AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(

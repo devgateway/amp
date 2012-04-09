@@ -218,7 +218,6 @@ function collapseAll() {
 	<html:hidden property="editAct" />
 	<html:hidden property="identification.approvalStatus"styleId="approvalStatus"/>
 	<html:hidden property="workingTeamLeadFlag"styleId="workingTeamLeadFlag"/>
-	<logic:present name="currentMember" scope="session">
 	
 
 <!-- MAIN CONTENT PART START -->
@@ -263,6 +262,7 @@ function collapseAll() {
 	    	</div>
             <div style="clear:both;"></div>
 	    </td>
+		<logic:present name="currentMember" scope="session">
 	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
 	    <td align=right>
 	    	<c:set var="trn">
@@ -279,6 +279,7 @@ function collapseAll() {
 	    		<digi:trn key="aim:print">Print</digi:trn>
 	    	</a>
 	    </td>
+		</logic:present>
 	  </tr>
 	</table>
 	</div>
@@ -389,14 +390,20 @@ function collapseAll() {
 		         </c:if>
 			<hr/>
 			</module:display>
-			<digi:trn>Duration of project</digi:trn>: <br/>
-			<b>${aimEditActivityForm.planning.projectPeriod }</b>
-			<hr/>
-			<digi:trn>Delivery rate</digi:trn>:<br/>
-			<b> ${aimEditActivityForm.funding.deliveryRate}</b>
-			<hr/>
-			<digi:trn>Consumption rate</digi:trn>:<br/>
-			<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
+			<field:display name="Duration of Project" feature="Planning">
+				<digi:trn>Duration of project</digi:trn>: <br/>
+				<b>${aimEditActivityForm.planning.projectPeriod }</b>
+				<hr/>
+			</field:display>
+			<field:display name="Delivery rate" feature="Funding Information">
+				<digi:trn>Delivery rate</digi:trn>:<br/>
+				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
+				<hr/>
+			</field:display> 
+			<field:display name="Consumption rate" feature="Funding Information">
+				<digi:trn>Consumption rate</digi:trn>:<br/>
+				<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
+			</field:display>
 	</fieldset>	
 	<fieldset>
 	<legend>
@@ -444,6 +451,7 @@ function collapseAll() {
     	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall">    
     </td>
     <td align=right>
+		<logic:present name="currentMember" scope="session">
 	    <c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
 	    <input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
 	    <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
@@ -459,7 +467,9 @@ function collapseAll() {
 					</logic:equal>
 				</field:display>
 			</feature:display>
-		</module:display>    </td>
+		</module:display>
+		</logic:present>    
+		</td>
   </tr>
   <tr>
       <td colspan="2" style="color:red;text-align: center">
@@ -787,7 +797,7 @@ function collapseAll() {
 	<!-- BUDGET SECTION -->
 	<!-- MISSING FIELD IN THE NEW ACTIVITY FORM -->
 	
-	<feature:display name="Budget" module="Project ID and Planning">
+	
 		<module:display name="/Activity Form/Identification/Activity Budget" parentModule="/Activity Form/Identification">
 		<c:choose>
 			<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
@@ -805,13 +815,7 @@ function collapseAll() {
 			</c:otherwise>
 		</c:choose>
 		<hr/>
-		<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
-			<field:display name="Project Code" feature="Budget">
-				<digi:trn key="aim:actProjectCode">Project Code</digi:trn>:<br />
-				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
-			</field:display>
-			<hr/>
-		</c:if>
+		
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:<br />
 			<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
@@ -825,7 +829,35 @@ function collapseAll() {
 			</logic:iterate>
 		</c:if>
 		</module:display>
-			
+		
+		<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
+			<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<digi:trn>FY</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Vote</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+				<br />
+			</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Sub-Program</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
+				<br />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
+				<digi:trn>Project Code</digi:trn>:&nbsp;
+				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
+				<br />
+			</module:display>
+		</module:display>
+		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">
 			
 			<digi:trn>Budget Classification</digi:trn>:<br />
@@ -873,7 +905,7 @@ function collapseAll() {
 			</c:if>
 			<hr/>
 		</module:display>
-	</feature:display>
+	
 	<!-- END BUDGET SECTION -->
 	
 	<!-- INDETIFICATION SECTION 2 -->
@@ -982,8 +1014,9 @@ function collapseAll() {
 			<digi:trn>Current Completion Date</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		</module:display>
 		<hr>
-		<digi:trn>Duration of project</digi:trn>:&nbsp;
-		<b>${aimEditActivityForm.planning.projectPeriod }</b>	</div>	
+		<field:display name="Duration of Project" feature="Planning"> 
+			<digi:trn>Duration of project</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.projectPeriod }</b>	</div>	</field:display>
 </fieldset>
 </module:display>
 
@@ -2772,6 +2805,7 @@ function collapseAll() {
     	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall_1">    
     </td>
     <td align=right>
+		<logic:present name="currentMember" scope="session">
     	<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
     	<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
    		<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
@@ -2787,7 +2821,9 @@ function collapseAll() {
 					</logic:equal>
 				</field:display>
 			</feature:display>
-		</module:display>   	</td>
+		</module:display>   	
+		</logic:present>
+		</td>
   </tr>
 </table>
 </div></td>
@@ -2798,7 +2834,6 @@ function collapseAll() {
 
 
 <!-- MAIN CONTENT PART END -->
-	</logic:present>
 </digi:form>
 <script language="JavaScript">
 	$(document).ready(function(){

@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
-<div id="myContent" style="display: none">
+<div id="myContent" class="invisible-item">
 	<div id="myContentContent" class="content">
 		<input type="text">
 	</div>

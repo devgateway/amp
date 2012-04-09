@@ -42,12 +42,15 @@ $(document).ready(function(){
 	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
 	Wicket.Ajax.Request.prototype.stateChangeCallback = function(){
 	    var t = this.transport;
-	    if (t != null && t.readyState != 1) {
-	       var tmp = t.getResponseHeader("Ajax-Location"); 
-	       if (typeof(tmp) != "undefined" && tmp != null){
-	          window.onbeforeunload=null;
-	       }
-	    }
+	    try{
+	    	if (t != null && t.readyState != 1) {
+	       		var tmp = t.getResponseHeader("Ajax-Location"); 
+	       		if (typeof(tmp) != "undefined" && tmp != null){
+	          		window.onbeforeunload=null;
+	       		}
+	    	}
+	    }catch(ignore){};
+	    
 	    return oldAjaxRequestCallback.call(this);    
 	};
 

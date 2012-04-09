@@ -12,6 +12,20 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 
+<c:set var="translation_valid_chars">
+			<digi:trn>Please only use letters, digits, '_', () and space !</digi:trn>
+</c:set>
+<c:set var="translation_only_numeric">
+			<digi:trn>Name and code values can't be only numeric</digi:trn>
+</c:set>
+
+<c:set var="translation_sector_empty">
+			<digi:trn>Sector field can't be empty</digi:trn>
+</c:set>
+<c:set var="translation_code_empty">
+			<digi:trn>Code field can't be empty</digi:trn>
+</c:set>
+
 <script language="JavaScript" type="text/javascript">
 
 function addBudgetsector(){
@@ -22,15 +36,28 @@ function addBudgetsector(){
 }
 
 function validatesector(){
-	if (document.getElementById('secname').value==''){
-		alert('Please enter the sector name');
-		return false;	
+	var secName = ''+document.getElementById('secname').value;
+	var bCode = ''+document.getElementById('bcode').value;
+	var errors = '';
+	if (secName==''){
+		errors = errors + '<li>' + "${translation_sector_empty}" + '</li>' ;
 	}
-	if (document.getElementById('bcode').value==''){
-		alert('Please enter the sector code');
-		return false;	
+	if (bCode==''){
+		errors = errors + '<li>' + "${translation_code_empty}" + '</li>' ;
 	}
-	addBudgetsector();
+	if ((secName!='' && bCode!='') && (!(isNaN(bCode)) || !(isNaN(secName)))){
+		errors = errors + '<li>' + "${translation_only_numeric}" + '</li>' ;
+	}
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+	var secNameOK = regexp.exec(secName);
+	var bCodeOK = regexp.exec(bCode);
+	if ((secName!='' && bCode!='') && (secNameOK!=secName || bCodeOK!=bCode)) {
+		errors = errors + '<li>' + "${translation_valid_chars}" + '</li>' ;
+	}
+	document.getElementById('errors').innerHTML	= errors;
+	if (errors.length == 0){
+		addBudgetsector();
+	}
 }
 
 function editsector(id) {
@@ -50,7 +77,7 @@ function setprogram() {
 }
 
 </script>
- <div style="margin:0 auto;width:1000px;">
+<div style="margin:0 auto;width:1000px;">
 <digi:form action="/BudgetManager.do" method="post">
 	<!--  AMP Admin Logo -->
 	<jsp:include page="teamPagesHeader.jsp"  />
@@ -79,6 +106,11 @@ function setprogram() {
 					</td>
 				</tr> -->
 				<tr>
+					<td style="font-size:12px;" height=16 valign="center" width=571>
+						<font color="red">
+							<ul id="errors"></ul>
+						</font>
+					</td>
 					<td style="font-size:12px;" height=16 valign="center" width=571><digi:errors /></td>
 				</tr>
 				<tr>

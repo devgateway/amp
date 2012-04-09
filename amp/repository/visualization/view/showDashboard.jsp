@@ -408,16 +408,16 @@ function initializeGlobalVariables(){
 																	title="${orgGrpe}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span>${orgGrp}
+															</c:if> <span><c:out value="${orgGrp}"/>
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="organization">
 																	<li><input type="checkbox"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
-																		name="organization_check" title="${organization.name}"
+																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
-																		onclick="uncheckAllOption('org_grp_check');" /> <span>${organization.name}</span>
+																		onclick="uncheckAllOption('org_grp_check');" /> <span><c:out value="${organization.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -474,7 +474,7 @@ function initializeGlobalVariables(){
 																	title="${item.mainEntity.name}"
 																	value="${item.mainEntity.id}"
 																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span>${item.mainEntity.name}
+															</c:if> <span><c:out value="${item.mainEntity.name}"/>
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -483,7 +483,7 @@ function initializeGlobalVariables(){
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"
-																		onclick="uncheckAllOption('region_check');" /><span>${zone.name}</span>
+																		onclick="uncheckAllOption('region_check');" /><span><c:out value="${zone.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -957,17 +957,17 @@ function initializeGlobalVariables(){
 		<c:choose>
 						<c:when test="${config.name=='Primary'}">
 							<field:display name="Primary Sector" feature="Sectors">
-							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Secondary'}">
 							<field:display name="Secondary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Tertiary'}">
 							<field:display name="Tertiary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 		</c:choose>
@@ -1052,17 +1052,17 @@ function initializeGlobalVariables(){
 		<c:choose>
 						<c:when test="${config.name=='Primary'}">
 							<field:display name="Primary Sector" feature="Sectors">
-							         <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Secondary'}">
 							<field:display name="Secondary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 						<c:when test="${config.name=='Tertiary'}">
 							<field:display name="Tertiary Sector" feature="Sectors">
-							    <html:option value="${config.id}"><digi:trn>${config.name}</digi:trn></html:option>
+							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
 	     					 </field:display>
 						</c:when>
 		</c:choose>

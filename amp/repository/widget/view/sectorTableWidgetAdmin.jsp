@@ -62,7 +62,7 @@
                     <c:forEach var="sectorTable" items="${sectorTableWidgetForm.sectorTables}" varStatus="stat">
                         <tr>
                             <td nowrap="nowrap" class="inside">
-                                ${sectorTable.name}
+                               <c:out value="${sectorTable.name}"/> 
                             </td>
 
                             <td nowrap="nowrap" class="inside" align=center>

@@ -122,6 +122,7 @@ public class LuceneUtil implements Serializable {
 	public final static Integer SEARCH_MODE_AND	= 1;
     
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
+    	logger.info("Getting lucene index stamp for index name: " + name);
 	  	String oql= "select idx from "+AmpLuceneIndexStamp.class.getName()+" idx"+
 	  	  			" where idx.idxName=:theName";
 	  	try {

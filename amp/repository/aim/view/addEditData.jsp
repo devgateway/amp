@@ -18,7 +18,6 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <jsp:include page="scripts/newCalendar.jsp"  />
 
-
 <script language="JavaScript">
 
 function chkNumeric(frmContrl){
@@ -115,7 +114,7 @@ function validation(){
 <table  width=572 cellPadding=4 cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
   <tr>
     <td bgColor=#c7d4db class=box-title height="25" align="center" colspan="7">
-    <digi:trn key="aim:addIndicator:add"><b><digi:trn>Add/Edit data</digi:trn></b></digi:trn><b>: ${aimThemeForm.indicatorName}</b>
+    <digi:trn key="aim:addIndicator:add"><b><digi:trn>Add/Edit data</digi:trn></b></digi:trn><b>: <c:out value="${aimThemeForm.indicatorName}"></c:out> </b>
     </td>
   </tr>
   <tr bgcolor="#F2F2F2" class="textalb">
@@ -157,7 +156,7 @@ function validation(){
 
           <td bgColor=#ffffff width="100%">
             <c:if test="${ind.location!=null&&ind.location.location!=null}">
-                ${ind.location.location.name}
+                <c:out value="${ind.location.location.name}"></c:out>
             </c:if>
             <c:if test="${ind.location==null}">
               <span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>

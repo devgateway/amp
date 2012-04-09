@@ -250,7 +250,7 @@
 						<p>
 							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();" onclick="simpleSubmit();" styleId="hide_empty_countries"/>
 						</p>
-						<p style="display: none" id="p_tree">
+						<p class="invisible-item" id="p_tree">
 							<font size="3">
 								<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 									<c:set var="locCollection" scope="request" value="${aimDynLocationManagerForm.firstLevelLocations}" />

@@ -30,13 +30,14 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
  */
 public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	
-	final String  EXPRESSION = "^((https?|ftp|file|)://|www\\.)[^\\s]+$";
+	final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?]+$";
 	
 	private WebMarkupContainer webLinkFeedbackContainer;
 	private Label webLinkFeedbackLabel;
@@ -58,6 +59,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		final IModel<TemporaryDocument> td = new Model(new TemporaryDocument());
 		
 		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title");
+		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
 		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
 		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
@@ -65,6 +67,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		FileUploadField file = new FileUploadField("file", new PropertyModel<FileUpload>(td, "file"));
 		file.setOutputMarkupId(true);
 		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
+		webLink.setTextContainerDefaultMaxSize();
 		webLink.setVisible(false);
 		webLink.setOutputMarkupId(true);
 		
@@ -101,6 +104,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 	}
             		
             		if(tmp.getWebLink() != null){
+            			tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(),null));
             			tmp.setFileName(tmp.getWebLink());
                 	}            	
                 	
@@ -177,6 +181,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 				if (!matcher.find()){
 					urlFormatValid = false;
 				}else{
+					if(!resource.getWebLink().contains("://"))
+						resource.setWebLink("http://" + resource.getWebLink());
 					urlFormatValid = true;
 				}
 			}			

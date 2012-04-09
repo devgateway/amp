@@ -467,4 +467,13 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
     public String getAdditionalSearchString() {
         return this.description;
     }
+
+	public AmpTheme getRootTheme() {
+		AmpTheme currentTheme = this;
+		while(currentTheme.getParentThemeId() != null)
+		{
+			currentTheme = currentTheme.getParentThemeId();
+		}
+		return currentTheme;
+	}
 }

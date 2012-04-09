@@ -43,7 +43,7 @@ function submitForm(mode) {
 						
 									<tr>
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
-	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;">Assign a global permission to the entire class</b>
+	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn>Assign a global permission to the entire class</digi:trn></b>
 	    								</td>
 	    							</tr>
 	    							<tr>
@@ -56,7 +56,7 @@ function submitForm(mode) {
 	    								<td class="inside" align="center">
 		    								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
 			    								<html:select property="permissionId" styleClass="dropdwn_sm">
-													<html:option value="0">--None--</html:option>
+													<html:option value="0">--<digi:trn>None</digi:trn>--</html:option>
 													<html:optionsCollection property="_availablePermissions" value="id" label="name" />
 												</html:select>
 											</logic:notEmpty>
@@ -65,12 +65,12 @@ function submitForm(mode) {
 	    						</table>
 	    						<br />
 	    						<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
-									<center><html:button styleClass="buttonx" property="saveGlobal" onclick="submitForm('saveGlobal')">Assign Global</html:button></center>
+									<center><html:button styleClass="buttonx" property="saveGlobal" onclick="submitForm('saveGlobal')"><digi:trn>Assign Global</digi:trn></html:button></center>
 								</logic:notEmpty>
 							</td>
 							<td width="20">&nbsp;</td>
 		    				<td valign="top" width="220">
-								<b>Key</b>:
+								<b><digi:trn>Key</digi:trn></b>:
 								<div class="perm_legend"><hr />
 									<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 									<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
@@ -79,8 +79,8 @@ function submitForm(mode) {
 									<hr />
 								</div>
 								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
-									<b>Permissions</b><br>
-									&nbsp;&nbsp; <digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS">Edit Permissions</digi:link>
+									<b><digi:trn>Permissions</digi:trn></b><br>
+									&nbsp;&nbsp; <digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS"><digi:trn>Edit Permissions</digi:trn></digi:link>
 								</logic:notEmpty>
 							</td>
 	  						</tr>

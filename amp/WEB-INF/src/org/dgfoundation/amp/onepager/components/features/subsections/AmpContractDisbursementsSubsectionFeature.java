@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -123,6 +124,7 @@ public class AmpContractDisbursementsSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				IPAContractDisbursement comp = new IPAContractDisbursement();
 				//comp.setContract(model.getObject());
+				comp.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				disbModel.getObject().add(comp);
 				target.addComponent(this.getParent());
 				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));

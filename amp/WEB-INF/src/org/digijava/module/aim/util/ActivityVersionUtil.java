@@ -85,7 +85,9 @@ public class ActivityVersionUtil {
 					 * date = DateConversion.ConvertDateToString((Date)
 					 * auxOutput.getValue()[i]); ret += date; } else {
 					 */
-					ret = ret + DbUtil.filter(auxOutput.getValue()[i].toString());
+					if (auxOutput.getValue()[i]!=null){
+						ret = ret + DbUtil.filter(auxOutput.getValue()[i].toString());
+					}
 					// }
 				}
 				if (auxOutput.getOutputs() != null) {

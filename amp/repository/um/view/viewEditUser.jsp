@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="umViewEditUserForm" />
 <digi:context name="digiContext" property="context" />
@@ -397,6 +400,7 @@ function isInvalid(field){
 																             </html:select>
 																		</td>
 																	</tr>
+																	<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
@@ -406,6 +410,7 @@ function isInvalid(field){
           																	<html:checkbox property="pledger" styleClass="inp-text"/>
 																		</td>
 																	</tr>
+																	</module:display>
 																	<tr>
 																		<td align="right"  class="formCheckContainer">
 																			<digi:trn>Assign to Workspace</digi:trn>

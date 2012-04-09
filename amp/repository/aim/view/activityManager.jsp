@@ -18,33 +18,35 @@
 		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>"; 
 		return confirm(translation);
 	}
+	
 	function deleteActivities(){
-		if(deleteActs()){
-			 var chk=document.getElementsByTagName('input');
-	         var tIds='';
-	         for(var i=0;i<chk.length;i++){
-	        	 if(chk[i].type == 'checkbox' && chk[i].checked && chk[i].id != 'chkAll'){
-	            	 tIds+=chk[i].value+',';
-	             }
-	         }
-	        if(tIds.length>0){
-	        	tIds=tIds.substring(0,tIds.length-1);
-	        	<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
-	    		document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
-	    		document.aimActivityForm.target = "_self";
-	    		document.aimActivityForm.submit();	
-	        }else{
-	        	var translation = "<digi:trn key="aim:activityselectone">Please select at least one topic to be deleted</digi:trn>"; 
-	            alert(translation);
-	            return false;
-	        }
-		}	
+		var chk=document.getElementsByTagName('input');
+      	var tIds='';
+      	for(var i=0;i<chk.length;i++){
+     	 	if(chk[i].type == 'checkbox' && chk[i].checked && chk[i].id != 'chkAll'){
+         	 	tIds+=chk[i].value+',';
+          	}
+      	}
+     	if(tIds.length>0){
+     		if(deleteActs()){ 
+      			tIds=tIds.substring(0,tIds.length-1);
+      			<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
+  				document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
+				document.aimActivityForm.target = "_self";
+				document.aimActivityForm.submit();	
+ 			}
+ 		}else{
+ 			var translation = "<digi:trn key="aim:activityselectone">Please select at least one activity to be deleted</digi:trn>"; 
+     		alert(translation);
+     		return false;
+ 		}
 	}	
 	
 	function deleteActs(){
 		var translation = "<digi:trn jsFriendly='true'>Are You Sure You Want To Remove Selected Activities?</digi:trn>"; 
 		return confirm(translation);
 	}	
+	
 	function load() {}
 
 	function unload() {}
@@ -430,10 +432,12 @@
 																title="${translation}">
 														&gt;&gt; 
 													</digi:link>
-													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-												</c:if> <c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn
-															key="aim:of">of</digi:trn>&nbsp;<c:out
-															value="${aimActivityForm.totalPages}"></c:out></td>
+													</c:if> &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;  
+													<digi:trn>Page</digi:trn>&nbsp;
+													<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;
+													<digi:trn>of</digi:trn>&nbsp;
+													<c:out value="${aimActivityForm.totalPages}"></c:out>
+													</td>
 														<td width="20%" align="right"><c:set
 															var="trnDeleteSelectedBtn">
 															<digi:trn>Delete Selected Activities</digi:trn>

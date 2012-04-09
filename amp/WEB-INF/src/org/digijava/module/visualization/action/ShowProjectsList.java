@@ -49,7 +49,7 @@ public class ShowProjectsList extends Action {
 		}
 
 		int endYearInt = 0;
-		if (endYear == null || endYear.equals("null")){
+		if (endYear == null || endYear.equals("null") || endYear.equals("undefined")){
 			endYearInt = startYearInt;
 		} else {
 			if (endYear.contains("-")) {

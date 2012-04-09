@@ -64,6 +64,9 @@
 <c:set var="filterPanelName">
 	<digi:trn key="rep:filter:filters">Filters</digi:trn>
 </c:set>
+<c:set var="settingsPanelName">
+	<digi:trn key="rep:filter:filters">Settings</digi:trn>
+</c:set>
 <c:set var="cannotSaveFiltersMessage">
 	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
 </c:set>
@@ -201,6 +204,7 @@
 				failureMessage: "${failureMessage}",
 				savingDataMessage: "${savingDataMessage}",
 				filterPanelName: "${filterPanelName}",
+                                settingsPanelName: "${settingsPanelName}",
 				cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
 				savingRepTabMessage: "${savingMessage}",
 				previewFundingTrn: "${previewFundingNameTrn}",
@@ -277,7 +281,7 @@ body {
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
 	<bean:define id="member" name="currentMember" scope="session" toScope="request" />
 	
-	<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv"></div>
+	<div style="color: red; text-align: center; " id="savingReportDiv"></div>
 	
 	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
 		<table width="1000" border="0" cellspacing="0" cellpadding="0">
@@ -307,7 +311,7 @@ body {
 				</td>
 			</tr>
 			<tr>
-				<div id="titlePanel" style="display: none">
+				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt;">
 						${plsEnterTitle}
 					</div>

@@ -1,8 +1,13 @@
 <wicket:extend>
 <span wicket:id="featureLabel"/>
-	<a href="#" onclick="$(this).siblings('div:first').slideToggle();return false;">
-	<b><span wicket:id="donorOrg"/></b>
-	</a>
+	<div style="height: 20px; width: 100%;">
+		<div style="float: left;">
+			<a href="#" onclick="$(this).siblings('div:first').slideToggle();return false;">
+			<b><span wicket:id="donorOrg"/></b>
+			</a>
+		</div>
+		<div wicket:id="delFunding" style="float: right;"/>
+	</div>
 	<div>
 	<table width="0" border="0" cellspacing="2" cellpadding="2">
 		<tr>
@@ -27,7 +32,7 @@
 	<div style="margin-top: 15px" wicket:id="newOrgSelect"/>
 	<div>
 		<div style="margin-top: 15px; float: left; width: 190px;" wicket:id="newOrgButton"/>
-		<div style="margin-top: 15px; float: left; width: 190px;" wicket:id="addAnotherFunding"/>
+		<div style="margin-top: 15px; float: left; width: 190px; padding-left: 15px;" wicket:id="addAnotherFunding"/>
 	</div>
 	</div>
 </wicket:extend>

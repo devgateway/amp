@@ -75,6 +75,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -123,7 +124,6 @@ public class ExportActivityToPDF extends Action {
 	private static final String [] componentDisbursementsFMfields={"Components Actual/Planned Disbursements","Components Amount Disbursements","Components Currency Disbursements","Components Date Disbursements"};
 	private static final String [] componentExpendituresFMfields={"Components Actual/Planned Expenditures","Components Amount Expenditures","Components Currency Expenditures","Components Date Expenditures"};
 	
-
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		EditActivityForm myForm=(EditActivityForm)form;
 		Long siteId=null;
@@ -140,7 +140,7 @@ public class ExportActivityToPDF extends Action {
 			actId=new Long(request.getParameter("activityid"));
 		}
 		
-                response.setContentType("application/download");
+        response.setContentType("application/download; charset=UTF-8");
         response.setHeader("content-disposition", "attachment;filename=activity.pdf");
 		Document document = new Document(PageSize.A4.rotate());
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1462,10 +1462,14 @@ public class ExportActivityToPDF extends Action {
             result=result.replaceAll("&lt;", "<");
 			result = result.replaceAll("&gt;",">");
             result = result.replaceAll("&amp;","&");
-		}		
-		return result;
+            result = result.replaceAll("&rsquo;","'");
+            
+		}
+		
+		return ExportActivityToPdfUtil.unhtmlentities(result);
 	}
-
+	
+	
 	private void buildIssuesPart(EditActivityForm myForm, PdfPTable mainLayout,String locale,Long siteId,ServletContext ampContext)	throws WorkerException {
 		Paragraph p1;
 		PdfPCell issuesCell1=new PdfPCell();

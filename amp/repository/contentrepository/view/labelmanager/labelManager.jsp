@@ -230,7 +230,7 @@
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
 						</div>
 
-						<p style="display: none" id="p_tree">
+						<p class="invisible-item" id="p_tree">
 							<font size="3">
 								<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 									<c:set var="labelCollection" scope="request" value="${myForm.rootLabel.children}" />

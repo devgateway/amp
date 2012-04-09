@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -14,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -55,13 +57,13 @@ public class ShowDashboard extends Action {
 			fromPublicView = true;
 		}
 		if (visualizationType.equals("sector")) {
-			prepareSectorDashboard(visualizationForm,fromPublicView);
+			prepareSectorDashboard(visualizationForm,fromPublicView,request);
 			return mapping.findForward("sector");
 		} else if (visualizationType.equals("donor")) {
-			prepareDonorDashboard(visualizationForm,fromPublicView);
+			prepareDonorDashboard(visualizationForm,fromPublicView,request);
 			return mapping.findForward("donor");
 		} else if (visualizationType.equals("region")) {
-			prepareRegionDashboard(visualizationForm,fromPublicView);
+			prepareRegionDashboard(visualizationForm,fromPublicView,request);
 			return mapping.findForward("region");
 		} else {
 			return null;
@@ -69,26 +71,26 @@ public class ShowDashboard extends Action {
 
 	}
 
-	private void prepareRegionDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
+	private void prepareRegionDashboard(VisualizationForm visualizationForm,boolean fromPublicView, HttpServletRequest request) {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
 		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.REGION || filter.getFromPublicView() != fromPublicView)) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 			filter.setDashboardType(Constants.DashboardType.REGION);
 		}
 		if (filter == null){
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 		}
 		filter.setFromPublicView(fromPublicView);
 		filter.setShowOnlyNonDraftActivities(true);
 	}
 
-	private void prepareDonorDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
+	private void prepareDonorDashboard(VisualizationForm visualizationForm,boolean fromPublicView, HttpServletRequest request) {
 
 		// Check if filter is initialized
 		// Filter initialization includes options for the filter
@@ -99,13 +101,13 @@ public class ShowDashboard extends Action {
 		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.DONOR || filter.getFromPublicView() != fromPublicView)) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 			filter.setDashboardType(Constants.DashboardType.DONOR);
 		}
 		if (filter == null){
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 		}
 		filter.setFromPublicView(fromPublicView);
 		
@@ -126,7 +128,7 @@ public class ShowDashboard extends Action {
 
 	}
 
-	private void initializeFilter(DashboardFilter filter) {
+	private void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
 		filter.setDashboardType(Constants.DashboardType.DONOR);
 
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
@@ -297,22 +299,32 @@ public class ShowDashboard extends Action {
 				e.printStackTrace();
 			}
         }
+        HttpSession httpSession = request.getSession();
+        TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
+		AmpApplicationSettings tempSettings = null;
+		if (teamMember != null) {
+			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			if (tempSettings!=null && tempSettings.getCurrency()!=null){
+				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
+				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
+			}
+		}
 	}
 
-	private void prepareSectorDashboard(VisualizationForm visualizationForm,boolean fromPublicView) {
+	private void prepareSectorDashboard(VisualizationForm visualizationForm,boolean fromPublicView, HttpServletRequest request) {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
 		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.SECTOR || filter.getFromPublicView() != fromPublicView)) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 			filter.setDashboardType(Constants.DashboardType.SECTOR);
 		}
 		if (filter == null){
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
-			initializeFilter(filter);
+			initializeFilter(filter, request);
 		}
 		filter.setFromPublicView(fromPublicView);
 		filter.setShowOnlyNonDraftActivities(true);

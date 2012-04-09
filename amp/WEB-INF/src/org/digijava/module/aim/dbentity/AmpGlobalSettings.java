@@ -13,7 +13,14 @@ public class AmpGlobalSettings implements Serializable {
 	private String globalSettingsDescription; //a description that will appear on mouseover
 	private String section;
 	private transient String[] listOfValues;
+	private Boolean valueTranslatable;
 	
+	public Boolean getValueTranslatable() {
+		return valueTranslatable;
+	}
+	public void setValueTranslatable(Boolean valueTranslatable) {
+		this.valueTranslatable = valueTranslatable;
+	}
 	/**
 	 * @return Returns the globalSettingsName.
 	 */

@@ -137,7 +137,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 							
 							<tr>
                                                             <td class="inside" style="width:60%">
-                                                                ${teamMemberDetail.teamName}
+                                                                <c:out value="${teamMemberDetail.teamName}"/>
                                                             </td>
 							<td class="inside">
 								<digi:trn>${teamMemberDetail.roleName}</digi:trn>

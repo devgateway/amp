@@ -32,13 +32,13 @@ ${fn:length(aimNPDForm.selYears)*3+1}
 		<tr>
 			<td class="inside normal"><digi:trn>Indicator Name</digi:trn></td>
 			<c:forEach var="year" items="${aimNPDForm.selYears}">
-				<td align="center" class="inside"><span
+				<td align="center" class="inside_inner_title"><span
 					class="desktop_project_name normal"> <digi:trn
 					key="aim:indGrid:baseVal">Base</digi:trn></span></td>
-				<td align="center" class="inside"><span
+				<td align="center" class="inside_inner_title"><span
 					class="desktop_project_name normal"> <digi:trn
 					key="aim:indGrid:actualVal">Actual</digi:trn></span></td>
-				<td align="center" class="inside"><span
+				<td align="center" class="inside_inner_title"><span
 					class="desktop_project_name normal"><digi:trn
 					key="aim:indGrid:targetVal">Target</digi:trn></span></td>
 
@@ -47,7 +47,7 @@ ${fn:length(aimNPDForm.selYears)*3+1}
 		<c:if test="${!empty aimNPDForm.indicators}">
 			<c:forEach var="indRow" items="${aimNPDForm.indicators}">
 				<tr>
-					<td class="inside normal"><span title="${indRow.description}">${indRow.name}</span>
+					<td class="inside normal"><span title="${indRow.description}"><c:out value="${indRow.name}"/></span>
 					</td>
 					<c:forEach var="val" items="${indRow.values}">
 						<td class="inside">${val.baseValue}</td>

@@ -290,7 +290,7 @@ function exportXSL(){
 																				<a	href="javascript:makeInactive('${curr.currencyCode}')" title="${translation}">
 																					<digi:img src="module/aim/images/bullet_green.gif" border="0" />
 																				</a>
-																				<span style="display: none"><digi:trn>Active currencies</digi:trn>
+																				<span class="invisible-item"><digi:trn>Active currencies</digi:trn>
 																				</span>
 																			</c:if>
 																			<c:if test="${curr.activeFlag != 1}">
@@ -300,7 +300,7 @@ function exportXSL(){
 																				<a href="javascript:makeActive('${curr.currencyCode}')" title="${translation}">
 																					<digi:img src="module/aim/images/bullet_grey.gif" border="0" />
 																				</a>
-																				<span style="display: none"><digi:trn>Inactive currencies</digi:trn></span>
+																				<span class="invisible-item"><digi:trn>Inactive currencies</digi:trn></span>
 																			</c:if>
 																		</td>
 																		<td align="left" class="inside">

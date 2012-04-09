@@ -53,13 +53,13 @@
 							<bean:write name="pl" property="placeLastRenderTime" format="dd MMMM yyyy - hh:mm:ss"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
-							${pl.placeName}
+							<c:out value="${pl.placeName}"/>
 						</td>
 						<td class="inside">
-						 	${pl.widgetName}
+						 	<c:out value="${pl.widgetName}"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
-						 	${pl.widgetTypeName}
+						 	<c:out value="${pl.widgetTypeName}"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
 							<digi:link href="/widgetplaces.do~actType=assignWidgt~placeId=${pl.placeId}"><digi:trn key="gis:widgetPlacesTable:assignWidgetLink">Assign widget</digi:trn></digi:link>

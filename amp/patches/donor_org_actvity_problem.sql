@@ -1,2 +1,0 @@
-insert into amp_org_role (activity, organisation,role)
-select f.amp_activity_id, f.amp_donor_org_id,1 from amp_funding f where f.amp_donor_org_id not in (select aor.organisation from amp_org_role aor);

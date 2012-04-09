@@ -1,1 +1,0 @@
-DELETE FROM dg_recurr_event;

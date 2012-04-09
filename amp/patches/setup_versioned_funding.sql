@@ -1,1 +1,0 @@
-UPDATE amp_funding SET group_versioned_funding = amp_funding_id WHERE group_versioned_funding IS NULL;

@@ -1,1 +1,0 @@
-update amp_message set object_URL=Replace(object_URL,SUBSTRING_INDEX(object_URL, '/', 3),'') where object_URL is not NULL

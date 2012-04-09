@@ -1,1 +1,0 @@
-alter table amp_budget_organizations drop index org_id;

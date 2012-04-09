@@ -1,1 +1,0 @@
-update `dg_user` users set users.EMAIL_VERIFIED=true,users.ACTIVE=true;

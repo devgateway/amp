@@ -265,7 +265,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											<table cellPadding=5>
 												<tr>
 													<td> 
-														<html:button styleClass="buttonx_sm"  property="addButton" onclick="buttonAdd()">
+														<html:button styleClass="buttonx_sm"  property="addButton" onclick="buttonAdd()" styleId="addSectorBtn">
 															<digi:trn key="btn:add">Add</digi:trn> 
 														</html:button>
 														
@@ -316,7 +316,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											Enter a keyword </digi:trn>
 										</td>
 										<td>
-											<html:text property="keyword"  styleClass="inp-text" />
+											<html:text property="keyword"  styleClass="inp-text" styleId="keyWordTextField"/>
 										</td>
 									</tr>
 									<tr>
@@ -330,7 +330,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									</tr>
 									<tr>
 										<td align="center" colspan=2>
-											<html:button  styleClass="buttonx_sm" property="submitButton" onclick="return searchSector()">
+											<html:button  styleClass="buttonx_sm" property="submitButton" onclick="return searchSector()" styleId="seachSectorBtn">
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:button>
 										</td>

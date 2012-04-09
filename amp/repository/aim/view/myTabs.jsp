@@ -180,7 +180,11 @@ var myTabsObject;
 			{	
 			document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
 			}
-		document.getElementById(labelComplete).style.display = 'none';
+		//console.log(labelComplete);
+		if(document.getElementById(labelComplete) != null){
+			document.getElementById(labelComplete).style.display = 'none';	
+		}
+		
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		startajaxtabs("MyTabs");

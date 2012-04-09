@@ -8,6 +8,8 @@
 
 <html>
 	<digi:base />
+	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>
 	<script language="JavaScript" type="text/javascript">
     <!--

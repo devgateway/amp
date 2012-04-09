@@ -73,6 +73,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedSecondarySectors;
     private Object[] selectedTertiarySectors;
 	private Object[] selectedStatuses;
+	private Object[] selectedWorkspaces;
 	// private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
@@ -375,6 +376,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedSecondarySectors = null;
                 this.selectedTertiarySectors=null;
 				this.selectedStatuses = null;
+				this.selectedWorkspaces = null;
 				this.selectedFinancingInstruments = null;
 				this.selectedTypeOfAssistance = null;
 				this.selectedModeOfPayment = null;
@@ -554,6 +556,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedStatuses = selectedStatuses;
 	}
 
+	public Object[] getSelectedWorkspaces() {
+		return selectedWorkspaces;
+	}
+
+	public void setSelectedWorkspaces(Object[] selectedWorkspaces) {
+		this.selectedWorkspaces = selectedWorkspaces;
+	}
+	
 	public Object[] getSelectedFinancingInstruments() {
 		return selectedFinancingInstruments;
 	}
@@ -1058,7 +1068,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedMultiDonor(Object[] selectedMultiDonor) {
 		this.selectedMultiDonor = selectedMultiDonor;
-	}	
+	}
+
 	
 	
 }

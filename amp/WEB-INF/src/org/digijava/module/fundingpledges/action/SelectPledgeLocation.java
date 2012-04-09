@@ -50,10 +50,10 @@ public class SelectPledgeLocation extends Action {
 			impLocLevel=new Long(request.getParameter("implemLocationLevel"));
 			pledgeForm.setImplemLocationLevel(impLocLevel);			
 		}
-		pledgeForm.setLevelId(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LEVEL_REGIONAL).getId());
+		pledgeForm.setLevelId(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL).getId());
 		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getImplemLocationLevel() );
 		if ( implLocValue == null )
-			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_REGION );
+			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY).getId()+1);
 		if (implLocValue != null) {
 			impLevelValue	= new Integer ( implLocValue.getIndex() + 1 );
 		}

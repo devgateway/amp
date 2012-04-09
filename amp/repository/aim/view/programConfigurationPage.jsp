@@ -30,6 +30,8 @@
         return valid;
     }
 
+   var enterBinder	= new EnterHitBinder('saveMPCBtn');
+
 </script>
 <h1 class="admintitle">Configuration settings</h1>
 <digi:instance  property="aimActivityProgramSettingsForm"/>
@@ -142,7 +144,7 @@ Default Hierarchy
 <tr>
 <td colspan="2" class="inside" align=center>
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return validateSave()"/>
+<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return validateSave()"  styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />

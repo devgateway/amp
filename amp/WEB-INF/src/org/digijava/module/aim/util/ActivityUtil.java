@@ -677,7 +677,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         // update the activity
         logger.debug("updating ....");
         oldActivity.setUpdatedDate(new Date(System.currentTimeMillis()));
-        oldActivity.setUpdatedBy(member);
+        oldActivity.setModifiedBy(member);
         session.saveOrUpdate(oldActivity);
         activityId = oldActivity.getAmpActivityId();
         String ampId=generateAmpId(member.getUser(),activityId,session );
@@ -2489,6 +2489,30 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return orgroles;
   }
+  
+  public static int getFundingByOrgCount(Long id) {
+	    Session session = null;
+	    int orgrolesCount = 0;
+	    try {
+	      session = PersistenceManager.getSession();
+	      String queryString = "select count(*) from " + AmpFunding.class.getName() +" f " + "where (f.ampDonorOrgId=:orgId)";
+	      Query qry = session.createQuery(queryString);
+	      qry.setParameter("orgId", id, Hibernate.LONG);
+	      orgrolesCount = (Integer)qry.uniqueResult();
+	    }
+	    catch (Exception ex) {
+	      logger.error("Unable to get fundings for organization :" + ex);
+	    }
+	    finally {
+	      try {
+	        PersistenceManager.releaseSession(session);
+	      }
+	      catch (Exception ex2) {
+	        logger.error("releaseSession() failed ");
+	      }
+	    }
+	    return orgrolesCount;
+	  }
 
   public static Collection<Components> getAllComponents(Long id) {
     Collection<Components> componentsCollection = new ArrayList<Components>();
@@ -4348,7 +4372,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
 		  try {
 	            String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName()  + " a left join a.member m WHERE " +
-	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
+	            			"(a.activityCreator=:atmId) OR (a.modifiedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
 	            Query qry = session.createQuery(queryStr);
 	            qry.setLong("atmId", ampTeamMemberId);
 	            

@@ -87,8 +87,8 @@
 							</td>
 							<td>
 								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/>
-								<html:button property="components.addNewCompoenent" onclick="addComponent()">
-									<digi:trn key="aim:add">Add</digi:trn>
+								<html:button property="components.addNewCompoenent" onclick="addComponent()" styleId="addComponentBtn">
+									<digi:trn key="aim:add">Add aa</digi:trn>
 								</html:button>
 								
 							</td>
@@ -836,6 +836,7 @@ if (document.getElementById('newCompoenentName').value!=''){
 if (document.getElementById('newCompoenentName').value!=''){
 	document.switchComponent();
 }
+
 	
 </script>
 

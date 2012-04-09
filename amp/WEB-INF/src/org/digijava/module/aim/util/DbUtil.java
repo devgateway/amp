@@ -1664,6 +1664,32 @@ public class DbUtil {
         }
         return activities;
     }
+    
+    public static Collection<AmpActivityVersion> getAllactivitiesRelatedToOrg(Long orgId){
+    	Session session = null;
+        Query qry = null;
+        Collection<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select role.activity from " + AmpOrgRole.class.getName()+ " role where role.organisation="+orgId;
+            qry = session.createQuery(queryString);
+            activities = qry.list();
+        } catch (Exception e) {
+            logger.error("Unable to get all activities");
+            logger.debug("Exceptiion " + e);
+        } finally {
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (HibernateException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        return activities;
+    }
 
     public static Collection getAllOrgActivities(Long orgId) {
         Session session = null;
@@ -1680,6 +1706,23 @@ public class DbUtil {
             logger.debug("Exceptiion " + e);
         }
         return activities;
+    }
+    
+    public static int getAllOrgActivitiesCount(Long orgId){
+    	Session session = null;
+        Query qry = null;
+        int activitiesCount = 0;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select count(*) from " + AmpActivityVersion.class.getName()
+                + " f where (f.internalId=:orgId)";
+            qry = session.createQuery(queryString);
+            activitiesCount = (Integer)qry.uniqueResult();
+        } catch (Exception e) {
+            logger.error("Unable to get all activities");
+            logger.debug("Exceptiion " + e);
+        }
+        return activitiesCount;
     }
 
     public static AmpFiscalCalendar getAmpFiscalCalendar(Long ampFisCalId) {
@@ -3291,6 +3334,40 @@ public class DbUtil {
             }
         }
     }
+    
+    public static void deleteOrg(AmpOrganisation org) throws JDBCException {
+        Session sess = null;
+        Transaction tx = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            tx = sess.beginTransaction();
+            logger.debug("before delete");
+            
+            Set<AmpOrganisationContact> orgConts = org.getOrganizationContacts(); 
+            if(orgConts != null){
+            	for (AmpOrganisationContact ampOrganisationContact : orgConts) {
+                	ampOrganisationContact.getContact().getOrganizationContacts().remove(ampOrganisationContact);
+    				sess.delete(ampOrganisationContact);
+    			}            
+                org.getOrganizationContacts().clear();
+            }            
+            
+            sess.delete(org);
+//sess.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (e instanceof JDBCException)
+                throw (JDBCException) e;
+            logger.error("Exception " + e.toString());
+            try {
+                tx.rollback();
+            } catch (HibernateException ex) {
+                logger.error("rollback() failed");
+                logger.error(ex.toString());
+            }
+        }
+    }    
 
     public static void deleteAllStamps(String idxName){
 		Connection con;

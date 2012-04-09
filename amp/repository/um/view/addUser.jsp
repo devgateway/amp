@@ -223,7 +223,7 @@
 <digi:instance property="umAddUserForm" />
 <center>
 <div class="ampFormContainer">
-<digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
+<digi:form action="/registerUser.do" method="post">
 
 	<html:hidden property="orgType" />
 

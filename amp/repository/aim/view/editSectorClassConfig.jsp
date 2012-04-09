@@ -34,6 +34,8 @@
        document.getElementById("originalSectorId").value = newId;
        return true;
     }
+    
+    var enterBinder	= new EnterHitBinder('addSectConfBtn');
     </script>
 
 <digi:instance property="aimSectorClassConfigForm" />
@@ -138,7 +140,7 @@
                                                                             
                                                                         </td>
                                                                         <td >&nbsp;&nbsp;
-                                                                        <html:submit  styleClass="dr-menu" property="event" onclick="return saveClicked()">
+                                                                        <html:submit  styleClass="dr-menu" property="event" onclick="return saveClicked()" styleId="addSectConfBtn">
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:Save">Save</digi:trn>
                                                                         </html:submit>
                                                                         <td>

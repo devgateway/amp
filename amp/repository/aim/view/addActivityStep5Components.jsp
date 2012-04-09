@@ -15,6 +15,9 @@
 <%@page import="org.digijava.module.aim.util.DbUtil"%>
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
+ <script type="text/javascript">
+var enterBinder	= new EnterHitBinder('addComponentBtn');
+</script>
 <style type="text/css">
 	.box-border-alt1 a:hover, .box-border a:hover {
 		background-color: transparent;

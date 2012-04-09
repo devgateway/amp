@@ -60,6 +60,7 @@ var trnPrimary = "";
 var trnAll = "";
 var trnExportOptions = "";
 var trnAdvancedFilter = "";
+var trnInstallFlash = "";
 var trnCancel = "";
 var trnShowSettings = "";
 var trnHideSettings = "";
@@ -136,6 +137,7 @@ function initializeTranslations(){
 	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
 	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
+	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
@@ -644,6 +646,13 @@ function initializeGlobalVariables(){
 <table>
 <tr>
 <td>
+<div id="installFlashPopin" class="dialog" title="Export Options">
+	<div id="popinContent3" class="content" align="center">
+		<a href="http://www.adobe.com/go/getflashplayer" target="_blank" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
+			<digi:trn>To view the dashboards you'll need Flash Player plug in installed. Please click here to go to Adobe website to download and install. After the plug in is installed please restart the browser.</digi:trn>
+		</a>
+	</div>
+</div>
 <div id="exportPopin" class="dialog" title="Export Options">
 <div id="popinContent2" class="content">
 	<div id="exportDiv" class="yui-navset">
@@ -1292,7 +1301,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1333,7 +1342,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1395,7 +1404,7 @@ function initializeGlobalVariables(){
 			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1439,7 +1448,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent" style="height:460px;">
 					<div id="ODAGrowth">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1504,7 +1513,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictability">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1569,7 +1578,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidType">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1633,7 +1642,7 @@ function initializeGlobalVariables(){
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FinancingInstrument">
-					<a href="http://www.adobe.com/go/getflashplayer">
+					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
 				</div>
@@ -1691,7 +1700,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="DonorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1751,7 +1760,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="SectorProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1811,7 +1820,7 @@ function initializeGlobalVariables(){
 				<br />
 				<div class="flashcontent" name="flashContent">
 					<div id="RegionProfile">
-						<a href="http://www.adobe.com/go/getflashplayer">
+						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
 					</div>
@@ -1842,6 +1851,92 @@ function initializeGlobalVariables(){
 </td>
 </tr>
 </table>
+
+<script language="Javascript">
+function initializeTranslations(){
+	trnPrimary = "<digi:trn jsFriendly='true'>Primary</digi:trn>";
+	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
+	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
+	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
+	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
+	trnCancel = '<digi:trn>Cancel</digi:trn>';
+	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
+	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
+	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
+	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
+	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
+	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
+	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
+	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
+	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
+	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
+	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
+	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
+	trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
+	trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
+	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
+	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
+	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
+	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
+	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
+	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
+	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
+	trnSubRegionProfile="<digi:trn jsFriendly='true'>Zone breakdown</digi:trn>";
+	trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
+	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
+	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
+	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
+	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
+	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
+	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
+	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
+	trnTitle = "<digi:trn>Title</digi:trn>";
+	trnName = "<digi:trn>Name</digi:trn>";
+	trnEmails = "<digi:trn>Emails</digi:trn>";
+	trnPhones = "<digi:trn>Phones</digi:trn>";
+	trnFaxes = "<digi:trn>Faxes</digi:trn>";
+	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
+	trnSave = "<digi:trn>Save</digi:trn>";
+	trnDescription = "<digi:trn>Description</digi:trn>";
+	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
+	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
+	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
+	trnAllSectors = "<digi:trn jsFriendly='true'>ALL Sectors</digi:trn>"; 
+	trnMultipleSubSector = "<digi:trn jsFriendly='true'>Multiple Sub Sectors</digi:trn>"; 
+	trnAllSubSector = "<digi:trn jsFriendly='true'>ALL Sub Sectors</digi:trn>"; 
+	trnAllRegions ="<digi:trn jsFriendly='true'>ALL Regions</digi:trn>"; 
+	trnAllZones = "<digi:trn jsFriendly='true'>ALL Zones</digi:trn>"; 
+	trnMultipleZones = "<digi:trn jsFriendly='true'>Multiple Zones</digi:trn>";
+	trnODAGrowth = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn>"; 
+	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
+	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
+	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
+}
+function initializeGlobalVariables(){
+	//Other global variables
+	loadingPanel;
+	myTabs;
+	<digi:context name="url1" property="/visualization/pdfExport.do"/>
+	urlPdfExport = "${url1}";
+	<digi:context name="url2" property="/visualization/wordExport.do"/>
+	urlWordExport = "${url2}";
+	<digi:context name="url3" property="/visualization/excelExport.do"/>
+	urlExcelExport = "${url3}";
+	<digi:context name="url" property="context/visualization/saveOrgInfo.do"/>
+	urlSaveAdditional = "${url}";
+	<digi:context name="showList" property="context/module/moduleinstance/showProjectsList.do?" />
+	urlShowList = "${showList}";
+}
+
+</script>
 
 </digi:form>
 

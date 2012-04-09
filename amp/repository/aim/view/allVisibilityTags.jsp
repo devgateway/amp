@@ -114,6 +114,7 @@
 <field:display name="Add Web Link" feature="Add Resources"></field:display>
 <field:display name="Upload Doc" feature="Add Resources"></field:display>
 
+<feature:display name="Archived" module="Filter Section"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 

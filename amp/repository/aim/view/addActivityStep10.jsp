@@ -501,7 +501,7 @@
 																
 																	<input type="text" name="indicator.baseValDate"
 																	value="<bean:write name="indicator" property="baseValDate" />"
-																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10"  id="txtBaseValDate">&nbsp;&nbsp;
 																
 																	<a id="clear1" href="javascript:clearDate(document.getElementById("txtBaseValDate"), 'clear1')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -542,7 +542,7 @@
 																	
 																	<input type="text" name="indicator.targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10"  id="txtTargetValDate">&nbsp;&nbsp;
 																	
 																	<a id="clear2" href="javascript:clearDate(document.getElementById('txtTargetValDate'), 'clear2')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -570,7 +570,7 @@
 																<td align="left">
 																	<input type="text" name="indicator.targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10"  id="txtTargetValDate">&nbsp;&nbsp;
 																</td>
 																</c:if>
 															</tr>
@@ -601,7 +601,7 @@
 																<td align="left">
 																	<input type="text" name="indicator.revTargetValDate"
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10"  id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
 																	<a id="clear3" href="javascript:clearDate(document.getElementById('txtRevisedTargetValDate'), 'clear3')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -673,7 +673,7 @@
 																<td align="left">
 																	<input type="text" name="indicator.currentValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
-																	class="inp-text" size="10" readonly="true" id="txtCurrValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10"  id="txtCurrValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.getElementById('txtCurrValDate'), 'clear4')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

@@ -78,6 +78,7 @@ public class AmpARFilter extends PropertyListable {
 	private boolean justSearch=false;
 	private Long ampReportId;
 	private Set statuses = null;
+	private Set workspaces = null;
 	// private Set donors=null; //not used anymore
 	@PropertyListableIgnore
 	private Set sectors = null;
@@ -548,21 +549,22 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +
 					"amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") ) AND draft<>true ";
+				+ ") ";
+				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
 		else{
 			
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") "
-				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams) + ") )" ;
+				+ ") ";
+				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				//+ Util.toCSString(ampTeams) + ") )" ;
 		}
 		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 			+ Util.toCSString(ampTeams)
-			+ ") "
-			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			+ Util.toCSString(ampTeams) + ") )" ;
+			+ ") ";
+			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			//+ Util.toCSString(ampTeams) + ") )" ;
 			
 
 	// computed workspace filter -- append it to the team filter so normal
@@ -600,6 +602,9 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
+
+		String WORKSPACE_FILTER = "select amp_activity_id from amp_activity where amp_team_id IN ("
+			+ Util.toCSString(workspaces) + ")";
 
 		// String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE
 		// amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
@@ -720,8 +725,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			if("Management".equals(this.getAccessType()))
 				APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("
 					+ Util.toCSString(activityStatus) + ")";
-			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
-				+ Constants.APPROVED_STATUS + "'";
+			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ('"
+				+ Constants.APPROVED_STATUS + "','"+ Constants.STARTED_APPROVED_STATUS +"')";
 		
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
@@ -942,6 +947,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
+		if (workspaces != null && workspaces.size() > 0)
+			queryAppend(WORKSPACE_FILTER);
 		// if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if (sectors != null && sectors.size() != 0) {
 			queryAppend(SECTOR_FILTER);
@@ -1209,6 +1216,21 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	 */
 	public void setStatuses(Set statuses) {
 		this.statuses = statuses;
+	}
+
+	/**
+	 * @return Returns the workspaces.
+	 */
+	public Set getWorkspaces() {
+		return workspaces;
+	}
+
+	/**
+	 * @param workspaces
+	 *            The workspaces to set.
+	 */
+	public void setWorkspaces(Set workspaces) {
+		this.workspaces = workspaces;
 	}
 
 	@PropertyListableIgnore

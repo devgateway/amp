@@ -178,7 +178,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			@Override
 			public Object getDisplayValue(Object object) {
 				String s = (String)object;
-				
+				// Fixing AMP-12708
 				if (s.compareTo("A") == 0)
 					return TranslatorUtil.getTranslation("Ascending");
 				else

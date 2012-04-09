@@ -19,6 +19,8 @@
 			document.aimAddSectorForm.submit();
 	
 	}
+	
+	 var enterBinder	= new EnterHitBinder('addSectSchemeBtn');
 </script>
 
 <digi:instance property="aimAddSectorForm" />

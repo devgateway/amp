@@ -97,7 +97,8 @@ public class DynLocationManagerUtil {
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession
 					.load(AmpCategoryValueLocations.class, id);
 			
-			loc.getParentLocation().getChildLocations().remove(loc);
+			if ( loc.getParentLocation() != null )
+				loc.getParentLocation().getChildLocations().remove(loc);
 //			String queryString = "delete from " + AmpLocation.class.getName()
 //					+ " a where a.location=" + loc.getId();
 //			Query qry = dbSession.createQuery(queryString);
@@ -108,7 +109,7 @@ public class DynLocationManagerUtil {
 //session.flush();
 			//tx.commit();
 		} catch (Exception e) {
-			tx.rollback();
+			//tx.rollback();
 			if (errors != null)
 				errors.add("title", new ActionMessage(
 						"error.aim.dynRegionManager.locationIsInUse"));

@@ -80,6 +80,14 @@
 			 return true;
 	}
 
+	function deleteActivities(){
+		if(confirmDelete() == true){
+			document.aimTeamActivitiesForm.submit();
+		}
+	}
+
+	var enterBinder	= new EnterHitBinder('deleteActBtn');
+	enterBinder.map(["actSearchKeyword"], "actSearchBtn");
 -->
 
 </script>
@@ -138,7 +146,7 @@
 							<tr>
 								<td width="195">
 									<digi:trn>Keyword</digi:trn>&nbsp;
-									<html:text property="keyword" styleClass="inp-text" />
+									<html:text property="keyword" styleClass="inp-text" styleId="actSearchKeyword"/>
 								</td>
 								<td width="120">
 									<digi:trn>Results</digi:trn>&nbsp;
@@ -159,7 +167,7 @@
 									<c:set var="trnGoBtn">
 										<digi:trn> GO </digi:trn>
 									</c:set>
-									<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+									<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamActivitiesForm.teamId }')" id="actSearchBtn">
 								</td>
 							</tr>
 						</table>
@@ -251,7 +259,7 @@
 													<tr bgcolor="#ffffff">
 														<td colspan="2" align="center">		
 															<html:hidden name="aimTeamActivitiesForm" property="teamId"/>												
-															<input type="submit" value="<digi:trn key='btn:remove'>Remove</digi:trn>"  class="buttonx" onclick="return confirmDelete()">
+															<input type="button" value="<digi:trn key='btn:remove'>Remove</digi:trn>" id="deleteActBtn" class="buttonx" onclick="deleteActivities()">
 														</td>
 													</tr>																										
 													</logic:notEmpty>

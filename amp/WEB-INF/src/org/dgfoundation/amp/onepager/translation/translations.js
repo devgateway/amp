@@ -103,12 +103,20 @@ function saveEditBox(labelId){
 }
 
 function wicketSwitchTranslationMode(){
-	var params = '&method=switchtranslatormode';
+	var path = window.location.pathname;
+	var onepagerPath = "${onepagerPath}";
+	var actId = path.substr(path.indexOf(onepagerPath) + onepagerPath.length);
+	
+	var params = '&method=switchtranslatormode&activity=' + actId;
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
 
 function wicketSwitchFMMode(){
-	var params = '&method=switchfmmode';
+	var path = window.location.pathname;
+	var onepagerPath = "${onepagerPath}";
+	var actId = path.substr(path.indexOf(onepagerPath) + onepagerPath.length);
+	
+	var params = '&method=switchfmmode&activity=' + actId;
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
 

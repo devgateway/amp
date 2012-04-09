@@ -51,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
@@ -68,6 +69,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -325,77 +327,79 @@ public class ReportsFilterPicker extends MultiAction {
  	 		
  	 	
         StopWatch.next("Filters", true, "before programs");
-        Collection<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
-        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
-        
-		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
-		AmpTheme primaryProg = null;
-		List<AmpTheme> primaryPrograms;		
-		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
-			//primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
-			primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
-			HierarchyListableUtil.changeTranslateable(primaryProg, false);
-			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
-			filterForm.getProgramElements().add(primaryProgElement);
-		} /*else {
-			primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-			for (AmpTheme ampTheme : primaryPrograms) {
-				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", ampTheme, "selectedPrimaryPrograms");
+        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard", ampContext) ) {
+	        Collection<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
+	        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
+	        
+			AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+			AmpTheme primaryProg = null;
+			List<AmpTheme> primaryPrograms;		
+			if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
+				//primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+				primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
+				HierarchyListableUtil.changeTranslateable(primaryProg, false);
+				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 				filterForm.getProgramElements().add(primaryProgElement);
-			}
-		}	*/
-		
-//		if (primaryPrgSetting!=null) {
-//			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
-//			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
-//			filterForm.getProgramElements().add(primaryProgElement);
-//	 	}
-		
-		AmpTheme secondaryProg = null;
- 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
- 	 	List<AmpTheme> secondaryPrograms;		
-		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
-			//secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
-			secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
-			HierarchyListableUtil.changeTranslateable(secondaryProg, false);
-			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
-			filterForm.getProgramElements().add(secondaryProgElement);
-		}/* else {
-			secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-			for (AmpTheme ampTheme : secondaryPrograms) {
-				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", ampTheme, "selectedSecondaryPrograms");
+			} /*else {
+				primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+				for (AmpTheme ampTheme : primaryPrograms) {
+					GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", ampTheme, "selectedPrimaryPrograms");
+					filterForm.getProgramElements().add(primaryProgElement);
+				}
+			}	*/
+			
+	//		if (primaryPrgSetting!=null) {
+	//			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+	//			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
+	//			filterForm.getProgramElements().add(primaryProgElement);
+	//	 	}
+			
+			AmpTheme secondaryProg = null;
+	 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
+	 	 	List<AmpTheme> secondaryPrograms;		
+			if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
+				//secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+				secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
+				HierarchyListableUtil.changeTranslateable(secondaryProg, false);
+				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 				filterForm.getProgramElements().add(secondaryProgElement);
-			}
-		}*/
-// 	 	if (secondaryPrg!=null) {
-//			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
-//			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
-//			filterForm.getProgramElements().add(secondaryProgElement);
-//		}
- 	 	
- 	 	
- 	 	
- 	 	
-		AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
-// 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
-// 	 	
-// 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
-// 	 	filterForm.getProgramElements().add(natPlanProgElement);
- 	 	
-		List<AmpTheme> nationalPlanningObjectives;
- 	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
- 	 		//AmpTheme nationalPlanningProg	= ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
- 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
- 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
- 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
- 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-		}/* else {
-			nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-			for (AmpTheme ampTheme : nationalPlanningObjectives) {
-				GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", ampTheme, "selectedNatPlanObj"); 	 	
+			}/* else {
+				secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+				for (AmpTheme ampTheme : secondaryPrograms) {
+					GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", ampTheme, "selectedSecondaryPrograms");
+					filterForm.getProgramElements().add(secondaryProgElement);
+				}
+			}*/
+	// 	 	if (secondaryPrg!=null) {
+	//			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+	//			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
+	//			filterForm.getProgramElements().add(secondaryProgElement);
+	//		}
+	 	 	
+	 	 	
+	 	 	
+	 	 	
+			AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+	// 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+	// 	 	
+	// 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
+	// 	 	filterForm.getProgramElements().add(natPlanProgElement);
+	 	 	
+			List<AmpTheme> nationalPlanningObjectives;
+	 	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
+	 	 		//AmpTheme nationalPlanningProg	= ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+	 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
+	 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
+	 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-			}
-		}*/
+			}/* else {
+				nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+				for (AmpTheme ampTheme : nationalPlanningObjectives) {
+					GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", ampTheme, "selectedNatPlanObj"); 	 	
+		 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
+				}
+			}*/
+        }
  	 	StopWatch.next("Filters", true, "After Programs");
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
@@ -547,6 +551,28 @@ public class ReportsFilterPicker extends MultiAction {
 			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
 					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
 							rootActivityStatus, "selectedStatuses");
+			filterForm.getOtherCriteriaElements().add(activityStatusElement);
+		}
+		if (true) { //Here needs to be a check to see if the field/feature is enabled
+			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+
+			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation();
+			rootCreators.setLabel("All");
+			rootCreators.setUniqueId("0");
+			rootCreators.setChildren( children );
+			Iterator<AmpTeam> it = creatorsList.iterator();
+			while(it.hasNext()){
+				AmpTeam ampTeam = it.next();
+				HierarchyListableImplementation creatorsDO	= new HierarchyListableImplementation();
+				creatorsDO.setLabel( ampTeam.getName() + "" );
+				creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
+				children.add(creatorsDO);
+			}
+			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
+					new GroupingElement<HierarchyListableImplementation>("Workspace", "filter_workspace_div", 
+							rootCreators, "selectedWorkspaces");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
 		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
@@ -721,7 +747,7 @@ public class ReportsFilterPicker extends MultiAction {
 							rootplanMinRank, "planMinRanks");
 			filterForm.getOtherCriteriaElements().add(planMinRankElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
+		if (FeaturesUtil.isVisibleFeature("Archived", ampContext)) { //Here needs to be a check to see if the field/feature is enabled
 			if(teamMember!=null){
 				Collection<HierarchyListableImplementation> children	= 
 					new ArrayList<HierarchyListableImplementation>();
@@ -924,6 +950,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+		filterForm.setSelectedWorkspaces(null);
 		filterForm.setSelectedSecondaryPrograms(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedNatPlanObj(null);
@@ -1255,6 +1282,18 @@ public class ReportsFilterPicker extends MultiAction {
 			AmpCategoryValue value 	= (AmpCategoryValue) session.load(AmpCategoryValue.class, statusId);
 			arf.getStatuses().add(value);
 		}
+		
+		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
+			arf.setWorkspaces(new HashSet());
+		else
+			arf.setWorkspaces(null);
+
+		for (int i = 0; filterForm.getSelectedWorkspaces() != null && i < filterForm.getSelectedWorkspaces().length; i++) {
+			Long workspaceId = Long.parseLong( filterForm.getSelectedWorkspaces()[i].toString() );
+			AmpTeam value 	= (AmpTeam) session.load(AmpTeam.class, workspaceId);
+			arf.getWorkspaces().add(value);
+		}
+
 		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)
 			arf.setProjectCategory(new HashSet());
 		else
@@ -1449,6 +1488,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+		filterForm.setSelectedWorkspaces(null);
 		filterForm.setSelectedNatPlanObj(null);
 		filterForm.setJustSearch(null);
 		filterForm.setSelectedPrimaryPrograms(null);

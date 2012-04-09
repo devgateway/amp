@@ -2159,7 +2159,7 @@ public class DEImportBuilder {
 								//update the AmpId of the DEMappingField.
 								AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(),iWorker.getIatiID(), iWorker.getLang());
 								DEMappingFields item = checkedActivity.getItem();
-								item.setAmpId(ampActivity.getAmpActivityId());
+								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
 								DataExchangeUtils.addObjectoToAmp(item);
 							}

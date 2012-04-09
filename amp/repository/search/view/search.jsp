@@ -186,7 +186,7 @@
 								<c:forEach items="${resultResources}" var="resource">
 									<li><c:choose>
 										<c:when test="${empty resource.webLink}">
-											<a 
+											<a style="cursor: pointer;text-decoration: underline;"
 												onclick="window.location='/contentrepository/downloadFile.do?uuid=${resource.uuid}'"
 												title="<digi:trn>Click here to download file</digi:trn>">
 											<c:out value="${resource.name}"></c:out> </a>

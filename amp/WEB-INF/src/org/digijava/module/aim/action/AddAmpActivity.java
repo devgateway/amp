@@ -1094,14 +1094,14 @@ private ActionForward showStep9(ActionMapping mapping,
 	    		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
 	    		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
 	
-	    		if (eaForm.getActivityId()!=null){
-	        		//get list of ref docs for activity
-	    			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
-	            	//create map where keys are category value ids.
-	    			categoryRefDocMap = AmpCollectionUtils.createMap(
-	    					activityRefDocs,
-	    					new ActivityUtil.CategoryIdRefDocMapBuilder());
-	    		}
+//	    		if (eaForm.getActivityId()!=null){
+//	        		//get list of ref docs for activity
+//	    			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+//	            	//create map where keys are category value ids.
+//	    			categoryRefDocMap = AmpCollectionUtils.createMap(
+//	    					activityRefDocs,
+//	    					new ActivityUtil.CategoryIdRefDocMapBuilder());
+//	    		}
 	
 	        	//create arrays, number of elements as much as category values
 	        	Long[] refdocIds=new Long[catValues.size()];

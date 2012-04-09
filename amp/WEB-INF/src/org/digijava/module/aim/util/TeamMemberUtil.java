@@ -1952,10 +1952,7 @@ public class TeamMemberUtil {
     		AmpActivityVersion act	= (AmpActivityVersion) iter.next();
     		if ( act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setModifiedBy(null);
-    		}
-    		if ( act.getUpdatedBy() != null && act.getUpdatedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
-    			act.setUpdatedBy(null);
-    		}
+    		}    		
     		if ( act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setActivityCreator(null);
     		}

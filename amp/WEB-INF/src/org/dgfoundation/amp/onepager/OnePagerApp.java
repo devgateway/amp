@@ -124,7 +124,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
 		 getPageSettings().addComponentResolver(new FMComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());
-		 mountBookmarkablePage("onepager", OnePager.class);
+		 mountBookmarkablePage(OnePagerConst.ONEPAGER_URL_PREFIX, OnePager.class);
 		 mountBookmarkablePage("permmanager", PermissionManager.class);
 		 
 //		 ServletContext servletContext = getServletContext();

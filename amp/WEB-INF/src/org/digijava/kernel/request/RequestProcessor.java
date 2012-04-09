@@ -250,8 +250,46 @@ public class RequestProcessor
         request.setCharacterEncoding("UTF-8");
         String uri  = request.getRequestURI();
         String layout = request.getParameter("layout");
-
+        String referrer = request.getHeader("referer"); // Yes, with the legendaric misspelling
         String secure = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SECURE_SERVER);
+        
+        //AMP Security Issues - AMP-12638
+        {
+        	String commonURL = new String(request.getRequestURL());
+        	String headCommonURL = commonURL.substring(0, commonURL.indexOf("://") + 3);
+        	commonURL = commonURL.substring(commonURL.indexOf("://") + 3);
+        	int idx = commonURL.indexOf('/');
+        	if (idx > -1){
+        		commonURL = commonURL.substring(0, idx);
+        	}
+        	String oldCommonURL = new String(commonURL);
+        	if (referrer != null){
+        		String commonREF = new String(referrer);
+        		commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
+        		idx = commonREF.indexOf('/');
+        		if (idx > -1){
+        			commonREF = commonREF.substring(0, idx);
+        		}
+        		
+        		if (commonREF.compareTo(commonURL) != 0){
+        			request.getSession().invalidate();
+        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+        		}
+        	}
+        	else{
+        		commonURL = new String(request.getRequestURL());
+        		if (request.getQueryString() != null)
+        			commonURL += "?" + request.getQueryString();
+        		if (commonURL.indexOf('~') > -1 ||
+        				commonURL.indexOf("id") > -1 ||
+        				commonURL.indexOf("Id") > -1){
+        			request.getSession().invalidate();
+        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+        		}
+        	}
+        }
+        
+        
 
         if (secure != null && ("login-only".compareToIgnoreCase(secure) == 0 || "everything".compareToIgnoreCase(secure) == 0)){
         	if (httpPort == null || httpsPort == null){

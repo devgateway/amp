@@ -12,6 +12,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -92,11 +93,19 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 	
 	private void switchTranslatorMode(Request request, AjaxRequestTarget target){
 		((AmpAuthWebSession) Session.get()).switchTranslatorMode();
+		
+		String id = request.getParameter("activity");
+		ActivityGatekeeper.pageModeChange(id);
+		
 		target.appendJavascript("window.location.reload()");
 	}
 
 	private void switchFMMode(Request request, AjaxRequestTarget target){
 		((AmpAuthWebSession) Session.get()).switchFMMode();
+		
+		String id = request.getParameter("activity");
+		ActivityGatekeeper.pageModeChange(id);
+		
 		target.appendJavascript("window.location.reload()");
 	}
 }

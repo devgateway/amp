@@ -97,6 +97,7 @@ public class TextCell extends Cell {
 				return this.shortText;
 			}
 			this.shortText	= ptr.matcher(value).replaceAll("").trim();
+			this.shortText 	= this.shortText.replaceAll("<style.*</style>", "");
 			this.shortText 	= this.shortText.replaceAll("\\<.*?>","");
 			this.shortText	= ptr2.matcher(this.shortText).replaceAll("");
 			if(this.shortText.length()<shortLength)
@@ -117,6 +118,7 @@ public class TextCell extends Cell {
 			Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
 			Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
 			this.fullText	= ptr.matcher(value).replaceAll("").trim();
+			this.fullText	= this.fullText.replaceAll("<style.*</style>", "");
 			this.fullText	= this.fullText.replaceAll("\\<.*?>", "");
 			this.fullText	= ptr2.matcher(this.fullText).replaceAll("");
 			return this.fullText;

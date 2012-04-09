@@ -167,7 +167,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set member;
 
 	protected String contactName;
-	protected AmpTeamMember updatedBy;
+	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
@@ -1240,14 +1240,6 @@ contactName = string;
 
 	public void setProposedCompletionDate(Date proposedCompletionDate) {
 		this.proposedCompletionDate = proposedCompletionDate;
-	}
-
-	public AmpTeamMember getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(AmpTeamMember updatedBy) {
-		this.updatedBy = updatedBy;
 	}
 
 	public Date getContractingDate() {

@@ -438,7 +438,7 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit styleClass="buttonx"><digi:trn>Save</digi:trn></html:submit>
+		<html:submit styleClass="buttonx" styleId="saveContent"><digi:trn>Save</digi:trn></html:submit>
 		</div>
       </td>
   </tr>

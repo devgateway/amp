@@ -389,6 +389,30 @@ function hideExport() {
 	popinPanels['Panel2'].hide();
 }
 
+function showInstallFlashPopin() {
+	if ( popinPanels['Panel3'] == null ) {
+		popinPanels['Panel3'] = new YAHOO.widget.Panel('Panel3', {
+		width:"750px",
+		maxHeight:"500px",
+		fixedcenter: true,
+	    constraintoviewport: false,
+	    underlay:"none",
+	    close:false,
+	    visible:false,
+	    modal:true,
+	    draggable:true,
+	    context: ["showbtn", "tl", "bl"]
+	    });
+		popinPanels['Panel3'].render(document.body);
+		var msg=trnInstallFlash;
+		popinPanels['Panel3'].setHeader(msg);
+		var element = document.getElementById("installFlashPopin");
+		element.style.display 	= "inline";
+		popinPanels['Panel3'].setBody(element);
+	}
+	popinPanels['Panel3'].show();
+}
+
 function doExport(){
 	var options = "?";
 	options += "typeOpt=" + getOptionChecked("export_type_");
@@ -691,6 +715,7 @@ function countSelected (selector){
 
 var callbackApplyFilterCall = {
 		  success: function(o) {
+			  //loadingPanel.hide();
 			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();
@@ -700,7 +725,22 @@ var callbackApplyFilterCall = {
 		  }
 		};
 
+function hasFlash(){
+	var hasFlash = false;
+	try {
+	  var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+	  if(fo) hasFlash = true;
+	}catch(e){
+	  if(navigator.mimeTypes ["application/x-shockwave-flash"] != undefined) hasFlash = true;
+	}
+	return hasFlash;
+}
+
 function callbackApplyFilter(e){
+	if (!hasFlash()){
+		showInstallFlashPopin();
+		return;
+	}
 	panelLoaded = false;
 	if (document.getElementById("workspaceOnlyQuickFilter")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;

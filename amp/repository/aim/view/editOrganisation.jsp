@@ -2219,7 +2219,7 @@ border-right: 1px solid rgb(208, 208, 208);
             <tr>
                 <td align="center">
 				<hr />
-                	<html:button styleClass="buttonx_sm" property="submitButton" onclick="return validateSaveOrg()">
+                	<html:button styleClass="buttonx_sm" property="submitButton" onclick="return validateSaveOrg()" styleId="addOrgBtn">
                         <digi:trn>Save</digi:trn>
                 	</html:button>
                 	<input type="reset" value="<digi:trn>Reset</digi:trn>" class="buttonx_sm">
@@ -2291,4 +2291,6 @@ border-right: 1px solid rgb(208, 208, 208);
 	      }				
 		});
 
+    
+    var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>

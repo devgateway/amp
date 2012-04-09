@@ -125,6 +125,11 @@
     <logic:equal name="isDevInfoMode" value="true">
         showDevinfo = true;
     </logic:equal>
+    
+    var isPublic = false;
+    <logic:present parameter="public">
+			isPublic = true;
+		</logic:present>
 </script>
 
 
@@ -150,6 +155,8 @@
 	<jsp:include page="gisFilter.jsp"></jsp:include>
 		
 	</div>
+
+
 
 <div class="filter_wnd_background_holder" style="display:none;">
 	

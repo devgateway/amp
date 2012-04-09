@@ -21,12 +21,12 @@ public class AmpActivityVersion extends AmpActivityFields{
 	public AmpActivityVersion() {
 	}
 
-	public AmpActivityVersion(Long ampActivityId, String name, Date updatedDate, AmpTeamMember updateBy, String ampid) {
+	public AmpActivityVersion(Long ampActivityId, String name, Date updatedDate, AmpTeamMember modifiedBy, String ampid) {
 		this.ampActivityId=ampActivityId;
 		this.name=name;
 		//this.budget=budget;
 		this.updatedDate=updatedDate;
-		this.updatedBy=updateBy;
+		this.modifiedBy = modifiedBy;
 		this.ampId=ampid;
 	}
 

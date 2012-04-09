@@ -29,9 +29,7 @@
 						<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
 						</c:set>
 						<digi:link href="/workspaceManager.do" styleClass="comment" title="${clickToViewWorkspaceManager}" >
-						<digi:trn key="aim:workspaceManager">
-						Workspace Manager
-						</digi:trn>
+						<digi:trn>Workspace Manager</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:roles">
 						Roles
@@ -39,7 +37,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>Workspace Manager</span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>

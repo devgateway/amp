@@ -2335,14 +2335,14 @@ function commentWin(val, commentId) {
 															</field:display>
 															
 															<field:display name="Activity Updated By" feature="Identification">
-																<c:if test="${!empty activity.updatedBy}">
+																<c:if test="${!empty activity.modifiedBy}">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i> <digi:trn
 																			key="aim:activityUpdatedBy">
 																				Activity updated by</digi:trn></i>: <c:out
-																			value="${activity.updatedBy.user.firstNames}" /> <c:out
-																			value="${activity.updatedBy.user.lastName}" /> - <c:out
-																			value="${activity.updatedBy.user.email}" />
+																			value="${activity.modifiedBy.user.firstNames}" /> <c:out
+																			value="${activity.modifiedBy.user.lastName}" /> - <c:out
+																			value="${activity.modifiedBy.user.email}" />
 																	</TR>
 																</c:if>
 															</field:display>

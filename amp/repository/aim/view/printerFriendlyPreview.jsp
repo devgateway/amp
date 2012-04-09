@@ -1802,7 +1802,13 @@ body {background:none;}
 																		<c:set var="translation">
 																			<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 																		</c:set>																		
-																		<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}"><img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>									
+																		<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" 
+																			onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}">
+																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
+																		</a> --%>
+																		<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
+																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
+																		</a>									
 																		<logic:notEmpty name="crDoc" property="description">
 																			<br />&nbsp;
 																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
@@ -2376,7 +2382,7 @@ body {background:none;}
 									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedBy">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2385,9 +2391,9 @@ body {background:none;}
 											</b>				
 											</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.identification.updatedBy.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.modifiedBy.user.email}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>

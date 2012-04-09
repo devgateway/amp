@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -24,6 +25,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -70,7 +72,13 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		}
 
 		final IModel<AmpIndicatorRiskRatings> riskModel = new PersistentObjectModel<AmpIndicatorRiskRatings>();
-
+		ChoiceRenderer cr = new ChoiceRenderer(){
+			@Override
+			public Object getDisplayValue(Object object) {
+				AmpIndicatorRiskRatings rating = (AmpIndicatorRiskRatings)object;			
+			    return TranslatorUtil.getTranslation(rating.getRatingName());
+			}
+		};
 		final AbstractSingleSelectChoice<AmpIndicatorRiskRatings> risk = new DropDownChoice<AmpIndicatorRiskRatings>(
 				"risk",
 				riskModel, new LoadableDetachableModel<List<AmpIndicatorRiskRatings>>() {
@@ -78,7 +86,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 					protected List<AmpIndicatorRiskRatings> load() {
 						return (List<AmpIndicatorRiskRatings>) MEIndicatorsUtil.getAllIndicatorRisks();
 					}
-				}).setNullValid(true);
+				}, cr).setNullValid(true);
+		
 		risk.setOutputMarkupId(true);
                 risk.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
@@ -86,6 +95,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     riskModel.setObject(risk.getConvertedInput());
                 }
                 });
+                
 		add(risk);
 
 		final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);

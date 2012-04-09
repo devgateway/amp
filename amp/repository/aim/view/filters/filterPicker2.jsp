@@ -39,7 +39,9 @@ StopWatch.next("Filters", true);
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
 		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
 		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
-		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
+		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+			<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
+		</module:display>
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
@@ -68,14 +70,16 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
-		<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
-			<div class="grayBorder">
-				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
-				<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
-				<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
-				<%@include file="bigFilterTable.jsp" %>
+		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
+				<div class="grayBorder">
+					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
+					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
+					<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
+					<%@include file="bigFilterTable.jsp" %>
+				</div>
 			</div>
-		</div>
+		</module:display>
 		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />

@@ -210,6 +210,9 @@ function closeWindow()
 	{
 		window.close();
 	}
+	
+var enterBinder	= new EnterHitBinder('addIndBtn');
+enterBinder.map(["keyWordTextField"], "searchIndBtn");
 </script>
 <digi:instance property="aimThemeForm" />
 <digi:form action="/assignNewIndicator.do" method="post">
@@ -260,7 +263,7 @@ function closeWindow()
 											Enter a keyword</digi:trn>
 										</td>
 										<td>
-										<html:text property="keyword" style="width:140px;font-family:arial;font-size:11px;" />
+										<html:text property="keyword" style="width:140px;font-family:arial;font-size:11px;" styleId="keyWordTextField"/>
 										</td>
 									</tr>
 									<tr>
@@ -276,7 +279,7 @@ function closeWindow()
 										<td align="center" colspan=2>
 											&nbsp;
 											<!-- <input type="submit" value="Go" style="font-family:verdana;font-size:11px;" /> -->
-											<html:button  styleClass="buttonx" property="submitButton" onclick="return searchindicators()">
+											<html:button  styleClass="buttonx" property="submitButton" onclick="return searchindicators()" styleId="searchIndBtn">
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:button>
 											&nbsp;
@@ -341,7 +344,7 @@ function closeWindow()
 									
                                         <tr>
                                           <td colspan="10" align="center" style="padding-top:10px; padding-bottom:10px;">
-                                          <html:button  styleClass="buttonx" property="submitButton"  onclick="return selectIndicators()">
+                                          <html:button  styleClass="buttonx" property="submitButton"  onclick="return selectIndicators()" styleId="addIndBtn">
 															<digi:trn key="btn:add">Add</digi:trn> 
 										</html:button>
                                           </td>

@@ -147,6 +147,8 @@ public class CategoryConstants {
 	
 	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "International", true);
+	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_NATIONAL = 
+		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "National", true);
 	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_REGIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "Regional", true);
 	 

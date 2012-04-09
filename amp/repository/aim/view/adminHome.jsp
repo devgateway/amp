@@ -31,7 +31,7 @@
 	    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		    <td class="admin_box_label">
 			    <c:set var="trnSystemSettings">
-					<digi:trn>Click here to view System Settings</digi:trn>
+					<digi:trn invisibleLinks="true">Click here to view System Settings</digi:trn>
 			    </c:set>
 		       <digi:link href="/GlobalSettings.do" title="${trnSystemSettings}" >
 					<digi:trn>Global Settings</digi:trn>
@@ -42,7 +42,7 @@
   	<module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION">
     <tr>
     	<c:set var="gatePermLink">
-        	<digi:trn>Click here to manage gate permissions and assignments</digi:trn>
+        	<digi:trn invisibleLinks="true">Click here to manage gate permissions and assignments</digi:trn>
         </c:set>
         <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
@@ -55,7 +55,7 @@
   		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
   		<td class="admin_box_label">
   		<c:set var="permManagerLink">
-    		<digi:trn key="aim:permManagerLinkTitle">Click here to manage permissions</digi:trn>
+    		<digi:trn key="aim:permManagerLinkTitle" invisibleLinks="true">Click here to manage permissions</digi:trn>
   		</c:set>
   		<html:link href="/wicket/permmanager/" title="${permManagerLink}">
     		<digi:trn key="aim:permissionManager">Permission Manager</digi:trn>
@@ -70,7 +70,7 @@
 	    </td>
 	    <td class="admin_box_label">
 		    <c:set var="trnFeatureManager">
-				<digi:trn>Click here to access Feature Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to access Feature Manager</digi:trn>
 		    </c:set>
 		    <digi:link href="/visibilityManager.do" title="${trnFeatureManager}" >
 		    	<digi:trn>Global feature Manager</digi:trn>
@@ -83,7 +83,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	    	<c:set var="trn">
-				<digi:trn>Click here to view Job Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Job Manager</digi:trn>
 	    	</c:set>
 	    	<digi:link module="aim" href="/quartzJobManager.do?action=all" title="${trn}">
 	    		<digi:trn>Job Manager</digi:trn>
@@ -97,7 +97,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	    	<c:set var="trnUploadFlags">
-	        	<digi:trn>Click here to upload and select flags</digi:trn>
+	        	<digi:trn invisibleLinks="true">Click here to upload and select flags</digi:trn>
 	        </c:set>
 			<digi:link href="/flagUploader.do" title="${trnUploadFlags}" >
             	<digi:trn>Flag uploader/selector</digi:trn>
@@ -118,7 +118,7 @@
 	   	</td>
 	    <td class="admin_box_label">
 			<c:set var="trnWorkspaceManager">
-	        	<digi:trn>Click here to view Workspace Manager</digi:trn>
+	        	<digi:trn invisibleLinks="true">Click here to view Workspace Manager</digi:trn>
 	        </c:set>
 	        <digi:link href="/workspaceManager.do~page=1~reset=true" title="${trnWorkspaceManager}" >
 	        	<digi:trn>Workspace Manager</digi:trn>
@@ -130,7 +130,7 @@
 	  	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
     		<c:set var="translation">
-				<digi:trn>Click here to view User Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view User Manager</digi:trn>
             </c:set>
             <digi:link module="um" href="/viewAllUsers.do?reset=true" title="${translation}">
             	<digi:trn>User Manager</digi:trn>
@@ -151,7 +151,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Category Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Category Manager</digi:trn>
         </c:set>
 		<digi:link href="/categoryManager.do" title="${translation}" contextPath="/categorymanager" >
         	<digi:trn>Category Manager</digi:trn>
@@ -164,7 +164,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	    	<c:set var="translation">
-	        	<digi:trn>Click here to view Region Manager</digi:trn>
+	        	<digi:trn invisibleLinks="true">Click here to view Region Manager</digi:trn>
 	       	</c:set>
 	        <digi:link href="/dynLocationManager.do" title="${translation}" >
 	        	<digi:trn>Region Manager</digi:trn>
@@ -177,7 +177,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
     		<c:set var="translation">
-            	<digi:trn>Click here to view Sector Manager</digi:trn>
+            	<digi:trn invisibleLinks="true">Click here to view Sector Manager</digi:trn>
             </c:set>
             <digi:link href="/getSectorSchemes.do" title="${translation}">
             	<digi:trn>Sector Manager</digi:trn>
@@ -190,7 +190,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	    	<c:set var="translation">
-				<digi:trn>Click here to view Fiscal Calendar Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Fiscal Calendar Manager</digi:trn>
 	        </c:set>
 	       <digi:link href="/fiscalCalendarManager.do" title="${translation}" >
 	       		<digi:trn>Calendar Manager</digi:trn>
@@ -203,7 +203,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	     	<c:set var="translation">
-				<digi:trn>Click here to view Components Types Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Components Types Manager</digi:trn>
 	     	</c:set>
 	    	 <digi:link href="/updateComponentType.do" title="${translation}" >
 	     		<digi:trn>Component types manager</digi:trn>
@@ -216,7 +216,7 @@
 	    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 	    <td class="admin_box_label">
 	    	<c:set var="trnOrganizationManager">
-	        	<digi:trn>Click here to view Organization Manager</digi:trn>
+	        	<digi:trn invisibleLinks="true">Click here to view Organization Manager</digi:trn>
 	        </c:set>
 	        <digi:link href="/organisationManager.do?orgSelReset=true" title="${trnOrganizationManager}" >
 	        	<digi:trn>Organization manager</digi:trn>
@@ -228,7 +228,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Multi Program Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Multi Program Manager</digi:trn>
         </c:set>
         <digi:link href="/themeManager.do~view=multiprogram" title="${translation}" >
         	<digi:trn>Multi Program Manager</digi:trn>
@@ -239,10 +239,10 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Multi Program Configuration Page</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Multi Program Configuration Page</digi:trn>
         </c:set>
         <digi:link href="/programConfigurationPage.do" title="${translation}" >
-        	<digi:trn>Multi Program Configuration</digi:trn>
+        	<digi:trn >Multi Program Configuration</digi:trn>
         </digi:link>
     </td>
   </tr>
@@ -252,7 +252,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-        	<digi:trn>Click here to view Indicator Manager</digi:trn>
+        	<digi:trn invisibleLinks="true">Click here to view Indicator Manager</digi:trn>
         </c:set>
         <digi:link href="/viewIndicators.do?sortBy=nameAsc" title="${translation}" >
         	<digi:trn>Indicator Manager</digi:trn>
@@ -264,7 +264,7 @@
 		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		<td class="admin_box_label">
  			<c:set var="translation">
- 				<digi:trn>Click here to manage GIS Structure Types</digi:trn>
+ 				<digi:trn invisibleLinks="true">Click here to manage GIS Structure Types</digi:trn>
  			</c:set>  
  			<digi:link module="esrigis" href="/structureTypeManager.do">
  				<digi:trn>Structure Types Manager</digi:trn>
@@ -277,7 +277,7 @@
   		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		<td class="admin_box_label">
        		<c:set var="translation">
-         		<digi:trn key="aim:clickToViewSectorManager">Click here to view budget manager</digi:trn>
+         		<digi:trn key="aim:clickToViewSectorManager" invisibleLinks="true">Click here to view budget manager</digi:trn>
        		</c:set>
        		<digi:link href="/BudgetManager.do" title="${translation}">
          		<digi:trn key="aim:budgetManager">Budget Manager</digi:trn>
@@ -302,7 +302,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Currency Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Currency Manager</digi:trn>
 	    </c:set>
 	    <digi:link href="/currencyManager.do~clean=true" title="${translation}" >
 	    	<digi:trn>Currency Manager</digi:trn>
@@ -315,7 +315,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
    		<c:set var="translation">
-			<digi:trn>Click here to view Currency Rates Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Currency Rates Manager</digi:trn>
 		</c:set>
 		<digi:link href="/showCurrencyRates.do~clean=true~timePeriod=1" title="${translation}">
         	<digi:trn>Currency Rate Manager</digi:trn>
@@ -356,7 +356,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
 	    <c:set var="trnDataExchangeExportTitle">
-			<digi:trn>Click here to view Data Import Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Data Import Manager</digi:trn>
 		</c:set>
 	   <digi:link module="dataExchange"  href="/manageSource.do" title="${trnDataExchangeExportTitle}" >
 	      <digi:trn>Data Import Manager</digi:trn>
@@ -369,7 +369,7 @@
 		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
         	<c:set var="trnDataExchangeExportTitle">
-				<digi:trn>Click here to view Data Export Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Data Export Manager</digi:trn>
 			</c:set>
 			<digi:link module="dataExchange"  href="/exportWizard.do?method=prepear" title="${trnDataExchangeExportTitle}" >
 				<digi:trn>Data Export Manager</digi:trn>
@@ -393,7 +393,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
 	    <c:set var="translation">
-			<digi:trn>Click here to view Audit Logger Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Audit Logger Manager</digi:trn>
 	    </c:set>
         <digi:link href="/auditLoggerManager.do" title="${translation}" >
         	<digi:trn>Audit Logger Manager</digi:trn>
@@ -406,7 +406,7 @@
      	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 	    	<c:set var="trnActivityManager">
-				<digi:trn>Click here to view Activity Manager</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Activity Manager</digi:trn>
 	        </c:set>
 			<digi:link href="/activityManager.do" title="${trnActivityManager}" >
 	        	<digi:trn>Activity Manager</digi:trn>
@@ -429,7 +429,7 @@
 		 <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		 <td class="admin_box_label">
 		  	<c:set var="translation">
-				<digi:trn>Click here to edit public view content</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to edit public view content</digi:trn>
 			</c:set>  
 			<digi:link module="content" href="/contentManager.do">
 				<digi:trn>Public View Content</digi:trn>
@@ -442,7 +442,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
     		<c:set var="translation">
-	 	    	<digi:trn>Click here to manage public filters</digi:trn>
+	 	    	<digi:trn invisibleLinks="true">Click here to manage public filters</digi:trn>
 	 		</c:set>  
 	 	 	<digi:link module="contentrepository" href="/publicDocTabManager.do?action=show">
 	 	 		<digi:trn>Public Filter Manager</digi:trn>
@@ -463,7 +463,7 @@
 		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
         		<c:set var="trnSystemSettings">
-            		<digi:trn>Click here to view the Patches applied</digi:trn>
+            		<digi:trn invisibleLinks="true">Click here to view the Patches applied</digi:trn>
             	</c:set>
 				<a href="/xmlpatcher/xmlpatches.do?mode=listPatches" title="${trnSystemSettings}">
                 	<digi:trn>Database Patches</digi:trn>
@@ -476,7 +476,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
        		<c:set var="trn">
-            	<digi:trn key="help:viewSettings">Click here to view Help Topics Admin</digi:trn>
+            	<digi:trn key="help:viewSettings" invisibleLinks="true">Click here to view Help Topics Admin</digi:trn>
             </c:set>
             <digi:link module="help" href="/helpActions.do~actionType=viewAdmin" title="${trn}">
             	<digi:trn key="help:helpTopicAdmin">Help Topics Admin</digi:trn>
@@ -492,7 +492,7 @@
         	translation
        </c:set>
     	<c:set var="trnTranslationManager">
-        	<digi:trn>Click here to view Translation Manager</digi:trn>
+        	<digi:trn invisibleLinks="true">Click here to view Translation Manager</digi:trn>
        </c:set>
        <digi:link module="translation" href="/importexport.do" title="${trnTranslationManager}">
      		<digi:trn>Translation Manager</digi:trn>
@@ -513,7 +513,7 @@
 	    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
 			<c:set var="translation">
-	        	<digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
+	        	<digi:trn key="aim:tipViewAhSurveis" invisibleLinks="true">Click here to view Paris Indicator Manager</digi:trn>
 	        </c:set>
 	       	<digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
 	        	<digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
@@ -537,7 +537,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
     		<c:set var="trn">
-				<digi:trn>Click here to view Message Settings</digi:trn>
+				<digi:trn invisibleLinks="true">Click here to view Message Settings</digi:trn>
 	       	</c:set>
 	        <digi:link module="message" href="/msgSettings.do?actionType=getSettings" title="${trn}">
 	        	<digi:trn>Message Manager</digi:trn>
@@ -558,7 +558,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to manage resource labels</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to manage resource labels</digi:trn>
  		</c:set>  
  	 	<digi:link module="contentrepository" href="/labelManager.do?htmlView=true">
  	 		<digi:trn>Resource Label Manager</digi:trn>
@@ -571,7 +571,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
    		<c:set var="translation">
-			<digi:trn>Click here to view template document manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view template document manager</digi:trn>
  		</c:set>  
  	 	<digi:link module="contentrepository" href="/tempDocManager.do?actType=viewTemplateDocuments">
  	 		<digi:trn>Template Documents Manager</digi:trn>
@@ -592,7 +592,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Results Dashboard Data Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Results Dashboard Data Manager</digi:trn>
         </c:set>
         <a href="/widget/indSectRegManager.do" title="${translation}">
         	<digi:trn>Results Dashboard Data Manager</digi:trn>
@@ -605,7 +605,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Indicator Chart Widgets Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Indicator Chart Widgets Manager</digi:trn>
         </c:set>
         <a href="/widget/indicatorchartwidgets.do" title="${translation}">
         	<digi:trn>Indicator Chart Widget Manager</digi:trn>
@@ -618,7 +618,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
         	<c:set var="translation">
-            	<digi:trn key="widgets:clickToViewTableWidgetAdmin">Click here to view Table Widgets Manager</digi:trn>
+            	<digi:trn key="widgets:clickToViewTableWidgetAdmin" invisibleLinks="true">Click here to view Table Widgets Manager</digi:trn>
        		</c:set>
             <digi:link module="widget" href="/adminTableWidgets.do" title="${translation}">
             	<digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
@@ -631,7 +631,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     	<td class="admin_box_label">
         	<c:set var="translation">
-                <digi:trn>Click here to view Sector Table Widgets Manager</digi:trn>
+                <digi:trn invisibleLinks="true">Click here to view Sector Table Widgets Manager</digi:trn>
             </c:set>
             <digi:link module="widget" href="/sectorTableManager.do" title="${translation}">
             	<digi:trn>Sector Table Widget</digi:trn>
@@ -644,7 +644,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
     	<c:set var="translation">
-			<digi:trn>Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
+			<digi:trn invisibleLinks="true">Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
         </c:set>
         <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
         	<digi:trn> Paris Indicator Table Widget</digi:trn>
@@ -657,7 +657,7 @@
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
        <c:set var="translation">
-         <digi:trn>Click here to view Result Matrix/GIS Settings page</digi:trn>
+         <digi:trn invisibleLinks="true">Click here to view Result Matrix/GIS Settings page</digi:trn>
        </c:set>
        <digi:link href="/showGisSettings.do" module="gis" title="${translation}" >
          <digi:trn>
@@ -672,7 +672,7 @@
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		<td class="admin_box_label">
         	<c:set var="translation">
-         	 	<digi:trn key="widget:clickToViewWidgetPlaceAdmin">Click here to view Widgets Place Manager</digi:trn>
+         	 	<digi:trn key="widget:clickToViewWidgetPlaceAdmin" invisibleLinks="true">Click here to view Widgets Place Manager</digi:trn>
         	</c:set>
         	<a href="/widget/widgetplaces.do" title="${translation}">
           		<digi:trn key="widget:widgetPlaceManager">Widget Place Manager</digi:trn>

@@ -155,7 +155,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		add(list);
 		
 		
-		add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list, percentageValidationField){
+		add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
 			public void setPercentage(AmpOrgRole loc, int val) {
 				loc.setPercentage((double) val);

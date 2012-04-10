@@ -499,16 +499,17 @@ public class IatiActivityWorker {
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
-		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
+		
+		if(activity.getFunding() == null) 
+			activity.setFunding(new HashSet());
+		Set<AmpFunding> fundings = activity.getFunding();
 		for (Iterator<Budget> it = iatiBudgetList.iterator(); it.hasNext();) {
 			Budget budget = (Budget) it.next();
 			AmpFunding f = getBudgetIATItoAMP(activity,budget,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiRepOrgList);
 			if(f!=null)
 				fundings.add(f);
 		}
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
-		activity.getFunding().addAll(fundings);
+		//activity.getFunding().addAll(fundings);
 	}
 	
 
@@ -532,8 +533,9 @@ public class IatiActivityWorker {
 //		Double proposedProjectCostAmount 		= new Double(0);
 //		String proposedProjectCostCurrency 	= null;
 		DEProposedProjectCost proposedProjectCost	= new DEProposedProjectCost();
-		
-		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
+		if(activity.getFunding() == null) 
+			activity.setFunding(new HashSet());
+		Set<AmpFunding> fundings = activity.getFunding();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
 			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiDefaultFundingOrgList, 
@@ -551,11 +553,7 @@ public class IatiActivityWorker {
 		
 		activity.setFunAmount(proposedProjectCost.getAmount());
 		
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
-//		else
-//			activity.getFunding().clear();
-		activity.getFunding().addAll(fundings);
+//		activity.getFunding().addAll(fundings);
 
 	}
 	
@@ -598,38 +596,38 @@ public class IatiActivityWorker {
 		//the transaction has no source organization - donor
 		if(ampOrg==null) return null;
 		
-		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
+		Set<AmpFunding> ampFundings = activity.getFunding();//fundings;
+		if(ampFundings == null) 
+			ampFundings = new HashSet<AmpFunding>();
+		AmpFunding ampFunding = new AmpFunding();
+		boolean found = false;
+		for (AmpFunding af : ampFundings) {
+			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+				ampFunding = af;
+				ampFunding.getFundingDetails().addAll(ampFundDetails);
+				found = true;
+				break;
+			}
+		}
+		
 		ampFunding.setActive(true);
-		ampFunding.setAmpDonorOrgId(ampOrg);
-		ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+		//ampFunding.setAmpDonorOrgId(ampOrg);
+		if(found==false){
+			ampFunding.setAmpDonorOrgId(ampOrg);
+			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+			ampFunding.setFundingDetails(ampFundDetails);
+			ampFunding.setTypeOfAssistance(typeOfAssistance);
+			ampFunding.setFinancingInstrument(financingInstrument);
+			ampFunding.setModeOfPayment(null);
+		}
+		
+		
 		populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		ampFunding.setFundingDetails(ampFundDetails);
-		ampFunding.setTypeOfAssistance(typeOfAssistance);
-		ampFunding.setFinancingInstrument(financingInstrument);
-		ampFunding.setModeOfPayment(null);
-		
 		if(activity !=null ) 
 			ampFunding.setAmpActivityId(activity);
-		Set<AmpFunding> ampFundings = activity.getFunding();//fundings;
-		//TODO check if we want to keep the old fundings here and merge them. 
-		//If mode of payment or funding status or other fields are changed it should not merge them.
-		if(ampFundings!=null)
-			for (AmpFunding af : ampFundings) {
-				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
-					ampFunding.setFinancingId(af.getFinancingId());
-					ampFunding.setModeOfPayment(af.getModeOfPayment());
-					ampFunding.setFundingStatus(af.getFundingStatus());
-					ampFunding.setActualStartDate(af.getActualStartDate());
-					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
-					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
-					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
-					ampFunding.setConditions(af.getConditions());
-					ampFunding.setDonorObjective(af.getDonorObjective());
-					break;
-				}
-			}
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -752,12 +750,7 @@ public class IatiActivityWorker {
 					return null;
 			}
 		
-		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-
-		ampFunding.setActive(true);
-		ampFunding.setAmpDonorOrgId(ampOrg);
-		ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
 		
 		if("d".compareTo(transactionType) ==0)
 			populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
@@ -779,32 +772,47 @@ public class IatiActivityWorker {
 					}
 			//the transaction is not C,D,E and will not be imported.
 				else return null;
+
+		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
+		if(ampFundings == null) 
+			ampFundings = new HashSet<AmpFunding>();
+		AmpFunding ampFunding = new AmpFunding();
+		boolean found = false;
+		for (AmpFunding af : ampFundings) {
+			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+//				ampFunding.setFinancingId(af.getFinancingId());
+//				ampFunding.setModeOfPayment(af.getModeOfPayment());
+//				ampFunding.setFundingStatus(af.getFundingStatus());
+//				ampFunding.setActualStartDate(af.getActualStartDate());
+//				ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+//				ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+//				ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+//				ampFunding.setConditions(af.getConditions());
+//				ampFunding.setDonorObjective(af.getDonorObjective());
+//				ampFunding.setGroupVersionedFunding(af.getGroupVersionedFunding());
+				ampFunding = af;
+				ampFunding.getFundingDetails().addAll(ampFundDetails);
+				found = true;
+				break;
+			}
+		}
 		
-		ampFunding.setFundingDetails(ampFundDetails);
-		ampFunding.setTypeOfAssistance(typeOfAssistance);
-		ampFunding.setFinancingInstrument(financingInstrument);
-		ampFunding.setModeOfPayment(modeOfPayment);
+		
+		//AmpFunding ampFunding = new AmpFunding();
+		ampFunding.setActive(true);
+		//ampFunding.setAmpDonorOrgId(ampOrg);
+		if(found==false){
+			ampFunding.setAmpDonorOrgId(ampOrg);
+			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+			ampFunding.setFundingDetails(ampFundDetails);
+			ampFunding.setTypeOfAssistance(typeOfAssistance);
+			ampFunding.setFinancingInstrument(financingInstrument);
+			ampFunding.setModeOfPayment(modeOfPayment);
+		}
+		
 		
 		if(a !=null ) 
 			ampFunding.setAmpActivityId(a);
-		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
-		//TODO check if we want to keep the old fundings here and merge them. 
-		//If mode of payment or funding status or other fields are changed it should not merge them.
-		if(ampFundings!=null)
-			for (AmpFunding af : ampFundings) {
-				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
-					ampFunding.setFinancingId(af.getFinancingId());
-					ampFunding.setModeOfPayment(af.getModeOfPayment());
-					ampFunding.setFundingStatus(af.getFundingStatus());
-					ampFunding.setActualStartDate(af.getActualStartDate());
-					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
-					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
-					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
-					ampFunding.setConditions(af.getConditions());
-					ampFunding.setDonorObjective(af.getDonorObjective());
-					break;
-				}
-			}
 		
 		//TODO: the language - lang attribute
 		if(isValidString(description)) ampFunding.setConditions(description);

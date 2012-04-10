@@ -209,6 +209,10 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
+		if("1".compareTo(this.getiActivity().getHierarchy()) == 0) {
+			System.out.println("Skipping activity no "+noAct+ " - Hierarchy no 1");
+			return null;
+		}
 		try{
 			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
 			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
@@ -877,7 +881,7 @@ public class IatiActivityWorker {
 		//if there is no rep organization we can not assign the iatiID to no ampORG 
 		if(ampOrg!=null) {
 			AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-			actInternalId.setInternalId(this.iatiID);
+			actInternalId.setInternalId(this.iatiID.replace(defaultReportingOrg.getRef()+"-", ""));
 			actInternalId.setAmpActivity(a);
 			actInternalId.setOrganisation(ampOrg);
 			internalIds.add(actInternalId);

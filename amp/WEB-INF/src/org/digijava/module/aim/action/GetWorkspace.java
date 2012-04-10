@@ -104,6 +104,11 @@ public class GetWorkspace extends Action {
 			if ( workspace.getType() != null ) {
 				typeId	= workspace.getType().getId();
 			}
+
+			Long groupId = new Long(0);
+			if ( workspace.getWorkspaceGroup() != null ) {
+				groupId	= workspace.getWorkspaceGroup().getId();
+			}
 			
 			uwForm.setTeamId(new Long(workspace.getId()));
 			uwForm.setTeamName(workspace.getName());
@@ -111,6 +116,7 @@ public class GetWorkspace extends Action {
 			uwForm.setTypeId(typeId);
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
+			uwForm.setWorkspaceGroup(groupId);
 			TreeSet orgs=new TreeSet();
 			if(workspace.getChildOrgs()!=null){
 				orgs.addAll(workspace.getChildOrgs());
@@ -119,6 +125,8 @@ public class GetWorkspace extends Action {
 			if (uwForm.getOrganizations()==null) {
 				uwForm.setOrganizations(new ArrayList());
 			}
+			else
+				uwForm.getOrganizations().clear();
 			//uwForm.getOrganizations().addAll(orgs);
 			uwForm.setOrganizations(orgs);
 			uwForm.setAddActivity(workspace.getAddActivity());

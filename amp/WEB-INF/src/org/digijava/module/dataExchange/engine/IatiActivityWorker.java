@@ -553,7 +553,7 @@ public class IatiActivityWorker {
 		Set<AmpFunding> fundings = activity.getFunding();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
 					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
 					proposedProjectCost);
 			if(f!=null)
@@ -610,19 +610,19 @@ public class IatiActivityWorker {
 		}
 		
 		AmpOrganisation ampOrg = null;
-				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
-				//we can not import funding with Donor null
-				if (ampOrg == null) return null;
+		ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+		//we can not import funding with Donor null
+		if (ampOrg == null) return null;
 		
 //		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
 //		ampOrg = getAmpOrganization(printList(defaultReportingOrg.getContent()), this.getLang(), defaultReportingOrg.getRef());
 		//there is no participating organization with funding role and the 
 		//the transaction has no source organization - donor
-		if(ampOrg==null) return null;
+		//if(ampOrg==null) return null;
 		
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
-		Set<AmpFunding> ampFundings = activity.getFunding();//fundings;
+		Set<AmpFunding> ampFundings = fundings;
 		if(ampFundings == null) 
 			ampFundings = new HashSet<AmpFunding>();
 		AmpFunding ampFunding = new AmpFunding();
@@ -630,7 +630,7 @@ public class IatiActivityWorker {
 		for (AmpFunding af : ampFundings) {
 			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
 				ampFunding = af;
-				ampFunding.getFundingDetails().addAll(ampFundDetails);
+				ampFundDetails = ampFunding.getFundingDetails();
 				found = true;
 				break;
 			}
@@ -638,7 +638,7 @@ public class IatiActivityWorker {
 		
 		ampFunding.setActive(true);
 		//ampFunding.setAmpDonorOrgId(ampOrg);
-		if(found==false){
+		if(!found){
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
 			ampFunding.setFundingDetails(ampFundDetails);
@@ -646,7 +646,6 @@ public class IatiActivityWorker {
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(null);
 		}
-		
 		
 		populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		ampFunding.setFundingDetails(ampFundDetails);
@@ -671,7 +670,7 @@ public class IatiActivityWorker {
 
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
-			String iatiDefaultCurrency, Set<AmpFunding> fundings, 
+			String iatiDefaultCurrency, 
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
 			ArrayList<ReportingOrg> iatiRepOrgList, 

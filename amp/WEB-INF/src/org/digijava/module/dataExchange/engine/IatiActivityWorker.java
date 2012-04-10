@@ -209,7 +209,7 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
-		if("1".compareTo(this.getiActivity().getHierarchy()) == 0) {
+		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null && "1".compareTo(this.getiActivity().getHierarchy()) == 0) {
 			System.out.println("Skipping activity no "+noAct+ " - Hierarchy no 1");
 			return null;
 		}

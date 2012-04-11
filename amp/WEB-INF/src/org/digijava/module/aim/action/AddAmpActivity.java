@@ -1332,7 +1332,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	          }
 	        }
 }
-}
+
 
 private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm) {
 	          if (!eaForm.isEditAct()) {

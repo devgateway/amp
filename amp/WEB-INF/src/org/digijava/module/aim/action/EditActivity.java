@@ -1599,7 +1599,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           		  eaForm.getAgencies().getImpOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
                 }
               }
-              }
+              
               else if (orgRole.getRole().getRoleCode().equals(Constants.BENEFICIARY_AGENCY)
                        && (!eaForm.getAgencies().getBenAgencies().contains(organisation))) {
                 eaForm.getAgencies().getBenAgencies().add(organisation);
@@ -1608,7 +1608,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 if(orgRole.getPercentage() != null ){
           		  eaForm.getAgencies().getBenOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
                 }
-              }
               }
               else if (orgRole.getRole().getRoleCode().equals(Constants.CONTRACTING_AGENCY)
                        && (!eaForm.getAgencies().getConAgencies().contains(organisation))) {

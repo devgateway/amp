@@ -329,10 +329,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</field:display>
 											
 											<field:display name="Proposed Completion Date" feature="Planning">
+											 <c:set var="trn">
+													<digi:trn>Proposed Completion Date</digi:trn>
+                                              </c:set>
 											<tr>
 												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;
-													<digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn>
+													${trn}
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
@@ -351,6 +354,9 @@ function myclearDate(editBox, clearLink, checkboxId){
 																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.proposedCompDate,"clear7")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
+															</td>
+															 <td>&nbsp;
+																	<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('Add Comments For ${trn}','pcd')">
 															</td>
 														</tr>
 													</table>

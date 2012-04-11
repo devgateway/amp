@@ -72,6 +72,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
                 , 'Multi Donor'
+                , 'Capital - Expenditure'              
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -94,6 +95,13 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		, 'Pledges Type Of Assistance'
 		
 	);
+
+YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
+		 'Primary Sector', 
+		 'Secondary Sector'
+		
+	);
+
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
@@ -110,6 +118,18 @@ function checkIfColIsHierarchy(id) {
 			fgArray	= YAHOO.amp.reportwizard.fundingGroups[ radios[i].value ];
 		}
 	}
+	if (fgArray == null) return false;
+	
+	for (j=0; j<fgArray.length; j++) {
+		if ( fgArray[j]==colName ) 
+			return true;
+	}
+	return false;
+}
+
+function checkincompatiblehierarchies(id){
+	var fgArray	= YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"];
+	var colName	= YAHOO.amp.reportwizard.colIdToName[id];
 	if (fgArray == null) return false;
 	
 	for (j=0; j<fgArray.length; j++) {

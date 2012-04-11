@@ -107,46 +107,107 @@ function checkallIssues() {
         }
 	    
 	  function addIssues(){
-	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
+			reusableDialog.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
 	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
- 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
+ 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callbackDialog);
         }
        
        
        
        function updateIssues(id) {
-     		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
+    	   reusableDialog.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
 			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
+			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callbackDialog);
 		}
         
         
 	function addMeasures(issueId) {
-	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
+		reusableDialog.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
+		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callbackDialog);
 	}
 
 
 	function updateMeasures(issueId,measureId) {
-		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
+		reusableDialog.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callbackDialog);
 	}
 	
 	
 	function addActors(issueId,measureId) {
-		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
+		reusableDialog.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callbackDialog);
 	}
 
 
 
 	function updateActor(issueId,measureId,actorId) {
-		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
+		reusableDialog.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callbackDialog);
+	}
+
+	function validateIssue() {
+		if(isEmpty(document.getElementById('issue').value) == true) {	
+			var issueError = "<digi:trn jsFriendly='true'>Please enter issue</digi:trn>"; 	
+			alert(issueError);			
+			addIssueForm.issue.focus();
+			return false;
+		}
+		<field:display feature="Issues" name="Issue Date">
+			if(isEmpty(document.getElementById('issueDate').value) == true) {	
+				var issueError2 = "<digi:trn jsFriendly='true'>Please enter issue date</digi:trn>"; 	
+				alert(issueError2);
+				return false;
+		}	
+		</field:display>
+		document.aimEditActivityForm.submit();
+		return true;
+	}
+
+	function validateMeasure() {
+		var meas = document.getElementsByName("issues.measure")[0];
+		if(isEmpty(meas.value) == true) {
+			var measError = "<digi:trn jsFriendly='true'>Please enter the measure</digi:trn>"; 	
+			alert(measError);
+			meas.focus();
+			return false;
+		}
+		document.aimEditActivityForm.submit();
+		return true;
+	}
+	
+	function validateActor() {
+		var actor = document.getElementsByName("issues.actor")[0];
+		if(isEmpty(actor.value) == true) {
+			var actorError = "<digi:trn jsFriendly='true'>Please enter the actor</digi:trn>"; 	
+			alert(actorError);
+			actor.focus();
+			return false;
+		}
+		document.aimEditActivityForm.submit();
+		return true;
+
+	}
+
+	function clearFieldIssue(){
+		document.getElementById('issue').value="";
+		<field:display feature="Issues" name="Issue Date">
+			document.getElementById('issueDate').value="";
+		</field:display>
+		return true;
+	}
+
+	function clearFieldMeasure(){
+		document.getElementsByName("issues.measure")[0].value="";
+		return true;
+	}
+
+	function clearFieldActor(){
+		document.getElementsByName("issues.actor")[0].value="";
+		return true;
 	}
 
 //END POPIN

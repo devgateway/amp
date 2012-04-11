@@ -258,6 +258,7 @@ public class FilterUtil {
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
 		form.setAmountinthousands(filter.getAmountinthousand());
+		form.setAmountinmillions(filter.getAmountinmillion());
 	}
 	
 }

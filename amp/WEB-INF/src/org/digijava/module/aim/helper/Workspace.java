@@ -17,6 +17,7 @@ public class Workspace {
 	//private String type;
 	private AmpCategoryValue type;
 	private String workspaceType;
+	private AmpCategoryValue workspaceGroup;
 	private Long relatedTeam;
 	private boolean hasActivities;
 	private boolean hasMembers;
@@ -182,6 +183,14 @@ public class Workspace {
 	 */
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
+	}
+
+	public void setWorkspaceGroup(AmpCategoryValue workspaceGroup) {
+		this.workspaceGroup = workspaceGroup;
+	}
+
+	public AmpCategoryValue getWorkspaceGroup() {
+		return workspaceGroup;
 	}
 	
 	

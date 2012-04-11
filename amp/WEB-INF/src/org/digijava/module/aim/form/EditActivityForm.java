@@ -2556,6 +2556,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private String fundingCurrCode;
         private int selectedMTEFProjectionYear;
         
+        private float capitalSpendingPercentage;
+
+        public float getCapitalSpendingPercentage() {
+            return capitalSpendingPercentage;
+        }
+
+        public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
+            this.capitalSpendingPercentage = capitalSpendingPercentage;
+        }
+
 		public String getConsumptionRate() {
 			String formatedConsumptionRate=null;
 			Calendar calendar = GregorianCalendar.getInstance();
@@ -4456,6 +4466,70 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		
+		public HashMap<String, String> getConOrgPercentage() {
+			return conOrgPercentage;
+		}
+
+		public void setConOrgPercentage(HashMap<String, String> conOrgPercentage) {
+			this.conOrgPercentage = conOrgPercentage;
+		}
+
+		public HashMap<String, String> getExecutingOrgPercentage() {
+			return executingOrgPercentage;
+		}
+
+		public void setExecutingOrgPercentage(
+				HashMap<String, String> executingOrgPercentage) {
+			this.executingOrgPercentage = executingOrgPercentage;
+		}
+
+		public HashMap<String, String> getImpOrgPercentage() {
+			return impOrgPercentage;
+		}
+
+		public void setImpOrgPercentage(HashMap<String, String> impOrgPercentage) {
+			this.impOrgPercentage = impOrgPercentage;
+		}
+
+		public HashMap<String, String> getRegOrgPercentage() {
+			return regOrgPercentage;
+		}
+
+		public void setRegOrgPercentage(HashMap<String, String> regOrgPercentage) {
+			this.regOrgPercentage = regOrgPercentage;
+		}
+
+		public HashMap<String, String> getRepOrgPercentage() {
+			return repOrgPercentage;
+		}
+
+		public void setRepOrgPercentage(HashMap<String, String> repOrgPercentage) {
+			this.repOrgPercentage = repOrgPercentage;
+		}
+
+		public HashMap<String, String> getSectOrgPercentage() {
+			return sectOrgPercentage;
+		}
+
+		public void setSectOrgPercentage(HashMap<String, String> sectOrgPercentage) {
+			this.sectOrgPercentage = sectOrgPercentage;
+		}
+
+		public HashMap<String, String> getBenOrgPercentage() {
+			return benOrgPercentage;
+		}
+
+		public void setBenOrgPercentage(HashMap<String, String> benOrgPercentage) {
+			this.benOrgPercentage = benOrgPercentage;
+		}
+
+		public HashMap<String, String> getRespOrgPercentage() {
+			return respOrgPercentage;
+		}
+
+		public void setRespOrgPercentage(HashMap<String, String> respOrgPercentage) {
+			this.respOrgPercentage = respOrgPercentage;
+		}
 		
 	}
 

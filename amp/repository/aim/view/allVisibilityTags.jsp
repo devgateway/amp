@@ -213,7 +213,9 @@
 <feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
-<feature:display name="Planned Disbursements" module="Measures"></feature:display> 
+<feature:display name="Planned Disbursements" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Capital" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Expenditure" module="Measures"></feature:display>   
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
@@ -288,7 +290,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
-<field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
+<field:display feature="Funding Information" name="Type Of Assistance"></field:display>
+<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>  
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

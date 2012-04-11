@@ -1179,12 +1179,17 @@
       <forward name="previewLogframe" path="/aim/previewActivity.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/previewActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
+      <forward name="previewPopin" path="/showLayout.do?layout=previewActivityPopin" />
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />
       <forward name="previewLogframe" path="/showLayout.do?layout=previewLogframe" />
       <forward name="publicPreview" path="/showLayout.do?layout=aim_publicActivityPreview" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/viewActivityPreview" scope="session" type="org.digijava.module.aim.action.EditActivity">
+      <forward name="forward" path="/aim/previewActivity.do" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/viewActivityPreviewPopin" scope="session" type="org.digijava.module.aim.action.EditActivity">
       <forward name="forward" path="/aim/previewActivity.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

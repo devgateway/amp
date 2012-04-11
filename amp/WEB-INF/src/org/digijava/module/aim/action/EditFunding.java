@@ -94,6 +94,7 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setAssistanceType(new Long(0));
 								}
 								//
+                                formBean.getFunding().setCapitalSpendingPercentage(funding.getCapitalSpendingPercentage());
 								formBean.getFunding().setOrgFundingId(funding.getOrgFundingId());
 								formBean.getOldFunding().setOrgFundingId(funding.getOrgFundingId());
 								//
@@ -191,7 +192,8 @@ public class EditFunding extends Action {
 		
 	     // load donor related pledges
 		formBean.getFunding().setPledgeslist(PledgesEntityHelper.getPledgesByDonor(orgId));
-		
+
+
 		return mapping.findForward("forward");
 	}
 }

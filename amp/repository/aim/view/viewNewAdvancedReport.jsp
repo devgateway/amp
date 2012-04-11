@@ -192,6 +192,13 @@ session.setAttribute("progressValue", counter);
 							</digi:trn>
 	           			<%}%>
 						
+	           			<%	                	
+	                	if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	               			<digi:trn key="rep:pop:AllAmount">
+								Amounts are in millions (000 000)
+							</digi:trn>
+	           			<%}%>
+						
 						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
@@ -477,6 +484,13 @@ session.setAttribute("progressValue", counter);
 		           		<%}%>
 						</td>
 						<td style="font-size: 11px;font-family: Arial,sans-serif">
+	           <%	                	
+	            if (af.getAmountinmillion()!=null && af.getAmountinmillion()==true){%>
+	               			<digi:trn key="rep:pop:AllAmount">
+								Amounts are in millions (000 000)
+							</digi:trn>
+   			   <%}%>				
+				
 							<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 								<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 								<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>

@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.poi.hssf.util.HSSFColor.SKY_BLUE;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -30,8 +28,6 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
-import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -144,6 +140,10 @@ public class CategAmountColWorker extends ColumnWorker {
 	}
 
 	
+	protected String retrieveValueFromRS ( ResultSet rs, String columnName ) throws SQLException {
+		return rs.getString(columnName);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -178,8 +178,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		String donorGroupName=null;
 		String donorTypeName=null;
-		Double fixedExchangeRate = null;;
-		Double pledgetotal = null;;
+		Double fixedExchangeRate = null;
+		Double pledgetotal = null;
+		Double capitalPercent	= null;
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
@@ -193,7 +194,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 		
 		if(columnsMetaData.contains("donor_type_name"))
-			donorTypeName=rs.getString("donor_type_name");
+			donorTypeName=retrieveValueFromRS(rs, "donor_type_name");
 					
 		
 		if (columnsMetaData.contains("transaction_type")){
@@ -201,11 +202,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 		
 		if (columnsMetaData.contains("org_grp_name")) {
-			donorGroupName	= rs.getString("org_grp_name");
+			donorGroupName	= retrieveValueFromRS(rs, "org_grp_name");
 		}
 		
 		if (columnsMetaData.contains("total_pledged")) {
 			pledgetotal	= rs.getDouble("total_pledged");
+		}
+		
+		if (columnsMetaData.contains("capital_spend_percent") ) {
+			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
@@ -223,7 +228,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if (!skpyCategorize){
 			if (columnsMetaData.contains("terms_assist_name")){
-				String termsAssist = rs.getString("terms_assist_name");
+				String termsAssist = retrieveValueFromRS(rs, "terms_assist_name");
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
 						termsAssist);
 				acc.getMetaData().add(termsAssistMeta);
@@ -231,14 +236,14 @@ public class CategAmountColWorker extends ColumnWorker {
         }
 			
 		if (columnsMetaData.contains("financing_instrument_name")){			
-		    	String financingInstrument = rs.getString("financing_instrument_name");
+		    	String financingInstrument = retrieveValueFromRS(rs, "financing_instrument_name");
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
 					financingInstrument);
 			acc.getMetaData().add(termsAssistMeta);
 		}
 
 		if (columnsMetaData.contains("mode_of_payment_name")) {
-			String modeOfPayment = rs.getString("mode_of_payment_name");
+			String modeOfPayment = retrieveValueFromRS(rs, "mode_of_payment_name");
 			if (modeOfPayment != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
 						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
@@ -252,7 +257,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		if (columnsMetaData.contains("funding_status_name")) {
-			String fundingStatus = rs.getString("funding_status_name");
+			String fundingStatus = retrieveValueFromRS(rs, "funding_status_name");
 			if (fundingStatus != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
 						ArConstants.FUNDING_STATUS, fundingStatus);
@@ -263,7 +268,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		MetaInfo headMeta=null;
 		
 		if("region_name".equals(headMetaName)){
-			String regionName = rs.getString("region_name");
+			String regionName = retrieveValueFromRS(rs, "region_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);			
 		} else
 			
@@ -273,13 +278,19 @@ public class CategAmountColWorker extends ColumnWorker {
 		} else	
 
 		if("donor_name".equals(headMetaName)){
-			String donorName = rs.getString("donor_name");
+			String donorName = retrieveValueFromRS(rs, "donor_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, (donorName!=null)?donorName.trim():donorName);			
 		}
 
 		if (filter.getAmountinthousand()==null) {
 			filter.setAmountinthousand(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 		} 
+		
+		if (filter.getAmountinmillion()){
+			if (tr_amount != 0){
+				acc.setAmount(tr_amount*0.001d*0.001d);
+			}
+		} else
 		
 		if (filter.getAmountinthousand()){
 			if (tr_amount != 0){
@@ -339,6 +350,10 @@ public class CategAmountColWorker extends ColumnWorker {
 			acc.getMetaData().add(adjMs);			
 		}	
 		
+		//Group all pledges without funding year under the same fake year 
+		if (td==null && trStr.equals(ArConstants.PLEDGE)){
+			td= ArConstants.PLEDGE_FAKE_YEAR;
+		}
 		
 		if (td==null) {
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
@@ -422,6 +437,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(pledgetotal!=null) {
 			MetaInfo pledgedtotalname = this.getCachedMetaInfo(ArConstants.PLEDGED_TOTAL, null);
 			acc.getMetaData().add(pledgedtotalname);
+		}
+		
+		if(capitalPercent != null) {
+			MetaInfo capitalPercentMI = this.getCachedMetaInfo(ArConstants.CAPITAL_PERCENT, capitalPercent);
+			acc.getMetaData().add(capitalPercentMI);
 		}
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT

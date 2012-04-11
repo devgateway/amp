@@ -6,22 +6,18 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
-
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -61,9 +57,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
-			TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
-			trails.generate();
-	
+		this.createTrailCells();
 		
 
 		// add data
@@ -79,11 +73,11 @@ public class ColumnReportDataXLS extends XLSExporter {
 				Iterator ii = columnReport.getItems().iterator();
 				if ( this.regularStyle == null )
 					this.getRegularStyle();
-				HSSFCell cell=this.getCell(regularStyle);
-				colId.inc();
+				this.createFirstCells();
+
 				while (ii.hasNext()) {
 					Viewable velement = (Viewable) ii.next();
-					velement.invokeExporter(this);
+					this.invokeChildExporter(velement);
 				}
 				rowId.inc();
 				colId.reset();
@@ -93,5 +87,22 @@ public class ColumnReportDataXLS extends XLSExporter {
 
 
 	}
+	
+	protected void createTrailCells () {
+		ColumnReportData columnReport = (ColumnReportData) item;
+		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
+		trails.generate();
+	}
+	
+	protected void createFirstCells () {
+		HSSFCell cell=this.getCell(regularStyle);
+		cell.setCellValue("");
+		colId.inc();
+	}
+	
+	protected void invokeChildExporter( Viewable element) {
+		element.invokeExporter(this);
+	}
+	
 
 }

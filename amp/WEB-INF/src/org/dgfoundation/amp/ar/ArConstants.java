@@ -61,12 +61,14 @@ public final class ArConstants {
 	
 	public final static String DONOR="Donor Agency";
 	public final static String MODE_OF_PAYMENT="Mode of Payment";
+	public final static String MODE_OF_PAYMENT_TOTAL="Total";
 	public final static String FUNDING_STATUS="Funding Status";
 	
 	public final static String MODE_OF_PAYMENT_UNALLOCATED="Mode of Payment Unallocated";
 	
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
+	public final static String CAPITAL_PERCENT="Capital Percent";
 	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
@@ -104,7 +106,7 @@ public final class ArConstants {
 	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
 	public final static String PLEDGE="Pledge";
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
-	
+	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
     
 	//Computed Field Constants
     //
@@ -179,6 +181,9 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	
+	public final static List<String> COLUMN_ANY_RELATED_ORGS=Arrays.asList("Beneficiary Agency","Contracting Agency",
+							"Executing Agency","Implementing Agency","Regional Group","Responsible Organization","Sector Group");
+	
 	public final static String COLUMN_COUNTRY="Country";
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_ZONE="Zone";
@@ -193,6 +198,8 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";
 	public final static String COLUMN_ANY_PRIMARYPROG			= "Primary Program";
 	public final static String COLUMN_ANY_SECONDARYPROG	= "Secondary Program";
+	
+	public final static String COLUMN_CAPITAL_EXPENDITRURE	=	"Capital - Expenditure";
 	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
@@ -255,7 +262,7 @@ public final class ArConstants {
 	
 	public static final String INITIALIZE_FILTER_FROM_DB	= "Initialize filter from db";
 
-	public static final String COLUMN_PROJECT_TITLE						 		= "Project Title";
+	public static final String COLUMN_PROJECT_TITLE			 		= "Project Title";
 	public static final String COLUMN_CUMULATIVE_COMMITMENT			= "Cumulative Commitment";
 	public static final String COLUMN_CUMULATIVE_DISBURSEMENT		= "Cumulative Disbursement";
 	public static final String COLUMN_UNDISB_CUMULATIVE_BALANCE		= "Undisbursed Cumulative Balance";
@@ -271,5 +278,54 @@ public final class ArConstants {
 	
 	public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
 	
+	public final static List<SyntheticColumnsMeta> syntheticColumns = Arrays.asList(
+			new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),
+			new SyntheticColumnsMeta("Planned Disbursements - Expenditure", new CapitalExpenditureCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Expenditure","Planned Disbursements")),
+			new SyntheticColumnsMeta("Planned Disbursements", new CapitalSplitTotalsCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements","Planned Disbursements"))
+	) ;
+	
+	public static class SyntheticColumnsMeta {
+		String columnName;
+		SyntheticCellGenerator generator;
 		
+		
+		public SyntheticColumnsMeta(String columnName,
+				SyntheticCellGenerator generator) {
+			super();
+			this.columnName = columnName;
+			this.generator = generator;
+		}
+		/**
+		 * @return the columnName
+		 */
+		public String getColumnName() {
+			return columnName;
+		}
+		/**
+		 * @param columnName the columnName to set
+		 */
+		public void setColumnName(String columnName) {
+			this.columnName = columnName;
+		}
+		/**
+		 * @return the generator
+		 */
+		public SyntheticCellGenerator getGenerator() {
+			return generator;
+		}
+		/**
+		 * @param generator the generator to set
+		 */
+		public void setGenerator(SyntheticCellGenerator generator) {
+			this.generator = generator;
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
+	
 }

@@ -94,6 +94,9 @@ public class AmpARFilter extends PropertyListable {
 	private Integer computedYear;
 	
 	@PropertyListableIgnore
+	private Integer actualAppYear;
+	
+	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
 	
@@ -274,6 +277,15 @@ public class AmpARFilter extends PropertyListable {
 
 	private DecimalFormat currentFormat = null;
 	private Boolean amountinthousand;
+	private Boolean amountinmillion;
+	public final Boolean getAmountinmillion() {
+		return amountinmillion;
+	}
+
+	public final void setAmountinmillion(Boolean amountinmillion) {
+		this.amountinmillion = amountinmillion;
+	}
+
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	private String accessType=null;
@@ -295,6 +307,8 @@ public class AmpARFilter extends PropertyListable {
 	
 	private Set<AmpCategoryValue> projectImplementingUnits = null; 
 	
+	private boolean budgetExport		= false;
+	
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
@@ -314,6 +328,8 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			
+			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
 			
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
@@ -335,6 +351,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpApplicationSettings tempSettings = null;
 		
+		if ( tm.getTeamId()== null ){
+			tm	= null;
+		}
 		if (tm != null) {
 			this.setAccessType(tm.getTeamAccessType());
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
@@ -379,6 +398,10 @@ public class AmpARFilter extends PropertyListable {
 			if (tempSettings!=null){
 				calendarType=tempSettings.getFiscalCalendar();
 			}
+		}
+			
+		if (tempSettings!=null){
+			calendarType=tempSettings.getFiscalCalendar();
 		}
 		String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (calendarType==null){
@@ -591,7 +614,6 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";
 		
 			}
-			
 		int c;
 		if(draft){
 			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
@@ -672,6 +694,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 			if (unallocatedLocation == true) {
 				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
 			}
+		}
+		
+		String ACTUAL_APPROVAL_YEAR_FILTER = "";
+		if (actualAppYear!=null && actualAppYear!=-1) {
+			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE YEAR(actual_approval_date) = " + actualAppYear + " ";
 		}
 		
 		if (locationSelected!=null) {
@@ -943,7 +970,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
-		if (ampTeams != null && ampTeams.size() > 0)
+		if (  !this.budgetExport && ampTeams != null && ampTeams.size() > 0)
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
@@ -1018,6 +1045,10 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		if (responsibleorg!=null && responsibleorg.size() >0){
 			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
+		}
+		
+		if (actualAppYear!=null && actualAppYear!=-1) {
+			queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
 		}
 		
 		if (governmentApprovalProcedures != null) {
@@ -1740,6 +1771,14 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
+	}
+
+	public Integer getActualAppYear() {
+		return actualAppYear;
+	}
+
+	public void setActualAppYear(Integer actualAppYear) {
+		this.actualAppYear = actualAppYear;
 	}
 
 	/**

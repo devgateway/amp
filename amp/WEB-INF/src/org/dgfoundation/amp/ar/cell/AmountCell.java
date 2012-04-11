@@ -460,8 +460,19 @@ public class AmountCell extends Cell {
 
 	}
 
+	/**
+	 * 
+	 * @return the original amount converted to the report's currency
+	 */
 	public double getOriginalAmount() {
 		return convert(this.originalAmount);
+	}
+	/**
+	 * 
+	 * @return the initial amount as read from the database. No conversions are done on this value.
+	 */
+	public double getInitialAmount() {
+		return this.originalAmount;
 	}
 
 }

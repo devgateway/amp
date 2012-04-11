@@ -1212,6 +1212,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
 			            fund.setConditions(ampFunding.getConditions());
 			            fund.setDonorObjective(ampFunding.getDonorObjective());
+                        fund.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
 
 			            /* Get MTEF Projections */
 			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
@@ -1567,8 +1568,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               orgRole = (AmpOrgRole) relOrgsItr.next();
               organisation = DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId());
               //
-              if (orgRole.getRole().getRoleCode().equals(
-                      Constants.RESPONSIBLE_ORGANISATION)
+              if (orgRole.getRole().getRoleCode().equals(Constants.RESPONSIBLE_ORGANISATION)
                       && (!eaForm.getAgencies().getRespOrganisations().contains(organisation))) {
                 	  eaForm.getAgencies().getRespOrganisations().add(organisation);
                 	  if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
@@ -1599,24 +1599,20 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           		  eaForm.getAgencies().getImpOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
                 }
               }
-              else if (orgRole.getRole().getRoleCode().equals(
-                  Constants.BENEFICIARY_AGENCY)
-                       && (!eaForm.getAgencies().getBenAgencies().contains(
-                           organisation))) {
-                eaForm.getAgencies().getBenAgencies().add(
-                    organisation);
+              }
+              else if (orgRole.getRole().getRoleCode().equals(Constants.BENEFICIARY_AGENCY)
+                       && (!eaForm.getAgencies().getBenAgencies().contains(organisation))) {
+                eaForm.getAgencies().getBenAgencies().add(organisation);
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
           		  eaForm.getAgencies().getBenOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){
           		  eaForm.getAgencies().getBenOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
                 }
               }
-              else if (orgRole.getRole().getRoleCode().equals(
-                  Constants.CONTRACTING_AGENCY)
-                       && (!eaForm.getAgencies().getConAgencies().contains(
-                           organisation))) {
-                eaForm.getAgencies().getConAgencies().add(
-                    organisation);
+              }
+              else if (orgRole.getRole().getRoleCode().equals(Constants.CONTRACTING_AGENCY)
+                       && (!eaForm.getAgencies().getConAgencies().contains(organisation))) {
+                eaForm.getAgencies().getConAgencies().add(organisation);
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
           		  eaForm.getAgencies().getConOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){

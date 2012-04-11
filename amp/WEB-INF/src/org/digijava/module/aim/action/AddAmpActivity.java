@@ -328,34 +328,42 @@ public class AddAmpActivity extends Action {
       if (eaForm.getAgencies().getExecutingAgencies() == null) {
           eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setExecutingOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setExecutingOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getImpAgencies() == null) {
           eaForm.getAgencies().setImpAgencies(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setImpOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setImpOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getBenAgencies() == null) {
           eaForm.getAgencies().setBenAgencies(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setBenOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setBenOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getConAgencies() == null) {
           eaForm.getAgencies().setConAgencies(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setConOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setConOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getReportingOrgs() == null) {
           eaForm.getAgencies().setReportingOrgs(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRepOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRepOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getSectGroups() == null) {
           eaForm.getAgencies().setSectGroups(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setSectOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getRegGroups() == null) {
           eaForm.getAgencies().setRegGroups(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRegOrgPercentage(new HashMap<String, String>());
       }
       if (eaForm.getAgencies().getRespOrganisations() == null) {
           eaForm.getAgencies().setRespOrganisations(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRespOrgPercentage(new HashMap<String, String>());
       }
 
 
@@ -418,6 +426,12 @@ public class AddAmpActivity extends Action {
       eaForm.setStep("9");
       eaForm.setPageId(1);
     }
+    
+    if (request.getParameter("previewPopin") != null && request.getParameter("previewPopin").compareTo("true") == 0) {
+       eaForm.setStep("9");
+       eaForm.setPageId(1);
+    }
+      
     //===============Sectors END=============================
 
 
@@ -1031,6 +1045,8 @@ private ActionForward showStep9(ActionMapping mapping,
 	        /*
 	         * If the mode is 'Add', set the Activity Creator as the current logged in user
 	         */
+			if (request.getParameter("isPreview")!= null)
+				eaForm.setIsPreview(Integer.parseInt(request.getParameter("isPreview")));
 	        if (action != null && eaForm.getIsPreview() != 1) {
 	          if (teamMember != null && (!eaForm.isEditAct()) &&
 	              (eaForm.getIdentification().getActAthEmail() == null ||
@@ -1309,8 +1325,13 @@ private ActionForward showStep9(ActionMapping mapping,
 	          /* END - Setting documents for preview */
 	          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 	          DocumentManagerUtil.logoutJcrSessions(request.getSession());
-	          return mapping.findForward("preview");
+	          if (request.getParameter("previewPopin") != null || logframepr.compareTo("true") == 0) {
+	        	  return mapping.findForward("previewPopin");
+	          } else {
+	          	return mapping.findForward("preview");
+	          }
 	        }
+}
 }
 
 private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm) {

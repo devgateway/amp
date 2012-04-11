@@ -65,7 +65,10 @@ public class MetaTextColWorker extends TextColWorker {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
 		}else  if((columnName.equals("Primary Program") || columnName.equals("Secondary Program"))){ 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
-		}	
+		}
+		else if ( ArConstants.COLUMN_ANY_RELATED_ORGS.contains(columnName.trim()) ) {
+			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
+		}
 		
 		MetaInfo percentageMeta = MetaInfo.getMetaInfo(mtc.getMetaData(), ArConstants.PERCENTAGE);
 		if(percentageMeta!=null && ((Double)percentageMeta.getValue()).doubleValue()==0 && columnName.equals(ArConstants.COLUMN_REGION) && ARUtil.hasHierarchy(generator.getReportMetadata().getHierarchies(),ArConstants.COLUMN_REGION )){ 

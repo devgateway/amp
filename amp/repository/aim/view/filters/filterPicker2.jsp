@@ -85,8 +85,10 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
-				<%@include file="bigFilterTable.jsp" %>
-				
+				<bean:define id="reqSearchFieldWidth" toScope="request" value="80px" />
+				<div style="width: 76%; height: 100%; padding: 0px; float: left; position: relative;">
+					<jsp:include page="bigFilterTable.jsp"/>
+				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
 				
 			</div>
@@ -101,10 +103,18 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-				<div style="width: 15%; height: 30%; padding: 10px; float: left; ">
-					
+				<div style="width: 20%; height: 30%; padding: 10px; float: left; ">
+					<c:set var="tooltip_translation">
+						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
+					</c:set>
+					<b><digi:trn>Keyword Search</digi:trn> </b>
+					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
+						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
+						<br />
+						<br />
+						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
 				</div>
-				<div style="width: 45%; height:30%; padding: 10px; float: left;">
+				<div style="width: 33%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					<br />
 					<table style="font-family: Arial; font-size: 1em;">
@@ -134,8 +144,17 @@ StopWatch.next("Filters", true);
 						</tr>
 					</table>
 				</div>
+				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
+					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
+						<br />
+						<br />
+						<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
+							<option value="-1"><digi:trn key="aim:filters:actualAppYear">Year</digi:trn></option>
+                         	<html:optionsCollection property="actualAppYearsRange" label="wrappedInstance" value="wrappedInstance" />
+						</html:select>
+				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
-					<div style="margin-left: 65%;width: 30%; height: 30%; padding: 10px; ">
+					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
 							<br />
 							<br />

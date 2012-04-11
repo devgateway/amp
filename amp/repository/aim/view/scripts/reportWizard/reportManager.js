@@ -192,6 +192,9 @@ function NormalReportManager () {
 	this.hierarchiesVisibility	= null;
 	this.hFieldsetVisibility	= null;
 }
+
+NormalReportManager.prototype.maxHierarchies	= 3;
+
 NormalReportManager.prototype.enableTab		= function (tabIndex) {
 	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps ) {
 		var tab			= YAHOO.amp.reportwizard.tabView.getTab(tabIndex);
@@ -305,8 +308,29 @@ NormalReportManager.prototype.checkMeasures	= function () {
 NormalReportManager.prototype.checkHierarchies	= function () {
 	var ulEl			= document.getElementById("dest_hierarchies_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
+	var incompatible = false;
+	var imcomplist = new Array();
 	
-	if ( items.length > 3 ) {
+	for ( var int = 0; int < items.length; int++) {
+		if (checkincompatiblehierarchies(getColDbId(items[int]))){
+			imcomplist.push(items[int]);
+		}
+		if(imcomplist.length > 1){
+			incompatible = true;
+		}
+	}
+	if (incompatible){
+		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
+		hierarchiesMustEl.style.visibility	= "";
+		this.disableTab(3);
+		return false;
+	}else {
+		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
+		hierarchiesMustEl.style.visibility	= "hidden";
+		this.enableTab(3);
+	}
+	
+	if ( items.length > this.maxHierarchies ) {
 		hierarchiesMustEl					= document.getElementById("hierarchiesMust");
 		hierarchiesMustEl.style.visibility	= "";
 		this.disableTab(3);
@@ -318,6 +342,7 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 		this.enableTab(3);
 		return true;
 	}
+	
 }
 
 NormalReportManager.prototype.checkColumns	= function () {

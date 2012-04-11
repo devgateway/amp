@@ -60,7 +60,7 @@ public class TextColWorker extends ColumnWorker {
 				value = str;
 	
 			} else {
-				value = objValue.toString();
+				value = this.retrieveValueFromRSObject( objValue );
 
 		}
 		}
@@ -85,6 +85,10 @@ public class TextColWorker extends ColumnWorker {
 	protected Cell getCellFromCell(Cell src) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	protected String retrieveValueFromRSObject( Object rsObj ) {
+		return rsObj.toString();
 	}
 
 	public Cell newCellInstance() {

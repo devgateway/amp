@@ -39,11 +39,17 @@
 															
 																<bean:write name="benAgency" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.benOrgToInfo(${benAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																	<field:display name="Beneficiary Agency Percentage"  feature="Beneficiary Agency">
+																		<digi:trn>Percentage</digi:trn> : <html:text property="agencies.benOrgPercentage(${benAgency.ampOrgId})"></html:text>
+																	</field:display>
+																	&nbsp;
 															</td>
 														</tr>
 													</table>

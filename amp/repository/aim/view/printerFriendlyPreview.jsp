@@ -1881,6 +1881,11 @@ body {background:none;}
 																				(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
 																				</logic:notEmpty>
 																			</field:display>
+																<field:display name="Responsible Organization Percentage"  feature="Responsible Organization">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 																			</li></ul>
 																	</td>
 																	<td width="15%" align="right">
@@ -1917,6 +1922,11 @@ body {background:none;}
 																	(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
 																	</logic:notEmpty> 
 																</field:display>
+																<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																</field:display>
 																			</li></ul>
 																	</td>
 																	<td width="15%" align="right">
@@ -1951,6 +1961,11 @@ body {background:none;}
 																	<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
 																		(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+																	<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
 																		</logic:notEmpty> 
 																	</field:display>
 																			</li></ul>
@@ -1991,6 +2006,11 @@ body {background:none;}
 																			(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> ) 
 																			</logic:notEmpty>
 																		</field:display>
+																		<field:display name="Beneficiary Agency  Percentage"  feature="Beneficiary Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty> 
+																		</field:display>
 																			</li></ul>
 																	</td>
 																	<td width="15%" align="right">
@@ -2025,6 +2045,11 @@ body {background:none;}
 																	<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
 																		(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+																	<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
 																		</logic:notEmpty> 
 																	</field:display>
 																			</li></ul>
@@ -2066,6 +2091,11 @@ body {background:none;}
 																				(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> ) 
 																				</logic:notEmpty>
 																			</field:display>
+																	<field:display name="Sector Group Percentage"  feature="Sector Group">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
+																		  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
+																		</logic:notEmpty> 
+																	</field:display>
 																			</li></ul>
 																	</td>
 																	<td width="15%" align="right">
@@ -2100,6 +2130,11 @@ body {background:none;}
 																<field:display name="Regional Group Additional Info"  feature="Regional Group">
 																	<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
 																		(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
+																	</logic:notEmpty> 
+																</field:display>
+																<field:display name="Regional Group Percentage"  feature="Regional Group">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
+																	  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
 																	</logic:notEmpty> 
 																</field:display>
 																			</li></ul>

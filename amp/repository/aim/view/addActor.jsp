@@ -14,22 +14,11 @@
 
 <digi:instance  property="aimEditActivityForm" />
 
-<digi:form name="addActorForm" type="aimEditActivityForm" action="/addActor.do" method="post" onsubmit="return validate()">
+<digi:form name="addActorForm" type="aimEditActivityForm" action="/addActor.do" method="post" >
 
 
 <script language="JavaScript">
 <!--
-
-	function validate() {
-	var meas = document.getElementsByName("issues.actor")[0];
-	if(isEmpty(meas.value) == true) {
-			alert("Please enter the actor");
-			meas.focus();
-			return false;
-		}
-		return true;
-
-	}
 
 	function addActor() {
 		var flag = validate();
@@ -45,11 +34,7 @@
 
 	function unload() {}
 
-	function clearField(){
-		document.getElementsByName("issues.actor")[0].value="";
-		return true;
-	}
-
+	
 -->
 </script>
 
@@ -86,15 +71,15 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.issues.actorId == -1}">
-															<input type="submit" value="<digi:trn key='btn:addActor'>Add</digi:trn>" class="dr-menu">
+															<input type="submit" onclick="return validateActor()" value="<digi:trn key='btn:addActor'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.actorId != -1}">
-															<input type="submit" value="<digi:trn key='btn:updateActor'>Update</digi:trn>" class="dr-menu">
+															<input type="submit" onclick="return validateActor()" value="<digi:trn key='btn:updateActor'>Update</digi:trn>" class="dr-menu">
 														</c:if>
 													</td>
 													<td>
-														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearFieldActor()">
 													</td>
 													
 												</tr>

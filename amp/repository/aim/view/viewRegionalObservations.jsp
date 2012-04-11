@@ -29,13 +29,125 @@ function fnEditProject(id)
    	document.aimRegionalObservationsForm.submit();
 }
 
+
+YAHOOAmp.namespace("YAHOOAmp.amp");
+
+var myPanel = new YAHOOAmp.widget.Panel("myPreview", {
+	width:"940px",
+	fixedcenter: true,
+    constraintoviewport: false,
+    underlay:"none",
+    close:true,
+    visible:false,
+    modal:true,
+    draggable:true,
+    context: ["showbtn", "tl", "bl"]
+    });
+var panelStart=0;
+
+var responseSuccess = function(o){
+	/* Please see the Success Case section for more
+	* details on the response object's properties.
+	* o.tId
+	* o.status
+	* o.statusText
+	* o.getResponseHeader[ ]
+	* o.getAllResponseHeaders
+	* o.responseText
+	* o.responseXML
+	* o.argument
+	*/
+	var response = o.responseText; 
+	var content = document.getElementById("myContentContent");
+	//response = response.split("<!")[0];
+	content.innerHTML = response;
+	//content.style.visibility = "visible";
+	
+	showContent();
+}
+
+function showPanelLoading(msg){
+	   var content = document.getElementById("myContentContent");
+	   content.innerHTML = "<div style='text-align: center'>" + "Loading..." +
+	   "... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";   
+	   showContent();
+	 }
+	 
+var responseFailure = function(o){ 
+	// Access the response object's properties in the 
+	// same manner as listed in responseSuccess( ). 
+	// Please see the Failure Case section and 
+	// Communication Error sub-section for more details on the 
+	// response object's properties.
+	//alert("Connection Failure!"); 
+}  
+var callback = 
+{ 
+	success:responseSuccess, 
+	failure:responseFailure 
+};
+
+function showContent(){
+	var element = document.getElementById("myContent");
+	element.style.display = "inline";
+	if (panelStart < 1){
+		myPanel.setBody(element);
+	}
+	if (panelStart < 2){
+		document.getElementById("myContent").scrollTop=0;
+		myPanel.show();
+		panelStart = 2;
+	}
+}
+
 function preview(id)
 {
-	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-    document.aimRegionalObservationsForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
-	document.aimRegionalObservationsForm.target = "_self";
-    document.aimRegionalObservationsForm.submit();
+	showPanelLoading();
+	var postString="&pageId=2&activityId=" + id+"&isPreview=2&previewPopin=true";
+	//alert(postString);
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
+	var url = "<%=addUrl %>?"+postString;
+	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	
 }
+
+function initPopin() {
+	var msg='\n<digi:trn>Activity Preview</digi:trn>';
+	myPanel.setHeader(msg);
+	myPanel.setBody("");
+	myPanel.beforeHideEvent.subscribe(function() {
+		panelStart=1;
+	}); 
+	
+	myPanel.render(document.body);
+}
+
+window.onload=initPopin();
+
+function expandAll() {
+   
+	$("img[id$='_minus']").show();
+	$("img[id$='_plus']").hide();	
+	$("div[id$='_dots']").hide();
+	$("div[id^='act_']").show('fast');
+}
+
+function collapseAll() {
+
+	$("img[id$='_minus']").hide();
+	$("img[id$='_plus']").show();	
+	$("div[id$='_dots']").show();
+	$("div[id^='act_']").hide();
+}
+
+function toggleGroup(group_id){
+	var strId='#'+group_id;
+	$(strId+'_minus').toggle();
+	$(strId+'_plus').toggle();
+	$(strId+'_dots').toggle();
+	$('#act_'+group_id).toggle('fast');
+}
+
 
 function projectFiche(id)
 {
@@ -45,7 +157,10 @@ function projectFiche(id)
 </script>
 
 <digi:errors/>
-
+<div id="myContent" style="display: none;">
+	<div id="myContentContent" class="content" style="overflow: scroll; height: 500px;">
+	</div>
+</div>
 <digi:instance property="aimRegionalObservationsForm" />
 <digi:context name="digiContext" property="context"/>
 <logic:equal name="aimRegionalObservationsForm" property="validLogin" value="false">

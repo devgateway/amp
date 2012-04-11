@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -58,6 +59,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
 	private boolean pledgereport=false;
+	
+	private HttpServletRequest request	= null;
 
 
 	/**
@@ -99,6 +102,10 @@ public class AmpReportGenerator extends ReportGenerator {
 					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns()) && "true".compareTo(FeaturesUtil.getGlobalSettingValue("Enabled Split by Type Of Assistance"))==0) {
 					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 				}
+			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+					ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
+				ret.add(ArConstants.MODE_OF_PAYMENT);
+			}
 
 		}
 		return ret;
@@ -182,7 +189,24 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 
+		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
+		if ( this.request != null ) {
+			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.request.getSession() );
+		}
+		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
+		
+		
+		for (ArConstants.SyntheticColumnsMeta scm:  possibleSyntColMeta) {
+			SyntheticCellGenerator generator	= scm.getGenerator();
+			if ( generator.checkIfApplicabale(reportMetadata)  ) {
+				if ( this.request != null )
+					generator.setSession(this.request.getSession() );
+				syntCellGenerators.add(generator);
+			}
+		}
+		
 		Iterator<AmpReportColumn> i = extractable.iterator();
+		
 		try {
 
 			while (i.hasNext()) {
@@ -228,24 +252,36 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				if (extractorView != null) {
 
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							filter.getGeneratedFilterQuery(), extractorView,
 							columnName, this });
 				} else {
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns, this });
 				}
 
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
+				if (request != null)
+					ce.setSession(request.getSession());
 				
 				
 				ce.setDebugMode(debugMode);
 				ce.setPledge(pledgereport);
 				
 				Column column = ce.populateCellColumn();
+				
+				if ( syntCellGenerators.size() > 0 && ArConstants.COLUMN_FUNDING.equals(column.getName()) ) {
+					for (SyntheticCellGenerator scg: syntCellGenerators) {
+						int order	= reportMetadata.getMeasureOrder( scg.getMeasureName() );
+						Collection<CategAmountCell> newCells	= scg.generate( column.getItems(), order );
+						if ( newCells!=null )
+							column.getItems().addAll(newCells);
+					}
+				} 
+				
 
 				if (relatedContentPersisterClass != null) {
 					column.setRelatedContentPersisterClass(Class
@@ -573,24 +609,52 @@ public class AmpReportGenerator extends ReportGenerator {
 		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
 				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
 				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+			
+			//iterate each column in newcol
+//			for (int i=0; i< newcol.getItems().size();i++){
+//				Column nestedCol = (Column) newcol.getItems().get(i);
+//				if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
+//				
+//				List<String> cat = new ArrayList<String>();
+//				cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+//				GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
+//						true, reportMetadata);
+//				
+//				nestedCol2.addColumn(nestedCol);
+//				nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+//				newcol.replaceColumn(nestedCol.getName(), nestedCol2);
+//				
+//			}
+			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+		}
+		
+		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+				ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
+			
+			this.addTotalsVerticalSplit(newcol, ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_TOTAL);
+		}
+		
+		rawColumns.addColumn(newcol);
+	}
+	
+	protected void addTotalsVerticalSplit(GroupColumn newcol, String splitterCol, String totalsSplitterCol) {
 		//iterate each column in newcol
 		for (int i=0; i< newcol.getItems().size();i++){
 			Column nestedCol = (Column) newcol.getItems().get(i);
 			if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
 			
 			List<String> cat = new ArrayList<String>();
-			cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+			cat.add(splitterCol);
 			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
 					true, reportMetadata);
 			
 			nestedCol2.addColumn(nestedCol);
-			nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+			nestedCol.setName(totalsSplitterCol);
 			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
 			
-			}
 		}
 		
-		rawColumns.addColumn(newcol);
 	}
 
 	protected void applyExchangeRate() {
@@ -801,6 +865,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter,
 			HttpServletRequest request) {
 		super();
+		this.request		= request;
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;

@@ -862,6 +862,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setComputedYearsRange(new ArrayList<BeanWrapperImpl>());
+		filterForm.setActualAppYearsRange(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setApprovalStatusSelectedCollection(new ArrayList());
 		
@@ -875,6 +876,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		for (long i = curYear-10; i < curYear; i ++) {
 			filterForm.getComputedYearsRange().add(new BeanWrapperImpl(new Long(i)));
+			filterForm.getActualAppYearsRange().add(new BeanWrapperImpl(new Long(i)));
 		}
 		
 		for (long i = 10; i <= 100; i += 10) {
@@ -1197,6 +1199,9 @@ public class ReportsFilterPicker extends MultiAction {
 				arf.setComputedYear(null);
 					
 		}
+		if (filterForm.getActualAppYear()!=-1){
+			arf.setActualAppYear(filterForm.getActualAppYear());
+		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency;
 		if (filterForm.getCurrency()!=null){
@@ -1441,6 +1446,8 @@ public class ReportsFilterPicker extends MultiAction {
 		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousands());
+		arf.setAmountinmillion(filterForm.getAmountinmillions());
+		
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
@@ -1496,6 +1503,7 @@ public class ReportsFilterPicker extends MultiAction {
         filterForm.setSelectedTertiarySectors(null);
         filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		filterForm.setAmountinthousands(false);
+		filterForm.setAmountinmillions(false);
 		filterForm.setSelectedMultiDonor(null);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
@@ -1546,6 +1554,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
 		filterForm.setAmountinthousands(null);
+		filterForm.setAmountinmillions(null);
 	}
 
 	private Integer getDefaultStartYear(HttpServletRequest request) {

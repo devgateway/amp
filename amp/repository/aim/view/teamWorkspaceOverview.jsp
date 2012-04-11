@@ -158,6 +158,29 @@ function updateChild(action) {
 													</html:select>
 										    </td>
 										</tr>
+														<c:set var="translation">
+															<digi:trn>Please select from below</digi:trn>
+														</c:set>															
+														<tr>
+															<td width="150" align="right" bgcolor="#f4f4f2">
+																<font color="red"><b>*</b></font>
+																<digi:trn key="aim:workspaceGroup">Workspace Group</digi:trn>
+															</td>
+															<td align="left" bgcolor="#f4f4f2">
+																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
+																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceGroup" /></b>
+																</logic:equal>
+																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
+																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceGroup" /></b>
+																</logic:equal>
+																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
+																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+																</logic:equal>
+																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
+																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+																</logic:equal>
+															</td>
+														</tr>
 										<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
 											<tr>
 												<td class="inside" colspan="3">

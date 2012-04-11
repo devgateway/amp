@@ -813,7 +813,11 @@
 			<type>jar</type>
 		</dependency>
 
-
+		<dependency>
+			<groupId>net.fckeditor</groupId>
+			<artifactId>java-core</artifactId>
+			<version>2.5</version>
+		</dependency>
 
 		<dependency>
 			<groupId>postgresql</groupId>

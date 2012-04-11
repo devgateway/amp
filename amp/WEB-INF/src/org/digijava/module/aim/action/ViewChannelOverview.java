@@ -431,6 +431,10 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                relOrg.setAdditionalInformation( orgRole.getAdditionalInfo() );
+				                if(orgRole.getPercentage() != null){
+				                	relOrg.setPercentage(orgRole.getPercentage());
+				                }
+				                
 //				                if (!relOrgs.contains(relOrg)) {
 //				                	relOrgs.add(relOrg);
 				                	relOrgsAux.add(relOrg);

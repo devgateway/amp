@@ -325,7 +325,7 @@ function editEvent(){
 					              	<td>
 					                	<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 					                	&nbsp;
-					                	<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+					                	<input class="buttonx" type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="editEvent()">
 									</td>
 								</tr>
 								<tr height="3px"><td colspan="2"></td></tr>

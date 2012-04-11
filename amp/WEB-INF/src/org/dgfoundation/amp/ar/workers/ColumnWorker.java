@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
@@ -203,6 +205,7 @@ public abstract class ColumnWorker {
 			logger.error(e);
 			e.printStackTrace();
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Error parsing date filters");
 		} 
 		finally {
@@ -391,5 +394,9 @@ public abstract class ColumnWorker {
 	public void setPledge(boolean pledgereport) {
 		this.pledgereport = pledgereport;	
 		}
+	
+	public void setSession(HttpSession session) {
+		;
+	}
 
 }

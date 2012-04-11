@@ -10,7 +10,7 @@
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
-<digi:form action="/viewNewAdvancedReport.do">
+<digi:form action="/viewNewAdvancedReport.do" module="aim">
 	<table width="400px" style="font-size: 11px;" cellpadding="2" cellspacing="2" align="center">
 		<tr>
 			<td align="right">

@@ -185,6 +185,8 @@
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
 		
+		if ( "true" == "${myForm.budgetExporter}" )	
+			NormalReportManager.prototype.maxHierarchies	= 5;
 	function initializeDragAndDrop() {
 		var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 		//alert( YAHOO.util.Dom.getDocumentHeight() );

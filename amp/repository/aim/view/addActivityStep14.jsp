@@ -85,40 +85,102 @@ var callback = {
 }
    
 function addObservations(){
-	myPanel1.setHeader('<digi:trn>Add Observation</digi:trn>');
+	reusableDialog.setHeader('<digi:trn>Add Observation</digi:trn>');
  	<digi:context name="addObservation" property="context/module/moduleinstance/showUpdateObservation.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addObservation%>&observations.issueId=-1",callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addObservation%>&observations.issueId=-1",callbackDialog);
 }       
 
 function updateObservations(id) {
-	myPanel1.setHeader('<digi:trn key="aim:updateObservation">Update Observation</digi:trn>');
+	reusableDialog.setHeader('<digi:trn key="aim:updateObservation">Update Observation</digi:trn>');
 	<digi:context name="addObservation" property="context/module/moduleinstance/showUpdateObservation.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addObservation%>&observations.issueId="+id,callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addObservation%>&observations.issueId="+id,callbackDialog);
 }
 
 function addMeasures(observationId) {
-	myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
+	reusableDialog.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateRegionalObservationMeasure.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&observations.issueId="+observationId+"&observations.measureId=-1",callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&observations.issueId="+observationId+"&observations.measureId=-1",callbackDialog);
 }
 
 function updateMeasures(observationId,measureId) {
-	myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
+	reusableDialog.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateRegionalObservationMeasure.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&observations.issueId="+observationId+"&observations.measureId="+measureId,callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&observations.issueId="+observationId+"&observations.measureId="+measureId,callbackDialog);
 }
 	
 function addActors(observationId,measureId) {
-	myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
+	reusableDialog.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateRegionalObservationActors.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&observations.issueId="+observationId+"&observations.measureId="+measureId+"&observations.actorId=-1",callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&observations.issueId="+observationId+"&observations.measureId="+measureId+"&observations.actorId=-1",callbackDialog);
 }
 
 function updateActor(observationId,measureId,actorId) {
-	myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
+	reusableDialog.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateRegionalObservationActors.do?edit=true" />
-	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&observations.issueId="+observationId+"&observations.measureId="+measureId+"&observations.actorId="+actorId,callback);
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&observations.issueId="+observationId+"&observations.measureId="+measureId+"&observations.actorId="+actorId,callbackDialog);
 }
+
+function validateObservation() {
+	if(isEmpty(document.getElementById('observation').value) == true) {	
+		var observationError = "<digi:trn jsFriendly='true'>Please enter observation</digi:trn>"; 	
+		alert(observationError);			
+		addObservationForm.observation.focus();
+		return false;
+	}
+	<field:display name="Regional Observations Date" feature="Regional Observations" >
+		if(isEmpty(document.getElementById('observationDate').value) == true) {	
+			var observationError2 = "<digi:trn jsFriendly='true'>Please enter observation date</digi:trn>"; 	
+			alert(observationError2);
+			return false;
+		}	
+	</field:display>
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
+function validateMeasure() {
+	var meas = document.getElementsByName("observations.measure")[0];
+	if(isEmpty(meas.value) == true) {
+		var measError = "<digi:trn jsFriendly='true'>Please enter the measure</digi:trn>"; 	
+		alert(measError);
+		meas.focus();
+		return false;
+	}
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
+function validateActor() {
+	var actor = document.getElementsByName("observations.actor")[0];
+	if(isEmpty(actor.value) == true) {
+		var actorError = "<digi:trn jsFriendly='true'>Please enter the actor</digi:trn>"; 	
+		alert(actorError);
+		actor.focus();
+		return false;
+	}
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
+
+function clearFieldObservation(){
+	document.getElementById('observation').value="";
+	<field:display name="Regional Observations Date" feature="Regional Observations" >
+	document.getElementById('observationDate').value="";
+	</field:display>
+	return true;
+}
+
+function clearFieldMeasure(){
+	document.getElementsByName("observations.measure")[0].value="";
+	return true;
+}
+
+function clearFieldActor(){
+	document.getElementsByName("observations.actor")[0].value="";
+	return true;
+}
+
 //END POPIN
 
 function removeObservation(idObservation) {

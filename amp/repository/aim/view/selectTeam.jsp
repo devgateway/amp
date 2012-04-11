@@ -24,17 +24,71 @@
 		<digi:trn key="aim:selectTheTeam">Select the team you want to use in this current session</digi:trn>
 	</div>
 	<div class="workspace_choose">
+				<tr><td>
+					<c:forEach var="workspaceGroup" items="${aimLoginForm.workspaceGroups}">
+					<table border=0 cellPadding=0 cellSpacing=0 width="100%" id="table_${workspaceGroup}" 
+                    style="display:none;margin:0px 0px 15px 0px;">
+						<tr>
+							<td>
+								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;"><c:out value="${workspaceGroup}"/></div>
+						</td>
+						</tr>
 		<c:forEach var="members" items="${aimLoginForm.members}">
+							<c:set var="nonEmptyGroup">false</c:set>
+							<c:if test="${members.ampTeam.workspaceGroup.id eq workspaceGroup.id}">
+								<c:set var="nonEmptyGroup">true</c:set>
 			<img src=img_2/ico_wrkspc.gif style="margin-right:7px;">
+								<tr>
+									<td>
+										<div class="workspacelist">
 			<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 				<c:set target="${urlParams}" property="id">
 					<c:out value="${members.ampTeamMemId}"/>
 				</c:set>								
 				<digi:link href="/selectTeam.do" name="urlParams">
-					<c:out value="${members.ampTeam.name}"/><br>
-				</digi:link>
+					<c:out value="${members.ampTeam.name}"/>
+				</digi:link></div>
+								</td></tr>
+							</c:if>
+							<c:if test="${nonEmptyGroup}">
+								<script language="javascript">
+									document.getElementById("table_${workspaceGroup}").style.display = "block";
+								</script>
+							</c:if>
+						</c:forEach>
+					</table>
+					</c:forEach>
+
+					<c:set var="nonEmptyGroup">false</c:set>
+					<table border=0 cellPadding=0 cellSpacing=0 width="100%" id="table_other" style="display:none;margin:0px 0px 15px 0px;">
+						<tr>
+							<td>
+								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;"><digi:trn key="aim:other">Other</digi:trn></div>
+						</td>
+						</tr>
+						<c:forEach var="members" items="${aimLoginForm.members}">
+							<c:if test="${empty members.ampTeam.workspaceGroup}">
+							<c:set var="nonEmptyGroup">true</c:set>
+							<tr>
+								<td><div class="workspacelist">
+									
+									<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+									<c:set target="${urlParams2}" property="id">
+										<c:out value="${members.ampTeamMemId}"/>
+									</c:set>								
+									<digi:link href="/selectTeam.do" name="urlParams2">
+									<c:out value="${members.ampTeam.name}"/></digi:link></div>
+							</td></tr>
+							</c:if>
 		</c:forEach>
 		</div>
+					<c:if test="${nonEmptyGroup}">
+						<script language="javascript">
+							document.getElementById("table_other").style.display = "block";
+						</script>
+					</c:if>
+				</td></tr>			
+			</table>
 	</td>
   </tr>
 </table>

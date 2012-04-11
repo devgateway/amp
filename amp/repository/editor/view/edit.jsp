@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/tags-fckeditor" prefix="FCK" %>
+<%@ taglib uri="http://java.fckeditor.net" prefix="FCK" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -50,9 +50,8 @@ function validate(){
 	if (size==-1){
 		size=100000;
 	}
-	
-	if (content.FCKeditorAPI.GetInstance('content').GetData().length > size){
-		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is'+size+' chrs';
+	if (FCKeditorAPI.GetInstance('content').GetData().length > size){
+		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is '+size+' chrs';
 		alert(msg);
 		return false;
 	}
@@ -103,9 +102,12 @@ function cancelText(){
                 </tr>                    
             </table>
     </c:if>
-    <br>        
-       <FCK:editor id="content"   basePath="/FCKeditor/" width="80%" height="500" toolbarSet="AMP" defaultLanguage="${editorForm.lang}">
-       		${editorForm.content}
+    <br>      
+       <FCK:editor instanceName="content"  basePath="/FCKeditor/" width="80%" height="500" toolbarSet="AMP">
+		<jsp:attribute name="value">${editorForm.content}</jsp:attribute>
+		<jsp:body>
+			<FCK:config AutoDetectLanguage="false" DefaultLanguage="${editorForm.lang}" />
+		</jsp:body>  
        </FCK:editor>
 
 

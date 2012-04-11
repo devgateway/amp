@@ -197,6 +197,9 @@
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body" module="aim" instance="default"/>
 		</layout>
+		<layout name="reportsLayout" file="aimReportsLayout.jsp">
+			<put name="title">Popup</put>
+		</layout>
 		<layout name="single" file="popupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
@@ -759,6 +762,7 @@
 				<page>tabManagerData</page>
 				<page>selectPledgeLocation</page>
 				<page>selectPledgeProgram</page>
+				<page>previewActivityPopin</page>
 			</module>
             <module name="orgProfile">
                 <page>orgSummary</page>
@@ -778,6 +782,9 @@
             <module name="calendar">
                 <page>printPreviewPopupLayout</page>
                  <page>printViewPopupLayout</page>
+            </module>
+            <module name="budgetexport">
+            	<page>reportWrapper</page>
             </module>
             <module name="esrigis">
 				<page>mainmap</page>

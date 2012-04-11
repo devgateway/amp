@@ -14,6 +14,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -47,6 +48,9 @@ public class SearchUtil {
 	public static final int REPORTS = 1;
 	public static final int TABS = 2;
 	public static final int RESOURCES = 3;
+    public static final int RESPONSIBLE_ORGANIZATION = 4;
+    public static final int EXECUTING_AGENCY = 5;
+    public static final int IMPLEMENTING_AGENCY = 6;
 
 	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,
 			String string) {
@@ -331,5 +335,76 @@ public class SearchUtil {
 		}
 		return false;
 	}
+	public static Collection<LoggerIdentifiable> getActivitiesUsingRelatedOrgs(String keyword, TeamMember tm, String roleCode) throws DgException {
+        Collection<LoggerIdentifiable> activities = new ArrayList<LoggerIdentifiable>();
+        Set<AmpTeam> teams=TeamUtil.getRelatedTeamsForMember(tm);
+        Set teamAO = TeamUtil.getComputedOrgs(teams);
+        boolean hasComputedOrgs = teamAO != null && !teamAO.isEmpty();
+        StringBuilder query = new StringBuilder();
+        query.append(" select act from ");
+        query.append(AmpActivity.class.getName());
+        query.append(" act inner join act.team team ");
+        query.append(" inner join act.orgrole role ");
+        query.append(" inner join role.organisation org ");
+        query.append(" inner join role.role roleCode ");
+        query.append("where (team.ampTeamId in (");
+        query.append(Util.toCSString(teams));
+        query.append( ")");
+        if(hasComputedOrgs){
+              query.append( " or org.ampOrgId in (");
+              query.append( Util.toCSString(teamAO));
+              query.append( ")");
+        }
+        query.append(")");
+        query.append(" and roleCode.roleCode=:roleCode ");
+        if (!hasComputedOrgs) {
+            query.append(" and org.name like :name");
+            if (tm.getTeamAccessType().equals("Management")) {
+                query.append(" and act.draft=false and act.approvalStatus ='approved' ");
+            }
+        }
+       
+        Session session = PersistenceManager.getRequestDBSession();
+        Query qry = session.createQuery(query.toString());
+       
+        if (hasComputedOrgs) {
+            qry.setString("roleCode", "DN");
+        }
+        else{
+            qry.setString("roleCode", roleCode);
+            qry.setString("name", '%' + keyword + '%');
+        }
+        
+        List<AmpActivity> result = qry.list();
+        if (result != null && !result.isEmpty()) {
+            if (!hasComputedOrgs) {
+                activities.addAll(result);
+            } else {
+                StringBuilder queryString = new StringBuilder();
+                queryString.append(" select act from ");
+                queryString.append(AmpActivity.class.getName());
+                queryString.append(" act ");
+                queryString.append(" inner join act.orgrole role ");
+                queryString.append(" inner join role.organisation org ");
+                queryString.append(" inner join role.role roleCode ");
+                queryString.append(" where roleCode.roleCode=:roleCode ");
+                queryString.append(" and act.ampActivityId in (");
+                queryString.append(Util.toCSString(result));
+                queryString.append(")");
+                queryString.append(" and org.name like :name");
+                qry = session.createQuery(queryString.toString());
+                qry.setString("roleCode", roleCode);
+                qry.setString("name", '%' + keyword + '%');
+                result = qry.list();
+                if (result != null && !result.isEmpty()) {
+                    activities.addAll(result);
+                }
+                
+            }
+
+        }
+        return activities;
+    }
+
 
 }

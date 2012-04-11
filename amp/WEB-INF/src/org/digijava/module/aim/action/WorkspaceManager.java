@@ -104,19 +104,33 @@ public class WorkspaceManager extends Action {
 		//vect.addAll(ampWorkspaces);
 		vect.addAll(colAt);
 		String workspaceType = wsForm.getWorkspaceType();
+		Long workspaceGroup = wsForm.getWorkspaceGroup();
 		for (AmpTeam ampTeam : vect) {
+			Boolean addTeam = false;
 			if(workspaceType!=null){
 			  if("all".equals(workspaceType)) {
-				  workspaces.add(ampTeam);
+				  addTeam = true;
 			  }else if("team".equals(workspaceType) && "Team".equals(ampTeam.getAccessType())) {
-				  workspaces.add(ampTeam);
+				  addTeam = true;
 			  }else if("management".equals(workspaceType) && "Management".equals(ampTeam.getAccessType())) {
-				  workspaces.add(ampTeam);
+				  addTeam = true;
 			  }else if("computed".equals(workspaceType) && ampTeam.getComputation()!=null && ampTeam.getComputation()) {
-				  workspaces.add(ampTeam);
+				  addTeam = true;
 			  }
 			}
+			if (workspaceGroup != null && workspaceGroup != 0 && addTeam) {
+				if(ampTeam.getWorkspaceGroup() != null && (ampTeam.getWorkspaceGroup().getId().compareTo(workspaceGroup) == 0))
+				{
+				  addTeam = true;
+				}
+				else
+				{
+				  addTeam = false;
+				}
+			}
+			if(addTeam) workspaces.add(ampTeam);
 		}
+		
 		//pages
 		int numPages = 0;
 		if (NUM_RECORDS!=0) {numPages=workspaces.size() / NUM_RECORDS;

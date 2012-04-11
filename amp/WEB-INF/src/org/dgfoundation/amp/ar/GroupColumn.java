@@ -6,8 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,11 +17,16 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Column that is built
@@ -105,7 +111,8 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				
-				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element instanceof TotalCommitmentsAmountColumn){ 
+				if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
+						&& element instanceof TotalCommitmentsAmountColumn){ 
 					continue;
 				}
 				
@@ -165,6 +172,21 @@ public class GroupColumn extends Column {
         	    
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
                 	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
+                	
+                	//Replace the year in pledges report for unspecified dates funding
+                	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
+	                	SimpleDateFormat pledgesfakeyear = new SimpleDateFormat("yyyy");
+	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
+	                	
+	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
+	                		try {
+								minfo2.setValue(TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId()));
+							} catch (WorkerException e) {
+								e.printStackTrace();
+							}
+	                	}
+                	}
+                	
                 	yearMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
                 	
                }
@@ -204,6 +226,16 @@ public class GroupColumn extends Column {
       if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true")) {
     	  if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) ) {
         	metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,ArConstants.TERMS_OF_ASSISTANCE_TOTAL));
+          }
+    	  
+    	  if(category.equals(ArConstants.QUARTER)) {
+    		  metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,ArConstants.QUARTERS_TOTAL));
+    	  }
+        
+      }
+      if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true")) {
+    	  if(category.equals(ArConstants.MODE_OF_PAYMENT) ) {
+        	metaSet.add(new MetaInfo<String>(ArConstants.MODE_OF_PAYMENT,ArConstants.MODE_OF_PAYMENT_TOTAL));
           }
     	  
     	  if(category.equals(ArConstants.QUARTER)) {
@@ -260,6 +292,9 @@ public class GroupColumn extends Column {
         	//if this category is found inside the grand totals column, ignore it 
             if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
             		element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL) && src instanceof TotalAmountColumn) continue;
+            
+            if(element.getCategory().equals(ArConstants.MODE_OF_PAYMENT) && 
+            		element.getValue().equals(ArConstants.MODE_OF_PAYMENT_TOTAL) && src instanceof TotalAmountColumn) continue;
 
             CellColumn cc = null;
             if (generateTotalCols)
@@ -309,6 +344,12 @@ public class GroupColumn extends Column {
     					continue;
     			}
     			
+    			if(element.getCategory().equals(ArConstants.MODE_OF_PAYMENT) && 
+    					element.getValue().equals(ArConstants.MODE_OF_PAYMENT_TOTAL)){
+    					cc.addCell(item);
+    					continue;
+    			}
+    			
     			//add totals for quarters for each year
     			if(element.getCategory().equals(ArConstants.QUARTER) && 
     					element.getValue().equals(ArConstants.QUARTERS_TOTAL)){
@@ -322,14 +363,16 @@ public class GroupColumn extends Column {
         
         // Start AMP-2724
         if(category.equals(ArConstants.FUNDING_TYPE)) {
+        	
+        	int index=0;
+        	List theItems = ret.getItems();
 			if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
 	
 				TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
 						ArConstants.TOTAL_COMMITMENTS);
 				
-	            List theItems = ret.getItems();
-	            
-	            int index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
+	           
+	            index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
 	            
 	            theItems.add(index <  0  || index > theItems.size() ?  theItems.size() : index, tac);
 	            
@@ -343,7 +386,38 @@ public class GroupColumn extends Column {
 					tac.addCell(element);
 				}
 	
-			}  
+			}
+			if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
+					reportMetadata.getMeasures())) {
+
+				TotalComputedMeasureColumn tcmc = new TotalComputedMeasureColumn(
+
+				ArConstants.UNDISBURSED_BALANCE);
+
+				index = reportMetadata
+						.getMeasureOrder(ArConstants.UNDISBURSED_BALANCE) - 1;
+
+				theItems.add(
+						index < 0 || index > theItems.size() ? theItems.size()
+								: index, tcmc);
+
+				tcmc.setParent(ret);
+
+				tcmc.setContentCategory(category);
+
+				tcmc.setExpression(MathExpressionRepository.UNDISBURSED_BALANCE);
+
+				Iterator<Cell> it = src.iterator();
+
+				while (it.hasNext()) {
+
+					AmountCell element = (AmountCell) it.next();
+
+					tcmc.addCell(element);
+
+				}
+
+			}
         }
         // End AMP-2724
         

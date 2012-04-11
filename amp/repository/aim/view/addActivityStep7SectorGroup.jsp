@@ -37,11 +37,17 @@
 															<td align="left" width="49%">
 																<bean:write name="impAgency" property="name" />
 															</td>
-															<td width="49%">
+															<td width="39%" valign="top">
 																<field:display name="Sector Group Department/Division"  feature="Sector Group">
 																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.sectOrgToInfo(${impAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
+															</td>
+															<td width="10%" valign="top">
+																	<field:display name="Sector Group Percentage"  feature="Sector Group">
+																		<digi:trn>Percentage</digi:trn> : <html:text property="agencies.sectOrgPercentage(${impAgency.ampOrgId})" styleId="sectGrpPerc"></html:text>
+																	</field:display>
+																	&nbsp;
 															</td>
 														</tr>
 													</table>

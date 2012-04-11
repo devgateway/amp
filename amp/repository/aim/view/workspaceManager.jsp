@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
@@ -1114,6 +1115,11 @@
                                 <html:option value="computed"><digi:trn>Computed</digi:trn></html:option>
                             </html:select>
                             </td>
+													<td align="center">
+														<digi:trn>Workspace Group</digi:trn>:&nbsp;		
+														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>												
+														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
+													</td>
                             <td align="left">
                             <c:set var="translation">
                                 <digi:trn>Show</digi:trn>

@@ -72,6 +72,41 @@
 										
 									<jsp:include page="teamSetupMenu.jsp"  />
 									
+									<div>
+										<table>
+													<tr>
+														<td nowrap="nowrap">
+															<digi:trn>Keyword</digi:trn>&nbsp;
+															<html:text property="keyword" styleClass="inp-text" />
+														</td>
+														<td width="120">
+															<digi:trn>Results</digi:trn>&nbsp;
+															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
+																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
+																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
+																</c:if>
+																<html:option value="10">10</html:option>
+																<html:option value="20">20</html:option>
+																<html:option value="50">50</html:option>
+																<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+															</html:select>
+														</td>
+														<td>
+															<c:set var="trnResetBtn">
+																<digi:trn>Reset</digi:trn>
+															</c:set>
+															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+														</td>
+														<td>					
+															<c:set var="trnGoBtn">
+																<digi:trn> GO </digi:trn>
+															</c:set>
+															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
+														</td>
+													</tr>
+												</table>
+									</div>
+									
 									<br>
 									<div id="private">
 										<img src= "/repository/contentrepository/view/images/make_public.gif">
@@ -104,7 +139,9 @@
 										<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>
 									</div>
 						
-									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
+									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">									
+									
+									
 										<tr style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">
 									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
@@ -316,8 +353,35 @@
 													</tr>
 											</logic:iterate>
 										</logic:notEmpty>
+										
 										<tr><td colspan="7"><digi:errors /></td></tr>
 									</table>
+									
+									<!-- Pagination -->
+									<logic:notEmpty name="aimTeamReportsForm" property="totalPages">
+										<div class="paging" style="font-size:11px;">
+											<digi:trn>Pages</digi:trn>:
+												<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+												  	<c:if test="${aimTeamReportsForm.currentPage==page}">
+				                                	    <b class="paging_sel"><c:out value="${page}"/></b>
+				                                    </c:if>
+				                                    <c:if test="${aimTeamReportsForm.currentPage!=page}">				                                    
+				                                    	<c:if test="${aimTeamReportsForm.showReportList == true}">
+															<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+							                                   	<c:out value="${page}"/>
+							                                </digi:link>
+														</c:if>
+														<c:if test="${aimTeamReportsForm.showReportList == false}">
+															<digi:link href="/teamDesktopTabList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+							                                   	<c:out value="${page}"/>
+							                                </digi:link>
+														</c:if>
+				                                    </c:if>				                                    
+													|&nbsp;
+												</c:forEach>
+											</div>
+										</logic:notEmpty>
+										<!-- end of Pagination -->
 									
 									<br>
 									<div class="buttons" align="center">
@@ -349,7 +413,7 @@
 function listReports()
 {
 	document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
-	document.aimTeamReportsForm.action="/updateTeamReports.do";
+	document.aimTeamReportsForm.action="/updateTeamReports.do?reset=true";
 	document.aimTeamReportsForm.submit();
 }
 
@@ -412,7 +476,46 @@ function validate() {
 		return false;
 	}
 }
+    
+    function resetSearch() {
+    	var showReports = document.getElementById("showReportList").value;    		
+		if(showReports == "true"){
+			return submitReports('yes');
+		}else if(showReports == "false"){
+			return  submitTabs('yes');
+		}
+	}
 
+	function searchActivity(teamId) {    		
+		var showReports = document.getElementById("showReportList").value;    		
+		if(showReports == "true"){
+			return submitReports('no');
+		}else if(showReports == "false"){
+			return  submitTabs('no');
+		}	 
+	}
+	
+	function submitTabs(reset){
+		<digi:context name="lala" property="context/module/moduleinstance/teamDesktopTabList.do"/>
+		url = "<%= lala %>";
+		if(reset=='yes'){
+			url +="?reset=true";
+		}
+		document.aimTeamReportsForm.action = url;   		    
+		    document.aimTeamReportsForm.submit();
+		 	return true;
+	}
+	
+	function submitReports(reset){
+		 <digi:context name="lala" property="context/module/moduleinstance/teamReportList.do"/>
+		 url = "<%= lala %>";
+		 if(reset=='yes'){
+ 			url +="?reset=true";
+ 		 }
+		 document.aimTeamReportsForm.action = url;   		    
+		     document.aimTeamReportsForm.submit();
+		 return true;
+	}
 
 </script>
 

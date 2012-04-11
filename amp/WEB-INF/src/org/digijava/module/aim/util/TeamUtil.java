@@ -1642,7 +1642,7 @@ public class TeamUtil {
     /*
      * return ReportsCollection Object
      */
-    public static Collection getTeamReportsCollection(Long teamId, Boolean tabs) {
+    public static Collection getTeamReportsCollection(Long teamId, Boolean tabs,String keyword) {
         Session session = null;
         ArrayList col = null;
         try {
@@ -1669,7 +1669,10 @@ public class TeamUtil {
 	    				} else {
 	    					queryString += " and r.drilldownTab=false ";
 	    				}
-	    			}	 
+	    			}
+	                if(keyword != null){
+	                	queryString += " and r.name like '%"+keyword+"%' ";
+	                }
 	                queryString += " order by r.name";
 	                qry = session.createQuery(queryString);
 	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
@@ -1706,7 +1709,7 @@ public class TeamUtil {
         }
         return col;
     }
-    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs) {
+    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs,String keyword) {
         Session session = null;
         List col = new ArrayList<ReportsCollection>();
         try {
@@ -1722,10 +1725,14 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
+            if(keyword != null){
+            	queryString += " and tr.report.name like '%"+keyword+"%' ";
+            }
             queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
             
-            
+            qry.setFirstResult(currentPage);
+            qry.setMaxResults(recordPerPage);
             qry.setLong("teamId", teamId);
 
             col=qry.list();
@@ -1739,36 +1746,39 @@ public class TeamUtil {
         return col;
     }
 
-    public static int getTeamReportsCollectionSize(Long teamId, Boolean tabs) {
-       Session session = null;
-       List col =new ArrayList();
-       int size=0;
-       try {
-           session = PersistenceManager.getRequestDBSession();
-           String queryString = "select r, tr.teamView from "
-               + AmpTeamReports.class.getName()
-               + " tr inner join tr.report r where (tr.team=:teamId) "; 
-           if (tabs != null) {
-				if (tabs) {
-					queryString += " and r.drilldownTab=true ";
-				} else {
-					queryString += " and r.drilldownTab=false ";
-				}
-			}           
-           queryString += " order by tr.report";
-           
-           Query qry = session.createQuery(queryString);
-           qry.setLong("teamId", teamId);
-           col = qry.list();
-           size=col.size();
-       } catch(Exception e) {
-           logger.debug("Exception from getTeamReportsCollection");
-           logger.debug(e.toString());
-           throw new RuntimeException(e);
-       }
-       return size;
-   }
-
+    public static int getTeamReportsCollectionSize(Long teamId, Boolean tabs,String keyword) {
+        Session session = null;
+        List col =new ArrayList();
+        int size=0;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select r, tr.teamView from "
+                + AmpTeamReports.class.getName()
+                + " tr inner join tr.report r where (tr.team=:teamId) "; 
+            if (tabs != null) {
+ 				if (tabs) {
+ 					queryString += " and r.drilldownTab=true ";
+ 				} else {
+ 					queryString += " and r.drilldownTab=false ";
+ 				}
+ 			}
+            if(keyword != null){
+            	queryString += " and tr.report.name like '%"+keyword+"%' ";
+            }
+            queryString += " order by tr.report";
+            
+            Query qry = session.createQuery(queryString);
+            qry.setLong("teamId", teamId);
+            col = qry.list();
+            size=col.size();
+        } catch(Exception e) {
+            logger.debug("Exception from getTeamReportsCollection");
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        }
+        return size;
+    }
+    
 
     /**
      * Ugly!

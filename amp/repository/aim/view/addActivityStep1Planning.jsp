@@ -143,7 +143,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.originalStartDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="planning.originalStartDate" size="10"
 																styleId="originalStartDate" styleClass="inp-text" />
 																</a>
 															</td>
@@ -173,7 +173,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.revisedStartDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="planning.revisedStartDate" size="10"
 																styleId="revisedStartDate" styleClass="inp-text" />
 																</a>
 															</td>
@@ -208,7 +208,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.originalAppDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="planning.originalAppDate" size="10"
 																styleId="originalAppDate" styleClass="inp-text"  />
 																</a>
 															</td>
@@ -238,7 +238,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
-																	<html:text name="aimEditActivityForm" property="planning.revisedAppDate" size="10"
+																	<html:text name="aimEditActivityForm" readonly="true" property="planning.revisedAppDate" size="10"
 																	styleId="revisedAppDate" styleClass="inp-text" />
 																</a>
 															</td>
@@ -274,7 +274,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ContractingDateofProject">Final Date (dd/mm/yy) for Contracting</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.contractingDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="planning.contractingDate" size="10"
 																styleId="contractingDate" styleClass="inp-text" />
 																</a>
 															</td>
@@ -307,7 +307,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 															<tr>
 																<td>
 																	<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">
-																	<html:text name="aimEditActivityForm" property="planning.disbursementsDate" size="10"
+																	<html:text name="aimEditActivityForm" readonly="true" property="planning.disbursementsDate" size="10"
 																	styleId="disbursementsDate" styleClass="inp-text" />
 																	</a>
 																</td>
@@ -343,7 +343,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.proposedCompDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="planning.proposedCompDate" size="10"
 																styleId="proposedCompDate" styleClass="inp-text"/>
 																</a>
 															</td>
@@ -379,7 +379,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 															<tr>
 																<td>
 																	<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-																	<html:text name="aimEditActivityForm" property="planning.currentCompDate" size="10"
+																	<html:text name="aimEditActivityForm" readonly="true" property="planning.currentCompDate" size="10"
 																	styleId="currentCompDate" styleClass="inp-text" />
 																	</a>
 																</td>

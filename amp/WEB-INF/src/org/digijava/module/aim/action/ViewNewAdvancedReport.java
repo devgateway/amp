@@ -131,7 +131,7 @@ public class ViewNewAdvancedReport extends Action {
 
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
-		if ( tm.getTeamId() == null )
+		if (tm == null || tm.getTeamId() == null )
 				tm = null;
 		AmpApplicationSettings ampAppSettings = null;				
 		if(tm!=null)				

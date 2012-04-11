@@ -257,6 +257,7 @@
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 													<c:set target="${urlParams1}" property="sortBy">${aimOrgGroupManagerForm.sortBy}</c:set>
+													<c:set target="${urlParams1}" property="orgSelReset">false</c:set>
 													<c:if test="${aimOrgGroupManagerForm.currentPage == pages}">
 													<font color="#FF0000"><%=pages%></font> |&nbsp;
 													</c:if>

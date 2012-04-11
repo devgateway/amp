@@ -351,7 +351,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpApplicationSettings tempSettings = null;
 		
-		if ( tm.getTeamId()== null ){
+		if (tm == null || tm.getTeamId() == null ) {
 			tm	= null;
 		}
 		if (tm != null) {
@@ -598,10 +598,10 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 				
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  ) AND draft<>true ";
+						Util.toCSString(activityStatus)	+")  ) " + (draft?"AND draft<>true ":"");
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  ) AND draft<>true ";
+						Util.toCSString(activityStatus)	+")  ) " + (draft?"AND draft<>true ":"");
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 //					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("

@@ -816,7 +816,13 @@ public class EditOrganisation extends DispatchAction {
       AddOrgForm editForm = (AddOrgForm) form;
       Long orgTypeId = editForm.getAmpOrgTypeId();
       editForm.setAmpOrgGrpId(null);
-      editForm.setOrgGroup(DbUtil.searchForOrganisationGroupByType(orgTypeId));
+
+//      editForm.setOrgGroup(DbUtil.searchForOrganisationGroupByType(orgTypeId));
+      List sortedCol = new ArrayList(DbUtil.searchForOrganisationGroupByType(orgTypeId));
+      Collections.sort(sortedCol, new DbUtil.HelperAmpOrgGroupNameComparator());
+      editForm.setOrgGroup(sortedCol);
+
+
       AmpOrgType orgType = DbUtil.getOrgType(orgTypeId);
       editForm.setType(orgType.getClassification());
       if (orgType.getClassification() != null && orgType.getClassification().equals(Constants.ORG_TYPE_NGO)) {

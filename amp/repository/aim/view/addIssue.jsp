@@ -48,7 +48,7 @@
 									  	<digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
 								      &nbsp;</td>
 								     <td>
-									      	<html:text property="issues.issueDate" size="10" styleId="issueDate" styleClass="inp-text" /> 
+									      	<html:text property="issues.issueDate" readonly="true" size="10" styleId="issueDate" styleClass="inp-text" /> 
 											<a class="nohoverlink" id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')" style="{display: none;}">
 	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>

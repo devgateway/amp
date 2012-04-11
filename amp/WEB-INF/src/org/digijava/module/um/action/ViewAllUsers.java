@@ -19,11 +19,11 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DbUtil.UserManagerSorting;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
 import org.digijava.module.um.util.AmpUserUtil;
-import org.digijava.kernel.util.RequestUtils;
 	
 	public class ViewAllUsers
 	    extends Action {
@@ -208,22 +208,18 @@ import org.digijava.kernel.util.RequestUtils;
 	    	    }
 	    	
 	            if(users != null) {
-	            List<User> sortedUser = new ArrayList(users);
+	            List<User> sortedUser = new ArrayList<User>(users);
 	            
-	            //sorting users
-	            if(request.getParameter("sortBy")!=null){
-	            	vwForm.setSortBy(request.getParameter("sortBy"));
-	            }
+	           
 	            String sortBy=vwForm.getSortBy();
+	            if(sortBy==null){
+	            	sortBy="nameAscending";
+	            	vwForm.setSortBy(sortBy);
+	            }
 	            
-	           if(sortBy!=null && sortBy.equals("name")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
-	           } else if(sortBy!=null && sortBy.equals("email")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparator());
-	           }	        	   
-	           else {
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
-	           }
+	            
+	        	Collections.sort(sortedUser, DbUtil.sortUsers(UserManagerSorting.valueOf(sortBy.toUpperCase())));
+	          
 	           
 	
 	            Collection<UserBean> ubCol = new ArrayList();

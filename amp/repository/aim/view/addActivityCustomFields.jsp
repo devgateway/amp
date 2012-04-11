@@ -47,7 +47,7 @@
 																<category:showoptions name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].longValue" categoryName="${customField.categoryName}" styleClass="inp-text" />								
 															</c:when>
 															<c:when test="<%=customField instanceof DateCustomField%>">																
-																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].strDate" size="10"
+																<html:text name="aimEditActivityForm" readonly="true" property="customFieldsSteps[${stepIdx}].customFields[${index}].strDate" size="10"
 																styleId="customField${index}_input_text" styleClass="inp-text"  />																
 																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

@@ -44,6 +44,7 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
@@ -529,6 +530,25 @@ public class DbUtil {
                 subSectorIds = getSubSectorIdsWhereclause(sectorId);
             }
         }
+
+        /*List<AmpTeam> topLevelManagementWscs = getTopLevelManagmentTeams();
+        List<AmpTeam> allManagementTeams = new ArrayList<AmpTeam>();
+        for (AmpTeam topLevelTeam : topLevelManagementWscs) {
+            allManagementTeams.add(topLevelTeam);
+            addAllChildWorkspaces (topLevelTeam, allManagementTeams, "Management");
+        }
+
+
+        StringBuffer parentTeamWhereclause = new StringBuffer();
+        Iterator<AmpTeam> ampTeamIt = allManagementTeams.iterator();
+        while (ampTeamIt.hasNext()) {
+            parentTeamWhereclause.append(ampTeamIt.next().getAmpTeamId());
+            if (ampTeamIt.hasNext()) {
+                parentTeamWhereclause.append(", ");
+            }
+
+        }*/
+
         List retVal = null;
         Session session = null;
         try {
@@ -538,12 +558,15 @@ public class DbUtil {
             publicwhere.append(AmpActivity.class.getName());
             publicwhere.append(" aa where aa.team in (select at.ampTeamId from ");
             publicwhere.append(AmpTeam.class.getName());
-            publicwhere.append(" at where (at.parentTeamId is null and at.accessType='Management') ");
-            publicwhere.append(" or (at.parentTeamId.parentTeamId is null and at.parentTeamId.accessType='Management'))");
+            publicwhere.append(" at where at.parentTeamId is not null");
+            publicwhere.append(")");
+            publicwhere.append(" and aa.approvalStatus in ('approved', 'startedapproved')");
+            publicwhere.append(" and aa.draft=false");
 
 
 
             if (sectorId > -1) {
+                /*
             	StringBuffer whereCaluse = getLongIdsWhereclause(subSectorIds);
                 StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
@@ -551,10 +574,26 @@ public class DbUtil {
                 qs.append(whereCaluse);
                 qs.append(") and sec.activityId in (" + publicwhere);
                 qs.append(") and sec.activityId.team is not null and sec.activityId.draft=false and");
-                qs.append(" sec.activityId.approvalStatus='approved'");
-                qs.append(" and sec.sectorId in (");
+                qs.append(" sec.activityId.approvalStatus in ('approved', 'startedapproved')");
+                */
+
+                StringBuffer whereCaluse = getLongIdsWhereclause(subSectorIds);
+                StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+                qs.append(AmpActivitySector.class.getName());
+                qs.append(" sec where sec.sectorId in (");
                 qs.append(whereCaluse);
+                //qs.append(") and sec.activityId in (" + publicwhere);
                 qs.append(")");
+                qs.append(" and sec.activityId.team.parentTeamId in (");
+                qs.append("select at.ampTeamId from ");
+                qs.append(AmpTeam.class.getName());
+                qs.append(" at where at.parentTeamId is not null");
+                qs.append(")");
+                //qs.append(" and (sec.activityId.team.parentTeamId is null or sec.activityId.team.parentTeamId.parentTeamId is null)");
+                //qs.append(" or (sec.activityId.team.parentTeamId.parentTeamId is null and sec.activityId.team.parentTeamId.accessType='Management' and sec.activityId.team.accessType!='Management'))");
+                qs.append(" and sec.activityId.draft=false");
+                qs.append(" and sec.activityId.approvalStatus in ('approved', 'startedapproved')");
+
                 q = session.createQuery(qs.toString());
            } else {
 
@@ -578,6 +617,38 @@ public class DbUtil {
             retVal = q.list();
         } catch (Exception ex) {
             logger.debug("Unable to get sector fundings from DB", ex);
+        }
+        
+
+        
+        return retVal;
+    }
+    
+    public static void addAllChildWorkspaces (AmpTeam team, List <AmpTeam> in, String workspaceType) { //at all levels
+        Collection<AmpTeam> children = (Collection<AmpTeam>) TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+        if (children != null && !children.isEmpty()) {
+            for (AmpTeam child : children) {
+                if (child.getAccessType().equalsIgnoreCase(workspaceType)) {
+                    in.add(child);
+                    addAllChildWorkspaces(child, in, workspaceType);
+                }
+            }
+        }
+    }
+    
+    public static List <AmpTeam> getTopLevelManagmentTeams() {
+        List <AmpTeam> retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+
+            StringBuffer queryStr = new StringBuffer("from ");
+            queryStr.append(AmpTeam.class.getName());
+            queryStr.append(" t where t.accessType='Management' and t.parentTeamId is null");
+            Query q = session.createQuery(queryStr.toString());
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector top level managment teams from DB", ex);
         }
         return retVal;
     }

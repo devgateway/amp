@@ -225,6 +225,12 @@ public class FilterHelper implements Serializable {
         return currName;
 
     }
+    public String getCurrCode() {
+        AmpCurrency curr = CurrencyUtil.getAmpcurrency(this.currId);
+        String currCode = curr.getCurrencyCode();
+        return currCode;
+
+    }
     public void initDerivedProperties() throws DgException {
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));

@@ -547,7 +547,7 @@
 									</b>
 								</td>
 								<td align="left" bgcolor="#ECF3FD">
-									<html:text name="aimEditActivityForm" property="funding.actualStartDate" styleId="actualStartDate"  size="10"  />
+									<html:text name="aimEditActivityForm" readonly="true" property="funding.actualStartDate" styleId="actualStartDate"  size="10"  />
 									<a id="actualStartDate1" href='javascript:pickDateById("actualStartDate1", "actualStartDate")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 									</a>
@@ -564,7 +564,7 @@
 									</b>
 								</td>
 								<td align="left" bgcolor="#ECF3FD">
-									<html:text name="aimEditActivityForm"  property="funding.actualCompletionDate" styleId="actualCompletionDate"  size="10"  />
+									<html:text name="aimEditActivityForm" readonly="true" property="funding.actualCompletionDate" styleId="actualCompletionDate"  size="10"  />
 									<a id="actualCompletionDate1" href='javascript:pickDateById("actualCompletionDate1", "actualCompletionDate")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 									</a>
@@ -843,7 +843,7 @@
 														<tr>
 															<td>
 																<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-																<html:text name="fundingDetail" indexed="true" property="transactionDate"
+																<html:text name="fundingDetail" readonly="true" indexed="true" property="transactionDate"
 																styleId="<%=tempIndexStr%>"  size="10" onchange="addForValidation(this)"/>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -1070,7 +1070,7 @@
 
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+															<html:text name="fundingDetail" readonly="true" indexed="true" property="transactionDate" 
 															styleId="<%=tempIndexStr%>" size="10"  onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
@@ -1293,7 +1293,7 @@
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+															<html:text name="fundingDetail" readonly="true" indexed="true" property="transactionDate" 
 															styleId="<%=tempIndexStr%>" size="10" onchange="addForValidation(this)"/>
 														</td>
 														<td valign="center" align="center">
@@ -1521,7 +1521,7 @@
 												<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>"  size="10" onchange="addForValidation(this)"/>
+															<html:text name="fundingDetail" readonly="true" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>"  size="10" onchange="addForValidation(this)"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">

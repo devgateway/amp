@@ -270,6 +270,12 @@ function initPopin() {
 	myPanel.render(document.body);
 }
 
+function viewChanges(id){
+	openNewWindow(650,200);
+	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+	popupPointer.document.location.href = "<%= showLog %>?activityId=" + id;
+}
+
 function expandAll() {
    
 	$("img[id$='_minus']").show();

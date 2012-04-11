@@ -99,6 +99,7 @@ function resetRootCheckboxes() {
 YAHOO.namespace("YAHOO.amptab");
 
 YAHOO.amptab.afterFiltersLoad   = function (){
+	//alert('ss');
 	var selColor    = "#BFD2DF";
 	 	donorsPropertyObj               = new RowManagerProperty(null, "filter_rows_donors", selColor);
 	 	relAgenciesPropertyObj  = new RowManagerProperty(null, "filter_rows_rel_agencies", selColor);

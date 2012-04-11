@@ -132,15 +132,16 @@
                             	<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
                         	</html:select>
                         </td>
-                        <td valign="center" align="center">
+                        <field:display name="Proposed Project Date" feature="Proposed Project Cost">
+	                        <td valign="center" align="center">
 	                          <html:text property="funding.proProjCost.funDate" styleId="funDate"  style="width:100px;"/>
-                        </td>
-                        <td valign="center" align="center">
-            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-							</a>
-                        </td>
-            
+	                        </td>
+	                        <td valign="center" align="center">
+	            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
+									<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+								</a>
+	                        </td>
+                        </field:display>            
                       </tr>
                     </table>
                   </td>

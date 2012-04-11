@@ -56,6 +56,8 @@
 	YAHOO.util.Event.on(window, "load", afterPageLoad);
 	
 	var enterBinder	= new EnterHitBinder('addDocFromRepBtn');
+	
+	var enterBinder	= new EnterHitBinder('addDocFromRepBtn');
 </script>	
 
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 

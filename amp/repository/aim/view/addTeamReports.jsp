@@ -46,6 +46,27 @@
 		return true;			  
 	}
 
+	function resetSearch() {
+		var addrepVal="List of Unassigned Reports";
+		<digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamReports.do"/>     
+		url = "<%= searchOrg %>?reset=true&addReport="+addrepVal;
+		//document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
+		document.aimTeamReportsForm.action = url;
+		document.aimTeamReportsForm.submit();
+		 return true;
+
+	}
+
+	function searchActivity(teamId) {
+		var addrepVal="List of Unassigned Reports";
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamReports.do"/>			 
+		     url = "<%= searchOrg %>?addReport="+addrepVal;
+		     //document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
+		     document.aimTeamReportsForm.action = url;
+		     document.aimTeamReportsForm.submit();
+			 return true;
+	}
+
 -->
 
 </script>
@@ -123,6 +144,16 @@
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
 										
 									<jsp:include page="teamSetupMenu.jsp"  />								
+
+								</td>
+							</tr>
+							
+							
+							
+							<tr bgColor=#f4f4f2>
+								<td valign="top">
+                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<div align="center">
 										
 										
 										
@@ -130,6 +161,43 @@
 								
 						
 									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
+										<tr>
+											<td>
+												<table>
+													<tr>
+														<td nowrap="nowrap">
+															<digi:trn>Keyword</digi:trn>&nbsp;
+															<html:text property="keyword" styleClass="inp-text" />
+														</td>
+														<td width="120">
+															<digi:trn>Results</digi:trn>&nbsp;
+															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
+																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
+																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
+																</c:if>
+																<html:option value="10">10</html:option>
+																<html:option value="20">20</html:option>
+																<html:option value="50">50</html:option>
+																<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+															</html:select>
+														</td>
+														<td>
+															<c:set var="trnResetBtn">
+																<digi:trn>Reset</digi:trn>
+															</c:set>
+															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+														</td>
+														<td>					
+															<c:set var="trnGoBtn">
+																<digi:trn> GO </digi:trn>
+															</c:set>
+															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr height="5px"><td>&nbsp;</td></tr>
 										<tr>
 									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
@@ -296,6 +364,50 @@
 									
 									<br>
 									<div class="buttons" align="center">
+														</td>
+													</tr>
+													<tr>
+                                                                                                        <td>
+                                                                                                <!-- Revisit teamUtil.java, see AMP-5420 -->
+                                                                                                <logic:notEmpty name="aimTeamReportsForm" property="totalPages">
+                                                                                                	<table>
+																										<tr>
+																											<td>
+																												<digi:trn>Pages :</digi:trn>
+																												<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+																												  	<c:if test="${aimTeamReportsForm.currentPage==page}">
+				                                                                                                         <c:out value="${page}"/>
+				                                                                                                    </c:if>
+				                                                                                                     <c:if test="${aimTeamReportsForm.currentPage!=page}">
+				                                                                                                     	<c:set var="translation">
+																															<digi:trn>Click here to goto Next Page</digi:trn>
+																														</c:set>																														
+																														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																														<c:set target="${urlParams}" property="addReport" value="List of Unassigned Reports"/>
+																														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams">
+					                                                                                                    	<c:out value="${page}"/>
+					                                                                                                    </digi:link>
+				                                                                                                     </c:if>																												  	
+																													|&nbsp;
+																												</c:forEach>
+																											</td>
+																										</tr>
+																									</table>
+																								</logic:notEmpty>
+                                                                                                
+                                                                                                
+                                                                                            </td>
+                                                                                            </tr>
+													<tr>
+														<td align="center" bgcolor=#ffffff>
+                                                          <a style="cursor:pointer;" onclick="window.scrollTo(0,0); return false"><digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span></a>
+														</td>
+													</tr>
+													<tr>
+														<td align="center" bgcolor=#ffffff>
+															<table cellspacing="5">
+																<tr>
+																	<td>
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<html:submit  styleClass="buttonx_sm btn" property="assignReports"  onclick="return validate()">
 												<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn> 

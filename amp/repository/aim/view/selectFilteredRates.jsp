@@ -163,6 +163,8 @@
 												</td>
 											</tr>
 										</table>
+
+										<button type="button" onclick="return addFilteredRate();" class="buton" id="addFilteredRateBtn"> <digi:trn>Add</digi:trn> </button>
 											</td>
 										</tr>
 										<tr>

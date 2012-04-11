@@ -673,7 +673,7 @@ function validateFormat(){
 	function sendCookieAndReload (){
 		showWaitPanel(msg3);
 		createCookie('report_scrolling',currentReportId,1);
-		submitSettings();
+		submitScroll();
 	}
 	
 	
@@ -692,7 +692,32 @@ function validateFormat(){
 	function hiddeScroll(){
 		showWaitPanel(msg4);
 		eraseCookie('report_scrolling');
-		//submitSettings();
+		submitScroll();
+	}
+
+	function submitScroll() {
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
+		filterForm.submit();
+	}
+	
+	function showWaitPanel(msgF){
+ 	 	var wait = new YAHOOAmp.widget.Panel("wait",   
+	 	 	{ width:"240px",  
+	 	 	fixedcenter:true,  
+	 	 	close:false,  
+	 	 	draggable:false,  
+	 	 	zindex:99, 
+	 	 	modal:true, 
+	 	 	visible:false,
+	 	 	underlay:"shadow"
+	 	 	}  
+ 	 	); 
+ 	 	
+		wait.setHeader(msg0); 
+ 	 	wait.setBody("<div align='center'>"+msgF+"</div>"); 
+ 	 	wait.render(document.body);
+ 	 	wait.show();
 	}
 	
 	var enableLink=function(){

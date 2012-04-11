@@ -13,9 +13,10 @@
     <c:set var="translation">
     <digi:trn>Delete this Classification?</digi:trn>
     </c:set>
-    function onDelete() {
+    function onDelete(url) {
         var flag = confirm("${translation}");
-            return flag;
+            if (flag)
+            	window.location = url; 
         }
         </script>
 <digi:instance property="aimSectorClassConfigForm" />
@@ -93,7 +94,7 @@
                                                              		<c:set var="trnEditScheme">
                                                                  		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
                                                                    	</c:set>
-                                                                     [ <digi:link href="/updateSectorClassConfig.do?event=delete&id=${classConfig.id}" onclick="return onDelete()" title="${trnEditScheme}">
+                                                                     [ <digi:link onclick="onDelete('/updateSectorClassConfig.do?event=delete&id=${classConfig.id}')" href="/getSectorClassConfig.do"  title="${trnEditScheme}">
                                                                      	 <digi:trn key="aim:delete">Delete</digi:trn>
                                                                      </digi:link>]	
                                                                      </c:if>												  

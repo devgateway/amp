@@ -166,13 +166,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		int tr_type = -1;
-		String adj_type = "";
+		int adj_type = -1;
 		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td= rs.getDate("transaction_date");
 		
 		String currencyCode="";
 		
-		if (columnsMetaData.contains("currency_code")){
+		if (columnsMetaData.containsKey("currency_code")){
 		    currencyCode=rs.getString("currency_code");
 		}
 		
@@ -185,31 +185,31 @@ public class CategAmountColWorker extends ColumnWorker {
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
 
-		if (columnsMetaData.contains("fixed_exchange_rate")){
+		if (columnsMetaData.containsKey("fixed_exchange_rate")){
 		    fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
 		}
 
-		if (columnsMetaData.contains("adjustment_type_name")){
-		    	adj_type = rs.getString("adjustment_type_name");
+		if (columnsMetaData.containsKey("adjustment_type")){
+		    	adj_type = rs.getInt("adjustment_type");
 		}
 		
-		if(columnsMetaData.contains("donor_type_name"))
-			donorTypeName=retrieveValueFromRS(rs, "donor_type_name");
+		if(columnsMetaData.containsKey("donor_type_name"))
+			donorTypeName=retrieveValueFromRS(rs,columnsMetaData.get(  "donor_type_name") );
 					
 		
-		if (columnsMetaData.contains("transaction_type")){
+		if (columnsMetaData.containsKey("transaction_type")){
 			tr_type  = rs.getInt("transaction_type");
 		}
 		
-		if (columnsMetaData.contains("org_grp_name")) {
-			donorGroupName	= retrieveValueFromRS(rs, "org_grp_name");
+		if (columnsMetaData.containsKey("org_grp_name")) {
+			donorGroupName	= retrieveValueFromRS(rs,columnsMetaData.get(  "org_grp_name") );
 		}
 		
-		if (columnsMetaData.contains("total_pledged")) {
+		if (columnsMetaData.containsKey("total_pledged")) {
 			pledgetotal	= rs.getDouble("total_pledged");
 		}
 		
-		if (columnsMetaData.contains("capital_spend_percent") ) {
+		if (columnsMetaData.containsKey("capital_spend_percent") ) {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
@@ -226,24 +226,22 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 		}
 		
-		if (!skpyCategorize){
-			if (columnsMetaData.contains("terms_assist_name")){
-				String termsAssist = retrieveValueFromRS(rs, "terms_assist_name");
+			if (columnsMetaData.containsKey("terms_assist_name")){
+				String termsAssist = retrieveValueFromRS(rs,columnsMetaData.get(  "terms_assist_name") );
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
 						termsAssist);
 				acc.getMetaData().add(termsAssistMeta);
 			}
-        }
 			
-		if (columnsMetaData.contains("financing_instrument_name")){			
-		    	String financingInstrument = retrieveValueFromRS(rs, "financing_instrument_name");
+		if (columnsMetaData.containsKey("financing_instrument_name")){			
+		    	String financingInstrument = retrieveValueFromRS(rs,columnsMetaData.get(  "financing_instrument_name") );
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
 					financingInstrument);
 			acc.getMetaData().add(termsAssistMeta);
 		}
 
-		if (columnsMetaData.contains("mode_of_payment_name")) {
-			String modeOfPayment = retrieveValueFromRS(rs, "mode_of_payment_name");
+		if (columnsMetaData.containsKey("mode_of_payment_name")) {
+			String modeOfPayment = retrieveValueFromRS(rs,columnsMetaData.get(  "mode_of_payment_name") );
 			if (modeOfPayment != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
 						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
@@ -256,8 +254,8 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 		}
 
-		if (columnsMetaData.contains("funding_status_name")) {
-			String fundingStatus = retrieveValueFromRS(rs, "funding_status_name");
+		if (columnsMetaData.containsKey("funding_status_name")) {
+			String fundingStatus = retrieveValueFromRS(rs,columnsMetaData.get(  "funding_status_name") );
 			if (fundingStatus != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
 						ArConstants.FUNDING_STATUS, fundingStatus);
@@ -268,7 +266,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		MetaInfo headMeta=null;
 		
 		if("region_name".equals(headMetaName)){
-			String regionName = retrieveValueFromRS(rs, "region_name");
+			String regionName = retrieveValueFromRS(rs,columnsMetaData.get(  "region_name") );
 			headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);			
 		} else
 			
@@ -278,7 +276,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		} else	
 
 		if("donor_name".equals(headMetaName)){
-			String donorName = retrieveValueFromRS(rs, "donor_name");
+			String donorName = retrieveValueFromRS(rs,columnsMetaData.get(  "donor_name") );
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, (donorName!=null)?donorName.trim():donorName);			
 		}
 
@@ -313,7 +311,19 @@ public class CategAmountColWorker extends ColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
-        MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type);
+        String adj_type_string = null;
+        switch(adj_type) {
+        case 0:
+        	adj_type_string = ArConstants.PLANNED;
+            break;
+        case 1:
+            adj_type_string = ArConstants.ACTUAL;
+            break;
+        case 2:
+        	adj_type_string = ArConstants.PIPELINE;
+            break;
+        }
+        MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type_string);
 		String trStr = null;
 
 		switch (tr_type) {

@@ -534,10 +534,14 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
-            StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from "
-            		+ AmpActivity.class.getName()
-            		+ " aa where aa.team in (select at.ampTeamId from "
-            		+ AmpTeam.class.getName() + " at where parentTeamId is not null)");
+            StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from ");
+            publicwhere.append(AmpActivity.class.getName());
+            publicwhere.append(" aa where aa.team in (select at.ampTeamId from ");
+            publicwhere.append(AmpTeam.class.getName());
+            publicwhere.append(" at where (at.parentTeamId is null and at.accessType='Management') ");
+            publicwhere.append(" or (at.parentTeamId.parentTeamId is null and at.parentTeamId.accessType='Management'))");
+
+
 
             if (sectorId > -1) {
             	StringBuffer whereCaluse = getLongIdsWhereclause(subSectorIds);
@@ -546,7 +550,8 @@ public class DbUtil {
                 qs.append(" sec where sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(") and sec.activityId in (" + publicwhere);
-                qs.append(") and sec.activityId.team is not null");
+                qs.append(") and sec.activityId.team is not null and sec.activityId.draft=false and");
+                qs.append(" sec.activityId.approvalStatus='approved'");
                 qs.append(" and sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(")");

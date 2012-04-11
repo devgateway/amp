@@ -298,7 +298,7 @@
 	
 									<tr>
 										<td align="center" colspan="2">
-											<html:button styleClass="buttonx" property="submitButton" onclick="return searchOrganization()">
+											<html:button styleClass="buttonx" property="submitButton" onclick="return searchOrganization()" styleId="orgSearchBtn">
 												<digi:trn>Search</digi:trn>
 											</html:button> &nbsp; 
 											<html:button styleClass="buttonx" property="resetButton" onclick="resetForm()">
@@ -391,7 +391,7 @@
 			                                                <logic:notEqual value="true" name="removeAddButton">
 			                                                	<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">
 			                                                		<td>
-																		<html:button styleClass="buttonx" property="submitButton"onclick="return selectOrganization()">
+																		<html:button styleClass="buttonx" property="submitButton"onclick="return selectOrganization()" styleId="selOrgBtn">
 																			<digi:trn>Add</digi:trn>
 																		</html:button>
 																	</td>
@@ -533,5 +533,9 @@
 	</table>
 </digi:form>
 
+<script type="text/javascript">
+var enterBinder	= new EnterHitBinder('selOrgBtn');
+enterBinder.map(["keyword"], "orgSearchBtn");
+</script>
 
 

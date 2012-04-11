@@ -151,6 +151,9 @@
 								<td width="120">
 									<digi:trn>Results</digi:trn>&nbsp;
 									<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+										<c:if test="${aimTeamActivitiesForm.tempNumResults!=-1}">
+											<html:option value="${aimTeamActivitiesForm.tempNumResults}">${aimTeamActivitiesForm.tempNumResults}</html:option>
+										</c:if>	
 										<html:option value="10">10</html:option>
 										<html:option value="20">20</html:option>
 										<html:option value="50">50</html:option>

@@ -114,6 +114,9 @@
 	        document.aimActivityForm.submit();
 	    }
 	
+	var enterBinder	= new EnterHitBinder('');
+	enterBinder.map(["keywordText"], "searchActBtn");	
+	
 -->
 </script>
 
@@ -187,7 +190,7 @@
 											<table style="margin-bottom:15px;5">
 												<tr>
 													<td width="195"><digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
-													<html:text property="keyword" styleClass="inp-text" /></td>
+													<html:text property="keyword" styleClass="inp-text" styleId="keywordText"/></td>
 													<td width="120"><digi:trn key="aim:results">Results</digi:trn>&nbsp;
 													<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
 													<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
@@ -207,7 +210,7 @@
 													<td width="260"><c:set var="trnGoBtn">
 														<digi:trn key="aim:btnGo"> GO </digi:trn>
 													</c:set> <input type="button" value="${trnGoBtn}" class="dr-menu"
-														onclick="return searchActivity()"></td>
+														onclick="return searchActivity()" id="searchActBtn"></td>
 												</tr>
 											</table>
 											</td>

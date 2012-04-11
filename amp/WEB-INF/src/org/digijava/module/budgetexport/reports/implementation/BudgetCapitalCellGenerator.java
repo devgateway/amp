@@ -42,7 +42,7 @@ public class BudgetCapitalCellGenerator extends CapitalCellGenerator {
 	@Override
 	public Collection<MetaInfo> syntheticMetaInfo() {
 		ArrayList<MetaInfo> ret	= new ArrayList<MetaInfo>();
-		String value			= this.insider.encoder.encode( "Expenditure" );
+		String value			= this.insider.encoder.encode( "Capital" );
 		MetaInfo mi				= new MetaInfo(ArConstants.COLUMN_CAPITAL_EXPENDITRURE, value );
 		ret.add(mi);
 		

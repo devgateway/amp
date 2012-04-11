@@ -561,5 +561,6 @@ function validateUpload(){
 	return true;
 }
 initFileUploads();
+var enterBinder	= new EnterHitBinder('saveContent');
 </script>
 </digi:form>

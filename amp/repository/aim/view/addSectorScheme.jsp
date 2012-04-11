@@ -97,7 +97,7 @@
 															
 														</td>
 														<td>
-                                                                                                                    <input  type="button" class="buttonx" name="addBtn" value="<digi:trn>Save</digi:trn>" onclick="saveScheme()">
+                                                            <input  type="button" class="buttonx" name="addBtn" value="<digi:trn>Save</digi:trn>" onclick="saveScheme()" id="addSectSchemeBtn">
 														<td>
 													</tr>
 											</table>

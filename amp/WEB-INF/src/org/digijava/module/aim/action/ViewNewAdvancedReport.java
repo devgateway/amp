@@ -108,6 +108,7 @@ public class ViewNewAdvancedReport extends Action {
 			}	
 		}
 		
+
 		String loadStatus=request.getParameter("loadstatus");
 		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
 		if(progressValue == null)

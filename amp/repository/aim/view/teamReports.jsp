@@ -19,7 +19,7 @@
 
 <digi:form action="/updateTeamReports.do" method="post">
 <html:hidden property="addReport"/>
-<html:hidden property="showReportList"/>
+<html:hidden property="showReportList" styleId="showReportList"/>
 <table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp"  />

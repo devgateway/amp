@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
@@ -345,7 +346,7 @@ LoggerIdentifiable, Cloneable {
 	 */
 
 	protected String FY;
-
+	protected List<String> fyYears;
 	@VersionableFieldSimple(fieldTitle = "Vote")
 	protected String vote;
 	@VersionableFieldSimple(fieldTitle = "Sub Vote")
@@ -398,6 +399,15 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean mergedActivity;
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
+	
+	public List<String> getFyYears() {
+		return fyYears;
+	}
+
+	public void setFyYears(List<String> fyYears) {
+		this.fyYears = fyYears;
+	}
+
 
 	//protected Set <AmpActivityContact> activityContacts;
 

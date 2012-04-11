@@ -4,6 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -106,8 +110,14 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
 	@Override
 	public AmpActivityVersion getObject() {
-		if (a == null)
+		if (a == null) {
 			a = load();
+			String fy = a.getFY();
+			if (fy != null && fy.length() > 0) {
+				String[] years = fy.split(",");
+				a.setFyYears(new ArrayList<String>(Arrays.asList(years)));
+			}
+		}
 		return a;
 	}
 

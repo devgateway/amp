@@ -193,7 +193,6 @@ public class OnePager extends AmpHeaderFooter {
 
 	private void initializeActivity(AmpActivityVersion activity,
 			String activityName, String latitude, String longitude, String geoId) {
-
 		AmpActivityLocation actLoc = new AmpActivityLocation();
 		AmpLocation ampLoc = LocationUtil.getAmpLocationByGeoCode(geoId);
 		// This check is necessary to avoid an exception if the location doesn't

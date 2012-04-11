@@ -147,7 +147,7 @@ function initPopin() {
 	myPanel.render(document.body);
 }
 
-window.onload=initPopin();
+window.onload=initPopin;
 
 function expandAll() {
    

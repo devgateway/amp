@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ARUtil"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -24,18 +25,11 @@
 	<c:if test="${reportData.levelDepth == 2}">
 		<td nowrap="nowrap" style="background:#99CCFF; border-bottom: #E2E2E2 1px solid;" height="15px" title='<bean:write name="reportData" property="repName"/>' >
 			<span style="font-family: Arial;font-weight: bold;font-size: 10px;padding-left: 5px;padding-right: 3px;">
-				<%if(reportData.getRepName().length()<40){ %>
-					<% if (!("".equals(reportData.getRepName()))){ %>
+				<%= ARUtil.getNameFromReportData(reportData) %>
 					<!-- *************************************************** 
 							WARNING:
 								Do not add Translations here!
 						 ***************************************************--> 
-		 				${reportData.repName}
-					<% 
-					} 
-				}else{%>
-					<%=reportData.getRepName().substring(0,39)%>...
-				<%} %>	
 			</span>
 		</c:if>
 	
@@ -43,13 +37,11 @@
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
 				<img src="module/aim/images/hierarchies.gif" align="top">
-			<% if (!("".equals(reportData.getRepName()))){ %>
+			<%= ARUtil.getNameFromReportData(reportData) %>
 			<!-- *************************************************** 
 					WARNING:
 						Do not add Translations here!
 				 ***************************************************--> 
-				${reportData.repName}
-			<% } %>
 			</span>
 		</c:if>
 	
@@ -58,13 +50,11 @@
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: ${paddingLeft}px;padding-right: 3px">
 			<img src="module/aim/images/hierarchies.gif" align="top">
-			<% if (!("".equals(reportData.getRepName()))){ %>
+			<%= ARUtil.getNameFromReportData(reportData) %>
 			<!-- *************************************************** 
 					WARNING:
 						Do not add Translations here!
 				 ***************************************************--> 
-		 		${reportData.repName}
-			<% } %>
 		</span>
 	</c:if>
 	</td>

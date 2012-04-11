@@ -120,6 +120,7 @@ public class GroupReportData extends ReportData {
 		this.sourceColsCount = d.getSourceColsCount();
 		this.globalHeadingsDisplayed=new Boolean(false);
 		this.columnsToBeRemoved=d.getColumnsToBeRemoved();
+		this.splitterCell	= d.getSplitterCell();
 	}
 
 	/**

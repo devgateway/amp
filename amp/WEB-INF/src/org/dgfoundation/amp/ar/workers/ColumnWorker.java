@@ -27,6 +27,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.budgetexport.util.MappingEncoder;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -224,6 +225,14 @@ public abstract class ColumnWorker {
 	protected abstract Cell getCellFromRow(ResultSet rs) throws SQLException;
 	
 	protected abstract Cell getCellFromCell(Cell src);
+	
+	/**
+	 * If this is a ColumnWorker that encodes the strings then this method needs to be overridden to return the encoder object.
+	 * @return null for standard Column workers
+	 */
+	public MappingEncoder getEncoder () {
+		return null;
+	} 
 
 	/**
 	 * @return Returns the logger.

@@ -72,6 +72,7 @@ import org.digijava.module.budgetexport.reports.implementation.BudgetGroupReport
 import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextColWorker;
 import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
+import org.digijava.module.budgetexport.util.MappingEncoder;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -626,4 +627,28 @@ public final class ARUtil {
 		return grd;
 	}
 	
+	
+	public static String getNameFromReportData(ReportData rd) {
+		
+		String name		= rd.getRepName() ;
+		
+		if ( rd.getSplitterCell() != null && rd.getSplitterCell().getColumn() != null 
+				&& rd.getSplitterCell().getColumn().getWorker() != null ) {
+			MappingEncoder enc		= rd.getSplitterCell().getColumn().getWorker().getEncoder();
+			if ( enc != null) { 
+				if ( enc.overwritesEverythingWithDefaultString() )
+					return enc.overwriterString();
+				else if	(name.toLowerCase().contains(ArConstants.UNALLOCATED.toLowerCase()) )
+					return enc.encode(name);
+				
+			}
+		}
+		
+		if( name.length() <40){ 
+			return name;
+		} 
+		else{
+			return name.substring(0,39);
+		}
+	}
 }

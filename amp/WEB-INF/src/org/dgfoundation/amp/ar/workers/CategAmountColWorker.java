@@ -286,7 +286,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			filter.setAmountinthousand(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 		} 
 		
-		if (filter.getAmountinmillion()){
+		if ( filter.getAmountinmillion()!=null && filter.getAmountinmillion()){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d*0.001d);
 			}

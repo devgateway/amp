@@ -116,6 +116,15 @@
 		failure:responseFailure 
 	};
 
+	var specialResponseSuccess = function(o){
+		myclose();
+   	}
+	var specialCallback =
+	{
+			success:specialResponseSuccess, 
+			failure:responseFailure 
+	}
+	
 	function commentWin(commentwinHeader,commentId){
 		delCommentContent=false;
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
@@ -137,13 +146,14 @@
 	}	
 	function saveComment(){
 		var postString		= generateFields("");
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", specialCallback, postString);
 	}
 	 function editDelete() {
 		var postString		= generateFields("edit=true");
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 
+	 
 	function message(val1,val2) {
 		var flag = true;
 		val2 = val2 - 1;

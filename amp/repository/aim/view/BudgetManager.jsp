@@ -78,6 +78,14 @@ function setprogram() {
 
 var enterBinder	= new EnterHitBinder('saveBudgetBtn');
 
+function onDelete() {
+	<c:set var="translation">
+		<digi:trn key="aim:ConfirmDeleteSector">Delete this Sector ?</digi:trn>
+	</c:set>
+		var flag = confirm("${translation}");
+		return flag;
+	}
+
 </script>
 <div style="margin:0 auto;width:1000px;">
 <digi:form action="/BudgetManager.do" method="post">

@@ -276,7 +276,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
-	private Boolean amountinthousand;
+	private Integer amountinthousand;
 	private Boolean amountinmillion;
 	public final Boolean getAmountinmillion() {
 		return amountinmillion;
@@ -386,6 +386,10 @@ public class AmpARFilter extends PropertyListable {
 					teams.add(ampReport.getOwnerId().getAmpTeam());
 					teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
 					this.setAmpTeams(teams);
+					Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
+					if (teamAO != null && teamAO.size() > 0){
+						this.setTeamAssignedOrgs(teamAO);
+					}
 				}else{
 					teams.add(-1);
 					this.setAmpTeams(teams);
@@ -1810,11 +1814,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		this.unallocatedLocation = unallocatedLocation;
 	}
 	
-	public Boolean getAmountinthousand() {
+	public Integer getAmountinthousand() {
 		return amountinthousand;
 	}
 
-	public void setAmountinthousand(Boolean amountinthousand) {
+	public void setAmountinthousand(Integer amountinthousand) {
 		this.amountinthousand = amountinthousand;
 	}
 

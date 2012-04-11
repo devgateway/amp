@@ -366,7 +366,7 @@ target.style.cursor = "default"
 												<td bgcolor="#ffffff">
 												<FONT color=red>*</FONT>&nbsp;
 												<digi:trn key="aim:status">Status</digi:trn>												  
-												<a href="javascript:popupwin('activity_status')">
+												<a href="javascript:popupwin()">
 												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width="10" height=10 border="0"></a>
 												</td>
 												<td bgcolor="#ffffff">

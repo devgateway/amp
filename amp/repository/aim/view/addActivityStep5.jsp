@@ -10,7 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ page
+	import="org.digijava.module.aim.form.EditActivityForm,java.util.*,org.digijava.module.aim.dbentity.*"%>
 <jsp:include page="scripts/newCalendar.jsp"  />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -26,6 +27,18 @@
 	  overflow: auto;
 	}
 </style>
+
+
+<%
+	EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
+	String defPers = (String) request.getAttribute("defPerspective");
+	String defCurr = (String) request.getAttribute("defCurrency");
+	int indexC = 0;
+	int indexD = 0;
+	int indexE = 0;
+%>
+
+
 
 <script language="JavaScript" type="text/javascript">
 
@@ -909,7 +922,7 @@ function editFunding(id){
 function addComponents()
 
 {
-	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
+	myPanel1.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
 	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
 
@@ -939,11 +952,9 @@ function addComponent(){
 	</feature:display>
 	postComponentForm("<%= addNewComponent%>");
 
-	//alert('A');
-	//if (document.getElementById('newCompoenentName').value!=''){
-	//	alert('B');	
-	//	document.switchComponent();
-	//}
+	if (document.getElementById('newCompoenentName').value!=''){
+		document.switchComponent();
+	}
 }
 
 function validateEnter(e) {
@@ -1047,6 +1058,279 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 		   document.addPhysicalProgressForm.action = "<%= addPhyProg %>";
 		   document.addPhysicalProgressForm.submit();
 		}
+	}
+		
+
+	var numComm = <%=indexC%>;
+	var numExpn = <%=indexE%>;
+	var numDisb = <%=indexD%>;
+
+	var tempComm = numComm;
+	var tempDisb = numDisb;
+	var tempExpn = numExpn;
+
+
+	document.addCommitments=function()
+	{
+		//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
+		var ni = document.getElementById('comm');
+		var divname = "comm_" + numComm;
+		var newdiv = document.getElementById('comm_gen').cloneNode(true);
+		newdiv.setAttribute("id",divname);
+		while(newdiv.innerHTML.match('@@') != null){
+			newdiv.innerHTML = newdiv.innerHTML.replace('@@', numComm);
+		}
+
+		var oldSelect = document.getElementById('comm_gen').getElementsByTagName("select")[1];
+		var selected = 0;
+		for(var j=0; j<oldSelect.options.length ; j++){
+			if(oldSelect.options[j].selected)
+				{	selected = j; break; }
+		}
+		var select = newdiv.getElementsByTagName("select")[1];
+		select.indexSelected = selected;	
+
+		for(var i=0; i<select.options.length ; i++){
+			select.options[i].selected = false;
+		}
+		select.options[selected].selected=true;
+		
+		newdiv.style.visibility = "visible";
+		ni.appendChild(newdiv);
+		numComm++;
+		tempComm++;
+	}
+
+	document.removeCommitment=function(divname)
+	{
+		var d = document.getElementById('comm');
+		var olddiv = document.getElementById(divname);
+		d.removeChild(olddiv);
+		tempComm--;
+	}
+
+	document.addDisbursement=function()
+	{
+		//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
+		var ni = document.getElementById('disb');
+		var divname = "disb_" + numDisb;
+		var newdiv = document.getElementById('disb_gen').cloneNode(true);
+		newdiv.setAttribute("id",divname);
+		while(newdiv.innerHTML.match('@@') != null){
+			newdiv.innerHTML = newdiv.innerHTML.replace('@@', numDisb);
+		}
+
+		var oldSelect = document.getElementById('disb_gen').getElementsByTagName("select")[1];
+		var selected = 0;
+		for(var j=0; j<oldSelect.options.length ; j++){
+			if(oldSelect.options[j].selected)
+				{	selected = j; break; }
+		}
+		var select = newdiv.getElementsByTagName("select")[1];
+		select.indexSelected = selected;	
+
+		for(var i=0; i<select.options.length ; i++){
+			select.options[i].selected = false;
+		}
+		select.options[selected].selected=true;
+
+		
+		newdiv.style.visibility = "visible";
+		ni.appendChild(newdiv);
+		numDisb++;
+		tempDisb++;
+	}
+
+	document.removeDisbursement=function(divname)
+	{
+		var d = document.getElementById('disb');
+		var olddiv = document.getElementById(divname);
+		d.removeChild(olddiv);
+		tempDisb--;
+	}
+
+	document.addExpenditure=function()
+	{
+		//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
+		var ni = document.getElementById('expn');
+		var divname = "expn_" + numExpn;
+		var newdiv = document.getElementById('expn_gen').cloneNode(true);
+		newdiv.setAttribute("id",divname);
+		while(newdiv.innerHTML.match('@@') != null){
+			newdiv.innerHTML = newdiv.innerHTML.replace('@@', numExpn);
+		}
+
+		var oldSelect = document.getElementById('expn_gen').getElementsByTagName("select")[1];
+		var selected = 0;
+		for(var j=0; j<oldSelect.options.length ; j++){
+			if(oldSelect.options[j].selected)
+				{	selected = j; break; }
+		}
+		var select = newdiv.getElementsByTagName("select")[1];
+		select.indexSelected = selected;	
+
+		for(var i=0; i<select.options.length ; i++){
+			select.options[i].selected = false;
+		}
+		select.options[selected].selected=true;
+		
+		newdiv.style.visibility = "visible";
+		ni.appendChild(newdiv);
+		numExpn++;
+		tempExpn++;
+	}
+
+	document.removeExpenditure=function(divname)
+	{
+		var d = document.getElementById('expn');
+		var olddiv = document.getElementById(divname);
+		d.removeChild(olddiv);
+		tempExpn--;
+	}
+
+
+
+	document.addComponentsPopup=function()
+	{
+		var flag = document.validate();
+		if (flag == true){
+			<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=save"/>
+			document.aimAddComponentForm.action = "<%= addComp %>";
+			document.aimAddComponentForm.submit();
+			closePopup();
+		}
+		return flag;
+	}
+
+	document.validate=function()
+	{
+	  var msgEnterAmount="<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>";
+	  var msgInvalidAmount="<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
+	  var msgEnterDate="<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>";
+	  var msgEnterTitle="<digi:trn key="aim:selectComponent:errmsg:enterTitle">Please enter title.</digi:trn>";
+	  var msgSelectComponent="<digi:trn key="aim:selectComponent:errmsg:selectComponent">Please select a Component before Saving.</digi:trn>";
+	  var msgEnterCommitment="<digi:trn key="aim:selectComponent:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
+	  var msgEnterExpenditure="<digi:trn key="aim:selectComponent:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
+
+
+		var titleFlag = isEmpty(document.getElementById('newCompoenentName').value);
+		if(titleFlag == true) {
+			alert(msgEnterTitle);
+			return false;
+		}
+
+		var x = document.aimAddComponentForm;
+		if(document.getElementById('newCompoenentName').value == '')
+		{
+			alert(msgSelectComponent);
+				return false;
+		}
+
+		if (tempComm == 0) {
+			alert (msgEnterCommitment);
+			return false;
+		}
+
+		if (tempExpn > 0 && tempDisb == 0) {
+			alert (msgEnterExpenditure);
+			return false;
+		}
+
+		for (index = 0;index < x.elements.length;index++) {
+			var str = x.elements[index].name;
+			if (str.match("comm_[0-9]*_2")) {
+				// validate amount
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterAmount);
+					x.elements[index].focus();
+					return false;
+				}
+				if (checkAmount(x.elements[index].value) == false) {
+					alert (msgInvalidAmount);
+					x.elements[index].focus();
+					return false;
+				}
+
+			} else if (str.match("comm_[0-9]*_4")) {
+				// validate date
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterDate);
+					x.elements[index].focus();
+					return false;
+				}
+			} else if (str.match("disb_[0-9]*_2")) {
+				// validate amount
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterAmount);
+					x.elements[index].focus();
+					return false;
+				}
+				if (checkAmount(x.elements[index].value) == false) {
+					alert (msgInvalidAmount);
+					x.elements[index].focus();
+					return false;
+				}
+			} else if (str.match("disb_[0-9]*_4")) {
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterDate);
+					x.elements[index].focus();
+					return false;
+				}
+			} else if (str.match("expn_[0-9]*_2")) {
+				// validate amount
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterAmount);
+					x.elements[index].focus();
+					return false;
+				}
+				if (checkAmount(x.elements[index].value) == false) {
+					alert (msgInvalidAmount);
+					x.elements[index].focus();
+					return false;
+				}
+			} else if (str.match("expn_[0-9]*_4")) {
+				if (trim(x.elements[index].value) == "") {
+					alert (msgEnterDate);
+					x.elements[index].focus();
+					return false;
+				}
+			}
+
+		}
+		return true;
+	}
+
+	document.checkAmount=function(val){
+	  if(val.match("[^0-9., ]")){
+	    return false;
+	  }
+	  return true;
+	}
+
+	document.switchComponent=function(){
+	if (document.getElementById('newCompoenentName').value!=''){
+	  	 document.getElementById('tblId').style.visibility="visible";                         		
+	     document.getElementById('tblId').style.position="relative";  
+	     //document.aimEditActivityForm.newCompoenentName.value="";
+		document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.getElementById('newCompoenentName').value;
+	  
+	  }else{
+	  	 document.getElementById('tblId').style.visibility="hidden";                         		
+	     document.getElementById('tblId').style.position="absolute";  
+	  
+	  }
+	  
+	  <feature:display name="Admin - Component Type" module="Components">
+	  if (document.getElementById('selectedType').value==-1){
+	    document.getElementById('newCompoenentName').disabled=true;
+	    document.getElementById('newCompoenentName').style.bgColor="#EEEEEE";
+	  }else{
+	  </feature:display>
+	   document.getElementById('newCompoenentName').disabled=false;
+	   document.getElementById('newCompoenentName').style.bgColor="#EEEEEE";
+	   <feature:display name="Admin - Component Type" module="Components">
+	  }
+	  </feature:display>
 	}
 		
 </script>

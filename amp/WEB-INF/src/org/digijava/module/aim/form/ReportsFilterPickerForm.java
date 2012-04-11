@@ -154,7 +154,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customDecimalPlacesTxt;
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
-	private Boolean amountinthousands;
+	private Integer amountinthousands;
 	private Boolean amountinmillions;
 	
 	public Boolean getAmountinmillions() {
@@ -387,7 +387,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			//AMP-5249
 			if (request.getParameter("applyFormat")!=null){
 				this.customUseGrouping=false;
-				this.amountinthousands=false;
+				this.amountinthousands=0;
 				this.amountinmillions=false;
 			}else{
 				this.selectedDonnorAgency=null;
@@ -917,11 +917,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.unallocatedLocation = unallocatedLocation;
 	}
 
-	public Boolean getAmountinthousands() {
+	public Integer getAmountinthousands() {
 		return amountinthousands;
 	}
 
-	public void setAmountinthousands(Boolean amountinthousands) {
+	public void setAmountinthousands(Integer amountinthousands) {
 		this.amountinthousands = amountinthousands;
 	}
 

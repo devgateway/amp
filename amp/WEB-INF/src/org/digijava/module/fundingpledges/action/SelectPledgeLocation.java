@@ -166,6 +166,7 @@ public class SelectPledgeLocation extends Action {
         	}
         	
         }
+        pledgeForm.setImplemLocationLevel(null);
         return mapping.findForward("forward");
 	}
 }

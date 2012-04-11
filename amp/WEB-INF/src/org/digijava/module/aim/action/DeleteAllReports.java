@@ -72,9 +72,10 @@ public class DeleteAllReports extends Action {
 				 logger.info(" this is rid...."+request.getParameter("rid")+" thisisa...."+a);
 				 Long id = new Long(a);
 				 if(id!=null){
-					  ampReport=DbUtil.getAmpReport(id);
-					  isTab		= (ampReport.getDrilldownTab()!=null) && ampReport.getDrilldownTab();
-					  if(lead||(ampReport.getOwnerId()!=null && tm.getMemberId().equals(ampReport.getOwnerId().getAmpTeamMemId())))
+					ampReport=DbUtil.getAmpReport(id);
+					if (ampReport!=null){
+						isTab		= (ampReport.getDrilldownTab()!=null) && ampReport.getDrilldownTab();
+						if(lead||(ampReport.getOwnerId()!=null && tm.getMemberId().equals(ampReport.getOwnerId().getAmpTeamMemId())))
 						 {							
 							 logger.info("In delete reports");							 
 								 ReportsForm ampReportForm = new ReportsForm();								 
@@ -101,6 +102,7 @@ public class DeleteAllReports extends Action {
 											 }
 										 }												
 						 }
+					  }
 				 }else {
 					 errors.add("title", new ActionMessage(
 						"error.aim.deleteReports.reportNotDeleted", TranslatorWorker.translateText("Report Not Deleted",locale,siteId)));

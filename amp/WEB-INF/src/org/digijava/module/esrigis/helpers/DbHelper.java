@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -29,9 +30,9 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.visualization.util.DashboardUtil; //TODO: Check this functions and use a common
+import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
@@ -58,7 +59,7 @@ public class DbHelper {
 		Long[] locationIds = filter.getSelLocationIds();
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] zonesids = filter.getZoneIds();
-		boolean zonescondition = zonesids != null && zonesids .length > 1;
+		boolean zonescondition = zonesids != null && zonesids.length > 1;
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
@@ -124,12 +125,15 @@ public class DbHelper {
 				oql += QueryUtil.getTeamQuery(teamMember);
 			}
 			if (!zonescondition && locationCondition) {
+            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
 				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds,0) + ") ";
-			}else if (zonesids!=null){
+			}else if (zonescondition){
+				zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
 				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids,1) + ") ";
 			}
 			
 			if (sectorCondition) {
+	        	sectorIds = getAllDescendants(sectorIds, DbUtil.getAmpSectors());
 				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds,0) + ") ";
 			}
 			
@@ -168,10 +172,9 @@ public class DbHelper {
 				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes(),0)+") ";
 			}
 
-			if (filter.getShowOnlyApprovedActivities() != null
-					&& filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
-			}
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+			//Show only activities that are not draft
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 			
 			//Additional clause to get the last version
 			if (ActivityVersionUtil.isVersioningEnabled()){
@@ -702,4 +705,40 @@ public class DbHelper {
 		}
 		
 	}
+    private static Long[] getAllDescendants(Long[] sectorIds,
+			ArrayList<AmpSector> allSectorList) {
+    	//Go through the list to determine the children
+    	List<Long> tempSectorIds = new ArrayList<Long>();
+		for(AmpSector as : allSectorList){
+			for(Long i : sectorIds){
+		    	if(!tempSectorIds.contains(i)) tempSectorIds.add(i);
+    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i)){
+    	    		tempSectorIds.add(as.getAmpSectorId());
+    			} else if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i)){
+    	    		tempSectorIds.add(as.getAmpSectorId());
+    			}
+    		}
+    	}
+		return (Long[]) tempSectorIds.toArray(new Long[0]);
+	}
+
+	private static Long[] getAllDescendantsLocation(Long[] locationIds,
+			ArrayList<AmpCategoryValueLocations> allLocationsList) {
+    	List<Long> tempLocationsIds = new ArrayList<Long>();
+		for(AmpCategoryValueLocations as : allLocationsList){
+			for(Long i : locationIds){
+		    	if(!tempLocationsIds.contains(i)) tempLocationsIds.add(i);
+    			if(as.getParentLocation() != null && as.getParentLocation().getId().equals(i)){
+    				tempLocationsIds.add(as.getId());
+    			} else if(as.getParentLocation() != null && as.getParentLocation().getParentLocation() != null && as.getParentLocation().getParentLocation().getId().equals(i)){
+    				tempLocationsIds.add(as.getId());
+    			} else if(as.getParentLocation() != null && as.getParentLocation().getParentLocation() != null && as.getParentLocation().getParentLocation().getParentLocation() != null
+    					&& as.getParentLocation().getParentLocation().getParentLocation().getId().equals(i)){
+    				tempLocationsIds.add(as.getId());
+    			}
+    		}
+    	}
+		return (Long[]) tempLocationsIds.toArray(new Long[0]);
+	}
+
 }

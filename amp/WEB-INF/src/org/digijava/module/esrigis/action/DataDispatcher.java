@@ -267,6 +267,7 @@ public class DataDispatcher extends MultiAction {
 						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 					}
 					if (isfiltered){
+//						if (locationIds.contains(alocation.getLocation().getLocation().getId()) || locationIds.contains(alocation.getLocation().getRegionLocation().getId()) ){
 						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
 							sla.add(sl);
 						}
@@ -666,7 +667,7 @@ public class DataDispatcher extends MultiAction {
 			}
 		}
 		
-		return modeShowActivities(mapping, datadispatcherform, request, response);
+		return null;
 	}
 	
 	

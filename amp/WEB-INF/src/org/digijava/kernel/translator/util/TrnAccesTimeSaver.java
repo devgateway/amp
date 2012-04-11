@@ -66,16 +66,20 @@ public class TrnAccesTimeSaver implements Runnable {
 		    cal.set(Calendar.SECOND, 0);
 		    cal.set(Calendar.MILLISECOND, 0);
 		    Date currentDate = cal.getTime();
-		    if(message.getLastAccessed()==null||message.getLastAccessed().before(currentDate)){
-		    	session	= PersistenceManager.openNewSession();
-				Message msg = (Message) session.get(Message.class, message);
-				// for newly created messages the last access time is set in the save method
-				if (msg != null) {
-					tx = session.beginTransaction();
-					msg.setLastAccessed(new Timestamp(currentDate.getTime()));
-					session.update(msg);
-					tx.commit();
-					TranslatorWorker.getInstance("").refresh(msg);
+			synchronized (this) {
+				if (message.getLastAccessed() == null
+						|| message.getLastAccessed().before(currentDate)) {
+					session = PersistenceManager.openNewSession();
+					Message msg = (Message) session.get(Message.class, message);
+					// for newly created messages the last access time is set in
+					// the save method
+					if (msg != null) {
+						tx = session.beginTransaction();
+						msg.setLastAccessed(new Timestamp(currentDate.getTime()));
+						session.update(msg);
+						tx.commit();
+						TranslatorWorker.getInstance("").refresh(msg);
+					}
 				}
 			}
 			

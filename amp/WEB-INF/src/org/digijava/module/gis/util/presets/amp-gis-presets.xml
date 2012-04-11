@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <amp-gis-presets>
 	<color-schemes>
-		<scheme name="default" display-name="Default color scheme (Gray-blue)">
+		<scheme name="default" display-name="Default color scheme (Gray-blue)" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>74</red>
@@ -71,8 +71,7 @@
 				</color>
 			</gradient-max>
 		</scheme>
-		
-		<scheme name="yello-orange" display-name="Yello-Orange Scheme">
+		<scheme name="yello-orange" display-name="Yello-Orange Scheme" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>226</red>
@@ -141,8 +140,7 @@
 				</color>
 			</gradient-max>
 		</scheme>
-		
-		<scheme name="green" display-name="Green Scheme">
+		<scheme name="green" display-name="Green Scheme" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>255</red>
@@ -211,8 +209,7 @@
 				</color>
 			</gradient-max>
 		</scheme>
-		
-		<scheme name="green-blue" display-name="Green-Blue Scheme">
+		<scheme name="green-blue" display-name="Green-Blue Scheme" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>255</red>
@@ -281,8 +278,7 @@
 				</color>
 			</gradient-max>
 		</scheme>
-		
-		<scheme name="magenta" display-name="Magenta Scheme">
+		<scheme name="magenta" display-name="Magenta Scheme" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>188</red>
@@ -350,8 +346,8 @@
 					<blue>245</blue>
 				</color>
 			</gradient-max>
-		</scheme>	
-		<scheme name="autumn" display-name="Autumn scheme (ORANGE)">
+		</scheme>
+		<scheme name="autumn" display-name="Autumn scheme (ORANGE)" hilight-type="gradient">
 			<background>
 				<color type="RGBA">
 					<red>163</red>
@@ -419,8 +415,88 @@
 					<blue>88</blue>
 				</color>
 			</gradient-max>
-		</scheme>	
-	
-		
+		</scheme>
+		<scheme name="timor" display-name="Timor-Leste scheme" hilight-type="predefined">
+			<background>
+				<color type="RGBA">
+					<red>163</red>
+					<green>179</green>
+					<blue>193</blue>
+				</color>
+			</background>
+			<terrain>
+				<color type="RGBA">
+					<red>93</red>
+					<green>46</green>
+					<blue>27</blue>
+				</color>
+			</terrain>
+			<water>
+				<color type="RGBA">
+					<red>52</red>
+					<green>155</green>
+					<blue>201</blue>
+				</color>
+			</water>
+			<border>
+				<color type="RGBA">
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+					<alpha>170</alpha>
+				</color>
+			</border>
+			<region-border>
+				<color type="RGBA">
+					<red>93</red>
+					<green>84</green>
+					<blue>78</blue>
+					<alpha>70</alpha>
+				</color>
+			</region-border>
+			<dash-lines>
+				<color type="RGBA">
+					<red>93</red>
+					<green>84</green>
+					<blue>78</blue>
+					<alpha>150</alpha>
+				</color>
+			</dash-lines>
+			<captions>
+				<color type="RGBA">
+					<red>0</red>
+					<green>0</green>
+					<blue>3</blue>
+					<alpha>3</alpha>
+				</color>
+			</captions>
+			<hilight-colors>
+				<color type="RGBA" from="0" less-then="20">
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+				<color type="RGBA" from="20" less-then="40">
+					<red>255</red>
+					<green>128</green>
+					<blue>128</blue>
+				</color>
+				<color type="RGBA" from="40" less-then="60">
+					<red>255</red>
+					<green>255</green>
+					<blue>0</blue>
+				</color>
+				<color type="RGBA" from="60" less-then="80">
+					<red>128</red>
+					<green>255</green>
+					<blue>0</blue>
+				</color>
+				<color type="RGBA" from="80" less-then="100">
+					<red>0</red>
+					<green>128</green>
+					<blue>0</blue>
+				</color>
+			</hilight-colors>
+		</scheme>
 	</color-schemes>
 </amp-gis-presets>

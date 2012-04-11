@@ -13,7 +13,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gis.dbentity.*;
-import org.springframework.security.ui.session.HttpSessionDestroyedEvent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +20,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -851,6 +849,8 @@ public class GisUtil {
         retVal = new MapColorScheme();
         retVal.setName(schemeNode.getAttribute("name"));
         retVal.setDisplayName(schemeNode.getAttribute("display-name"));
+        String schemeType = schemeNode.getAttribute("hilight-type");
+        retVal.setType(schemeType == null?MapColorScheme.COLOR_SCHEME_GRADIENT:schemeType);
 
         NodeList colorNodes = schemeNode.getElementsByTagName("color");
         for (int colorItemIdx = 0; colorItemIdx < colorNodes.getLength(); colorItemIdx ++) {
@@ -870,13 +870,30 @@ public class GisUtil {
                 retVal.setDashColor(createColorObjFromFromConfigNode(colorNodeItem));
             } else if (parentNodeTagName.equalsIgnoreCase("captions")) {
                 retVal.setTextColor(createColorObjFromFromConfigNode(colorNodeItem));
-            } else if (parentNodeTagName.equalsIgnoreCase("gradient-min")) {
-                retVal.setGradientMinColor(createColorObjFromFromConfigNode(colorNodeItem));
-            } else if (parentNodeTagName.equalsIgnoreCase("gradient-max")) {
-                retVal.setGradientMaxColor(createColorObjFromFromConfigNode(colorNodeItem));
+            } 
+            
+            
+            if (retVal.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
+                if (parentNodeTagName.equalsIgnoreCase("gradient-min")) {
+                    retVal.setGradientMinColor(createColorObjFromFromConfigNode(colorNodeItem));
+                } else if (parentNodeTagName.equalsIgnoreCase("gradient-max")) {
+                    retVal.setGradientMaxColor(createColorObjFromFromConfigNode(colorNodeItem));
+                }
+            } else if (retVal.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_PREDEFINED)) {
+                if (parentNodeTagName.equalsIgnoreCase("hilight-colors")) {
+                    float from = Float.parseFloat(colorNodeItem.getAttributes().getNamedItem("from").getNodeValue());
+                    float lessThen = Float.parseFloat(colorNodeItem.getAttributes().getNamedItem("less-then").getNodeValue());
+                    ColorRGB color = createColorObjFromFromConfigNode(colorNodeItem);
+                    MapColorSchemePredefinedItem item = new MapColorSchemePredefinedItem(from, lessThen, color);
+                    if (retVal.getPredefinedColors() == null) {
+                        retVal.setPredefinedColors(new ArrayList<MapColorSchemePredefinedItem>());
+                    }
+                    retVal.getPredefinedColors().add(item);
+                }
             }
-
         }
+
+
 
         return retVal;
     }
@@ -921,19 +938,27 @@ public class GisUtil {
         return retVal;
     }
 
-    public static byte[] getGradienTegendBytes(MapColorScheme colorScheme, int width, int height) throws IOException{
+    public static byte[] getGradienLegendBytes(MapColorScheme colorScheme, int width, int height) throws IOException{
         byte[] retVal = null;
             BufferedImage graph = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
             Graphics2D g2d = graph.createGraphics();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            GradientPaint gradient = new GradientPaint(0,0,colorScheme.getGradientMinColor().getAsAWTColor(),
-                                                                   width - 1,height - 1,colorScheme.getGradientMaxColor().getAsAWTColor(),true);
 
+            if (colorScheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
+                GradientPaint gradient = new GradientPaint(0,0,colorScheme.getGradientMinColor().getAsAWTColor(),
+                                                                       width - 1,height - 1,colorScheme.getGradientMaxColor().getAsAWTColor(),true);
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, width, height);
+            } else if (colorScheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_PREDEFINED)) {
+                for (MapColorSchemePredefinedItem item : colorScheme.getPredefinedColors()) {
+                    g2d.setPaint(item.getColor().getAsAWTColor());
+                    int rectLeft = (int)(((float)width)*item.getStart()/100f);
+                    int rectRight = (int)(((float)width)*item.getLessThen()/100f);
+                    g2d.fillRect(rectLeft, 0, rectRight, height - 1);
+                }
+            }
 
-
-            g2d.setPaint(gradient);
-            g2d.fillRect(0, 0, width, height);
 
             g2d.setPaint(Color.black);
             g2d.drawRect(0, 0, width - 1, height - 1);
@@ -972,9 +997,9 @@ public class GisUtil {
         return retVal;
     }
 
-    public static byte[] getDefaultGradienTegendBytes(HttpServletRequest request, int width, int height) throws IOException  {
+    public static byte[] getDefaultGradienLegendBytes(HttpServletRequest request, int width, int height) throws IOException  {
         MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
-        byte[] retVal = getGradienTegendBytes(colorScheme, width, height);
+        byte[] retVal = getGradienLegendBytes(colorScheme, width, height);
         return retVal;
     }
 

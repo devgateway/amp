@@ -1045,7 +1045,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
             byte[] gradientLegendBytes = null;
-            gradientLegendBytes = GisUtil.getDefaultGradienTegendBytes(request, 500, 20);
+            gradientLegendBytes = GisUtil.getDefaultGradienLegendBytes(request, 500, 20);
 			Image image = Image.getInstance(gradientLegendBytes);
 			// image.scaleAbsoluteWidth(320f);
 			image.setAlignment(Image.ALIGN_RIGHT);

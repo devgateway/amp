@@ -6,15 +6,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.gis.form.AdditionalGraphicsForm;
 import org.digijava.module.gis.util.GisUtil;
-import org.digijava.module.gis.util.MapColorScheme;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.font.GlyphVector;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,7 +32,7 @@ public class ShowAdditionalGraphics extends Action {
 
             int width = additionalGraphicsForm.getWidth();
             int height = additionalGraphicsForm.getHeight();
-            response.getOutputStream().write(GisUtil.getDefaultGradienTegendBytes(request, width, height));
+            response.getOutputStream().write(GisUtil.getDefaultGradienLegendBytes(request, width, height));
             response.getOutputStream().close();
         }
 

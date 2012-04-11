@@ -523,19 +523,26 @@ public class RMMapCalculationUtil {
 
         float deltaVal = max.floatValue() - min.floatValue();
 
-        int deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
-        int deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
-        int deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+        int deltaRed, deltaGreen, deltaBlue;
+        float coeffRed = 0f;
+        float coeffGreen = 0f;
+        float coeffBlue = 0f;
 
-        float coeffRed, coeffGreen, coeffBlue;
-        if (deltaVal > 0) {
-        	coeffRed = deltaRed / deltaVal;
-            coeffGreen = deltaGreen / deltaVal;
-            coeffBlue = deltaBlue / deltaVal;
-        } else {
-            coeffRed = 1;
-            coeffGreen = 1;
-            coeffBlue = 1;
+        if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
+            deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
+            deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
+            deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+
+
+            if (deltaVal > 0) {
+                coeffRed = deltaRed / deltaVal;
+                coeffGreen = deltaGreen / deltaVal;
+                coeffBlue = deltaBlue / deltaVal;
+            } else {
+                coeffRed = 1;
+                coeffGreen = 1;
+                coeffBlue = 1;
+            }
         }
 
         List retVal = new ArrayList();
@@ -549,17 +556,29 @@ public class RMMapCalculationUtil {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
 
-                    float red = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffRed + scheme.getGradientMinColor().getRed();
-                    float green = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffGreen + scheme.getGradientMinColor().getGreen();
-                    float blue = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeffBlue + scheme.getGradientMinColor().getBlue();
-                    if (deltaVal > 0) {
-                    hData.setColor(new ColorRGB((int) red, (int) green, (int) blue));
-                    } else {
-                    	hData.setColor(scheme.getGradientMaxColor());
+                    if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
+                        float red = (Float.parseFloat(sd.getSegmentValue()) -
+                                       min.floatValue()) * coeffRed + scheme.getGradientMinColor().getRed();
+                        float green = (Float.parseFloat(sd.getSegmentValue()) -
+                                       min.floatValue()) * coeffGreen + scheme.getGradientMinColor().getGreen();
+                        float blue = (Float.parseFloat(sd.getSegmentValue()) -
+                                       min.floatValue()) * coeffBlue + scheme.getGradientMinColor().getBlue();
+                        if (deltaVal > 0) {
+                        hData.setColor(new ColorRGB((int) red, (int) green, (int) blue));
+                        } else {
+                            hData.setColor(scheme.getGradientMaxColor());
 
+                        }
+                    } else if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_PREDEFINED)) {
+                        float percentage = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) / deltaVal * 100f;
+                        ColorRGB rangeColor = null;
+                        for (MapColorSchemePredefinedItem item : scheme.getPredefinedColors()) {
+                            if ((item.getStart() <= percentage && item.getLessThen() > percentage) || (item.getStart() <= percentage && item.getLessThen()==100f && percentage == 100f)) {
+                                rangeColor = item.getColor();
+                                break;
+                            }
+                        }
+                        hData.setColor(rangeColor);
                     }
                     retVal.add(hData);
                 }

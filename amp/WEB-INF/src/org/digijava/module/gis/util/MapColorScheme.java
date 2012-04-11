@@ -1,7 +1,8 @@
 package org.digijava.module.gis.util;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
+import java.util.List;
+
 
 /**
  * User: George Kvizhinadze
@@ -9,6 +10,8 @@ import java.awt.*;
  * Time: 2:59:31 PM
  */
 public class MapColorScheme {
+    public static final String COLOR_SCHEME_GRADIENT = "gradient";
+    public static final String COLOR_SCHEME_PREDEFINED = "predefined";
 
     private String name;
     private String displayName;
@@ -24,13 +27,18 @@ public class MapColorScheme {
     private ColorRGB gradientMinColor;
     private ColorRGB gradientMaxColor;
 
+    private String type;
+    
+    private List<MapColorSchemePredefinedItem> predefinedColors;
+    
     public MapColorScheme() {
 
     }
 
     public static MapColorScheme getDefaultColorScheme() {
 
-        return new MapColorScheme("default", "Default Color Scheme",
+        return new MapColorScheme("default", "Default Color Scheme", COLOR_SCHEME_GRADIENT,
+                                  null,
                                   new ColorRGB(74,104,122),
                                   new ColorRGB(214, 194, 158),
                                   new ColorRGB(0,0,100),
@@ -42,7 +50,8 @@ public class MapColorScheme {
                                   new ColorRGB(218,220,221));
     }
 
-    public MapColorScheme(String name, String displayName,
+    public MapColorScheme(String name, String displayName, String type,
+                          List<MapColorSchemePredefinedItem> predefinedColors,
                           ColorRGB backgroundColor,
                           ColorRGB terrainColor,
                           ColorRGB waterColor,
@@ -63,7 +72,25 @@ public class MapColorScheme {
         this.gradientMaxColor = gradientMaxColor;
         this.name = name;
         this.displayName = displayName;
+        this.type = type;
+        this.predefinedColors = predefinedColors;
 
+    }
+
+    public List<MapColorSchemePredefinedItem> getPredefinedColors() {
+        return predefinedColors;
+    }
+
+    public void setPredefinedColors(List<MapColorSchemePredefinedItem> predefinedColors) {
+        this.predefinedColors = predefinedColors;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {

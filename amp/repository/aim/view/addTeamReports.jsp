@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 <DIV id="TipLayer"
@@ -243,7 +244,14 @@ function searchActivity(teamId) {
 															</html:multibox>
 														</td>
 														<td class="inside">
-															<bean:write name="reports" property="name" />
+															<span title="<c:out value="${reports.name}"/>">
+															<c:if test="${fn:length(reports.name) > 25}" >
+																<c:out value="${fn:substring(reports.name, 0, 25)}" />...
+															</c:if>
+															<c:if test="${fn:length(reports.name) < 25}" >
+																<c:out value="${reports.name}" /> 
+															</c:if>
+														</span>
 														</td>
 														<td class="inside">
 															<logic:present name="reports" property="ownerId">

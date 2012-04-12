@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -19,7 +20,7 @@
 
 <digi:form action="/updateTeamReports.do" method="post">
 <html:hidden property="addReport"/>
-<html:hidden property="showReportList"/>
+<html:hidden property="showReportList" styleId="showReportList"/>
 <table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -202,12 +203,19 @@
 															</html:multibox>
 														</td>
 														<td class="inside">
-															<digi:trn key="aim:reportMemberSpecificName:${ampReports.name}"><bean:write name="ampReports" property="name" /></digi:trn>
+															<span  title="<c:out value="${ampReports.name}"/>">
+															<c:if test="${fn:length(ampReports.name) > 25}" >
+																<c:out value="${fn:substring(ampReports.name, 0, 25)}" />...
+															</c:if>
+															<c:if test="${fn:length(ampReports.name) < 25}" >
+																<c:out value="${ampReports.name}" /> 
+															</c:if>
+															</span>														
 														</td>
 														<td class="inside">
 															<logic:present name="ampReports" property="ownerId">
-                              	<bean:write name="ampReports" property="ownerId.user.name" />
-                              </logic:present>
+								                              	<bean:write name="ampReports" property="ownerId.user.name" />
+								                              </logic:present>
 														</td>
 														<td class="inside">
 															<li>

@@ -94,7 +94,7 @@ $(document).ready(function(){
 });
 
 </script>
-<h1 class="admintitle"> Content manager</h1>
+<h1 class="admintitle"> <digi:trn>Content manager</digi:trn></h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>

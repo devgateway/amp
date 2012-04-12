@@ -581,7 +581,8 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 		Double currencyValue = new Double(0);
 		String currencyName = iatiDefaultCurrency;
-		Date dateToSet = null;
+		Date startDate = null;
+		Date endDate = null;
 		for (Iterator<Object> it = budget.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
 			Object contentItem = (Object) it.next();
 			if(contentItem instanceof JAXBElement){
@@ -599,12 +600,17 @@ public class IatiActivityWorker {
 					XMLGregorianCalendar isoDate = item.getIsoDate();
 					
 					if(isoDate != null)
-						dateToSet = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
+						startDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
 					//else dateToSet	=	DataExchangeUtils.stringToDate(item.get);
 				}
 				
 				//TODO check if this still to be added to AMP
 				if(i.getName().equals(new QName("period-end"))){
+					DateType item = (DateType)i.getValue();
+					XMLGregorianCalendar isoDate = item.getIsoDate();
+					
+					if(isoDate != null)
+						endDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
 				}
 			}
 		}
@@ -646,7 +652,13 @@ public class IatiActivityWorker {
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(null);
 		}
-		
+		Date dateToSet = null;
+		if(startDate!=null)
+			dateToSet = startDate;
+		else if (endDate!=null)
+				dateToSet = endDate;
+			//if there is no date, the budget element should be skipped
+			else return null; 
 		populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		ampFunding.setFundingDetails(ampFundDetails);
 		if(activity !=null ) 

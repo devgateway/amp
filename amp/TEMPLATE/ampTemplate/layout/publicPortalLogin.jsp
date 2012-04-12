@@ -66,12 +66,29 @@ $.ajax({
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
 	<div id="container">
-    	<div id="header">
-			<h1><a href="/" style="text-decoration: none;float: le">
-		            <img src="/aim/default/displayFlag.do" border="0" style="" width="50px" height="34px">
-		            </a><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></h1> 
-            <div id="toplnk"><a href="/publicPortal"><digi:trn>Acess AMP as Public User</digi:trn>&nbsp;&raquo;</a></div>          
-        </div>
+	<center>
+			<div class="header">
+				<div class="login_nav">
+					<div id="toplnk"><a href="/publicPortal"><digi:trn>Access AMP as Public User</digi:trn>&nbsp;&raquo;</a></div>
+				</div>
+				<div class="logo">
+					<table width="480" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width="50" style="vertical-align: middle;"><a href="/"
+								style="text-decoration: none"> <img
+									src="/aim/default/displayFlag.do" border="0" width="50px"
+									height="34px"><br /></a></td>
+							<td style="padding-left: 10px;text-align: left;"><a href="/"
+								style="text-decoration: none">
+									<div class="amp_label" style="padding-top: 0px;">
+										<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
+									</div>
+							</a></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</center>
           <div class="clear"></div>
 		 
         <div id="loginbox">  

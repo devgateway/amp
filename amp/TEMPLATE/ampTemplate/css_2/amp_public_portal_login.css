@@ -22,16 +22,17 @@ input#amplogin{width:61px;height:32px;background:url(/TEMPLATE/ampTemplate/img_2
 #changePassword{clear:both; width:352px;margin:0 auto;}
 .clear{clear:both;}
 a{color:#454545;font-size:12px;font-weight:bold;}
-#forgot a{font-size:11px;color:#4c6b7d;}
+#changePassword a{font-size:11px;color:#4c6b7d;}
+.login_nav {float:right; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
 #toplnk{float:right;width:200px;}
-#toplnk a{color:#fff;text-shadow: 1px 1px 5px #2b3942;line-height:65px;font-size:14px;}
+#toplnk a{color:#fff;text-shadow: 1px 1px 5px #2b3942; font-size:12px;}
 #loginbox li{list-style:none;}
 #loginbox select#actions{width:352px;margin:0 auto;margin-top:5px;height:25px;color:#48677b;font-size:11px;}
 #loginbox select option{font-weight:normal;color:#48677b;font-size:11px;}
 .error{padding:5px;color:red;font-weight:bold;font-size:11px;clear:both;display:block;}
 div.utils{clear:both;padding:5px 0px 10px 0px;;border-bottom:1px solid #c6d6e1;}
 div.utils a{font-size:11px;color:#44596a;}
-div.utils a#forgot, div.utils a#trouble{color:#6f818d;padding:0px 25px 0px 0px;}
+div.utils a#changePassword, div.utils a#trouble{color:#6f818d;padding:0px 25px 0px 0px;}
 a#new{display:block;padding:10px 0px 10px 20px;background:url(/TEMPLATE/ampTemplate/img_2/add.gif) no-repeat left;color:#415866;}
 div.addnew{clear:both;padding:5px 0px;width:340px;}
 	
@@ -39,3 +40,7 @@ div.addnew{clear:both;padding:5px 0px;width:340px;}
 .footer {background-color: #8B8B8B;color: #FFFFFF;font-size: 11px;margin-top: 25px;padding-bottom: 10px;width:100%;padding-top: 10px; text-align:center;}
 .dgf_footer {margin-top:15px; margin-bottom:15px; text-align:center; font-size:11px; color:#8B8B8B; line-height:18px;}
 .dgf_logo_footer {margin-bottom:5px;}
+.header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
+.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
+.logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
+.amp_label {padding-top:10px;font-size:14px;}

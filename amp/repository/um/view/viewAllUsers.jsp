@@ -60,7 +60,7 @@ function banUser(txt) {
 <digi:instance property="umViewAllUsersForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/viewAllUsers.do" method="post" >
-<h1 class="admintitle">User manager</h1>
+    <h1 class="admintitle"><digi:trn>User manager</digi:trn></h1>
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"
 		align=center>
 		<tr>

@@ -1,4 +1,5 @@
-html{background:url(/TEMPLATE/ampTemplate/img_2/bg.jpg) repeat-x #fff;font-family:arial;}
+html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;}
+body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;}
 *{padding:0px;margin:0px;text-decoration:none;}
 input{background:none;border:transparent;}
 h1{color:#fff;font-size:14px;text-shadow: 1px 1px 5px #2b3942;}

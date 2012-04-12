@@ -282,6 +282,10 @@ public class ReportsFilterPicker extends MultiAction {
 		StopWatch.reset("Filters");
 		StopWatch.next("Filters", true);
 		String ampReportId 	= request.getParameter("ampReportId");
+		
+		if (ampReportId!=null && ampReportId.equalsIgnoreCase("")){
+			ampReportId = null;
+		}
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//ServletContext ampContext = getServlet().getServletContext();
 		HttpSession httpSession = request.getSession();
@@ -945,9 +949,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A4")));
 
 		if (ampReportId != null && ampReportId.length() > 0 ) {
-
 			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
-
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
 		

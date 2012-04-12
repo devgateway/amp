@@ -2352,19 +2352,22 @@ function commentWin(val, commentId) {
 															<TR>
 																		<TD bgcolor="#ffffff">
 																			<i>
-																				<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>
-																			</i>:
-																			<c:out value="${activity.activityCreator.ampTeam.name}" /> - <c:out value="${activity.activityCreator.ampTeam.accessType}" />
-																			<br/>
+																				<digi:trn>Worskpaces of creator</digi:trn>
+																			</i>:<br/>
+																			<c:forEach var="userWorkspace"
+																				items="${aimChannelOverviewForm.workspaces}">
+																				<c:out value="${userWorkspace.ampTeam.name}" /> - <c:out value="${userWorkspace.ampTeam.accessType}" /> |
 																			<i>
 																				<digi:trn key="aim:computation">Computation</digi:trn>
 																			</i>:
-																				<c:if test="${activity.activityCreator.ampTeam.computation == 'true'}">
+																				<c:if test="${userWorkspace.ampTeam.computation == 'true'}">
 																				  <digi:trn key="aim:yes">Yes</digi:trn>
 																				</c:if>
-																				<c:if test="${activity.activityCreator.ampTeam.computation == 'false'}">
+																				<c:if test="${userWorkspace.ampTeam.computation == 'false'}">
 																				  <digi:trn key="aim:no">No</digi:trn>
 																				</c:if>
+																			<br/>
+																			</c:forEach>
 																			<br/>
 																		</TD>
 															</TR>

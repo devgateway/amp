@@ -111,7 +111,7 @@ $.ajax({
                 <c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
-				<digi:link href="/showChangePassword.do" styleId="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></digi:link><digi:link href="/aim/showEmailForm.do" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
+				<digi:link href="/showChangePassword.do" styleId="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></digi:link><digi:link href="/showEmailForm.do" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
 				</div>
 				<feature:display name="Enable New User Registration"
 							module="Login - User Management">

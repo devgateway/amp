@@ -1551,8 +1551,7 @@ public class IatiActivityWorker {
 	}
 	
 	private String getAttributeCodeType(JAXBElement<CodeType> item, String key) {
-		Map<QName, String> otherAttributes = item.getValue().getOtherAttributes();
-		String code = otherAttributes.get(new QName(key));
+		String code = item.getValue().getCode();
 		return code;
 	}
 	

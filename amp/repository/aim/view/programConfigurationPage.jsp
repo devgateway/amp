@@ -33,7 +33,7 @@
    var enterBinder	= new EnterHitBinder('saveMPCBtn');
 
 </script>
-<h1 class="admintitle">Configuration settings</h1>
+<h1 class="admintitle"><digi:trn>Configuration settings</digi:trn></h1>
 <digi:instance  property="aimActivityProgramSettingsForm"/>
 
 

@@ -16,11 +16,6 @@
 		</repository>
 
 		<repository>
-			<id>freehep-maven</id>
-			<name>Maven FreeHEP</name>
-			<url>http://java.freehep.org/maven2</url>
-		</repository>
-		<repository>
 			<id>repo.pentaho.org</id>
 			<name>repo.pentaho.org-releases</name>
 			<url>http://repository.pentaho.org/artifactory/pentaho</url>

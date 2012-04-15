@@ -83,23 +83,32 @@
 <SCRIPT TYPE="text/javascript">
 function popup(mylink, windowname)
 {
-if (! window.focus)return true;
-var href;
-if (typeof(mylink) == 'string')
-   href=mylink;
-else
-   href=mylink.href;
+	if (!window.focus)
+		return true;
 
-  	myWindow	= window.open('',windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
-  	myWindow.document.write("<html>");
-	myWindow.document.write("<div style='height: 20px; left: 45%; position: absolute; text-align: center; top: 0%;width: 230px;padding: 5px;background-color:#27415F;font-family: arial; font-size: 14px;text-align: center;font-weight:bold;color: white;'>");
-	myWindow.document.write("Loading step 1/3. Please wait ...");
-	myWindow.document.write("<div><html>");
-	myWindow.focus();
-	myWindow.location	= href;
+	var href;
+	if (typeof(mylink) == 'string')
+		href = mylink;
+	else
+		href = mylink.href;
+
+	if(windowname == ""){
+		windowname="popup"+new Date().getTime();;
+	}
 	
-
-return false;
+	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+		var referLink = document.createElement('a');
+		referLink.href = href;
+		referLink.target = windowname;
+		document.body.appendChild(referLink);
+		referLink.click();
+	}
+	else
+	{
+		openedWindow.location = href;
+	}
+	return false;
 }
 
 function confirmFunc() {

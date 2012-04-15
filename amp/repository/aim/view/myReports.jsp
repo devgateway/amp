@@ -13,12 +13,18 @@
 
 function popup(mylink, windowname)
 {
-if (! window.focus)return true;
-var href;
-if (typeof(mylink) == 'string')
-   href=mylink;
-else
-   href=mylink.href;
+	if (! window.focus)return true;
+
+	var href;
+
+	if (typeof(mylink) == 'string')
+	   href=mylink;
+	else
+	   href=mylink.href;
+	
+	if(windowname == ""){
+		windowname="popup"+new Date().getTime();;
+	}
 
   	myWindow	= window.open('',windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
   	myWindow.document.write("<html>");
@@ -26,10 +32,19 @@ else
 	myWindow.document.write("<digi:trn>Loading step</digi:trn> 1/3. <digi:trn>Please wait</digi:trn> ...");
 	myWindow.document.write("<div><html>");
 	myWindow.focus();
-	myWindow.location	= href;
 	
-
-return false;
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+		var referLink = document.createElement('a');
+		referLink.href = href;
+		referLink.target = windowname;
+		document.body.appendChild(referLink);
+		referLink.click();
+	}
+	else
+	{
+		myWindow.location = href;
+	}
+	return false;
 }
 </SCRIPT>
 <br/>

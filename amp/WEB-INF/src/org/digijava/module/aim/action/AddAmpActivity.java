@@ -836,13 +836,24 @@ private ActionForward addSector(ActionMapping mapping, HttpSession session,
 	Object searchedsector = session.getAttribute("add");
 
 	if (searchedsector != null && searchedsector.equals("true")) {
-		Collection selectedSecto = (Collection) session
-				.getAttribute("sectorSelected");
+		Collection selectedSectors = null;
+		if(session.getAttribute("sectorSelected") instanceof ActivitySector)
+		{
+	          selectedSectors = new ArrayList<ActivitySector>();
+	          selectedSectors.add((ActivitySector) session.getAttribute("sectorSelected"));
+		}
+		else
+		{
+	          selectedSectors = new ArrayList<ActivitySector>();
+	          selectedSectors.addAll((Collection) session.getAttribute("sectorSelected"));
+		}
+			
+		 
 		Collection<ActivitySector> prevSelSectors = eaForm.getSectors()
 				.getActivitySectors();
 
-		if (selectedSecto != null) {
-			Iterator<ActivitySector> itre = selectedSecto.iterator();
+		if (selectedSectors != null) {
+			Iterator<ActivitySector> itre = selectedSectors.iterator();
 			while (itre.hasNext()) {
 				ActivitySector selectedSector = (ActivitySector) itre
 						.next();

@@ -22,6 +22,10 @@ import org.hibernate.criterion.Restrictions;
  */
 public class AmpOrganisationSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpOrganisation> {
+	
+	public enum PARAM implements AmpAutoCompleteModelParam {
+		TYPE_FILTER, GROUP_FILTER
+	};
 
 	public AmpOrganisationSearchModel(String input,
 			Map<AmpAutoCompleteModelParam, Object> params) {
@@ -45,11 +49,13 @@ public class AmpOrganisationSearchModel extends
 						Restrictions.disjunction()
 								.add(getTextCriterion("name", input))
 								.add(getTextCriterion("acronym", input)));	
+			if(params != null && getParams().get(PARAM.TYPE_FILTER) !=null) 
+				crit.add(Restrictions.conjunction().add(Restrictions.eq("orgType", getParams().get(PARAM.TYPE_FILTER))));
 			crit.addOrder(Order.asc("name"));
 
 			if (params != null) {
 				Integer maxResults = (Integer) getParams().get(
-						PARAM.MAX_RESULTS);
+						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 				if (maxResults != null && maxResults.intValue() != 0)
 					crit.setMaxResults(maxResults);
 			}

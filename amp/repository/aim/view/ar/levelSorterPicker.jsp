@@ -66,7 +66,7 @@
 			<td><html:submit property="applySorter"><digi:trn key="aim:popsort:apply">Apply Sorting</digi:trn></html:submit></td>
 			</logic:notEqual>
 			<logic:equal name="widget" scope="request" value="true">			
-			<td><input type="button" name="applySorter" value='<digi:trn key="aim:popsort:hierarchy:apply">Apply Sorting</digi:trn>'			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);hideSorter();"/>
+			<td><input type="button" name="applySorter" value='<digi:trn key="aim:popsort:hierarchy:apply">Apply Sorting</digi:trn>'			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);hideSorter();"/>
 			</td>
 			</logic:equal>
 		</tr>

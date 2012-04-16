@@ -137,8 +137,8 @@ var myTabsObject;
 		divAllTabs.style.display 	= "block";
 		allTabsPanel.setBody(divAllTabs);
 		<logic:notEmpty name="filterCurrentReport" scope="session">
-		if(!tabExists('Tab-<c:out value="${filterCurrentReport.name}"/>'))
-			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.name}" />");
+		if(!tabExists('Tab-<c:out value="${filterCurrentReport.ampReportId}"/>'))
+			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.ampReportId}" />");
 		</logic:notEmpty>	
 	}
 	function tabExists(tabCheckName){
@@ -259,17 +259,17 @@ function toggleSettings(){
 	var tabName	= "Tab-By Project";
 	<logic:empty name="filterCurrentReport" scope="session">
 		<logic:notEmpty name="defaultTeamReport" scope="session">
-				tabName	= 'Tab-${defaultTeamReport.name}';
+				tabName	= 'Tab-${defaultTeamReport.ampReportId}';
 		</logic:notEmpty>
 
 		<logic:empty name="defaultTeamReport" scope="session">
 			<logic:notEmpty name="myTabs" scope="session">
-					tabName	= 'Tab-${myTabs[0].name}';
+					tabName	= 'Tab-${myTabs[0].ampReportId}';
 			</logic:notEmpty>
 		</logic:empty>
 	</logic:empty>
 	<logic:notEmpty name="filterCurrentReport" scope="session">
-		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
+		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="ampReportId"/>';
 	</logic:notEmpty>	
 </script>
 	
@@ -295,10 +295,10 @@ function toggleSettings(){
 	                    <c:if test="${counter <= 6}">
 	                    <li>
 	                    <c:if test="${fn:length(report.name) > 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
+							<a id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
 	                    </c:if>
 	                    <c:if test="${fn:length(report.name) <= 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
+							<a id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
 	                    </c:if>
 	                                                                
 	                    </li>
@@ -360,10 +360,10 @@ DIV.panelList {
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set> --%>
 	                    <c:if test="${fn:length(report.name) > 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.ampReportId}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
 	                    </c:if>
 	                    <c:if test="${fn:length(report.name) <= 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${report.name}" />", "Tab-<c:out value="${report.name}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></div>
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${report.name}" />", "Tab-<c:out value="${report.ampReportId}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></div>
 	                    </c:if>
 					</logic:equal>
             </c:if>

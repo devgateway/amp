@@ -18,6 +18,7 @@
 		<logic:equal name="report" property="drilldownTab" value="true">
 			<logic:equal name="firstReportFound" value="false">
 				<bean:define id="firstReportName" name="report" property="name" toScope="Page"/>
+				<bean:define id="firstReportId" name="report" property="ampReportId" toScope="Page"/>
 				<bean:define id="firstReportFound" value="true" toScope="page"/>
 			</logic:equal>
 		</logic:equal>
@@ -71,7 +72,7 @@ function toggleSettings(){
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="report" property="publicReport" value="true">
 				<logic:equal name="report" property="drilldownTab" value="true">
-					<li><a id='Tab-<bean:write name="report" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li>
+					<li><a id='Tab-<bean:write name="report" property="ampReportId"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li>
 				</logic:equal>
 			</logic:equal>
 </logic:iterate>
@@ -95,7 +96,7 @@ No Public Tabs
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	
 	startajaxtabs("PublicTabs");
-	reloadTab('PublicTabs','Tab-<bean:write name="firstReportName"/>');
+	reloadTab('PublicTabs','Tab-<bean:write name="firstReportId"/>');
 	</script>
 </logic:present>
 

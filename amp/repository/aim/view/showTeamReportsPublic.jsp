@@ -39,7 +39,7 @@ function popup(mylink, windowname)
 		href = mylink.href;
 
 	if(windowname == ""){
-		windowname="popup"+new Date().getTime();;
+		windowname="popup"+new Date().getTime();
 	}
 	
 	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');

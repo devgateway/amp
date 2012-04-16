@@ -149,9 +149,22 @@ function initPopin() {
 window.onload=initPopin;
 
 function viewChanges(id){
-	openNewWindow(650,200);
+	var windowname = "popup"+new Date().getTime();
+	
+	openNewWindowWithName(650,200, windowname);
 	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
-	popupPointer.document.location.href = "<%= showLog %>?activityId=" + id;
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+		var referLink = document.createElement('a');
+		referLink.href = "<%= showLog %>?activityId=" + id;;
+		referLink.target = windowname;
+		document.body.appendChild(referLink);
+		referLink.click();
+	}
+	else
+	{
+		popupPointer.href = "<%= showLog %>?activityId=" + id;
+	}
+	
 }
 
 function expandAll() {

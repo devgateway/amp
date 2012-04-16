@@ -848,7 +848,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           if (activity.isHumanitarianAid() != null)
         	  eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());
           else
-        	  activity.setHumanitarianAid(new Boolean(false));
+        	  activity.setHumanitarianAid(null);
 
 
           if (activity.getCrisNumber() != null)
@@ -2065,67 +2065,69 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     }
     
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
-	Long ampTeamId = teamMember.getTeamId();
-	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
-	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
-	//commented under AMP-10788
-//	if (workingTeamFlag) {
-//		eaForm.setButtonText("edit");	// In case of regular working teams
-//		if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
-//	 	{
-//	 		//burkina
-//	 		// if an user save an activity he could edit it even it is not approved by team leader
-//	 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
-//	 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
-//	 			eaForm.setButtonText("validate");
-//	 		}/*else {
-//	 			formBean.setButtonText("approvalAwaited");
-//	 		}*/		 		
-//	 	}
-//	} else {
-//		eaForm.setButtonText("none");	// In case of management-workspace
-//	}
-	
-	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
-	boolean isManagement = false;
-	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
-		eaForm.setButtonText("none");
-	}
-	else{ //not a management team
-		//there is another simple way to write these "if"s, but it is more clear like this
-		eaForm.setButtonText("edit");
-		if(activity!=null && activity.getDraft()!=null && !activity.getDraft())
-			if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
-				//global validation off
-				eaForm.setButtonText("edit");
-			}
-			else{
-				//global validation is on
-				
-//				if("alloff".compareTo(apps.getValidation().toLowerCase())==0)
-//					eaForm.setButtonText("edit");
-				
-				//only the team leader of the team that owns the activity has rights to validate it
-				//if activity is already approved it will display the edit value
-				if( apps.getValidation()!= null && "alledits".compareTo(apps.getValidation().toLowerCase())==0 )
-					if(teamLeadFlag &&
-					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
-					   (Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0 || 
-					    Constants.EDITED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0)
-					   ) 
-					eaForm.setButtonText("validate");
-					//else eaForm.setButtonText("edit");
-				
-				//only the team leader of the team that owns the activity has rights to validate it
-				//it will display the validate label only if it is just started and was not approved not even once
-				if(apps.getValidation()!=null && "newonly".compareTo(apps.getValidation().toLowerCase())==0)
-					if(teamLeadFlag && 
-							Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0					
-							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())
-					) eaForm.setButtonText("validate");
-					//else eaForm.setButtonText("edit");
-			}
-	}
+    if(teamMember != null){
+    	Long ampTeamId = teamMember.getTeamId();
+    	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
+    	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
+    	//commented under AMP-10788
+//    	if (workingTeamFlag) {
+//    		eaForm.setButtonText("edit");	// In case of regular working teams
+//    		if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
+//    	 	{
+//    	 		//burkina
+//    	 		// if an user save an activity he could edit it even it is not approved by team leader
+//    	 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
+//    	 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
+//    	 			eaForm.setButtonText("validate");
+//    	 		}/*else {
+//    	 			formBean.setButtonText("approvalAwaited");
+//    	 		}*/		 		
+//    	 	}
+//    	} else {
+//    		eaForm.setButtonText("none");	// In case of management-workspace
+//    	}
+    	
+    	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
+    	boolean isManagement = false;
+    	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
+    		eaForm.setButtonText("none");
+    	}
+    	else{ //not a management team
+    		//there is another simple way to write these "if"s, but it is more clear like this
+    		eaForm.setButtonText("edit");
+    		if(activity!=null && activity.getDraft()!=null && !activity.getDraft())
+    			if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
+    				//global validation off
+    				eaForm.setButtonText("edit");
+    			}
+    			else{
+    				//global validation is on
+    				
+//    				if("alloff".compareTo(apps.getValidation().toLowerCase())==0)
+//    					eaForm.setButtonText("edit");
+    				
+    				//only the team leader of the team that owns the activity has rights to validate it
+    				//if activity is already approved it will display the edit value
+    				if( apps.getValidation()!= null && "alledits".compareTo(apps.getValidation().toLowerCase())==0 )
+    					if(teamLeadFlag &&
+    					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
+    					   (Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0 || 
+    					    Constants.EDITED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0)
+    					   ) 
+    					eaForm.setButtonText("validate");
+    					//else eaForm.setButtonText("edit");
+    				
+    				//only the team leader of the team that owns the activity has rights to validate it
+    				//it will display the validate label only if it is just started and was not approved not even once
+    				if(apps.getValidation()!=null && "newonly".compareTo(apps.getValidation().toLowerCase())==0)
+    					if(teamLeadFlag && 
+    							Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0					
+    							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())
+    					) eaForm.setButtonText("validate");
+    					//else eaForm.setButtonText("edit");
+    			}
+    	}
+    }
 	
 	
 	

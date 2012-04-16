@@ -26,7 +26,7 @@
 <bean:define id="org" name="currentOrg"
 	type="org.digijava.module.aim.helper.RelOrganization" scope="request"
 	toScope="page" />
-<div style='position:relative;display:none;' id='org-<bean:write name="org" property="orgCode"/>'> 
+<div style='position:relative;display:none;' id='org-<c:out value="${org.orgCode}"/>'> 
 <ul>
 <c:set var="ampOrg" scope="page" value="${org.ampOrganisation}" />
 <c:set var="onClickText" value="" scope="page" />
@@ -57,23 +57,23 @@
 </c:if>
 
 <c:if test="${!empty org.orgName}">
-	<li> Organization Name: <bean:write name="org" property="orgName"/></li>
+	<li><digi:trn>Organization Name:</digi:trn> <c:out value="${org.orgName}"/></li>
 </c:if>
 <c:if test="${!empty org.acronym}">
-	<li>Organization Acronym: <bean:write name="org" property="acronym"/></li>
+	<li><digi:trn>Organization Acronym:</digi:trn> <c:out value="${org.acronym}"/></li>
 </c:if>
 <c:if test="${!empty org.orgTypeId}">
 	<c:if test="${!empty org.orgTypeId.orgType}">
-		<li>Organization Type: <bean:write name="org" property="orgTypeId.orgType"/></li>
+		<li><digi:trn>Organization Type:</digi:trn> <c:out value="${org.orgTypeId.orgType}"/></li>
 	</c:if>
 </c:if>
 <c:if test="${!empty org.orgGrpId}">
 	<c:if test="${!empty org.orgGrpId.orgGrpName}">
-		<li>Organization Group: <bean:write name="org" property="orgGrpId.orgGrpName"/></li>
+		<li><digi:trn>Organization Group:</digi:trn> <c:out value="${org.orgGrpId.orgGrpName}"/></li>
 	</c:if>
 </c:if>
 <c:if test="${!empty org.orgCode}">
-<li>Organization Code: <bean:write name="org" property="orgCode"/></li>
+<li><digi:trn>Organization Code:</digi:trn> <c:out value="${org.orgCode}"/></li>
 </c:if>
 
 </ul>
@@ -82,11 +82,11 @@
 <li>
 	<div align="left" width="2" 
 	style="display: inline"
-	onMouseOver="stm(['<bean:write name="org" property="orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="orgCode"/>').innerHTML],Style[0])" 
+	onMouseOver="stm(['<c:out value="${org.orgCode}"/> Details',document.getElementById('org-<c:out value="${org.orgCode}"/>').innerHTML],Style[0])" 
 	onMouseOut="htm()">
-	[ <u><bean:write name="org" property="orgName"/>
+	[ <u><c:out value="${org.orgName}"/>
 		<logic:notEmpty name="org" property="additionalInformation" >
-			(${org.additionalInformation})
+			(<c:out value="${org.additionalInformation}"/>)
 		</logic:notEmpty></u>]
 		<logic:notEmpty name="org" property="percentage" >
 			<bean:write name="org" property="percentage"/> %

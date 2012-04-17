@@ -199,22 +199,25 @@ var tabView = new YAHOO.widget.TabView('demo');
 	<form id="gisFilterForm" action="../../gis/getFoundingDetails.do"	>
 		<div class="filterContainerTabs">
 			<div id="demo" class="yui-navset">
-				<ul class="yui-nav">
-					<li class="selected"><a href="#tab1" style="border-radius:0;"><div><digi:trn>Donor Agencies</digi:trn>
-						</div>
-					</a>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
+				<ul class="yui-nav" style="float:bottom;">
+					<li class="selected">
+						<a href="#tab1" style="border-radius:0;"><div><digi:trn>Donor Agencies</digi:trn></div></a>
 					</li>
-					<li><a href="#tab2" style="border-radius:0;"><div><digi:trn>Sectors</digi:trn></div>
-					</a>
+					<li>
+						<a href="#tab2" style="border-radius:0;"><div><digi:trn>Sectors</digi:trn></div></a>
 					</li>
-					<li><a href="#tab3" style="border-radius:0;"><div><digi:trn>Programs</digi:trn></div>
-					</a>
+					<li>
+						<a href="#tab3" style="border-radius:0;"><div><digi:trn>Programs</digi:trn></div></a>
 					</li>
 				</ul>
-				<div class="yui-content" style="background-color: #FFFFFF;">
+				</td></tr>
+				<tr><td>
+				<div class="yui-content" style="background-color: #FFFFFF; float:right;">
 					<div>
 						<div id="tabDonorAgency">
 							<bean:define name="gisDashboardForm" id="element" property="donorElements" toScope="request" />
+							<table width="100%" height="100%" cellpadding="0" cellspacing="0"><tr><td>
 							<div class="groupingSelector">
 								<div class="innerTabHeader">
 									<h3>
@@ -231,6 +234,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									</ul>
 								</div>
 							</div>
+						</td><td>
 							<div class="membersSelector">
 								<div class="innerTabHeader">
 									<h3><digi:trn>Members selector</digi:trn></h3>
@@ -254,7 +258,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 									</div>
 								</c:forEach>
 							</div>
-	
+						</td></tr></table>
 						</div>
 						<%--
 							<div class="datesCurrenceyFormFooter">
@@ -539,6 +543,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 						</div>
 						</div>
 				</div>
+			</td></tr></table>
 			</div>
 		</div>
 		<input type="hidden" name="filterStartYear" id="filterStartYear">

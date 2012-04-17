@@ -40,7 +40,7 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		super(id, model, fmName);
 		//TrnLabel selectOrgTypeLabel = new TrnLabel("selectOrgTypeLabel", "Select Organization Type");
 		//add(selectOrgTypeLabel);
-		orgTypePanel = new AmpSelectFieldPanel<String>("selectOrgType", new Model<String>(), loadOrgTypes(), "Select Organization Type", false, false);
+		orgTypePanel = new AmpSelectFieldPanel<String>("selectOrgType", new Model<String>(), loadOrgTypes(), "Select Organization Type", true, false);
 	    
 		orgTypePanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 				@Override

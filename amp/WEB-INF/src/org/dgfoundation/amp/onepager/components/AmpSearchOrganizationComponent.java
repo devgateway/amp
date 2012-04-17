@@ -1,34 +1,28 @@
 package org.dgfoundation.amp.onepager.components;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.IOnChangeListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
+import org.digijava.module.aim.util.DbUtil;
+
 
 
 public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  implements IOnChangeListener{
 
-	private AmpSelectFieldPanel<String> orgTypePanel;
+	private AmpSelectFieldPanel<AmpOrgGroup> orgGroupPanel;
 	private AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel;
 	/**
 	 * 
@@ -40,73 +34,48 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		super(id, model, fmName);
 		//TrnLabel selectOrgTypeLabel = new TrnLabel("selectOrgTypeLabel", "Select Organization Type");
 		//add(selectOrgTypeLabel);
-		orgTypePanel = new AmpSelectFieldPanel<String>("selectOrgType", new Model<String>(), loadOrgTypes(), "Select Organization Type", true, false);
-	    
-		orgTypePanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+		
+		
+		ChoiceRenderer cr = new ChoiceRenderer(){
+			@Override
+			public Object getDisplayValue(Object object) {
+				if(object == null)
+					return TranslatorUtil.getTranslatedText("All Groups");
+				AmpOrgGroup orgGroup = (AmpOrgGroup)object;
+			    return orgGroup.getOrgGrpName();
+			}
+		};
+		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.getAllOrgGroups());
+		orgGroupPanel = new AmpSelectFieldPanel<AmpOrgGroup>("selectOrgType", new Model<AmpOrgGroup>(),  orgGroupsModel, "Select Organization Type", true, true, cr);
+
+		orgGroupPanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 				@Override
 				protected  void onUpdate(AjaxRequestTarget target)
 				{
 					
-					String org_type = (String) orgTypePanel.getChoiceContainer().getModelObject();
-					if(org_type != null)						
-					   autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.TYPE_FILTER, org_type);
+					AmpOrgGroup org_group = (AmpOrgGroup) orgGroupPanel.getChoiceContainer().getModelObject();
+					if(org_group != null)						
+					   autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER, org_group);
 					else
-						autocompletePanel.getModelParams().remove(AmpOrganisationSearchModel.PARAM.TYPE_FILTER);
+						autocompletePanel.getModelParams().remove(AmpOrganisationSearchModel.PARAM.GROUP_FILTER);
 					target.addComponent(autocompletePanel);
 				}
 				
 		});
-		add(orgTypePanel);
+		add(orgGroupPanel);
 	    
 	    
-	    orgTypePanel.setOutputMarkupId(true);
+		orgGroupPanel.setOutputMarkupId(true);
 		this.autocompletePanel = autocompletePanel;
 		add(autocompletePanel);
-
 	}
 	
 	
-	private Session session;
 	
-	protected List<String> loadOrgTypes() {
-		List<String> ret = null;
-		try {
-
-			session = PersistenceManager.getRequestDBSession();
-			Criteria crit = session.createCriteria(AmpOrganisation.class);
-			crit.setCacheable(true);
-			
-			crit.setProjection(Projections.distinct(Projections.property("orgType")));
-		//	crit.setProjection(Projections.distinct(Projections.property("orgCode")));
-
-			crit.addOrder(Order.asc("orgType"));
-		
-			ret = crit.list();
-
-		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return ret;
-	}
-
 	@Override
 	public void onSelectionChanged() {
-		
-		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.TYPE_FILTER, orgTypePanel.getChoiceContainer().getValue());
+		Long id =  ((AmpOrgGroup)orgGroupPanel.getChoiceContainer().getModelObject()).getAmpOrgGrpId();
+		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,id);
 	}
 
 	

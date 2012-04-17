@@ -49,8 +49,8 @@ public class AmpOrganisationSearchModel extends
 						Restrictions.disjunction()
 								.add(getTextCriterion("name", input))
 								.add(getTextCriterion("acronym", input)));	
-			if(params != null && getParams().get(PARAM.TYPE_FILTER) !=null) 
-				crit.add(Restrictions.conjunction().add(Restrictions.eq("orgType", getParams().get(PARAM.TYPE_FILTER))));
+			if(params != null && getParams().get(PARAM.GROUP_FILTER) !=null) 
+				crit.add(Restrictions.conjunction().add(Restrictions.eq("orgGrpId", getParams().get(PARAM.GROUP_FILTER))));
 			crit.addOrder(Order.asc("name"));
 
 			if (params != null) {

@@ -11,8 +11,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -97,7 +99,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(addNewFunding);
 		
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("newOrgSelect","Replace Funding Organizations",AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Replace Funding Organizations",AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
 				return DbUtil.filter(choice.getName());
@@ -128,16 +130,25 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				return null;
 			}
 		};
-		newOrgSelect.setIgnoreFmVisibility(true);
-		newOrgSelect.setVisible(false);
-		newOrgSelect.setOutputMarkupId(true);
-		add(newOrgSelect);
+//		newOrgSelect.setIgnoreFmVisibility(true);
+//		newOrgSelect.setVisible(false);
+//		newOrgSelect.setOutputMarkupId(true);
+		
+		
+		final AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
+				"searchOrganizationByType",   newOrgSelect );
+		searchOrganization.setIgnoreFmVisibility(true);
+		searchOrganization.setVisible(false);
+		searchOrganization.setOutputMarkupId(true);
+
+		
+		add(searchOrganization);
 
 		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				newOrgSelect.setVisible(true);
-				MarkupContainer tmpParent = newOrgSelect.getParent();
+				searchOrganization.setVisible(true);
+				MarkupContainer tmpParent = searchOrganization.getParent();
 				target.addComponent(tmpParent);
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(tmpParent));
 			}

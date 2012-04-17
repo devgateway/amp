@@ -166,7 +166,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		int tr_type = -1;
-		int adj_type = -1;
+		String adj_type = "";
 		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td= rs.getDate("transaction_date");
 		
@@ -189,8 +189,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		    fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
 		}
 
-		if (columnsMetaData.containsKey("adjustment_type")){
-		    	adj_type = rs.getInt("adjustment_type");
+		if (columnsMetaData.containsKey("adjustment_type_name")){
+		    	adj_type = rs.getString("adjustment_type_name");
 		}
 		
 		if(columnsMetaData.containsKey("donor_type_name"))
@@ -311,20 +311,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setCurrencyCode(currencyCode);
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
-		
-        String adj_type_string = null;
-        switch(adj_type) {
-        case 0:
-        	adj_type_string = ArConstants.PLANNED;
-            break;
-        case 1:
-            adj_type_string = ArConstants.ACTUAL;
-            break;
-        case 2:
-        	adj_type_string = ArConstants.PIPELINE;
-            break;
-        }
-        MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type_string);
+        MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type);
 		String trStr = null;
 
 		switch (tr_type) {

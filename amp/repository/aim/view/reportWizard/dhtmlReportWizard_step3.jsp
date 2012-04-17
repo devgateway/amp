@@ -46,15 +46,29 @@
 								</td>					
 								</tr>
 								<tr>
-									<td colspan="3">
-										<span id="hierarchiesMust" style="visibility: hidden;">
-											<font color="red">* 
-												<digi:trn key="rep:wizard:hint:notmorehierarchies">
-													You cannot select more than 3 hierarchies
-												</digi:trn>
-											</font>
-										</span>
-									</td>
-								</tr>
+								<td colspan="3">
+									<span id="hierarchiesMust" style="visibility: hidden;">
+									<font color="red">*
+										<c:choose> 
+											<c:when test="${myForm.budgetExporter }">
+												<digi:trn>You cannot select more than 5 hierarchies</digi:trn>
+											</c:when>
+											<c:otherwise>
+												<digi:trn>You cannot select more than 3 hierarchies</digi:trn>
+											</c:otherwise>
+										</c:choose>
+									</font>
+									</span>
+									<br>
+									<span id="incompatiblehierarchies" style="visibility: hidden;">
+									<font color="red">* 
+										<digi:trn key="rep:wizard:hint:notmorehierarchies">
+											You cannot Select Primary and Secondary Sectors as hierarchies
+										</digi:trn>
+									</font>
+									</span>
+								</td>
+							</tr>
+						
 							</table>
 						</div>

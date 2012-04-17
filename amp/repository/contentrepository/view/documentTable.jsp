@@ -101,7 +101,7 @@
 										</c:when>
 										<c:otherwise>
 											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
-												onClick="downloadFile('${documentData.nodeVersionUUID}');"
+												onClick="downloadFile('${documentData.uuid}');"
 												style="cursor:pointer; color: #222222; font-size: 11px">
 										</c:otherwise>
 									</c:choose>

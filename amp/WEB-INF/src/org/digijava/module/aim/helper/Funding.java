@@ -51,13 +51,13 @@ public class Funding implements Serializable
 	
 	private Long groupVersionedFunding;
 
-    private float capitalSpendingPercentage;
+    private Float capitalSpendingPercentage;
 
-    public float getCapitalSpendingPercentage() {
+    public Float getCapitalSpendingPercentage() {
         return capitalSpendingPercentage;
     }
 
-    public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
+    public void setCapitalSpendingPercentage(Float capitalSpendingPercentage) {
         this.capitalSpendingPercentage = capitalSpendingPercentage;
     }
 

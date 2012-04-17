@@ -181,7 +181,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       	div.append(li);
       </feature:display>
       
-      div.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'</a>');
+      div.append('<div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'</a></div>');
       
       
     }

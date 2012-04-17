@@ -233,7 +233,8 @@ public class GroupColumn extends Column {
     	  }
         
       }
-      if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true")) {
+      if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT)!=null &&
+    		  FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true")) {
     	  if(category.equals(ArConstants.MODE_OF_PAYMENT) ) {
         	metaSet.add(new MetaInfo<String>(ArConstants.MODE_OF_PAYMENT,ArConstants.MODE_OF_PAYMENT_TOTAL));
           }

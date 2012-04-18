@@ -54,7 +54,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				Criteria crit = session.createCriteria(AmpTheme.class);
 				crit.setCacheable(true);
 				//The following line was commented out because it added only the parent hierarchy in the list.
-				//getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
+				getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
 				if (input.trim().length() > 0){
 					Object o = getTextCriterion("name", input);
 					if (o instanceof SimpleExpression){

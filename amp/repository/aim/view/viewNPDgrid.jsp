@@ -79,7 +79,7 @@
 									<td valign="top">
 										<table cellPadding="5" cellSpacing="5" width="100%">
                                             <tr class="noPrint">
-                                                <td align="left"
+                                                <td align="left">
                                                     <digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">
                                                         <digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>
                                                         &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>

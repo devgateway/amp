@@ -727,4 +727,4 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 .invisible-item-hidden{visibility: hidden;}
 
 #filter_donor_types_div {width:486px !important;}
-.reg_butt {width:85px !important;}
+.reg_butt input {width:85px !important;}

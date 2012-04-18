@@ -346,7 +346,6 @@ LoggerIdentifiable, Cloneable {
 	 */
 
 	protected String FY;
-	protected List<String> fyYears;
 	@VersionableFieldSimple(fieldTitle = "Vote")
 	protected String vote;
 	@VersionableFieldSimple(fieldTitle = "Sub Vote")
@@ -400,13 +399,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 	
-	public List<String> getFyYears() {
-		return fyYears;
-	}
-
-	public void setFyYears(List<String> fyYears) {
-		this.fyYears = fyYears;
-	}
 
 
 	//protected Set <AmpActivityContact> activityContacts;

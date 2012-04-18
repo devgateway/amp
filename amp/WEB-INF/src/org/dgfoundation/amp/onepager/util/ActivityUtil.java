@@ -78,17 +78,6 @@ public class ActivityUtil {
 		
 		AmpActivityVersion a = (AmpActivityVersion) am.getObject();
 		AmpActivityVersion oldA = a;
-		String fy=null;
-		if(a.getFyYears()!=null&&a.getFyYears().size()>0){
-			StringBuilder years=new StringBuilder();
-			for(String year:a.getFyYears()){
-				years.append(year);
-				years.append(",");
-			}
-			years.deleteCharAt(years.length()-1);
-			fy=years.toString();
-		}
-		a.setFY(fy);
 		boolean newActivity = false;
 		try {
 			saveFundingOrganizationRole(a);

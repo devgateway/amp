@@ -112,11 +112,6 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	public AmpActivityVersion getObject() {
 		if (a == null) {
 			a = load();
-			String fy = a.getFY();
-			if (fy != null && fy.length() > 0) {
-				String[] years = fy.split(",");
-				a.setFyYears(new ArrayList<String>(Arrays.asList(years)));
-			}
 		}
 		return a;
 	}

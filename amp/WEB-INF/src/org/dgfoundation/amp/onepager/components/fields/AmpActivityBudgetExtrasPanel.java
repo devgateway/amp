@@ -15,6 +15,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.models.ActivityFYModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -39,10 +40,8 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 			years.add("" + i);
 		}
 		
-
-		final AmpSelectFieldPanel fy = new AmpSelectFieldPanel("fy",
-				new PropertyModel<List<String>>(model, "fyYears"), years,
-				"FY", false, true, false);
+		List<String> selectedYears=new ArrayList<String>();
+		final AmpSelectFieldPanel fy = new AmpSelectFieldPanel("fy", new ActivityFYModel(new PropertyModel<List<String>>(model, "FY")), years, "FY", false, true, false);
 		fy.getChoiceContainer().setOutputMarkupId(true);
 		fy.setOutputMarkupId(true);
 		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){

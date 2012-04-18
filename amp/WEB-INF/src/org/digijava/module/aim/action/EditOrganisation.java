@@ -1051,19 +1051,20 @@ public class EditOrganisation extends DispatchAction {
           Set<AmpOrgRecipient> recipientsToRetain = new HashSet<AmpOrgRecipient>();
           while (recipientIter.hasNext()) {
               AmpOrgRecipient recipient = recipientIter.next();
-              if (recipient.getAmpOrgRecipientId()!=null&&recipient.getAmpOrgRecipientId()!=0) {
+              /*if (recipient.getAmpOrgRecipientId()!=null&&recipient.getAmpOrgRecipientId()!=0) {
                   AmpOrgRecipient newRecipient = (AmpOrgRecipient) DbUtil.getObject(AmpOrgRecipient.class, recipient.getAmpOrgRecipientId());
                   newRecipient.setDescription(recipient.getDescription());
                   recipientsToRetain.add(newRecipient);
                   continue;
-              }
+              }*/
               AmpOrgRecipient newRecipient = new AmpOrgRecipient();
               newRecipient.setParentOrganization(organization);
               newRecipient.setOrganization(recipient.getOrganization());
               newRecipient.setDescription(recipient.getDescription());
               recipients.add(newRecipient);
           }
-          organization.getRecipients().retainAll(recipientsToRetain);
+          //organization.getRecipients().retainAll(recipientsToRetain);
+          organization.getRecipients().clear();
           organization.getRecipients().addAll(recipients);
       }
 
@@ -1078,14 +1079,14 @@ public class EditOrganisation extends DispatchAction {
           Set<AmpOrgStaffInformation> infosToRetain = new HashSet<AmpOrgStaffInformation>();
           while (infoIter.hasNext()) {
               AmpOrgStaffInformation info = infoIter.next();
-              if (!info.isNewlyCreated()) {
+              /*if (!info.isNewlyCreated()) {
                   AmpOrgStaffInformation newInfo = (AmpOrgStaffInformation) DbUtil.getObject(AmpOrgStaffInformation.class, info.getId());
                   newInfo.setStaffNumber(info.getStaffNumber());
                   newInfo.setType(info.getType());
                   newInfo.setYear(info.getYear());
                   infosToRetain.add(newInfo);
                   continue;
-              }
+              }*/
               AmpOrgStaffInformation newInfo = new AmpOrgStaffInformation();
               newInfo.setOrganization(organization);
               newInfo.setStaffNumber(info.getStaffNumber());
@@ -1093,7 +1094,8 @@ public class EditOrganisation extends DispatchAction {
               newInfo.setYear(info.getYear());
               infos.add(newInfo);
           }
-          organization.getStaffInfos().retainAll(infosToRetain);
+         // organization.getStaffInfos().retainAll(infosToRetain);
+          organization.getStaffInfos().clear();
           organization.getStaffInfos().addAll(infos);
       }
       else{
@@ -1112,7 +1114,7 @@ public class EditOrganisation extends DispatchAction {
           AmpOrganizationBudgetInformation newInfo = null;
           while (infoIter.hasNext()) {
               AmpOrganizationBudgetInformation info = infoIter.next();
-              if (!info.isNewlyCreated()) {
+             /* if (!info.isNewlyCreated()) {
                   newInfo = (AmpOrganizationBudgetInformation) DbUtil.getObject(AmpOrganizationBudgetInformation.class, info.getId());
                   newInfo.setYear(info.getYear());
                   newInfo.setType(info.getType());
@@ -1128,7 +1130,7 @@ public class EditOrganisation extends DispatchAction {
                   }
                   infosOrgToRetain.add(newInfo);
                   continue;
-              } else {
+              } else {*/
                   newInfo = new AmpOrganizationBudgetInformation();
                   newInfo.setOrganization(organization);
                   newInfo.setYear(info.getYear());
@@ -1137,10 +1139,11 @@ public class EditOrganisation extends DispatchAction {
                   newInfo.setAmount(info.getAmount());
                   newInfo.setOrganizations(info.getOrganizations());
                   infosOrg.add(newInfo);
-              }
+             // }
               
             
-              organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
+             // organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
+              organization.getOrganizationBudgetInfos().clear();
               organization.getOrganizationBudgetInfos().addAll(infosOrg);
           }
 

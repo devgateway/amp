@@ -3030,7 +3030,11 @@ public class DbUtil {
                 String email= org.getEmail();
                 String phone=org.getPhone();
                 String fax=org.getFax();
-              
+                Set<AmpOrgStaffInformation> staffs=org.getStaffInfos();
+                Set<AmpOrganizationBudgetInformation> budgetInfos=org.getOrganizationBudgetInfos();
+                Set<AmpOrgRecipient> recipients=org.getRecipients();
+               
+           
                 org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());
                 org.setName(name);
                 org.setDacOrgCode(dacOrgCode);
@@ -3121,9 +3125,51 @@ public class DbUtil {
                 	org.getDepartments().addAll(departments);
                 }
                 
+                if(org.getStaffInfos()==null){
+                	org.setStaffInfos(new HashSet<AmpOrgStaffInformation>());
+                }
+                org.getStaffInfos().clear();
+				if (staffs != null&&staffs.size()>0) {
+					for(AmpOrgStaffInformation staff:staffs){
+						staff.setOrganization(org);
+					}
+					org.getStaffInfos().addAll(staffs);
+				}
+				
+                 
+                if (org.getOrganizationBudgetInfos() == null) {
+                    org.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
+                }
+                
+                org.getOrganizationBudgetInfos().clear();
+                if (budgetInfos != null&&budgetInfos.size()>0) {
+					for (AmpOrganizationBudgetInformation info : budgetInfos) {
+						info.setOrganization(org);
+					}
+					org.getOrganizationBudgetInfos().addAll(budgetInfos);
+				}
+				
+                            
+                
+                if (org.getRecipients() == null) {
+                    org.setRecipients(new HashSet<AmpOrgRecipient>());
+                } 
+                org.getRecipients().clear();
+				if (recipients != null && recipients.size() > 0) {
+					for (AmpOrgRecipient info : recipients) {
+						info.setParentOrganization(org);
+					}
+					org.getRecipients().addAll(recipients);
+				}
+                	
+				
+				
+                
+                
                 if(org.getBudgetsectors()==null){
                 	org.setBudgetsectors(new HashSet<AmpBudgetSector>());
                 }
+                
                 org.getBudgetsectors().clear();
                 if(budgetsectors!=null){
                 	org.getBudgetsectors().addAll(budgetsectors);

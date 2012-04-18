@@ -344,16 +344,16 @@
             <tr>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
-              <td align="right" style="padding-top:20px;" ><c:set var="btnSubmit">
+              <td align="right" style="padding-top:20px;" class="reg_butt"><c:set var="btnSubmit">
                 <digi:trn key="btn:submit" styleClass="reg_butt">Submit</digi:trn>
               </c:set>
                 <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
              </td>
-              <td align="left" style="padding-top:20px;">
+              <td align="left" style="padding-top:20px;" class="reg_butt">
               <c:set var="btnReset">
-                <digi:trn key="btn:reset" styleClass="reg_butt">Reset</digi:trn>
+                <digi:trn key="btn:reset">Reset</digi:trn>
               </c:set>
-                <html:reset value="${btnReset}" styleClass="buttonx" onclick=""/>
+                <html:reset value="${btnReset}" onclick=""/>
              </td>
 			 <td></td>
               </tr>

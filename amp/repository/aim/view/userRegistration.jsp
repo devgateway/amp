@@ -264,7 +264,7 @@
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>
-              <td class="orgtype" align="left" colspan="3" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
+              <td class="orgtype" align="left" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectType">Select a type</digi:trn>
                     --</html:option>
@@ -272,11 +272,15 @@
 
 													value="ampOrgTypeId" label="orgType" />
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
+				
             </tr>
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationGroup">Organization Group</digi:trn>              </td>
-              <td align="left" colspan="3"  class="orgtype" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
+              <td align="left" class="orgtype" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectGroup">Select a group</digi:trn>
                     --</html:option>
@@ -286,11 +290,14 @@
 									         			value="ampOrgGrpId" label="orgGrpName" />
                   </logic:notEmpty>
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationName">Organization Name </digi:trn>              </td>
-              <td align="left" class="orgtype" colspan="3" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
+              <td align="left" class="orgtype" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
                 <html:select property="selectedOrganizationId" styleClass="inp-text" >
                   <html:option value="-1">--
                     <digi:trn key="um:selectOrganization">Select an organization</digi:trn>
@@ -299,6 +306,9 @@
                     <html:optionsCollection name="aimUserRegisterForm" property="orgColl" value="ampOrgId" label="name" />
                   </logic:notEmpty>
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <!-- <tr>
 
@@ -321,12 +331,15 @@
 				</tr> -->
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:yourLangSettings">Your language settings </digi:trn>              </td>
-              <td align="left" colspan="3"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
+              <td align="left"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
                   <bean:define id="languages" name="aimUserRegisterForm" property="navigationLanguages"
 
 					 type="java.util.Collection" />
                   <html:options  collection="languages" property="code" labelProperty="name" />
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <tr>
             	<td width="3%">&nbsp;</td>
@@ -342,6 +355,7 @@
               </c:set>
                 <html:reset value="${btnReset}" styleClass="buttonx" onclick=""/>
              </td>
+			 <td></td>
               </tr>
             <tr>
               <td colspan=6>&nbsp;</td>

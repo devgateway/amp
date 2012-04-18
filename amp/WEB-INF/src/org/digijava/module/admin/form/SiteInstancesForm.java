@@ -143,6 +143,11 @@ public class SiteInstancesForm
         public void setSelectedNumOfItemsInTeaser(Long selectedNumOfItemsInTeaser) {
             this.selectedNumOfItemsInTeaser = selectedNumOfItemsInTeaser;
         }
+        
+        @Override
+        public String toString() {
+        	return this.getModule() + "/" + this.getInstance() + "/" + this.getId() ;
+        }
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {

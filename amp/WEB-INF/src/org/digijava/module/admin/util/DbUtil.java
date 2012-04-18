@@ -711,7 +711,7 @@ public class DbUtil {
 		List sites = null;
 		Session session = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.openNewSession();
 			String queryString = " from " + ModuleInstance.class.getName() +
 			 					 " m where m.site.id != :siteId and m.realInstance is not null" +
 			 					 " and m.realInstance.site.id = :siteId " +

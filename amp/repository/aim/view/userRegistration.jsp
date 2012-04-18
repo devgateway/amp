@@ -345,7 +345,7 @@
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
               <td align="right" style="padding-top:20px;" class="reg_butt"><c:set var="btnSubmit">
-                <digi:trn key="btn:submit" styleClass="reg_butt">Submit</digi:trn>
+                <digi:trn key="btn:submit">Submit</digi:trn>
               </c:set>
                 <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
              </td>

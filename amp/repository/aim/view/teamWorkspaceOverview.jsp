@@ -43,6 +43,10 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
+	if( document.aimUpdateWorkspaceForm.workspaceGroup.value==0){
+		alert("<digi:trn>Please Select Workspace Group</digi:trn>");
+		return false;
+	}
 	var id = document.aimUpdateWorkspaceForm.teamId.value;
 	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;

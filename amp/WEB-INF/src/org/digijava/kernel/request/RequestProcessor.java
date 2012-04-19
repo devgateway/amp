@@ -281,8 +281,8 @@ public class RequestProcessor
         		if (request.getQueryString() != null)
         			commonURL += "?" + request.getQueryString();
         		if (commonURL.indexOf('~') > -1 ||
-        				commonURL.indexOf("id") > -1 ||
-        				commonURL.indexOf("Id") > -1){
+        				commonURL.indexOf("id=") > -1 ||
+        				commonURL.indexOf("Id=") > -1){
         			request.getSession().invalidate();
         			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}

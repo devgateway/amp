@@ -56,7 +56,7 @@
                                 <digi:link module="aim" href="/viewActivityPreview.do~public=true~pageId=2~activityId=${project.activityId}~showOnlyAct=true" target="_blank">${project.title}</digi:link>
                             </c:when>
                             <c:otherwise>
-                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link>
+                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" target="_blank">${project.title}</digi:link>
                             </c:otherwise>
                         </c:choose>
                     </c:when>
@@ -66,7 +66,7 @@
                                 <digi:link module="aim" href="/viewActivityPreview.do~public=true~pageId=2~activityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})" target="_blank">${project.title}</digi:link>
                             </c:when>
                             <c:otherwise>
-                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})">${project.title}</digi:link>
+                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})" target="_blank">${project.title}</digi:link>
                             </c:otherwise>
                         </c:choose>
                     </c:otherwise>

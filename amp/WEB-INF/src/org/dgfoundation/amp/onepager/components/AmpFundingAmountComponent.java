@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -21,6 +22,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.MaskConverter;
 import org.apache.wicket.util.convert.converters.DoubleConverter;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
@@ -108,9 +110,24 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		validationFields.add(validationHiddenField);
 		amount.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur") {
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				for(AmpCollectionValidatorField hiddenField: validationFields)
-					hiddenField.reloadValidationField(target);
+			protected void onUpdate(final AjaxRequestTarget target) {
+				
+				AmpFundingItemFeaturePanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+				 parentPanel.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
+				{
+
+					@Override
+					public Object component(AmpCollectionValidatorField component) {
+						component.reloadValidationField(target);
+						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+					}
+				}
+			);
+//				for(AmpCollectionValidatorField hiddenField: validationFields)
+//					hiddenField.reloadValidationField(target);
+//				
+				
+				
 			}
 		});
 	}

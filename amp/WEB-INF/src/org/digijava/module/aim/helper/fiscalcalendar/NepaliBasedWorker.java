@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.GregorianChronology;
 
 public class NepaliBasedWorker implements ICalendarWorker {
 
@@ -16,7 +16,7 @@ public class NepaliBasedWorker implements ICalendarWorker {
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
-	private fi.joensuu.joyds1.calendar.NepaliCalendar nepaliCalendar;
+	private DateTime nepaliCalendar;
 
 	public NepaliBasedWorker(AmpFiscalCalendar fiscalCalendar) {
 		this.fiscalCalendar = fiscalCalendar;
@@ -34,9 +34,10 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		int gregDay = cal.get(Calendar.DAY_OF_MONTH);
 
 		if (fiscalCalendar != null) {
-			fi.joensuu.joyds1.calendar.Calendar c = fi.joensuu.joyds1.calendar.Calendar.getInstance();
-			c.set(gregYear, gregMonth, gregDay);
-			nepaliCalendar = new fi.joensuu.joyds1.calendar.NepaliCalendar(c);
+			nepaliCalendar = new DateTime(gregYear, gregMonth, gregDay,0,0,0,0,GregorianChronology.getInstance());
+			nepaliCalendar = nepaliCalendar.plusYears(56);
+			nepaliCalendar = nepaliCalendar.plusMonths(8);
+			nepaliCalendar = nepaliCalendar.plusDays(17); //this is to convert gregorian to nepali calendar
 		}
 	}
 
@@ -45,7 +46,7 @@ public class NepaliBasedWorker implements ICalendarWorker {
 	}*/
 
 	public Integer getQuarter() throws Exception {
-		return getQuarter(nepaliCalendar.getMonth());
+		return getQuarter(nepaliCalendar.getMonthOfYear());
 	}
 
 	public Integer getYear() throws Exception {
@@ -53,11 +54,11 @@ public class NepaliBasedWorker implements ICalendarWorker {
 	}
 
 	public Integer getDay() throws Exception {
-		return nepaliCalendar.getDay();
+		return nepaliCalendar.getDayOfMonth();
 	}
 
 	public Integer getMonthNumber() throws Exception {
-		return nepaliCalendar.getMonth();
+		return nepaliCalendar.getMonthOfYear();
 	}
 
 	public Integer getDayOfWeek() throws Exception {
@@ -73,13 +74,13 @@ public class NepaliBasedWorker implements ICalendarWorker {
 
 	public Comparable getMonth() throws Exception {
 		if (!this.fiscalCalendar.getIsFiscal()) {
-			return this.getMonthName(nepaliCalendar.getMonth());
+			return this.getMonthName(nepaliCalendar.getMonthOfYear());
 		} else {
 			checkSetTimeCalled();
-			int monthId = nepaliCalendar.getMonth();
+			int monthId = nepaliCalendar.getMonthOfYear();
 			ComparableMonth cm = monthCache.get(monthId);
 			if (cm == null) {
-				String monthStr = this.getMonthName(nepaliCalendar.getMonth());
+				String monthStr = this.getMonthName(nepaliCalendar.getMonthOfYear());
 				cm = new ComparableMonth(monthId, monthStr);
 				monthCache.put(monthId, cm);
 			}

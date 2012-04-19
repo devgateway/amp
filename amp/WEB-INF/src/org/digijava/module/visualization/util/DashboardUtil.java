@@ -41,8 +41,9 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 
-import fi.joensuu.joyds1.calendar.EthiopicCalendar;
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.GregorianChronology;
 
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -433,30 +434,29 @@ public class DashboardUtil {
     }
 
     public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
-        Date date;
-        fi.joensuu.joyds1.calendar.Calendar calendar = getCalendar(fiscalCalendar, startDate, year);
-        Calendar gregorianCal = calendar.toJavaUtilGregorianCalendar();
-        date = gregorianCal.getTime();
-        return date;
+       return getCalendar(fiscalCalendar, startDate, year);
     }
     
-    public static fi.joensuu.joyds1.calendar.Calendar getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
-        fi.joensuu.joyds1.calendar.Calendar calendar = null;
+    public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+        DateTime dt = null;
         String calendarType = fiscalCalendar.getBaseCal();
         if (calendarType.equals("ETH-CAL")) {
-            calendar = new EthiopicCalendar();
+        	DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,EthiopicChronology.getInstance());
+        	dt = dtEth.withChronology(GregorianChronology.getInstance());
         } else {
             if (calendarType.equals("NEP-CAL")) {
-                calendar = new NepaliCalendar();
-            }
+            	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+            	dt = dt.plusYears(56);
+            	dt = dt.plusMonths(8);
+            	dt = dt.plusDays(17); //this is to convert gregorian to nepali calendar
+            } else
+        	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
         }
-        if (startDate) {
-            calendar.set(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
-        } else {
-            calendar.set(year + 1, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
-            calendar.addDays(-1);
+        if (!startDate) {
+        	dt = dt.plusYears(1);
+        	dt = dt.minusDays(1);
         }
-        return calendar;
+        return dt.toDate();
     }
 
     public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups) {

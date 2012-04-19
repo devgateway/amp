@@ -272,12 +272,4 @@ public class FormatHelper {
 	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);	
 	return formater.format(date);
     }
-   public static String formatDate( fi.joensuu.joyds1.calendar.Calendar calendar) {
-	if(calendar==null) return null;
-	String defaultFormat = FeaturesUtil
-		.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-	fi.joensuu.joyds1.calendar.format.SimpleDateFormat formater = new fi.joensuu.joyds1.calendar.format.SimpleDateFormat(defaultFormat);
-	return formater.format(calendar);
-    }
-   
 }

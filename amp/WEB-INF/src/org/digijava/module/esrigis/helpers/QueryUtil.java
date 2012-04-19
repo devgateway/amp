@@ -34,10 +34,10 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.util.Constants;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.GregorianChronology;
 import org.springframework.beans.BeanWrapperImpl;
-
-import fi.joensuu.joyds1.calendar.EthiopicCalendar;
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 public class QueryUtil {
 	 public static final BigDecimal ONEHUNDERT = new BigDecimal(100);
@@ -70,16 +70,31 @@ public class QueryUtil {
 		return cal.getTime();
 	}
 
-	public static Date getGregorianCalendarDate(
-			AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
-		Date date;
-		fi.joensuu.joyds1.calendar.Calendar calendar = getCalendar(
-				fiscalCalendar, startDate, year);
-		Calendar gregorianCal = calendar.toJavaUtilGregorianCalendar();
-		date = gregorianCal.getTime();
-		return date;
-	}
-
+	public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
+	       return getCalendar(fiscalCalendar, startDate, year);
+	    }
+	    
+	    public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+	        DateTime dt = null;
+	        String calendarType = fiscalCalendar.getBaseCal();
+	        if (calendarType.equals("ETH-CAL")) {
+	        	DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,EthiopicChronology.getInstance());
+	        	dt = dtEth.withChronology(GregorianChronology.getInstance());
+	        } else {
+	        	 if (calendarType.equals("NEP-CAL")) {
+	             	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+	             	dt = dt.plusYears(56);
+	             	dt = dt.plusMonths(8);
+	             	dt = dt.plusDays(17); //this is to convert gregorian to nepali calendar
+	             } else
+	        	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+	        }
+	        if (!startDate) {
+	        	dt = dt.plusYears(1);
+	        	dt = dt.minusDays(1);
+	        }
+	        return dt.toDate();
+	    }
 	public static Date getEndDate(Long fiscalCalendarId, int year) {
 		Date endDate = null;
 		if (fiscalCalendarId != null && fiscalCalendarId != -1) {
@@ -105,28 +120,6 @@ public class QueryUtil {
 			endDate = cal.getTime();
 		}
 		return endDate;
-	}
-
-	public static fi.joensuu.joyds1.calendar.Calendar getCalendar(
-			AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
-		fi.joensuu.joyds1.calendar.Calendar calendar = null;
-		String calendarType = fiscalCalendar.getBaseCal();
-		if (calendarType.equals("ETH-CAL")) {
-			calendar = new EthiopicCalendar();
-		} else {
-			if (calendarType.equals("NEP-CAL")) {
-				calendar = new NepaliCalendar();
-			}
-		}
-		if (startDate) {
-			calendar.set(year, fiscalCalendar.getStartMonthNum(),
-					fiscalCalendar.getStartDayNum());
-		} else {
-			calendar.set(year + 1, fiscalCalendar.getStartMonthNum(),
-					fiscalCalendar.getStartDayNum());
-			calendar.addDays(-1);
-		}
-		return calendar;
 	}
 
 	public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups) {

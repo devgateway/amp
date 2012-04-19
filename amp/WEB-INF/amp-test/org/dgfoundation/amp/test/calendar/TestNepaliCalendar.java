@@ -13,8 +13,8 @@ import junit.framework.TestCase;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
-
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.GregorianChronology;
 
 public class TestNepaliCalendar extends TestCase {
 
@@ -1016,15 +1016,16 @@ public class TestNepaliCalendar extends TestCase {
 				java.util.Calendar cal = java.util.Calendar.getInstance();
 				cal.setTime(date);
 
-				fi.joensuu.joyds1.calendar.Calendar c = fi.joensuu.joyds1.calendar.Calendar.getInstance();
-				c.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
-				fi.joensuu.joyds1.calendar.NepaliCalendar npc = new fi.joensuu.joyds1.calendar.NepaliCalendar(c);
-
+				DateTime nepaliCalendar = new DateTime(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH),0,0,0,0,GregorianChronology.getInstance());
+				nepaliCalendar = nepaliCalendar.plusYears(56);
+				nepaliCalendar = nepaliCalendar.plusMonths(8);
+				nepaliCalendar = nepaliCalendar.plusDays(17); //this is to convert gregorian to nepali calendar
+				
 				DecimalFormat ff = new DecimalFormat("00");
-				String compareWith = ff.format(npc.getDay()) + "/" + ff.format(npc.getMonth()) + "/" + npc.getYear();
+				String compareWith = ff.format(nepaliCalendar.getDayOfMonth()) + "/" + ff.format(nepaliCalendar.getMonthOfYear()) + "/" + nepaliCalendar.getYear();
 
 				if (!dateList.get(key).equalsIgnoreCase(compareWith)) {
-					System.out.println(key + " converted by calendar to " + compareWith + " (" + npc.getMonth()
+					System.out.println(key + " converted by calendar to " + compareWith + " (" + nepaliCalendar.getMonthOfYear()
 							+ ") but expected on TXT " + dateList.get(key));
 					fail++;
 				}

@@ -65,6 +65,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.GregorianChronology;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -72,9 +75,6 @@ import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.table.RtfCell;
-
-import fi.joensuu.joyds1.calendar.EthiopicCalendar;
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 /**
  *
@@ -790,34 +790,31 @@ public class OrgProfileUtil {
   
 
     public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
-        Date date;
-        fi.joensuu.joyds1.calendar.Calendar calendar = getCalendar(fiscalCalendar, startDate, year);
-        Calendar gregorianCal = calendar.toJavaUtilGregorianCalendar();
-        date = gregorianCal.getTime();
-        return date;
-    }
-     public static fi.joensuu.joyds1.calendar.Calendar getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
-        fi.joensuu.joyds1.calendar.Calendar calendar = null;
-        String calendarType = fiscalCalendar.getBaseCal();
-        if (calendarType.equals("ETH-CAL")) {
-            calendar = new EthiopicCalendar();
-        } else {
-            if (calendarType.equals("NEP-CAL")) {
-                calendar = new NepaliCalendar();
-            }
-        }
-        if (startDate) {
-            calendar.set(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
-        } else {
-            calendar.set(year + 1, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
-            calendar.addDays(-1);
-        }
-        return calendar;
-    }
-
-  
-   
-
+        return getCalendar(fiscalCalendar, startDate, year);
+     }
+     
+     public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+         DateTime dt = null;
+         String calendarType = fiscalCalendar.getBaseCal();
+         if (calendarType.equals("ETH-CAL")) {
+         	DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,EthiopicChronology.getInstance());
+         	dt = dtEth.withChronology(GregorianChronology.getInstance());
+         } else {
+        	 if (calendarType.equals("NEP-CAL")) {
+             	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+             	dt = dt.plusYears(56);
+             	dt = dt.plusMonths(8);
+             	dt = dt.plusDays(17); //this is to convert gregorian to nepali calendar
+             } else
+         	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+         }
+         if (!startDate) {
+         	dt = dt.plusYears(1);
+         	dt = dt.minusDays(1);
+         }
+         return dt.toDate();
+     }
+     
 	public static long getParisIndicator10bValue(Long year,
 			List<NodeWrapper> nodeWrappers, Long[] orgIds, Long groupId)
 			throws DgException {

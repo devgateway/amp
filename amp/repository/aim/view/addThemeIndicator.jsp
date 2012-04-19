@@ -86,8 +86,14 @@
 
 
 function addIndicator(id){
-  <digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
-  openURLinWindow("<%= addIndicator %>?parentid=" + id + "&type=program",800, 500);
+	var windowname = "popup"+new Date().getTime();
+	openNewWindowWithName(800, 500, windowname);
+	<digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
+ 	var referLink = document.createElement('a');
+ 	referLink.href = "<%= addIndicator %>?parentid=" + id + "&type=program";
+ 	referLink.target = windowname;
+ 	document.body.appendChild(referLink);
+ 	referLink.click();
 }
 
 

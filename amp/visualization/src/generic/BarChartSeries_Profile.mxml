@@ -39,7 +39,7 @@
 	creationComplete="application1_creationCompleteHandler(event);"
 >
 
-	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)">
+	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)" method="POST">
 	</mx:HTTPService>
 	<!--<mx:Style source="styles/charts.css"/>-->
 	<mx:Script>
@@ -270,7 +270,7 @@
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				profileDataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
-				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				strUrl ="/visualization/dataDispatcher.do";
 
 				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
@@ -308,7 +308,8 @@
 					var params:Object = {
 						"format" : "xml",
 						"typeofaid" : "true",
-						"itemId" : itemId
+						"itemId" : itemId,
+						"action": dataAction
 					};
 					service.send(params);
 				}
@@ -367,7 +368,8 @@
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
-					"itemId" : itemId
+					"itemId" : itemId,
+					"action": dataAction
 				};
 				params["startYear"] = startYear;
 				params["endYear"] = endYear;
@@ -391,7 +393,8 @@
 				params["itemId"] = itemId;
 				params["startYear"] = sliderYear.values[0];
 				params["endYear"] = sliderYear.values[1];
-				
+				params["action"] = dataAction;
+
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 			}

@@ -8,7 +8,7 @@
 				layout="absolute"
 				creationComplete="application1_creationCompleteHandler(event);" viewSourceURL="srcview/index.html" xmlns:debug="org.axiis.debug.*" >
 	
-	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)">
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)" method="POST">
 		<mx:request>
 			<format>xml</format>
 			<donut>true</donut>
@@ -240,7 +240,7 @@
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
-				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				strUrl ="/visualization/dataDispatcher.do";
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 
 				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
@@ -277,7 +277,8 @@
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				var params:Object = {
 					"format" : "xml",
-					"donut": "true"
+					"donut": "true",
+					"action":dataAction
 				};
 				
 				//Handle special parameter cases
@@ -285,7 +286,8 @@
 					params = {
 						"format" : "xml",
 						"donut": "true",
-						"typeofaid" : "true"
+						"typeofaid" : "true",
+						"action":dataAction
 					};
 				}
 				if(itemId != null && itemId != "-1"){
@@ -314,7 +316,8 @@
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 				var params:Object = {
 					"format" : "xml",
-					"donut": "true"
+					"donut": "true",
+					"action": dataAction
 				};
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
@@ -331,7 +334,8 @@
 					params = {
 						"format" : "xml",
 						"donut": "true",
-						"typeofaid" : "true"
+						"typeofaid" : "true",
+						"action": dataAction
 					};
 				}
 				params["startYear"] = sliderYear.values[0];
@@ -355,6 +359,7 @@
 				params["year"] = sliderYear.value;
 				params["format"] = "xml";
 				params["donut"] = "true";
+				params["action"] = dataAction;
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){

@@ -778,7 +778,7 @@ public class DbUtil {
                 if (isPublic) {
                     qs.append(" and sec.activityId.approvalStatus in ('approved', 'startedapproved')");
                     qs.append(" and sec.activityId.draft=false");
-                    qs.append(" and sec.activityId.team.parentTeamId is not null");
+                    qs.append(" and sec.activityId.team in (select at.ampTeamId from " + AmpTeam.class.getName() + " at where parentTeamId is not null)");
                 }
                 q = session.createQuery(qs.toString());
            } else {

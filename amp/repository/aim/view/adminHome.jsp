@@ -682,13 +682,14 @@
     </feature:display>
                           <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
 							<tr>
-                            	<td class="f-names" nowrap="nowrap">
-                              		<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
-							   		<digi:link module="budgetexport" href="/" title="Budget Integration" >
-							      	<digi:trn>Budget Integration</digi:trn>
-							   		</digi:link>
-                            	</td>
-                          	</tr>
+														<td><img width="16" align="left"
+															src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+														<td class="admin_box_label"><digi:link
+																module="budgetexport" href="/"
+																title="Budget Integration">
+																<digi:trn>Budget Integration</digi:trn>
+															</digi:link></td>
+							</tr>
                           </module:display>
 </table>
 </div></td>

@@ -537,7 +537,7 @@ public class ActivityVersionUtil {
 			method.invoke(out, returnSet);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Can't init set:", e);
+			logger.error("Can't init set '"+ setName +"':", e);
 		}
 	}
 

@@ -66,7 +66,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 		return adjustmentTypes;
 		}catch(Exception e)
 		{
-			logger.error("AmpCategoryGroupFieldPanel initialization failed");
+			logger.error("AmpCategoryGroupFieldPanel initialization failed", e);
 		}
 		return null;
 	}

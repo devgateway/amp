@@ -241,7 +241,8 @@
 <feature:display name="Show Options on Export" module="Report and Tab Options"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Support Request Form" module="HELP"></feature:display> 
+<feature:display name="Support Request Form" module="HELP"></feature:display>
+<feature:display name="Search Feature" module="Tools"></feature:display> 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
 <feature:display name="Total Commitments" module="Measures"></feature:display> 
@@ -840,6 +841,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
 <field:display name="Validate Mandatory Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Search Feature - Executing Agency" feature="Search Feature"></field:display>
+<field:display name="Search Feature - Implementing Agency" feature="Search Feature"></field:display>
+<field:display name="Search Feature - Responsible Organization" feature="Search Feature"></field:display>
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
@@ -1016,6 +1020,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Output Indicators" feature="Widgets"></field:display>
 <field:display name="Total resources" feature="Widgets"></field:display>
 <field:display name="External Aid Resources" feature="Widgets"></field:display>
+
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

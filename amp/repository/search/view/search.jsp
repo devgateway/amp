@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
 
 <script language="javascript">
@@ -81,7 +82,7 @@
 			<c:set var="searchTooltip">
 				<digi:trn>You can use the * wildcard for matching any character</digi:trn>
 			</c:set>
-			<div class="${keywordClasses}" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: 
+			<div class="${keywordClasses}" style="padding-right: 135px"><digi:trn>Keyword</digi:trn>: 
 				<html:text title="${searchTooltip}" 
 				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
 			<html:select property="queryType" styleClass="inputx insidex">
@@ -101,13 +102,19 @@
 					<digi:trn>Resources</digi:trn>
 				</html:option>
                                                      <feature:display name="Responsible Organization" module="Organizations">
-                                                        <html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
+                                                     	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
+                                                        	<html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
+                                                        </field:display>
                                                     </feature:display>
                                                     <feature:display name="Executing Agency" module="Organizations">
-                                                        <html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
+                                                    	<field:display name="Search Feature - Executing Agency" feature="Search Feature">
+                                                        	<html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
+                                                        </field:display>
                                                     </feature:display>
                                                     <feature:display name="Implementing Agency" module="Organizations">
-                                                        <html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
+                                                    	<field:display name="Search Feature - Implementing Agency" feature="Search Feature">
+                                                        	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
+                                                        </field:display>
                                                     </feature:display>
 			</html:select> 
 			<digi:trn>Search Mode</digi:trn>:

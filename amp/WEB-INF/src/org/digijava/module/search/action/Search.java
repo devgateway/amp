@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
@@ -95,15 +96,21 @@ public class Search extends Action {
 				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
 				resultResources = SearchUtil.getResources(searchForm
 						.getKeyword(), request, tm);
-				resultActivitiesWithRespOrgs.addAll(SearchUtil
-						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-								tm, Constants.ROLE_CODE_RESPONSIBLE_ORG));
-				resultActivitiesWithExeOrgs.addAll(SearchUtil
-						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-								tm, Constants.ROLE_CODE_EXECUTING_AGENCY));
-				resultActivitiesWithImpOrgs.addAll(SearchUtil
-						.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-								tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+				if ( FeaturesUtil.isVisibleField("Search Feature - Responsible Organization", ampContext)) {
+					resultActivitiesWithRespOrgs.addAll(SearchUtil
+							.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+									tm, Constants.ROLE_CODE_RESPONSIBLE_ORG));
+				}
+				if ( FeaturesUtil.isVisibleField("Search Feature - Executing Agency", ampContext)) {
+						resultActivitiesWithExeOrgs.addAll(SearchUtil
+								.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+										tm, Constants.ROLE_CODE_EXECUTING_AGENCY));
+				}
+				if ( FeaturesUtil.isVisibleField("Search Feature - Implementing Agency", ampContext)) {
+							resultActivitiesWithImpOrgs.addAll(SearchUtil
+									.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
+											tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+				}
 				break;
 			case SearchUtil.ACTIVITIES:
 				resultActivities = SearchUtil.getActivities(searchForm

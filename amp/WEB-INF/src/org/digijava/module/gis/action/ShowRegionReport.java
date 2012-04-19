@@ -105,7 +105,8 @@ public class ShowRegionReport extends Action {
         if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){	
         	Long donorid =new Long(request.getParameter("donorid"));
             if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
-        	    secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType);
+                boolean isPublic = request.getParameter("public") != null && request.getParameter("public").equals("true");
+        	    secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType, isPublic);
             } else {
                 secFundings = DbUtil.getProgramFoundingsByDonor(prgId, donorid);
             }

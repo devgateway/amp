@@ -743,6 +743,10 @@ public class DbUtil {
     }
 
     public static List getSectorFoundingsByDonor(Long sectorId, Long donorid, int sectorQueryType) {
+        return getSectorFoundingsByDonor(sectorId, donorid, sectorQueryType, false);
+    }
+
+    public static List getSectorFoundingsByDonor(Long sectorId, Long donorid, int sectorQueryType, boolean isPublic) {
         List subSectorIds = null;
         if (sectorId > -1) {
             if (sectorQueryType == SELECT_SECTOR_SCHEME) {
@@ -771,6 +775,11 @@ public class DbUtil {
                 qs.append(getLongIdsWhereclause(subSectorIds));
                 qs.append(")");
                 qs.append(" and sec.activityId.team is not null and sec.activityId in ("+donorwhere+")");
+                if (isPublic) {
+                    qs.append(" and sec.activityId.approvalStatus in ('approved', 'startedapproved')");
+                    qs.append(" and sec.activityId.draft=false");
+                    qs.append(" and sec.activityId.team.parentTeamId is not null");
+                }
                 q = session.createQuery(qs.toString());
            } else {
                 q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() 

@@ -80,7 +80,7 @@
 				});
 	}
 </script>
-<div id="show_login_pop_box">
+<div id="show_login_pop_box" style="width: 250px;">
 						<form action="/j_spring_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
@@ -92,7 +92,7 @@
     									<digi:trn>Password</digi:trn>:</label>
     							
 	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
-	    				
+	    							<br/>
 	    							<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login</digi:trn>'>
   									
 	    			</form>

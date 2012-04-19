@@ -480,7 +480,7 @@
     
     
     var responseSuccess = function(o){
-        var response = o.responseText; 
+        var response = o.responseText;
         myPanel.setBody(response);
         showContent();
     }
@@ -502,14 +502,19 @@
         checkErrorAndClose();
     }
     function checkErrorAndClose(){
-        if(checkAndClose==true){
-            if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-            	myPanel.hide();
-                refreshPage();
+            var error=document.getElementById("someError");
+            if(checkAndClose=="true"||checkAndClose){
+                if(error!=null&&YAHOO.lang.trim(error.innerHTML)!=''){checkAndClose=false; return }          
+                else{
+                    if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false" ){
+                        myPanel.hide();
+                        refreshPage();
+                    }
+                }
+                			
             }
-            checkAndClose=false;			
+            checkAndClose=false;
         }
-    }
     function refreshPage(){
         if(lastFunction==="showDetails"){
             showDetails();

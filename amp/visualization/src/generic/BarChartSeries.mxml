@@ -37,7 +37,7 @@
 	layout="absolute"
 	creationComplete="application1_creationCompleteHandler(event);">
 
-	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)"/>
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)" method="POST"/>
 	<mx:Script>
 		<![CDATA[
 			import com.exportUtil.*;
@@ -289,7 +289,7 @@
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
-				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				strUrl ="/visualization/dataDispatcher.do";
 
 				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
@@ -323,16 +323,13 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				var params:Object = {
-										"format" : "xml"
-									};
+				var params:Object = {};
+				params["format"] = "xml";
+				params["action"] = dataAction;
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){
-					params = {
-						"format" : "xml",
-						"typeofaid" : "true"
-					};
+					params["typeofaid"] = "true";
 				}
 				if(start == "true")
 					service.send(params);
@@ -403,14 +400,11 @@
 				sliderYear.values[1] = endYear;
 
 				var params:Object = {};
-				params["format"] = "xml";
 				params["divide"] = divide;
+				params["format"] = "xml";
+				params["action"]= dataAction;
 				if(idContainer == "AidType"){
-					params = {
-						"format" : "xml",
-						"typeofaid" : "true",
-						"divide": divide
-					};
+					params["typeofaid"]= "true";
 				}
 				params["startYear"] = startYear;
 				params["endYear"] = endYear;
@@ -486,11 +480,7 @@
 				params["format"] = "xml";
 				params["divide"] = divide;
 				if(idContainer == "AidType"){
-					params = {
-						"format" : "xml",
-						"typeofaid" : "true",
-						"divide": divide
-					};
+					params["typeofaid"] = "true";
 				}
 				params["startYear"] = sliderYear.values[0];
 				params["endYear"] = sliderYear.values[1];

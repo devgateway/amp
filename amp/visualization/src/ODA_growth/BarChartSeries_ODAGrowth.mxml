@@ -39,7 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 				creationComplete="application1_creationCompleteHandler(event);"
 				>
 	
-	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)">
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)" method="POST">
 	</mx:HTTPService>
 	<!--<mx:Style source="styles/Axiis_Examples.css"/>-->
 	<mx:Script>
@@ -251,7 +251,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getODAGrowthGraphData";
+				var strUrl:String ="/visualization/dataDispatcher.do";
 				var start:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
 				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
@@ -290,7 +290,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 				
 				var params:Object = {
 					"format" : "xml",
-					"typeofaid" : "true"};
+					"typeofaid" : "true",
+					"action:": "getODAGrowthGraphData"
+				};
 				params["previousYear"] = previousYear.selectedLabel;
 				params["currentYear"] = currentYear.selectedLabel;
 				
@@ -368,7 +370,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var params = {
 					"format" : "xml",
 					"typeofaid" : "true",
-					"ignore" : ignore
+					"ignore" : ignore,
+					"action":"getODAGrowthGraphData"
 				};
 				params["previousYear"] = previousYear.selectedLabel;
 				params["currentYear"] = currentYear.selectedLabel;
@@ -434,7 +437,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 				var params:Object = {
 					"format" : "xml",
-					"typeofaid" : "true"};
+					"typeofaid" : "true",
+					"action":"getODAGrowthGraphData"
+				};
 				params["previousYear"] = previousYear.selectedLabel;
 				params["currentYear"] = currentYear.selectedLabel;
 				service.send(params);

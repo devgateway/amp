@@ -39,7 +39,7 @@
 	xmlns:labels="org.axiis.charts.labels.*"
 	xmlns:utils="org.axiis.utils.*">
 
-	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)">
+	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)" method="POST">
 		<mx:request>
 			<linechart>true</linechart>
 		</mx:request>
@@ -353,7 +353,7 @@
 				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
 				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
-				strUrl ="/visualization/dataDispatcher.do?action=" + dataAction;
+				strUrl ="/visualization/dataDispatcher.do";
 				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
 
 				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
@@ -389,14 +389,16 @@
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				var params:Object = {
-					"linechart" : "true"
+					"linechart" : "true",
+					"action"	: dataAction
 				};
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){
 					params = {
 						"linechart" : "true",
-						"typeofaid" : "true"
+						"typeofaid" : "true",
+						"action"	: dataAction
 					};
 				}
 				if(itemId != null && itemId != "-1"){
@@ -438,11 +440,13 @@
 				params["endYear"] = sliderYear.values[1];
 				params["divide"] = divide;
 				params["linechart"] = "true";
+				params["action"] =  dataAction;
 				if(idContainer == "AidType"){
 					params = {
 						"typeofaid" : "true",
 						"divide": divide,
-						"linechart" : "true"
+						"linechart" : "true",
+						"action"	: dataAction
 					};
 					params["startYear"] = sliderYear.values[0];
 					params["endYear"] = sliderYear.values[1];
@@ -531,11 +535,13 @@
 				params["endYear"] = sliderYear.values[1];
 				params["divide"] = divide;
 				params["linechart"] = "true";
+				params["action"] = dataAction;
 				if(idContainer == "AidType"){
 					params = {
 						"typeofaid" : "true",
 						"divide": divide,
-						"linechart" : "true"
+						"linechart" : "true",
+						"action": dataAction
 					};
 					params["startYear"] = sliderYear.values[0];
 					params["endYear"] = sliderYear.values[1];

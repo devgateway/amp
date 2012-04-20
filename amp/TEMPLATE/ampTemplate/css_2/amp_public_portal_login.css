@@ -9,7 +9,7 @@ h1{color:#fff;font-size:14px;text-shadow: 1px 1px 5px #2b3942;}
 #loginbox p.userfield{display:block;width:352px;height:37px;background:url(/TEMPLATE/ampTemplate/img_2/login.gif) no-repeat top left;margin:0px 0px 0px 0px;}
 #loginbox p.passfield{display:block;width:352px;height:37px;background:url(/TEMPLATE/ampTemplate/img_2/pass.gif) no-repeat top left;margin:10px 0px 5px 0px;}
 #loginbox p.userfield input, #loginbox p.passfield input{float: right; width:230px;margin:3px 5px 0px 0px; height:29px;background:none;border:none;}
-label{font-size:12px;font-weight:bold;color:#fff;display:block;float:left;line-height:33px;margin:0px 0px 0px 35px;}
+label{font-size:12px;font-weight:bold;color:#fff;display:block;float:left;line-height:33px;margin:0px 0px 0px 10px;}
 input#amplogin{width:61px;height:32px;background:url(/TEMPLATE/ampTemplate/img_2/submit.gif);line-height:30px;color:#fff;font-size:12px;font-weight:bold;float:left;margin:0px 0px 5px 0px;}
 .logintitle{background:url(/TEMPLATE/ampTemplate/img_2/ttlbg.gif) repeat-x bottom;width:352px;margin:0 auto;margin-bottom:25px;padding-top:15px;	}
 .logintitle h2{padding:5px;display:inline;background:#e6eaed;margin:15px 0px 0px 0px;}

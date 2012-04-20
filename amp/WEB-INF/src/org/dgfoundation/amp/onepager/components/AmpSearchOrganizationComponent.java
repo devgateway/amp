@@ -5,14 +5,15 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.IOnChangeListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -32,8 +33,8 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 	public AmpSearchOrganizationComponent(String id, IModel<T> model,
 			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel ) {
 		super(id, model, fmName);
-		//TrnLabel selectOrgTypeLabel = new TrnLabel("selectOrgTypeLabel", "Select Organization Type");
-		//add(selectOrgTypeLabel);
+		TrnLabel title = new TrnLabel("title", fmName);
+		add(title);
 		
 		
 		ChoiceRenderer cr = new ChoiceRenderer(){
@@ -62,6 +63,7 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 				}
 				
 		});
+		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model("width: 100px"), ";"));
 		add(orgGroupPanel);
 	    
 	    

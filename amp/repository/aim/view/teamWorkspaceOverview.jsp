@@ -21,7 +21,7 @@ function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			openNewWindow(650, 380);
 			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
-			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=teamLead";
+			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin";
 			document.aimUpdateWorkspaceForm.target = popupPointer.name;
 			document.aimUpdateWorkspaceForm.submit();
 		} else {

@@ -631,12 +631,12 @@ public class TrnTag
         if(isUseKey()) {
             retVal = "<a href=\"" + getHref() +
             "/translation/showTranslate.do?key=" + getKey() + siteParam +
-            "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
+            "&back_url=" + backUrl + "&type=" + trnType + "\" class=\"trnClass\">&lt;" + operType +
             suffix + "&gt;</a>";
         } else {
             retVal = "<a href=\"" + getHref() +
             "/translation/showTranslate.do?key=" + getGeneratedKey() + siteParam +
-            "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
+            "&back_url=" + backUrl + "&type=" + trnType + "\" class=\"trnClass\">&lt;" + operType +
             suffix + "&gt;</a>";
         }
 

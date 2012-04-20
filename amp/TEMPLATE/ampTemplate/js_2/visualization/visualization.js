@@ -491,6 +491,7 @@ function resetToDefaults(){
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_config_dropdown_id").selectedIndex = 0;
+	callbackChildren.call(document.getElementById("sector_config_dropdown_id"), null);
 	removeOptionsDropdown("org_dropdown_id");
 	removeOptionsDropdown("zone_dropdown_id");
 	removeOptionsDropdown("sector_dropdown_id");
@@ -500,6 +501,7 @@ function resetToDefaults(){
 	document.getElementById("filterSectors").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
+	document.getElementById("SectorProfileItemId").value = -1;
 	applyFilterPopin();
 }
 
@@ -673,6 +675,7 @@ function callbackChildren(e) {
 			objectType = "Sector";
 			//try to set the SectorProfileItemId from select:
 			try {
+				
 				document.getElementById("SectorProfileItemId").value = parentId;
 			}
 			catch(e){

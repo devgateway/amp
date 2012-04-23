@@ -555,7 +555,7 @@
 
 
 <script language="JavaScript">
-    var oldKeyword="", oldWorkspaceType="";
+    var oldKeyword="", oldWorkspaceType="", oldWorkspaceGroup="";
     function onDelete() {
         var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
         return flag;
@@ -578,14 +578,16 @@
     }
     function getParams(){
         ret = "";
-        ret += "keyword="+document.getElementsByName('keyword')[0].value+"&workspaceType="+document.getElementsByName('workspaceType')[0].value;
+        ret += "keyword="+document.getElementsByName('keyword')[0].value+"&workspaceType="+document.getElementsByName('workspaceType')[0].value+"&workspaceGroup="+document.getElementsByName('workspaceGroup')[0].value;
         return ret;
     }
 	
     function resetPage(){
-        if(oldKeyword != document.getElementsByName('keyword')[0].value  || oldWorkspaceType != document.getElementsByName('workspaceType')[0].value){
+        if(oldKeyword != document.getElementsByName('keyword')[0].value  || oldWorkspaceType != document.getElementsByName('workspaceType')[0].value
+        		|| oldWorkspaceGroup!=document.getElementsByName('workspaceGroup')[0].value){
             oldKeyword=document.getElementsByName('keyword')[0].value;
             oldWorkspaceType=document.getElementsByName('workspaceType')[0].value;
+            oldWorkspaceGroup=document.getElementsByName('workspaceGroup')[0].value;
                 <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>  
                 var url = "<%=commentUrl %>";
             url += "?"+getParams();

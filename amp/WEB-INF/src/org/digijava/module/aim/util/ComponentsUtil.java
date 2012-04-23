@@ -378,6 +378,9 @@ public class ComponentsUtil {
      * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present
      */
     public static boolean checkComponentNameExists(String title) {
+    	return checkComponentNameExists(title, null);
+    }
+    public static boolean checkComponentNameExists(String title, Long excludeId) {
         logger.info(" in the checking for components existence through title ");
         boolean flag = false;
         Collection col = null;
@@ -387,8 +390,12 @@ public class ComponentsUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponent.class.getName() + " co where co.title=:title";
+            if (excludeId != null)
+            	queryString += " and not co.ampComponentId=:excludeId";
             qry = session.createQuery(queryString);
             qry.setParameter("title", title, Hibernate.STRING);
+            if (excludeId != null)
+            	qry.setLong("excludeId", excludeId);
 
             col = qry.list();
         } catch (Exception ex) {

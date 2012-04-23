@@ -92,7 +92,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 				target.addComponent(componentNameLabel);
 			}
 		});
-		name.getTextContainer().add(new AmpUniqueComponentTitleValidator());
+		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<Long>(componentModel, "ampComponentId")));
 		add(name);
 
 		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);

@@ -74,7 +74,7 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
 <table cellspacing="0" cellPadding="0" border="0" width="100%" vAlign="top" bgcolor="#27415f">
 	<tbody>
    	<tr>
-        <td valign="center" height="34" width="60%">&nbsp;
+        <td valign="center" height="34">&nbsp;
             <logic:notEmpty name="defFlagExist" scope="application">
                 <logic:equal name="defFlagExist" scope="application" value="true">
                 <img src="<%=displayFlag%>" border="0" width="30" vspace="2" hspace="2" align="absmiddle">
@@ -84,7 +84,7 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
                     <digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
             </digi:link>
         </td>
-		<td valign="middle" align="right" width="40%">
+		<td valign="middle" align="right" width="400px">
  	 		<digi:insert attribute="logWidget"/>
  	 	<%-- 
           <logic:present name="currentMember" scope="session">

@@ -7123,14 +7123,14 @@ public class DbUtil {
 	        public int compare(Object obj1, Object obj2) {
 	            User user1 = (User) obj1;
 	            User user2 = (User) obj2;
-	            return user1.getName().trim().compareTo(user2.getName().trim());
+	            return user1.getName().trim().compareToIgnoreCase(user2.getName().trim());
 	        }
 	    }
 	    public static class HelperUserNameComparatorDesc implements Comparator {
 	        public int compare(Object obj1, Object obj2) {
 	            User user1 = (User) obj1;
 	            User user2 = (User) obj2;
-	            return user2.getName().trim().compareTo(user1.getName().trim());
+	            return user2.getName().trim().compareToIgnoreCase(user1.getName().trim());
 	        }
 	    }
 

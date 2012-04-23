@@ -507,11 +507,20 @@
 			}
 			
 			private function getLegendY(currentIndex:Number ,y:Number):Number{
-				return (currentIndex < 4) ? y-5 : y + 25;
+				var ret = 0;
+				if (currentIndex < 4){
+					ret = y-5;
+				} else if (currentIndex < 8){
+					ret = y+25;
+				} else {
+					ret = y+55;
+					sliderYear.y = 440;
+				}
+				return ret;
 			}
 			
 			private function getLegendX(currentIndex:Number ,x:Number):Number{
-				return (currentIndex < 4) ? currentIndex*160 : (currentIndex-4)*160;
+				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
 			}
 			
 			protected function service_faultHandler(event:FaultEvent):void

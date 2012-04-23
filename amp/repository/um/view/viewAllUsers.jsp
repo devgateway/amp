@@ -213,18 +213,48 @@ function banUser(txt) {
 																					<thead
 																						background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
 																						<tr>
-																							<td height="30" width="220"><digi:link
-																									href="/viewAllUsers.do?sortBy=name&reset=false">
-																									<b> <digi:trn
-																											key="um:viewAllUsers:UsersNames">Name</digi:trn>
-																									</b>
-																								</digi:link></td>
-																							<td height="30" width="220"><digi:link
-																									href="/viewAllUsers.do?sortBy=email&reset=false">
-																									<b> <digi:trn
-																											key="um:viewAllUsers:UsersEmails">Email</digi:trn>
-																									</b>
-																								</digi:link></td>
+																							<td height="30" width="220"><c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='nameAscending'}">
+																									<digi:link
+																										href="/viewAllUsers.do?sortBy=nameAscending&reset=false">
+																										<b><digi:trn
+																												key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
+																									</digi:link>
+																								</c:if> <c:if
+																									test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='nameAscending'}">
+																									<digi:link
+																										href="/viewAllUsers.do?sortBy=nameDescending&reset=false">
+																										<b><digi:trn
+																												key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
+																									</digi:link>
+																								</c:if> <c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameAscending'}">
+																									<img src="/repository/aim/images/up.gif" />
+																								</c:if> <c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}">
+																									<img src="/repository/aim/images/down.gif" />
+																								</c:if></td>
+																							<td height="30" width="220"><c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='emailAscending'}">
+																									<digi:link
+																										href="/viewAllUsers.do?sortBy=emailAscending&reset=false">
+																										<b><digi:trn
+																												key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
+																									</digi:link>
+																								</c:if> <c:if
+																									test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='emailAscending'}">
+																									<digi:link
+																										href="/viewAllUsers.do?sortBy=emailDescending&reset=false">
+																										<b><digi:trn
+																												key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
+																									</digi:link>
+																								</c:if> <c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
+																									<img src="/repository/aim/images/up.gif" />
+																								</c:if> <c:if
+																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}">
+																									<img src="/repository/aim/images/down.gif" />
+																								</c:if></td>
 																							<td height="30" width="220"><b> <digi:trn
 																										key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn>
 																							</b></td>

@@ -101,13 +101,17 @@ public class FundingCalculationsHelper {
 
 			AmpFundingDetail fundDet = fundDetItr.next();
 			AmpCategoryValue adjType=null;
-			try {
-				adjType = CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				logger.info("", e);
-			}
-			if(fundDet.getAdjustmentType() != null) adjType=fundDet.getAdjustmentType();
+			if(fundDet.getAdjustmentType() != null) 
+				adjType=fundDet.getAdjustmentType();
+			else
+			{
+				try {
+					adjType = CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					logger.info("", e);
+				}
+			}	
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 
@@ -212,13 +216,17 @@ public class FundingCalculationsHelper {
 			
 			AmpFundingDetail fundDet = fundDetItr.next();
 			AmpCategoryValue adjType = null;
-			try {
-				adjType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				logger.info("", e);
-			}
-			if(fundDet.getAdjustmentType() != null) adjType=   fundDet.getAdjustmentType();
+			if(fundDet.getAdjustmentType() != null) 
+				adjType = fundDet.getAdjustmentType();
+			else
+			{
+				try {
+					adjType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					logger.info("", e);
+				}
+			}	
 
 			if(adjType.equals(adjustmentType) && fundDet.getTransactionType().intValue() == transactionType){
 				FundingDetail fundingDetail = new FundingDetail();

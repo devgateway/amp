@@ -30,7 +30,7 @@
                     style="display:none;margin:0px 0px 15px 0px;">
 						<tr>
 							<td>
-								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;"><c:out value="${workspaceGroup}"/></div>
+								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:100%;"><c:out value="${workspaceGroup}"/></div>
 						</td>
 						</tr>
 		<c:forEach var="members" items="${aimLoginForm.members}">

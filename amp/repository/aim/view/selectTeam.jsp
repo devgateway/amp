@@ -29,8 +29,8 @@
 					<table border=0 cellPadding=0 cellSpacing=0 width="100%" id="table_${workspaceGroup}" 
                     style="display:none;margin:0px 0px 15px 0px;">
 						<tr>
-							<td>
-								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:100%;"><c:out value="${workspaceGroup}"/></div>
+							<td style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:100%;">
+								<div class="subtitle-blue" ><c:out value="${workspaceGroup}"/></div>
 						</td>
 						</tr>
 		<c:forEach var="members" items="${aimLoginForm.members}">

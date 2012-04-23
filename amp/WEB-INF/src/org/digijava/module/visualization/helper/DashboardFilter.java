@@ -24,6 +24,8 @@ public class DashboardFilter {
     private int dashboardType;
     private Long startYear;
     private Long endYear;
+    private Long defaultStartYear;
+    private Long defaultEndYear;
     private Long startYearQuickFilter;
     private Long endYearQuickFilter;
     private Long startYearFilter;
@@ -382,7 +384,23 @@ public class DashboardFilter {
         this.endYearQuickFilter = year;
     }
 
-    public Collection<BeanWrapperImpl> getYears() {
+    public Long getDefaultStartYear() {
+		return defaultStartYear;
+	}
+
+	public void setDefaultStartYear(Long defaultStartYear) {
+		this.defaultStartYear = defaultStartYear;
+	}
+
+	public Long getDefaultEndYear() {
+		return defaultEndYear;
+	}
+
+	public void setDefaultEndYear(Long defaultEndYear) {
+		this.defaultEndYear = defaultEndYear;
+	}
+
+	public Collection<BeanWrapperImpl> getYears() {
         return years;
     }
 

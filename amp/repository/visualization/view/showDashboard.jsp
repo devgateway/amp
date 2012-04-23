@@ -790,6 +790,8 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.startYear" styleId="startYear"/>
 <html:hidden property="filter.endYear" styleId="endYear" />
+<html:hidden property="filter.defaultStartYear" styleId="defaultStartYear"/>
+<html:hidden property="filter.defaultEndYear" styleId="defaultEndYear" />
 <html:hidden property="filter.yearToCompare" styleId="yearToCompare"/>
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>

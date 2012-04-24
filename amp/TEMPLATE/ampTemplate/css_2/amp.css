@@ -727,3 +727,20 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 .invisible-item-hidden{visibility: hidden;}
 /*---rafy was here---*/
 td.wrklist div.workspacelist{padding:0px 0px 5px 0px;border-bottom:1px solid #f2f2f2;margin:0px 0px 5px 0px;width:300px;}
+div.filterContainerTabs div#gisfilters{float:left;width:100%;}
+html.ie div.filterContainerTabs div#gisfilters div.groupingSelector, html.ie div.filterContainerTabs div#gisfilters div.membersSelector{float:left;width:50%;}
+html.ie div.filterContainerTabs div.innerTab{ padding:10px; overflow:auto;height:200px;}
+html.ie div.filterContainerTabs div.innerTab li{list-style:none;}
+html.ie div.filterContainerTabs div#gisfilters div.groupingSelector ul, html.ie div.filterContainerTabs div#gisfilters div.membersSelector ul{width:90%;margin:0 auto;}
+html.ie div.filterContainerTabs div#gisfilters div.groupingSelector{border-right:1px solid #ccc;}
+html.ie div.innertabheader{border-bottom: 1px solid #CCC; background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); height: 31px;}
+html.ie div.innertabheader h3 {height: 31px; line-height: 31px; text-indent: 11px; float: left; font-size: 11px; color: #767676; margin: 0; padding: 0;}
+html.ie  div.filterContainerTabs .otherCriteriaFoofet{border-top:1px solid #ccc;padding:10px;}
+html.ie .groupingselector ul li a { padding: 5px; font-size: 12px; display: block; background: white; color: black; text-decoration: none;}
+html.ie .groupingselector ul li a:hover{background:#bfd2df}
+html.ie div.filterContainerTabs div.othercriteriafoofet select {background: white;border: 1px solid #D0D0D0;color: black;font-size: 11px;padding: 0px;width: 150px;}
+html.ie div.filterContainerTabs div.othercriteriafoofet #calendarform label {width: 100px;font-size: 11px;display: inline-block;}
+html.ie div.filterContainerTabs div.tabSubmit{clear:both;text-align:center;}
+html.ie div.innertabheader input.buttonx{margin-top:3px;}
+html.ie div.innertabheader input.inputx{margin-top:5px;vertical-align:top;}
+html.ie div.menucontainer{margin:0 auto;width:1000px;}

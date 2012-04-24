@@ -59,6 +59,7 @@ ${fn:replace(message,quote,escapedQuote)}
 }
 </style>
 <div class="menucontainer">
+<center>
 <div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   
@@ -209,7 +210,7 @@ ${fn:replace(message,quote,escapedQuote)}
 		  </module:display>
           </ul>            
       </div>
-  </div>
+  </div></center>
 </div> 
 
 </logic:notPresent>

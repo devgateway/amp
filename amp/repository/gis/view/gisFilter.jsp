@@ -211,7 +211,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 					</a>
 					</li>
 				</ul>
-				<div class="yui-content" style="background-color: #FFFFFF;">
+				<div class="yui-content" id="gisfilters">
 					<div>
 						<div id="tabDonorAgency">
 							<bean:define name="gisDashboardForm" id="element" property="donorElements" toScope="request" />

@@ -232,12 +232,12 @@ session.setAttribute("progressValue", counter);
 		        	<div class="tab_opt_cont">
             <logic:notEmpty name="reportMeta" property="hierarchies">
             	<c:if test="${!ReportsFilter.publicView}">
-	                <a class="settingsLink" style="color:#376091;" onClick="showSorter();">
+	                <a class="settingsLink" style="cursor: pointer;color:#376091;" onClick="showSorter();">
 	                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
 	                </a> | 
 	            </c:if>
             </logic:notEmpty> 
-                <a class="settingsLink"  style="color:#376091;" onClick="showFilter(); " >
+                <a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
                 <%
@@ -245,7 +245,7 @@ session.setAttribute("progressValue", counter);
                 	if (arf.isPublicView()==false){%>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
-	          	 	<a class="settingsLink"  style="color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
+	          	 	<a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
 	                	${saveFilters}
 	                </a>
                 </feature:display>
@@ -254,7 +254,7 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  	<%if (arf.isPublicView()==false){%>
            	  	|
-				<a  id="frezzlinkreport" class="settingsLinkDisable" style="color:#376091; cursor: default;" onclick="javascript:frezzreport()">
+				<a  id="frezzlinkreport" class="settingsLinkDisable" style="cursor: pointer;color:#376091; " onclick="javascript:frezzreport()">
                		<script language="javascript">
 						document.write(msg1);
 					</script>
@@ -263,7 +263,7 @@ session.setAttribute("progressValue", counter);
                       	
            	</logic:notEqual>
                 
-                |<a  class="settingsLink"  style="color:#376091;" onClick="showFormat(); " >
+                |<a  class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFormat(); " >
                 <digi:trn>Report Settings</digi:trn>
                 </a>
            

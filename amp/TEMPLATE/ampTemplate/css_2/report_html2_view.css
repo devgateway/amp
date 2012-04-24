@@ -80,12 +80,14 @@ a.settingsLink:link, a.settingsLink, A.settingsLink:active, A.settingsLink:visit
 	font-size: 8pt;		  
 	font-weight:normal;
 	text-decoration:none;
+	cursor: pointer;
 }
 a.settingsLink:hover{
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 8pt;		  
 	font-weight:normal;
 	text-decoration:none;
+	cursor: pointer;
 }
 
 	
@@ -95,6 +97,7 @@ a.settingsLinkDisable{
 	font-weight:normal;
 	text-decoration:none;
 	color: #EEEEEE ;
+	cursor: pointer;
 }
 
 a.nohoverlink{

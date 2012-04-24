@@ -466,79 +466,60 @@ public class DbUtil {
         Transaction tx = null;
         Session session = null;
         //Sdm doc=null;
-        boolean newDoc=false;
+       // boolean newDoc=false;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.openNewSession();
 //beginTransaction();
-            session.saveOrUpdate(document);
-//            session.clear();
-//            if(document.getId()==null){
-//            	newDoc=true;
-//            	doc=new Sdm();
-//            }else{
-//            	doc=getDocument(document.getId());
-//            }
-//            if(doc==null){
-//            	newDoc=true;
-//            	doc=new Sdm();
-//            }
-//            doc.setInstanceId(document.getInstanceId());
-//            doc.setSiteId(document.getSiteId());
-//            doc.setName(document.getName());
-//            session.saveOrUpdate(doc);
-            
-            if(newDoc){
+            tx = session.beginTransaction();
+            if(document.getId()==null){
+            	session.save(document);
             	if(document.getItems()!=null){
             		Iterator<SdmItem> iter=document.getItems().iterator();
             		while(iter.hasNext()){
             			SdmItem oldItem = (SdmItem) iter.next();
-            			SdmItem newItem=new SdmItem();
-            			newItem.setAlignment(oldItem.getAlignment());
-            			newItem.setBold(oldItem.getBold());
-            			newItem.setContent(oldItem.getContent());
-            			newItem.setContentText(oldItem.getContentText());
-            			newItem.setContentTitle(oldItem.getContentTitle());
-            			newItem.setContentType(oldItem.getContentType());
-            			newItem.setFont(oldItem.getFont());
-            			newItem.setFontSize(oldItem.getFontSize());
-            			newItem.setItalic(oldItem.getItalic());
-            			newItem.setParagraphOrder(oldItem.getParagraphOrder());
-            			newItem.setRealType(oldItem.getRealType());
-            			newItem.setUnderline(oldItem.getUnderline());
-            			//newItem.setDocument(doc);
-            			newItem.setDocument(document);
+            			oldItem.setDocument(document);
             			//save item
-            			 session.save(newItem);
-            			//add this item to doc
-//                         if(doc.getItems()==null){
-//                         	doc.setItems(new HashSet<SdmItem>());
-//                         }
-//                         doc.getItems().add(newItem);
+            			 session.save(oldItem);
             		}
             	}
-            }else{
-            	if (document.getItems() != null) {
-                    Iterator iter = document.getItems().iterator();
-                    while (iter.hasNext()) {
-                        SdmItem item = (SdmItem) iter.next();
-                        if (item.getDocument() == null) {
-                            //item.setDocument(doc);
-                        	item.setDocument(document);
-                            session.save(item);
-                            //add this item to doc
-//                            if(doc.getItems()==null){
-//                            	doc.setItems(new HashSet<SdmItem>());
-//                            }
-//                            doc.getItems().add(item);
-                        }
-                        else {                        	
-                            session.update(item);
-                        }
-                    }
-                }
-            }            
-            
-            //tx.commit();
+            }
+            else{
+            	Sdm doc=(Sdm)session.load(Sdm.class, document.getId());
+            	doc.setName(document.getName());
+            	doc.setInstanceId(document.getInstanceId());
+            	doc.setSiteId(document.getSiteId());
+            	if(document.getItems()!=null){
+            		for(Object item:document.getItems()){
+            			SdmItem sdmItem=(SdmItem)item;
+            			if(sdmItem.getDocument()==null){
+            				sdmItem.setDocument(document);
+            				session.save(sdmItem);
+            			}
+            			else{
+            				SdmItem oldItem=(SdmItem) session.load(SdmItem.class, new SdmItem(doc,sdmItem.getParagraphOrder()));
+            				oldItem.setAlignment(sdmItem.getAlignment());
+            				oldItem.setBold(sdmItem.getBold());
+            				oldItem.setContent(sdmItem.getContent());
+            				oldItem.setContentText(sdmItem.getContentText());
+            				oldItem.setContentTitle(sdmItem.getContentTitle());
+            				oldItem.setContentType(sdmItem.getContentType());
+            				oldItem.setFont(sdmItem.getFont());
+            				oldItem.setFontSize(sdmItem.getFontSize());
+            				oldItem.setItalic(sdmItem.getItalic());
+            				oldItem.setParagraphOrder(sdmItem.getParagraphOrder());
+            				oldItem.setRealType(sdmItem.getRealType());
+            				oldItem.setUnderline(sdmItem.getUnderline());
+                			//update item
+                			session.update(oldItem);
+            			}
+            		}
+            	}
+            	
+            	session.update(doc);
+            	
+            }           
+//      
+            tx.commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to update document information into database",ex);
@@ -551,6 +532,15 @@ public class DbUtil {
                 }
             }
             throw new SDMException("Unable to update document information into database", ex);
+        }
+        finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed", ex1);
+                }
+            }
         }
         return document;
     }

@@ -195,36 +195,35 @@ addLoadEvent(addpanel);
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
 
-		<td noWrap align=left valign="center" title="<digi:trn>Download as PDF</digi:trn>">		
-			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
+		<td noWrap align=left valign="center">		
+			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
 				<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
 
-		<td noWrap align=left valign="center" title="<digi:trn>Download as XLS</digi:trn>">		
-			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;">
+		<td noWrap align=left valign="center">		
+			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
 				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
 			</a>
 		</td>
 
-
-		<td noWrap align=left valign="center" title="<digi:trn>Download as CSV</digi:trn>">
-			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="Download as CSV">
 				<digi:img style="margin-bottom:5px" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		
 		<feature:display name="Show Printer Friendly option" module="Public Reports">
-			<td noWrap align=left valign="center" title="<digi:trn>Print</digi:trn>">
-				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-					<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+			<td noWrap align=left valign="center">
+				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;" title="Print">
+					<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print.png" border="0" alt="Printer Friendly" />
 				</digi:link>
 			</td>
 		</feature:display>
 					
 		<module:display name="Map Module">
-			<td noWrap align=left valign="center" title="<digi:trn>Export to Map</digi:trn>">
-				<a href="/esrigis/mainmap.do?exportreport=true" target="_blank">
+			<td noWrap align=left valign="center">
+				<a href="/esrigis/mainmap.do?exportreport=true" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
 					<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
 				</a>
 			</td>

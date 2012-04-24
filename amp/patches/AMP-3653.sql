@@ -1,0 +1,1 @@
+update dg_message set message_utf8 = 'Congratulations, your AMP registration was successful. The next step is to contact your AMP Software Administrator so that you can be assigned to a workspace.' where message_key = 'aim:newuserregistrationsuccess' and lang_iso = 'en';

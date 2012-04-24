@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12729</jira>
+	<keyword>Global Settings</keyword>
+	<keyword>Public Portal</keyword>
+	<author>Medea</author>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="AMP_GLOBAL_SETTINGS"
+			columnname="settingsName" columnvalue="Public Portal" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section) values(nextval('amp_global_settings_seq'),'Public Portal','false','t_Boolean','Has the sever public portal', 'general');
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

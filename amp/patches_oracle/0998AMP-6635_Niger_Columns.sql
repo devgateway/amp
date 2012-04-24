@@ -1,0 +1,3 @@
+update amp_measures set measureName = 'Previous Month Disbursements', aliasName = 'Previous Month Disbursements', description = 'Sum of Actual Disbursements of the Previous Month' where measureName = 'Current Month Disbursements';
+update amp_measures set description = 'Current year Actual Disbursements not including previus and current months' where measureName = 'Prior Actual Disbursements';
+insert into amp_measures (measureName,description, expression ) values ('Current Year Planned Disbursements','Current Year Planned Disbursements','currYearPlannedDisbursement');

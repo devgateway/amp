@@ -1,0 +1,1 @@
+update amp_npdsettings set activities_per_page=20; 

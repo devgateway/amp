@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `amp_calendar_event_organisation`;

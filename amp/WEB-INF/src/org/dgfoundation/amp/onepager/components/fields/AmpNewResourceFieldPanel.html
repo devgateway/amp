@@ -1,0 +1,45 @@
+<wicket:extend>
+	<span wicket:id="featureLabel"/>
+	<form wicket:id="form">
+		<table width="100%">
+			<tr>
+				<td>
+					<span wicket:id="docTitle" />
+				</td>
+				<td>
+					<span wicket:id="docType" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span wicket:id="docDesc" />
+				</td>
+				<td>
+					<span wicket:id="docNote" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" >
+				    <div style="white-space: nowrap;" >
+						<span wicket:id="resourceLabel" class="l_big_b">...</span>
+						<br />
+					    <input wicket:id="file" type="file" />
+					    <span wicket:id="webLink" />
+					</div>
+				</td>	
+			</tr>
+			<tr>
+				<td colspan="2" align="left">
+					<span wicket:id="ajaxSubmit" />
+				</td>
+			</tr>
+			<tr>
+				<td class="inside" align="left" colspan="2">
+					<span wicket:id="webLinkFeedbackContainer" style="color: red;">
+						<span wicket:id="webLinkFeedbackLabel" class="feedbacklabel.error"></span>
+					</span>
+				</td>
+			</tr>			
+		</table>
+	</form>
+</wicket:extend>

@@ -1,0 +1,56 @@
+*{margin:0px;padding:0px;font-family:arial;outline:none;font-size:12px;}
+	.clear, .innerTab{clear:both;}
+	div#filterContainer{width:820px;min-height:400px;margin:0 auto; border:1px solid #000;background:#fff;}
+	div.filterContainerHeader{background:#e9e9fb;border-bottom:1px solid #bfd4e0; height:26px;}
+	div.filterContainerHeader h2{line-height:26px; font-size:12px; font-weight:bold; text-indent:11px;width:90%;float:left;}
+	div.filterContainerHeader a{display:block; float:right;background:url(images/close.gif) top left no-repeat;width:12px; height:12px;text-indent:-9999px;margin:6px 10px 0px 0px;}
+	div.filterContainerTabs{width:820px;margin:0 auto;margin-top:11px;}
+	div.groupingSelector{width:333px;float:left;border:1px solid #cccccc;border-right:none;height:155px;}
+	div.groupingSelectorGis{width:302px;float:left;border:1px solid #cccccc;border-right:none;height:155px;}
+	div.membersSelector{width:450px;float:right;border:1px solid #cccccc;height:155px;white-space: nowrap;}
+	div.innerTabHeader{border-bottom:1px solid #cccccc;background:url(/repository/gis/view/images/tabheader.gif);height:31px;}
+	div.innerTabHeader h3{height:31px; line-height:31px; text-indent:11px; width:40%; float:left;font-size:11px; color:#767676;white-space: nowrap;}
+	div.membersSelector form.memsearch{padding:1px 0px 0px 0px;width:230px; float:right;text-align:right;}
+	input.buttonx{background-color: #5E8AD1;
+    border-color: #99BAF1 #225099 #225099 #99BAF1;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: bold;
+    height:24px;
+	padding:0px 5px;
+	margin:0px 3px;
+	}
+	.innerTabHeader input.buttonx {font-size:11px;}
+	input.inputx{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 6px 5px 5px 5px;padding:1px;}
+	.groupingSelector ul {margin:0 auto;margin-bottom:15px; width:250px;border-left:1px solid #d0d0d0;border-bottom:1px solid #d0d0d0;}
+	.groupingSelector ul li {list-style:none;}
+	.groupingSelector ul li a{padding:5px; font-size:12px; display:block; background:#fff;color:#000;text-decoration:none;}
+	.groupingSelector ul li a:hover{background:#bfd2df;}
+	.groupingSelectorGis ul {margin:0 auto;margin-bottom:15px; width:250px;border-left:1px solid #d0d0d0;border-bottom:1px solid #d0d0d0;}
+	.groupingSelectorGis ul li {list-style:none;}
+	.groupingSelectorGis ul li a{padding:5px; font-size:12px;display:block;color:#000;text-decoration:none;}
+	.groupingSelectorGis ul li a:hover{background:#bfd2df;}
+	div.innerTab{height:115px; overflow:auto;margin:2px;width:99%;}
+	form#membersform ul li{padding:5px 0px 0px 30px;}
+	form#membersform ul li.listChapter{padding:5px 0px 0px 15px;}
+	form#membersform ul li label{padding:0px 0px 0px 5px;font-size:11px;vertical-align:top;}
+	div.halfcal{width:50%;float:left;}
+   .datesCurrenceyFormFooterGis{padding:15px 0px 0px 0px;clear:both;width:730px;margin:0 auto;}
+   .datesCurrenceyFormFooterGis form label{width:100px;font-size:11px;display:inline-block;}
+   p{padding:0px 0px 10px 0px;}
+    #topFundingType {padding:5px;}
+	.datesCurrenceyFormFooter{padding:15px 0px 0px 0px;clear:both;}
+   .datesCurrenceyFormFooter form label{width:100px;font-size:11px;display:inline-block;}
+    p{padding:0px 0px 10px 0px;}
+   .datesCurrenceyFormFooter select {background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #000;font-size: 11px;padding: 0px; width:150px;}
+   .datesCurrenceyFormFooter form  label#dateLabel{display:inline-block;width:50px;}
+   .datesCurrenceyFormFooterGis select, #topFundingType select {background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #000;font-size: 11px;padding: 0px; width:150px;}
+   .datesCurrenceyFormFooterGis form  label#dateLabel{display:inline-block;width:50px;}
+   a.callcalendar{margin:5px 0px 0px 0px;display:inline-block;}
+   .tabSubmit{text-align:center;padding:0px 0px 5px 0px;}
+   .groupingSelectors li a span {display:inline-block;float:right;font-size:11px;}
+   div#gis{width:730px;margin:0 auto;}
+   select.smallselect{width:50px;}
+   label{text-indent:10px;}

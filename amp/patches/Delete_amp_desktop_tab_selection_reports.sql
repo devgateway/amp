@@ -1,0 +1,1 @@
+DELETE FROM amp_desktop_tab_selection WHERE amp_report_id NOT IN (SELECT amp_report_id FROM amp_reports);

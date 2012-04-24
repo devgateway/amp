@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-12460</jira>
+    <keyword>Insert New fields Visibility , v_g_settings_new_fields_visibility</keyword>
+    <author>Dan</author>
+    <description>Insert New fields Visibility and create v_g_settings_new_fields_visibility</description> 
+    <trigger type="all">
+        <condition  type="tableOrViewExists">util_global_settings_possible_</condition>
+        <condition  type="entryInTableMissing" tablename="amp_global_settings" columnname="settingsName" columnvalue="New fields Visibility"/>
+    </trigger> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO util_global_settings_possible_(id,setting_name,value_id,value_shown) VALUES(nextval('util_global_settings_possible__seq'),'New fields Visibility','on','on');
+                INSERT INTO util_global_settings_possible_(id,setting_name,value_id,value_shown) VALUES(nextval('util_global_settings_possible__seq'),'New fields Visibility','off','off'); 
+                CREATE OR REPLACE VIEW v_g_settings_new_fields_visibility AS 
+                SELECT util_global_settings_possible_.value_id AS id, util_global_settings_possible_.value_shown AS value
+                FROM util_global_settings_possible_
+                WHERE util_global_settings_possible_.setting_name::text = 'New fields Visibility'::text;
+                insert into amp_global_settings(id,settingsName,settingsValue,possibleValues, description,section, value_translatable) 
+                values(nextval('amp_global_settings_seq'),'New fields Visibility','on','v_g_settings_new_fields_visibility','Sets if the new fields will be added as enabled or disabled by default','general', true); 
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

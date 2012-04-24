@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12711</jira>
+	<keyword>Activity Form</keyword>
+	<author>Dare</author>
+	<description>copu updated_by to modified_by</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="sql">
+				update amp_activity_version a set modified_by = updated_by where a.modified_by is null;					
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

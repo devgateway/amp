@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -51,7 +52,10 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
@@ -547,6 +551,23 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding) throws DgException {
+
+        AmpCategoryClass catClass = null;
+        Long actualCommitmentCatValId = null;
+        try {
+            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+            for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    actualCommitmentCatValId = val.getId();
+                    break;
+                }
+            }
+        } catch (NoCategoryClassException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
+
         Collection<DonorSectorFundingHelper> fundings = null;
         String oql = "select sec.ampSectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
@@ -559,7 +580,7 @@ public class ChartWidgetUtil {
         if (donorIDs != null && donorIDs.length > 0) {
             oql += " inner join f.ampDonorOrgId org ";
         }
-        oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
+        oql += " where  fd.transactionType = 0 and fd.adjustmentType = " + actualCommitmentCatValId.toString() + " ";
         if (donorIDs != null && donorIDs.length > 0) {
             oql += " and (org.ampOrgId in (:donors ) ) ";
         }

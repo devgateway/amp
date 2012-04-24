@@ -63,7 +63,7 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 				}
 				
 		});
-		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model("width: 100px"), ";"));
+		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model("width: 100px; height: 22px; margin-top: 1px;"), ";"));
 		add(orgGroupPanel);
 	    
 	    

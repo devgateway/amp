@@ -48,37 +48,39 @@ public class UserSearch extends Action {
 			
 			if (vwForm.getNumResults() == 0 ) {
 				vwForm.setTempNumResults(10);				
-			} else {
-				int stIndex = ((page - 1) * vwForm.getNumResults()) + 1;
-				int edIndex = page * vwForm.getNumResults();
-				
-				if (vwForm.isSelectedNoLetter()) {
-					if (edIndex > vwForm.getUsers().size()) {
-						edIndex = vwForm.getUsers().size();
-					}
-				}
-				else {
-					if (edIndex > vwForm.getAlphaUsers().size()) {
-						edIndex = vwForm.getAlphaUsers().size();
-					}
-				}
-
-				Vector vect = new Vector();
-				
-				if (vwForm.isSelectedNoLetter())
-					vect.addAll(vwForm.getUsers());
-				else
-					vect.addAll(vwForm.getAlphaUsers());
-
-				Collection tempCol = new ArrayList();
-
-				for (int i = (stIndex - 1); i < edIndex; i++) {
-					tempCol.add(vect.get(i));
-				}
-
-				vwForm.setPagedUsers(tempCol);
-				vwForm.setCurrentPage(new Integer(page));
+			} 
+			if (page==-1){
+				page = vwForm.getUsers().size()%vwForm.getNumResults()==0 ? vwForm.getUsers().size()/vwForm.getNumResults() : vwForm.getUsers().size()/vwForm.getNumResults()+1;
 			}
+			int stIndex = ((page - 1) * vwForm.getNumResults()) + 1;
+			int edIndex = page * vwForm.getNumResults();
+			
+			if (vwForm.isSelectedNoLetter()) {
+				if (edIndex > vwForm.getUsers().size()) {
+					edIndex = vwForm.getUsers().size();
+				}
+			}
+			else {
+				if (edIndex > vwForm.getAlphaUsers().size()) {
+					edIndex = vwForm.getAlphaUsers().size();
+				}
+			}
+
+			Vector vect = new Vector();
+			
+			if (vwForm.isSelectedNoLetter())
+				vect.addAll(vwForm.getUsers());
+			else
+				vect.addAll(vwForm.getAlphaUsers());
+
+			Collection tempCol = new ArrayList();
+
+			for (int i = (stIndex - 1); i < edIndex; i++) {
+				tempCol.add(vect.get(i));
+			}
+
+			vwForm.setPagedUsers(tempCol);
+			vwForm.setCurrentPage(new Integer(page));
 			
 		return mapping.findForward("forward");
 	}

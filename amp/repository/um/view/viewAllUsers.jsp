@@ -420,6 +420,8 @@ function banUser(txt) {
 																					</c:if>
 																					<c:set target="${urlParamsLast}"
 																						property="orgSelReset" value="false" />
+																					<c:set target="${urlParamsLast}" property="page"
+																						value="-1" />
 																					<c:set var="translation">
 																						<digi:trn key="aim:lastpage">Last Page</digi:trn>
 																					</c:set>

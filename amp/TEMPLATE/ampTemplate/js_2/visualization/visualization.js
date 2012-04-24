@@ -758,6 +758,11 @@ function callbackApplyFilter(e){
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
 	
+	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
+		alert(alertBadDate);	
+		return;
+	}
+	
 	loadingPanel.show();
 
 	YAHOO.util.Connect.setForm('visualizationform');
@@ -877,6 +882,11 @@ function applyFilterPopin(e){
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 
+	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
+		alert(alertBadDate);	
+		return;
+	}
+	
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;

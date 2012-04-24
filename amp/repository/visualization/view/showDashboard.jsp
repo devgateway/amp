@@ -123,7 +123,7 @@ var trnSavingInformation = "";
 var trnSavedInformation = "";
 var trnFailedSave = "";
 
-
+var alertBadDate="";
 var loadingPanel;
 var urlPdfExport = "";
 var urlWordExport = "";
@@ -199,6 +199,8 @@ function initializeTranslations(){
 	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
+	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
+	
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -1921,6 +1923,7 @@ function initializeTranslations(){
 	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
+	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables

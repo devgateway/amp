@@ -993,14 +993,14 @@ border-right: 1px solid rgb(208, 208, 208);
                     </tr>
                     <tr>
                         <td>
-                            <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                            <digi:link styleId="printWin" href="#" onclick="window.print(); return false;" title="Printer Friendly">
                                 <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
                             </digi:link>
                             <c:if test="${aimAddOrgForm.type=='NGO'}">
-                            	<digi:link href="#" onclick="javascript:exportWholeNGOInfo(); return false;">
+                            	<digi:link href="#" onclick="javascript:exportWholeNGOInfo(); return false;" title="Export to Excel">
 	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 	                            </digi:link>
-	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;">
+	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;" title="Export to PDF">
 	                            	<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 	                            </digi:link>
                             </c:if>                           

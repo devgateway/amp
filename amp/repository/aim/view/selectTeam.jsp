@@ -63,14 +63,14 @@
 					<table border=0 cellPadding=0 cellSpacing=0 width="100%" id="table_other" style="display:none;margin:0px 0px 15px 0px;">
 						<tr>
 							<td>
-								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;"><digi:trn key="aim:other">Other</digi:trn></div>
+								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:1000px;"><digi:trn key="aim:other">Other</digi:trn></div>
 						</td>
 						</tr>
 						<c:forEach var="members" items="${aimLoginForm.members}">
 							<c:if test="${empty members.ampTeam.workspaceGroup}">
 							<c:set var="nonEmptyGroup">true</c:set>
 							<tr>
-								<td><div class="workspacelist">
+								<td class="wrklist"><div class="workspacelist">
 									
 									<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParams2}" property="id">

@@ -725,3 +725,5 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 .white-item{color: white;}
 .marginal-five{margin-right:5px;}
 .invisible-item-hidden{visibility: hidden;}
+/*---rafy was here---*/
+td.wrklist div.workspacelist{padding:0px 0px 5px 0px;border-bottom:1px solid #f2f2f2;margin:0px 0px 5px 0px;width:300px;}

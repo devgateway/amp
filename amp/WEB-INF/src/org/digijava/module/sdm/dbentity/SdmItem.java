@@ -55,6 +55,10 @@ public class SdmItem
     public SdmItem() {
 
     }
+    public SdmItem(Sdm document,Long paragraphOrder) {
+    	this.document=document;
+    	this.paragraphOrder=paragraphOrder;
+    }
 
     public byte[] getContent() {
         return content;

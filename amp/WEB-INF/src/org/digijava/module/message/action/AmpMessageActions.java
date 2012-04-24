@@ -1063,6 +1063,7 @@ public class AmpMessageActions extends DispatchAction {
         	Sdm doc=null;
         	if(document!=null){
         		document.setName(message.getName());
+        		document.setId(null);
         		doc=DbUtil.saveOrUpdateDocument(document);
         		message.setAttachedDocs(doc);
         	} 

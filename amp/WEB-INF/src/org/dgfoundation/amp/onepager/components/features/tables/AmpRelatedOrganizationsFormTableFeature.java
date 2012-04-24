@@ -168,7 +168,8 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 
 			@Override
 			public boolean itemInCollection(AmpOrgRole item) {
-				return true; //all items displayed in the same list
+				return item.getRole().getAmpRoleId().compareTo(specificRole.getAmpRoleId()) == 0;
+			//	return true; //all items displayed in the same list
 			}
 
 		});

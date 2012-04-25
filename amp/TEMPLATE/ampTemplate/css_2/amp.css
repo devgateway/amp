@@ -74,7 +74,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .wlcm_txt_menu {font-size:12px; color:#CCCCCC; margin-top:5px; margin-bottom:15px;}
 .wlcm_txt_menu_spc {margin-left:10px; margin-right:10px;}
 .welcome_info {font-size:12px; line-height:17px;}
-.welcome_title {font-size:11pt; font-weight:bold; margin-bottom:10px;color:#737373;}
+.welcome_title {font-size:10pt; font-weight:bold; margin-bottom:10px;color:#737373;}
 #logincontainer {z-index:9999;}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
 .login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;float:left;margin-left:70px;}

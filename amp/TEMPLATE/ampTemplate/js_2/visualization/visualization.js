@@ -501,10 +501,10 @@ function resetToDefaults(){
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	document.getElementById("show_amounts_in_thousands").checked = false;
-	document.getElementById("startYearQuickFilter_dropdown").selected = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYearQuickFilter_dropdown").selected = document.getElementById("defaultEndYear").value;
-	document.getElementById("startYear_dropdown").selected = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYear_dropdown").selected = document.getElementById("defaultEndYear").value;
+	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
+	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
+	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
+	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
 	applyFilterPopin();
 }
 

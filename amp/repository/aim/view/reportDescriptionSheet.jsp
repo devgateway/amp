@@ -129,9 +129,22 @@
 	YAHOO.namespace("YAHOO.reportsheet");
 	function openReportWindow () {
 		var selectedReport	= document.getElementById('defaultReport').value;
-		var reference		= '/viewNewAdvancedReport.do?view=reset&ampReportId=' + selectedReport;
-		
-		window.open(reference, "_blank");
+		var href		= '/viewNewAdvancedReport.do?view=reset&ampReportId=' + selectedReport;
+		var popupName = "popup"+new Date().getTime();
+		var popupWindow = window.open("about:blank", popupName);		
+		if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+			var referLink = document.createElement('a');
+			referLink.href = href;
+			referLink.target = popupName;
+			document.body.appendChild(referLink);
+			referLink.click();
+		}
+		else
+		{
+			popupWindow.href = href;
+		}
+			
+	
 	}
 	
 	

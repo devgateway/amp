@@ -88,13 +88,31 @@
 <!--
 function popup(mylink, windowname)
 {
-	if (! window.focus)return true;
+	if (!window.focus)
+		return true;
+
 	var href;
 	if (typeof(mylink) == 'string')
-		href=mylink;
+		href = mylink;
 	else
-	  	href=mylink.href;
-	window.open(href,windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+		href = mylink.href;
+
+	if(windowname == ""){
+		windowname="popup"+new Date().getTime();
+	}
+	
+	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+		var referLink = document.createElement('a');
+		referLink.href = href;
+		referLink.target = windowname;
+		document.body.appendChild(referLink);
+		referLink.click();
+	}
+	else
+	{
+		openedWindow.location = href;
+	}
 	return false;
 }
 //-->

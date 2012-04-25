@@ -420,7 +420,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
 		try {
 			
-			if (showAcronyms()){
+			if (showAcronyms() && input.indexOf(ACRONYM_DELIMITER_STOP) != -1){
 				input = input.substring(input.indexOf(ACRONYM_DELIMITER_STOP) + ACRONYM_DELIMITER_STOP.length());
 			}
 			
@@ -435,7 +435,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
 			Collection<CHOICE> choices = newInstance.getObject();
 			
-			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
+			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object " + input +"!");
 			CHOICE[] allChoices = (CHOICE[]) choices.toArray();
 			return allChoices[allChoices.length - 1];
 		} catch (SecurityException e) {

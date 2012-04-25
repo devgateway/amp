@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.request.target.component.listener.BehaviorRequestTarget;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -16,13 +17,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
  */
 public class AmpOrganisationSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpOrganisation> {
-	
+	private static final Logger logger = LoggerFactory.getLogger(AmpOrganisationSearchModel.class);
 	public enum PARAM implements AmpAutoCompleteModelParam {
 		TYPE_FILTER, GROUP_FILTER
 	};
@@ -62,6 +65,7 @@ public class AmpOrganisationSearchModel extends
 			ret = crit.list();
 
 		} catch (HibernateException e) {
+			logger.error("Organization " +input + " not found.");
 			throw new RuntimeException(e);
 		} catch (DgException e) {
 			// TODO Auto-generated catch block

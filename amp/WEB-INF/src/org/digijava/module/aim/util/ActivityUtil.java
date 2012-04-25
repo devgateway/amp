@@ -121,6 +121,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -2984,7 +2985,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	  Criteria crit = session.createCriteria(AmpActivity.class);
 	  
 	  Conjunction conjunction = Restrictions.conjunction();
-	  conjunction.add(Restrictions.eq("name",name));
+	  conjunction.add(Restrictions.ilike("name", name, MatchMode.EXACT));
 	  if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
 	  crit.add(conjunction);
 	  

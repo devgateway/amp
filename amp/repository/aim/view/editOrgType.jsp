@@ -123,7 +123,7 @@
 												<td bgColor=#ffffff>
 													<table border="0" cellpadding="1" cellspacing="1" width="100%">
 														<tr>
-															<td height="25" bgcolor=#c7d4db align="center" colspan="5" style="font-size:12px; font-weight:bold; padding-bottom:15px;">
+															<td height="25" bgcolor=#c7d4db align="center" colspan="5" style="font-size:12px; font-weight:bold; ">
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
 																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>																</logic:equal>
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >
@@ -131,23 +131,23 @@
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%" bgColor=#f4f4f2 style="border:1px solid #CCCCCC;">
-																<table width="100%" cellPadding=3 cellSpacing=3 border="0" style="margin-top:15px;">
+															<td  bgColor=#f4f4f2 style="border:1px solid #ccc;">
+																<table width="500px" cellPadding=3 cellSpacing=3 border="0" style="margin-top:15px;" align="center">
 															  		<tr>
-																		<td width="50%" align="right">
+																		<td width="100" align="left">
 																		<digi:trn key="aim:orgTypeName">Name</digi:trn><font size="2" color="#FF0000">*</font></td>																
-																	    <td width="50%" >
-																	          <html:text property="orgType" size="35" />																	    </td>
+																	    <td width="400" >
+																	          <html:text property="orgType" size="60" style="border:1px solid #CCCCCC;" />																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="100" align="let">
 																        <digi:trn key="aim:orgTypeCode">Type Code<font size="2" color="#FF0000">*</font></digi:trn></td>
-																		<td width="30%">
-																           <html:text property="orgTypeCode" size="15" />																		</td>
+																		<td width="400">
+																           <html:text property="orgTypeCode" size="60" style="border:1px solid #CCCCCC;" />																		</td>
 																	</tr>
 																	<tr>
                                                                         <td colspan="2" align="center">
-                                                                            <fieldset style="width: 40%;border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
+                                                                            <fieldset style="border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>

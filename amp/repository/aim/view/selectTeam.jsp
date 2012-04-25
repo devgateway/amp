@@ -21,7 +21,7 @@
   <tr>
     <td valign="top">
     <div class="welcome_title">
-		<digi:trn key="aim:selectTheTeam">Select the team you want to use in this current session</digi:trn>
+		<digi:trn key="aim:selectTheTeam">Select the workspace you want to use for this session</digi:trn>
 	</div>
 	<div class="workspace_choose">
 				<tr><td>

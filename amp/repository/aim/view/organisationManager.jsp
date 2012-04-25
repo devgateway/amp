@@ -105,7 +105,7 @@
 					</td>
 				</tr>-->
 					<tr>
-						<td align="left" colspan=5>
+						<td align="left" colspan=7>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
@@ -114,7 +114,7 @@
 					</tr>
 					<tr>
 						<td width="250"><digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
-							<html:select property="ampOrgTypeId" styleClass="inp-text">
+							<html:select property="ampOrgTypeId" styleClass="inp-text-orgType">
 								<html:option value="-1">
 									<digi:trn key="aim:all">All</digi:trn>
 								</html:option>
@@ -124,10 +124,11 @@
 								</logic:notEmpty>
 							</html:select>
 						</td>
-						<td width="210"><digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
+						<td width="170"><digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
 						<html:text property="keyword" styleClass="inp-text" styleId="keyWordTextField"/>
-						</td>
-						<td width="120"><digi:trn key="aim:results">Results</digi:trn>&nbsp;
+                        </td>
+                        <td width="100">
+						<digi:trn key="aim:results">Results</digi:trn>&nbsp;
 							<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
 							<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
 							<html:select property="tempNumResults" styleClass="inp-text">
@@ -150,7 +151,7 @@
 							</c:set> <input type="button" value="${trnResetBtn}" class="buttonx_sm"
 							onclick="return resetSearch()">
 						</td>
-						<td width="300"><c:set var="trnGoBtn">
+						<td width="100"><c:set var="trnGoBtn">
 								<digi:trn key="aim:btnGo"> GO </digi:trn>
 							</c:set> <input type="button" value="${trnGoBtn}" class="buttonx_sm"
 							onclick="return searchOrganization()"  id="searchBtn">

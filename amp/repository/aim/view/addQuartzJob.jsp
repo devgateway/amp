@@ -293,7 +293,7 @@ function typeChanged(value){
                   <td width="288">
                 
                 
-                  <html:text name="quartzJobManagerForm" readonly="true" property="startDateTime" styleId="txtStartDateTime" style="width:100px" readonly="readonly" styleClass="inp-text"/>
+                  <html:text name="quartzJobManagerForm" readonly="true" property="startDateTime" styleId="txtStartDateTime" style="width:100px" styleClass="inp-text"/>
                	  
                   <a id="clear1" href='javascript:clearDate(document.getElementById("txtStartDateTime"), "clear1")'>
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -345,7 +345,7 @@ function typeChanged(value){
                   <td>
                  
      
-<html:text name="quartzJobManagerForm" readonly="true" property="endDateTime" styleId="txtEndDateTime" style="width:100px"  readonly="readonly"  styleClass="inp-text"/>
+<html:text name="quartzJobManagerForm" readonly="true" property="endDateTime" styleId="txtEndDateTime" style="width:100px"  styleClass="inp-text"/>
                    <a id="clear1" href='javascript:clearDate(document.getElementById("txtEndDateTime"), "clear1")'>
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>

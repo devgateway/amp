@@ -13,13 +13,13 @@
 <jsp:include page="allVisibilityTags.jsp" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align="center">
   <tr>
-   <td align="left" class="r-dotted-lg" vAlign="top" width="750px">
+   <td align="left" class="r-dotted-lg" vAlign="top">
       <table cellPadding="5" cellSpacing="0" width="100%">
         <tr>
           <td nowrap="nowrap" vAlign="top" align="center">
 
-<fieldset style="background-color:#F2F2F2;">
-<legend><span class="legend_label"><digi:trn>Administrative Tools</digi:trn></span></legend>
+<fieldset style="background-color:#F2F2F2;position:relative;padding-top:25px;">
+<legend class="admtoolsttl"><span class="legend_label"><digi:trn>Administrative Tools</digi:trn></span></legend>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>

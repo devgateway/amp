@@ -907,7 +907,8 @@ function removeGuest(obj) {
 		</tr>	
 		<tr>
 			<td height="16" vAlign="middle" width="571">
-				<span class=subtitle-blue>&nbsp;<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn> </span>
+            <div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:1000px;"><digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn></div>
+				
 			</td>
 		</tr>
 		<tr>			

@@ -294,20 +294,9 @@ function resetRecurrent(){
 
 
 <table border="0" cellPadding=2 cellspacing="0" width="100%" >
-
-
 <tr>
-	<td style="font-family: Tahoma;">
-	                <div style="padding: 1px;">
-	                    <div style="padding:7px;text-align:center;background-color: #336699; font-size: 18px;color:white; font-weight: bold;">
-	                        <digi:trn>Recurring Event Setup</digi:trn>
-	                    </div>
-	                </div>
-	</td>
-</tr>
-	<tr>
 		<td>
-		 <table border="0" cellpadding="10" width="100%" style="border-style:solid;border-color:#1C5180;border-width: 1px" >
+		 <table border="0" cellpadding="10" width="100%" style="border-style:solid;border-color:#ccc;border-width: 1px" >
 		 	<tr>
 		 		<td>
 			 		<table  border="0" width="100%">
@@ -318,7 +307,7 @@ function resetRecurrent(){
 					 		</tr>
 					 		<tr>
 					 			<td>
-					 			 <table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7"  style="border-style:solid;border-color:#1C5180;border-width: 1px">
+					 			 <table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7"  style="border-style:solid;border-color:#ccc;border-width: 1px">
 					 			 	<tr>
 							 		 	<td><digi:trn>Every</digi:trn></td>
 							 	 		<td>
@@ -338,7 +327,7 @@ function resetRecurrent(){
 							   </tr>
 					 		<tr>
 				 			<td>
-				 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7" style="border-style:solid;border-color:#1C5180;border-width: 1px">
+				 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7" style="border-style:solid;border-color:#ccc;border-width: 1px">
 				 				<!-- 	
 				 					<tr>
 							 	 		<td width="95px"><digi:trn>Recover Every Day</digi:trn></td>
@@ -367,14 +356,14 @@ function resetRecurrent(){
 			 		</table>
 		 		</td>
 			 		<td>
-				 		<table  bgcolor="#F5F5F5">
+				 		<table >
 						 		<tr bgcolor="white">
 						 			<td><input type="radio" name="typeofOccurrence" value="week" id="Weekly" onclick="disableInputs();"/><digi:trn>Weekly</digi:trn></td>
 						 		</tr>
 								<tr>
-									<td>
+									<td style="border-style:solid;border-color:#ccc;border-width: 1px" bgcolor="#F5F5F5">
 									<html:hidden  property="occurrWeekDays" name="calendarEventForm"  styleId="daysOfWeek"/>
-									  <table bgcolor="#F5F5F5" align="center" height="100px" width="300px" cellpadding="5" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
+									  <table  align="center" height="100px" width="300px" cellpadding="5" >		
 									 		<tr>
 									 	 		<td><digi:trn>Every</digi:trn></td>
 									 	 		<td>
@@ -384,18 +373,18 @@ function resetRecurrent(){
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td><input id="checkDay7" type="checkbox" name="occurrWeekDays" value="7" /><digi:trn>Sun</digi:trn></td>
-									 			<td><input id="checkDay3" type="checkbox" name="occurrWeekDays" value="3" /><digi:trn>Wed</digi:trn></td>
-									 			<td><input id="checkDay6" type="checkbox" name="occurrWeekDays" value="6" /><digi:trn>Saturday</digi:trn></td>
+									 			<td width="100"><input id="checkDay7" type="checkbox" name="occurrWeekDays" value="7" /><digi:trn>Sun</digi:trn></td>
+									 			<td width="100"><input id="checkDay3" type="checkbox" name="occurrWeekDays" value="3" /><digi:trn>Wed</digi:trn></td>
+									 			<td width="100"><input id="checkDay6" type="checkbox" name="occurrWeekDays" value="6" /><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td><input id="checkDay1" type="checkbox" name="occurrWeekDays" value="1" /><digi:trn>Monday</digi:trn></td>
-									 			<td><input id="checkDay4" type="checkbox" name="occurrWeekDays" value="4" /><digi:trn>Thur</digi:trn></td>
-									 			<td>
+									 			<td width="100"><input id="checkDay1" type="checkbox" name="occurrWeekDays" value="1" /><digi:trn>Monday</digi:trn></td>
+									 			<td width="100"><input id="checkDay4" type="checkbox" name="occurrWeekDays" value="4" /><digi:trn>Thur</digi:trn></td>
+									 			<td width="100">
 									 		</tr>
 									 		<tr>
-									 			<td><input id="checkDay2" type="checkbox" name="occurrWeekDays" value="2" /><digi:trn>Tuesday</digi:trn></td>
-									 			<td><input id="checkDay5" type="checkbox" name="occurrWeekDays" value="5" /><digi:trn>Friday</digi:trn></td>
+									 			<td width="100"><input id="checkDay2" type="checkbox" name="occurrWeekDays" value="2" /><digi:trn>Tuesday</digi:trn></td>
+									 			<td width="100"><input id="checkDay5" type="checkbox" name="occurrWeekDays" value="5" /><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>
@@ -407,7 +396,7 @@ function resetRecurrent(){
 					 			</tr>
 					 			<tr>
 					 			  <td>
-					 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
+					 				<table bgcolor="#F5F5F5" align="center" height="40px" width="300px" cellpadding="7"style="border-style:solid;border-color:#ccc;border-width: 1px" >		
 									  	<tr>
 					 						<td><digi:trn>Every</digi:trn></td>
 							 	 			<!--<td>
@@ -485,7 +474,7 @@ function resetRecurrent(){
 
 <tr>
 		<td>
-			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="350px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
+			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="690px" style="border-style:solid;border-color:#ccc;border-width: 1px">
 				 		
 				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
 				 		<tr>
@@ -562,16 +551,16 @@ function resetRecurrent(){
                                              <td nowrap="nowrap">
         	                                       <html:text styleId="recurrSelectedEndDate" readonly="true" name="calendarEventForm" property="recurrEndDate" style="width:80px"/>
                                              </td>
-                                             <td>
-            	                                 &nbsp;
+                                             <td>&nbsp;
+            	                                 
                                              </td>
                                              <!--<td>
                                                <a id="clear2" href="javascript:clearDate(document.getElementById('recurrSelectedEndDate'),'clear2')">
                                                  <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                </a>
                                              </td>
-                                             --><td>
-                	                             &nbsp;
+                                             --><td>&nbsp;
+                	                             
                                              </td>
                                              <td>
                                                <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("recurrSelectedEndDate"),"clear2")'>

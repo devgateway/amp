@@ -106,10 +106,13 @@
 		return false;
 	}
 	function isVoid(name){
-        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
-        	return true;
+		if (name == "" || name == null || name.charAt(0) == ' '){
+        	return 1;
         }		
-		return false;		
+		if (!isNaN(name)){
+        	return 2;
+        }		
+		return 0;		
 	}
 
 	function isPassVoid(name){
@@ -126,18 +129,34 @@
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
         
-        if (isVoid(name))
+        if (isVoid(name)==1)
         {
 			<c:set var="translation">
-			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank</digi:trn>
+			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank or starts with an space</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;
         }
-        if (isVoid(lastname))
+        if (isVoid(name)==2)
         {
 			<c:set var="translation">
-			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
+			<digi:trn key="erroruregistration.FirstNameNumeric">First can't be only numeric</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname)==1)
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.LastNameBlank">LastName is Blank or starts with an space</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname)==2)
+        {
+			<c:set var="translation">
+			<digi:trn key="erroruregistration.LastNameNumeric">LastName can't be only numeric</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;

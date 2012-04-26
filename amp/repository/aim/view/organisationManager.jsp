@@ -66,7 +66,7 @@
 	-->
 
 </script>
-<h1 class="admintitle">Organization manager</h1>
+<h1 class="admintitle"><digi:trn>Organization manager</digi:trn></h1>
 <digi:instance property="aimOrgManagerForm" />
 
 <digi:context name="digiContext" property="context" />

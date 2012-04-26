@@ -3550,6 +3550,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					+ " OR fundingDetail.ampDonorOrgId.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + ") "
 					+ " OR orgRole.organisation.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + "))"
 					+ " and ampAct.team is not null "
+					+ " and ampAct.deleted = false or ampAct.deleted is null "
 					+ " and (ampAct.approvalStatus like '"+Constants.APPROVED_STATUS+"' or ampAct.approvalStatus like '"+Constants.STARTED_APPROVED_STATUS+"')"
 					+ " order by ampAct.ampActivityId desc";
 			}
@@ -3558,7 +3559,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				queryString = "select ampAct from "
 					+ AmpActivityVersion.class.getName()
 					+ " ampAct"
-					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
+					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId and ampAct.deleted = false or ampAct.deleted is null order by ampAct.ampActivityId desc";
 			}
 			qry = session.createQuery(queryString).setMaxResults(5);
 			qry.setLong("teamId", team.getAmpTeamId());

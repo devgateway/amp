@@ -702,7 +702,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		String ACTUAL_APPROVAL_YEAR_FILTER = "";
 		if (actualAppYear!=null && actualAppYear!=-1) {
-			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE YEAR(actual_approval_date) = " + actualAppYear + " ";
+			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE EXTRACT (YEAR FROM actual_approval_date) = " + actualAppYear + " ";
 		}
 		
 		if (locationSelected!=null) {

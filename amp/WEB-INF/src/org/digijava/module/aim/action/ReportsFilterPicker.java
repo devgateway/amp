@@ -1216,6 +1216,8 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getActualAppYear()!=-1){
 			arf.setActualAppYear(filterForm.getActualAppYear());
 		}
+		else 
+			arf.setActualAppYear(null);
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency;
 		if (filterForm.getCurrency()!=null){

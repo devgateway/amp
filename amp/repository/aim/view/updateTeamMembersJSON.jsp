@@ -20,71 +20,47 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=380>
 	<tr>
-
-		<td align=left vAlign=top width=380>
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<td height=16 vAlign=center width=380><span class=subtitle-blue>
-						<bean:write name="aimTeamMemberForm" property="teamName" />
-					</span></td>
-				</tr>
-				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr><td noWrap width=380 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
-								<td vAlign="top" width="100%">&nbsp;
-									
+								<td vAlign="top" width="100%" style="border-bottom:2px solid #ccc;"valign="middle" >
+									<span class=subtitle-blue style="margin:0px 0px 0px 0px;display:block;float:left;width:200px;">
+                                    <bean:write name="aimTeamMemberForm" property="teamName" /></span>
+                                    <div class="adminicon" style="float: right;"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
 								</td>
 							</tr>
-							<tr>
-								<td valign="top" style="border:1px solid #ccc;">
-									<table align=center cellPadding=0 cellSpacing=0 width="100%" border=0>	
-										<tr >
-											<td style="border-bottom:1px solid #ccc;">
-												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
-													<tr >
-														<td  class=box-title width=100 align="center">
-																<logic:equal name="aimTeamMemberForm" property="action" value="edit">
-																	<digi:trn key="aim:editTeamMembers">Edit Members</digi:trn>	
-																</logic:equal>
-																<strong>
-                                                                <logic:equal name="aimTeamMemberForm" property="action" value="delete">
-																	<digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn>	
-																</logic:equal></strong>
-														</td>
-                                                        <td class=box-title align="right">
-                                                        	<div class="adminicon" style="float: right;"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
-                                                        </td>
-                                                    </tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td bgColor=#ffffff class=box-border>
+							<tr >
+								<td valign="top" style="padding:10px 0px;border-bottom:2px solid #ccc;">
+									
+								<logic:equal name="aimTeamMemberForm" property="action" value="edit"><digi:trn key="aim:editTeamMembers">Edit Members</digi:trn></logic:equal>
+								<h3><logic:equal name="aimTeamMemberForm" property="action" value="delete"><digi:trn key="aim:deleteTeamMembers">Delete Members</digi:trn></logic:equal></h3>
+								</td></tr>
+								<tr>
+									<td bgColor=#ffffff class=box-border colspan="2">
 												<table border=0 cellPadding=5 cellSpacing=1 class=box-border width="100%">
 													<tr>
-														<td align="left" width="50%">
+														<td align="left" width="40%" style="font-weight:bold;">
 															<digi:trn key="aim:memberName">Name &nbsp;&nbsp; &nbsp;</digi:trn>
 														</td>
-														<td align="left" width="50%">
+														<td align="left" width="60%">
 															<bean:write name="aimTeamMemberForm" property="name" />
 															<html:hidden name="aimTeamMemberForm" property="someError" />
 														</td>
 													</tr>
 													<tr>
-														<td align="left" width="50%">
+														<td align="left" width="40%" style="font-weight:bold;">
 															<digi:trn key="aim:memberRole">Role&nbsp;&nbsp; &nbsp;&nbsp;</digi:trn>	
 														</td>
-														<td align="left" width="50%">
+														<td align="left" width="60%">
 															<html:select property="role">
 																<%@include file="teamMemberRolesDropDown.jsp" %>
 															</html:select>
 														</td>
 													</tr>
 													<tr>
-														<td colspan="2" width="60%">
+														<td colspan="2" width="40%"  style="border-top:2px solid #ccc;">
 															<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 															<table width="100%" cellspacing="5">
 																<tr>
@@ -136,9 +112,7 @@
 </tr>
 					</table>
 					</td>
-				</tr>
-			</table>
-		</td>
+		
 	</tr>
 </table>
 </digi:form>

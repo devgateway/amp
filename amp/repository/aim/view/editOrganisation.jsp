@@ -356,11 +356,17 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             myAddLocation(params);
         }
         function removeSelLocations(){
+        	var locationsToBeRemoved=$("#selectedLocationsList").find("input[name='selLocs']:checked");
+        	if(locationsToBeRemoved==null || locationsToBeRemoved.length == 0){
+            	alert('<digi:trn jsFriendly="true">Please choose at least one location to remove</digi:trn>');
+            	return false;
+        	}else{
     		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.action = "${remLocs}";
             document.aimAddOrgForm.target = "_self"
             document.aimAddOrgForm.actionFlag.value="deleteLocation";
             document.aimAddOrgForm.submit();
+        	}
         }
         function removeAllLocations(){
             try{
@@ -1454,7 +1460,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                 </c:if>
 
                                                 <c:if test="${not empty aimAddOrgForm.selectedLocs}">
-                                                    <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+                                                    <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedLocationsList">
 
                                                         <c:forEach var="selectedLocs" items="${aimAddOrgForm.selectedLocs}">
 

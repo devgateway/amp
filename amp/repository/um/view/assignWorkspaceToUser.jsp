@@ -95,7 +95,7 @@
 					      <td align="center">
 						     <table width="100%">
 							    <tr>
-							       <td style="background-color: #c7d4db; height: 25px;" align=center><b>New User</b>
+							       <td style="background-color: #c7d4db; height: 25px;" align=center><b><digi:trn>New User</digi:trn></b>
 							    </tr>
 							 </table>
 						  </td>
@@ -232,7 +232,7 @@
 												<c:out value="${assignedWS.ampTeam.name}"/>
 												</td>
 												<td>
-												<c:out value="${assignedWS.ampMemberRole.description}"/>
+												<digi:trn><c:out value="${assignedWS.ampMemberRole.description}"/></digi:trn>
 												</td>
 												<td align="center">
 													<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn>Click on this icon to remove user from the workspace</digi:trn>">

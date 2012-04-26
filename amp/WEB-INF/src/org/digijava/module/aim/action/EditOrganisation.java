@@ -921,11 +921,15 @@ public class EditOrganisation extends DispatchAction {
       if (exist) {
           errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgNameError"));
       }
-
-      Collection orgsCol = DbUtil.getOrgByCode(action, editForm.getOrgCode(),editForm.getAmpOrgId());
-      if (!orgsCol.isEmpty()) { // To check for duplicate org-code
-          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgCodeError"));
-      }
+		if (editForm.getOrgCode() != null
+				&& editForm.getOrgCode().trim().length() > 0) {
+			Collection orgsCol = DbUtil.getOrgByCode(action,
+					editForm.getOrgCode(), editForm.getAmpOrgId());
+			if (!orgsCol.isEmpty()) { // To check for duplicate org-code
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"error.aim.organizationManager.saveOrgCodeError"));
+			}
+		}
             
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 

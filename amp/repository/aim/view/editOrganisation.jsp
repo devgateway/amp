@@ -549,7 +549,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             }
             else{
                 var orgCode= document.aimAddOrgForm.orgCode.value;
-                if (orgCode == null||orgCode.length == 0 ) {
+                var mandatoryOrganizationCode = document.getElementById('mandatoryOrganizationCode');
+                if ( mandatoryOrganizationCode!=null&&(orgCode == null||orgCode.length == 0) ) {
                     alert('<digi:trn  jsFriendly="true">Please enter code for this Organization.</digi:trn>');
                     document.aimAddOrgForm.orgCode.focus();
                     return false;
@@ -1766,19 +1767,22 @@ border-right: 1px solid rgb(208, 208, 208);
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdBoldClass"><digi:trn>Organization Code</digi:trn><font
-                            size="2" color="#FF0000">*</font></td>
+                    <td class="tdBoldClass"><digi:trn>Organization Code</digi:trn>
+                    <feature:display name="Organization Form" module="Organization Manager"></feature:display>
+                     <field:display name="Mandatory Organization Code" feature="Organization Form">
+                    	<span id="mandatoryOrganizationCode"><font size="2" color="#FF0000">*</font></span>
+                     </field:display>
+
                     <td  height="30px"><html:text
                         property="orgCode" size="15" styleId="orgCode"/></td>
                 </tr>
 
                 <tr>
                     <td class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn>
-                    <feature:display name="Organization Form" module="Organization Manager">
+                   
                      <field:display name="Mandatory Budget Organization Code" feature="Organization Form">
                     	<span id="mandatoryBudgetOrganizationCode"><font size="2" color="#FF0000">*</font></span>
-                     </field:display>
-                    </feature:display></td>
+                     </field:display></td>
                     <td  height="30px"><html:text
                         property="budgetOrgCode" size="15" styleId="budgetOrgCode"/></td>
                 </tr>

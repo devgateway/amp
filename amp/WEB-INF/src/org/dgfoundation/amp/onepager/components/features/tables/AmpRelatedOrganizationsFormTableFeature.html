@@ -1,0 +1,37 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:organization">Organization</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:departmentDivision">Department/Division</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn>Percentage</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="list">
+		<td class="inside" align="right"><span wicket:id="name"/></td>
+		<td class="inside"><input class="inputx" wicket:id="departmentDivision"/></td>
+		<td class="inside"><span wicket:id="percentage"/></td>
+		<td class="inside" align="left">
+			<span wicket:id="delRelOrg"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="inside" align="center" >
+			<span wicket:id="ajaxIndicator"/>
+			<span wicket:id="relOrgPercentageTotal"/>
+			<span wicket:id="uniqueOrgsValidator"/>			
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="inside" align="right">
+			<table>
+					<tr>
+						<td>
+							<span wicket:id="search"/>	
+						</td>
+						<td>
+							<span wicket:id="dividePercentage"/>
+						</td>
+					</tr>
+			</table>
+		</td>		
+	</tr>
+</wicket:extend>

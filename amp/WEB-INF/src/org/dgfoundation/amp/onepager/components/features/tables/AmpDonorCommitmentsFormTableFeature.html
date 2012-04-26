@@ -1,0 +1,36 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title">
+			<wicket:trn key="trn:adjType">Adjustment Type</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:amount">Amount</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:currency">Currency</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:transactionDate">Transaction Date</wicket:trn></b></td>
+		<wicket:fm fmNames="Exchange Rate">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:exchangeRate">Exchange Rate</wicket:trn></b></td>
+		</wicket:fm>
+		<wicket:fm fmNames="Pledges">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:pledge">Pledge</wicket:trn></b></td>
+		</wicket:fm>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="listCommitments">
+		<td  class="inside"><span wicket:id="adjustmentType"/></td>
+		<span class="invisible-item" wicket:id="fundingAmount"/>
+		<wicket:fm fmNames="Exchange Rate">	
+			<td class="inside"><span wicket:id="exchangeRate"/></td>
+		</wicket:fm>
+		<wicket:fm fmNames="Pledges">
+			<td class="inside"><span wicket:id="pledge"/></td>
+		</wicket:fm>
+		<td  class="inside">
+			<span wicket:id="delCommitment"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="inside" align="center" colspan="8">
+			    <span wicket:id="ajaxIndicator"/>
+				<span wicket:id="amountSumComparator"/>
+				
+		</td>
+	</tr>
+</wicket:extend>

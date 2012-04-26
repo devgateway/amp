@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-9423</jira>
+    <keyword>Mondrian</keyword>
+    <author>Diego</author>
+    <description>Modify Sub Sub Sector- Add parent sector for mondrian</description> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                CREATE OR REPLACE VIEW v_sub_sub_sectors AS 
+ 				SELECT a.amp_activity_id, s.name, s.amp_sector_id, a.sector_percentage,parent_sector_id
+   				FROM amp_activity_sector a, amp_sector s
+  				WHERE a.amp_sector_id = s.amp_sector_id AND getsectordepth(s.amp_sector_id) = 2 AND (s.amp_sec_scheme_id IN ( SELECT c.classification_id
+           		FROM amp_classification_config c
+          		WHERE c.name::text = 'Primary'::text))
+  				ORDER BY a.amp_activity_id, s.name;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

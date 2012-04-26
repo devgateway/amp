@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE digi-common [
+       <!ENTITY commonEntities SYSTEM "digi-common.xml">
+]>
+
+<digi-config>
+    <smtp>
+		 <host>localhost</host>
+		 <from>system@digijava.org</from>
+	</smtp>	
+
+	
+     <logon-site id="dglogin" host="">http://clean.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://clean.ampdev.net/</site-domain>
+      
+      <server-type caseSensitiveTranslatioKeys="false"/>
+    
+	<server-type prefix="">development</server-type>
+
+
+	<forward-emails enabled="false">
+		<email>lasha@gateway.ge</email>
+	</forward-emails>
+
+	<exception-emails>
+		<email>lasha@gateway.ge</email>
+	</exception-emails>
+	
+	<enable-autologin>true</enable-autologin>
+
+	<!-- ECS Service -->
+	<ecsDisable>true</ecsDisable>
+	<ecsServerName>ampdev.200.clean</ecsServerName>
+	<!-- <propertiesFile></propertiesFile> -->
+	<!--             -->
+
+	    
+   <!-- <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
+            <description>Advanced Database Patcher Module</description>
+            <property name="patchesDir">patches</property>
+    </service>
+	
+-->	&commonEntities;
+	
+</digi-config>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10122</jira>
+  <keyword>Update amp_filter_data</keyword>
+  <author>Dan</author> 
+
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+update amp_filter_data set element_class_name='org.digijava.module.aim.dbentity.AmpCategoryValueLocations', property_class_name='java.util.HashSet', property_name='locationSelected' where property_name='regionSelected';
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

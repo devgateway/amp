@@ -1,0 +1,7 @@
+update amp_measures set description='Current Year Actual Disbursements Until Previous Month (not included)'  where  measureName='Prior Actual Disbursements';
+update amp_measures set description='Actual Disbursements Of Previous Month' where  measureName='Previous Month Disbursements';
+update amp_measures set description='Prior Actual Disbursements + Previous Month Disbursements' where measureName='Cumulated Disbursements';
+update amp_measures set description='(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100' where measureName='Consumption Rate';
+update amp_measures  set measureName='Selected Year Planned Disbursements', description='Selected Year Planned Disbursements', aliasName='Selected Year Planned Disbursements', expression='selectedYearPlannedDisbursement' where measureName='Last Year of Planned Disbursements';
+delete from amp_report_measures where measureId in (select x.measureId from amp_measures x where x.measureName in  ('Previous 2 Year Planned Disbursements','Previous 3 Year Planned Disbursements','Current Year Actual Planned Disbursements','Current Planned Disbursements','Current Year Planned Disbursements'));
+delete from amp_measures where measureName in  ('Previous 2 Year Planned Disbursements','Previous 3 Year Planned Disbursements','Current Year Actual Planned Disbursements','Current Planned Disbursements','Current Year Planned Disbursements');

@@ -306,6 +306,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (mapLevel == null) {
 			mapLevel = "2";
 		}
+        
+        int mapLevelInt = Integer.parseInt(mapLevel);
 
         MapColorScheme colorScheme = GisUtil.getActiveColorScheme(request);
 		if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
@@ -324,9 +326,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			} else {
 				if (mapCode != null && mapCode.trim().length() > 0) {
-					outMapByteArray = getMapImage(mapCode, colorScheme);
+					outMapByteArray = getMapImage(mapCode, mapLevelInt, colorScheme);
 				} else {
-					outMapByteArray = getMapImage("TZA", colorScheme);
+					outMapByteArray = getMapImage("TZA", mapLevelInt,   colorScheme);
 				}
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
@@ -1740,14 +1742,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-	private ByteArrayOutputStream getMapImage(String mapCode, MapColorScheme colorScheme) {
+	private ByteArrayOutputStream getMapImage(String mapCode, int mapLevel, MapColorScheme colorScheme) {
 		GisUtil gisUtil = new GisUtil();
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
 
 		if (mapCode != null && mapCode.trim().length() > 0) {
-			map = GisUtil.getMap(mapCode);
+			map = GisUtil.getMap(mapCode, mapLevel);
 		}
 
 		int canvasWidth = 700;

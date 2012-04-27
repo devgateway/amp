@@ -86,6 +86,8 @@
 	var selectedFromYear = document.getElementsByName("selectedFromYear")[0].value;
 	var selectedToYear = document.getElementsByName("selectedToYear")[0].value;
 
+	var mapLevel = $("[name='mapLevelRadio']:checked").val();
+	mapLevel = (mapLevel==null)?2:mapLevel;
 
 	if (showDevinfo) {
 			var sectorId =  document.getElementById("sectorsMapCombo").value;
@@ -93,7 +95,7 @@
 			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
 		  
-			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval, 780, 500);
+			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&mapLevel=" + mapLevel + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval, 780, 500);
 		} else {
 			
 			/*

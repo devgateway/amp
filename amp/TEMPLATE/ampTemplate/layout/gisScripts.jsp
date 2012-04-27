@@ -60,12 +60,16 @@ window.onload = function(){
 			selectDonorsStr = escape(selectDonors.options[idx].text);
 	}
 
+
+	var mapLevel = $("[name='mapLevelRadio']:checked").val();
+	mapLevel = (mapLevel==null)?2:mapLevel;
+	
 	if (showDevinfo) {
 			var sectorId =  document.getElementById("sectorsMapCombo").value;
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
 			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
-			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&indYear=" + timeInterval, 780, 500);
+			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&selectedDonor=" + selectedDonor + "&mapLevel=" + mapLevel + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&indYear=" + timeInterval, 780, 500);
 		} else {
 			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
 			

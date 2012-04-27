@@ -49,6 +49,7 @@ public class EditOrgType extends DispatchAction {
 		 }
 
 		AddOrgTypeForm editForm = (AddOrgTypeForm) form;
+		editForm.setDeleteFlag("no");
 		if (null == editForm.getOrgType()){
 			return mapping.findForward("forward");
 		}else{

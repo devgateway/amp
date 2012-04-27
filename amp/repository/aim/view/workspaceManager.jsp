@@ -681,7 +681,7 @@
                 html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
                 html[j++] = '</td></tr>';
             }
-            document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;"><digi:trn  jsFriendly="true">* Worskpace Manager</digi:trn></em>';
+            document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;">* <digi:trn  jsFriendly="true">Worskpace Manager</digi:trn></em>';
         } else {
             html[j++] = '<tr><td colspan="2"><em><digi:trn  jsFriendly="true">No Member data</digi:trn><em></td></tr>';
             document.getElementById('footerMessage').innerHTML='';

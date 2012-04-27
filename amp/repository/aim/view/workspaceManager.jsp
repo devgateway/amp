@@ -1040,7 +1040,7 @@
 </script> 
 
 <DIV id="TipLayer"	style="absolute;z-index:1000;"></DIV>
-<h1 class="admintitle">Workspace manager</h1>
+<h1 class="admintitle"><digi:trn>Workspace manager</digi:trn></h1>
 
 <digi:context name="digiContext" property="context" />
 

@@ -123,7 +123,8 @@ span.extContactDropdownEmail {
 .yui-pg-current-page {
 	background-color: #FFFFFF;
 	color: rgb(208, 208, 208);
-	padding: 0px;
+	padding-right: 10px;
+	border-right: 1px solid rgb(208, 208, 208);
 }
 
 .current-page {
@@ -131,6 +132,8 @@ span.extContactDropdownEmail {
 	color: #FFFFFF;
 	margin-right: 5px;
 	font-weight: bold;
+	padding-right: 10px;
+	border-right: 1px solid rgb(208, 208, 208);
 }
 
 .yui-pg-last {
@@ -200,7 +203,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
 	        	}
 	        }
-	        // Create the Paginator 
+	        // Create the Paginator  yui-pg-current-page yui-pg-page
 	        var myPaginator = new YAHOO.widget.Paginator({ 
 	        	rowsPerPage:10,
 	        	containers : ["dt-pag-nav"], 
@@ -287,7 +290,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		});
 		
 		var teamHeadRole=document.getElementById('wrkspcManRoleId').value;
-		var teamHeadCount=0; //this field is used to cound how many users were indicated as TL.if it's greater then 1,then we should show error
+		var teamHeadCount=0; //this field is used to count how many users were indicated as TL.if it's greater then 1,then we should show error
 		var workspaceManExist=document.getElementById('wrkspcManager').value;
 		if(workspaceManExist=='exists'){
 			teamHeadCount++;

@@ -103,21 +103,25 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			@Override
 			protected ArrayList<AmpComments> load() {
 				HashSet<AmpComments> tmp = org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS);
+				
 				ArrayList list = new ArrayList();
 				
 				if (tmp == null){
 					tmp = new HashSet();
 					org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_ITEMS, tmp);
 				}
-
+				if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS) == null)
+					org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, new HashSet());
+				
 				Iterator<AmpComments> it = tmp.iterator();
 				while (it.hasNext()) {
 					AmpComments comm = (AmpComments) it.next();
-					if (comm.getAmpFieldId().getAmpFieldId() == field.getAmpFieldId())
+					if (comm.getAmpFieldId().getAmpFieldId() == field.getAmpFieldId() &&
+							!org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS).contains(comm) )
 						list.add(comm);
 				}
 				
-				if (list.size() == 0){
+				if (list.size() == 0  && org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS).isEmpty()){
 					
 					ArrayList<AmpComments> listTmp = new ArrayList<AmpComments>();
 					try {
@@ -154,7 +158,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<AmpComments> item) {
+			protected void populateItem(final ListItem<AmpComments> item) {
 				final IModel<AmpComments> currentItem = PersistentObjectModel.getModel(item.getModelObject());
 				item.add(new Label("userName", new PropertyModel<String>(currentItem, "memberName")));
 				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("deleteComment","Delete Comment") {
@@ -164,8 +168,9 @@ public class AmpCommentPanel extends AmpFieldPanel {
 							org.apache.wicket.Session.get().setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, new HashSet());
 					
 						if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) != null)
-							org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).remove(currentItem.getObject());
-						
+						{
+						    org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).remove(currentItem.getObject());							
+						}
 						org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS).add(currentItem.getObject());
 
 						listView.removeAll();

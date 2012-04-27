@@ -80,7 +80,7 @@
 				});
 	}
 </script>
-<div id="show_login_pop_box" style="width: 250px;">
+<div id="show_login_pop_box" style="width: 270px;">
 						<form action="/j_spring_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:

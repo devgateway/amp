@@ -142,7 +142,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
@@ -1867,7 +1867,7 @@ function initializeTranslations(){
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
 	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>Show Top</digi:trn>" + " " + document.getElementById("topLists").value; 
+	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
 	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";

@@ -68,7 +68,10 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		if (choice.getId() == null) {
 			return TranslatorUtil.getTranslation("add new contact");
 		}
-		return choice.getFullname();
+		String ret = choice.getFullname();
+		if (ret == null)
+			ret = "";
+		return ret;
 	}
 
 	@Override

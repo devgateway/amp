@@ -25,7 +25,7 @@
      document.aimAddSectorForm.submit();
  }
 </script>
-<h1 class="admintitle">Sector manager</h1>
+<h1 class="admintitle"><digi:trn>Sector manager</digi:trn></h1>
 <digi:instance property="aimAddSectorForm" />
 <digi:form action="/getSectorSchemes.do" method="post">
 <digi:context name="digiContext" property="context" />

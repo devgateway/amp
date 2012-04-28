@@ -29,17 +29,17 @@
 					<table border=0 cellPadding=0 cellSpacing=0 width="100%" id="table_${workspaceGroup}" 
                     style="display:none;margin:0px 0px 15px 0px;">
 						<tr>
-							<td style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:100%;">
-								<div class="subtitle-blue" ><c:out value="${workspaceGroup}"/></div>
+							<td>
+								<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:100%;"><digi:trn><c:out value="${workspaceGroup}"/></digi:trn></div>
 						</td>
 						</tr>
 		<c:forEach var="members" items="${aimLoginForm.members}">
 							<c:set var="nonEmptyGroup">false</c:set>
 							<c:if test="${members.ampTeam.workspaceGroup.id eq workspaceGroup.id}">
 								<c:set var="nonEmptyGroup">true</c:set>
-			<img src=img_2/ico_wrkspc.gif style="margin-right:7px;">
+			
 								<tr>
-									<td>
+									<td class="wrklist">
 										<div class="workspacelist">
 			<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 				<c:set target="${urlParams}" property="id">

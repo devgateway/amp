@@ -106,7 +106,7 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 			this.choiceModel=model;
 			if (selectedMultiselect)
 				choiceContainer = new ListMultipleChoice<AmpCategoryValue>(
-						"choice", model, choices);
+						"choice", model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>());
 			else
 				choiceContainer = new DropDownChoice<AmpCategoryValue>(
 						"choice",

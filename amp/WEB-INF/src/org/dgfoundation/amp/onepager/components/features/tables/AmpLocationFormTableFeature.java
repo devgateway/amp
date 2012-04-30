@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -34,6 +35,7 @@ import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -71,7 +73,7 @@ public class AmpLocationFormTableFeature extends
 			final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel,
 			final IModel<Boolean> disablePercentagesForInternational)
 			throws Exception {
-		super(id, am, fmName);
+		super(id, am, fmName, false, true);
 		setTitleHeaderColSpan(4);
 		setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
@@ -105,6 +107,11 @@ public class AmpLocationFormTableFeature extends
 		};
 		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
+		
+		final AmpMinSizeCollectionValidationField<AmpActivityLocation> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityLocation>(
+				"minSizeValidator", listModel, "Location required validator");
+		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
+		add(minSizeCollectionValidationField);
 		
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 

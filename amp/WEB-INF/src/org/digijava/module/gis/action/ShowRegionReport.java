@@ -5,6 +5,7 @@ import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -35,7 +36,15 @@ public class ShowRegionReport extends Action {
 
         response.setContentType("text/html");
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
+        HttpSession session = request.getSession();
 
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        if(tm==null){
+        	gisRegReportForm.setFromPublicView(Boolean.TRUE);
+        }
+        else{
+        	gisRegReportForm.setFromPublicView(Boolean.FALSE);
+        }
 
 
         boolean isDevinfo = request.getParameter("devInfo")!=null && request.getParameter("devInfo").trim().compareToIgnoreCase("true") == 0;
@@ -93,11 +102,11 @@ public class ShowRegionReport extends Action {
                 gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
             }
 
-            TeamMember tm = null;
+
             Long teamId = null;
             boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
             if (curWorkspaceOnly) {
-                tm = (TeamMember)request.getSession().getAttribute("currentMember");
+               
                 if (tm != null) {
                     AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
                     teamId = team.getAmpTeamId();
@@ -160,11 +169,10 @@ public class ShowRegionReport extends Action {
                 gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
             }
 
-            TeamMember tm = null;
+
             Long teamId = null;
             boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
             if (curWorkspaceOnly) {
-                tm = (TeamMember)request.getSession().getAttribute("currentMember");
                 if (tm != null) {
                     AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
                     teamId = team.getAmpTeamId();

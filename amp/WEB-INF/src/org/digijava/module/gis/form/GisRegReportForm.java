@@ -39,8 +39,17 @@ public class GisRegReportForm extends ActionForm {
     private List<String> selSectorNames;
 
     private boolean filterAllSectors;
+    private boolean fromPublicView;
 
-    public boolean isFilterAllSectors() {
+    public boolean isFromPublicView() {
+		return fromPublicView;
+	}
+
+	public void setFromPublicView(boolean fromPublicView) {
+		this.fromPublicView = fromPublicView;
+	}
+
+	public boolean isFilterAllSectors() {
         return filterAllSectors;
     }
 

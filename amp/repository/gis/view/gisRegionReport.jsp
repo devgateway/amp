@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
 
@@ -220,9 +221,20 @@
 								<td width="30%" valign="top" style="overflow-x:hidden;" height="20">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
-											<a title="<bean:write name="activityLocationFunding" property="activityName"/>" href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activityId"/>);">
-												<bean:write name="activityLocationFunding" property="activityName"/>
-											</a>
+											<c:choose>
+												<c:when test="${gisRegReportForm.fromPublicView}">
+													<bean:write name="activityLocationFunding"
+														property="activityName" />
+												</c:when>
+												<c:otherwise>
+													<a
+														title="<bean:write name="activityLocationFunding" property="activityName"/>"
+														href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activityId"/>);">
+														<bean:write name="activityLocationFunding"
+															property="activityName" />
+													</a>
+												</c:otherwise>
+											</c:choose>
 										</div>
 									</div>
 								</td>

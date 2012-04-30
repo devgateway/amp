@@ -13,8 +13,9 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.animSpeed=0.5;
     this.autoComplete.minQueryLength=0;
     this.autoComplete.queryDelay=1;
-    this.autoComplete.forceSelection=true;
+    //this.autoComplete.forceSelection=true;
     this.autoComplete.maxResultsDisplayed = 1000;
+    this.autoComplete.containerPopulateEvent.subscribe(function(sType, aArgs) {document.getElementById(inputId).focus();});
     this.autoComplete.formatEscapedResult = function(pResultData, pQuery, pResultMatch) {
     	var formatedResult;
     	var escapedResultData=pResultData[1];

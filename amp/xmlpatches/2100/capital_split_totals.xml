@@ -4,6 +4,10 @@
   <keyword>percetanges</keyword>
   <keyword>capital expenditure</keyword>
   <author>Alex</author>  
+  
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorview" columnvalue="v_capital_and_exp" />
+  </trigger>
    
   <apply>
     <script>

@@ -5,6 +5,10 @@
     <keyword>grouping</keyword>
     <author>FFerreyra</author>
     <description>Adding group as attribute for the Workspaces</description>
+    
+    <trigger type="all">
+	      <condition  type="entryInTableMissing" tablename="amp_category_class" columnname="keyName" columnvalue="workspace_group" />
+	</trigger>
        <apply>
         <script>
             <lang  delimiter=";" type="postgres">

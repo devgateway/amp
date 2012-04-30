@@ -5,6 +5,11 @@
   <author>Diego Dimunzio</author>
   <description>Add the type of executing agency and implementing agency in the report generator</description>
   
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorview" columnvalue="v_executing_agency_type" />
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorview" columnvalue="v_implementing_agency_type" />
+  </trigger>
+  
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

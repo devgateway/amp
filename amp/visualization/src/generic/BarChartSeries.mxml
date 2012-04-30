@@ -488,6 +488,7 @@
 				var params:Object = {};
 				params["format"] = "xml";
 				params["divide"] = divide;
+				params["action"] = dataAction;
 				if(idContainer == "AidType"){
 					params["typeofaid"] = "true";
 				}

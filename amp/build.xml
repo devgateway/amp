@@ -79,20 +79,12 @@
 
     <!-- classpath for Struts 1.1 -->
     <path id="compile.classpath">
-        <fileset dir="${lib}">
-          <include name="**/*.jar"/>
-          <include name="**/*.zip"/>
-        </fileset>
     	<pathelement location="${classes}"/>
     	<pathelement path="${compile_classpath}"/>
     </path>
 
     <!-- classpath for JAXB -->	
-    <path id="xjc.classpath">
-        <fileset dir="${lib}">
-          <include name="**/*.jar"/>
-          <include name="**/*.zip"/>
-        </fileset>
+    <path id="xjc.classpath">      
     	<pathelement path="${compile_classpath}"/>
     </path>
 
@@ -133,7 +125,7 @@
   <!--compile Java source files-->
    <target name="jaxb" description="Compile all Java source files">
     <echo message="Compiling the schema..." />
-    <mkdir dir="${gen-src}" />
+    <mkdir dir="${gen-src}" />   	
     <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
     	<produces dir="${gen-src}" includes="org/digijava/module/dataExchange/jaxb/*.java"/>
    	</xjc>
@@ -337,8 +329,7 @@
       <delete dir="${doc.path}"/>
       <delete dir="${gen-src}"/>
       <delete dir="${metainf}"/>    	
-   	  <delete dir="${webinf}/lib"/>
-      <mkdir dir="${webinf}/lib"/>
+   	  <delete dir="${webinf}/lib"/>      
     </target>
                                  
 

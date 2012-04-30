@@ -491,6 +491,7 @@ function resetToDefaults(){
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_config_dropdown_id").selectedIndex = 0;
+	callbackChildren.call(document.getElementById("sector_config_dropdown_id"), null);
 	removeOptionsDropdown("org_dropdown_id");
 	removeOptionsDropdown("zone_dropdown_id");
 	removeOptionsDropdown("sector_dropdown_id");
@@ -505,6 +506,7 @@ function resetToDefaults(){
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
+	document.getElementById("SectorProfileItemId").value = -1;
 	applyFilterPopin();
 }
 

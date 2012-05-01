@@ -260,7 +260,7 @@ public class ExportActivityToPDF extends Action {
 			}
 			//Description cell
 			if(FeaturesUtil.isVisibleField("Description", ampContext)){
-				columnName=TranslatorWorker.translateText("Description",locale,siteId);
+				columnName=TranslatorWorker.translateText("Description",locale,siteId);				
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getDescription()));
 			}
 			//Lessons learned
@@ -1457,7 +1457,22 @@ public class ExportActivityToPDF extends Action {
 	//cuts <p> and </p> tags from editTag value
 	private String processEditTagValue(HttpServletRequest request,String editTagKey) throws Exception {
 		String result=getEditTagValue(request,editTagKey);
+		
+		if(result!=null && result.indexOf("<![endif]-->") != -1){
+			result = result.substring(result.lastIndexOf("<![endif]-->")+"<![endif]-->".length()); 
+		}
+		
 		if(result!=null){
+			String formatterPrefix = "<![endif]-->";  //some records contain wordpress tags in comments,which need to be filtered
+			if(result.indexOf(formatterPrefix) != -1){
+				result = result.substring(result.lastIndexOf(formatterPrefix)+formatterPrefix.length()); 
+				if(result.startsWith("<span")){
+					result = result.substring(result.indexOf(">")+1);
+					result = result.substring(0,result.indexOf("</span>"));
+				}
+			}
+			
+			
 			result=result.replaceAll("\\<.*?>","");
             result=result.replaceAll("&lt;", "<");
 			result = result.replaceAll("&gt;",">");

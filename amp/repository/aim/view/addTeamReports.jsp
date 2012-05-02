@@ -6,22 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
-<DIV id="TipLayer"
-  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-
-
-
-
+<DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
 <script type="text/javascript">
-
 <!--
-
-
 	function validate() {
 		if (document.aimTeamReportsForm.selReports.checked != null) {
 			if (document.aimTeamReportsForm.selReports.checked == false) {
@@ -75,15 +66,11 @@
 <digi:errors/>
 <digi:instance property="aimTeamReportsForm" />
 <digi:form action="/updateTeamReports.do" method="post">
-
 <html:hidden property="teamId" />
-
 <table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp"  />
-</td></tr>
-<tr>
-<td>
+
 									<c:if test="${aimTeamReportsForm.showReportList == true}">
 										<c:set var="selectedTab" value="3" scope="request"/>
 									</c:if>
@@ -145,24 +132,13 @@
 										
 									<jsp:include page="teamSetupMenu.jsp"  />								
 
-								</td>
-							</tr>
-							
-							
-							
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+                                	<div class="contentbox_border" style="border-top:0px;padding: 10px 0px 10px 0px;">
 									<div align="center">
 										
-										
-										
-
-								
-						
-									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
+							
+									<table class="normal" width="100%" cellpadding="0" cellspacing="0" style="background:#fff;">
 										<tr>
-											<td>
+											<td >
 												<table>
 													<tr>
 														<td nowrap="nowrap">
@@ -197,12 +173,14 @@
 												</table>
 											</td>
 										</tr>
-										<tr height="5px"><td>&nbsp;</td></tr>
 										<tr>
-									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
-									  		<input type="checkbox" id="checkAll">
+                                        <td colspan="7" style="width:100%; border-top:1px solid #b8b7b7; ">
+                                        	<table cellpadding="1" cellspacing="1" border="0" style="background:#b8b7b7;">
+                                            	<tr>
+                                                <td style="5%" align="center"class="tdInsideHeader">
+									  		<input type="checkbox" id="checkAll" >
 									  	</td>
-									    <td width=35% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width="35%"class="tdInsideHeader">
 									    	<b class="ins_title">
 									    		<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:reportListUnassignedReports">
@@ -216,28 +194,28 @@
 													</c:if>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width=15% class="tdInsideHeader">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td  width=15% class="tdInsideHeader">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportType">Type</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td    width=15% class="tdInsideHeader">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:hierarchies">Hierarchies</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
-									    	&nbsp;
+									    <td    width=18% class="tdInsideHeader">&nbsp;
+									    	
 									    </td>
 										</tr>
 										<logic:empty name="aimTeamReportsForm" property="reports">
 											<tr>
-												<td class="inside">
+												<td   class="inside1"   class="inside1">
 													<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
 													</c:if>
@@ -250,20 +228,20 @@
 										<logic:notEmpty name="aimTeamReportsForm" property="reports">
 											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.module.aim.dbentity.AmpReports">
 													<tr>
-														<td width="5" align="center" class="inside">
+														<td style="5%" align="center"   class="inside1">
 															<html:multibox property="selReports" >
 																<bean:write name="reports" property="ampReportId" />
 															</html:multibox>
 														</td>
-														<td class="inside">
+														<td   class="inside1">
 															<bean:write name="reports" property="name" />
 														</td>
-														<td class="inside">
+														<td   class="inside1">
 															<logic:present name="reports" property="ownerId">
                                  <bean:write name="reports" property="ownerId.user.name" />
                               </logic:present>
 														</td>
-														<td class="inside">
+														<td   class="inside1" >
 															<li>
                                   <%
                                     if (reports.getType()!=null && reports.getType().equals(new Long(1))) {
@@ -317,14 +295,14 @@
                                 </li>
                               </logic:equal>
 														</td>
-														<td class="inside">
+														<td   class="inside1" >
 															<logic:iterate name="reports" property="hierarchies" id="hierarchy" >
 																<li>
 										            	${hierarchy.column.columnName}
 										            </li>
 										          </logic:iterate>
 														</td>
-														<td class="inside">
+														<td   class="inside1">
 															<div style='position:relative;display:none;' id='report-<bean:write name="reports" property="ampReportId"/>'> 
                                 <logic:iterate name="reports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
@@ -356,9 +334,17 @@
                               <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="reports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
                               </span>
 														</td>
-													</tr>
-											</logic:iterate>
+                                                </tr>
+                                                	</logic:iterate>
 										</logic:notEmpty>
+                                            </table>
+                                        
+                                        </td></tr>
+										<tr>
+                                        
+									  	
+													</tr>
+										
 										<tr><td colspan="7"><digi:errors /></td></tr>
 									</table>
 									
@@ -434,7 +420,7 @@
 </td></tr>
 </table>
 </digi:form>
-
+</tr></td></table></div>
 <script language="javascript">
 		$("#checkAll").bind("change", function (obj){
 		$("input[name=selReports]").attr("checked", $("#checkAll").attr("checked"));

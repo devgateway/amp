@@ -62,12 +62,10 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		
 		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
-		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
-		wmc.add(iValidator);
 		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator=
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpCommitmentsCollectionsSumComparatorValidator"); 
-		amountSumComparator.setIndicatorAppender(iValidator);
+		wmc.add(amountSumComparator.getIndicatorAppender());
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(false);
 		add(amountSumComparator);			

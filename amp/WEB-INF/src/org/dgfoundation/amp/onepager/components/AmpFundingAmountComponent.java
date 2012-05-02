@@ -125,10 +125,9 @@ public class AmpFundingAmountComponent<T> extends Panel {
 						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 					}
 				}
-			);
-//				for(AmpCollectionValidatorField hiddenField: validationFields)
-//					hiddenField.reloadValidationField(target);
-//				
+				 
+				
+			);			
 				
 				
 			}

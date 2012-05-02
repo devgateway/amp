@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -89,12 +90,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		
 		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
-		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
-		wmc.add(iValidator);
-		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator=
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpCommitmentsCollectionsSumComparatorValidator"); 
-		amountSumComparator.setIndicatorAppender(iValidator);
+		wmc.add(amountSumComparator.getIndicatorAppender());
 		amountSumComparator.setSecondCollectionModel(commitmentModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
 		add(amountSumComparator);
@@ -102,18 +100,12 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		
 		WebMarkupContainer wmc1 = new WebMarkupContainer("ajaxIndicator1");
 		add(wmc1);
-		AjaxIndicatorAppender iValidator1 = new AjaxIndicatorAppender();
-		wmc1.add(iValidator1);
-		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator1=
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
-		amountSumComparator1.setIndicatorAppender(iValidator1);
+		wmc.add(amountSumComparator1.getIndicatorAppender());
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
 		add(amountSumComparator1);
-			
-	
-		
 		
 		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 
@@ -165,12 +157,24 @@ public class AmpDonorDisbursementsFormTableFeature extends
 							}
 						}));
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.addComponent(parent.getFundingInfo());
 						updateModel();
+						
+						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
+									{
+
+										@Override
+										public Object component(AmpCollectionValidatorField component) {
+											component.reloadValidationField(target);
+											return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+										}
+									});
+					
+						
 					};
 				});
 			}

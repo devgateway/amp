@@ -3,6 +3,9 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.Response;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -29,7 +32,25 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 	public AmpCollectionsSumComparatorValidatorField(String id,
 			IModel<? extends Collection<AmpFundingDetail>> setModel,  String fmName, String messageKey) {
 		super(id, setModel, fmName, new AmpCollectionsSumComparatorValidator(messageKey));
-		 
+		// remove spinner
+		// AMP-12968
+		setIndicatorAppender(new AjaxIndicatorAppender() {
+			@Override
+			public void onRendered(Component component)
+			{
+				final Response r = component.getResponse();
+
+				r.write("<span style=\"display:none;\" class=\"");
+				r.write(getSpanClass());
+				r.write("\" ");
+				r.write("id=\"");
+				r.write(getMarkupId());
+				r.write("\">");
+				
+				r.write("</span>");
+			}
+
+		});
 		hiddenContainer.setType(Double.class);
 	
 	}

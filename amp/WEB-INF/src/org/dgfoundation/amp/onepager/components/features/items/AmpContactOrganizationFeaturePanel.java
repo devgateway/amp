@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
@@ -105,7 +106,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		add(idsList);
 
 		
-		AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchOrgs","Search Organizations",AmpOrganisationSearchModel.class) {			
+		AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {			
 			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
@@ -153,7 +154,9 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 			}
 		};
 
-		add(searchOrgs);
+		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchOrgs", new Model<String>(),
+				"Search Organizations", searchOrgs);
+		add(searchOrganization);
 		
 	}
 

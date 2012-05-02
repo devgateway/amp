@@ -15,8 +15,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -80,7 +82,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 		idsList.setReuseItems(true);
 		add(idsList);
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchOrgs","Search Organizations",AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
 			@Override
 			protected void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
 				AmpActivityInternalId activityInternalId = new AmpActivityInternalId();
@@ -114,8 +116,10 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 			}
 		};
 
-		add(searchOrgs);
-		
+		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchOrgs", new Model<String> (),
+				"Search Organizations",  searchOrgs );
+		add(searchOrganization);
+
 	}
 
 }

@@ -19,8 +19,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -91,7 +93,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("search","Search Funding Organizations",AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,AmpOrganisationSearchModel.class) {			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override
@@ -124,8 +126,9 @@ public class AmpContractOrganizationsSubsectionFeature extends
 				return null;
 			}
 		};
-
-		add(searchOrgs);
+		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("search", new Model<String> (),
+				"Search Funding Organizations",   searchOrgs );
+		add(searchOrganization);
 	}
 
 }

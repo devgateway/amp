@@ -120,7 +120,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 					AmpOrganisation choice) {
 				PropertyModel<AmpOrganisation> pm = new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId");
 				pm.setObject(choice);
-				this.setVisible(false);
+				this.getParent().setVisible(false);
 				
 				target.addComponent(parent);
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));

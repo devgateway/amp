@@ -26,6 +26,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -78,7 +79,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 		final Label pod = new Label("PoD", PersistentObjectModel.getModel(survey.getObject().getPointOfDeliveryDonor()));
 		pod.setOutputMarkupId(true);
 		add(pod);
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("orgSearch","Search Organizations",AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {			
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
 				return DbUtil.filter(choice.getName());
@@ -105,10 +106,11 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 				return null;
 			}
 		};
+		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("orgSearch", new Model<String> (),
+				"Search Organizations",   searchOrgs );
+		add(searchOrganization);
 
-
-		add(searchOrgs);
-
+		
 		final AbstractReadOnlyModel<List<AmpAhsurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpAhsurveyIndicator>>() {
 			private static final long serialVersionUID = 3706184421459839210L;
 			@Override

@@ -132,8 +132,6 @@ public class AmpDonorFundingFormSectionFeature extends
 
 		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
 				"Search Funding Organizations",   searchOrgs );
-		
-		
 		add(searchOrganization);
 
 	}

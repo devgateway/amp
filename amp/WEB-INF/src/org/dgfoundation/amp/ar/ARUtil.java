@@ -103,7 +103,7 @@ public final class ARUtil {
 			String queryString = "select r from " + AmpReports.class.getName()
 					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
             if (name != null) {
-                queryString += " and r.name like :name ";
+                queryString += " and lower(r.name) like lower(:name) ";
             }
 			Query qry = session.createQuery(queryString);
 			if ( getTabs!=null )

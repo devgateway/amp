@@ -39,11 +39,14 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
-	var id = document.aimUpdateWorkspaceForm.teamId.value;
-	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
-	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
-	document.aimUpdateWorkspaceForm.target = "_self";
-	document.aimUpdateWorkspaceForm.submit();
+	if(validateMandatoryFields ()){
+		var id = document.aimUpdateWorkspaceForm.teamId.value;
+		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
+		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
+		document.aimUpdateWorkspaceForm.target = "_self";
+		document.aimUpdateWorkspaceForm.submit();	
+	}
+	
 }
 
 function updateChild(action) {
@@ -55,6 +58,20 @@ function updateChild(action) {
 		document.aimUpdateWorkspaceForm.submit();
 	
 	
+}
+
+function validateMandatoryFields (){
+	var workspaceName = document.getElementById("teamName").value;
+	if(trim(workspaceName) == ''){
+		var msg = '<digi:trn>Please enter workspace name</digi:trn>';
+		alert(msg);
+		return false;
+	}
+	return true;
+}
+
+function trim(stringToTrim) {
+	return stringToTrim.replace(/^\s+|\s+$/g,"");
 }
 
 -->
@@ -144,7 +161,7 @@ function updateChild(action) {
 										</logic:equal>
 										<tr>
 										    <td class="inside" valign="top">
-										    	<html:text property="teamName" size="50" styleClass="inputx insidex" />
+										    	<html:text property="teamName" size="50" styleClass="inputx insidex" styleId="teamName"/>
 										    </td>
 										    <td class="inside" valign="top">
 										    	<html:textarea property="description" rows="3" cols="50" styleClass="inputx insidex"/>

@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.taglib.html;
 
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
@@ -197,12 +198,16 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 	                Message msg = new Message();
                         ServletContext context = pageContext.getServletContext();
 	                //msg.setKey(item.getKey().trim().toLowerCase());
-                        String body=bundleApplication.getString(item.getKey());
-                        msg.setKey(TranslatorWorker.generateTrnKey(body));
-	                msg.setMessage(body);
-                        String errorMsg=body;
-	                msg.setSiteId(site.getId().toString());
-	                msg.setLocale(currentLocale.getCode().trim());
+					String body = bundleApplication.getString(item.getKey());
+					if (item.getValues() != null) {
+						MessageFormat format = new MessageFormat(body);
+						body = format.format(item.getValues());
+					}
+					msg.setKey(TranslatorWorker.generateTrnKey(body));
+					msg.setMessage(body);
+					String errorMsg = body;
+					msg.setSiteId(site.getId().toString());
+					msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
                         Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString());
                         if (!msg.getLocale().equals("en")) {

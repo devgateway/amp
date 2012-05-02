@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-11057</jira>
+  <keyword>FM modules</keyword>
+  <author>Mauricio</author>
+  <description>This patch remove unused modules from FM</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+     	DELETE FROM amp_modules_templates WHERE module IN 
+     	(SELECT id FROM amp_modules_visibility WHERE name = 'Aid Predictability chart' OR name = 'Aid Type chart' OR name = 'ODA Historical Trend - Funding chart' OR name = 'Financing Instrument chart' OR name = 'Donor Profile' OR name = 'Sector Profile' OR name = 'Region Profile');
+     	
+    	DELETE FROM amp_modules_visibility WHERE name = 'Aid Predictability chart' OR name = 'Aid Type chart' OR name = 'ODA Historical Trend - Funding chart' OR name = 'Financing Instrument chart' OR name = 'Donor Profile' OR name = 'Sector Profile' OR name = 'Region Profile';
+    	</lang>
+    </script>
+  </apply>
+
+</tns:patch>

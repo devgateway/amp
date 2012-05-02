@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11688</jira>
+    <keyword>AmpTheme fields</keyword>
+    <author>Dare</author>
+    <description>alter some fields to store larger texts</description> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">              
+			ALTER TABLE AMP_THEME ALTER COLUMN lead_agency TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN target_groups TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN background TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN objectives TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN outputs TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN beneficiaries TYPE TEXT;
+			ALTER TABLE AMP_THEME ALTER COLUMN environment_considerations TYPE TEXT;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

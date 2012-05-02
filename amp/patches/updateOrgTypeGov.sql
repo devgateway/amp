@@ -1,0 +1,1 @@
+update amp_org_type set org_type_is_governmental=true where org_type like '%Government%'

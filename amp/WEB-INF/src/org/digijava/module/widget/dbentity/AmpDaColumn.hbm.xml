@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.widget.dbentity.AmpDaColumn" table="AMP_WIDGET_COLUMN"
+		discriminator-value="s">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">AMP_WIDGET_COLUMN_seq</param>
+			</generator>
+		</id>
+		<discriminator column="column_type" />
+
+		<property name="name" column="col_name" type="java.lang.String" />
+		<property name="code" column="col_code" type="java.lang.String" />
+		<property name="cssClass" column="css_class" type="java.lang.String" />
+		<property name="htmlStyle" column="html_style" type="java.lang.String" />
+		<property name="pattern" column="display_pattern" type="java.lang.String" />
+		<property name="width" column="col_width" type="java.lang.String" />
+		<property name="orderNo" column="order_no" type="java.lang.Integer" />
+		<property name="columnType" column="column_type_no" type="java.lang.Integer" />
+
+		<many-to-one name="widget" column="table_widget_id"
+			class="org.digijava.module.widget.dbentity.AmpDaTable" cascade="none" />
+		<set name="values" lazy="true" inverse="true" order-by="row_pk asc"
+			cascade="all-delete-orphan">
+			<key column="column_id" />
+			<one-to-many class="org.digijava.module.widget.dbentity.AmpDaValue" />
+		</set>
+
+		<subclass name="org.digijava.module.widget.dbentity.AmpDaColumnFilter"
+			discriminator-value="f">
+			<property name="filterItemProvider" column="filter_item_provider" type="java.lang.Long" />
+		</subclass>
+
+	</class>
+</hibernate-mapping>

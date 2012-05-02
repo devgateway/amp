@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-10440</jira>
+	<keyword>Messaging</keyword>
+	<keyword>Activity Preview</keyword>
+	<author>Medea Gugushvili</author>
+	<description>Update object urls so that they pointed to new activity preview url</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+    			UPDATE amp_message
+    			SET object_url=replace(object_url,'/aim/selectActivityTabs.do~ampActivityId','/aim/viewActivityPreview.do~public=true~pageId=2~activityId') 
+    			where object_url like '/aim/selectActivityTabs.do~ampActivityId=%';
+            </lang>
+		</script>
+	</apply>
+</tns:patch>

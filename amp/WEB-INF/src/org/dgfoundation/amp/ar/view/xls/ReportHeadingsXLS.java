@@ -120,7 +120,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						cell.setCellStyle(style);
 						String cellValue=element2.getName(metadata.getHideActivities());
 						//if (rowId.value == 8){
-						if (rowId.value < 10 && cellValue.length() > 0){
+						if (rowId.value < 10 && cellValue!=null && cellValue.length() > 0){
 							//here we set the cell width
 							//if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
 								short val;

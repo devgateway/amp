@@ -148,7 +148,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 					PdfPCell pdfc=null;
 					font.setSize(9);
 					if(translatedCellValue.compareTo("")==0){
-					    if(cellValue.length() < 18){
+					    if(cellValue!=null && cellValue.length() < 18){
 						font.setSize(12);
 					    }
 					    pdfc = new PdfPCell(new Paragraph(cellValue,font));

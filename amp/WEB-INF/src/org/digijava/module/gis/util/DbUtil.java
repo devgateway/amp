@@ -2556,7 +2556,7 @@ public class DbUtil {
         }
     }
 
-    private static String generateWhereclause (Collection objects, IdGetter getter) {
+    public static String generateWhereclause (Collection objects, IdGetter getter) {
         String retValStr = null;
         if (objects != null) {
             StringBuilder retVal = new StringBuilder("(");

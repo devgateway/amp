@@ -12,6 +12,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -20,11 +21,17 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.helper.ActivitySectorDonorFunding;
@@ -597,6 +604,29 @@ public class WidgetUtil {
 
     }
       public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
+          AmpCategoryClass catClass = null;
+          Long actualCommitmentCatValId = null;
+          try {
+              catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+              for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                  if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                      actualCommitmentCatValId = val.getId();
+                      break;
+                  }
+              }
+          } catch (NoCategoryClassException e) {
+              e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+
+          Session session = PersistenceManager.getRequestDBSession();
+          StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
+          lastVersionsQry.append(AmpActivityGroup.class.getName());
+          lastVersionsQry.append(" as actGroup");
+          Query actGrpupQuery = session.createQuery(lastVersionsQry.toString());
+          List lastVersions = actGrpupQuery.list();
+          String lasVersionsWhereclause = org.digijava.module.gis.util.DbUtil.generateWhereclause(lastVersions, new DbUtil.GenericIdGetter());
+
+
         String oql = "select  actSec, f.ampDonorOrgId ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -606,7 +636,7 @@ public class WidgetUtil {
         if (donorIDs != null && donorIDs.length > 0) {
             oql += "  inner join f.ampDonorOrgId org ";
         }
-        oql += " where  fd.adjustmentType = 1 ";
+        oql += " where  fd.adjustmentType = " + actualCommitmentCatValId.toString();
         if (donorIDs != null && donorIDs.length > 0) {
             oql += " and (org.ampOrgId in (:donors) ) ";
         }
@@ -614,8 +644,10 @@ public class WidgetUtil {
         oql += " and sec.ampSectorId in (:sectors) ";
         oql += " and config.name='Primary' ";
         oql += "  and act.team is not null ";
+        oql += "  and act.ampActivityId in" + lasVersionsWhereclause;
+
         oql += " order by actSec";
-        Session session = PersistenceManager.getRequestDBSession();
+
         @SuppressWarnings(value = "unchecked")
         List result = null;
         try {
@@ -637,6 +669,21 @@ public class WidgetUtil {
 
     @SuppressWarnings("unchecked")
     public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
+
+        AmpCategoryClass catClass = null;
+        Long actualCommitmentCatValId = null;
+        try {
+            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+            for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    actualCommitmentCatValId = val.getId();
+                    break;
+                }
+            }
+        } catch (NoCategoryClassException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         AmpActivityVersion activity = activityFundngObj.getActivity();
         List<AmpSector> sectors = activityFundngObj.getSectors();
         List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
@@ -660,7 +707,7 @@ public class WidgetUtil {
         oql += " inner join actSec.sectorId sec ";
         oql += " inner join actSec.activityId act ";
         oql += " inner join actSec.classificationConfig config ";
-        oql += " where  fd.adjustmentType = 1 ";
+        oql += " where  fd.adjustmentType = " + actualCommitmentCatValId.toString();
         oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIDs) + ") ";
@@ -688,6 +735,20 @@ public class WidgetUtil {
     }
     @SuppressWarnings("unchecked")
 	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
+        AmpCategoryClass catClass = null;
+        Long actualCommitmentCatValId = null;
+        try {
+            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+            for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    actualCommitmentCatValId = val.getId();
+                    break;
+                }
+            }
+        } catch (NoCategoryClassException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         List<TopDonorGroupHelper> donorGroups = new ArrayList<TopDonorGroupHelper>();
         Date fromDate = null;
 		Date toDate = null;
@@ -712,7 +773,7 @@ public class WidgetUtil {
         queryString += " inner join f.ampDonorOrgId org  ";
         queryString += " inner join org.orgGrpId orgGrp ";
         queryString += "  inner join f.ampActivityId act ";
-        queryString += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
+        queryString += " where  fd.transactionType = 0 and fd.adjustmentType = " + actualCommitmentCatValId.toString();
         queryString += " and act.team is not null ";
         queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
         queryString += " group by orgGrp.ampOrgGrpId, orgGrp.orgGrpName ";

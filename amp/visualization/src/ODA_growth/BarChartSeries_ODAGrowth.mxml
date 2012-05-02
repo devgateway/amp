@@ -291,16 +291,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
-					"action:": "getODAGrowthGraphData"
+					"action": "getODAGrowthGraphData"
 				};
 				params["previousYear"] = previousYear.selectedLabel;
 				params["currentYear"] = currentYear.selectedLabel;
 				
 				if(start == "true")
+					messageLoadingPanel.visible = true;
+					sizeLoadingPanel(300, 200);
+					dc.visible = false;
 					service.send(params);
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
-					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
+					//ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
 				}
 				catch(errObject:Error){
 					//Fail silently when running standalone

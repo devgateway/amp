@@ -1108,25 +1108,26 @@ border-right: 1px solid rgb(208, 208, 208);
                                     </td>
 
                                 </tr>
-
-                                <c:if test="${aimAddOrgForm.type=='REGIONAL'}">
-                                    <tr>
-                                        <td style=" text-align:right;" width=50%><digi:trn>Region</digi:trn></td>
-                                        <td height="30px" width=50%>
-                                            <html:select property="regionId" >
-                                                <c:set var="translation">
-                                                    <digi:trn
-                                                        key="aim:editOrganisationSelectSpecifyRegion">Specify Region</digi:trn>
-                                                </c:set>
-                                                <html:option value="-1">-- ${translation} --</html:option>
-                                                <logic:notEmpty name="aimAddOrgForm"
-                                                                property="region">
-                                                    <html:optionsCollection name="aimAddOrgForm" property="region" value="id" label="name" />
-                                                </logic:notEmpty>
-                                            </html:select>
-                                        </td>
-                                    </tr>
-                                </c:if>
+								<field:display name="Show region dropdown when org type is regional" feature="Organization Form">
+	                                <c:if test="${aimAddOrgForm.type=='REGIONAL'}">
+	                                    <tr>
+	                                        <td style=" text-align:right;" width=50%><digi:trn>Region</digi:trn></td>
+	                                        <td height="30px" width=50%>
+	                                            <html:select property="regionId" >
+	                                                <c:set var="translation">
+	                                                    <digi:trn
+	                                                        key="aim:editOrganisationSelectSpecifyRegion">Specify Region</digi:trn>
+	                                                </c:set>
+	                                                <html:option value="-1">-- ${translation} --</html:option>
+	                                                <logic:notEmpty name="aimAddOrgForm"
+	                                                                property="region">
+	                                                    <html:optionsCollection name="aimAddOrgForm" property="region" value="id" label="name" />
+	                                                </logic:notEmpty>
+	                                            </html:select>
+	                                        </td>
+	                                    </tr>
+	                                </c:if>
+								</field:display>
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>

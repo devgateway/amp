@@ -1332,14 +1332,23 @@ function collapseAll() {
 										</field:display>
 									</feature:display>
                                    </module:display>
+                 
                                     
-                                   <logic:present name="currentMember" scope="session">
+                 <logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									  <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"></bean:define>
                                     <jsp:include  page="previewActivityFunding.jsp"/>
 						
 									</module:display>
 								</logic:present> 
+								
+								<logic:notPresent name="currentMember" scope="session">
+
+									<module:display name="Funding on Public View" parentModule="PROJECT MANAGEMENT">
+									  <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"></bean:define>
+                                    <jsp:include  page="previewActivityFunding.jsp"/>
+									</module:display>
+								</logic:notPresent>
 									
 								
 									<feature:display name="Regional Funding" module="Funding">

@@ -1154,6 +1154,7 @@ function collapseAll() {
 		</c:if>
 	</div>
 </fieldset>
+</module:display>
 <!-- END NATIONAL PLAN SECTION -->
 
 <!-- PROGRAM SECTION -->
@@ -1278,7 +1279,7 @@ function collapseAll() {
 	</c:if>
 </div>
 </fieldset>
-</module:display>
+
 <!-- END SECTORS SECTION -->
 
 <!-- FUNDING SECTION -->

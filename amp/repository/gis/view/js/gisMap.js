@@ -1457,14 +1457,32 @@
 				var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 				var toYear = document.getElementsByName('selectedToYear')[0].value;
 				
+				
 			
 				var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&devInfo=true";
 			if (isPublic) {
 				regRepUrl += "&public=true";
 			}
-				var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
-				
+			
+			if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+				var popupName = "popup"+new Date().getTime();
+				var popupWindow = window.open("about:blank", popupName,"height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+				var referLink = document.createElement('a');
+				referLink.href = regRepUrl;
+				referLink.target = popupName;
+				document.body.appendChild(referLink);
+				referLink.click();
+			}
+			else
+			{
+				var popup = window
+						.open(
+								regRepUrl,
+								null,
+								"height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+
 				popup.focus();
+			}
 			}
 		}
 		

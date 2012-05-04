@@ -94,56 +94,77 @@
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
 			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
-		  
-			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&mapLevel=" + mapLevel + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval, 780, 500);
-		} else {
+			var href="/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&mapLevel=" + mapLevel + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval,;
 			
+			if (navigator.appName.indexOf('Microsoft Internet Explorer') > -1) { //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+						var popupName = "popup" + new Date().getTime();
+						var popupWindow = window.open(href, popupName,
+								"height=780,width=500");
+						var referLink = document.createElement('a');
+						referLink.href = href;
+						referLink.target = popupName;
+						document.body.appendChild(referLink);
+						referLink.click();
+					} else {
+						openURLinWindow(href, 780, 500);
+					}
+
+		} else {
+
 			/*
 			var sectorId =  document.getElementById("sectorsMapComboFin").value;
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
-		  
+			
 			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId , 780, 500);
-			*/
-			
-			var mapModeFin = document.getElementById("mapModeFin")!=null?document.getElementById("mapModeFin").value:"fundingData";
-			
-			
-			var popup = window.open("about:blank", "regReportWnd", "height=500,width=780,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+			 */
+
+			var mapModeFin = document.getElementById("mapModeFin") != null ? document
+					.getElementById("mapModeFin").value
+					: "fundingData";
+
+			var popup = window
+					.open(
+							"about:blank",
+							"regReportWnd",
+							"height=500,width=780,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 			var filterForm = $("#gisFilterForm");
-			
-			
-			
+
 			filterForm.attr("method", "post");
-			filterForm.attr("action", "/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear);
+			filterForm.attr("action",
+					"/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&mapModeFin="
+							+ mapModeFin + "&selectedFromYear="
+							+ selectedFromYear + "&selectedToYear="
+							+ selectedToYear);
 			filterForm.attr("target", "regReportWnd");
-			
+
 			var allSectors = false;
-			if ($("input[name='selectedSectors']:checked").length + 
-					$("input[name='selectedSecondarySectors']:checked").length + 
-					$("input[name='selectedTertiarySectors']:checked").length == 0) {
+			if ($("input[name='selectedSectors']:checked").length
+					+ $("input[name='selectedSecondarySectors']:checked").length
+					+ $("input[name='selectedTertiarySectors']:checked").length == 0) {
 				$("input[name='selectedSectors']").attr("checked", "true");
-				$("input[name='selectedSecondarySectors']").attr("checked", "true");
-				$("input[name='selectedTertiarySectors']").attr("checked", "true");
+				$("input[name='selectedSecondarySectors']").attr("checked",
+						"true");
+				$("input[name='selectedTertiarySectors']").attr("checked",
+						"true");
 				allSectors = true;
 			}
-			
-			$("#filterAllSectors").val(allSectors);
-			
-			filterForm[0].submit();
-			
-	    if (allSectors) {
-	    	$("input[name='selectedSectors']").removeAttr("checked");
-				$("input[name='selectedSecondarySectors']").removeAttr("checked");
-				$("input[name='selectedTertiarySectors']").removeAttr("checked");
-	    }
 
-		
-		
-		
+			$("#filterAllSectors").val(allSectors);
+
+			filterForm[0].submit();
+
+			if (allSectors) {
+				$("input[name='selectedSectors']").removeAttr("checked");
+				$("input[name='selectedSecondarySectors']").removeAttr(
+						"checked");
+				$("input[name='selectedTertiarySectors']")
+						.removeAttr("checked");
+			}
+
 			popup.focus();
 			return null;
 
 		}
-  }
+	}
 </script>

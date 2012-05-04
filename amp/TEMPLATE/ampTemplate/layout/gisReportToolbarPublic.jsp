@@ -94,7 +94,7 @@
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
 			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
-			var href="/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&mapLevel=" + mapLevel + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval,;
+			var href="/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&mapLevel=" + mapLevel + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval;
 			
 			if (navigator.appName.indexOf('Microsoft Internet Explorer') > -1) { //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
 						var popupName = "popup" + new Date().getTime();

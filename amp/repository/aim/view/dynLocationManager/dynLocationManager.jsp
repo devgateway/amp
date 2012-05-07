@@ -74,12 +74,16 @@
 		if ( !checkStructure(null, -1) ) {
 			alert("<digi:trn>There is an error in the tree structure</digi:trn>");
 			return false;
+		} else {
+			alert("<digi:trn>Tree structure checked</digi:trn>");
+			return true;
 		}
-		var myForm						= document.getElementById("dynLocationManagerForm");
-		myForm.treeStructure.value		= getTreeStruct(locationsUlId);
-		myForm.unorgLocations.value		= getTreeStruct(unorgLocsUlId);
-		myForm.target="_self";
-		myForm.submit();
+		
+		//var myForm						= document.getElementById("dynLocationManagerForm");
+		//myForm.treeStructure.value		= getTreeStruct(locationsUlId);
+		//myForm.unorgLocations.value		= getTreeStruct(unorgLocsUlId);
+		//myForm.target="_self";
+		//myForm.submit();
 		
 	}
 	function getTreeStruct (ulId) {
@@ -276,8 +280,8 @@
 								</ul>
 							</font>		
 						</p>
-						<button type="button" class="buton" onclick="checkStructure(null, -1)" ><digi:trn>Check Structure</digi:trn></button> &nbsp; &nbsp;
-						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> 
+						<button type="button" class="buton" onclick="submitTreeStructure()" ><digi:trn>Check Structure</digi:trn></button> &nbsp; &nbsp;
+<!--						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> -->
 					</td>
 				</tr>
 				</c:if>

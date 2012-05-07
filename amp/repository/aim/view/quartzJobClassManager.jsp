@@ -35,7 +35,9 @@ function setIdAndAction(id, action){
 
 function deleteJc(id){
   if(setIdAndAction(id,"deleteJc")){
-      document.quartzJobClassManagerForm.submit();
+	  if(confirm("<digi:trn>Are you sure you want to delete this Job Class</digi:trn>?")){
+		  document.quartzJobClassManagerForm.submit();
+	  } 
   }
 }
 function editJc(id){

@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesForm
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -58,7 +59,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		
 		final IModel<TemporaryDocument> td = new Model(new TemporaryDocument());
 		
-		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title");
+		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
 		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);

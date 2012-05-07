@@ -306,7 +306,7 @@ body {
 						<div class="tab selected" id="rtab">
 							<div class="tab_cont">
 								<span class="step_num">1</span>
-								<a href="#type_step_div" class="l_big_b"><digi:trn>Report Details</digi:trn></a>
+								<a href="#type_step_div" class="l_big_b"><c:out value="${detailsStepName}"/></a>
 							</div>
 						</div>
 						<div class="tab" id="rtab">

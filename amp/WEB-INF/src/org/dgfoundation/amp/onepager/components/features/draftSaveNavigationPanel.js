@@ -1,6 +1,7 @@
 var saveAsDraftPanel;
 function showDraftPanel(){
-	saveAsDraftPanel = new YAHOOAmp.widget.Panel("saveAsDraftPanel", {
+    if(saveAsDraftPanel==null){
+        saveAsDraftPanel = new YAHOOAmp.widget.Panel("saveAsDraftPanel", {
 		width : "350px",
 		fixedcenter : true,
 		constraintoviewport : true,
@@ -10,10 +11,16 @@ function showDraftPanel(){
 		modal : true,
 		draggable : false
 	});
-	$("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
-	$("#saveAsDraftPanel").show();
+        $("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
+        $("#saveAsDraftPanel").show();
 	saveAsDraftPanel.render();
-	 return false;
+        
+    }
+    else{
+         $("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
+         saveAsDraftPanel.show();
+    }
+    return false;
 }
 function hideDraftPanel(){
 	if(saveAsDraftPanel!=null){

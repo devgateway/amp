@@ -46,6 +46,20 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 		this(id, model, fmName);
 		this.fmType = fmType;
 	}
+	
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,AmpFMTypes fmType, boolean showRedStarForNotReqComp) {
+		super(id, model, fmName, false, false,showRedStarForNotReqComp);
+		this.fmType = fmType;
+		textContainer = new TextField<T>("textContainer",model) {
+			@Override
+			public IConverter getConverter(Class<?> type) {
+				if(getInternalConverter(type)!=null) return getInternalConverter(type);
+				return super.getConverter(type);
+			}
+		};
+		textContainer.setOutputMarkupId(true);
+		addFormComponent(textContainer);
+	}
 
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {

@@ -123,9 +123,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, IModel<T> model, String fmName) {
 		this(id,model,fmName,false);
 	}
-
 	
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp){
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -136,7 +135,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
-				if (formComponent!=null && formComponent.isRequired() && titleLabel.isVisible()){
+				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp) && titleLabel.isVisible()){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
 					this.add(new AttributeAppender("style", new Model("margin-left: -5px"), ";"));
 					this.setEscapeModelStrings(false);
@@ -170,6 +169,12 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		feedbackContainer.setOutputMarkupId(true);
 		feedbackContainer.add(feedbackLabel);
 		add(feedbackContainer);
+		
+	}
+
+	
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
+		this(id, model, fmName,hideLabel, hideNewLine, false);
 	}
 
 	

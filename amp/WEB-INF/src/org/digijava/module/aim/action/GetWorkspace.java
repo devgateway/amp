@@ -110,8 +110,10 @@ public class GetWorkspace extends Action {
 			uwForm.setDescription(workspace.getDescription());
 			TreeSet orgs=new TreeSet();
 			orgs.addAll(workspace.getChildOrgs());
-			if (uwForm.getOrganizations()==null) {
+			if (uwForm.getOrganizations() == null) {
 				uwForm.setOrganizations(new ArrayList());
+			} else {
+				uwForm.getOrganizations().clear();
 			}
 			uwForm.getOrganizations().addAll(orgs);
 			uwForm.setAddActivity(workspace.getAddActivity());

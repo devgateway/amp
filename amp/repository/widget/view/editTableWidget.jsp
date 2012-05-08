@@ -184,21 +184,21 @@
 				<c:forEach var="column" items="${wform.columns}" varStatus="varStat">
 					<tr>
 						<td>
-							${column.name}
+							<c:out value="${column.name}"/>
 						</td>
                                                 <field:display name="Table Column Code" feature="Table Widgets">
 						<td>
-							${column.code}
+							<c:out value="${column.code}"/>
 						</td>
                                                 </field:display>
                                                 <field:display name="Table Column CSS class" feature="Table Widgets">
 						<td>
-							${column.cssClass}
+							<c:out value="${column.cssClass}"/>
 						</td>
                                                 </field:display>
                                                 <field:display name="Table Column Pattern" feature="Table Widgets">
 						<td>
-							${column.pattern}
+							<c:out value="${column.pattern}"/>
 						</td>
                                                 </field:display>
 						<td>

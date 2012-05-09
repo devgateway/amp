@@ -170,7 +170,7 @@ function fnSubmit() {
 	}
 
 </script>
-<h1 class="admintitle">Exchange Rates</h1>
+<h1 class="admintitle"><digi:trn>Exchange Rates</digi:trn></h1>
 <digi:errors/>
 <digi:instance property="aimCurrencyRateForm" />
 

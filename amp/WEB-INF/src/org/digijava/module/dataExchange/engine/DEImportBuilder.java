@@ -2166,6 +2166,7 @@ public class DEImportBuilder {
 							else continue;
 						}
 				//process log
+				if(activityLogs == null) continue;
 				processLog(log, iLog, iWorker, activityLogs, actionType);
 			}
 			iLog.saveObject(log.getDeSourceSetting());

@@ -197,7 +197,7 @@
     <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
         <td align=left valign="top" width="65%">
-          <table border="0" cellPadding=0 cellspacing="0" width="100%">
+          <table border="0" cellPadding=0 cellspacing="0" width="650">
             <logic:notEmpty name="aimUserRegisterForm" property="errors" >
               <tr>
                 <td align=left class=title noWrap colspan="33"><!-- digi:errors /-->
@@ -223,48 +223,48 @@
 			<td colspan="8" height=15>&nbsp;</td>
 			</tr>
             <tr>
-              <td class=f-names noWrap width="20%" style="padding-bottom:10px;"><FONT color=red>*</FONT>
+              <td class=f-names noWrap width="175" style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:firstName">First Name</digi:trn>              </td>
-              <td align="left" width="20%" style="padding-bottom:10px;"><html:text property="firstNames" size="20" styleClass="inp-text"/>              </td>
-              <td width="3%">&nbsp;</td>
-              <td class=f-names noWrap width="20%" style="padding-bottom:10px;"><FONT color=red>*</FONT>
+              <td align="right" width="145" style="padding-bottom:10px;"><html:text property="firstNames" size="20" styleClass="inp-text"/>              </td>
+              <td width="10">&nbsp;</td>
+              <td class=f-names noWrap width="175" style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:lastName">Last Name</digi:trn>              </td>
-              <td align="left" width="20%" style="padding-bottom:10px;"><html:text property="lastName" size="20" styleClass="inp-text"/>              </td>
+              <td align="right" width="145" style="padding-bottom:10px;"><html:text property="lastName" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:emailAddress">E-mail Address </digi:trn>              </td>
-              <td align="left" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text"/>              </td>
-              <td width="3%">&nbsp;</td>
+              <td align="right" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text"/>              </td>
+              <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repEmailAddress">Repeat Email Address </digi:trn>              </td>
-              <td align="left" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
+              <td align="right" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:password">Password </digi:trn>              </td>
-              <td align="left" style="padding-bottom:10px;"><html:password property="password" size="20" styleClass="inp-text"/>              </td>
-              <td width="3%">&nbsp;</td>
+              <td align="right" style="padding-bottom:10px;"><html:password property="password" size="20" styleClass="inp-text"/>              </td>
+              <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repPassword">Repeat Password </digi:trn>              </td>
-              <td align="left" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
+              <td align="right" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:countryOfResidence">Country of Residence </digi:trn>              </td>
-              <td align="left"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedCountryResidence" styleClass="inp-text" >
+              <td align="right"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedCountryResidence" styleClass="inp-text" >
                   <c:forEach var="cn" items="${aimUserRegisterForm.countryResidence}">
                     <html:option value="${cn.iso}">${cn.name}</html:option>
                   </c:forEach>
                 </html:select>              </td>
-              <td width="3%">&nbsp;</td>
+              <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
-              <td align="left" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
+              <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>
-              <td class="orgtype" align="left" colspan="3" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
+              <td class="orgtype" align="right" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectType">Select a type</digi:trn>
                     --</html:option>
@@ -272,11 +272,15 @@
 
 													value="ampOrgTypeId" label="orgType" />
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
+				
             </tr>
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationGroup">Organization Group</digi:trn>              </td>
-              <td align="left" colspan="3"  class="orgtype" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
+              <td align="right" class="orgtype" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectGroup">Select a group</digi:trn>
                     --</html:option>
@@ -286,11 +290,14 @@
 									         			value="ampOrgGrpId" label="orgGrpName" />
                   </logic:notEmpty>
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationName">Organization Name </digi:trn>              </td>
-              <td align="left" class="orgtype" colspan="3" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
+              <td align="right" class="orgtype" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
                 <html:select property="selectedOrganizationId" styleClass="inp-text" >
                   <html:option value="-1">--
                     <digi:trn key="um:selectOrganization">Select an organization</digi:trn>
@@ -299,6 +306,9 @@
                     <html:optionsCollection name="aimUserRegisterForm" property="orgColl" value="ampOrgId" label="name" />
                   </logic:notEmpty>
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <!-- <tr>
 
@@ -321,27 +331,31 @@
 				</tr> -->
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:yourLangSettings">Your language settings </digi:trn>              </td>
-              <td align="left" colspan="3"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
+              <td align="right"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
                   <bean:define id="languages" name="aimUserRegisterForm" property="navigationLanguages"
 
 					 type="java.util.Collection" />
                   <html:options  collection="languages" property="code" labelProperty="name" />
                 </html:select>              </td>
+				<td></td>
+				<td></td>
+				<td></td>
             </tr>
             <tr>
-            	<td width="3%">&nbsp;</td>
-            	<td width="3%">&nbsp;</td>
-              <td align="right" style="padding-top:20px;"><c:set var="btnSubmit">
+            	<td>&nbsp;</td>
+            	<td>&nbsp;</td>
+              <td align="right" style="padding-top:20px;" class="reg_butt"><c:set var="btnSubmit">
                 <digi:trn key="btn:submit">Submit</digi:trn>
               </c:set>
                 <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
              </td>
-              <td align="left" style="padding-top:20px;">
+              <td align="left" style="padding-top:20px;" class="reg_butt">
               <c:set var="btnReset">
                 <digi:trn key="btn:reset">Reset</digi:trn>
               </c:set>
-                <html:reset value="${btnReset}" styleClass="buttonx" onclick=""/>
+                <html:reset value="${btnReset}" onclick=""/>
              </td>
+			 <td></td>
               </tr>
             <tr>
               <td colspan=6>&nbsp;</td>

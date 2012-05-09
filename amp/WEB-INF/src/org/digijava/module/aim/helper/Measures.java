@@ -60,7 +60,7 @@ public class Measures {
 		throw new ClassCastException();
 	}
 	public String getNameTrimmed() {
-		return name.replace(" ", "");
+		return (name!=null)?name.replace(" ", ""):"";
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;

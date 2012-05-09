@@ -576,14 +576,14 @@ border-right: 1px solid rgb(208, 208, 208);
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
-								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId')">
+								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',false);fPanel.hide();menuPanelForUser.hide();">
 								    		<digi:trn>Filters</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
+								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
@@ -621,7 +621,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								<tr>
 						        	<td>
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
-										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
+										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();teamFPanel.hide();teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 										</button>
 										<!-- 
@@ -631,11 +631,11 @@ border-right: 1px solid rgb(208, 208, 208);
 										 -->
 										
 									<%}%>
-										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId');">
+										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', false);teamFPanel.hide();menuPanelForTeam.hide();">
 								    		<digi:trn>Filters</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="teamLabelButtonId" class="buttonx" type="button" onclick="teamFPanel.toggleView();">
+								    	<button id="teamLabelButtonId" class="buttonx" type="button" onclick="teamFPanel.toggleView();teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', true);menuPanelForTeam.hide();">
 								    		<digi:trn>Labels</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
@@ -673,11 +673,11 @@ border-right: 1px solid rgb(208, 208, 208);
 								<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 									<tr>
 										<td>										
-											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
+											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', false);sharedFPanel.hide();">
 									    		<digi:trn>Filters</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
-									    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();">
+									    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', true);">
 									    		<digi:trn>Labels</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>

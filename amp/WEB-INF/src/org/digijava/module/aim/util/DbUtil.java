@@ -7227,4 +7227,28 @@ public class DbUtil {
 		return comparator;
 		
 	}
+
+		public static String getValidationFromTeamAppSettings(Long ampTeamId) {
+	        Session session = null;
+	        Query qry = null;
+	        AmpApplicationSettings ampAppSettings = null;
+
+	        try {
+	            session = PersistenceManager.getRequestDBSession();
+	            String queryString = "select a from "
+	                + AmpApplicationSettings.class.getName()
+	                + " a where (a.team=:teamId) ";
+	            qry = session.createQuery(queryString);
+	            qry.setParameter("teamId", ampTeamId, Hibernate.LONG);
+	            Iterator itr = qry.list().iterator();
+	            while (itr.hasNext()) {
+	                ampAppSettings = (AmpApplicationSettings) itr.next();
+	                if(ampAppSettings!=null && ampAppSettings.getValidation() != null && !"".equals(ampAppSettings.getValidation()) ) break;
+	            }
+	            
+	        } catch (Exception e) {
+	            logger.error("Unable to get TeamAppSettings", e);
+	        }
+	        return ampAppSettings != null ? ampAppSettings.getValidation() : null;
+		}
 }

@@ -250,7 +250,7 @@ html.chrome #show_login_pop_box{display:none; margin:37px 0px 0px 55px;width:240
 .msg_added_cont {background-color:#EDEDED; margin-top:5px; border:1px solid #D0D0D0; padding:5px; font-weight:bold;}
 #help_content_body{margin-top:10px;border-top:1px solid #d0d0d0;padding-top:10px;line-height:1.5em}
 #help-right{border: 1px solid #d0d0d0; width: 756px; overflow: scroll; padding: 10px; margin: 13px 10px 0pt; vertical-align: top; font-size: 12px;height:387px}
-.help_search{color:#000000;font-size:11px;float:right}
+.help_search{color:#000000;font-size:11px;clear:both; padding-right:0 !important; border:1px solid #FFFFFF;}
 .help_topics{background:url('../images/help_topics.png') no-repeat;width:206px;height:27px;color:#ffffff;margin-top:13px}
 .help_tree ul.dynatree-container{margin-top:0}
 .help_topics span{padding-left:10px;font-weight:bold;font-size:12px;float:left;padding-top:5px}
@@ -487,7 +487,7 @@ div.adminicon{float:right;}
 .login_here{position:absolute;}
 div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
 div.reg_form_container table {margin:0 auto; }
-div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px;}
+div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px; width:145px;}
 div.reg_form_container .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; height:25px;}
 div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
 div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
@@ -729,6 +729,10 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 .white-item{color: white;}
 .marginal-five{margin-right:5px;}
 .invisible-item-hidden{visibility: hidden;}
+
+#filter_donor_types_div {width:486px !important;}
+.reg_butt input {width:85px !important;}
+
 /*---rafy was here---*/
 td.wrklist div.workspacelist{background: url(../images/arrow-014E86.gif) no-repeat center left #F2F2F2;
 padding: 3px 10px 3px 3px;

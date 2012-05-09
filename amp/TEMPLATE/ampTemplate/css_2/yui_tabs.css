@@ -31,6 +31,8 @@
 			/* background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top; */
 			color: #FF6000;
 			background-color: #FFFFFF;
+			margin-left:11px;
+			
 	}
 	#tabview_container li a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top; */

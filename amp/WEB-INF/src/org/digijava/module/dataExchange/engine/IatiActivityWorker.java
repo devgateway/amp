@@ -47,6 +47,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
@@ -208,6 +209,10 @@ public class IatiActivityWorker {
 		// TODO Auto-generated method stub
 	public ArrayList<AmpMappedField> checkContent(int noAct) { 
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
+		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null && "1".compareTo(this.getiActivity().getHierarchy()) == 0) {
+			System.out.println("Skipping activity no "+noAct+ " - Hierarchy no 1");
+			return null;
+		}
 		try{
 			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
 			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
@@ -314,6 +319,7 @@ public class IatiActivityWorker {
 		ArrayList<JAXBElement<CodeType>> iatiStatusList = new ArrayList<JAXBElement<CodeType>>();
 		ArrayList<ParticipatingOrg> iatiPartOrgList = new ArrayList<ParticipatingOrg>();
 		ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList = new ArrayList<ParticipatingOrg>();
+		ArrayList<ParticipatingOrg> iatiExtendingOrgList = new ArrayList<ParticipatingOrg>();
 		ArrayList<ReportingOrg> iatiRepOrgList = new ArrayList<ReportingOrg>();
 		ArrayList<Sector> iatiSectorList = new ArrayList<Sector>();
 		ArrayList<Budget> iatiBudgetList = new ArrayList<Budget>();
@@ -352,7 +358,7 @@ public class IatiActivityWorker {
 		//workspace settings + team lead owner
 		
 		//populate the lists with IATI values of the activity
-		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,iatiDefaultFundingOrgList,
+		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,iatiDefaultFundingOrgList, iatiExtendingOrgList,
 				iatiRepOrgList, iatiSectorList, iatiBudgetList, iatiTransactionList,
 				iatiDescriptionList, iatiOtherIdList, iatiActDateList,
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
@@ -362,9 +368,9 @@ public class IatiActivityWorker {
 		processPlanningStep(a,iatiActDateList);
 		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
 		processRelOrgsStep(a,iatiPartOrgList);
-		processActInternalIdsStep(a,iatiOtherIdList);
-		processBudgetStep(a,iatiBudgetList,iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
-		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList);
+		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
+		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
+		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
 		processLocationStep(a,iatiLocationList);
 		processContactsStep(a,iatiContactList);
 		return logs;
@@ -484,61 +490,99 @@ public class IatiActivityWorker {
 		a.getLocations().addAll(locations);
 		
 	}
-
-	private void processBudgetStep(AmpActivityVersion activity, ArrayList<Budget> iatiBudgetList, ArrayList<ReportingOrg> iatiRepOrgList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
+	private void processBudgetStep(AmpActivityVersion activity, ArrayList<Budget> iatiBudgetList,
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
+			ArrayList<ReportingOrg> iatiRepOrgList,
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency) {
 		// TODO Auto-generated method stub
 		if(iatiBudgetList.isEmpty()) return;
-		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
-		JAXBElement<CodeReqType> iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
+		if(iatiDefaultFinanceType !=null && !iatiDefaultFinanceType.isEmpty())
+			iatiDefFinTypeLocal=iatiDefaultFinanceType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefAidTypeLocal = null;
+		if(iatiDefaultAidType !=null && !iatiDefaultAidType.isEmpty())
+			iatiDefAidTypeLocal =iatiDefaultAidType.iterator().next();
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
-		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
+		
+		if(activity.getFunding() == null) 
+			activity.setFunding(new HashSet());
+		Set<AmpFunding> fundings = activity.getFunding();
 		for (Iterator<Budget> it = iatiBudgetList.iterator(); it.hasNext();) {
 			Budget budget = (Budget) it.next();
-			AmpFunding f = getBudgetIATItoAMP(activity,budget,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiRepOrgList);
+			AmpFunding f = getBudgetIATItoAMP(activity,budget,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,
+					iatiDefaultFundingOrgList, 
+					iatiExtendingOrgList,
+					iatiRepOrgList);
 			if(f!=null)
 				fundings.add(f);
 		}
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
-		activity.getFunding().addAll(fundings);
+		//activity.getFunding().addAll(fundings);
 	}
 	
 
 	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
-			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, 
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
+			ArrayList<ReportingOrg> iatiRepOrgList) {
 		
 		if(iatiTransactionList.isEmpty()) return;
-		JAXBElement<CodeReqType> iatiDefFinTypeLocal = iatiDefaultFinanceType.iterator().next();
-		JAXBElement<CodeReqType> iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
+		if(iatiDefaultFinanceType !=null && !iatiDefaultFinanceType.isEmpty())
+			iatiDefFinTypeLocal=iatiDefaultFinanceType.iterator().next();
+		JAXBElement<CodeReqType> iatiDefAidTypeLocal = null;
+		if(iatiDefaultAidType !=null && !iatiDefaultAidType.isEmpty())
+			iatiDefAidTypeLocal =iatiDefaultAidType.iterator().next();
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
-		Set<AmpFunding> fundings = new HashSet<AmpFunding>();
+		
+		//info regarding proposed project cost = sum of all actual commitments
+//		Date proposedProjectCostDate 			= null;
+//		Double proposedProjectCostAmount 		= new Double(0);
+//		String proposedProjectCostCurrency 	= null;
+		DEProposedProjectCost proposedProjectCost	= new DEProposedProjectCost();
+		if(activity.getFunding() == null) 
+			activity.setFunding(new HashSet());
+		Set<AmpFunding> fundings = activity.getFunding();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,iatiDefaultFundingOrgList);
+			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
+					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
+					proposedProjectCost);
 			if(f!=null)
 				fundings.add(f);
 		}
+		if(isValidString(proposedProjectCost.getCurrency()) )
+				proposedProjectCost.setCurrency(iatiDefaultCurrency);
+		activity.setCurrencyCode(proposedProjectCost.getCurrency());
+
+		if(proposedProjectCost.getDate() == null)
+			proposedProjectCost.setDate(new Date());
+		activity.setFunDate(proposedProjectCost.getDate());
 		
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
-//		else
-//			activity.getFunding().clear();
-		activity.getFunding().addAll(fundings);
+		activity.setFunAmount(proposedProjectCost.getAmount());
+		
+//		activity.getFunding().addAll(fundings);
 
 	}
 	
-	private AmpFunding getBudgetIATItoAMP(AmpActivityVersion activity, Budget budget, AmpCategoryValue typeOfAssistance, AmpCategoryValue financingInstrument, String iatiDefaultCurrency, Set<AmpFunding> fundings, ArrayList<ReportingOrg> iatiRepOrgList) {
+	private AmpFunding getBudgetIATItoAMP(AmpActivityVersion activity, Budget budget, AmpCategoryValue typeOfAssistance, 
+			AmpCategoryValue financingInstrument, String iatiDefaultCurrency, Set<AmpFunding> fundings, 
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
+			ArrayList<ReportingOrg> iatiRepOrgList) {
 		// TODO Auto-generated method stub
 		Double currencyValue = new Double(0);
 		String currencyName = iatiDefaultCurrency;
-		Date dateToSet = null;
+		Date startDate = null;
+		Date endDate = null;
 		for (Iterator<Object> it = budget.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
 			Object contentItem = (Object) it.next();
 			if(contentItem instanceof JAXBElement){
@@ -556,55 +600,69 @@ public class IatiActivityWorker {
 					XMLGregorianCalendar isoDate = item.getIsoDate();
 					
 					if(isoDate != null)
-						dateToSet = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
+						startDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
 					//else dateToSet	=	DataExchangeUtils.stringToDate(item.get);
 				}
 				
 				//TODO check if this still to be added to AMP
 				if(i.getName().equals(new QName("period-end"))){
+					DateType item = (DateType)i.getValue();
+					XMLGregorianCalendar isoDate = item.getIsoDate();
+					
+					if(isoDate != null)
+						endDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
 				}
 			}
 		}
 		
 		AmpOrganisation ampOrg = null;
-		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
-		ampOrg = getAmpOrganization(printList(defaultReportingOrg.getContent()), this.getLang(), defaultReportingOrg.getRef());
+		ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+		//we can not import funding with Donor null
+		if (ampOrg == null) return null;
+		
+//		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
+//		ampOrg = getAmpOrganization(printList(defaultReportingOrg.getContent()), this.getLang(), defaultReportingOrg.getRef());
 		//there is no participating organization with funding role and the 
 		//the transaction has no source organization - donor
-		if(ampOrg==null) return null;
+		//if(ampOrg==null) return null;
 		
-		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
+		Set<AmpFunding> ampFundings = fundings;
+		if(ampFundings == null) 
+			ampFundings = new HashSet<AmpFunding>();
+		AmpFunding ampFunding = new AmpFunding();
+		boolean found = false;
+		for (AmpFunding af : ampFundings) {
+			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+				ampFunding = af;
+				ampFundDetails = ampFunding.getFundingDetails();
+				found = true;
+				break;
+			}
+		}
+		
 		ampFunding.setActive(true);
-		ampFunding.setAmpDonorOrgId(ampOrg);
-		ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+		//ampFunding.setAmpDonorOrgId(ampOrg);
+		if(!found){
+			ampFunding.setAmpDonorOrgId(ampOrg);
+			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+			ampFunding.setFundingDetails(ampFundDetails);
+			ampFunding.setTypeOfAssistance(typeOfAssistance);
+			ampFunding.setFinancingInstrument(financingInstrument);
+			ampFunding.setModeOfPayment(null);
+		}
+		Date dateToSet = null;
+		if(startDate!=null)
+			dateToSet = startDate;
+		else if (endDate!=null)
+				dateToSet = endDate;
+			//if there is no date, the budget element should be skipped
+			else return null; 
 		populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		ampFunding.setFundingDetails(ampFundDetails);
-		ampFunding.setTypeOfAssistance(typeOfAssistance);
-		ampFunding.setFinancingInstrument(financingInstrument);
-		ampFunding.setModeOfPayment(null);
-		
 		if(activity !=null ) 
 			ampFunding.setAmpActivityId(activity);
-		Set<AmpFunding> ampFundings = activity.getFunding();//fundings;
-		//TODO check if we want to keep the old fundings here and merge them. 
-		//If mode of payment or funding status or other fields are changed it should not merge them.
-		if(ampFundings!=null)
-			for (AmpFunding af : ampFundings) {
-				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
-					ampFunding.setFinancingId(af.getFinancingId());
-					ampFunding.setModeOfPayment(af.getModeOfPayment());
-					ampFunding.setFundingStatus(af.getFundingStatus());
-					ampFunding.setActualStartDate(af.getActualStartDate());
-					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
-					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
-					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
-					ampFunding.setConditions(af.getConditions());
-					ampFunding.setDonorObjective(af.getDonorObjective());
-					break;
-				}
-			}
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -624,7 +682,11 @@ public class IatiActivityWorker {
 
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
-			String iatiDefaultCurrency, Set<AmpFunding> fundings, ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList) {
+			String iatiDefaultCurrency, 
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
+			ArrayList<ReportingOrg> iatiRepOrgList, 
+			DEProposedProjectCost ppc) {
 
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -715,61 +777,76 @@ public class IatiActivityWorker {
 			}
 		}
 		
-		//we can not import funding with Donor null
 		if(ampOrg == null) 
-			{
-				//return null;
-				ParticipatingOrg defaultFundingOrg = iatiDefaultFundingOrgList.iterator().next();
-				ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
-				if(ampOrg==null)
-					//there is no participating organization with funding role and the 
-					//the transaction has no source organization - donor
-					return null;
-			}
+		{
+				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+				//we can not import funding with Donor null
+				if (ampOrg == null) return null;
+		}
 		
-		AmpFunding ampFunding = new AmpFunding();
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-
-		ampFunding.setActive(true);
-		ampFunding.setAmpDonorOrgId(ampOrg);
-		ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
-		
-		if("d".compareTo(transactionType) ==0)
+		//DRC demand for DFID - merge disb with exp into disb
+		if("d".compareTo(transactionType) ==0 || "e".compareTo(transactionType) ==0)
 			populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
 		else
-			if(("e".compareTo(transactionType) ==0))
-				populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
-			else
-				if(("c".compareTo(transactionType) ==0))
-					populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+//			if("e".compareTo(transactionType) ==0)
+//				populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
+//			else
+				if("c".compareTo(transactionType) ==0)
+					{
+						populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+						if(!isValidString(ppc.getCurrency()))
+							ppc.setCurrency(currencyName);
+						if(ppc.getDate() == null)
+							ppc.setDate(tDate);
+						Double amount = ppc.getAmount();
+						amount+=currencyValue;
+						ppc.setAmount(amount);
+						
+					}
 			//the transaction is not C,D,E and will not be imported.
 				else return null;
+
+		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
+		if(ampFundings == null) 
+			ampFundings = new HashSet<AmpFunding>();
+		AmpFunding ampFunding = new AmpFunding();
+		boolean found = false;
+		for (AmpFunding af : ampFundings) {
+			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+//				ampFunding.setFinancingId(af.getFinancingId());
+//				ampFunding.setModeOfPayment(af.getModeOfPayment());
+//				ampFunding.setFundingStatus(af.getFundingStatus());
+//				ampFunding.setActualStartDate(af.getActualStartDate());
+//				ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+//				ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+//				ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+//				ampFunding.setConditions(af.getConditions());
+//				ampFunding.setDonorObjective(af.getDonorObjective());
+//				ampFunding.setGroupVersionedFunding(af.getGroupVersionedFunding());
+				ampFunding = af;
+				ampFunding.getFundingDetails().addAll(ampFundDetails);
+				found = true;
+				break;
+			}
+		}
 		
-		ampFunding.setFundingDetails(ampFundDetails);
-		ampFunding.setTypeOfAssistance(typeOfAssistance);
-		ampFunding.setFinancingInstrument(financingInstrument);
-		ampFunding.setModeOfPayment(modeOfPayment);
+		
+		//AmpFunding ampFunding = new AmpFunding();
+		ampFunding.setActive(true);
+		//ampFunding.setAmpDonorOrgId(ampOrg);
+		if(found==false){
+			ampFunding.setAmpDonorOrgId(ampOrg);
+			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+			ampFunding.setFundingDetails(ampFundDetails);
+			ampFunding.setTypeOfAssistance(typeOfAssistance);
+			ampFunding.setFinancingInstrument(financingInstrument);
+			ampFunding.setModeOfPayment(modeOfPayment);
+		}
+		
 		
 		if(a !=null ) 
 			ampFunding.setAmpActivityId(a);
-		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
-		//TODO check if we want to keep the old fundings here and merge them. 
-		//If mode of payment or funding status or other fields are changed it should not merge them.
-		if(ampFundings!=null)
-			for (AmpFunding af : ampFundings) {
-				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
-					ampFunding.setFinancingId(af.getFinancingId());
-					ampFunding.setModeOfPayment(af.getModeOfPayment());
-					ampFunding.setFundingStatus(af.getFundingStatus());
-					ampFunding.setActualStartDate(af.getActualStartDate());
-					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
-					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
-					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
-					ampFunding.setConditions(af.getConditions());
-					ampFunding.setDonorObjective(af.getDonorObjective());
-					break;
-				}
-			}
 		
 		//TODO: the language - lang attribute
 		if(isValidString(description)) ampFunding.setConditions(description);
@@ -790,6 +867,29 @@ public class IatiActivityWorker {
 	}
 
 	
+	private AmpOrganisation findFundingOrganization(
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList,
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList,
+			ArrayList<ReportingOrg> iatiRepOrgList) {
+		AmpOrganisation ampOrg = null;
+		if(iatiExtendingOrgList != null && !iatiExtendingOrgList.isEmpty())
+		{
+			ParticipatingOrg defaultFundingOrg = iatiExtendingOrgList.iterator().next();
+			ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+		}
+		else if(iatiDefaultFundingOrgList != null && !iatiDefaultFundingOrgList.isEmpty())
+				{
+					ParticipatingOrg defaultFundingOrg = iatiDefaultFundingOrgList.iterator().next();
+					ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+				}
+				else if(iatiRepOrgList != null && !iatiRepOrgList.isEmpty())
+						{
+							ReportingOrg defaultFundingOrg = iatiRepOrgList.iterator().next();
+							ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+						}
+		return ampOrg;
+	}
+
 	private void populateFundingDetails(Double currencyValue, String currencyCode, Date tDate, Set<AmpFundingDetail> fundDetails, int transactionType, int adjustmentType) {
 			//senegal
 			if(currencyValue.doubleValue()==0) return;
@@ -810,26 +910,40 @@ public class IatiActivityWorker {
 		
 	}
 	
-	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList) {
+	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList, ArrayList<ReportingOrg> iatiRepOrgList) {
 		// TODO Auto-generated method stub
-		if(iatiOtherIdList.isEmpty()) return;
 		Set<AmpActivityInternalId> internalIds = new HashSet<AmpActivityInternalId>();
-		for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
-			OtherIdentifier otherIdentifier = (OtherIdentifier) it.next();
+		if(iatiOtherIdList.isEmpty()) {
+			for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
+				OtherIdentifier otherIdentifier = (OtherIdentifier) it.next();
+				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+				actInternalId.setInternalId(otherIdentifier.getContent());
+				actInternalId.setAmpActivity(a);
+				
+				String orgName = otherIdentifier.getOwnerName();
+				String orgCode = otherIdentifier.getOwnerRef();
+				AmpOrganisation org = getAmpOrganization(orgName,lang,orgCode);
+				if(org != null)
+					actInternalId.setOrganisation(org);
+				internalIds.add(actInternalId);
+			}
+		}
+		AmpOrganisation ampOrg = null;
+		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
+		ampOrg = getAmpOrganization(printList(defaultReportingOrg.getContent()), this.getLang(), defaultReportingOrg.getRef());
+		//if there is no rep organization we can not assign the iatiID to no ampORG 
+		if(ampOrg!=null) {
 			AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-			actInternalId.setInternalId(otherIdentifier.getContent());
+			actInternalId.setInternalId(this.iatiID.replace(defaultReportingOrg.getRef()+"-", ""));
 			actInternalId.setAmpActivity(a);
-			
-			String orgName = otherIdentifier.getOwnerName();
-			String orgCode = otherIdentifier.getOwnerRef();
-			AmpOrganisation org = getAmpOrganization(orgName,lang,orgCode);
-			if(org != null)
-				actInternalId.setOrganisation(org);
+			actInternalId.setOrganisation(ampOrg);
 			internalIds.add(actInternalId);
 		}
+		if(internalIds==null || internalIds.isEmpty()) return;
 		
 		if(a.getInternalIds() == null) a.setInternalIds(new HashSet<AmpActivityInternalId>());
 		else a.getInternalIds().clear();
+		
 		a.getInternalIds().addAll(internalIds);
 		
 	}
@@ -1054,7 +1168,8 @@ public class IatiActivityWorker {
 	private void extractIATIEntities(ArrayList<JAXBElement<TextType>> iatiTitleList,
 			ArrayList<JAXBElement<CodeType>> iatiStatusList,
 			ArrayList<ParticipatingOrg> iatiPartOrgList,
-			ArrayList<ParticipatingOrg> iatiFundOrgList, ArrayList<ReportingOrg> iatiRepOrgList,
+			ArrayList<ParticipatingOrg> iatiFundOrgList,ArrayList<ParticipatingOrg> iatiExtendingOrgList,
+			ArrayList<ReportingOrg> iatiRepOrgList,
 			ArrayList<Sector> iatiSectorList,
 			ArrayList<Budget> iatiBudgetList, ArrayList<Transaction> iatiTransactionList,
 			ArrayList<Description> iatiDescriptionList,
@@ -1140,6 +1255,8 @@ public class IatiActivityWorker {
 				iatiPartOrgList.add(item);
 				if(item.getRole()!=null && "funding".compareTo(item.getRole().toLowerCase())==0)
 					iatiFundOrgList.add(item);
+				if(item.getRole()!=null && "extending".compareTo(item.getRole().toLowerCase())==0)
+					iatiExtendingOrgList.add(item);
 			}
 			
 			if(contentItem instanceof Sector){
@@ -1434,8 +1551,7 @@ public class IatiActivityWorker {
 	}
 	
 	private String getAttributeCodeType(JAXBElement<CodeType> item, String key) {
-		Map<QName, String> otherAttributes = item.getValue().getOtherAttributes();
-		String code = otherAttributes.get(new QName(key));
+		String code = item.getValue().getCode();
 		return code;
 	}
 	

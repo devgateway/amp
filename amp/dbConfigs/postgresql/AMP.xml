@@ -222,7 +222,8 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Sub-Sub-Sector">
+	
+	<!-- Dimension name="Sub-Sub-Sector">
 		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sub-Sectors#">
 			<Level name="sub-sub-sector" column="p_sub_sub_sector_name">
 				<NameExpression>
@@ -232,7 +233,7 @@
 				</NameExpression>
 			</Level>
 		</Hierarchy>
-	</Dimension>
+	</Dimension-->
 	
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />

@@ -278,8 +278,13 @@ NormalReportManager.prototype.checkSteps	= function () {
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
-				if ( this.checkMeasures() )
+				if ( this.checkMeasures() ) {
 						this.checkReportName() ;
+						return;
+				}
+	
+	// If any of the checks above fails the save should be disabled
+	this.disableSave();
 }
 
 NormalReportManager.prototype.checkReportDetails	= function () {
@@ -463,7 +468,7 @@ TabReportManager.prototype.checkColumns	= function () {
 		columnsLimitEl	= document.getElementById("columnsLimit");
 		columnsLimitEl.style.visibility="hidden";
 		this.enableTab(2);
-                this.enableSave();
+		
 		return true;
 	}
 	else {
@@ -479,7 +484,7 @@ TabReportManager.prototype.checkColumns	= function () {
 		else
 			columnsLimitEl.style.visibility="hidden";
 		this.disableTab(2);
-                this.disableSave();
+		
 		return false;
 	}
 }

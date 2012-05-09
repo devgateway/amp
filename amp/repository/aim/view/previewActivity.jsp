@@ -19,6 +19,10 @@
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
+<style type="text/css">
+	.legend_label a.trnClass { color:yellow;}
+}
+</style>
 
 <script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -1163,6 +1167,7 @@ function collapseAll() {
 		</c:if>
 	</div>
 </fieldset>
+</module:display>
 <!-- END NATIONAL PLAN SECTION -->
 
 <!-- PROGRAM SECTION -->
@@ -1287,7 +1292,7 @@ function collapseAll() {
 	</c:if>
 </div>
 </fieldset>
-</module:display>
+
 <!-- END SECTORS SECTION -->
 
 <!-- FUNDING SECTION -->

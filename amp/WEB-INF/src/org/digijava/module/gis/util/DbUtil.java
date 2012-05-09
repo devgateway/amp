@@ -25,9 +25,11 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -2273,9 +2275,21 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+
+            StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
+            lastVersionsQry.append(AmpActivityGroup.class.getName());
+            lastVersionsQry.append(" as actGroup");
+            Query actGrpupQuery = sess.createQuery(lastVersionsQry.toString());
+            List lastVersions = actGrpupQuery.list();
+            String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
+
             StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.location.id, actLoc.locationPercentage from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as actLoc where actLoc.locationPercentage is not null and actLoc.locationPercentage > 0");
+            queryStr.append(" and actLoc.activity.ampActivityId in ");
+            queryStr.append(lasVersionsWhereclause);
+            queryStr.append(" and (actLoc.activity.deleted IS NULL OR actLoc.activity.deleted = false)");
+
             if (locationWhereclause != null) {
                 queryStr.append(" and actLoc.location.location.id in ");
                 queryStr.append(locationWhereclause);
@@ -2636,7 +2650,7 @@ public class DbUtil {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select act.ampActivityId, act.name from ");
-            queryStr.append(AmpActivity.class.getName());
+            queryStr.append(AmpActivityVersion.class.getName());
             queryStr.append(" as act where act.ampActivityId in ");
             queryStr.append(actIdWhereclause);
             Query q = sess.createQuery(queryStr.toString());

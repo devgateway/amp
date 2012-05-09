@@ -201,16 +201,7 @@ DROP TABLE IF EXISTS cached_v_sector_group_info;
 CREATE TABLE cached_v_sector_group_info AS SELECT * FROM v_sector_group_info;
 DROP TABLE IF EXISTS cached_v_funding_status;
 CREATE TABLE cached_v_funding_status AS SELECT * FROM v_funding_status;
---DROP TABLE IF EXISTS cached_v_contact_donor;
---CREATE TABLE cached_v_contact_donor AS SELECT * FROM v_contact_donor;
---DROP TABLE IF EXISTS cached_v_contact_mofed;
---CREATE TABLE cached_v_contact_mofed AS SELECT * FROM v_contact_mofed;
---DROP TABLE IF EXISTS cached_v_contact_project_coordinator;
---CREATE TABLE cached_v_contact_project_coordinator AS SELECT * FROM v_contact_project_coordinator;
---DROP TABLE IF EXISTS cached_v_contact_sector_ministry;
---CREATE TABLE cached_v_contact_sector_ministry AS SELECT * FROM v_contact_sector_ministry;
---DROP TABLE IF EXISTS cached_v_contact_impl_exec_agency;
---CREATE TABLE cached_v_contact_impl_exec_agency AS SELECT * FROM v_contact_impl_exec_agency;
+
 DROP TABLE IF EXISTS cached_v_zones;
 CREATE TABLE cached_v_zones AS SELECT * FROM v_zones;
 DROP TABLE IF EXISTS cached_v_districts;
@@ -229,7 +220,7 @@ DROP TABLE IF EXISTS cached_v_costs;
 CREATE TABLE cached_v_costs AS SELECT * FROM v_costs;
 
 DROP TABLE IF EXISTS cached_amp_activity;
-CREATE TABLE cached_amp_activity AS  SELECT amp_activity_version.* FROM amp_activity_version, amp_activity_group WHERE (amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id);
+CREATE TABLE cached_amp_activity AS  select * from amp_activity;
 
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;
 CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy limit 0;
@@ -371,9 +362,6 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
          coalesce(sp.program_percentage, 100) / 100 *
          coalesce(np.program_percentage, 100) / 100 *
          coalesce(secs.sector_percentage,100) / 100 *
-         coalesce(psub.sector_percentage,100) / 100 *
-         coalesce(ssub.sector_percentage,100) / 100 *
-         coalesce(psubsub.sector_percentage,100) / 100 *
          coalesce(s.sector_percentage,100) / 100) AS transaction_amount,
          
          d.name AS donor_name,
@@ -420,10 +408,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
           npl6.name as npl6_name,
           npl7.name as npl7_name,
           npl8.name as npl8_name,
-          psub.sectorname AS p_sub_sector_name,
           ssub.sectorname AS s_sub_sector_name,
           secs.sectorname AS s_sectorname,
-          psubsub.name AS p_sub_sub_sector_name,
           ss.sec_scheme_name AS s_amp_sec_scheme_name
   from cached_amp_activity aa join amp_funding f on aa.amp_activity_id = f.amp_activity_id
        join amp_funding_detail fd on f.amp_funding_id = fd.amp_funding_id
@@ -433,10 +419,9 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
        join amp_org_group b on d.org_grp_id = b.amp_org_grp_id
        join amp_org_type ot on b.org_type = ot.amp_org_type_id
        join amp_category_value cval2 on f.financing_instr_category_value = cval2.id
+
        left join cached_v_sectors s on aa.amp_activity_id = s.amp_activity_id
-       left join cached_v_sub_sectors psub on aa.amp_activity_id = psub.amp_activity_id
-       left join cached_v_sub_sub_sectors psubsub on s.amp_sector_id = psubsub.parent_sector_id
-       
+
        left join cached_v_secondary_sectors secs on aa.amp_activity_id = secs.amp_activity_id
        left join cached_v_secondary_sub_sectors ssub on aa.amp_activity_id = ssub.amp_activity_id
        left join amp_sector_scheme ss on secs.amp_sector_scheme_id = ss.amp_sec_scheme_id
@@ -483,16 +468,10 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            aa.amp_activity_id,
            s.amp_sector_id,
            s.sectorname,
-           psub.amp_sector_id,
-           psub.sectorname,
-            psub.amp_activity_id,
            secs.amp_sector_id,
            secs.sectorname,
-            secs.amp_activity_id,
-           ssub.amp_sector_id,
-           ssub.sectorname,
-            ssub.amp_activity_id,
-            ss.amp_sec_scheme_id,
+           secs.amp_activity_id,
+           ss.amp_sec_scheme_id,
            ot.org_type,
            ot.amp_org_type_id,
            d.amp_org_id,
@@ -537,7 +516,6 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            sp.program_percentage,
            np.program_percentage,
            secs.sector_percentage,
-           psub.sector_percentage,
            ssub.sector_percentage,
            s.sector_percentage,
            s.sec_scheme_name,
@@ -568,15 +546,10 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            npl6.name,
            npl7.name,
            npl8.name,
-           psub.sectorname ,
            ssub.sectorname ,
            secs.sectorname ,
-           ss.sec_scheme_name,
-           psubsub.name,
-           psubsub.sector_percentage,
-           psubsub.amp_sector_id,
-           psubsub.amp_activity_id
-
+           ss.sec_scheme_name
+           
   order by aa.amp_activity_id,
            s.sectorname,
            fd.transaction_type,

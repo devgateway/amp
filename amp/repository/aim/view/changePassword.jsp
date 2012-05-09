@@ -23,6 +23,13 @@
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
+		<td align=left valign="top" width="60%">
+			<digi:errors/>
+		</td>
+	</tr>
+	<tr>
+		<td width="5%">&nbsp;
+		</td>
 		<td align=left valign="top" width="60%"><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				

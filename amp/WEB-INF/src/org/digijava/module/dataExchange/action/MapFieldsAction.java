@@ -233,10 +233,10 @@ public class MapFieldsAction extends MultiAction {
 		if(DataExchangeConstants.IATI_ACTIVITY.compareTo(ampClassTypeSelected) ==0 )
 			allEntities 	=	DataExchangeUtils.getNameGroupAllActivities();
 		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by f.orgType asc");
 		}
 		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f order by f.name asc");
 		}
 		if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
 			allEntities 	=	DataExchangeUtils.getNameIdAllLocations();
@@ -248,7 +248,7 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
 		}
 		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)), f.ampSectorId  from " + AmpSector.class.getName()+ " f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f order by sname");
 		}
 		//type of assistance
 		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){

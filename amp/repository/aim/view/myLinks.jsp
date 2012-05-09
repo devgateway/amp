@@ -12,7 +12,7 @@
 	<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 </c:set>
 <module:display name="Content Repository" parentModule="Resources">
-	<div class="right_menu">
+	<div class="right_menu" style="margin-top:20px;">
 	<div class="right_menu_header">
 		<div class="right_menu_header_cont">
 			<digi:trn key="aim:resources">Resources</digi:trn>
@@ -33,9 +33,11 @@
 						</a>
 					</c:if>
 			    </logic:iterate>
+				<div title="Click here to view More Resources" style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px">
 			   	<a href="/contentrepository/documentManager.do?type=team">
 		       		<digi:trn key="aim:moreResources">More resources</digi:trn>
 				</a>	 	
+				</div>
 	      </logic:notEmpty>    
 	      <logic:empty name="myLinks" scope="session">
           	<digi:trn key="aim:noResources">No Resources</digi:trn></div>

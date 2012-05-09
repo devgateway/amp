@@ -74,8 +74,8 @@ function validateUserInfo(){
 	var country=document.getElementById("country").value;
 	var errorMsg='';
 	
-	if(isInvalid(userMail)){
-		errorMsg='<digi:trn jsFriendly="true">Email Is Blank</digi:trn>';
+	if(isInvalid(userMail)==1){
+		errorMsg='<digi:trn jsFriendly="true">Email Is Blank or starts with an space</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}else if(userMail.indexOf('@')==-1 || userMail.indexOf('.')==-1){
@@ -83,16 +83,34 @@ function validateUserInfo(){
 		alert(errorMsg);
 		return false;
 	}
-	if(isInvalid(firstName)){
-		errorMsg='<digi:trn jsFriendly="true" >FirstName Is Blank</digi:trn>';
-		alert(errorMsg);
-		return false;
+	if(isInvalid(firstName)==1){
+		<c:set var="translation">
+		<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank or starts with an space</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
 	}
-	if(isInvalid(lastName)){
-		errorMsg='<digi:trn jsFriendly="true">LastName Is Blank</digi:trn>';
-		alert(errorMsg);
-		return false;
+	if(isInvalid(firstName)==2){
+		<c:set var="translation">
+		<digi:trn key="erroruregistration.FirstNameNumeric">First can't be only numeric</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
+    }
+	if(isInvalid(lastName)==1){
+		<c:set var="translation">
+		<digi:trn key="error.registration.LastNameBlank">LastName is Blank or starts with an space</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
 	}
+	if(isInvalid(lastName)==2){
+		<c:set var="translation">
+		<digi:trn key="erroruregistration.LastNameNumeric">LastName can't be only numeric</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
+    }
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
 		alert(errorMsg);
@@ -102,10 +120,13 @@ function validateUserInfo(){
 }
 
 function isInvalid(field){
-	if (field == null || field == '' || !isNaN(field) || field.charAt(0) == ' '){
-    	return true;
+	if (field == "" || field == null || field.charAt(0) == ' '){
+    	return 1;
     }		
-	return false;
+	if (!isNaN(field)){
+    	return 2;
+    }		
+	return 0;
 }
 </script>
 <center>

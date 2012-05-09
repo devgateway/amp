@@ -109,7 +109,7 @@ a.itr:hover {
     document.aimViewIndicatorsForm.submit();
 }
 </script>
-<h1 class="admintitle">Indicator manager</h1>
+<h1 class="admintitle"><digi:trn>Indicator manager</digi:trn></h1>
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">

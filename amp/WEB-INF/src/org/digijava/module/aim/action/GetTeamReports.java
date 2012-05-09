@@ -88,9 +88,21 @@ public class GetTeamReports extends Action {
             	defReportsPerPage = raForm.getTempNumResults();
             }
             
+                        
+                        String reset = request.getParameter("reset");
+                        
+                        if(reset!=null && reset.equalsIgnoreCase("true")){
+                        	//raForm.setTempNumResults(-1);
+                        	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
+                        	raForm.setKeyword(null);
+                        }
+                        if(raForm.getTempNumResults()!=-1){
+                        	defReportsPerPage = raForm.getTempNumResults();
+                        }
 		}
 
 		if (id != null) {
+			
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
             Double totalPages=null;
             Collection col =null;
@@ -108,7 +120,7 @@ public class GetTeamReports extends Action {
             raForm.setTotalPages(totalPages.intValue());
 			raForm.setReports(col);
 			raForm.setTeamId(id);
-			raForm.setTeamName(ampTeam.getName());
+			raForm.setTeamName(ampTeam.getName());			
 			return mapping.findForward("forward");
 		} else {
 			return null;

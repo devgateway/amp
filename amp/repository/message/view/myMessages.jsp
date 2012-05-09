@@ -181,7 +181,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       	div.append(li);
       </feature:display>
       
-      div.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'</a>');
+      div.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1" style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px; display:block;">'+moremessages+'</a>');
       
       
     }
@@ -197,7 +197,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     </script>
     
     <feature:display name="My Messages" module="Messages">
-    <div class="right_menu">
+    <div class="right_menu" style="margin-top:20px;">
 		<div class="right_menu_header">
 			<div class="right_menu_header_cont"><digi:trn>My Messages</digi:trn></div>
 		</div>

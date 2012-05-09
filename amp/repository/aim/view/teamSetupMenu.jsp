@@ -105,7 +105,7 @@ function putLoading(){
 					</c:if>
 					<c:if test="${selectedTab != '3'}">
 						<li class="desktop_tab ui-state-default ui-corner-top">
-							<digi:link href="/teamReportList.do" styleClass="tab_link">
+							<digi:link href="/teamReportList.do~reset=true" styleClass="tab_link">
 								<digi:trn key="aim:workspaceReports">Reports</digi:trn>
 							</digi:link>
 						</li>
@@ -270,7 +270,7 @@ function putLoading(){
 								</span>
 							</c:if>
 							<c:if test="${selectedSubTab != '0'}">
-								<digi:link href="/teamReportList.do" name="urlParams" styleClass="l_sm">
+								<digi:link href="/teamReportList.do~reset=true" name="urlParams" styleClass="l_sm">
 									<digi:trn key="aim:assignedreports">Assigned</digi:trn>
 								</digi:link>
 							</c:if>

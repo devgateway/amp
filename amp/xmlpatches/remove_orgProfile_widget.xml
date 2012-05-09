@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-10440</jira>
+    <keyword>Org Profile</keyword>
+    <keyword>Widget</keyword>
+    <author>Medea Gugushvili</author>
+    <description>Remove Profile places and widgets</description>
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+    			delete from amp_widget_place where place_code like 'orgprof_chart_place%';
+    			delete from amp_widget where widget_type='orgprofile';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

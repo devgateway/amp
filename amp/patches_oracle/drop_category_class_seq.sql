@@ -1,0 +1,1 @@
+drop sequence AMP_CATEGORY_CLASS_SEQ;

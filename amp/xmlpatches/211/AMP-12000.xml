@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12000</jira>
+  <keyword>module</keyword>
+  <keyword>FM mode</keyword>
+  <author>Armen</author>
+  <description>Remove "/Activity Form/FM Mode" duplication for "name" attribute of amp_modules_visibility table</description>
+  <trigger type="all">
+       <condition type="custom">
+			<script returnVar="db">
+				<lang type="postgres">SELECT current_database()</lang>
+			</script>
+			<test>db.equalsIgnoreCase("amp_honduras") || db.equalsIgnoreCase("amp_honduras_staging")</test>
+       </condition>
+  </trigger>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">      
+  	DELETE FROM amp_modules_visibility
+ 	WHERE  id not in (select min(id) from  amp_modules_visibility where "name" = '/Activity Form/FM Mode')  
+ 	and "name" = '/Activity Form/FM Mode';	
+      </lang>
+    </script>
+    
+    
+  </apply>
+
+</tns:patch>

@@ -1,0 +1,1 @@
+delete from dg_user_group where USER_ID not in (select ID from DG_USER);

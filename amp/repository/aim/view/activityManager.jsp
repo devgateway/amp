@@ -339,7 +339,7 @@
 												<hr />
 												<table width=100%>
 													<tr>
-														<td>
+														<td style="text-align:center;">
 														<%
 													ActivityForm aimActivityForm = (ActivityForm) pageContext.getAttribute("aimActivityForm");
 													java.util.List pagelist = new java.util.ArrayList();

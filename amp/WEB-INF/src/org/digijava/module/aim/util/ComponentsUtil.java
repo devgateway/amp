@@ -17,6 +17,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -389,21 +390,27 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select co from " + AmpComponent.class.getName() + " co where co.title=:title";
+            
+            queryString = "select co.title from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
+                    " co  where co  in elements(a.components)  and" +
+                    " co.title=:title";
+
             if (excludeId != null)
             	queryString += " and not co.ampComponentId=:excludeId";
             qry = session.createQuery(queryString);
+            
+           
             qry.setParameter("title", title, Hibernate.STRING);
             if (excludeId != null)
             	qry.setLong("excludeId", excludeId);
-
+           
             col = qry.list();
         } catch (Exception ex) {
             logger.error("Unable to get Component for editing from database " + ex.getMessage());
             ex.printStackTrace(System.out);
         }
         logger.info(" returning the collection");
-        if (col.isEmpty()) {
+        if (col== null ||  col.isEmpty()  ) {
             return false;
         } else
             return true;

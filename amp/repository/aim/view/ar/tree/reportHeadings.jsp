@@ -30,7 +30,7 @@
 	<logic:equal name="column" property="columnDepth" value="1">
 	
 	<logic:equal name="widget" scope="request" value="true">
-	<a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+	<a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
 		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</a>
 	</logic:equal>

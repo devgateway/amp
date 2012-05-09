@@ -161,12 +161,20 @@ public class ReportsFilterPicker extends MultiAction {
 			if ( existingFilter != null ) { 
 				FilterUtil.populateForm(filterForm, existingFilter);
 				request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
-				filterForm.setCalendar(existingFilter.getCalendarType()==null ? tempSettings.getFiscalCalendar().getAmpFiscalCalId() : existingFilter.getCalendarType().getAmpFiscalCalId());
-				filterForm.setCurrency(existingFilter.getCurrency()==null ? tempSettings.getCurrency().getAmpCurrencyId() : existingFilter.getCurrency().getAmpCurrencyId());
+				if (filterForm.getCalendar() == null){
+					filterForm.setCalendar(existingFilter.getCalendarType()==null ? tempSettings.getFiscalCalendar().getAmpFiscalCalId() : existingFilter.getCalendarType().getAmpFiscalCalId());
+				}
+				if (filterForm.getCurrency() == null){
+					filterForm.setCurrency(existingFilter.getCurrency()==null ? tempSettings.getCurrency().getAmpCurrencyId() : existingFilter.getCurrency().getAmpCurrencyId());
+				}
 			} else 
 				if ( !"Apply Format".equals(applyFormat) ) {
-					filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-					filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
+					if (filterForm.getCalendar() == null){
+						filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+					}
+					if (filterForm.getCurrency() == null){
+						filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
+					}
 				}
 		}
 
@@ -955,6 +963,7 @@ public class ReportsFilterPicker extends MultiAction {
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
 		
+		
 		StopWatch.next("Filters", true);
 	}
 	
@@ -1450,15 +1459,14 @@ public class ReportsFilterPicker extends MultiAction {
 		DecimalFormat custom = new DecimalFormat();
 		DecimalFormatSymbols ds = new DecimalFormatSymbols();
 		ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0)));
-		//
+		
 		if (filterForm.getCustomUseGrouping().booleanValue() == true) {			
-		ds
-				.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt()
-						.charAt(0)));
-		custom.setGroupingUsed(filterForm.getCustomUseGrouping());
-		custom.setGroupingSize(filterForm.getCustomGroupSize());
+			ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt()
+							.charAt(0)));			
+			custom.setGroupingUsed(filterForm.getCustomUseGrouping());
+			custom.setGroupingSize(filterForm.getCustomGroupSize());			
 		}
-		//
+		
 		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousands());

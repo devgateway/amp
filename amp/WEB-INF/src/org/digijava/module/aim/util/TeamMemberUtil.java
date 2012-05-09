@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -1813,6 +1814,18 @@ public class TeamMemberUtil {
                         }
                     }
                     
+                    qryStr = "select cont from "+AmpContact.class.getName() +" cont where (cont.creator=:memberId) ";
+                    qry = session.createQuery(qryStr);
+                    qry.setLong("memberId", id[i]);
+                    List<AmpContact> ampContacts = qry.list();
+                    if(ampContacts!=null&&ampContacts.size()>0){
+                        Iterator<AmpContact> contIter=ampContacts.iterator();
+                        while (contIter.hasNext()) {
+                        	AmpContact ampCont = contIter.next();
+                            session.delete(ampCont);
+                        }
+                    }
+                   
                     ArrayList<OffLineReports> reports = new ArrayList<OffLineReports>();
             		reports = (ArrayList<OffLineReports>) EntityHelper.getReports(ampMember);
             		for (OffLineReports report : reports) {

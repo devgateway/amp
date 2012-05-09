@@ -1643,17 +1643,25 @@ public class SaveActivity extends Action {
 			//Do the checks here
 				if(FeaturesUtil.isVisibleField("Beneficiary Agency Percentage", ampContext)){
 					if (eaForm.getAgencies().getBenOrgPercentage()!= null && eaForm.getAgencies().getBenOrgPercentage().size() > 0) {
-						Iterator<String> ppIt = eaForm.getAgencies().getBenOrgPercentage().values().iterator();
+						Iterator<String> ppIt = eaForm.getAgencies().getBenOrgPercentage().keySet().iterator();
 						Double totalPercentage = 0d;
 						while (ppIt.hasNext()) {
-							String percent = ppIt.next() ;
+                            String benAgencyIdStr = ppIt.next();
+							String percent = eaForm.getAgencies().getBenOrgPercentage().get(benAgencyIdStr);
 							if (null == percent|| "".equals(percent)) {
 								errors.add("BenOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.BenOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter beneficiary agency  percentage",locale,siteId)));
 								break;
 							}
-			
-							Double percentage = new Double(percent);
-							totalPercentage += percentage;
+
+                            for (AmpOrganisation benAgecny : eaForm.getAgencies().getBenAgencies()) {
+                                if (benAgencyIdStr.equals(String.valueOf(benAgecny.getAmpOrgId()))) {
+                                    Double percentage = new Double(percent);
+                                    totalPercentage += percentage;
+                                    break;
+                                }
+                            }
+
+
 						}
 						if (totalPercentage != 100)
 							errors.add("BenOrgPercentageSumWrong",

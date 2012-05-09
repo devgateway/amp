@@ -86,7 +86,7 @@
     }
     
     
-    var responseSuccess = function(o){
+    var responseSuccessSector = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -104,7 +104,7 @@
 		content.innerHTML = response;
 	    //content.style.visibility = "visible";
 		
-		showContent();
+		showContentSector();
 		
 	}
  
@@ -116,9 +116,9 @@
 	// response object's properties.
 		//alert("Connection Failure!"); 
 	}  
-	var callback = 
+	var callbackSector = 
 	{ 
-		success:responseSuccess, 
+		success:responseSuccessSector, 
 		failure:responseFailure 
 	};
 
@@ -133,7 +133,7 @@
 			failure:responseFailure 
 	}
 
-	function showContent(){
+	function showContentSector(){
 		var element = document.getElementById("mySector");
 		element.style.display = "inline";
 		if (panelStart < 1){
@@ -291,7 +291,7 @@
 		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, postString);
 		//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
   											
 	}	
@@ -301,7 +301,7 @@
 			var postString		= generateFields(3);
 			<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
 			var url = "<%=Url %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, postString);
 			checkAndClose=true;
 		}
 		else{
@@ -332,7 +332,7 @@
 		<digi:context name="commentUrl" property="context/aim/searchSectors.do"/>
 		var url = "<%=commentUrl %>?"+postString;
 		url += generateFields(3);
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, postString);
 
 	}
 	function checkSectorEmpty()
@@ -413,7 +413,7 @@
 	function selectSector() {
 		<digi:context name="selectSec" property="context/aim/selectSectors.do" />
 		var url = "<%= selectSec %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, "edit=true");
 	}
 
 	function searchSector() {
@@ -423,7 +423,7 @@
               var postString		= generateFields(2);
 			  <digi:context name="searchSctr" property="context/aim/searchSectors.do" />
 			  var url = "<%= searchSctr %>";
-			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
+			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, "edit=true&"+postString);
 						 
 			 return true;
 			}
@@ -438,7 +438,7 @@
 	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 
 	  var url = "<%=commentUrl %>";
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackSector, params);
 	  
 	}
 	function removeSelSectors(configId) {

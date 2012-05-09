@@ -172,14 +172,14 @@ AbstractDynamicList.prototype.createReqString	= function () {
 	return this.reqString;
 }
 
-AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
+AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
 	debugger;
-	if ( this.fPanel == null) {
+	if ( this.fPanel == null && hide == false) {
 		var divEl		= document.getElementById(divId);
 		
 		var panel 		= 
-			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", visible:true, 
-				draggable:true, close:true, 
+			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", 
+				visible:true, draggable:true, close:true, 
 				modal:false,
 				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 				context:[buttonId,"tl","bl"]} );
@@ -193,17 +193,26 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
 		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0],"click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1],"click", this.fPanel.hide, this.fPanel, true);
-	}else{
+	} else if (hide == true) {
 //		var isVisible = this.fPanel.get("visible");
 //		alert (isVisible);
 //		if ( isVisible )
 //			this.fPanel.hide();
 //		else
-			this.fPanel.show();
+			if (this.fPanel != null) this.fPanel.hide();
+//		this.fPanel = null;
+	} else if (hide == false) {
+//		var isVisible = this.fPanel.get("visible");
+//		alert (isVisible);
+//		if ( isVisible )
+//			this.fPanel.hide();
+//		else
+		if (this.fPanel != null) this.fPanel.show();
 //		this.fPanel = null;
 	}
 	return this.fPanel;
 }
+
 AbstractDynamicList.prototype.emptyLabels			= function () {
 	this.filterWrapper.filterLabels	= new Array();
 }

@@ -136,8 +136,10 @@ ActionsMenu.prototype.toggleTeamView	= function() {
 }
 
 ActionsMenu.prototype.hide	= function () {
-	this.overlay.hide();
-	this.divEl.innerHTML	= "";
+	if (this.overlay != null) {
+		this.overlay.hide();
+		this.divEl.innerHTML	= "";
+	}	
 }
 
 ActionsMenu.prototype.show	= function () {	

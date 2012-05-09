@@ -236,6 +236,13 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 	}
 }
 
+FilterAsYouTypePanel.prototype.hide	= function() {
+	if ( this.visible ) {
+		this.hide();
+		this.visible	= false;
+	}
+}
+
 FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {	
 	var clickedEl	= e.target;
 	if ( !clickedEl )
@@ -254,10 +261,12 @@ FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
 }
 
 FilterAsYouTypePanel.prototype.hide	= function () {
-	this.overlay.hide();
-	this.textboxEl.value	= "";
-	this.resetFilter();
-	this.visible	= false;
+	if (this.overlay != null) {
+		this.overlay.hide();
+		this.textboxEl.value	= "";
+		this.resetFilter();
+		this.visible	= false;
+	}	
 }
 
 FilterAsYouTypePanel.prototype.show	= function () {

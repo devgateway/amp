@@ -87,18 +87,6 @@ public class GetTeamReports extends Action {
             if(raForm.getTempNumResults()!=-1){
             	defReportsPerPage = raForm.getTempNumResults();
             }
-            
-                        
-                        String reset = request.getParameter("reset");
-                        
-                        if(reset!=null && reset.equalsIgnoreCase("true")){
-                        	//raForm.setTempNumResults(-1);
-                        	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
-                        	raForm.setKeyword(null);
-                        }
-                        if(raForm.getTempNumResults()!=-1){
-                        	defReportsPerPage = raForm.getTempNumResults();
-                        }
 		}
 
 		if (id != null) {

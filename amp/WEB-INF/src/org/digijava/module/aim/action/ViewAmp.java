@@ -97,7 +97,8 @@ public class ViewAmp
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
        
-        lForm.setMembers(members);
+        session.setAttribute("currentUser", user);
+		lForm.setMembers(members);
 
        
         //response.sendRedirect("showSelectTeam.do");

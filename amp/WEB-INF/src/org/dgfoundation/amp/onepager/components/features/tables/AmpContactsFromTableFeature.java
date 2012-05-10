@@ -14,7 +14,7 @@ import java.util.TreeSet;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -153,19 +153,26 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     
                     AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",true);
                     name.getTextContainer().setRequired(true);
+                    name.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
                     item.add(name);
                     AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true);
                     lastname.getTextContainer().setRequired(true);
+                    lastname.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     lastname.setTextContainerDefaultMaxSize();
                     item.add(lastname);
+                    
                     AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",true,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
+                    
                     AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",true);
                     function.setTextContainerDefaultMaxSize();
+                    function.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     item.add(function);
+                    
                     AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",true);
                     organisationName.setTextContainerDefaultMaxSize();
+                    organisationName.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     item.add(organisationName);
                     
                     AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);

@@ -494,11 +494,11 @@ public class ImportExportUtil {
 					continue;
 				}
 				
-				String key=hssfRow.getCell(0).getStringCellValue();
+				String key=(hssfRow.getCell(0).getCellType()==HSSFCell.CELL_TYPE_NUMERIC)?hssfRow.getCell(0).getNumericCellValue()+"":hssfRow.getCell(0).getStringCellValue();
 				Message existingMessageInTargetLang =ImportExportUtil.getCacheSearcher().get(key,targetLanguage,msgSiteId);
 				Message existingMessageInEnglish =ImportExportUtil.getCacheSearcher().get(key,"en",msgSiteId);
-				String englishText=hssfRow.getCell(1).getStringCellValue();
-				String targetText=hssfRow.getCell(2).getStringCellValue();
+				String englishText=(hssfRow.getCell(1)==null)?"":hssfRow.getCell(1).getStringCellValue();
+				String targetText=(hssfRow.getCell(2)==null)?"":hssfRow.getCell(2).getStringCellValue();
 				//save only new trns
 				if (existingMessageInTargetLang == null) {
 					saveMsg(msgSiteId, session, worker, targetLanguage,

@@ -77,7 +77,7 @@ public class ImportExportTranslations extends Action {
 			FormFile uploadedFile = ioForm.getFileUploaded();
 			byte[] fileData = uploadedFile.getFileData();
 			InputStream inputStream = new ByteArrayInputStream(fileData);
-			if(uploadedFile.getContentType().equals("application/vnd.ms-excel")){
+			if(!uploadedFile.getContentType().equals("text/xml")){
 				Site site = RequestUtils.getSite(request);
 				try {
 					String targetLanguage = ImportExportUtil.importExcelFile(

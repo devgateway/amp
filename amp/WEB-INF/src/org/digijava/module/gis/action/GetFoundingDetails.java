@@ -497,6 +497,7 @@ public class GetFoundingDetails extends Action {
                     root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
                     root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
                     root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+                    root.addAttribute("totalPlannedDisb",FormatHelper.formatNumber(totalFunding.getPlannedDisb().doubleValue()));
 
                     segmendDataInfo.addElement(root);
                     Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -509,6 +510,7 @@ public class GetFoundingDetails extends Action {
                         regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
                         regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
                         regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
+                        regionData.addAttribute("fundingPlannedDisb",FormatHelper.formatNumber(ammount.getPlannedDisb().doubleValue()));
                         root.addElement(regionData);
                     }
                     segmendDataInfo.output(sos);
@@ -1207,11 +1209,13 @@ public class GetFoundingDetails extends Action {
                     totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForSectorSelected / 100f)))))  ;
                     totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal (percentsForSectorSelected/ 100f))));
                     totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure().add(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
+                    totalFundingForSector.setPlannedDisb(totalFundingForSector.getPlannedDisb().add(totalFunding.getPlannedDisb().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
 
                     FundingData fundingForSector = new FundingData();
                     fundingForSector.setCommitment(totalFunding.getCommitment().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
                     fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
                     fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    fundingForSector.setPlannedDisb(totalFunding.getPlannedDisb().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 
 
 
@@ -1240,6 +1244,7 @@ public class GetFoundingDetails extends Action {
                                     newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    newVal.setPlannedDisb(existingVal.getPlannedDisb().add(fundingForSector.getPlannedDisb().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     locationFundingMap.put(regCode, newVal);
                                 } else {
                                     if (fundingForSector.getCommitment().floatValue() !=0f || fundingForSector.getDisbursement().floatValue() != 0f || fundingForSector.getExpenditure().floatValue() != 0f) {
@@ -1247,6 +1252,7 @@ public class GetFoundingDetails extends Action {
                                         newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
                                         newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)));
                                         newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
+                                        newVal.setPlannedDisb(fundingForSector.getPlannedDisb().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
                                         locationFundingMap.put(regCode, newVal);
                                     }
                                 }
@@ -1267,6 +1273,7 @@ public class GetFoundingDetails extends Action {
                                     newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/100f))));
                                     newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    newVal.setPlannedDisb(existingVal.getPlannedDisb().add(fundingForSector.getPlannedDisb().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     locationFundingMap.put(regCode, newVal);
                                 } else {
                                     if (fundingForSector.getCommitment().floatValue() !=
@@ -1280,6 +1287,7 @@ public class GetFoundingDetails extends Action {
                                         newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
                                         newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
                                         newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
+                                        newVal.setPlannedDisb(fundingForSector.getPlannedDisb().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
                                         locationFundingMap.put(regCode, newVal);
                                     }
                                 }
@@ -1580,6 +1588,7 @@ public class GetFoundingDetails extends Action {
         BigDecimal commitment = null;
         BigDecimal disbursement = null;
         BigDecimal expenditure = null;
+        BigDecimal plannedDisb = null;
 
         Timestamp startTs = new Timestamp(start.getTime());
         startTs.setNanos(0);
@@ -1638,13 +1647,14 @@ public class GetFoundingDetails extends Action {
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();
             expenditure = fch.getTotActualExp().getValue();
+            plannedDisb = fch.getTotPlanDisb().getValue();
 
         } catch (Exception ex1) {
             ex1.printStackTrace();
             //Add exception reporting
         }
 
-        retVal = new FundingData(commitment, disbursement, expenditure);
+        retVal = new FundingData(commitment, disbursement, expenditure, plannedDisb);
 
         return retVal;
     }

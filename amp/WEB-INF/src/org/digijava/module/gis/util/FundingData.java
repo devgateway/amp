@@ -20,6 +20,7 @@ public class FundingData {
     private BigDecimal commitment;
     private BigDecimal disbursement;
     private BigDecimal expenditure;
+    private BigDecimal plannedDisb;
 
     List activityLocationFundingList;
 
@@ -29,6 +30,7 @@ public class FundingData {
         this.commitment = new BigDecimal(0);
         this.disbursement = new BigDecimal(0);
         this.expenditure = new BigDecimal(0);
+        this.plannedDisb = new BigDecimal(0);
 
     }
 
@@ -36,6 +38,14 @@ public class FundingData {
         this.commitment = commitment;
         this.disbursement = disbursement;
         this.expenditure = expenditure;
+        this.plannedDisb = new BigDecimal(0);
+    }
+
+    public FundingData(BigDecimal commitment, BigDecimal disbursement, BigDecimal expenditure, BigDecimal plannedDisb) {
+        this.commitment = commitment;
+        this.disbursement = disbursement;
+        this.expenditure = expenditure;
+        this.plannedDisb = plannedDisb;
     }
 
     public BigDecimal getCommitment() {
@@ -70,4 +80,11 @@ public class FundingData {
         this.activityLocationFundingList = activityLocationFundingList;
     }
 
+    public BigDecimal getPlannedDisb() {
+        return plannedDisb;
+    }
+
+    public void setPlannedDisb(BigDecimal plannedDisb) {
+        this.plannedDisb = plannedDisb;
+    }
 }

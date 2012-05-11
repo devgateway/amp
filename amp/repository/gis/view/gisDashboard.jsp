@@ -736,6 +736,13 @@
 			    <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
 		    </tr>
 		    </field:display>
+		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipTotalPlannedDisbursementContainer">&nbsp;</td>
+		    </tr>
+		    </field:display>
+		    
 		    <tr>
 			    <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
 		    </tr>
@@ -755,6 +762,12 @@
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+		    </tr>
+		    </field:display>
+		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+		    <tr>
+			    <td nowrap width="50%"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentPlannedDisbursementContainer">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
@@ -815,6 +828,12 @@
                 <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
             </tr>
             </field:display>
+            <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+            <tr id="plannedDisbursementRowTotal">
+                <td nowrap width="50%"><digi:trn>Planned Disbursement</digi:trn></td>
+                <td width="50%" id="tooltipTotalPlannedDisbursementContainer">&nbsp;</td>
+            </tr>
+            </field:display>
             <tr id="pledgeRowTotal" style="display:none;">
                 <td nowrap width="50%"><digi:trn>Pledge ammount</digi:trn></td>
                 <td width="50%" id="tooltipTotalPledgeContainer">&nbsp;</td>
@@ -838,6 +857,12 @@
             <tr id="expenditureRow">
                 <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
                 <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+            </tr>
+            </field:display>
+            <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+            <tr id="plannedDisbursementRow">
+                <td nowrap width="50%"><digi:trn>Planned Disbursement</digi:trn></td>
+                <td width="50%" id="tooltipCurrentPlannedDisbursementContainer">&nbsp;</td>
             </tr>
             </field:display>
             <tr id="pledgeRow" style="display:none;">

@@ -31,6 +31,7 @@
 	var totalCommitmentFund = "0";
 	var totalDisbursementFund = "0";
 	var totalExpenditureFund = "0";
+	var totalPlannedDisbFund = "0";
 
 	var selSector = 0;
 	
@@ -343,6 +344,10 @@
                 	totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
                 }
                 
+                if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisb")){
+                	totalPlannedDisbFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisb").value;
+                }
+                
                 
                 var regionDataList = data.getElementsByTagName('region');
                 fundingDataByRegion = new Array();
@@ -354,6 +359,7 @@
                     regionDataMap[1] = regData.attributes.getNamedItem("fundingCommitment").value;
                     regionDataMap[2] = regData.attributes.getNamedItem("fundingDisbursement").value;
                     regionDataMap[3] = regData.attributes.getNamedItem("fundingExpenditure").value;
+                    regionDataMap[4] = regData.attributes.getNamedItem("fundingPlannedDisb").value;
 
                     fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
                 }
@@ -916,11 +922,13 @@
 			$("#commitmentRowTotal").hide();
 			$("#disbursementRowTotal").hide();
 			$("#expenditureRowTotal").hide();
+			$("#plannedDisbursementRowTotal").hide();
 			$("#pledgeRowTotal").show();
 			
 			$("#commitmentRow").hide();
 			$("#disbursementRow").hide();
 			$("#expenditureRow").hide();
+			$("#plannedDisbursementRow").hide();
 			$("#pledgeRow").show();
 			
 			$("#fundingTypeRow").hide();
@@ -929,11 +937,13 @@
 			$("#commitmentRowTotal").show();
 			$("#disbursementRowTotal").show();
 			$("#expenditureRowTotal").show();
+			$("#plannedDisbursementRowTotal").show();
 			$("#pledgeRowTotal").hide();
 			
 			$("#commitmentRow").show();
 			$("#disbursementRow").show();
 			$("#expenditureRow").show();
+			$("#plannedDisbursementRow").show();
 			$("#pledgeRow").hide();
 			
 			$("#fundingTypeRow").show();
@@ -1306,6 +1316,10 @@
 			if (document.getElementById("tooltipTotalExpenditureContainer")){
 				document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
 			}
+			
+			if (document.getElementById("tooltipTotalPlannedDisbursementContainer")){
+				document.getElementById("tooltipTotalPlannedDisbursementContainer").innerHTML = totalPlannedDisbFund;
+			}
 		
 			var regData = getRegFounding(regCode);
 		
@@ -1322,6 +1336,10 @@
 			}
 			if(document.getElementById("tooltipCurrentExpenditureContainer")){
 				document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
+			}
+			
+			if(document.getElementById("tooltipCurrentPlannedDisbursementContainer")){
+				document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = regData[3] + note;
 			}
 			
 			
@@ -1397,12 +1415,12 @@
 	}
 	
 	function getRegFounding (regCode) {
-		var retVal = new Array (0, 0, 0);
+		var retVal = new Array (0, 0, 0, 0);
 		var dataIndex = 0;
 		for (dataIndex = 0; dataIndex < fundingDataByRegion.length; dataIndex ++) {
 			var dataItem = fundingDataByRegion[dataIndex];
 			if (dataItem[0] == regCode) {
-				retVal = new Array (dataItem[1], dataItem[2], dataItem[3]);
+				retVal = new Array (dataItem[1], dataItem[2], dataItem[3], dataItem[4]);
 				break;
 			}
 		}

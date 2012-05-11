@@ -31,10 +31,17 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 	private static final long serialVersionUID = 1L;
 	
 	public AmpSearchOrganizationComponent(String id, IModel<T> model,
-			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel ) {
+			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel){
+		this(id,model,fmName,autocompletePanel,true);	
+	}
+	
+	public AmpSearchOrganizationComponent(String id, IModel<T> model,
+			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel, boolean isLabelVisible ) {
 		super(id, model, fmName);
 		TrnLabel title = new TrnLabel("title", fmName);
+		title.setVisible(isLabelVisible);
 		add(title);
+		
 		
 		
 		ChoiceRenderer cr = new ChoiceRenderer(){

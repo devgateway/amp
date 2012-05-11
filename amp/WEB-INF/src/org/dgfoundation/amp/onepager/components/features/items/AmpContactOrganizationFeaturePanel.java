@@ -155,7 +155,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		};
 
 		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchOrgs", new Model<String>(),
-				"Search Organizations", searchOrgs);
+				"Search Organizations", searchOrgs,false);
 		add(searchOrganization);
 		
 	}

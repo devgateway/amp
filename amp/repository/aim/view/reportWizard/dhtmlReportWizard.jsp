@@ -103,7 +103,7 @@
 		<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
 	</c:set>
 	<c:set var="detailsStepName">
-		<digi:trn key="rep:wizard:dhtmlTab:tabDetails">1. Tab Details</digi:trn>
+		<digi:trn key="rep:wizard:dhtmlTab:tabDetails">Tab Details</digi:trn>
 	</c:set>
 	<c:set var="descriptionName" scope="request">
 		<digi:trn key="aim:reportBuilder:TabDescription">Tab Description</digi:trn>
@@ -138,7 +138,7 @@
 		<digi:trn key="aim:reportwizard:reportgenerator">Report Generator</digi:trn>
 	</c:set>
 	<c:set var="detailsStepName">
-		<digi:trn key="rep:wizard:dhtmlTab:reportDetails">1. Report Details</digi:trn>
+		<digi:trn key="rep:wizard:dhtmlTab:reportDetails">Report Details</digi:trn>
 	</c:set>
 	<c:set var="descriptionName" scope="request">
 		<digi:trn key="aim:reportBuilder:ReportDescription">Report Description</digi:trn>

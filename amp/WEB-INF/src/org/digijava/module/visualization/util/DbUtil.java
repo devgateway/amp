@@ -297,6 +297,7 @@ public class DbUtil {
 		}
         
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and act.deleted = false";
 
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
@@ -403,6 +404,7 @@ public class DbUtil {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+	            oql += " and act.deleted = false";
 
 	            oql+=" order by loc.parentCategoryValue";
 	            
@@ -499,6 +501,7 @@ public class DbUtil {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+	            oql += " and act.deleted = false";
 
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
@@ -592,6 +595,7 @@ public class DbUtil {
 			}
             
             oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+            oql += " and act.deleted = false";
 
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
@@ -716,6 +720,7 @@ public class DbUtil {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 	    		}
 	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+	            oql += " and act.deleted = false";
 
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
@@ -850,6 +855,7 @@ public class DbUtil {
 		}
 
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and act.deleted = false";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1017,6 +1023,7 @@ public class DbUtil {
 		}
 
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and act.deleted = false";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1327,6 +1334,7 @@ public class DbUtil {
 			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 		}
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and act.deleted = false";
 
         Session session = PersistenceManager.getRequestDBSession();
         try {

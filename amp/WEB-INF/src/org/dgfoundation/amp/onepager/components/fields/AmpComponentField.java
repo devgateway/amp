@@ -66,7 +66,7 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
 			add(disbursements);
 
 			AmpComponentsFundingSubsectionFeature expeditures = new AmpComponentsFundingSubsectionFeature("expeditures", activityModel, 
-					componentModel, componentsSetModel, "Components Expeditures", 
+					componentModel, componentsSetModel, "Components Expenditures", 
 					Constants.EXPENDITURE);
 			expeditures.setOutputMarkupId(true);
 			expeditures.setOutputMarkupPlaceholderTag(true);

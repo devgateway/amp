@@ -41,7 +41,7 @@ table tr td.f-names{font-weight:bold;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
 fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
-html.chrome legend{float:left;margin:-20px 0px 0px 5px;}
+html.chrome #moreSettingsLegend{float:left;margin:-20px 0px 0px 10px;}
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
 table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;}

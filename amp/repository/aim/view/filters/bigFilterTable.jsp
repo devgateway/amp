@@ -22,55 +22,43 @@
 <logic:notEmpty scope="request" name="reqSelectorHeaderSize">
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
-	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; width: 100%; color: white; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
-			<div class="inside">
-				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
-			</div>
-		</div>
-		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;">		
-				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+		<div id="grouping_selector_wrapper">
+			<div class="innertabheader" ><h3><digi:trn>Grouping Selector</digi:trn></h3></div>
+			<div>		
+				<ul  class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
-						<tr style="cursor: pointer;"
+						<li style="cursor: pointer;"
 							onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
-							onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
-							onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
-							<td>
-								<div class="selector_type_cont">
+							onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false) " 
+							onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false) ">
+								<a onMouseover="this.style.backgroundColor='#c7d4db'" onMouseout="this.style.backgroundColor='#ffffff'">
 									<digi:trn>${element.name}</digi:trn>
-									<span style="float: right;">
+									<span >
 										(${element.rootHierarchyListable.countDescendants-1})
 										<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
 										style="display: none;">Fake</button>
 									</span>
-								</div>
-							</td>
-							
-						</tr>
+								</a>
+						</li>
 					</logic:iterate>
-				</table>
-		</div>
+				</ul>
+			</div>
 	</div>
-	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;background: white;">
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding-top:5px; height: ${selectorHeaderSize}%;border: 1px solid #CCCCCC;border-bottom: 0px;">
-				<div class="inside" style="float: left" >&nbsp;
-					<b class="ins_header">
-						<digi:trn>Member Selector</digi:trn>
-					</b>
-				</div>
-				<div class="memberSelectorInputWrapper" style="float: right">
+	<div id="member_selector_wrapper" >
+			<div  class="innertabheader"><h3><digi:trn>Member Selector</digi:trn></h3><div class="memberSelectorInputWrapper" >
 					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" style="margin-top:0px; width: ${searchFieldWidth};" class="inputx" />&nbsp;
-					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" style="padding: 0px;" type="button">&lt;&lt;</button>
-					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" style="padding: 0px;" type="button">&gt;&gt;</button>
+					<button class="buttonx" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()"  type="button">&lt;&lt;</button>
+					<button class="buttonx" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()"  type="button">&gt;&gt;</button>
 				</div>
-		</div>
+				</div>
+                	<div id="membercontainer">
 					<c:set var="displayProperty"> </c:set>
 					<logic:iterate id="element" name="elements" scope="page">
-						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;width:100%" id="${element.htmlDivId}">
+						<div  id="${element.htmlDivId}">
 							<bean:define id="reqEntityList" name="element" property="rootHierarchyListable.children" toScope="request" />
 							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
 							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>
-							<ul style="list-style-type: none;">
+							<ul >
 								<li>
 									<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
 										<span style="font-family: Arial; font-size: 12px;">
@@ -85,6 +73,7 @@
 						</div>
 						<c:set var="displayProperty"> display: none;</c:set>
 					</logic:iterate>
+                    </div>
 	</div>
 	
 	

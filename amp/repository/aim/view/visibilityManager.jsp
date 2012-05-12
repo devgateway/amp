@@ -21,6 +21,7 @@
 	}
 
 </script>
+
 	<h1 class="admintitle">
 						<digi:trn key="aim:featureManager">
 							Feature Manager
@@ -35,31 +36,10 @@
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
-		<td align=left valign="top" width=750>
+		<td align=left valign="top" width=1000>
 	
 			<table cellPadding=5 cellspacing="0" width="100%" border="0" style="font-size:12px;">
-				<!-- <tr>
-					Start Navigation -->
-					<!-- <td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>
-						<!--<c:set var="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:AmpAdminHome">
-							Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:featureManager">
-							Feature Manager
-						</digi:trn>
-					</td>
-					<!-- End navigation 
-				</tr>-->
-				<tr>
-					<td height=16 valign="center" width=571 colspan=2 align="center">
-					
-					</td>
-				</tr>
+
 				<tr>
 					<td height=16 valign="center" width=571 colspan=2>
 				 		<font color="red">
@@ -81,7 +61,7 @@
 				
 				
 				<tr>
-					<td noWrap width=80% vAlign="top" class="yui-skin-sam">
+					<td noWrap width=80% vAlign="top" class="yui-skin-sam" >
 						<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 							<jsp:include page="manageTreeVisibility.jsp" />
 						</logic:equal>

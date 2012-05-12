@@ -119,8 +119,8 @@ div.fakefile2 input{
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left border="1" class="inside">	
-	<tr><td bgColor=#C7D4DB class="inside" height="20" align="center" colspan="3">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left class="inside">	
+	<tr style="#C7D4DB"><td bgColor=#C7D4DB class="inside" height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampFeatureManager">
 		Feature Manager 
@@ -131,7 +131,7 @@ div.fakefile2 input{
 	<tr>
 		<th class="inside" height=32 bgcolor=#F5F5F5><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
-		<th class="inside" bgcolor=#F5F5F5><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
+		<th class="inside" bgcolor=#F5F5F5 style="border-right:1px solid #ccc;"><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
 	</tr>
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>

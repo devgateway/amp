@@ -676,7 +676,7 @@ margin-left: 70px;margin-top:10px;}
 html.ie #show_login_pop_box{ border:1px solid #cccccc;position:absolute;left:0px; top:15px;z-index:9999;}
 html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;position:absolute;top:15px; left:10px;}
 html.ie .login_nav {font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:absolute;right:0px;}
-html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px; }
+html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:162px; }
 html.ie li.tri a{background:(/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left;  font-size:11px;}
 html.ie li.tri {padding:0px;margin:0px;text-indent:none;backgrund:red;}
 html.ie li.tri:first-child{padding:0px 0px 0px 10px;}

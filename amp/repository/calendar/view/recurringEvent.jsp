@@ -373,18 +373,18 @@ function resetRecurrent(){
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td width="100"><input id="checkDay7" type="checkbox" name="occurrWeekDays" value="7" /><digi:trn>Sun</digi:trn></td>
-									 			<td width="100"><input id="checkDay3" type="checkbox" name="occurrWeekDays" value="3" /><digi:trn>Wed</digi:trn></td>
-									 			<td width="100"><input id="checkDay6" type="checkbox" name="occurrWeekDays" value="6" /><digi:trn>Saturday</digi:trn></td>
+									 			<td><input id="checkDay7" type="checkbox" name="occurrWeekDays" value="7" /><digi:trn>Sun</digi:trn></td>
+									 			<td><input id="checkDay3" type="checkbox" name="occurrWeekDays" value="3" /><digi:trn>Wed</digi:trn></td>
+									 			<td><input id="checkDay6" type="checkbox" name="occurrWeekDays" value="6" /><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td width="100"><input id="checkDay1" type="checkbox" name="occurrWeekDays" value="1" /><digi:trn>Monday</digi:trn></td>
-									 			<td width="100"><input id="checkDay4" type="checkbox" name="occurrWeekDays" value="4" /><digi:trn>Thur</digi:trn></td>
-									 			<td width="100">
+									 			<td><input id="checkDay1" type="checkbox" name="occurrWeekDays" value="1" /><digi:trn>Monday</digi:trn></td>
+									 			<td><input id="checkDay4" type="checkbox" name="occurrWeekDays" value="4" /><digi:trn>Thur</digi:trn></td>
+
 									 		</tr>
 									 		<tr>
-									 			<td width="100"><input id="checkDay2" type="checkbox" name="occurrWeekDays" value="2" /><digi:trn>Tuesday</digi:trn></td>
-									 			<td width="100"><input id="checkDay5" type="checkbox" name="occurrWeekDays" value="5" /><digi:trn>Friday</digi:trn></td>
+									 			<td><input id="checkDay2" type="checkbox" name="occurrWeekDays" value="2" /><digi:trn>Tuesday</digi:trn></td>
+									 			<td><input id="checkDay5" type="checkbox" name="occurrWeekDays" value="5" /><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>

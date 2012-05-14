@@ -186,9 +186,11 @@ function loadShareRules(){
 							<logic:equal name="aimUpdateAppSettingsForm" property="errors" value="true">
 								<tr>
 									<td class="inside" colspan="2">
-										<digi:trn key="aim:wrongNumberOfActivitiesProjectsPerPage">
-														Wrong number of Activities/Projects per page. The number should be greater than 1.
-										</digi:trn>
+										<font color="red">
+											<digi:trn key="aim:wrongNumberOfActivitiesProjectsPerPage">
+															Wrong number of Activities/Projects per page. The number should be greater than 1.
+											</digi:trn>
+										</font>
 									</td>
 								</tr>
 							</logic:equal>

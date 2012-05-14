@@ -52,6 +52,11 @@ function popup(mylink, windowname)
 	}
 	return false;
 }
+function submitForm(action){
+    document.aimTeamReportsForm.action.value=action;
+    document.aimTeamReportsForm.submit();
+    
+}
 //-->
 </script>
 <style>

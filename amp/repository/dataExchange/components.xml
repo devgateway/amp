@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="exportWizard" title="Export Manager"/>
+		<page name="importWizard" title="Import Manager"/>
+		<page name="importChapters" title="Chapters Importers"/>
+		<page name="importWizardAfterUploadFile" title="Import Manager "/>
+		<page name="indexDE" title="Data Exchange Manager"/>
+		<page name="de_showLogs" page="showLogs" title="Data Exchage Log Viewer"/>
+		<page name="de_viewExecutionLog" page="viewExecutionLog" title="Data Exchage Log Execution Viewer"/>
+		<page name="de_mapFields" page="viewMapFields" title="Data Exchage Map Fields Viewer"/>
+		<page name="de_logFeed" page="logFeed" title=""/>
+		<page name="de_createSourceWizard" page="createSourceWizard" title="Create Source Wizard" />
+		<page name="de_showSourceDetails" page="showSourceDetails" title="" />
+		<page name="de_showSources" page="showSources" title="List Of Sources" />
+		<page name="de_showLogItemDetails" page="showLogItemDetails" title="" />
+	</secondary-pages>
+	<module>
+	</module>
+</config>

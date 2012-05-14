@@ -1,0 +1,52 @@
+<wicket:extend>	
+<div class="perm_level">
+<form wicket:id="ampFieldPMForm">
+	<table width="952" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
+
+	  	<tr><td colspan="3" ><center><h3><wicket:trn>Assign Field Permission</wicket:trn></h3></center></td></tr>
+	  	<tr><td colspan="3" >&nbsp;</td></tr>
+	  	<tr><td colspan="3"  align="center">
+	  			<div style="float: left;"><input wicket:id="showWorkspace" type="checkbox" /> <wicket:trn>Show Workspace</wicket:trn></div>
+	  			<div style="float: right;">
+	  				<span wicket:id="permPriorityLabel"/>
+		  			<span wicket:id="permissionPriorityChoices"/>
+				</div> 
+			</td>
+			
+		</tr>
+		<tr><td colspan="3" >&nbsp;</td></tr>
+	  	<tr>
+		    <td valign="top"  width="440">
+		    	<span wicket:id="searchFields"/>
+		    	<div class="perm_tree">
+		    		<div wicket:id="fmFieldsPanel" />
+		      	</div>
+		     </td>
+			 <td  width="10">&nbsp;</td>
+	    	 <td valign="top" >
+	    	 	<br/>
+	    	 	<div class="perm_view_cont">&nbsp;&nbsp;&nbsp;<b><wicket:trn>Edit field permissions</wicket:trn>:</b><br />
+				<div class="perm_wrksp_det"><span wicket:id="permGatesFieldsForm"/></div>
+				<hr />
+				<div wicket:id="workspaces">
+					<b>&nbsp;&nbsp;&nbsp;<wicket:trn>Choose workspace</wicket:trn></b>:
+					<div class="perm_wrksp_det_short"><span wicket:id="permWorkspacesFieldsForm"/></div>
+				</div>
+				<hr />
+				</div>
+			</td>
+	  	</tr>
+	</table>
+	<br />
+	<center>
+			<table border="0">
+				<tr>
+					<td><span wicket:id="saveFieldPermissionButton"/></td>
+					<td><span wicket:id="resetFieldPermissionButton"/></td>
+				</tr>
+			</table>
+			<br/><br/>
+	</center>
+</form>
+</div>
+</wicket:extend>	

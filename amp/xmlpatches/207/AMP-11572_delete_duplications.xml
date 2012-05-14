@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11572</jira>
+    <keyword>duplications</keyword>
+    <keyword>Contacts</keyword>
+    <author>Medea</author>
+    <description>Eleminate duplications from amp_contact_properties</description> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                ALTER TABLE amp_contact_properties ALTER COLUMN property_id SET DEFAULT nextval('"amp_contact_properties_seq"'); 
+                CREATE TEMPORARY TABLE amp_contact_properties_dup
+                (
+                "name" character varying(255),
+                "value" character varying(255),
+                contact_id bigint
+                );
+                INSERT INTO amp_contact_properties_dup
+                (SELECT name, value, contact_id 
+                from amp_contact_properties group by contact_id, name, value having count(property_id)>1);
+                delete from amp_contact_properties where property_id in  (select property_id
+                from amp_contact_properties pr,
+                amp_contact_properties_dup as dup
+                where pr.contact_id=dup.contact_id and pr.name=dup.name and pr."value"=dup.value  order by  pr.contact_id);
+                INSERT INTO amp_contact_properties(name,value,contact_id)
+                SELECT * FROM amp_contact_properties_dup;
+                DROP TABLE amp_contact_properties_dup;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

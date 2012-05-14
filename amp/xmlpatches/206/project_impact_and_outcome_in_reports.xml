@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11453</jira>
+    <keyword>new columns for reports</keyword>
+    <keyword>report generator</keyword>
+    <author>Dare Roinishvili</author>    
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+            	insert into amp_columns (columnId,columnName, cellType, extractorView) 
+				(select (Select (max(columnId) + 1) from amp_columns),'Project Impact','org.dgfoundation.amp.ar.cell.TextCell','v_proj_impact'  
+ 				where (select count(columnId) from amp_columns where extractorView='v_proj_impact')=0);
+ 
+ 				insert into amp_columns (columnId,columnName, cellType, extractorView) 
+				(select (Select (max(columnId) + 1) from amp_columns),'Purpose','org.dgfoundation.amp.ar.cell.TextCell','v_purposes'  
+ 				where (select count(columnId) from amp_columns where extractorView='v_purposes')=0);				
+ 				
+				CREATE or REPLACE VIEW v_purposes AS select a.amp_activity_id ,e.body as ebody from amp_activity_version a,dg_editor e where a.purpose = e.EDITOR_KEY and trim(e.body)!='' order by a.amp_activity_id;
+				
+				CREATE or REPLACE VIEW v_proj_impact AS select a.amp_activity_id ,e.body as impact from amp_activity_version a,dg_editor e where a.project_impact = e.EDITOR_KEY and trim(e.body)!='' order by a.amp_activity_id;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>xmlpatcher</name>
+	
+	<security>
+		<action login-required="true" pattern="/xmlpatchesjson">ADMIN</action>
+		<action login-required="true" pattern="/xmlpatches">ADMIN</action>
+	</security>		
+	
+	<hibernate-classes required="true">
+	<hibernate-class>org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog</hibernate-class>		
+	<hibernate-class>org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch</hibernate-class>
+	</hibernate-classes>
+</module-config>

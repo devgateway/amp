@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12409</jira>
+  <keyword>Pledges Columns</keyword>
+  <keyword>Pledges views</keyword>
+  <author>Diego</author>
+  <description>Organize pledges columns and views</description>
+
+  <apply>
+    <script>
+      <lang delimiter=";" type="sql">
+     	update amp_report_column set columnid =(select columnid from  amp_columns where columnname ='Pledge Contact 1 - Name')
+		where columnid IN (select columnid from amp_columns where columnname='Point of Contact');
+     	
+     	DELETE FROM amp_columns where columnName = 'Point of Contact';
+		DELETE FROM amp_columns where columnName = 'Alternate Contact';
+		
+		DROP VIEW IF EXISTS v_pledges_contact;
+		DROP VIEW IF EXISTS v_pledges_alternate_contact;
+		
+		UPDATE amp_columns set columnName = 'Pledge Contact 1 - Alternate Contact' WHERE columnName =' Pledge Contact 1 - Alternate Contact';
+		UPDATE amp_columns set columnName = 'Pledge Contact 1 - Title' WHERE columnName =' Pledge Contact 1 - Title';
+		UPDATE amp_columns set columnName = 'Pledge Contact 2 - Alternate Contact' WHERE columnName =' Pledge Contact 2 - Alternate Contact';
+		UPDATE amp_columns set columnName = 'Pledge Contact 2 - Title' WHERE columnName =' Pledge Contact 2 - Title';
+		
+		
+		CREATE or REPLACE VIEW v_pledges_contact1_address as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAddress_1 AS address,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		CREATE or REPLACE VIEW v_pledges_contact1_Email as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAlternativeEmail AS email,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		CREATE or REPLACE VIEW v_pledges_contact1_Ministry as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactMinistry AS ministry,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		    
+		CREATE or REPLACE VIEW v_pledges_contact1_Title as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactTitle AS Title,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		
+		CREATE or REPLACE VIEW v_pledges_contact1_Telephone as 
+		select
+		    pf.id as  pledge_id,
+		    pf.contactTelephone_1 AS Telephone,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		CREATE or REPLACE VIEW v_pledges_contact1_name as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactName AS name,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		
+		CREATE or REPLACE VIEW v_pledges_contact1_Alternate as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAlternativeName AS altername,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_address as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAddress_1 AS address,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_Email as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAlternativeEmail_1 AS email,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_Ministry as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactMinistry_1 AS ministry,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_Title as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactTitle_1 AS Title,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_Telephone as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactTelephone_1 AS Telephone,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		
+		CREATE or REPLACE VIEW v_pledges_contact2_name as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactName_1 AS name,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+		    
+		  CREATE or REPLACE VIEW v_pledges_contact2_Alternate as 
+		select
+		    pf.id AS pledge_id,
+		    pf.contactAlternativeName_1 AS altername,
+		    pf.id AS contactName_id
+		  from
+		    amp_funding_pledges pf
+		  order by
+		    pf.id;
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

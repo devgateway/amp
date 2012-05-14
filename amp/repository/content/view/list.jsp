@@ -145,9 +145,9 @@ $(document).ready(function(){
                     </c:set>
                       <c:forEach  var="content" items="${requestScope.contentList}">
                         <tr bgColor=#f4f4f2>
-                          <td align="center" class="inside"> ${content.title} </td>
-                          <td align="center" class="inside"> ${content.description}</td>
-                          <td align="center" class="inside"> ${content.pageCode}</td>
+                          <td align="center" class="inside"> <c:out value="${content.title}"/> </td>
+                          <td align="center" class="inside"> <c:out value="${content.description}"/></td>
+                          <td align="center" class="inside"> <c:out value="${content.pageCode}"/></td>
                           <td align="center" class="inside">
                           <c:choose>
                             <c:when test="${content.isHomepage eq true}">

@@ -37,6 +37,9 @@ function checkSelMembers() {
 			alert(msg);
 			return false;					  
 		}
+		else{
+			return confirm("<digi:trn jsFriendly='true'>Are you sure you want to remove selected member(s)?</digi:trn>");
+		}
 	}
 	return true;
 }	

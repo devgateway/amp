@@ -144,8 +144,7 @@ function initFormatPopup(){
 	
 	
 	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
-	
-	if (decimalSymbol=="CUSTOM"){
+	if (decimalSymbol.toLowerCase()=="custom"){
 		document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=false;
 	
 	}else{
@@ -154,8 +153,7 @@ function initFormatPopup(){
 	}
 
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-	
-	if (customDecimalPlaces=="CUSTOM"){
+	if (customDecimalPlaces.toLowerCase()=="custom"){
 		document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
 	}else{
 		document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
@@ -172,23 +170,23 @@ function initFormatPopup(){
 		}
 	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 	document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
-	document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("CUSTOM"!=customGroupCharacter));
+	document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("custom"!=customGroupCharacter.toLowerCase()));
 
 	changeFormat();
 }
 
 function changeFormat(){
 	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
-		decimalSymbol=("CUSTOM"==decimalSymbol)?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
+		decimalSymbol=(decimalSymbol.toLowerCase()=="custom")?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
 	
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-		customDecimalPlaces=("CUSTOM"==customDecimalPlaces)?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+		customDecimalPlaces=(customDecimalPlaces.toLowerCase()=="custom")?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
 	
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	
 	
 	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
-		customGroupCharacter=("CUSTOM"==customGroupCharacter)?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
+		customGroupCharacter=(customGroupCharacter.toLowerCase()=="custom")?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
 	
 	
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;

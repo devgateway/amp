@@ -816,7 +816,7 @@ function initializeGlobalVariables(){
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
-<div class="dashboard_stat" align="right" ><a onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
+<div class="dashboard_stat" align="right" ><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
 <div class="dashboard_stat" style="display:none; padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr style="background-color:white;" >

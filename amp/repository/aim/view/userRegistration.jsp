@@ -88,11 +88,15 @@
 	}
 
 	function isVoid(name){
-        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
-        	return true;
-        }		
-		return false;		
+		if (name == "" || name == null || name.charAt(0) == ' '){
+	 		return 1;
+		}      
+		if (!isNaN(name)){
+	 		return 2;
+		}               
+		return 0;                        	
 	}
+	
 	function validate(){
         name = document.aimUserRegisterForm.firstNames.value;
         lastname = document.aimUserRegisterForm.lastName.value;
@@ -102,7 +106,7 @@
         selectedOrgGroup = document.aimUserRegisterForm.selectedOrgGroup.value;
         selectedOrganizationId = document.aimUserRegisterForm.selectedOrganizationId.value;
         
-        if (isVoid(name))
+        if (isVoid(name)==1)
         {
 			<c:set var="translation">
 			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank</digi:trn>
@@ -110,10 +114,26 @@
 			alert("${translation}");
         	return false;
         }
-        if (isVoid(lastname))
+        if (isVoid(name)==2)
         {
 			<c:set var="translation">
-			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
+			<digi:trn key="erroruregistration.FirstNameNumeric">First Name can't be only numeric</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname)==1)
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.LastNameBlank">Last Name is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname)==2)
+        {
+			<c:set var="translation">
+			<digi:trn key="erroruregistration.LastNameNumeric">LastName can't be only numeric</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;
